@@ -1,0 +1,56 @@
+{
+  "npmScope": "frontend",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "tslint.json": "*",
+    ".eslintrc.json": "*",
+    "nx.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "accessToken": "NmVlZmI0OGUtMWM0Ny00OTQwLWE5OTUtMDA0N2M1ZDY5NzM0fHJlYWQtd3JpdGU=",
+        "cacheableOperations": [
+          "build",
+          "test",
+          "lint",
+          "e2e"
+        ],
+        "canTrackAnalytics": false,
+        "showUsageWarnings": true
+      }
+    }
+  },
+  "projects": {
+    "webapp": {
+      "tags": []
+    },
+    "webapp-e2e": {
+      "tags": [],
+      "implicitDependencies": [
+        "webapp"
+      ]
+    },
+    "website": {
+      "tags": []
+    },
+    "website-e2e": {
+      "tags": [],
+      "implicitDependencies": [
+        "website"
+      ]
+    },
+    "chakra-theme": {
+      "tags": []
+    }
+  }
+}
