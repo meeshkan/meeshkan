@@ -3,5 +3,6 @@ module.exports = {
     '<rootDir>/apps/webapp',
     '<rootDir>/apps/website',
     '<rootDir>/libs/chakra-theme',
+    '<rootDir>/apps/og-cards',
   ],
 };

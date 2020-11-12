@@ -42,6 +42,13 @@
     },
     "chakra-theme": {
       "tags": []
+    },
+    "og-cards": {
+      "tags": []
+    },
+    "og-cards-e2e": {
+      "tags": [],
+      "implicitDependencies": ["og-cards"]
     }
   }
 }
