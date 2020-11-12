@@ -1,6 +1,6 @@
 import { ChakraProvider } from '@chakra-ui/core'
 import { AppProps } from 'next/app'
-import customTheme from '../theme'
+import customTheme from '@frontend/chakra-theme'
 
 const App = ({ Component, pageProps }: AppProps) => {
 	return (
