@@ -1,0 +1,245 @@
+---
+title: Finding and fixing bugs in your tests with fast-check
+description: A follow-up to our JavaScript guide that solves a testing bug with property-based testing practices.
+slug: property-based-testing-bugs
+date: 2020-07-27
+authors: ["carolyn"]
+published: true
+tags:
+  - testing
+  - javascript
+  - debugging
+  - tutorial
+---
+
+> This post assumes that you have a solid understanding of JavaScript. You should also know the basics of [property-based testing](/blog/property-based-testing-javascript/) and the [fast-check framework](https://dubzzz.github.io/fast-check/).
+
+Recently, we published [Property-based testing for JavaScript developers](/blog/property-based-testing-javascript/). In it, we introduced [an issue to show the limitations of example-based testing](/blog/property-based-testing-javascript/#what-your-existing-test-suite-probably-looks-like-and-is-missing). Throughout the rest of the guide, we provided examples of how to use fast-check and other property-based testing principles.
+
+But we didn't offer a fix to that initial testing bug.
+
+We've been told that this is unsatisfying, so consider this post our redemption.
+
+💻 The tests featured in this post are available in the [corresponding GitHub repository](https://github.com/meeshkan/property-based-testing-for-js-devs/blob/main/tests/getNumberIntl.test.js).
+
+## Summary of the bug in our test
+
+> If you're already familiar with the referenced issue, [skip to the solution](#fixing-this-bug-with-fast-check).
+
+Imagine you have an input where users write in a price - but this input is `type="text"` rather than `type="number"`. So you need to create a function (`getNumber`) that converts the input string into a number and an accompanying test:
+
+```javascript
+const getNumber = inputString => {
+  const numberFromInputString = Number(inputString)
+  return numberFromInputString
+}
+
+test("turns input string into a number", () => {
+  expect(getNumber("59.99")).toBe(59.99)
+})
+```
+
+This passes 🎉
+
+Now imagine your website also operates in Germany where the meaning of commas and decimals in numbers are switched (i.e. $1,200.99 in English would be $1.200,99 in German).
+
+So you add another test case to address this:
+
+```javascript
+test("turns input string into a number", () => {
+  // English test case
+  expect(getNumber("59.99")).toBe(59.99)
+  // German test case
+  expect(getNumber("19,95")).toBe(19.95)
+})
+```
+
+But when you run the test, you hit an error:
+
+```bash
+expect(received).toBe(expected) // Object.is equality
+
+Expected: 19.95
+Received: NaN
+```
+
+Assuming that your website and input are equipped to handle various locales and localized strings, this would be a limitation of your tests - not a bug in your app.
+
+There's something that can help though: **Property-based testing**.
+
+## Fixing this bug with fast-check
+
+To solve this problem, let's use [fast-check](https://dubzzz.github.io/fast-check/), a JavaScript framework for generative test cases. Our goal is to test that our function turns any valid input string into a number, regardless of locale.
+
+First, we need to pick the **property** (or properties) to test for in this situation. There a couple of options:
+
+- It works with strings that aren't formatted.
+- It works with strings that are formatted using one of the accepted locales (in this case, that would be German).
+- A combination of the two.
+
+We'll tackle the latter: A combination of formatted and non-formatted strings.
+
+### Spoiler alert: Final solution
+
+Here's a peek at what our test will look like by the end of this post:
+
+```javascript
+test("turns any valid input string into a number, regardless of locale", () => {
+  fc.assert(
+    fc.property(
+      fc.float(),
+      fc.option(fc.constantFrom("de-DE", "fr-FR")),
+      (testFloat, locale) => {
+        const fixedFloat = parseFloat(testFloat.toFixed(2))
+
+        const floatString = locale
+          ? new Intl.NumberFormat(locale).format(fixedFloat)
+          : fixedFloat.toString()
+
+        expect(getNumber(floatString)).toBe(fixedFloat)
+      }
+    )
+  )
+})
+```
+
+This is a lot all at once. So let's go through it step-by-step.
+
+### Setting up our test
+
+To begin, we need to set up our test:
+
+```javascript
+test("turns any valid input string into a number, regardless of locale", () => {
+  fc.assert(
+    fc.property(
+      // Everything else will go here!
+  )
+})
+```
+
+> Note: This test uses the `assert` and `property` fast-check functions. If you need a refresher, these are both covered in our [JavaScript property-based testing guide](/blog/property-based-testing-javascript/#introducing-fast-check).
+
+### Applying our properties
+
+To test a combination of formatted and non-formatted strings, we need to pass two different arbitraries to `property`.
+
+The first will be [`float`](https://dubzzz.github.io/fast-check/#/2-API/fast-check/float_1) to generate the floating-point numbers:
+
+```javascript
+fc.float()
+```
+
+The second is also a combination of sorts. To start, we need to write a [`constantFrom` function](https://dubzzz.github.io/fast-check/#/2-API/fast-check/constantFrom_1) that takes in multiple, equally probable values. We'll use this for our German locale: `de-DE`.
+
+```javascript
+fc.constantFrom(
+  "de-DE"
+  /* This is where you'd pass another locale */
+)
+```
+
+Then, we'll wrap `constantFrom` in the [`option` function](https://dubzzz.github.io/fast-check/#/2-API/fast-check/option_1). With `option`, the complete arbitrary will return either `null` (a stand-in for the English default) or our values from `constantFrom`.
+
+```javascript
+fc.option(fc.constantFrom("de-DE"))
+```
+
+Prices in these locales only go to the second decimal place and we want to embody this in our test.
+
+To do this, we'll take the `testFloat` value and use JavaScript's built-in [`toFixed` method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed) on it. The `2` value indicates how many decimal places we want.
+
+This method returns a string, but we need a number for our final assertion. So we'll wrap it in another built-in function, [`parseFloat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat), and name this variable `fixedFloat`.
+
+```javascript
+const fixedFloat = parseFloat(testFloat.toFixed(2))
+```
+
+Finally, we'll pass two arguments to the `property` callback: `testFloat` (representing each generated floating-point number) and `locale` (representing the generated locale from our `option` and `constantFrom` combination).
+
+Altogether, our `property` function will look like this so far:
+
+```javascript
+fc.property(
+  fc.float(),
+  fc.option(fc.constantFrom("de-DE")),
+  (testFloat, locale) => {
+    const fixedFloat = parseFloat(testFloat.toFixed(2))
+    // More to come!
+  }
+)
+```
+
+### Processing the strings
+
+Because we're testing both formatted and non-formatted strings, we need a way to differentiate these two string types.
+
+We'll create a variable called `floatString` that checks if there is a `locale` value.
+
+If `locale !== null`, then we need to create a localized string based on the generated float.
+
+To do this, we'll use the [`Intl.NumberFormat` constructor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat) and pass in our `locale` value. On top, we'll chain on the [`format` method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/format) with our `fixedFloat` value from earlier.
+
+```javascript
+new Intl.NumberFormat(locale).format(fixedFloat)
+```
+
+> Note: This constructor should mimic existing functionality in your app.
+
+If `locale` is `null`, then we'll use the built-in [`toString` method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString) on `fixedFloat`, which returns it as a string.
+
+```javascript
+fixedFloat.toString()
+```
+
+The resulting `floatString` variable:
+
+```javascript
+const floatString = locale
+  ? new Intl.NumberFormat(locale).format(fixedFloat)
+  : fixedFloat.toString()
+```
+
+### Adding your assertion
+
+At last, we need the most crucial part of any test: The assertion.
+
+The following [`expect` statement](https://jestjs.io/docs/en/expect) indicates that when you pass the `floatString` (formatted or not) to the `getNumber` function, you expect it to equal the `fixedFloat` number value:
+
+```javascript
+expect(getNumber(floatString)).toBe(fixedFloat)
+```
+
+### Putting it all together
+
+After all that, you're back to that final result:
+
+```javascript
+test("turns any valid input string into a number, regardless of locale", () => {
+  fc.assert(
+    fc.property(
+      fc.float(),
+      fc.option(fc.constantFrom("de-DE", "fr-FR")),
+      (testFloat, locale) => {
+        const fixedFloat = parseFloat(testFloat.toFixed(2))
+
+        const floatString = locale
+          ? new Intl.NumberFormat(locale).format(fixedFloat)
+          : fixedFloat.toString()
+
+        expect(getNumber(floatString)).toBe(fixedFloat)
+      }
+    )
+  )
+})
+```
+
+> Reminder: You can check out the code in our [accompanying GitHub repository](https://github.com/meeshkan/property-based-testing-for-js-devs/blob/main/tests/getNumberIntl.test.js).
+
+Now your tests are more thorough and resilient 🎉
+
+## Special thanks
+
+[Nicolas Dubien](https://github.com/dubzzz/), the creator of fast-check, was the first to flag this issue in the original guide. He also helped develop the solution. You're the best, Nicolas!
+
+_Have a better solution? [Tweet us a gist with your suggestions](https://twitter.com/intent/tweet?text=Hey%20%40meeshkan%2C%20I%20just%20finished%20your%20post%20on%20fixing%20testing%20bugs%20with%20fast-check%20and%20I%20would%27ve%20solved%20it%20with...%20https%3A%2F%2Fmeeshkan.com%2Fblog%2Fproperty-based-testing-bugs) or [open a pull request](https://github.com/meeshkan/property-based-testing-for-js-devs)._

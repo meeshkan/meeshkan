@@ -1,0 +1,40 @@
+- id: mike
+  name: Mike Solomon
+  avatar: avatars/mike.png
+  authorLink: https://dev.to/mikesol
+  bio: CEO
+- id: kimmo
+  name: Kimmo Sääskilahti
+  avatar: avatars/kimmo.png
+  authorLink: https://dev.to/ksaaskil
+  bio: Data Science Engineer
+- id: carolyn
+  name: Carolyn Stransky
+  avatar: avatars/carolyn.png
+  authorLink: https://twitter.com/carolstran
+  bio: Software Engineer
+- id: kenna
+  name: Makenna Smutz
+  avatar: avatars/kenna.png
+  authorLink: https://twitter.com/kenzsmutz
+  bio: COO
+- id: nikolaos
+  name: Nikolaos Kamarinakis
+  avatar: avatars/nikolaos.png
+  authorLink: https://nikolaskama.me/
+  bio: Developer in Residence
+- id: maria
+  name: Maria Malitckaya
+  avatar: avatars/maria.png
+  authorLink: https://medium.com/@maria.malitckaya
+  bio: Data Scientist
+- id: fredi
+  name: Fredrik Fornwall
+  avatar: avatars/fredrik.png
+  authorLink: https://dev.to/fornwall
+  bio: Open Source Engineer
+- id: nikolay
+  name: Nikolay Zenovkin
+  avatar: avatars/nikolay.png
+  authorLink: https://github.com/aby2s
+  bio: Data Scientist

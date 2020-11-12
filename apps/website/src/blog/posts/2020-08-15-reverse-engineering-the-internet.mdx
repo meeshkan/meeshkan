@@ -1,0 +1,30 @@
+---
+title: Reverse engineering the internet
+description: How we represent messy real-world APIs as clean models using machine learning.
+slug: reverse-engineering-the-internet
+date: 2020-08-15
+authors: ["mike"]
+published: true
+tags:
+  - testing
+  - machine learning
+---
+
+Real-world software is messy, and the internet is messier. As machine-to-machine communication over the internet increases through the use of Application Programming Interfaces (APIs), a single online service, like a payroll processor or a price comparator, integrates directly or indirectly with hundreds of other services. While protocols like [REST](https://restfulapi.net/) and [GraphQL](https://graphql.org/) exist to make this communication smoother, the number of things that can go wrong and the number of potential outcomes makes writing and maintaining high-quality online software an expensive endeavor.
+
+When a client signs up for Meeshkan, part of the reason they find our service attractive is because we know how to simulate the internet in all its messiness. Our service puts an API through a (really) large and reliable simulation of the traffic it will see on a day-to-day basis, unearthing mission-critical bugs and defects in APIs. We love the challenge of simulating the internet, and we promise our clients high-quality tests of GraphQL and REST APIs in an isolated, secure environment. There are lots of moving parts to get this right, but the hardest part is figuring out _how our clients want their services to behave._
+
+Thankfully, we have some really useful hints. Our clients provide us documents like OpenAPI specs and GraphQL schemas to help us understand their intent, and there are also industry-standard best practices that help us make reasonable assumptions, like "sensitive data should not be sent unencrypted" or "the ID of a resource should not change once it's created." But there are deeper, more nuanced questions that quickly add up to something so complex that no documentation, no matter how thorough, could possibly answer. For example:
+
+- What are the access restrictions for every resource served by the API, and how can these restrictions change over time?
+- Is a company's underlying data supposed to change when an API is queried and, if so, are these changes reversible?
+- Is there a convention to how an API's resources are named, and is the convention broken anywhere?
+- Does it seem like an API's functionality changed unintentionally with the release of a new feature?
+
+If an API can yield thousands of different potential results and is based on hundreds of subtle authentication rules, we'd spend three months asking questions just to run our first test. This is why we use **machine learning** to power our testing process. We train algorithms using millions of data points in order to make accurate assumptions about how an API should behave, and we then check those assumptions against the behavior of our clients APIs. We use these high-quality, data-driven assumptions to build a _model_ of an API. The model is used to automatically generate thousands of test cases, and our clients APIs are tested every day in an isolated environment using synthetic data.
+
+To keep ourselves on track, and to keep our clients up-to-date, we've published a machine learning [roadmap](/ml). On it, we've grouped together a collection of articles, open-source repositories, and research documents that show how far we've come and where we're going. We try to provide a mix of technical and non-technical writing, and we hope you learn new things as you read through it.
+
+If you're looking for a software testing solution and considering using Meeshkan, we know you have a choice of testing tools. As the CEO and Founder of Meeshkan, I personally guarantee that we offer the best, most comprehensive and highest quality testing service available at our price point. You simply won't find a better service. I also know that you're looking for other ways to evaluate our service and compare it to others. In addition to reading customer testimonials and learning more about our features, I hope our roadmap inspires you about where we're going and how we plan to help your business for years to come.
+
+Happy reading, and if you have any questions, please feel free to drop us a line!

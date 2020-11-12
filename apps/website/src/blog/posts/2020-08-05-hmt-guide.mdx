@@ -1,0 +1,230 @@
+---
+title: Create a mock server for any REST API
+description: A step-by-step tutorial for building a mock server using the HTTP Mocking Toolkit (HMT).
+date: 2020-08-05
+authors: ["carolyn"]
+published: true
+slug: create-a-mock-server
+tags:
+  - tutorial
+  - testing
+  - apis
+---
+
+If you make a REST API call from your codebase then there's a good chance that, at some point, you'll want to write a test for that integration. Instead of calling the real API, it might make sense to use a mock. But manually stubbing data can be time-consuming and doesn't lead to a high level of confidence. 
+
+That's where this tutorial comes in.
+
+In this tutorial, you'll learn how to create a mock server for any REST API. This mock server will generate dynamic, type-based response data that you can use in your tests. You'll do this using the [HTTP Mocking Toolkit (HMT)](https:github.com/meeshkan/hmt), a tool that mocks HTTP APIs for use in automated and exploratory testing. 
+
+As an example, this tutorial uses the [Studio Ghibli API](https://ghibliapi.herokuapp.com/), which catalogs the worlds created by Japanese anime studio [Studio Ghibli](http://www.ghibli.jp/). Why Studio Ghibli? Because they RULE! 
+
+✅ **Steps**:
+
+1. [Collect recordings of your API's traffic](#1-collect-recordings-of-your-apis-traffic)
+2. [Build an OpenAPI specification from your recordings](#2-build-an-openapi-specification-from-your-recordings)
+3. [Mock server traffic using your specification](#3-mock-server-traffic-using-your-specification)
+
+⚠️ **Prerequisites**:
+
+- [Python 3.6+](https://www.python.org/downloads/) installed (no previous Python knowledge is necessary, it's only for installing HMT)
+- Familiarity with [REST APIs](https://www.programmableweb.com/api-university/what-are-apis-and-how-do-they-work) and how they work
+- Comfort using the [command-line](https://www.davidbaumgold.com/tutorials/command-line/)
+
+💻 **References**: <br />
+There's a [GitHub repository](https://github.com/meeshkan/studio-ghibli-mock-server) that contains a completed Studio Ghibli mock server. You can use it as a reference for this tutorial. 
+
+## Initial setup
+
+Before building the mock server, you first need to create a project directory. This will house your recordings and specifications (explained later in this tutorial).
+
+Let's do this in the terminal and name it `studio-ghibli-mock-server`:
+
+```bash
+mkdir studio-ghibli-mock-server
+cd studio-ghibli-mock-server
+```
+
+### (Optional) Create a virtual environment
+
+Using a [virtual environment](https://towardsdatascience.com/why-you-should-use-a-virtual-environment-for-every-python-project-c17dab3b0fd0) can help keep your packages organized and ensure that you have the correct Python version. For this example, you'll name yours `.aichienv` based on [the location of the new Studio Ghibli theme park](https://www.japantimes.co.jp/news/2020/07/28/national/studio-ghibli-theme-park-construction/). 
+
+First, run the following script to set up a [venv](https://docs.python.org/3/library/venv.html) directory:
+
+```bash
+python3 -m venv .aichienv
+```
+
+Then, launch your virtual environment:
+
+```bash
+source .aichienv/bin/activate
+```
+
+Finally, check your Python version with `python --version`. It should be version 3.6 or higher.
+
+> Whenever you're done, you can terminate the virtual environment by running: `deactivate`
+
+### Install HMT
+
+You can install HMT on the command line using [pip](https://pip.pypa.io/en/stable/installing/), a package installer for Python:
+
+```bash
+pip install hmt
+```
+
+> For HMT to install and run properly, it **requires Python version 3.6+**
+
+Check your HMT version with `hmt --version` to make sure the command-line interface (CLI) is installed.
+
+## 1. Collect recordings of your API's traffic
+
+The first step towards creating a mock server is to collect recordings of your API's traffic. That way, our future mock server will know what types of data to mimic.
+
+Using the `record` mode, the HMT CLI can be used to record HTTP API traffic in a format that you can later build into a specification.
+
+### Start HMT
+
+To start an HMT server that will record your API traffic, use the `hmt record` command:
+
+```bash
+hmt record
+```
+
+This starts HMT as a reverse proxy on the default port of `8000`.
+
+> To stop HMT without losing any of your data, type `Ctrl + C` or another `kill` command.
+
+Keep this running. Then, in another terminal window, you can use HMT as a proxy with [curl](https://curl.haxx.se/).
+
+By default, HMT uses path routing to intercept HTTP API calls. Path routing appends the URL you wish to call (`https://ghibliapi.herokuapp.com/`) to the end of the URL of the recording server (`http://localhost:8000/`):
+
+```bash
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/
+```
+
+HMT will automatically make an API call using the URL in the path - in this case, `https://ghibliapi.herokuapp.com/` - and return the response from the called API.
+
+### Run API-specific curl commands
+
+In order for HMT to later mock your API, it needs to understand what kinds of endpoints exist and the associated responses to expect. One way to feed it that information is by using curl.
+
+There's no minimum or maximum number of calls you should make in order for HMT to accurately record your API traffic. You have to feel it out. A general rule is that you want to record every critical endpoint at least once.
+
+With the Studio Ghibli API, there's five main endpoints: [Films](https://ghibliapi.herokuapp.com/#tag/Films), [People](https://ghibliapi.herokuapp.com/#tag/People), [Locations](https://ghibliapi.herokuapp.com/#tag/Locations), [Species](https://ghibliapi.herokuapp.com/#tag/Species), and [Vehicles](https://ghibliapi.herokuapp.com/#tag/Vehicles). You'll want to make sure to call each of those.
+
+[The example in the reference repository](https://github.com/meeshkan/studio-ghibli-mock-server) alternates between calling the root endpoint and calling a specific field within that endpoint. For thoroughness, here's exactly what was tested:
+
+```bash
+# Films
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/films
+
+# Film - Castle in the Sky
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/films/2baf70d1-42bb-4437-b551-e5fed5a87abe
+
+# People
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/people
+
+# Person - Granny (My Neighbor Totoro)
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/people/08ffbce4-7f94-476a-95bc-76d3c3969c19
+
+# Locations
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/locations
+
+# Location - Irontown (Princess Mononoke)
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/locations/11014596-71b0-4b3e-b8c0-1c4b15f28b9a
+
+# Species
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/species
+
+# Species - Cats
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/species/603428ba-8a86-4b0b-a9f1-65df6abef3d3
+
+# Vehicles
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/vehicles
+
+# Vehicle - Sōsuke's Boat (Ponyo on the Cliff by the Sea)
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/vehicles/923d70c9-8f15-4972-ad53-0128b261d628
+```
+
+### Check the recordings file
+
+Running `hmt record` will automatically generate two directories: `logs` and `specs`. 
+
+By default, HMT records all traffic to the `logs` directory in a file called `{hostname}-recordings.jsonl`. `{hostname}` refers to your API's host URL and in this case, that's `ghibliapi.herokuapp.com`.
+
+How it works is that HMT takes the recorded server traffic and serializes them as JSON objects in the [`http-types`](https://github.com/meeshkan/http-types) format. Then, this is written to a [JSON Lines](http://jsonlines.org/) file. 
+
+This specific formatting and file type is required for HMT to be able to build an OpenAPI specification in the next step.
+
+## 2. Build an OpenAPI specification from your recordings
+
+Using the HMT CLI, you can build an [OpenAPI specification](https://swagger.io/specification/) that describes how your API works. This is built from that `.jsonl` file generated by the `record` command.
+
+On the command-line, you'll run `hmt build` with the `--input-file` flag followed by the path to your recordings file:
+
+```bash
+hmt build --input-file logs/ghibliapi.herokuapp.com-recordings.jsonl
+```
+
+> This uses the default build command. To see the other options, run `hmt build --help` or check out the [HMT build documentation](https://github.com/meeshkan/hmt/blob/master/docs/BUILD.md).
+
+By default, HMT builds a new OpenAPI specification (called `openapi.json`) in the `specs` directory from earlier. Once you've generated the specification, you can use that to create a mock server.
+
+## 3. Mock server traffic using your specification
+
+Now you can use your `openapi.json` and a different HMT command to create a mock server. 
+
+All it takes is `hmt mock` followed by the path to the directory or file where your OpenAPI specification is (for this example, that's `specs/`):
+
+```bash
+hmt mock specs/
+```
+
+Keep this running. Then, in another terminal window, make another curl request:
+
+```bash
+curl http://localhost:8000/https://ghibliapi.herokuapp.com/people/08ffbce4-7f94-476a-95bc-76d3c3969c19
+```
+
+> Yes, you read that right - it's almost identical to the command that you ran earlier after launching `hmt record`.
+
+This is the same command we ran in the second step for Granny from My Neighbor Totoro. But our server won't return Granny's exact data. Instead, it'll return the same character response fields from the Studio Ghibli API with mock data for the values based on their types. 
+
+Here's an example of what this response could look like:
+
+```bash
+{
+  "id": "Bradley Joseph",
+  "name": "Jeremy Vasquez", 
+  "gender": "Jodi Francis", 
+  "age": "Karen Booth", 
+  "eye_color": "Andre Mcclure", 
+  "hair_color": "Brandon Freeman", 
+  "films": [
+    "Stephanie Campbell", 
+    "Paul Young", 
+    "Catherine Gonzalez DDS", 
+    "Charles Dean", 
+    "Jackson Smith", 
+    "Alexander Manning", 
+    "Anthony Reed"
+  ], 
+  "species": "Jasmine Davis",
+  "url": "David Olson"
+  }
+```
+
+> Because this data is generated, there's a good chance that yours will be different if you're following along. Although the strings almost always seem to be random names 😅
+
+There you have it, your very own mock server 🎉
+
+## Conclusion
+
+This tutorial ran through the entire HMT flow: **Collect**, **build**, and **mock**. First, you collected data by recording server traffic from the Studio Ghibli API. Then, you built an OpenAPI specification based on that data. Finally, you used that specification to spin up a Studio Ghibli mock server.
+
+> If you want to see the code for the final mock server, check out the [example repository on GitHub](https://github.com/meeshkan/studio-ghibli-mock-server).
+
+There are many customization options for your mock server - such as custom callback scripts, format options, and response types. You can find out more in the [HMT documentation](https://github.com/meeshkan/hmt/blob/master/docs/MOCK.md).
+
+HMT is actively maintained by our team at Meeshkan. It's also open-source 🎉 If you run into any problems with the product or have questions, please [open an issue on GitHub](https://github.com/meeshkan/hmt/issues/new/choose).

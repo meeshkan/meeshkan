@@ -1,7 +1,12 @@
-/**
- * Implement Gatsby's Browser APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/browser-apis/
- */
+import React from "react"
+import { ChakraProvider } from "@chakra-ui/core"
+import customTheme from "./theme/theme"
+import Prism from "prism-react-renderer/prism"
+;(typeof global !== "undefined" ? global : window).Prism = Prism
+require("prismjs/components/prism-haskell")
+require("prismjs/components/prism-scheme")
+require("prismjs/components/prism-latex")
 
-// You can delete this file if you're not using it
+export const wrapRootElement = ({ element }) => {
+	return <ChakraProvider theme={customTheme}>{element}</ChakraProvider>
+}

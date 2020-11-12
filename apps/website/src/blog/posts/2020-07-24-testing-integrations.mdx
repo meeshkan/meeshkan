@@ -1,0 +1,104 @@
+---
+title: Testing apps with third-party integrations
+description: The best (and worst) ways to test any app that makes an API call to a third-party integration or service.
+date: 2020-07-24
+authors: ["carolyn"]
+published: true
+slug: testing-third-party-integrations
+tags:
+  - testing
+  - apis
+  - webdev
+---
+
+import { Button } from "@chakra-ui/core"
+
+> This post assumes that you're familiar with [APIs](https://www.programmableweb.com/api-university/what-are-apis-and-how-do-they-work) and have a basic understanding of testing. It's also based on a [presentation by Mike Solomon](https://www.youtube.com/watch?v=KFiSEQtTdpk&t=779s).
+
+Whether you’re working with the latest technologies or fighting against legacy code, you'll likely need to make a call to an API. And even more likely, this will be an API that you don't maintain.
+
+Reliance on external services is becoming more prevalent in our engineering ecosystem. As a result, we need cost-effective, secure, and reliable ways to test how our app interacts with these services.
+
+In this post, we'll examine some strategies and available tools for testing apps that use third-party integrations.
+
+**TL;DR**: If you don't have time to write tests but want to be sure your apps are covered, [use an automated testing tool like Meeshkan](#use-a-service-like-meeshkan-to-test-your-apps).
+
+## Why should you test third-party integrations?
+
+The way we build apps has changed a lot in the past two decades. At the beginning of the 2000s, when you ran into a problem or needed a specific service, you had to build it yourself.
+
+Now, there's an API for almost everything. SendGrid for emails, Auth0 for authentication, Stripe for payments, and the list goes on. The [Programmable Web API Directory](https://www.programmableweb.com/apis/directory) has over 23,000 different APIs available for use. Even [MySpace has its own set of realtime REST APIs](https://www.programmableweb.com/api/myspace-rest-api).
+
+But using a third-party integration that you didn't build and don't maintain is risky.
+
+You need to be sure that the calls you're making to these APIs are reliable and serving the expected data. That's why you should test them.
+
+There are a few different options for how to test these external services. Let’s start with the most common and walk-through some of the issues they can cause.
+
+## Three common (but misguided) ways to test APIs
+
+### 1. Do nothing
+
+Don't write tests - or comment them out when you write them and they don't work.
+
+If this is you, don't be ashamed.
+
+Not to mention there's an entire economy around helping you solve issues that arise when you don't test your code. There are also products designed to test your apps when you understand the importance but don't want to manually write any (more on that [later in this post](#use-a-service-like-meeshkan-to-test-your-apps)).
+
+### 2. Using the real APIs
+
+We have another blog post that highlights the [three primary reasons to not use the real APIs in tests](/blog/why-not-use-real-apis-in-tests/). It covers security, integrity, and speed.
+
+But there are also lots of unfortunate scenarios that can happen when you use the real APIs in a [CI/CD pipeline](https://www.infoworld.com/article/3271126/what-is-cicd-continuous-integration-and-continuous-delivery-explained.html).
+
+During the research for his initial talk, Mike Solomon collected horror stories from developers who have used real APIs in their tests. Here are two of those.
+
+**“I want you back”**
+One company accidentally embedded a Twilio API key in their CI environment. This caused some poor person in Kansas to receive dozens of text messages a day saying “I want you back <3”.
+
+**`OR 1=1`**
+Another testing engineer created a fake username called `OR 1=1` (a common [SQL injection](https://developer.mozilla.org/en-US/docs/Glossary/SQL_Injection)). This username got sent repeatedly to a production API and the organization was banned from using the service.
+
+### 3. Reverse engineering the API
+
+This option is the least dangerous, but the most time-consuming.
+
+When you create a reverse-engineered version of the API you're testing, it comes at a cost. For instance, sinking more time into writing a test script than you did the feature you're testing. Or the stubbed API data ends up being longer than the code you're testing. It's also difficult to maintain unless you endlessly monitor the changelog of that external API.
+
+None of these options are great, so let's look at more reliable strategies for testing your third-party integrations.
+
+## Better ways to test third-party integrations
+
+It'd be cruel to leave you without a solution, so outlined below are two cost-effective, secure options for your tests.
+
+### Write your tests with a mocking library
+
+A **mock** is a substitute for a service that mimics the original functionality. Or at least the functionality that you're aiming to test.
+
+In this case, the mock acts as a replacement for your third-party integration. That way, you don't need to make a network call from your tests. This helps make your test resilient when the network is down or slow and enables you to specify and test corner cases. Plus mocks are often less complicated to access and maintain.
+
+There are some libraries you can use to write your mocks. We recently published a post [comparing two JavaScript mocking libraries - nock and unmock](/blog/unmock-vs-nock/).
+
+We’ve loved and used this approach ourselves (I mean, we built [unmock](https://github.com/meeshkan/unmock-js)). There are still issues with this approach though. Namely, that you have to manually write all the tests - even if the input values are generated.
+
+This can be tedious and take a lot of time. So that’s where the second option comes in.
+
+### Use a service (like Meeshkan) to test your apps
+
+Yes, this is a product plug - but with good reason.
+
+We built [Meeshkan](/) for those of you reading this post and wondering who has time to write tests. Our automated testing service executes and reports on a collection of generated tests. These tests are designed to imitate any third-party integrations you're working with using [schemas and a bit of NLP](/docs/how-meeshkan-works/).
+
+All you need to do is authorize our GitHub app, choose a repository test, and set up your base configuration.
+
+Sound good? Create an account today ⬇️
+
+<Button
+	as="a"
+	mt={4}
+	href="https://app.meeshkan.com"
+	aria-label="Create a free Meeshkan account."
+	w={["100%", "100%", "auto"]}
+>
+	Create a free account
+</Button>

@@ -1,0 +1,220 @@
+---
+title: Type-safe rationals in PureScript - why, what, and how
+description: I'm using type-safe rationals in my next project. You should try them out!
+date: 2020-08-27
+authors: ["mike"]
+published: true
+slug: typelevel-rationals-in-purescript
+tags:
+  - purescript
+  - types
+  - graphql
+---
+
+In the era of Corona, I've heard some amazing music projects recorded entirely remotely using technologies like virtual desktops and web audio. As a side project, I'm building an open-source web-based digital audio workstation that uses [PureScript](https://purescript.org) in the browser as its scripting language. My hope is to facilitate remote audio collaboration and open up new creative possibilites for musicians all over the world.
+
+One of the biggest challenges in audio is parameter validation. There are so many numeric parameters and tracks in a modern audio project that it's really easy to saturate quickly, resulting in soul-crushing compression and limiting. Add more people to the equation, none of whom have the same mix in their head/ears, and it's a recipe for disaster. So one thing I wanted to get right from the outset was a representation of parameters where people could reason about acceptable ranges.
+
+A lot of user-facing parameters in audio are represented as rational numbers, most often between 0 and 1. Bearing this in mind, I set out to build a library that allows programmers to reason about numeric parameters their audio programs (or any programs) right from their IDE.
+
+Enter [purescript-typelevel-rationals](https://github.com/mikesol/purescript-typelevel-rationals). They allow you to keep track of flows of rational numbers to know exactly what the possible range of output values will be. I hope that it helps musicians make more subtle mixes. With time, I'll add features like trigonometric functions, natural logarithms, complex numbers, and other things that can be expressed at the type level.
+
+That's all well and good, but _what_ is a rational number expressed as a type? I'm glad you asked!
+
+## Type-level programming
+
+Anyone that uses a strongly typed functional language works with the compiler to some extent as they write their code. Fingers tire, the brain starts to shut down, and at a certain point you think "ah, whatever, let the compiler do the hard work" as you press compile. There are IDE extensions for most languages that'll put these warnings in your editor so that you can tidy up right as you code.
+
+Type-level programming, for me, is a way to enhance this experience. It teaches the compiler to catch mistakes based on the types you define. For example, if you find a way to define `PositiveFloat`, then the compiler can warn you or downright fail the build anytime the value dips into the negatives. For audio applications, this is really important, as a lot of plugins have wanky behavior with negative input.
+
+### My PureScript implementation
+
+To start, I define a number not as a value, but as a _constrained value_. To the right of the colon is a constraint meaning `0 <= n < 1`.
+
+```haskell
+type Between0And1 = ConstrainedRatioI ((Nt (Lt Zero)) &&/ (Lt (P1 +/ P1)))
+oneHalf = asConstraintedRational 1 2 :: Maybe Between0And1
+```
+
+This will yield a value of `1/2` with the following type:
+
+```haskell
+Just
+  ( ConstrainedRatioI
+      ( AndConstraint
+          ( NotConstraint
+              (LessThanConstraint Zero)
+          )
+          (LessThanConstraint (PRational P1 P1))
+      )
+  )
+```
+
+Because our constraint is between 0 and 1, the compiler does not know that it is `1/2`, but it does know that it is in an initial acceptable range. Had we tried to do the following, we would have gotten `Nothing` because `3/2` is greater than `1`:
+
+```haskell
+
+oneHalf = asConstraintedRational 3 2 :: Maybe Between0And1 -- Nothing
+```
+
+Traditionally, this type of validation function is implemented so that it yields `Maybe Float`. While that's all well and good, we lose tons of information by working with a blunt instrument like `Float`. Our type above may be a bit verbose (we can stash it in a type variable to save room), but it communicates our intention exactly.
+
+Of course, a type with that wide of an ambitus only makes sense when you're not sure what the input will be, ie if you're reading from disk. If you know it's `1/2`, just say it!
+
+```haskell
+type ExactlyOneHalf = ConstrainedRatioI (EqConstraint (P1 +/ P2))
+
+oneHalfPrecise = asConstraintedRational 1 2 :: Maybe ExactlyOneHalf
+```
+
+### invoke
+
+The next important bit is `invoke`. It takes a function from `a -> c`, where `a` is a constrained rational, and transforms it into a function of type `b -> c` if `b`'s type is a sub-constraint of `a`. For example, `0 <= n < 2` is a sub-constraint of `-1 <= n < 2` but not `-1 <= n < 1`. The constraints and subconstraints can get as wild as you'd like, ie `(0 <= n < 2 & 4 <= n < -5) || n < -42`. `purescript-typeleve-rationals` figures it out.
+
+To use invoke, let's take the `oneHalfPrecise` we defined above. Now, let's create a function that accepts any value between `0 & 1` and returns `0.25`.
+
+```haskell
+type OneQuarter = ConstrainedRatioI (EqConstraint (P1 +/ P4))
+
+returnAQuarter :: Between0And1 -> OneQuarter
+returnAQuarter _ = constConstrained $ resolve (CRProxy :: CRProxy OneQuarter)
+```
+
+Above, `resolve` resolves a constraint into a rational if it is a single value (ie `1/4`) and `constConstrained` converts it back to a constrained rational. To see how powerful resolve is, try to mess with it. For example, in my `IDE`, I changed the `NotConstraint (LessThanConstraint (PRational P1 P4))` to `NotConstraint (LessThanConstraint (PRational P1 P5))`. That means that the value is between `1/5` and `1/4`, so we can no longer resolve it to a single value. Sure enough, the IDE gets angry at me. Thanks, PureScript compiler!
+
+![red compiler invoke](https://i.ibb.co/QHYyP66/Screenshot-from-2020-08-27-16-04-15.png)
+
+Now that we have our function, let's invoke it!
+
+```haskell
+myQuarterBack = invoke returnAQuarter <$> oneHalfPrecise
+```
+
+Neato, we get a quarter. But what if we tried to invoke it with something (gasp) outside of its proscribed range of `0 <= n < 1`? Let's find out!
+
+![red compiler resolve](https://i.ibb.co/m4K0Gnf/Screenshot-from-2020-08-27-17-31-57.png)
+
+Wow, that compiler is livid. As it should be! We've tried to invoke a function with a value (`3/2`) outside of its domain (`1/2`). Going back to audio, think of all those ears that will be spared from gratuitous clipping. Unless you're into Merzbow, in which case you can make a constraint that the volume should always be _over_ one.
+
+### Adding numbers
+
+Lastly, let's see how `invoke` allows us to specialize functions, like an adder, for specific input.
+
+First, we'll create an adder for numbers between `0` and `1`.
+
+```haskell
+type Gte0lt1 = ((Nt (Lt Zero)) &&/ (Lt (P1 +/ P1)))
+
+type Between0And1 = ConstrainedRatioI Gte0lt1
+
+zeroToOneAdder =
+  addConstrainedRationals ::
+    forall (a :: ConstrainedRational).
+    InvokableRational
+      Gte0lt1
+      a =>
+    Between0And1 ->
+    ( forall (b :: ConstrainedRational).
+      InvokableRational
+        Gte0lt1
+        b =>
+      Between0And1 ->
+      ( forall (c :: ConstrainedRational).
+        AddConstraint a b c =>
+        ConstrainedRatioI c
+      )
+    )
+```
+
+Now that that's done, we can create a specialized function called `addTwoHalves` that _only_ accepts values that are `1/2` and, consequentially, returns 1.
+
+```haskell
+
+type IsOneHalf = EqConstraint (P1 +/ P2)
+
+type IsOne = EqConstraint (P4 +/ P4)
+
+addTwoHalves ::
+  ConstrainedRatioI IsOneHalf ->
+  ConstrainedRatioI IsOneHalf ->
+  ConstrainedRatioI IsOne
+addTwoHalves i0 i1 = finalStep
+  where
+  curryFirstArg ::
+    Between0And1 ->
+    ( forall (c :: ConstrainedRational).
+      AddConstraint
+        IsOneHalf
+        IsOneHalf
+        c =>
+      (ConstrainedRatioI c)
+    )
+  curryFirstArg = invoke zeroToOneAdder i0
+
+  finalStep ::
+    forall (c :: ConstrainedRational).
+    AddConstraint
+      IsOneHalf
+      IsOneHalf
+      c =>
+    ConstrainedRatioI c
+  finalStep = invoke curryFirstArg i1
+```
+
+The amazing thing here is that, when you give the function a signature, the type of the return value _has_ to be `ConstrainedRatioI IsOne`. Try it out yourself - if you put any other constrained rational as the return value, the program won't compile. That means that, just by solving type constraints supplied by `AddConstraint`, the PureScript compiler is smart enough to follow two constrained values through the insides of our addition function and know what constrained is supposed to come out the other side.
+
+## How?
+
+Type-level programming in PureScript is just straight-up programming, no more, no less. All of the things I'm about to show you (kinds, functional constraints, type classes etc) take a while to fully understand, but for the purpose of this blog, the most important thing to grok are the equivalencies in a hand-wavy way.
+
+In normal-land, this is how you'd define the Peano representation of the integers.
+
+```haskell
+data Peano = Zero | Succ Peano
+```
+
+In type-level programming, you do the same thing using kinds.
+
+```haskell
+foreign import kind Peano
+foreign import data Zero :: Peano
+foreign import data Succ :: Peano -> Peano
+```
+
+Next, onto functions. To define addition on the Peano integers, you can do (for example):
+
+```haskell
+add :: Peano -> Peano -> Peano
+add Zero x = x
+add (Succ x) y = (Succ (Add x y))
+```
+
+Same thing in type classes:
+
+```haskell
+class Add (a :: Peano) (b :: Peano) (c :: Peano) | a b -> c
+instance addZero :: Add Zero b b
+instance addSucc :: Add a b => Add (Succ a) b (Succ c)
+```
+
+Let's see how we'd implement a series of functions
+
+```haskell
+mul :: Peano -> Peano -> Peano
+mul Zero x = 0
+mul (Succ x) y = Add (Mul x y) y
+```
+
+Same thing in type classes:
+
+```haskell
+class Mul (a :: Peano) (b :: Peano) (c :: Peano) | a b -> c
+instance mulZero :: Mul Zero b b
+instance mulSuc :: (Mul a b c, Add c b d) => Add (Succ a) b d
+```
+
+For more information on what's going on under the hood, check out [this post](https://blog.wuct.me/fun-with-typed-type-level-programming-in-purescript-5f8af42cfec5), which is where I learned to do all this stuff.
+
+So that's it. When doing type-level programming in PureScript, you have access to recursive functions, pattern matching, and data constructors. What more does one need? If it weren't for that pesky varmant I/O, you could write your entire program just using types. But because my audio project will have I/O (ie a microphone and a speaker), you need some form of input validation and coersion to output. As we saw above, that's doable with `invoke`.
+
+Type-level programming in PureScript is lots of fun, and the community is implementing helpful things to make it easier all the time. After sprucing up this library a bit and adding more numeric features, I hope to get some killer WebAudio-API-music flowing through it!

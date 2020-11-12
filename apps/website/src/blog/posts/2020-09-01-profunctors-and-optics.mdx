@@ -1,0 +1,568 @@
+---
+title: Profunctors are everywhere!
+description: How to leverage the power of profunctors to write great code.
+slug: profunctors-and-optics
+date: 2020-08-20
+authors: ["mike"]
+published: true
+tags:
+  - purescript
+  - profunctors
+  - optics
+  - functional programming
+---
+
+Profunctors are a _really useful abstraction_. It took me a while to understand what they are, but once I did, I found myself using them in contexts as diverse as digital signal processing, server building and data mining.
+
+In this article, I'd like to share the intuition I've built up about profunctors. The way I learned these things is by studying how profunctors can be used to create [optics](https://medium.com/@gcanti/introduction-to-optics-lenses-and-prisms-3230e73bfcfe#:~:text=Optics%20are%20a%20very%20useful,values%20in%20a%20data%20type.). By the end of the article, I hope you'll see the value of using profunctors and optics in your day-to-day work!
+
+## What's a profunctor?
+
+In short, a profunctor fulfills three criteria:
+
+- It has input and output.
+- You can bolt on something to the "output" end to modify the output.
+- You can bolt on something to the "input" end to convert input.
+
+If this sounds like a **function**, it's because functions are profunctors! Let's see how.
+
+- A function has input and output. In JavaScript, `(a) => a * 3` maps input, like `5`, to output, like `15`.
+- We can bolt something to the output. `(b) => ((a) => a * 3)(b) - 5` takes our original function and, for the same input `5`, now returns `10` instead of `15`.
+- We can convert input. `(b) => ((a) => a * 3)(b + 1)` takes our original function and, for the same input `5`, now returns `18` instead of `15`.
+- (bonus) We can convert input _and_ modify output at the same time. `(b) => ((a) => a * 3)(b + 1) - 5`
+
+Profunctors are _not_ just functions. Profunctors are a _general way to conceive of IO_. This is why I find them so useful. As programmers, we deal with IO on a micro-level (ie chaining functions) and a macro-level (ie chaining audio plugins) all the time.
+
+In [PureScript](https://www.purescript.org), the function that performs the operation above is called `dimap` and it works like this:
+
+```haskell
+dimap input output profunctor == new_profunctor
+```
+
+The four JS examples above can be written in PureScript as follows:
+
+```haskell
+dimap identity identity ((*) 3)
+dimap identity (flip (-) 5) ((*) 3)
+dimap ((+) 1) identity ((*) 3)
+dimap ((+) 1) (flip (-) 5) ((*) 3)
+```
+
+For the remainder of the article, we'll focus on one profunctor that I'll affectionately call "The Plus One Server". It takes a number and returns the number + 1. In JavaScript, `(a) => a + 1`. In Python `lambda a: a + 1`. In [Brainfuck](https://en.wikipedia.org/wiki/Brainfuck) `>+[-<+>]<`. You get the idea.
+
+Let's say that we've written "The Plus One Server" (aka `((+) 1.0)`) and we now learn that it needs to accept and return a string. The temptation may be to do something like this:
+
+```javascript
+const original = (a) => a + 1.0
+const modified = (a) => `${original(parseFloat(a))}`
+modified("3.1416") // "4.1416"
+```
+
+Thinking profunctorially, we can do it like this in PureScript:
+
+```haskell
+original = ((+) 1.0)
+modified = dimap readFloat show original
+modified "3.1416" -- "4.1416"
+```
+
+`readFloat` changes a string to a number, `show` changes a number to a string, and `((+) 1)` is my profunctor.
+
+The difference between the JS and PureScript versions is subtle but important. The first sends us on the path to spaghetti code, and the second leads to organizing things in a clean, maintainable way.
+
+To see why, imagine that the boss comes along and she says "Hey, coder person, your plus-one server needs to accept UTF8 byte strings and return byte strings." No prob, profunctors to the rescue!
+
+```haskell
+original = ((+) 1.0)
+modified = dimap readFloat show original
+bossMadeMe = dimap fromUTF8 toUTF8 modified
+```
+
+In the JS version, we'd have to constantly dip into the internals of the function to make changes, whereas here, we just bolt converters onto both ends and we're done with it.
+
+Let's now imagine that the boss, ever fickle, decides to keep the output format as `String`. No problem!
+
+```haskell
+original = ((+) 1.0)
+modified = dimap readFloat show original
+bossMadeMe = dimap fromUTF8 identity modified
+```
+
+So far, I've glossed over the profunctor-ness (profunctor-iality? profunctor-tude?) of `((+) 1.0)`, but it's time to address that. Let's see how `dimap` is implemented for functions:
+
+```haskell
+class Profunctor p where
+  dimap :: forall s t a b. (s -> a) -> (b -> t) -> p a b -> p s t
+
+instance profunctorFunction :: Profunctor Function where
+  dimap input output function = output <<< function <<< input
+```
+
+At [Meeshkan](https://meeshkan.com), we work a lot with IO (we're in the business of testing servers), so having "the server typeclass" (aka `Profunctor`) is invaluable as we build up mock servers from primitives.
+
+## Our first profunctor optic - Iso
+
+If you look at the signature of `dimap`, you can read it a few different ways. One way is that it returns a profunctor `p s t`. But another way, and one that is closer to that of `map`, is that it returns a function between profunctors `p a b -> p s t`. When `s == t` and `a == b`, another way to look at `dimap (s -> a) (a -> s)` is that it has the potential to create an isomorphism between `s` and `a`, ie converting a map to a list of tuples and back again. In this case, and if there is no funny business (ie deleting entries), the two can be used interchangeably.
+
+In lens-land, `dimap` is called `iso` for this reason.
+
+```haskell
+iso :: forall p s t a b. Profunctor p => (s -> a) -> (b -> t) -> p a b -> p s t
+iso = dimap
+```
+
+I'll also rebrand the signature `p a b -> p s t` as an **Iso** so that it's easier to understand the contract. Meaning that if you give me `(s -> a) -> (b -> t)`, I'll give you back a `p a b -> p s t`.
+
+```haskell
+type Iso s t a b = forall p. Profunctor p => p a b -> p s t
+
+iso :: forall s t a b. (s -> a) -> (b -> t) -> Iso s t a b
+iso = dimap
+```
+
+In general, a _profunctor optic_ is a function with the signature `p a b -> p s t`.
+
+You may be wondering, "Why are there two names for that thing profunctors do - `dimap` and `iso`?" The reason is because the profunctor of implementation of optics came about _after_ optics were invented. The genius of the profunctor implementation is that one of the classic optics - Iso - is the `dimap` function.
+
+```haskell
+dimap readFloat show ((+) 1.0) "3.1416" -- "4.1416"
+iso readFloat show ((+) 1.0) "3.1416" -- "4.1416"
+```
+
+## A stronger profunctor
+
+Now, imagine that "The Plus One Server" is getting used more and, as is natural with servers, we want to hook it up to other services. While other "more sophisticated" services have some sort of logging, our mighty `((+) 1.0)` lacks logging capabilities. So how can "The Plus One Server" take logs from upstream services and pass them to downstream services?
+
+```haskell
+(dimap
+  (\(Tuple s myLog) -> Tuple (readFloat s) myLog)
+  ((Tuple b myLog) -> Tuple (show b) myLog)
+  ((+) 1.0))
+  "3.1416" -- craaasssshhh
+```
+
+Wouldn't it be nice if we could just ignore the log? We'd need to beef up our profunctor with a bit more muscle so it can "carry" the log in addition to the payload. In short, we need to make our server _stronger_.
+
+```haskell
+class Profunctor p <= Strong p where
+  first :: forall a b c. p a b -> p (Tuple a c) (Tuple b c)
+  second :: forall a b c. p a b -> p (Tuple c a) (Tuple c b)
+```
+
+And now, let's make The Plus One Server strong.
+
+```haskell
+dimap
+  (\(Tuple s myLog) -> Tuple (readFloat s) myLog)
+  ((Tuple b myLog) -> Tuple (show b) myLog)
+  (first ((+) 1.0))
+  (Tuple "3.1416" "someLog") -- Tuple "4.1416" "someLog"
+```
+
+The function `first` upgrades `((+) 1.0)` to carry the log from the input to the output.
+
+So what does this have to do with profunctor optics? What if we want to carry a map back to the incoming object?
+
+```haskell
+mapBackHome :: String -> Tuple Number (Number -> String)
+mapBackHome s = Tuple (readFloat s) show
+```
+
+In the example above, `show` is our "map back" from `readFloat`. It tells us how to convert the input to the output. We call a function between strong profunctors a **Lens** when it carries a map back home.
+
+```haskell
+lens :: forall p s t a b. Strong p => (s -> Tuple a (b -> t)) -> p a b -> p s t
+lens inputWithMap server =
+  dimap
+    inputWithMap
+    ((Tuple b backHome) -> backHome b)
+    (first server)
+```
+
+Here's the type of **Lens**.
+
+```haskell
+type Lens s t a b = forall p. Strong p => p a b -> p s t
+```
+
+So we could have written the above definition as:
+
+```haskell
+lens :: forall s t a b. Strong p => (s -> Tuple a (b -> t)) -> Lens s t a b
+lens inputWithMap server =
+  dimap
+    inputWithmap
+    ((Tuple b backHome) -> backHome b)
+    server
+```
+
+Because optics are functions, we can compose them. Let's see how that works with lenses and our server.
+
+```haskell
+mapBackToString :: String -> Tuple Number (Number -> String)
+mapBackToString s = Tuple (readFloat s) show
+
+mapBackToUTF8 :: ByteString -> Tuple String (String -> ByteString)
+mapBackToUTF8 s = Tuple (fromUTF8 s) toUTF8
+
+(lens mapBackToUTF8 -- lens 1
+  <<< lens mapBackToString) -- lens 2
+  ((+) 1.0) -- server
+  (withOctets pack [0xAB, 0xCD]) -- "4.1416"
+```
+
+Even though lenses allow a different output type, for the purposes of this tutorial, we're using `Lens s s a a`, which is defined as `Lens'` in [`purescript-profunctor-lenses`](https://github.com/purescript-contrib/purescript-profunctor-lenses). In general, when you "zoom out" from a lens, you want to get back to where you started, so `Lens'` is enough for most cases.
+
+Although we're using our hand-rolled lens function above, it is exactly the same one as in [`purescript-profunctor-lenses`](https://github.com/purescript-contrib/purescript-profunctor-lenses) with a slightly different name. They call it `lens'`, and they use `lens` as a helper function to build `lens'`. Try subbing `lens` above out for `Data.Lens.lens'` and see for yourself!
+
+## Give us a choice!
+
+So "The Plus One Server" is the talk of the town, and other devs are starting to notice. Some are a little bit angry because they've never asked for a `((+) 1.0)` and now it is part of their stack. A colleague approaches us and says:
+
+> Congrats on your accomplishment with "The Plus One Server." But now it's everywhere downstream and I don't work with numbers. Can you just ignore my input when you see it?
+
+Aiming to please, we see what we can do!
+
+```haskell
+-- how I'll use The Plus One Server
+dimap
+  (\s -> Left (readFloat s))
+  (either show identity)
+  ((+) 1.0)
+  "3.1416" -- craaasssshhh
+-- how my colleague's data will pass through the server
+dimap
+  (\s -> Right "Hello")
+  (either show identity)
+  ((+) 1.0)
+  "3.1416" -- craaasssshhh
+```
+
+How do we deal with this? We have a _choice_ between two data types, and our server needs to be a profunctor that can adapt accordingly.
+
+```haskell
+class Profunctor p <= Choice p where
+  left :: forall a b c. p a b -> p (Either a c) (Either b c)
+  right :: forall a b c. p a b -> p (Either c a) (Either c b)
+```
+
+Armed with `Choice`, we can build a server that can act on our data and pass through our colleague's data:
+
+```haskell
+-- how i'll use The Plus One Server
+(dimap (\s -> Left (readFloat s)) (either show identity) (left ((+) 1.0))) "3.1416" -- == "4.1416"
+-- how my colleague will use my server
+(dimap (\s -> Right "Hello") (either show identity) (left ((+) 1.0))) "3.1416" -- == "Hello"
+```
+
+Another choice we can make is whether to attempt the computation at all. If our server can process the information, great, and if not, we provide a sensible default.
+
+```haskell
+sensibleDefault :: String -> Either String Number
+sensibleDefault s = if isNaN (readFloat s) then Right s else Left (readFloat s)
+```
+
+In lens-land, this is called a **Prism**.
+
+```haskell
+prism :: forall p s t a b. Choice p => (s -> Either t a) -> (b -> t) -> p a b -> p s t
+prism to fro server = dimap to (either identity fro) (right server)
+```
+
+And we can use it for our server like this:
+
+```haskell
+prism sensibleDefault show ((+) 1.0) "3.1416" -- == "4.1416"
+prism sensibleDefault show ((+) 1.0) "not a number" -- == "not a number"
+```
+
+So prisms give us a _choice_ thanks to the **Choice** profunctor
+
+## But what about security?
+
+"The Plus One Server" is _so_ hot that hackers have noticed it and are trying to reverse engineer it to understand its inner workings and exploit its vulnerabilities. The boss, dismayed, starts saying stuff like "we need to lock this thing down" and "does anyone here know about end-to-end encryption?"
+
+Your colleagues scramble to implement a crude form of encryption:
+
+```haskell
+dimap
+  (\s password -> readFloat s))
+  (\locked -> show (locked "passw0rd"))
+  ((+) 1.0)
+  "3.1416" -- craaasssshhh
+```
+
+So some upstream service "locks" our operation with a password, and they later unlock it with their super-secure password `"passw0rd"`. Of course, we have no clue what to do with a function that takes a password and produces a number. Our humble server can only work with numbers! Unless we are armed with a **Closed** profunctor.
+
+```haskell
+class Profunctor p <= Closed p where
+  lock :: forall a b x. p a b -> p (x -> a) (x -> b)
+```
+
+A way to think about lock is that it delays application of our function until the point when a password is provided. Another way to imagine it is that it sends the function to the end-user and lets them apply it with their password. I would guess that this is the _exact_ algorithm WhatsApp uses for their end-to-end encryption.
+
+Back to "The Plus One Server", it can now handle password-protected data:
+
+```haskell
+(dimap (\s password -> readFloat s)) (\locked -> show (locked "passw0rd")) (lock ((+) 1.0))) "3.1416" -- == "4.1416"
+```
+
+In functional-programming land, passwords can be anything. Strings, ints, aaannnd..... functions! Yes, passwords can be functions - but why would one do this?
+
+A password "unlocks" our lock, so a function unlocking something would mean that it provides information for a computation to continue. For example, think about image processing. We have a killer algorithm to do something like Gaussian blur or masking, but we don't want to know _how_ the user applies it to their picture. Their _use_ of our algorithm is private, and this use is encoded in a function. We'll call this form of password-protection with a function a **Grate**.
+
+```haskell
+-- Here, (s -> a) will be our "function" password
+grate :: (((s -> a) -> b) -> t) -> p a b -> p s t
+grate unlock server = dimap (\s f -> f s) unlock (lock server)
+```
+
+The types going to `dimap` are a bit hard to follow, so let's write `dimap` just using its types:
+
+```haskell
+dimap
+  (s -> (s -> a) -> a) -- input
+  (((s -> a) -> b) -> t) -- output
+  (p ((s -> a) -> a) ((s -> a) -> b)) -- internal profunctor
+  -- yields p s t
+```
+
+We see that, all the way through, `(s -> a)` is our password for the closed profunctor. Or, subbing `(s -> a)` into the definition of `Closed`, we have:
+
+```haskell
+class Profunctor p <= Closed p where
+-- remembering that
+-- lock :: forall a b x. p a b -> p (x -> a) (x -> b)
+-- when using a function (s -> a), polymorphism turns this into
+   lock :: p a b -> p ((s -> a) -> a) ((s -> a) -> b)
+```
+
+If your brain is hurting, rest assured that that's as heady as it gets. Now we can actually use our grate to do some password-protected art with the `((+) 1.0)` server.
+
+```haskell
+data RGB = RGB Number Number Number
+
+red :: RGB -> Number
+red (RGB r g b) = r
+
+green :: RGB -> Number
+green (RGB r g b) = g
+
+blue :: RGB -> Number
+blue (RGB r g b) = b
+
+myFilter :: ((RGB -> Number) -> Number) -> RGB
+myFilter = \f -> RGB (f green) (f blue) (f red)
+
+grate mySecretFilterApplication ((+) 1.0) (RGB 1.0 2.0 3.0) -- == (RGB 4.0 2.0 3.0)
+```
+
+Our `((+) 1.0)` server did its magic without ever knowing the inner workings of your algorithm. The "passwords" here were `green`, `blue` and `red`. When mixed with our `((+) 1.0)`, they produced a new pixel.
+
+In general, when thinking about password protecting something or, more generally, hiding the application of an algorithm like the one above, closed profunctors and grates are your friend!
+
+## Make me a Star
+
+We've now deemed "The Plus One Server" to be so useful that we want to use it with exotic optics that we've never even heard of. So far, we have only been dealing with optics that accept one profunctor - the function. But there are lots of nice profunctors, and we'd like to work with them somehow.
+
+One such profunctor is the **Kleisli** profunctor. It is a profunctor with a side effect mixed in. So if you take the `Function` profunctor we've seen before `a -> b`, a Kleisli profunctor is that with a little something extra like write to a log, read from an environment or launch a rocket. The signature for a Kleisli profunctor, also called a **Star**, is:
+
+```haskell
+newtype Star f a b = Star (a -> f b)
+
+instance functorStar :: Functor f => Functor (Star f a) where
+  map f (Star g) = Star (map f <<< g)
+
+instance profunctorStar :: Functor f => Profunctor (Star f) where
+  dimap i o (Star ft) = Star (map o <<< ft <<< i)
+```
+
+Here, `f` represents the side effect and `b` represents the output value. This could be something like `Log Int` or `Array String` or `RocketLauncher Number`.
+
+I don't know why they call it **Star**, but it seems like a reasonable choice. I tried singing "Twinkle Twinkle Little Kleisli" to my kid and it didn't really work, so let's stick with Star.
+
+Anyway, the boss wants to use an optic from Kleisli-Land, and we're responsible for getting it to integrate with our system. Our profunctor that makes a foray into Kleisli-land is called **Wander**.
+
+```haskell
+class Profunctor p <= Wander p where
+  wander :: forall s t a b. StarOptic s t a b -> Optic p s t a b
+```
+
+The first argument is an optic of star profunctors. The return value is also an optic, but one that can be used by _any_ profunctor that implements Wander. Under the hood, our profunctor call the Kleisli (Star) optic. That means that it'll have to know how to add _and_ remove a side effect - adding when it enters Kleisli-land and removing when it leaves.
+
+The actual signature for Wander in purescript is a bit different. I'm not sure why they made it this way, but it is isomorphic to the one above and gets the job done:
+
+```haskell
+-- real signature
+class Profunctor p <= Wander p where
+  wander :: forall s t a b. (forall f. (a -> f b) -> s -> f t) -> p a b -> p s t
+```
+
+To make this more concrete, let's look at the implementation of Wander for the `Function` profunctor.
+
+```haskell
+instance wanderFunction :: Wander Function where
+  wander kleisli ourfunc input = unwrap ((kleisli (Identity <<< ourfunc)) input)
+  -- you can also use this, which is more concise
+  -- wander t = alaF Identity t
+```
+
+For example, let's imagine that we got a Kleisli function that lifted a side effect from one operation to another. This is common when, for example, an operation fails for a part of a whole and you need to mark the whole as "failed".
+
+```haskell
+type Client = { name :: String, balance :: Number}
+
+actOnBalance :: forall f. Applicative f => (Number -> f Number) -> Person -> f Person
+actOnBalance f p = { name: p.name, balance: _ } <$> f p.balance
+```
+
+When we try using with "The Plus One Server", it will predictably crash.
+
+```haskell
+actOnBalance ((+) 1.0) { name: "Mike", balance: 0.0 } -- crasssshhhh
+```
+
+But if we make ((+) 1.0) effectful, it is able to wander into Kleisli-land by using `Identity` under the hood, as we saw above.
+
+```haskell
+wander actOnBalance ((+) 1.0) { name: "Mike", balance: 0.0 } -- == { name: "Mike", balance: 0.0 }
+```
+
+Luckily, there is a whole category of functions that behave like `actOnBalance`. They're called `traverse`, and they work on types that implement the `Traversable` typeclass.
+
+The basic contract with something implementing `Traversable` is that, if you have a container of values and you can produce a side effect for each value in the container, then you can accumulate the side effects. For example, if you have a `List` of `Writer Int` (meaning integers we're keeping some sort of log about), then we can get a `Writer (List Int)` by accumulating the logs for each `Int`.
+
+Let's look at the signature for traverse:
+
+```haskell
+traverse :: forall a b m t. Traversable t => Applicative m => (a -> m b) -> t a -> m (t b)
+```
+
+It is exactly the same as the first argument to `wander`, with `s == t a` and `t == t b`.
+
+This means that we can create a utility for anything implementing `Traversable`.
+
+```haskell
+traversal = wander traverse
+```
+
+Now, let's use it with our friend `((+) 1.0)`.
+
+```haskell
+traversal ((+) 1.0) [1.0,2.0,3.0] -- [2.0, 3.0, 4.0]
+```
+
+Remembering that we can compose optics, let's use it with the lens from above:
+
+```haskell
+(traversal
+  <<< lens (\s -> Tuple (readFloat s) show))
+  ((+) 1.0)
+  ["1.0","2.0","3.0"] -- ["2.0", "3.0", "4.0"]
+```
+
+In summary, a profunctor implementing `Wander` allows us to take a stroll in Kleisli-Land, and it can be used in lots of different contexts. We saw two of them above - `actOnBalance` and the mega-useful `traversal`. Wander will be even more useful when we talk about folds.
+
+## Folding up values
+
+So far, our workhorse profunctor has been the function, and even when we wandered into Kleisli-land, we did so to import our results back to the world of functions. Remembering that optics are functions between profunctors, when we give a `Function` to an optic as an argument, we call that a **Setter**. This is how "The Plus One Server" worked - it is a function (profunctor) that we passed to an optic (function acting on profunctors) and it set something on the inside of a larger structure (ie an array of integers in a traversal or a RGB channel in a grate).
+
+While this metaphor is helpful, it is admittedly like a bad monad tutorial (sorry), in that it specializes the idea of profunctors too narrowly. Profunctors are a generalized way to reason about I/O, and there's more to I/O than just functions.
+
+One thing that comes up a lot with I/O is intentionally suppressing the output. For example, you can ignore the output value and instead return something else. In Purescript, this is called `Forget`.
+
+```haskell
+newtype Forget r a b = Forget (a -> r)
+
+instance forgetfulProfunctor :: Profunctor (Forget r) where
+  dimap f _ (Forget z) = Forget (z <<< f)
+
+instance forgetfulStrong:: Strong (Forget r) where
+  first (Forget z) = Forget (z <<< f <<< fst)
+  second (Forget z) = Forget (z <<< f <<< snd)
+
+
+dimap (const true) (const 42) (identity) "3.1416" -- 42
+dimap (const true) (const 42) (Forget identity) "3.1416" -- Forget true
+```
+
+We catch the input (`true`) and forget about the output.
+
+A **Fold** is a profunctor optic that is evaluated with a `Forget` profunctor. A **Getter** is a special fold that uses the `identity` function as its accumulator. Let's build up `view` defined in [`purescript-profunctor-lenses`](https://github.com/purescript-contrib/purescript-profunctor-lenses) step by step.
+
+```haskell
+lens i = dimap i ((Tuple b f) -> f b) <<< first
+lens (\a -> Tuple (readFloat a) show) (Forget identity) "3.1416" -- Forget 3.1416
+forgetForget (Forget f) = f
+forgetForget $ lens (\a -> Tuple (readFloat a) show) (Forget identity) "3.1416" -- 3.1416
+view profunctor = forgetForget (profunctor (Forget identity))
+view $ lens (\a -> Tuple (readFloat a) show) (Forget identity) "3.1416" -- 3.1416
+```
+
+Our view function below is isomorphic to the one you'll find in [`purescript-profunctor-lenses`](https://github.com/purescript-contrib/purescript-profunctor-lenses). It's quite concise!
+
+The issue with `Forget` is that it can't forget something that doesn't exist. For example, let's try to make `Forget` an instance of `Choice`.
+
+```haskell
+instance forgetChoice :: Choice (Forget r) where
+  left (Forget f) = either (Left <<< f) ??? -- craaashhhh
+  right (Forget f) = either ??? (Right <<< f)  -- craaashhhh
+```
+
+The problem is that we can't pass through a `b` because we're forgetting it - we just have `a` and `r`. So how can we get around this? When we don't have an `a` for `(a -> r)`, we need to be able to pull an `r` out of thin air. What is the typeclass of things where you can pull one out of thin air? The monoid! The function to do that is `mempty`
+
+```haskell
+mempty :: String -- == ""
+mempty :: List -- Nil
+mempty :: Array -- []
+mempty :: Maybe Int -- Nothing
+```
+
+So as long as `r` above is a monoid, we can have our `Choice` profunctor.
+
+```haskell
+instance forgetChoice :: Monoid r => Choice (Forget r) where
+  left (Forget f) = either (Left <<< f) (Right mempty)
+  right (Forget f) = either (Right mempty) (Right <<< f)
+```
+
+The same trick works for `Wander` but on a functor application level. Again, `r` will be a monoid, and the `Const` functor will "pull an `r` out of thin air" if not provided one.
+
+```haskell
+instance wanderForget :: Monoid r => Wander (Forget r) where
+  wander f (Forget r) = Forget (alaF Const f r)
+
+instance applicativeConst :: Monoid a => Applicative (Const a) where
+  pure _ = Const mempty -- "out of thin air"
+```
+
+So, when you try to preview a value from an empty list using a lens library as we do below, you get `Nothing` because:
+
+- the `Wander` instance of forget uses the `Const` profunctor
+- the `Const` profunctor, when used in List's implementation of `traverse`, starts with a pure const (getting an `mempty`, or a `Nothing` in this case)
+- as there is nothing to smoosh, it returns `Nothing`
+
+```haskell
+preview traversed (Nil :: List Int) -- Nothing
+```
+
+Going back to Kleisli-land, the `Const` functor is the side effect that allows us to `Wander` into a `Star` profunctor (in this case, the function traversal), get its benefits, and bring them back home to our optic.
+
+## tl;dr
+
+When building a server (when using a profunctor), here are some cool optics:
+
+- An **iso** is a profunctor whose input _and_ output are isometric to some other value.
+- A **lens** is strong 💪 enough to drill down into a value and carry a map so we know how to get back up.
+- A **prism** gives us a choice 🤷‍♂️ between a value and a sensible default if we can't process the value.
+- A **traversal** allows us to wander 🏃‍♀️ into Kleisli-land and back to do our bidding
+- A **grate** allows us to lock 🔒 our optic and unlock it with a key, where the key is a function
+
+And as optics are just functions from profunctor to profunctor, here are two profunctors you can use with optics:
+
+- The **Function** profunctor (`a -> b`), which is called `Setter`, and whose magic we've seen in "The Plus One Server."
+- The **Forget** profunctor, that accepts `a`'s and "forgets them" in a recepticle called `r`, ignoring the output `b`. A forget that maps `a` to itself is called a `Getter`, aka `Forget identity`. The general operation is called a `Fold`.
+
+Remember, these are just _representations_ of the concept of optics. There are many ways to build up optics, and the profunctor one is one way. It is my favorite way because it gives you an expressive vocabulary to solve problems. At [Meeshkan](https://meeshkan.com), we use custom optics and profunctors all over the place for different business cases, and the nice thing about the PureScript community is that we can share these solutions and get their feedback.
+
+In this post, I've tried to build up intuition about what profunctors are and show how lenses are derived from them. Usually, when I use a library like [`purescript-profunctor-lenses`](https://github.com/purescript-contrib/purescript-profunctor-lenses), I'm happy just to use the library without understanding what's going on under the hood. However, the concepts used to implement profunctor lenses are so useful/universal that they're worth exploring in their own right. I hope they help you too as you solve new and exciting challenges!

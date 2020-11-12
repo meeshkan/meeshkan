@@ -1,0 +1,245 @@
+---
+title: Functional on the frontend with fp-ts and pipe
+description: Why our team integrated the fp-ts library into our web application and how to work with the pipe function.
+slug: functional-programming-for-frontend-pipe
+date: 2020-05-27
+authors: ["carolyn"]
+published: true
+tags:
+  - functional
+  - typescript
+  - react
+  - webdev
+---
+
+> This article is based on an internal presentation done by [Mike Solomon](https://dev.to/mikesol), who will be further referred to as "my boss."
+
+As a team, we decided to integrate functional programming practices into the codebase for our web application. More specifically, we're using [`fp-ts`](https://github.com/gcanti/fp-ts), a library for typed functional programming in TypeScript. 
+
+This article explains why we chose `fp-ts` and walks through a practical example using the `pipe` function.
+
+## In this article:
+- [Why we're going functional](#why-were-going-functional)
+- [Working with our existing React codebase](#working-with-our-existing-react-codebase)
+- [Putting it into practice with `pipe`](#putting-it-into-practice-with-pipe)
+- [More with `fp-ts`](#more-with-fp-ts)
+
+## Why we're going functional
+
+Because my boss [likes Haskell](/blog/introducing-plzwrk/) 🤷‍♀️
+
+I'm joking (mostly). My boss does have an affinity for functional programming and he's more comfortable in this type of workflow. But even if the learning curve is steep for those of us who didn't know what monads are, we've realized something. Adopting functional programming practices has improved our web application.
+
+Here are some of the reasons:
+
+_Productivity_
+* **Descriptive errors** - When we see logs in the console, it's rarely `Uncaught TypeError: Cannot Read Property 'name' of undefined` or `Object doesn't support property or method 'getPosts'`. This helps for more efficient debugging.
+* **Less code** - Functional programming takes care of many patterns that would otherwise result in boilerplate code.
+* **Limited options** - With functional programming, you can only do things a certain number of ways.
+* **Refactoring** - With strong type safety, you refactor "against" the compiler. This means the red squiggles in your IDE guide the refactoring process and proposes helpful suggestions.
+
+_Correctness_
+* **Type safety** - When you use a typed variable, you're defining a constraint on all possible values. This helps ensure that the inputs and outputs of our code work as expected.
+* **Error routing** - With functional programming, errors become first-class citizens and are propagated to error handlers based on rules.
+* **Linear ordering** - No more jumping between `if` this `else` that or getting stuck in a deep-nested JavaScript `try`/`catch` block.
+
+### Why we chose the `fp-ts` library
+
+In theory, we could've switched out `fp-ts` for another functional programming library for TypeScript like [Purify](https://gigobyte.github.io/purify/). Both libraries have similar syntax for common functional patterns like the `Either` class and the `chain` function. However, `fp-ts` has some additional classes that we use regularly like [`Reader`](https://gcanti.github.io/fp-ts/modules/Reader.ts.html) and [`Semigroup`](https://gcanti.github.io/fp-ts/modules/Semigroup.ts.html).
+
+If there were terms in that last paragraph that you didn't understand, don't worry! We'll cover those in a [future post](#more-with-fp-ts).
+
+## Working with our existing React codebase
+
+Fortunately for us, the codebase we're working with is still fairly new. The repository was created a little over one month ago. The initial setup was done by two developers (myself included) with no functional programming experience. But, turns out, we were already applying functional programming principles to our React application. 
+
+Some examples:
+* [**Hooks**](https://reactjs.org/docs/hooks-intro.html) as a functional way to manage state dependencies.
+* [**Function components**](https://reactjs.org/docs/components-and-props.html#function-and-class-components) instead of `class` components.
+* [**Arrow function expressions**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), which, when used without brackets, enforces a single flow of information.
+
+But taking that next step into the functional programming world required us to restructure the way we think about and read code. To make it more tangible, the rest of this article will focus on one specific function from the `fp-ts` library: `pipe`.
+
+## Putting it into practice with `pipe`
+
+The concept of piping goes well beyond the `fp-ts` library. According to [The Linux Information Project](http://www.linfo.org/pipes.html), piping is defined as:
+
+> A form of redirection that is used to send the output of one program to another program for further processing.
+
+Sounds intense and a bit abstract. Let's break it down.
+
+Overall, a pipe is one big function of functions. It takes an initial value and then passes that as the argument(s) for the first internal function to use. Then it takes the result from that function and passes it to _another_ internal function. And so on, potentially forever 🤪
+
+Maybe it's better to explain with code. 
+
+Here's an example of piping written in vanilla JavaScript:
+
+```javascript
+const examplePipe = (a, b, c) => c(b(a));
+```
+
+This `examplePipe` function takes in three parameters (`a`, `b`, and `c`). For `examplePipe` to work as expected, `a` should be a value that can be consumed by `b`. Then `b` should be a function that takes `a` as an argument. Finally, `c` should be another function that takes the result of `b` as an argument.
+
+Let's put in some arguments:
+
+```javascript
+examplePipe(1, (x) => x+1, (x) => x+5)
+```
+
+First, it takes an independent value: `1`. 
+
+Then, `1` is passed to the next function: `(x) => x+1`. So because `x` is equal to `1`, the result is `2`.
+
+Finally, this result (`2`) is passed to the last function: `(x) => x+5`. Because `x` is now equal to `2`, the `examplePipe` will return `7`.
+
+And there you have it, our first pipe 🎉
+
+This was a generic example of piping. Next, we'll go step-by-step to see how this would work in a web application. Throughout, we'll use the [`pipe`](https://gcanti.github.io/fp-ts/modules/pipeable.ts.html) function that's available through the `fp-ts` library.  
+
+### Defining the initial value in a `pipe`
+
+The most minimal `pipe` we can write is a `pipe` with a single object, like `pipe(1)`. Here, the first value (`1`) isn't consumed by any functions in the `pipe`. This means that the result of `pipe(1)` is equal to `1`. 
+
+As soon as a `pipe` grows to two values, it then enforces a contract - the second element of the `pipe` must be a _function_ that can consume the first value. This first value can be anything: A number, a string, a class, a function, or even `void`.
+
+This is common practice in functional programming. Instead of defining variables along the way, everything we need is defined at the start. "Priming the pipe" so to speak.
+
+Let's start creating an example. We're going to define an `exampleFunction` that doesn't have any parameters and returns a `pipe`. To start, `pipe` contains an object with three values: `projects` (independent `getProjects` function), a `users` array, and a `configuration` object. 
+
+It should look like this:
+
+```javascript
+const getProjects = () => ([]);
+
+const exampleFunction = () => pipe(
+    {
+        projects: getProjects(),
+        users: [5],
+        configuration: {}
+    }
+);
+```
+
+> This example assumes we have [`fp-ts` installed](https://github.com/gcanti/fp-ts#installation) and `pipe` imported.
+
+Another nuance of `pipe` is the order (or lack of order) that we define our initial values. To show how this works, let's look at a real-world example.
+
+In our web application, we often define our hooks within this first part of the `pipe` function. Alternatively, you could use `const` to define variables like so:
+
+```javascript
+const useColorMode = useColorMode()
+const useDisclosure = useDisclosure()
+```
+
+In this structure, `useDisclosure` will always be executed _after_ `useColorMode`. This is because JavaScript code executes in order.
+
+But with an object, there are no guarantees about the order of execution. JavaScript doesn't indicate which values in an object are created in memory first. This is true for any object, but it's especially useful in our `pipe` function.
+
+Defining variables within the first object of `pipe` signals to anyone maintaining the code that the order of these variables is insignificant. This allows us to refactor with more confidence. 
+
+What's also nice about putting these values first is that it distinguishes what is independent in your function. So no matter what, you know that these values don't have any dependencies or rely on anything else. This can help with debugging and code readability.
+
+### First function in the `pipe`
+
+The next part of the `pipe` is our first function. In this function, we can pass the values defined in the first object as an argument. 
+
+We do this in the following example with the `valuesFromObjectAbove` parameter:
+
+```javascript
+const getProjects = () => ([]);
+
+const exampleFunction = () => pipe(
+    {
+        projects: getProjects(),
+        users: [5],
+        configuration: {}
+    },
+    (valuesFromObjectAbove) => ({
+        // Coming soon!
+    })
+);
+```
+
+Here, `valuesFromObjectAbove` represents `projects`, `users`, and `configuration`.
+
+We can then use `valuesFromObjectAbove` to create new values. In this example, we're creating arrays of `adminProjects` and `notAdminProjects` using the `projects` value we defined in the first object:
+
+```javascript
+const getProjects = () => ([]);
+
+const exampleFunction = () => pipe(
+    {
+        projects: getProjects(),
+        users: [5],
+        configuration: {}
+    },
+    (valuesFromObjectAbove) => ({
+        adminProjects: valuesFromObjectAbove.projects.filter(a => a.admin === true),
+        notAdminProjects: valuesFromObjectAbove.projects.filter(a => a.admin === false)
+    })
+);
+```
+
+Now, we can see this grouping of independent values first, dependent ones second. Reading the code, we can deduce that `adminProjects` and `notAdminProjects`, by definition, depend on a value that was created earlier. This can help with debugging. For instance, if you insert a `console.log()` statement after the first object, you know that your log will only contain the independent values in the function.
+
+### Another round of functions
+
+There are a few options available for what values are passed to our second function. 
+
+One option is to use a [spread operator](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Operators/Spread_operator):
+
+```javascript
+const getProjects = () => ([]);
+
+const exampleFunction = () => pipe(
+    {
+        projects: getProjects(),
+        users: [5],
+        configuration: {}
+    },
+    (valuesFromObjectAbove) => ({
+        ...valuesFromObjectAbove, // Look here!
+        adminProjects: valuesFromObjectAbove.projects.filter(a => a.admin === true),
+        notAdminProjects: valuesFromObjectAbove.projects.filter(a => a.admin === false)
+    }),
+    (valuesFromFunctionAbove) => ({
+        ...
+    })
+);
+```
+
+By using the spread operator, we're saying that we want to pass down everything. This means that `valuesFromFunctionAbove` contains all of the values from the initial object (`projects`, `users`, `configuration`). And it also contains the values from the first function (`adminProjects`, `notAdminProjects`). Bonus: It's all type safe!
+
+But let's say we delete the spread operator:
+
+```javascript
+const getProjects = () => ([]);
+
+const exampleFunction = () => pipe(
+    {
+        projects: getProjects(),
+        users: [5],
+        configuration: {}
+    },
+    (valuesFromObjectAbove) => ({
+        // No spread operator
+        adminProjects: valuesFromObjectAbove.projects.filter(a => a.admin === true),
+        notAdminProjects: valuesFromObjectAbove.projects.filter(a => a.admin === false)
+    }),
+    (valuesFromFunctionAbove) => ({
+        ...
+    })
+);
+```
+
+Now, the second function only has access to `adminProjects` and `notAdminProjects`.
+
+That is the power of `pipe`. We always know what's ready to use 💥
+
+If organized appropriately, `pipe` can contain everything that we would need to create our React component. So those `...` in the last two examples? That's where we could put in our JSX.
+
+## More with `fp-ts`
+
+This article only scratched the surface of what the `fp-ts` library can bring to a web application. On our team, there are many more functions and patterns that we use (`Either`, `chain`, `isLeft`, `isRight`, `Reader`). If you'd be interested in learning about these, [tweet at us](https://twitter.com/intent/tweet?text=Check%20out%20this%20comprehensive%20article%20about%20functional%20programming%20for%20web%20applications.%20Excited%20for%20the%20next%20one!%20%40meeshkan%20https%3A%2F%2Fmeeshkan.com%2Fblog%2Ffunctional-programming-for-frontend-pipe) and let us know! 
+
+In the meantime, check out the [`fp-ts` documentation](https://gcanti.github.io/fp-ts/).

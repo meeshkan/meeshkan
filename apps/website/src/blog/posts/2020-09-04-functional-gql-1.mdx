@@ -1,0 +1,258 @@
+---
+title: Functional GraphQL 1 - Specs and typelevel parsing
+description: A series of articles on supercharging GraphQL development with PureScript
+slug: functional-gql-1
+date: 2020-09-04
+authors: ["mike"]
+published: true
+tags:
+  - functional
+  - purescript
+  - graphql
+---
+
+import { Button } from "@chakra-ui/core"
+
+One of the common points of friction in GraphQL-land is making sure resolvers are conformant to specs. There are three main strategies I've seen to do this:
+
+1. Runtime validation of IO like in [Apollo](https://www.apollographql.com/) and [Absinthe](https://github.com/absinthe-graphql/absinthe).
+1. Code generation, like [Prisma](https://prisma.io) and [GraphQL code generator](https://graphql-code-generator.com/).
+1. Deriving the schema from the resolvers or db, which is available in [`purescript-graphql`](https://github.com/hendrikniemann/purescript-graphql) and underpins services like [8base](https://8base.com).
+
+They all have their disadvantages:
+
+1. Runtime validation requires lots of testing and manual upkeep.
+1. Code generation requires constantly merging generated code and dealing with stubbed methods.
+1. Deriving the schema from the resolvers is my favorite so far, but IMO it puts the control in the wrong direction. A schema should be influenced equally by consumers, and putting too much control in the hands of producers makes development less fluid.
+
+I'd like to talk about a different strategy: **generation of resolver types**.
+
+The basic idea is that you have a schema, and the compiler uses the schema to generate the type of your resolver. That way, when the schema updates, the code no longer compiles, and getting the code to compile makes it schema-conformant.
+
+This strategy is possible in any strongly-typed language. For example, in TypeScript, [GraphQL code generator](https://graphql-code-generator.com/) will generate a resolver type that looks like this:
+
+```graphql
+schema {
+	query: Query
+}
+
+type Query {
+	me: String!
+}
+```
+
+```typescript
+export type QueryResolvers<
+	ContextType = any,
+	ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
+> = {
+	me?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+}
+
+export type Resolvers<ContextType = any> = {
+	Query?: QueryResolvers<ContextType>
+}
+```
+
+This is already a vast improvement, but it still has a few issues:
+
+1. Important parts of business logic cannot be known by a type generator. For example, if you want custom directives to influence authentication or need a more nuanced `context`, a type generator becomes clunky.
+2. You need an extra layer of translation from input types to application-level types. For example, the String `me` above may need to be a full-fledged `User` object in the application.
+3. You lose the benefits of code generation in places where application logic is boring and repeatable.
+
+So, while the generation of resolver types is helpful, we can do better. For the rest of this article, I'd like to talk about **compile-time generation of resolver types**.
+
+## What is compile-time generation of types?
+
+Compile-time generation of types means using the compiler to generate one type from another type. While that many sound a bit strange, there's nothing about it that's conceptually different than generating one value from another value. In programming, for example, we can do:
+
+```typescript
+const toString = (i: any): string => `${i}`
+```
+
+At the type-level (switching to PureScript) this becomes:
+
+```haskell
+class ToString a b | a -> b where
+  toString :: a -> b
+
+instance ts :: Show a => ToString a String where
+  toString = show
+```
+
+In the first example, we're guaranteed that any value that goes into `toString` will come out as a `string` on the other end. In the second example, we're guaranteed that any type that goes into `ToString` will come out as `String` on the other end.
+
+```typescript
+const a = toString(1) // "1"
+```
+
+```haskell
+forceString :: forall b. ToString Int b => b -> b
+forceString = identity
+
+a = forceString "5"
+
+b = toString 5
+```
+
+Here, we've the same `toString` function in JavaScript for free, and in addition, we've gotten a compile-time validator `forceString`. To see why, let's look at what happens when you use `forceString` with anything other than a string.
+
+![Compiler 1](https://i.ibb.co/xGtBDGm/Screenshot-from-2020-09-04-08-29-58.png)
+
+If we hover over it, you'll see that the compiler has "solved" what `forceString` must take.
+
+![Compiler 2](https://i.ibb.co/0MtYSfQ/Screenshot-from-2020-09-04-08-30-01.png)
+
+Using `ToString`, we've pulled a type out of thin air. If you look at `forceString`, nowhere in the definition does it say `b` must be a String. The compiler figures it out from the implementation of `ToString`.
+
+In the same way, the compiler will figure out what _type_ our GraphQL resolver needs to be from our GraphQL spec.
+
+## A slightly-more realistic example
+
+In the following example, we'll use [`purescript-typelevel-parser`](https://github.com/meeshkan/purescript-typelevel-parser) to turn symbols into types. In PureScript, `Symbol` is a kind. A **kind** is just a family of types. The types that inhabit `kind Symbol` are every unicode string. Thankfully, the binary of the PureScript compiler doesn't contain every unicode string (that'd be a pretty big compiler!). The compiler creates a type for each unicode String on-the-fly. So the type `"a"` is of `kind Symbol` just like the value `"a"` is of `type String`.
+
+Instead of GraphQL, in this example, we'll use a spec called **TypeQL**. This (fabricated) spec is a series of lowercase strings separated by `&`. The general idea is that it defines keys that point to a type. Keys of what? Who knows! Perhaps a dictionary, perhaps a database - that's for us to decide when we implement the spec. What type do the keys point to? Who knows! Perhaps `Int`, perhaps `String`.
+
+One example would be `gold&silver&bronze` pointing to `Int`, another would be `earth&wind&fire` pointing to `Boolean`. Like a GraphQL spec, our TypeQL spec doesn't _mean_ anything. It is just a container of information. Our program will give it meaning, just like a GraphQL resolver gives a spec meaning.
+
+An engineer has been tasked with taking a **TypeQL** spec and creating a PureScript implementation that can work for any type. So, for example, if we get a spec `earth&wind&fire`, then we want to be able to automatically generate a type `{ earth :: a, wind :: a, fire :: a }`, where `a` can be any type (`Int`, `String`, etc).
+
+Let's start with some imports.
+
+```haskell
+module Test.TypeQL where
+
+import Prelude
+import Prim.Row (class Cons)
+import Type.Data.Row (RProxy(..))
+import Type.Parser (class Parse,
+  type (!:!), ConsPositiveParserResult, ListParser, ListParserResult,
+  Lowercase, NilPositiveParserResult, SingletonMatcher', SingletonParserResult,
+  SomeMatcher, Success, kind ParserResult)
+```
+
+Now, we define our spec. In this case, it will be `python&java&javascript`. In the next article, this'll be a full blown GraphQL spec. Notice how `"python&java&javascript"` is a Symbol, not a String, because of the identifier `type`.
+
+```haskell
+-- our spec
+type OurSpec
+  = "python&java&javascript"
+```
+
+The next step is defining a parser. In most cases, you never have to actually write a parser as it is done for you (ie Apollo parses GraphQL). The same will be true of our GraphQL parser in the next article, but I want to show you how it's done so that you can follow a full example
+
+```haskell
+data Key
+
+data Keys
+
+-- here's our parser
+type KeyList
+  = ListParser ((SomeMatcher Lowercase) !:! Key) (SingletonMatcher' "&") Keys
+```
+
+Using the primitives of `purescript-typelevel-parser`, we define a list of lowercase values separated by the separator `&` that accurately describes the TypeQL spec.
+
+Once we have a parser result, we need to define how it translates into a type that our application understands (continuing in GraphQL-speak, we need to define the type of our resolver). In this case, we will take the parser result and turn it into a row where every key points to something of type `i`. For example, `foo&bar&baz` with type `Int` will turn into a type `{ foo :: Int, bar :: Int, baz :: Int }`.
+
+```haskell
+class TypeQLToRow (p :: ParserResult) (i :: Type) (t :: # Type) | p i -> t
+
+instance nqlToRowNil ::
+  TypeQLToRow
+    ( Success
+        (ListParserResult NilPositiveParserResult Keys)
+    )
+    i
+    res
+
+instance nqlToRowCons ::
+  ( TypeQLToRow (Success (ListParserResult y Keys)) i out
+  , Cons key i out res
+  ) =>
+  TypeQLToRow
+    ( Success
+        ( ListParserResult
+            ( ConsPositiveParserResult
+                (SingletonParserResult key Key)
+                y
+            )
+            Keys
+        )
+    )
+    i
+    res
+
+class SymbolToRow (s :: Symbol) (i :: Type) (r :: # Type) | s i -> r
+
+instance symbolToTypeQLType ::
+  ( Parse KeyList s out
+  , TypeQLToRow out i r
+  ) =>
+  SymbolToRow s i r
+```
+
+Now, we can create our typelevel validator. The validator just passes through an object, but in doing so, validates at compile-time that the object conforms to our spec. For example, `{ python: 1, javascript: 2, java: 3 }` conforms to our spec.
+
+```haskell
+intValidator ::
+  forall (c :: # Type).
+  SymbolToRow OurSpec Int c =>
+  Record c ->
+  Record c
+intValidator a = a
+
+languages :: { python :: Int, javascript :: Int, java :: Int }
+languages =
+  intValidator
+    { python: 1
+    , javascript: 2
+    , java: 3
+    }
+```
+
+Let's imagine that we now add a language (say purescript). Our spec becomes `python&java&javascript&purescript`. What happens to `languages`? Let's see!
+
+```haskell
+type OurSpec
+  = "python&java&javascript&purescript"
+```
+
+As we hoped, the compiler gets angry.
+
+![Compiler](https://i.ibb.co/G0z7kQy/Screenshot-from-2020-09-04-09-04-04.png)
+
+But, because it deep down the PureScript compiler is nice, it gives us a helpful error message letting us know what we did wrong.
+
+![Compiler love](https://i.ibb.co/JvRCwgN/Screenshot-from-2020-09-04-09-04-08.png)
+
+Now we can fix it!
+
+```haskell
+languages :: { python :: Int, javascript :: Int, java :: Int, purescript :: Int }
+languages =
+  intValidator
+    { python: 1
+    , javascript: 2
+    , java: 3
+    , purescript: 4
+    }
+```
+
+## Conclusion and next steps
+
+In this article, I've shown how typelevel-programming allows you to take a spec (ie TypeQL) and use it to generate a type. We use the type to create a validator that makes sure our code is always conformant with the spec. It's also allowed us to use custom business-logic (in this case, using `Int` as the indexed type of our record).
+
+In the next article in this series, which will come out in mid-September 2020, I'll show how this strategy can be used to build type-safe GraphQL resolvers. In the meantime, if you're building a GraphQL API, you should sign up for [Meeshkan](https://meeshkan.com)! We do automated testing of GraphQL APIs.
+
+<Button
+	as="a"
+	mt={4}
+	href="https://app.meeshkan.com"
+	aria-label="Create a free Meeshkan account."
+	w={["100%", "100%", "auto"]}
+>
+	Create a free account
+</Button>
+
+Our novel approach combines functional programming and machine learning to execute thousands of tests against your GraphQL API and find mission-critical bugs and inconsistencies. Regisration is free, and don't hesitate to reach out - we'd love to learn more about what you're building!

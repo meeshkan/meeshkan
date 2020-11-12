@@ -1,0 +1,244 @@
+---
+title: Reviving the Dhall API discussion
+description: Here's why Dhall is a great contender for superseding REST and GraphQL.
+slug: dhall-api
+date: 2020-09-06
+authors: ["mike"]
+published: true
+tags:
+  - functional
+  - dhall
+  - graphql
+  - rest
+  - api
+---
+
+I've worked a lot with [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) and [GraphQL](https://graphql.org/) over the past year, and there some issues that crop up in both ways of building an API.
+
+1. **Dense specs**: OpenAPI and GraphQL are fairly complex, and they both require a subtle understanding of how input arguments to an API effect the output. For example, to filter an 8base query, you have to understand how a quadruply-nested input argument will effect a specific subfield. Yikes!
+1. **Producer-first**: OpenAPI and GraphQL put control in the hands of API producers, which means that consumers are constrained in the way data can be viewed and aggregated by the JSON return type (OpenAPI) and structure of the type system (GraphQL).
+1. **Clunky auth**: Authorization feels like a bolt-on in both OpenAPI and GraphQL. OpenAPI is a bit better in that different tokens can be used for different endpoints, but they both require _ad hoc_ fine-grained authorization solutions.
+1. **Custom DSL**: Types from OpenAPI (ie the return type of a GET request) and GraphQL (ie an object type) cannot be used in another context without a lot of parsing and converting. Compare this to isomorphic TypeScript, where types can be standardized across entire projects through the use of libraries.
+
+These problems are not because OpenAPI or GraphQL are bad. It's just that modern software has complexities that neither spec was designed to handle.
+
+Tinkering with Dhall this weekend, I had the thought "What if Dhall could be the basis of a query language à la REST or GraphQL? Would this help solve some of the issues above?"
+
+Github did not disappoint - someone was already thiking of this a couple years ago and wrote an [initial design document](https://github.com/ocharles/dhallql). My spin on it is different, but the basic idea of using Dhall as a stand-in for GraphQL is the same. I'm curious to hear what people think!
+
+## What's Dhall
+
+[Dhall](https://dhall-lang.org) is a configuration language. It's basically JSON, but with variables, types, functions and the ability to include other files. It also has some built-in functions for basic tasks like folding lists.
+
+This is some dhall:
+
+```
+{ name = "Mike", country = "Finland"}
+```
+
+This is some slightly more complicated Dhall.
+
+```
+let license = "Apache-2.0" in
+{ name = "Mike", country = "Finland", license = license }
+```
+
+Once variables are substituted and functions are evaluated, Dhall is output as plain old JSON or YAML.
+
+## Dhall for Web APIs
+
+The next sections of this article outline the basics of a Dhall-based API exchange using a pet store example. I'll then address how it solves the four problems I've identified above.
+
+### Service discovery
+
+The first step is to send a JWT (ie from Auth0) to a service discovery endpoint which returns a JSON object with two keys:
+
+- `schema`, which shows the JSON schema that an API consumer can consume with the given token; and
+- `nonce`, which must be sent along with the token to verify that the correct version of the schema is being served.
+
+In our example, the return value will look something like this:
+
+```json
+{
+  "nonce": "wjsmcpmpiyvpwqba",
+  "schema": {
+    "$ref": "#/definitions/user",
+    "definitions": {
+      "user": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "pets": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/pet" }
+        }
+      },
+      "pet": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "owner": {
+            "$ref": "#/definitions/user",
+            "items": { "type": "object" }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Dhall from the producer
+
+Now that the API consumer knows what information she or he can access with a given token, the server needs to be able to process requests for that information. This is where the Dhall comes in. The example presented below can be seen [in its entirety on this gist](https://gist.github.com/mikesol/8f685029361c13fcb44758480d82f651).
+
+First, let's import some functions we'll need a bit later on:
+
+```
+let fold = https://prelude.dhall-lang.org/List/fold
+let filter = https://prelude.dhall-lang.org/List/filter
+let equal = https://prelude.dhall-lang.org/Natural/equal
+```
+
+Data, as represented by an API producer, should be _flat_. A single table with three columns will suffice:
+
+- **Pointer**: A pointer to an underlying object.
+- **Key**: A key on the object.
+- **Value**: The value of the key.
+
+Below is my data model. It's a simple pet-store API, so there are three types of objects: `User`, `Pet` and `List`. The keys of an object can be `Id` (ie 42), `Type` (ie `Pet`), `Name` (ie "Fluffy") etc. `Head` and `Tail` are a way to represent linked lists.
+
+Entries are integers, booleans, doubles, text, pointers to other objects called `Id_`, a given `Type`, and `Nil` to signal an array terminates.
+
+Lastly, our `Db` is a list of `Row` objects that combine a pointer to an `Id`, a key and a value.
+
+```
+let Obj = <User | Pet | List>
+let Key = <Id | Type | Name | Pets | Head | Tail>
+let Entry = <Int_: Integer | Bool_: Bool | Double_: Double | Text_: Text | Id_: Natural | Type_: Obj | Nil>
+let Row = { ptr: Natural, key: Key, val: Entry }
+let Db = List Row
+```
+
+If Haskell and MongoDB had a baby, this'd be it. There is a notion of using a union - `Obj` - to represent typed objects. At the same time, the way these things are mixed and matched is flexible.
+
+The last thing we do as an API producer is define how to pass this information to consumers. The signature of `Reader` says "for whatever projection the consumer wants, if they provide a function from the db to the projection, I will provide that projection." We then feed the data to `ReaderImpl`.
+
+Note that, in a live example, a Dhall-language binding in a given language (ie JavaScript, Python) would be used, and the data would be injected via that binding rather than hardcoding it in Dhall files.
+
+```
+let Reader: Type = forall (Projection: Type)
+  -> forall (ProjectionF: Db -> Projection)
+  -> Projection
+
+let ReaderImpl: Reader = \(Projection: Type)
+  -> \(ProjectionF: Db -> Projection)
+  -> ProjectionF [
+    {ptr=0, key=Key.Id, val=Entry.Id_ 0},
+    {ptr=0, key=Key.Type, val=Entry.Type_ Obj.User},
+    {ptr=0, key=Key.Name, val=Entry.Text_ "Mike"},
+    {ptr=0, key=Key.Pets, val=Entry.Id_ 1},
+    {ptr=1, key=Key.Type, val=Entry.Type_ Obj.List},
+    {ptr=1, key=Key.Head, val=Entry.Id_ 10},
+    {ptr=1, key=Key.Tail, val=Entry.Nil},
+    {ptr=10, key=Key.Id, val=Entry.Id_ 10},
+    {ptr=10, key=Key.Type, val=Entry.Type_ Obj.Pet},
+    {ptr=10, key=Key.Name, val=Entry.Text_ "Fluffy"}
+  ]
+```
+
+One important convention to note in this setup is that the top-level object of the JSON schema is **always** represented by the pointer `0`.
+
+Lastly, this code works for queries but not mutations. For mutations, you'd need a `Writer` type with the following signature:
+
+```
+let Writer: Type = forall (Projection: Type)
+  -> forall (TransformF: Db -> Db)
+  -> forall (ProjectionF: Db -> Projection)
+  -> Projection
+```
+
+The transform function takes the Db and produces an altered version with whatever writes/deletes/updates one wants to do, and the projection function is the same as above.
+
+### Dhall from the consumer
+
+The consumer then fulfills her or his part of the contract by providing the projection function.
+
+```
+let getName: (Db -> Natural -> Text) = \(db: Db)
+  -> \(ptr: Natural)
+  -> fold
+     Row
+     (filter
+       Row
+       (\(a: Row) -> equal a.ptr ptr)
+       db)
+      Text
+      (\(a: Row) -> \(t: Text) ->
+        merge {
+          Id=t,
+          Type=t,
+          Name=merge {
+            Int_=\(v: Integer) -> t,
+            Bool_=\(v: Bool) -> t,
+            Double_=\(v: Double) -> t,
+            Text_=\(v: Text) -> v,
+            Id_=\(v: Natural) -> t,
+            Type_=\(v: Obj) -> t,
+            Nil=t
+          } a.val,
+          Pets=t,
+          Head=t,
+          Tail=t
+      } a.key) ""
+
+let View = { name: Text }
+in ReaderImpl
+   View
+   (\(db: Db) -> {
+     name = getName db 0
+   })
+```
+
+If you [copy-and-paste the code in the gist](https://gist.github.com/mikesol/8f685029361c13fcb44758480d82f651) and [run it in the on-line dhall interpreter](https://dhall-lang.org), you'll get `{"name":"Mike"}` as the output JSON.
+
+NB that the `getName` monstrosity above is in the grey-zone between producer and consumer. It is consumer side, but is boiler-plate-y enough to warrant a standardized implementation for all consumers. The great thing about Dhall is that these sort of functions can be factored into their own files.
+
+## How this fixes the problems defined above
+
+Let's revisit the problems above one by one and see how this solution fixes them.
+
+### Spec
+
+The spec is JSON schema, pure and simple. It is more concise than OpenAPI, and it lacks having to deal with input parameters like GraphQL.
+
+It is up to the producer to ensure that the flat data structure fed to the projection function follows the JSON schema. Combing over it is then automatable with functions like `getName`.
+
+### Power to the consumers
+
+The return type from the spec is _completely_ determined by the consumer. That's the line `let View = { name: Text }` above. The JSON schema represents how the data is provided on the producer side, but it is entirely up to the consumer how they choose to aggregate it. In this case, I opted to leave off pets, going only for `{"name":"Mike"}`. I didn't need to call the field `"name"`, nor did I need to return `"Mike"` unaltered. As consumers of the data, we aggregate it as we see fit.
+
+At the same time, the data can be infinitely deep, as we saw with the pets-to-owners recursive relationship in the JSON schema. This is why the types cannot be represented in anything other than a flat structure.
+
+The idea of consumers sending code to a server to execute and turn into a result may seem far-fetched, but Dhall is the _perfect_ language for this because it is ultra-secure (no IO possible) and has no recursion, so no infinite loops.
+
+### Authorization
+
+In my opinon, the most important aspect of this design is that it gets authorization right. When the first handshake happens and the consumer receives a JSON schema based on their token, they know what _they_ will be allowed to see. They don't know anything about what anyone else can see or an underlying schema. The JSON encodes the entirety of their authorization permissions.
+
+It could be, for example, that a resource is both viewable (ie someone's name on a list of friends) and not viewable (ie the fact that that person is dating your ex) depending on where it shows up in the JSON schema. In this way, the same resource can have multiple different pointers, and similarly, the same pointer can be referenced recursively (pets-to-owners above), allowing for queries as deeply nested as the consumer wants. What stops a recursive loop is the fact that the consumer's query is not infinitely long, but we do not limit how deep they can nest their data.
+
+### Custom DSL
+
+With Dhall, there's no custom DSL like GraphQL. There's just Dhall, and Dhall types can live across projects. Dhall was born for the internet, so including a type is as easy as pointing to its URL (as we saw with the imports of `fold`, `filter` and `equal` above).
+
+## Conlcusion
+
+In this article, I presented four ways that I think modern API building suffers:
+
+1. The specs are too dense.
+1. The way data is queried and mutated is dictated by API producers.
+1. Authorization is broken.
+1. Custom DSLs require needless specialization.
+
+I then presented a brief sketch for a Dhall-based web API that, in my opinion, solves these problems. I encourage you to paste the GitHub gist in the Dhall on-line evaluator to see how the whole thing ties together. Please let me know what you think!

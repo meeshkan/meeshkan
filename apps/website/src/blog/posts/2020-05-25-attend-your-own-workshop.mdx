@@ -1,0 +1,65 @@
+---
+title: Attending your own workshop
+description: What's better than running a workshop? A workshop running you!
+slug: attend-your-own-workshop
+date: 2020-05-25
+authors: ["mike"]
+published: false
+tags:
+  - testing
+  - javascript
+  - typescript
+  - git
+---
+
+_This article was originally published on September 20, 2019._
+
+What’s better than running a workshop? A workshop running you! This is exactly what I did at [OdessaJS](https://github.com/meeshkan/unmock-odessa-saturday) this year.
+
+The workshop format comes from years of workshops not panning out because there are always problems — projector not working, people know more than me and get bored, people don’t have the requisite skill set, unclear examples, etc. To remedy this, I started with the basic premise of “let’s build a GitHub repo, from scratch, that is populated (almost) exclusively by attendees’ [pull requests](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests).” That way, I don’t need an HDMI cable because the workshop lives in the attendees screens and unfolds in real-time. In thirty minutes, the workshop runs itself, and the workshop runner (me) sets the cadence, becomes a glorified pointer to the [documentation](https://www.unmock.io/), and makes coffee runs. Lastly, because the workshop is plugged into CircleCI, people can build multiple branches without hogging CPU. The PRs and build artifacts act as an audit log of everyone’s efforts, which usually gives hints on how to fix broken code.
+
+So without further ado, let’s unpack my unmock workshop, step-by-step with timestamps, so that you see how the sausage is made.
+
+### 11AM — Pleasantries, short introductions
+
+### 11:05AM — Create the [GitHub repo](https://github.com/meeshkan/unmock-odessa-saturday)
+
+Pass around your computer to get everyone to sign up. If they don’t have a GitHub account, ask them to create one. If they won’t create one then you’re SoL, but I haven’t run into this yet.
+
+### 11:10AM — First pull requests to [README.md](https://github.com/meeshkan/unmock-odessa-saturday/pull/1)
+
+Have everyone make a [pull request to README.md](https://github.com/meeshkan/unmock-odessa-saturday/pull/3). Merge them as they come in and help people sort out their own merge conflicts. This way, people who are uncomfortable with the git flow can get help from other attendees. This is the only place that I saw some more advanced students getting bored, and I asked them to help set up [.gitignore](https://github.com/meeshkan/unmock-odessa-saturday/pull/4), TypeScript, package.json, Jest and various other tidbits so that we could hit the ground running.
+
+### 11:14AM — Set up [CircleCI](https://circleci.com/gh/meeshkan/unmock-odessa-saturday)
+
+Get automatic builds going immediately, and populate the repo with a [minimum viable CircleCI config file](https://github.com/meeshkan/unmock-odessa-saturday/pull/13). About half the crowd has no clue it is this easy to run automated tests on your code. There is at least one person who tears up thinking about the amount of time they’ve wasted not using a tool like CircleCI. Comfort them and move on.
+
+### 11:18AM — Write your first tests
+
+At this point, we want to get people writing tests. Not because we are evangelizing [test-driven development](https://en.wikipedia.org/wiki/Test-driven_development), nor because we are teaching them to use [unmock](https://www.unmock.io/) (well, ok, kinda because of that), but because tests provide a spec for how people think through their work and show people’s expectations for success and failure, which makes collaboration easier.
+
+For example, [OlehBuriaOSF](https://github.com/OlehBuriaOSF) authored a [PR](https://github.com/meeshkan/unmock-odessa-saturday/pull/11) with the following test:
+
+```javascript
+test("string + number = string", () => {
+  expect("2" + 3).toBe("23");                                      
+});
+``` 
+
+While perhaps not revealing that much about the predilections, aspirations and fears of OlehBuriaOSF, we know that he expects a string plus a number to be a string in JavaScript. You’d be amazed how many people are comforted by seeing the way other people write tests. It assures them that writing tests is not hard, that it’s ok to write silly tests, and that tests really do help communication.
+
+### 11:30AM — Write your first functions to test
+
+A more realistic scenario is that a person writes a test for a function. For example, [kl2karpenko](https://github.com/kl2karpenko) wrote a lovely `pow` function (power to Lily!), imported it into her test and [tested it](https://github.com/meeshkan/unmock-odessa-saturday/pull/21).
+
+### 11:40AM — Failing a test
+
+This is the secret sauce — [ask everyone to write an intentionally bad bit of code that whatever you are teaching will fix](https://circleci.com/gh/meeshkan/unmock-odessa-saturday/36). This is not that hard, as most libraries or packages fix something that’s broken in the development process. In this case, because we are teaching unmock, which is all about mocking APIs, we ask them to call a real API. Predictably, builds for this sort of thing will fail for a variety of reasons — 404 unauthorized errors, rate limits, etc. If you’re lucky, you may even hit a real API and do something fun like move money between two banks! But usually this doesn’t happen.
+
+### 11:55AM — Passing the test using unmock
+
+Once everyone has felt the pain, help them ease their way out if it by introducing the meat of what you’re there to teach. In this case, unmock saves the day by helping them write a spec for their API and using that spec to automatically mock the API, which means their tests pass. The [pull requests don’t lie](https://github.com/meeshkan/unmock-odessa-saturday/pull/34) — the students get it. Horrah!
+
+## Never run a workshop again
+
+Using this method, your workshops will become delightful collaborative experiences where people rarely get bored and everyone verifiably learns the thing you set out to do. And unless you are creating a quantum computer, you can probably build it all from scratch during the workshop. Actually, [even DIY quantum computing is possible](https://spookyactionbook.com/category/diyquantum/). I look forward to any and all feedback about this workshop format, and thanks for taking the time to check it out!

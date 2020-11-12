@@ -39,9 +39,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/webapp/**/*.{ts,tsx}"
-            ]
+            "lintFilePatterns": ["apps/webapp/**/*.{ts,tsx}"]
           }
         },
         "test": {
@@ -74,9 +72,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/webapp-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/webapp-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -144,9 +140,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/website-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/website-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -160,9 +154,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/chakra-theme/**/*.{ts,tsx,js,jsx}"
-            ]
+            "lintFilePatterns": ["libs/chakra-theme/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {

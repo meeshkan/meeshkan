@@ -1,0 +1,34 @@
+---
+title: Kotlin tests and user stories
+description: I love stories. I love tests. And I really love tests that read like stories.
+slug: kotlin-tests-user-stories
+date: 2020-07-10
+authors: ["mike"]
+published: true
+tags:
+  - kotlin
+  - testing
+  - automation
+---
+
+_This article was originally published on August 14, 2019._
+
+I love stories. I love tests. And I really love tests that read like stories.
+
+My journey into the poetic world of writing tests like stories starts with a talk by Jake Wharton about [robot testing](https://jakewharton.com/testing-robots/). Wharton argues that tests should read like instructions to a robot on how to use your app. The benefits of his approach go beyond the human-readability of a testing spec. Writing hybrid story/tests enforces a form of rigor that forces one to take a step back and think about how one truly wants users to interact with an app. This invariably leads to a cleaner design and less cruft.
+
+This way of authoring tests has recently become a bit of an obsession. So much so that I have dispensed with functional syntax and begun writing my tests using prose. Think OuLiPo plus Larry Wall.
+
+“How does the whole thing work?” you may ask. Imagine we were writing a payment app. The code below would constitute a syntactically-valid Kotlin test.
+
+```
+First sign into your console.
+ Then check your point balance. There should be fifteen points.
+ Then use all of your points to buy a ticket to Guam that costs exactly the number of points you have.
+ Then check your point balance. It should now be zero.
+```
+
+Kotlin makes the example above possible thanks to the keyword. I have provided below the same example with all of the infix functions needed to create syntactically correct Kotlin.
+
+You see that some functions above contain placeholder comments to verify the various bits of business logic that we are testing. This allows us to decouple the actual functions we are testing from their semantic meaning. It also reduces the ambiguity of intent even though it requires a fair amount of boilerplate. Even the boilerplate can be mitigated to a certain extent by scripts that transform prose into code.
+Robot tests are not the only situations where Kotlin-interpretable prose can prove useful. [Medium articles work as well](https://try.kotlinlang.org/#/UserProjects/uspeu9cmn55b14jn71l3amlea1/r95i21of8ue2oc7aaop4rkp9dl).

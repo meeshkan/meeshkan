@@ -1,0 +1,172 @@
+---
+title: Optics in TypeScript
+description: tl;dr Use monocle-ts
+slug: optics-in-ts
+date: 2020-05-18
+authors: ["mike"]
+published: false
+tags:
+  - javascript
+  - typescript
+  - optics
+  - functional
+---
+
+_This article was originally published on September 20, 2019._
+
+When one of my team members shared [this Medium story](https://medium.com/javascript-scene/lenses-b85976cb0534) about lenses, I thought it would be great to do a nice, lightweight exercise in optics (the category to which lenses belong) that my team could get behind. So, I rewrote the entire code base to use optics and submitted it as a giant pull request. So much for best intentions. But I did learn a lot about optics, as did my team, and I would like to share my learnings here. By the end of the article, you should know _why_ one would use optics, _what_ optics are and _how_ to use them.
+
+## Why optics 
+
+Let’s look at a really basic operation: changing the first letter of each string in an array of strings to `"F"` and returning the first string from the array. Here is my first attempt.
+
+```typescript
+const string withF = (s: string[]): string =>
+  s.map(i => "F"+i.slice(1))[0];
+```
+
+This code has two major flaws: we are not guaranteed that the strings will be of non-zero length, and we are not sure that the array will be of non-zero length. We could remedy this with the following.
+
+```typescript 
+const string withF = (s: string[]): string | undefined =>
+  s.length > 0 ? s.map(
+    i => i.length > 0 ? "F"+i.slice(1) : undefined
+  )[0] : undefined;
+```
+
+While this works, it is unreadable. We have diluted the intention of our code in a sea of conditionals and `undefined`.
+
+Optics give you three big advantages compared to the hot mess above:
+* They are readable.
+* They allow you to focus on each step of a complex operation in isolation, which helps eliminate bugs.
+* They create composable bits of logic that can be combined into powerful abstractions.
+
+As a basic rule of thumb, any time you are _getting_ a property of an object that may be undefined, which includes anything in a `Record`, `Array`, or `string`, use optics. Also, if you are creating a new object from an old one, use optics. So, basically, use optics all the time.
+
+## What are optics 
+
+You can think of lenses as ways to focus on different parts of an object and either get those parts or create a new object with those parts changed. While there are lots of different optics, I would like to discuss four. If you master these four, everything else is either a combination thereof or some exotic wizardry that falls outside of average use cases.
+
+### Lens 
+
+The most ubiquitous optic is called a lens. It is a simple zoom operation. Let’s see it in action, using `monocle-ts` as our optics library of choice.
+
+```typescript
+import { Lens } from "monocle-ts";
+type Person = {
+  name: string;
+  hobbies?: string[];
+}
+const nameLens = new Lens<Person, string>(
+  person => person.name,
+  name => person => ({ ...person, name }) )
+);
+const newPerson = nameLens.modify(_ => "Jane")({ name: "Steve" });
+newPerson.name // "Jane"
+```
+
+In general, the syntax for a Lens is:
+
+```typescript
+<TopLevel, ThingToFocusOn>(
+  getter: (a: TopLevel) => ThingToFocusOn,
+  setter: (a: ThingToFocusOn) => (b: TopLevel) => TopLevel
+)
+```
+
+Because lenses are often used to zoom in on the field of an object, `monocle-ts` provides us with the `Lens.fromProp` method that simplifies the above definition. In this case, we’d use the following.
+
+```typescript
+import { Lens } from "monocle-ts";
+type Person = {
+  name: string;
+  hobbies: string[];
+}
+const nameLens = Lens.fromProp<Person>()("name");
+```
+
+### Iso 
+
+Next up is Iso, which changes something to something else in a lossless manner. That is, you need to preserve all of the information from the original object for Iso to work correctly.
+
+```typescript
+import { Iso } from "monocle-ts";
+type Person = {
+  name: string;
+  hobbies?: string[];
+}
+type Coder = Person & { languages?: string[]; }
+const personToCoder = new Iso<Person, Coder>(
+  person => person,
+  coder => { { languages, ...rest } = coder; return rest; }
+);
+const newCoder = personToCoder.modify(_ => _)({ name: "Steve" });
+newCoder.name // "Steve"
+```
+
+In general, the syntax for an Iso is:
+
+```typescript
+<ThingA, ThingB>(
+  get: (a: ThingA) => ThingB,
+  reverseGet: (b: ThingB) => ThingA
+)
+```
+
+In my experience, I’ve found that the main use of Iso is to convert between data structures to then do further processing. For example, sometimes it is easier to work with arrays instead of objects, in which case an object-to-array Iso helps.
+
+```typescript
+const objectToArray = <A, B>() new Iso<Record<A,B>, Array<[A,B]>>(
+  obj => Object.entries(obj),
+  arr = arr.reduce((a, b) => ({ ...a, [b[0]]: b[1] }), {})
+);
+```
+
+You have to be careful here that you know how your object behaves. For example, if we use the Iso above and then map all of the entries’ keys to the same entity of type `A`, we will lose all of the values but one of type `B`, which breaks the Iso promise. So, while an Iso is a helpful converter, make sure that it is a lossless converter or, alternatively, that you can accept whatever loss may come along with it!
+
+### Traversal 
+
+Traversal operates on objects that can be iterated over in a definite order, like arrays. Unlike the other objects we’ve explored, the signature for a traversal constructor is quite complicated. Essentially, it takes an applicative functor that is applied to all the elements of a collection. Thankfully, we do not have to write these functors: we can just used several useful prefabricated traversals.
+
+For example, `monocle-ts` has a `fromTraversable` function that allows you to easily build a Traversal from something implementing the `Traversable` interface in `fp-ts`. One common `Traversable` is array. So,
+
+```typescript
+import { fromTraversable } from "monocle-ts";
+import { array } from "fp-ts/lib/Array";
+const arrayTraversal = fromTraversable(array)();
+arrayTraversal.modify(i => i + 1)([1, 2, 3]); // [2, 3, 4]
+```
+
+### Prism 
+
+The last optic to grok is Prism, which takes an object and returns `none` if the object does not correspond to some criteria or `some(obj)` if the object does correspond. Here, `none` and `some` are part of the `Option` class from `fp-ts`, but any optional type (ie `string | undefined`) will do. The “classic” way to use prisms is to discriminate between types in a union (think variants in ReasonML, union types in TypeScript, etc). But you can use it to apply any criteria to any object and determine of the object fulfills or rejects that criteria.
+
+```typescript
+const undefinedPrism= <A>() new Prism<A | undefined>(
+  myUnion => myUnion === undefined ? none : some(myUnion),
+  myA => myA
+);
+```
+
+In general, the signature for a Prism takes two functions: one that does the discriminating, and one that passes in a valid value and yields the original value. The latter is usually the identity function. If it is not, consider composing your Prism with an Iso.
+
+```typescript
+<A>(
+  get: (a: A) => Option<A>,
+  reverseGet: (a: A) => A
+);
+```
+
+### Summary 
+
+The four optics we see above can be thought of roughly with the following equivalents:
+* Lens = Accessor (ie `a.b`)
+* Iso = Map (ie `f(a)`)
+* Traversal = Iterator (ie `a.map`)
+* Prism = Filter (ie `a === b`)
+
+From these four objects, we can combine really powerful optics that dig deep into structures and modify them or yield their parts. For example, `monocle-ts` offers an Optional optic, which is a Lens + a Prism, that you’ll want to use whenever a field in an object may be undefined.
+
+## How to use optics 
+
+The best way to learn how to use optics is to study a repository that uses them. For example, we created [`openapi-refinements`](https://github.com/meeshkan/unmock-js/blob/dev/packages/openapi-refinements/src/index.ts) to make it easier to get and set parts of an OpenAPI schema. I hope you find them useful — they make for less errors and more readable code!

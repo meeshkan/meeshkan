@@ -1,0 +1,138 @@
+---
+title: Four reasons that PureScript is your best choice to build a server in 2020
+description: Plus a bonus reason at the end for diligent readers!
+slug: purescript-2020
+date: 2020-09-04
+authors: ["mike"]
+published: true
+tags:
+  - functional
+  - purescript
+  - api
+---
+
+Today, on the #purescript channel of the functional programming Slack, I wrote "I think PureScript is the best choice for anyone building a server in 2020." To that, Peter Andersen asked:
+
+> Wow! What are the key things in your eyes that make it the best?
+
+Now if that's not an incitation to blog, I don't know what is!
+
+So, here are four reasons that PureScript is the best way to build a server in 2020. I'll tl;dr them here, but you should stick around for the bonus reason at the end as well!
+
+- Hello world
+- Portability
+- Language
+- Community
+
+## Hello world
+
+The time it takes to get a server up and running in PureScript is as fast as a `hello-world` server in JavaScript and Python. At Meeshkan, we regularly have to push out a server for some random part of the stack, and my fingers can get in the PureScript+Payload groove as fast as Node+Express or Python+Flask.
+
+```bash
+npm init -y
+npm install purescript spago xhr2
+init
+spago install payload
+spago build
+```
+
+Then mosy on over to `src/Main.purs` and paste:
+
+```haskell
+module Main where
+
+import Prelude
+import Effect (Effect)
+import Effect.Aff (Aff)
+import Payload.Server as Payload
+import Payload.Spec (Spec(Spec), GET)
+
+type Message
+  = { text :: String }
+
+spec ::
+  Spec
+    { hello ::
+        GET "/hello"
+          { response :: Message
+          }
+    }
+spec = Spec
+
+hello :: {} -> Aff Message
+hello _ = pure { text: "world" }
+
+main :: Effect Unit
+main = Payload.launch spec { hello }
+```
+
+Then, in bash:
+
+```bash
+spago run
+```
+
+Try `curl http://localhost:3000/hello`, get back `{"text": "world"}`.
+
+The package [Payload](https://pursuit.purescript.org/packages/purescript-payload) is one of several ways to build a server in Purescript - there's also [Hyper](https://pursuit.purescript.org/packages/purescript-hyper). And there are libraries to work with GraphQL and OpenAPI as well.
+
+In the "just get stuff done" department, PureScript rivals languages like JavaScript, Python and Go. The next time you need to crank out a server, remember that PureScript is imminently crankable!
+
+## Portability
+
+PureScript is a front-end for multiple languages. It compiles to JavaScript, Go, Python, Erlang, Haskell, and C++, just to name a few. So the "write once, use everywhere" philosophy that made isomorphic Node+Browser development so popular is even _more_ powerful in PureScript. Furthermore, because PureScript is just transpiling, it can be deployed to environments like Heroku, Vercel or GCP by putting `spago run` in your `package.json` for the run command.
+
+If your server needs to access custom language features, like a ML model in Python or a killer library you can't live without in JavaScript, PureScript's foreign function interface allows for seamless interaction between PureScript and the target language. For example, if in PureScript we have:
+
+```haskell
+-- Main.purs
+module Main where
+
+foreign import hello :: Int -> Effect String
+```
+
+Then you just need a `Main.js` in the same folder:
+
+```javascript
+// Main.js
+exports.hello = (i) => () => `${i}`
+```
+
+And PureScript automatically links them up.
+
+The day you need to migrate your server from language X to language Y, you'll be glad you wrote most of it in PureScript. I recently had this experience with WebAudio - I wrote a proof of concept in PS->JavaScript and did PS->Wasm once I was ready to make it more performant at the expense of debugability.
+
+## Language
+
+PureScript is in the same category of languages as Haskell, Idris, Agda and Coq. Because these languages lend themselves well to proving things, really smart people tend to flock to them, which means the discussion is usually pretty heady and newbs can get easily lost.
+
+However, this discussion masks the reality that functional languages are no more difficult to get started in than other ones. Imagine that you need to write a function that increments positive integers and returns some nullish value for anything less than 0. Compare an implementation in Python to the same in PureScript.
+
+```python
+def posinc(i):
+  return None if i <= 0 else i + 1
+```
+
+```haskell
+posinc i = if i <=0 then Just i else Nothing
+```
+
+I've shown these "Rosetta stone" examples before many-a-coder and have yet to find someone that feels one is inherently more difficult than the other.
+
+If I were a betting person, I'd bet that the type safety and clean, readable code that come with the Haskell family of languages will save you many-a-bug in production and cause you to never work with anything else. But alas, I don't bet. The only point I'll make here is that you don't need to have ten years of software development under your belt to grok PureScript. Getting up and running is no different than learning Python.
+
+...a quick aside to those of you who _are_ into FP and swear up and down by it. PureScript is not as full featured as Haskell, and doesn't have out-of-the-box dependent types like Idris/Agda, but it has a minimalistic feature set that allows you to do most of the stuff you'd actually want to do in a real-world app. Plus, it is way easier to ship than Idris.
+
+## Community
+
+The PureScript community has an active, non-toxic [Discourse](https://discourse.purescript.org/) and [Slack](https://functionalprogramming.slack.com) populated by helpful people that answer each others' questions and share resources. Additionally, most libraries you'd ever need for a basic server have already been written with ample documentation on [Pursuit](https://pursuit.purescript.org/), and novel ideas are being explored all the time.
+
+A lot of PureScript coders also use [dhall](https://dhall-lang.org) as an alternative to JSON for configuration. If you use `spago` as I did above, you're using `dhall` and you'll see `dhall` files in your directory. For anyone that has ever been hit by a [configuration bug](https://news.ycombinator.com/item?id=23755843), you know the importance of getting config right early on in a project. PureScript+Dhall is an unbeatable combo in this regard.
+
+## Bonus
+
+I promised you a bonus, and here it is. While [Meeshkan](https://meeshkan.com) is an equal-opportunity tester, we have additional bells and whistles in our service that we use if you provide us with certain assets like an OpenAPI spec or GraphQL schema. We also have tools that use the types of certain languages to create even more powerful tests, and PureScript is on the list. So by going with PureScript, your service will be more testable by Meeshkan. As our stack becomes more mature, we regularly open-source PureScript libraries to help folks build better servers and write more powerful tests.
+
+## Conclusion
+
+PureScript is still in early-adopter mode, and the community is tiny. I personally was reluctant to try it out at first because I didn't see the point over using Haskell. However, the velocity of development/deployment, the limited feature set one can wrap one's head around, and the portability won me over. The next time you're building a server, or even in your current server if it is in a language to which PureScript compiles, give PureScript a shot!

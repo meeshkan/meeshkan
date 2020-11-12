@@ -1,0 +1,290 @@
+---
+title: How to create a sandbox for the OP Bank API
+description: I'll show how to recreate the OP Bank sandbox and enhance it using the HTTP Mocking Toolkit (HMT).
+slug: op-bank-tutorial
+date: 2020-05-06
+authors: ["nikolay"]
+published: true
+pageImage: https://user-images.githubusercontent.com/26869552/81176469-7d225800-8fa5-11ea-8264-9c0641b0f8ba.png
+tags:
+  - python
+  - testing
+  - api
+  - tutorial
+---
+
+Writing tests for software that integrates with external APIs can become a real mess. Some APIs don't provide a sandbox at all. Some have strong limits on free requests, which make the possibility to run tests on a CI pipeline doubtful.
+
+Today I'll show how to recreate the OP Bank sandbox and enhance it using the HTTP Mocking Toolkit (HMT).
+
+[OP Bank](https://www.op.fi/) provides [a great API](https://op-developer.fi/docs) and a completely free sandbox for it. The problem is that if you run [the official example](https://github.com/op-developer/python-example-client/blob/master/get_requests.py), it will fail. Only accounts with a v3 endpoint are available in the sandbox. And a database of the `/accounts` endpoint differs from the one used for `/payments` endpoints. This situation is common because maintaining API sandboxes could be a time consuming and challenging task. That's one of the reasons why we created HMT.
+
+[HMT](https://github.com/meeshkan/hmt) is a tool for building mocks and API sandboxes. It's often hard to achieve satisfying sandbox behavior from a mock using either OpenAPI specifications and random data generation or recordings of API calls. So we decided to mix them both. We also added some consciousness to the data generation algorithms and provided a set of tools to customize behavior with minimal effort.
+
+Let's recreate OP Bank's API behavior using HMT. All it should take is executing several commands and writing about a dozen lines of code in [Python](https://www.python.org/downloads/).
+
+All of the code in this article is available on [our example repository](https://github.com/meeshkan/hmt-examples/tree/master/opbank).
+
+## Table of Contents
+
+- [Installing HMT](#installing-hmt)
+- [Making API recordings](#making-api-recordings)
+- [Defining callbacks](#defining-callbacks)
+- [What's next?](#whats-next)
+
+## Installing HMT
+
+HMT is written in Python and available as a [PyPi package](https://pypi.org/project/hmt/).
+
+To install HMT via [pip](https://pip.pypa.io/en/stable/installing/), run:
+
+```bash
+pip install hmt
+```
+
+> Note: HMT requires Python 3.6+
+
+To make sure it's installed properly, run:
+
+```bash
+hmt --help
+```
+
+## Making API recordings
+
+Since we don't have an existing product that integrates with the OP Bank API, we'll have to create a sample client first.
+
+Let's use the following class:
+
+```python
+# opbank_client.py
+import requests
+
+
+class OPBankClient:
+    API_URL = 'https://sandbox.apis.op-palvelut.fi/'
+    API_KEY = 'API_KEY'
+    API_TOKEN = 'API_TOKEN'
+
+    def get_accounts(self):
+        accounts = requests.get(self.API_URL + '/accounts/v3/accounts',
+                                headers={'x-api-key': self.API_KEY,
+                                         'authorization': "Bearer {}".format(self.API_TOKEN)}).json()['accounts']
+        return {account['identifier']: account for account in accounts}
+
+    def init_payment(self, payer_iban, receiver_iban, amount):
+        body = {
+            "amount": amount,
+            "subject": "Client Test",
+            "currency": "EUR",
+            "payerIban": payer_iban,
+            "valueDate": "2020-01-27T22:59:34Z",
+            "receiverBic": "string",
+            "receiverIban": receiver_iban,
+            "receiverName": "string"
+        }
+        url = self.API_URL + '/v1/payments/initiate'
+        response = requests.post(url, headers={'x-api-key': self.API_KEY, 'x-authorization': self.API_TOKEN}, json=body)
+        return response.json()
+
+    def confirm_payment(self, payment_id):
+        body = {
+            'paymentId': payment_id
+        }
+        url = self.API_URL + '/v1/payments/confirm'
+        response = requests.post(url, headers={'x-api-key': self.API_KEY, 'x-authorization': self.API_TOKEN}, json=body)
+        return response.json()
+```
+
+The above `OPBankClient` class can obtain a list of accounts with the `get_accounts` function. It can also make payments in two steps. First, the `init_payment` function initializes a payment and then `confirm_payment` confirms it.
+
+Now let's check the response from the real API executing the following code:
+
+```python
+# opbank_rec.py
+from opbank.opbank_client import OPBankClient
+
+client = OPBankClient()
+
+# Sample IBANs provided by OP Bank in the official example - https://github.com/op-developer/python-example-client/blob/master/client.py
+payer_iban = 'FI8359986950002741'
+receiver_iban = 'FI4859986920215738'
+amount = 5
+
+accounts = client.get_accounts()
+print('Account list before payment: {}'.format(accounts))
+
+payment = client.init_payment(payer_iban, receiver_iban, amount)
+payment_id = payment['paymentId']
+print("Created payment {}".format(payment))
+confirmation = client.confirm_payment(payment_id)
+
+accounts = client.get_accounts()
+print('Account list after payment confirmed: {}'.format(accounts))
+```
+
+To run this code, you'll need a valid `API_KEY` and `Oauth2` token from OP Bank. Both are available for free when registering as an [OP Developer](https://op-developer.fi/developers/register).
+
+You may notice in the script output that the list of accounts doesn't contain the IBANs that we used for the payment. We can make payments between two fixed accounts but we can't check if a payment actually changed anything. It limits our ability to test software, but it doesn't stop us from making recordings.
+
+There are many ways to obtain API recordings using HMT. It has connectors to [Kong API Gateway](https://konghq.com/kong/), a tool to convert tcpdump logs and a standalone reverse proxy. We'll use the reverse proxy.
+
+We believe that a reverse proxy is a more convenient way to make recordings than a proxy. Not every client in every language respects the `HTTP_PROXY` environment variable or similar - while API hosts are usually configured somewhere and can be changed without code modifications. But we'll support both in the future.
+
+To make recordings using the reverse proxy, we need to first start HMT in a recording mode:
+
+```bash
+hmt record
+```
+
+This should create a file in the generated `logs` directory called `sandbox.apis.op-palvelut.fi-recordings.jsonl`. This contains recordings in the [`http-types` format](/blog/introducing-http-types/).
+
+Now we can use the obtained recordings to build an OpenAPI spec:
+
+```bash
+hmt build --input-file ./logs/sandbox.apis.op-palvelut.fi-recordings.jsonl  --mode mixed
+```
+
+This should create a file in the generated `specs` directory called `openapi.json`, which contains our spec. The `--mode` argument tells HMT to create an OpenAPI spec in the `mixed` mode during recording. The `mixed` mode means that a mock may return either recorded or generated data - depending on whether or not it could find a match for a request.
+
+Now we have to change the target host to a HMT proxy host. By default, this is `http://localhost:8000` followed by the target host in a path string.
+
+Let's change it in the `opbank_rec.py` script:
+
+```python
+# opbank_rec.py
+client = OPBankClient()
+client.API_URL = 'http://localhost:8000/https://sandbox.apis.op-palvelut.fi/'
+...
+```
+
+If we run the test script with the new URL, we'll get the same results.
+
+So now we can restart HMT in mock mode:
+
+```bash
+hmt mock ./spec/openapi.yml
+```
+
+When we run the script again, it should print the same results. But this time, it uses the mock instead of the OP Bank Sandbox.
+
+## Defining callbacks
+
+Now that we have a mock, we can enhance it even further using callbacks.
+
+Let's change account identifiers to something else we have in the list of accounts. Then, we can convert our test client script into a test case:
+
+```python
+# test_opbank.py
+import requests
+
+from opbank.opbank_client import OPBankClient
+
+
+def test_opbank():
+    requests.delete("http://localhost:8888/admin/storage")
+
+    client = OPBankClient()
+    client.API_URL = 'http://localhost:8000/https://sandbox.apis.op-palvelut.fi/'
+
+    payer_iban = 'FI3959986920207073'
+    receiver_iban = 'FI2350009421535899'
+    amount = 5
+
+    accounts = client.get_accounts()
+    print('Account list before payment: {}'.format(accounts))
+    assert 2215.81 == accounts[payer_iban]['balance']
+    assert 0 == accounts[receiver_iban]['balance']
+
+
+    payment = client.init_payment(payer_iban, receiver_iban, amount)
+    payment_id = payment['paymentId']
+    print("Created payment {}".format(payment))
+
+    accounts = client.get_accounts()
+    print('Account list before confirmation: {}'.format(accounts))
+    assert 2215.81 == accounts[payer_iban]['balance']
+    assert 0 == accounts[receiver_iban]['balance']
+
+    confirmation = client.confirm_payment(payment_id)
+
+    accounts = client.get_accounts()
+    print('Account list after confirmation: {}'.format(accounts))
+    assert 2210.81 == accounts[payer_iban]['balance']
+    assert 5 == accounts[receiver_iban]['balance']
+```
+
+If we run the above code, it will fail on both the mock and the official sandbox. We can't do anything with the sandbox, but we can modify our mocks.
+
+HMT allows us to define custom callbacks that can flexibly modify the response data, while also having access to a request data and internal key-value storage. Internal key-value storage allows us to maintain a state across a sequence of requests. To clean it, we need to call `DEL /admin/storage` in the HMT admin server. This admin server is launched automatically with the mock server.
+
+Callbacks are Python functions decorated by the `@callback` decorator. HMT loads them automatically on start from any `*.py` file located under the `./callbacks` directory.
+
+Since we have access to internal storage, we may write a set of callbacks that:
+
+- Store payment data upon payment initialization.
+- Update difference between initial and current account balance.
+- Modify account balance according to stored differences upon account request.
+
+It may sound complicated, but we can do all of this in less than 20 lines of code in Python:
+
+```python
+# callbacks/opbank_callbacks.py
+import copy
+
+from hmt.serve.mock.callbacks import callback
+
+
+@callback('sandbox.apis.op-palvelut.fi', 'post', '/v1/payments/initiate', format='json')
+def initiate(request_body, response_body, storage):
+    """
+    This callback function is called on a request to the `/v1/payments/initiate` endpoint.
+    It stores a request body into internal storage to modify accounts after confirmation.
+    :param request_body: a request body
+    :param response_body: a mocked response body
+    :param storage: the internal storage
+    :return: a response body without modifications
+    """
+    storage[response_body['paymentId']] = request_body
+    return response_body
+
+
+@callback('sandbox.apis.op-palvelut.fi', 'post', '/v1/payments/confirm', format='json')
+def confirm(request_body, response_body, storage):
+    """
+    This callback function is called on a request to the `/v1/payments/confirm` endpoint.
+    It stores differences between initial balances of accounts and actual balances after payments are completed.
+    :param request_body: a request body
+    :param response_body: a mocked response body
+    :param storage: the internal storage
+    :return: a response body without modifications
+    """
+    payment_info = storage[response_body['paymentId']]
+    storage[payment_info['receiverIban']] = storage.get(payment_info['receiverIban'], 0) + payment_info['amount']
+    storage[payment_info['payerIban']] = storage.get(payment_info['payerIban'], 0) - payment_info['amount']
+    return response_body
+
+
+@callback('sandbox.apis.op-palvelut.fi', 'get', '/accounts/v3/accounts', format='json')
+def accounts(request_body, response_body, storage):
+    """
+    This callback function is called on a request to the `/accounts/v3/accounts` endpoint.
+    It modifies mocked balances of accounts according to previously confirmed payments.
+    :param request_body: a request body
+    :param response_body: a mocked response body
+    :param storage: the internal storage
+    :return: a response body with modified accounts
+    """
+    response_body_new = copy.deepcopy(response_body)
+    for account in response_body_new['accounts']:
+        account['balance'] += storage.get(account['identifier'], 0)
+    return response_body_new
+```
+
+When we launch the test script again, all of the test cases should pass.
+
+## What's next?
+
+The mock we made covers the basic features of the OP Bank API. However, a lot of developers probably want to be able to mock validation errors. We're going to explain how to manage error responses with HMT in a future tutorial.
+
+We would appreciate any questions as well as feature requests. Please, leave a comment or [create an issue on GitHub](https://github.com/meeshkan/hmt) if you have something to tell us. You may also follow us on [Twitter](https://twitter.com/meeshkan) to stay in touch. Any feedback means a lot for us since we're developing a new and emerging tool.

@@ -1,0 +1,126 @@
+---
+title: Six questions to answer before implementing a telemetry feature
+description: Things to consider before adding a telemetry feature to your open-source product.
+slug: oss-telemetry-part-2
+date: 2020-04-14
+updated: 2020-05-18
+authors: ["carolyn"]
+published: true
+series: Can you do telemetry without being evil?
+tags:
+  - opensource
+  - ethics
+  - data
+---
+
+In the [first post of this series](/blog/oss-telemetry-part-1/), I covered the what telemetry features are and how developers feel about them. The general consensus was that the data needs to be anonymous, it should be clearly documented and it must be able to be switched off easily (or opt-in if possible).
+
+While this sounds great, it's not always realistic for every product or organization. And it's definitely not that straightforward. There are still a few questions that you'll need to discuss together with your team.
+
+This post outlines six of them:
+
+- [Why are you collecting this data?](/#why-are-you-collecting-this-data)
+- [What kind of data will you track?](/#what-kind-of-data-will-you-track)
+- [How will you collect the data?](/#how-will-you-collect-the-data)
+- [Who has access to this data?](/#who-has-access-to-this-data)
+- [Opt-in or opt-out?](/#opt-in-or-opt-out)
+- [When will you delete data?](/#when-will-you-delete-data)
+
+## Why are you collecting this data?
+
+Before anything else, you'll need to ask two important questions:
+
+- Is there a valid purpose for this data to be collected?
+- If yes, is there an alternative way to achieve the purpose without the data?
+
+Write these answers down, regardless of whether you decide to implement the feature or not. If you decide to go the telemetry route, you might want to share these answers later in user documentation (more on this in a future post). Regardless, documenting these answers internally will help align your team and fuel future discussions.
+
+## What kind of data will you track?
+
+Think about your purpose for collecting this data and let that inform the data you collect. If you're trying to measure usage, you could track how many people initialize your CLI and what commands they execute. Or you can prioritize bugs by tracking how many people run into particular errors and wherein the process these errors occur.
+
+You should always question whether personal data is _really_ necessary for what you need. For instance, while it might be interesting to see where in the world your users come from, tracking location is much more invasive. So unless you're trying to gauge something like where to add more customer support agents, you should reconsider.
+
+"Telemetry helps to shape the product, but not at cost of user's privacy, we need data collection but make sure none of it contains any data points which can be used to profile a user," says developer [Trishul Goel](https://twitter.com/trishulgoel/status/1182576734383812609?s=20) when discussing [how they do telemetry at Cliqz](https://cliqz.com/en/whycliqz/human-web).
+
+### A note about anonymous data
+
+Some justify collecting personal data by saying, 'Well, as long as it's anonymous then it's fine.' But then you need to ask yourself another question, what does it mean for data to be anonymous?
+
+"There's no such thing as anonymous usage data, especially if a third party is doing the collecting," says open-source developer [Claus Due](https://twitter.com/NamelessCoder/status/1182663311369953280?s=20).
+
+Typically, it's not enough to say that data is anonymous. Developers implementing telemetry features need to put in extra effort to make sure that people can't be identified from the data.
+
+"If you're very confident it's anonymous, depends on the data, since a lot to anonymous data has actually been found to be able to identify people," says developer and designer [Nick Colley](https://twitter.com/NickColley/status/1182574947220242432?s=20). Nick also mentioned that he prefers to focus on [data minimization](https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/principles/data-minimisation/) because it's more "proactive and user-focused."
+
+### Other considerations around tracking data
+
+**What security measures do you have in place?**
+
+This could include (but isn't limited to) penetration testing, encryption, intrusion protection and vulnerability reporting.
+
+**What will you do if there is a problem?**
+
+Teams should consider having an [incident response plan](https://dvikan.no/ntnu-studentserver/reports/AC49DE3D7E65E331FC78C953CB3E03C.pdf) available, in case there are any issues.
+
+## How will you collect the data?
+
+Or, alternatively, where is the data handled?
+
+The answer will depend on whether you are building your telemetry feature in-house or using a third-party integration.
+
+### Homegrown
+
+Developing your own telemetry feature will take more effort (time, money, maintenance) all around. But it also allows you to manage who has access to the data, what exactly is collected and how it is communicated to your users.
+
+If the rest of your product is already open-source, your telemetry feature should be as well. A good example of this comes from Gatsby: [gatsby-telemetry](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-telemetry)
+
+### Third-party
+
+Using a third-party, like [OpenTelemetry](https://opentelemetry.io/), will likely require less effort upfront. It also provides a built-in support system through bug reporting and community usage. But, with any outside source, you're giving up control of the data and increasing risk as more people are potentially able to access it. Resources like Mozilla's [Outsourced Services Worksheet](https://docs.google.com/document/d/1nMsdX8pPhpHsnC33rbc7YjHpG6tqSCtWXtREAFpJTRs/edit) can help you evaluate the potential risk of a third-party service.
+
+## Who has access to this data?
+
+It's recommended that data access only be granted to the people who need it to perform their jobs. The [Security Access Controls Worksheet](https://docs.google.com/document/d/1z_1llMFf18zkM0WRPzQd1VWc7Q3Nd8RILs-4em_jvZk/edit) is another resource from Mozilla that can help you determine this.
+
+### Should this data be open?
+
+If this usage data is truly anonymous, you could consider having it open and available to your users.
+
+One way to do this is through public, accessible dashboards. You can use tools like [Open MCT](https://github.com/nasa/openmct) to showcase telemetry data. Another way is to make it available upon request or on an as-needed basis.
+
+"I don't believe data should be open but it should be possible to get access with a reasonable process," says developer [Florian Gilcher](https://twitter.com/Argorak/status/1182573260904583168?s=20).
+
+## Opt-in or opt-out?
+
+Users should always be able to decide if they're ok with having their data tracked. But _when_ to present this option is the question.
+
+This leads us to the most notorious debate in telemetry: Should users have to agree to tracking (opt-in) or should tracking be on by default (opt-out)?
+
+### Opt-in
+
+This means asking for explicit consent from users before sending any data to your system. In [our initial survey about telemetry in open source](/blog/oss-telemetry-part-1/), many developers mentioned that telemetry features should be opt-in only. They also said that users should know what's being tracking and not have that information hidden in a blog post or setting somewhere.
+
+One potential trade-off with an opt-in only approach is engagement. There's a lingering question of whether people will actually opt-in.
+
+"I once build [an open-source project] with opt-in for telemetry data, bug reports and anonymous analytics," explains open-source maintainer [Sebastian Golasch](https://twitter.com/asciidisco/status/1182573376486948864?s=20). "I kindly asked the users to enable this to help improve the project, but I must admit, less than 10% (judging from the download to telemetry ratio) actually did it."
+
+### Opt-out
+
+Having telemetry settings on by default is much more common in modern products. These products give users the option to switch off tracking through an environment variable, command line argument/flag or a toggle in the product's GUI.
+
+When taking an opt-out approach, it's advised to let your users know right away that these settings are on and they are being tracked. It's more transparent and also reduces the risk of ill feelings later.
+
+"I do accept tracking if there is an explanation upfront. But I don't if I discover by accident that I am tracked," says [Stephan Schuler](https://twitter.com/kautschpoteito/status/1183025348797177857?s=20).
+
+## When will you delete data?
+
+The value of the data diminishes over time, so it's recommended to delete data when it's no longer relevant.
+
+You should agree on a specific time limit for data (i.e. 3 months, 6 months, 1 year). You can choose to communicate that to your users through documentation or when alerting them that they are being tracked.
+
+## Next up: Telemetry in the wild
+
+This is the second in an undetermined number of posts about telemetry in open-source software. Up next, I'll cover some telemetry feature examples in popular open-source products and what they are (and aren't) getting right.
+
+If you have any requests for this series, please [reach out](mailto:carolyn@meeshkan.com).

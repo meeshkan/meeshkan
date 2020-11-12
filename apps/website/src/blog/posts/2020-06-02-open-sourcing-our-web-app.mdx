@@ -1,0 +1,64 @@
+---
+title: We're open-sourcing our webapp
+description: In this post, we explain why we're open-sourcing our webapp and how we hope it will be helpful.
+slug: open-source-webapp
+date: 2020-06-02
+authors: ["mike"]
+published: true
+tags:
+  - news
+  - opensource
+  - webdev
+  - typescript
+---
+
+tl;dr Here's the source code for our [webapp](https://github.com/meeshkan/webapp).
+
+Like many companies these days, we've had to make big changes to navigate through the current world economic situation. One of those changes has been transitioning from offline to online sales.
+
+To do this, we knew we'd need a webapp so we began developing one as a closed-source project. But keeping it closed-source felt strange as it went against our company's open-source by default philosophy. At the same time, it wasn't immediately clear how our webapp could be useful to anyone other than us. So we kept it closed.
+
+Within days, it was pretty clear that this repo had several features that our other repos did not. It lacked tests. It had almost no type safety. Credentials were accidentally checked into version control. In short, we were getting sloppy, and all of us felt the lack of public scrutiny was effecting our work on a subconcious level.
+
+For this and other reasons I'll get into below, we made the decision to [open-source the repository](https://github.com/meeshkan/webapp), and we devoted some company time every week towards getting the project to a point where we were comfortable sharing it with the world. In doing so, we found and squashed several bugs, wrote some tests for the most crucial parts of the app, and added type-safety and validation to many core functions. But the main reason we open-sourced the webapp is to hold ourselves accountable to our users, current and future, in terms of transparency and security.
+
+I'm proud of the result. And in this post, I'd like to share why this decision was important and how I hope it can benefit you as a reader of our blog and supporter of the Meeshkan project.
+
+## Meeshkan uses Meeshkan
+
+One consistent piece of feedback we've received is that developers want to see a [live example that uses Meeshkan](https://github.com/meeshkan/webapp) to find and squash bugs. While there are some great open-source projects that use our webapp, it's difficult to find these in the wild. We wanted to release a banner repository where people could see the value Meeshkan creates for a team. Since we're using Meeshkan to test our webapp anyway, it made sense to open-source the webapp so that it could fulfill this objective.
+
+Our web app provides an example of how Meeshkan interacts with projects that include a REST API, GraphQL API, or role-based authentication. The bugs Meeshkan finds and the suggestions it makes help us spend more time building new innovative features and less time finding and fixing bugs.
+
+For more information on what Meeshkan does and how Meeshkan works, you can read our [documentation](https://meeshkan.com/docs/).
+
+## To open-source or not to open-source
+
+I can think of two good reasons **_not_** to open-source a codebase:
+
+1. The code contains sensitive data.
+1. The code contains a trade secret.
+
+I can also think of several bad reasons not to open-source a codebase:
+
+1. It is messy.
+1. It has no tests.
+1. It is undocumented.
+
+I'm not saying these are bad things - they're just bad reasons. There's nothing wrong with open-sourcing messy, untested and undocumented code. If the thought of doing that makes you feel uneasy, that's a _good_ thing - it means you care about your code! Open-source it, and then use that emotion to motivate you to make incremental improvements towards cleaner, better tested and better documented code. You won't be doing this just for show. All three of these things contribute to more resilient code that can be developed and refactored at a brisk clip.
+
+## Safety and integrity
+
+We know that you are trusting us to test your code and find bugs. It would be hypocritical of us to expect this trust without showing how we create your user experience and how we protect your data and privacy.
+
+For example, access to our various APIs is gated by JSON Web Tokens with restrictive scopes. Additionally, our analytics footprint is minimal and 100% anonymized. Lastly, very little user data is persisted to stored in session cookies. Our unique focus is delivering comprehensive, insightful, and actionable test reports to our clients.
+
+## A place to learn, share and contribute
+
+We'd like to think that our web app is written in a way that allows little bits of it to be repurposed and incorporated into others' projects, and we've already written [one article](https://dev.to/meeshkan/functional-on-the-frontend-with-fp-ts-and-pipe-4mn9) on this subject.
+
+We also hope that Meeshkan users and open-source enthusiasts will help us improve our webapp. While we are unable to accept contributions directly, if you notice something off or have a suggestion, we'd love to know on our [issues](https://github.com/meeshkan/webapp/issues) page.
+
+In closing, I've really enjoyed working with the Meeshkan team to open source our web app, and I hope you find the repository useful. At the very least, I hope it acts as a good example of how Meeshkan can find and fix bugs in a live repository. If you have any questions about the code, please reach out to us on our [Gitter](https://gitter.com/meeshkan).
+
+Thanks for [checking out our webapp](https://github.com/meeshkan/webapp), and we hope to publish more news about other open-source projects soon!
