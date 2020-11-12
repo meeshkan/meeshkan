@@ -42,6 +42,5 @@ Thumbs.db
 /apps/website/public
 /apps/website/.cache
 
-.env
 .local.env
 .env.local
