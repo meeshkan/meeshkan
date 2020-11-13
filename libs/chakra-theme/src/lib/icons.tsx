@@ -116,6 +116,16 @@ export const PackageIcon = createIcon({
 	)
 })
 
+export const SettingsIcon = createIcon({
+	displayName: "SettingsIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 2.667 14 L 2.667 9.333 M 2.667 6.667 L 2.667 2 M 8 14 L 8 8 M 8 5.333 L 8 2 M 13.333 14 L 13.333 10.667 M 13.333 8 L 13.333 2 M 0.667 9.333 L 4.667 9.333 M 6 5.333 L 10 5.333 M 11.333 10.667 L 15.333 10.667" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
 export const GitHubIcon = createIcon({
 	displayName: "GitHubIcon",
 	viewBox: "0 0 16 16",
