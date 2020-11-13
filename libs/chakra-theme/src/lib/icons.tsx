@@ -105,6 +105,17 @@ export const CheckSquareIcon = createIcon({
 	)
 })
 
+export const PackageIcon = createIcon({
+	displayName: "PackageIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 11 6.51 L 5 3.15 M 14 10.783 L 14 5.604 C 14 5.141 13.745 4.714 13.333 4.483 L 8.667 1.893 C 8.254 1.662 7.746 1.662 7.333 1.893 L 2.667 4.483 C 2.255 4.714 2 5.141 2 5.604 L 2 10.783 C 2 11.246 2.255 11.672 2.667 11.903 L 7.333 14.493 C 7.746 14.725 8.254 14.725 8.667 14.493 L 13.333 11.903 C 13.745 11.672 14 11.246 14 10.783 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2.18 4.93 L 8 8.2 L 13.82 4.93 M 8 14.72 L 8 8.193" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
 export const GitHubIcon = createIcon({
 	displayName: "GitHubIcon",
 	viewBox: "0 0 16 16",
