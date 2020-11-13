@@ -94,6 +94,17 @@ export const VideoIcon = createIcon({
 	)
 })
 
+export const CheckSquareIcon = createIcon({
+	displayName: "CheckSquareIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 6 7.333 L 8 9.333 L 14.667 2.667" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 14 8 L 14 12.667 C 14 13.403 13.403 14 12.667 14 L 3.333 14 C 2.597 14 2 13.403 2 12.667 L 2 3.333 C 2 2.597 2.597 2 3.333 2 L 10.667 2" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
 export const GitHubIcon = createIcon({
 	displayName: "GitHubIcon",
 	viewBox: "0 0 16 16",
