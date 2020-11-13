@@ -1,19 +1,29 @@
-import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import React from 'react'
+import { ApolloProvider } from '@apollo/react-hooks'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import ChakraProvider from '../components/chakra'
+import Layout from '../components/layout'
+import SideBar from '../components/sidebar'
+import CentralGrid from '../components/central-grid'
+import RightGrid from '../components/right-grid'
 
-const Home = ({ data }) => {
+export const Index = ({ cookies }) => {
   const client = new ApolloClient({
     uri: 'http://localhost:4200/api/graphql',
     cache: new InMemoryCache(),
-  });
+  })
 
   return (
     <ApolloProvider client={client}>
-      <div>
-        <h1>Meeshkan webapp placeholder</h1>
-      </div>
+      <ChakraProvider cookies={cookies}>
+        <Layout>
+          <SideBar />
+        </Layout>
+      </ChakraProvider>
     </ApolloProvider>
   );
 };
 
-export default Home;
+export default Index;
+
+export { getServerSideProps } from '../components/chakra'
