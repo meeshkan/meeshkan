@@ -72,6 +72,17 @@ export const TwitterIcon = createIcon({
 	),
 })
 
+export const InboxIcon = createIcon({
+	displayName: "InboxIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 14.667 8 L 10.667 8 L 9.333 10 L 6.667 10 L 5.333 8 L 1.333 8" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 3.633 3.407 L 1.333 8 L 1.333 12 C 1.333 12.736 1.93 13.333 2.667 13.333 L 13.333 13.333 C 14.07 13.333 14.667 12.736 14.667 12 L 14.667 8 L 12.367 3.407 C 12.142 2.954 11.679 2.667 11.173 2.667 L 4.827 2.667 C 4.321 2.667 3.858 2.954 3.633 3.407 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
 export const GitHubIcon = createIcon({
 	displayName: "GitHubIcon",
 	viewBox: "0 0 16 16",
