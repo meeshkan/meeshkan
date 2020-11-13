@@ -83,6 +83,17 @@ export const InboxIcon = createIcon({
 	)
 })
 
+export const VideoIcon = createIcon({
+	displayName: "VideoIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 15.333 4.667 L 10.667 8 L 15.333 11.333 Z" fill="transparent" strokeWidth="0.99" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2 12.667 C 1.264 12.667 0.667 12.07 0.667 11.333 L 0.667 4.667 C 0.667 3.93 1.264 3.333 2 3.333 L 9.333 3.333 C 10.07 3.333 10.667 3.93 10.667 4.667 L 10.667 11.333 C 10.667 12.07 10.07 12.667 9.333 12.667 Z" fill="transparent" strokeWidth="0.99" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
 export const GitHubIcon = createIcon({
 	displayName: "GitHubIcon",
 	viewBox: "0 0 16 16",
