@@ -1,5 +1,6 @@
 import React from 'react'
 import { Flex, useColorModeValue } from '@chakra-ui/core'
+import './layout.module.css'
 
 const Layout = ({ children, ...props }) => {
     return (
