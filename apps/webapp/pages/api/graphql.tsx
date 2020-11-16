@@ -3,6 +3,8 @@ import { schema } from '../../utils/graphql/schema';
 
 const apolloServer = new ApolloServer({
   schema,
+  introspection: true,
+  playground: true,
   context(ctx) {
     return ctx;
   },
@@ -11,6 +13,10 @@ const apolloServer = new ApolloServer({
 export const config = {
   api: {
     bodyParser: false,
+  },
+  engine: {
+    reportSchema: true,
+    variant: 'current',
   },
 };
 
