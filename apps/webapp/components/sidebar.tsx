@@ -16,9 +16,8 @@ import {
     ChevronDownIcon,
     ArrowUpDownIcon,
     ChatIcon,
-    CloseIcon,
-    TriangleDownIcon,
 } from '@chakra-ui/icons'
+import { motion, useCycle } from 'framer-motion'
 import {
     LogoIcon,
     InboxIcon,
@@ -28,29 +27,18 @@ import {
     PackageIcon,
     SettingsIcon,
 } from '@frontend/chakra-theme'
-import { useCycle } from 'framer-motion'
+import NavButton from './nav-button'
 import ColorModeButton from './color-mode-button'
+import MenuToggleButton from './menu-toggle-button'
 
-const NavButton = (props) => {
-    return (
-        <Button
-            size="sm"
-            variant="ghost"
-            colorScheme="black"
-            width="100%"
-            justifyContent="flex-start"
-            alignItems="center"
-            {...props}
-        />
-    )
-}
+const MotionStack = motion.custom(Stack)
 
 const SideBar = (props) => {
     const [isOpen, toggleOpen] = useCycle(false, true)
-    const [isMobile] = useMediaQuery("(max-width: 30em)")
+    const [isMobile] = useMediaQuery('(max-width: 30em)')
 
     return (
-        <Stack
+        <MotionStack
             p={4}
             as="nav"
             rounded="lg"
@@ -58,6 +46,8 @@ const SideBar = (props) => {
             w="100%"
             maxW={['100%', '256px', '256px', '256px']}
             h={[isOpen ? '100vh' : 'auto', '100%', '100%', '100%']}
+            animate={isOpen ? 'open' : 'closed'}
+            initial={false}
             {...props}
         >
             <Flex direction="column" h="full">
@@ -90,12 +80,7 @@ const SideBar = (props) => {
                             />
                         </Button>
                     </Flex>
-                    <IconButton
-                        size="md"
-                        icon={isOpen ? <CloseIcon /> : <TriangleDownIcon />}
-                        display={['inline', 'none', 'none', 'none']}
-                        onClick={() => toggleOpen()}
-                    />
+                    <MenuToggleButton toggle={() => toggleOpen()} />
                 </Flex>
                 {(isOpen || !isMobile) && (
                     <>
@@ -150,7 +135,7 @@ const SideBar = (props) => {
                     </>
                 )}
             </Flex>
-        </Stack>
+        </MotionStack>
     )
 }
 
