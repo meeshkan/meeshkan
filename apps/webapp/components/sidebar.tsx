@@ -10,13 +10,15 @@ import {
     AvatarBadge,
     Select,
     Divider,
+    useMediaQuery,
 } from '@chakra-ui/core'
 import {
     ChevronDownIcon,
     ArrowUpDownIcon,
     ChatIcon,
+    CloseIcon,
+    TriangleDownIcon,
 } from '@chakra-ui/icons'
-import ColorModeButton from './color-mode-button'
 import {
     LogoIcon,
     InboxIcon,
@@ -26,6 +28,8 @@ import {
     PackageIcon,
     SettingsIcon,
 } from '@frontend/chakra-theme'
+import { useCycle } from 'framer-motion'
+import ColorModeButton from './color-mode-button'
 
 const NavButton = (props) => {
     return (
@@ -42,16 +46,18 @@ const NavButton = (props) => {
 }
 
 const SideBar = (props) => {
+    const [isOpen, toggleOpen] = useCycle(false, true)
+    const [isMobile] = useMediaQuery("(max-width: 30em)")
+
     return (
         <Stack
+            p={4}
             as="nav"
-            h="100%"
+            rounded="lg"
             bg={useColorModeValue('gray.200', 'gray.800')}
             w="100%"
             maxW={['100%', '256px', '256px', '256px']}
-            h={['100vh', '100%', '100%', '100%']}
-            rounded="lg"
-            p={4}
+            h={[isOpen ? '100vh' : 'auto', '100%', '100%', '100%']}
             {...props}
         >
             <Flex direction="column" h="full">
@@ -84,53 +90,65 @@ const SideBar = (props) => {
                             />
                         </Button>
                     </Flex>
-                </Flex>
-                <Stack mt={6}>
-                    <NavButton
-                        isActive
-                        leftIcon={<ActivityIcon />}
-                    >
-                        Health dashboard
-                    </NavButton>
-                    <NavButton
-                        leftIcon={<VideoIcon />}
-                    >
-                        User flows
-                    </NavButton>
-                    <NavButton
-                        leftIcon={<CheckSquareIcon />}
-                    >
-                        Test cases
-                    </NavButton>
-                    <NavButton
-                        leftIcon={<PackageIcon />}
-                    >
-                        Releases
-                    </NavButton>
-                </Stack>
-                <Spacer />
-                <NavButton
-                    leftIcon={<ChatIcon />}
-                    mt={2}
-                >
-                    Help and Feedback
-                </NavButton>
-                <Divider my={5} />
-                <Flex align="center" mb={3}>
-                    <Select
-                        placeholder="Acme Industries"
-                        variant="outline"
-                        rounded="md"
-                        size="sm"
-                    />
                     <IconButton
-                        icon={<SettingsIcon color={useColorModeValue('gray.600', 'gray.500')} />}
-                        variant="ghost"
-                        size="sm"
-                        ml={2}
+                        size="md"
+                        icon={isOpen ? <CloseIcon /> : <TriangleDownIcon />}
+                        display={['inline', 'none', 'none', 'none']}
+                        onClick={() => toggleOpen()}
                     />
                 </Flex>
-                <ColorModeButton />
+                {(isOpen || !isMobile) && (
+                    <>
+                        <Stack mt={6}>
+                            <NavButton
+                                isActive
+                                leftIcon={<ActivityIcon />}
+                            >
+                                Health dashboard
+                            </NavButton>
+                            <NavButton
+                                leftIcon={<VideoIcon />}
+                            >
+                                User flows
+                            </NavButton>
+                            <NavButton
+                                leftIcon={<CheckSquareIcon />}
+                            >
+                                Test cases
+                            </NavButton>
+                            <NavButton
+                                leftIcon={<PackageIcon />}
+                            >
+                                Releases
+                            </NavButton>
+                        </Stack>
+                        <Spacer /> 
+                        <Box>
+                            <NavButton
+                                leftIcon={<ChatIcon />}
+                                mt={2}
+                            >
+                                Help and Feedback
+                            </NavButton>
+                            <Divider my={5} />
+                            <Flex align="center" mb={3}>
+                                <Select
+                                    placeholder="Acme Industries"
+                                    variant="outline"
+                                    rounded="md"
+                                    size="sm"
+                                />
+                                <IconButton
+                                    icon={<SettingsIcon color={useColorModeValue('gray.600', 'gray.500')} />}
+                                    variant="ghost"
+                                    size="sm"
+                                    ml={2}
+                                />
+                            </Flex>
+                            <ColorModeButton />
+                        </Box>
+                    </>
+                )}
             </Flex>
         </Stack>
     )

@@ -7,7 +7,7 @@ const Layout = ({ children, ...props }) => {
             p={[0, 8, 8, 8]}
             w="100%"
             bg={useColorModeValue('gray.100', 'gray.900')}
-            h={['100%', '100vh', '100vh', '100vh']}
+            h="100vh"
             direction={['column', 'row', 'row', 'row']}
             {...props}
         >
