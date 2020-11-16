@@ -4,8 +4,6 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 import ChakraProvider from '../components/chakra'
 import Layout from '../components/layout'
 import SideBar from '../components/sidebar'
-import CentralGrid from '../components/central-grid'
-import RightGrid from '../components/right-grid'
 
 export const Index = ({ cookies }) => {
   const client = new ApolloClient({
