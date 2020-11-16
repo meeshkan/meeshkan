@@ -1,104 +1,113 @@
 import { gql } from '@apollo/client';
 
 export const typeDefs = gql`
-  type Query{
-	project: Project
-	configuration: Configuration
-	integration: Integration
-}
+	type Query {
+		project(id: ID!): Project
+		projects: [Project]
+		users: [User]
+		user(id: ID!): User
+	}
 
-"""
-A project represents an application in Meeshkan.
-"""
-type Project{
-	name: String!
-	avatar: String
-	configuration: Configuration
-	integration: Integration
-}
+	"""
+	A project represents an application in Meeshkan.
+	"""
+	type Project {
+		id: ID!
+		name: String!
+		avatar: String
+		configuration: Configuration
+		integration: Integration
+		activity: [activity]
+		members: [User]!
+	}
 
-"""
-Settings configuration for a project.
-"""
-type Configuration{
-	id: [UUID!]
-	productionUrl: String
-	stripeCustomerId: ID
-	inviteLink: String
-}
+	"""
+	Settings configuration for a project.
+	"""
+	type Configuration {
+		id: [PropertyID]!
+		productionUrl: URL
+		stripeCustomerId: ID
+		inviteLink: String
+		project: Project
+	}
 
-type Integration{
-	slackWebhook: slack
-	continuousIntegrationProvider: continuousIntegrationProvider
-	continuousIntegration: continuousIntegration
-	projectManagementProvider: projectManagementProvider
-	projectManagement: projectManagement
-}
+	type Integration {
+		slackWebhook: slack
+		continuousIntegrationProvider: continuousIntegrationProvider
+		continuousIntegration: integration
+		projectManagementProvider: projectManagementProvider
+		projectManagement: integration
+		project: Project
+	}
 
-type slack{
-	slackSyncCheckSum: String
-	slackSyncNonce: String
-}
+	type slack {
+		slackSyncCheckSum: String
+		slackSyncNonce: String
+	}
 
-type circleCI{
-	authenticated: Boolean!
-}
+	type linear {
+		linearToken: String
+		authenticated: Boolean!
+	}
 
-type gitlabCI{
-	authenticated: Boolean!
-}
+	type jira {
+		jiraToken: String
+		authenticated: Boolean!
+	}
 
-type bitbucketCI{
-	authenticated: Boolean!
-}
+	type trello {
+		trelloToken: String
+		authenticated: Boolean!
+	}
 
-type githubActions{
-	authenticated: Boolean!
-}
+	type githubIssues {
+		githubToken: String
+		authenticated: Boolean!
+	}
 
-type linear{
-	authenticated: Boolean!
-	personalToken: String
-}
+	type PropertyID {
+		propertyName: String
+		uuid: UUID!
+	}
 
-type jira{
-	authenticated: Boolean!
-}
+	enum continuousIntegrationProvider {
+		circleCI
+		gitlabCI
+		bitbucketCI
+		githubActions
+	}
 
-type trello{
-	authenticated: Boolean!
-}
+	enum projectManagementProvider {
+		linear
+		jira
+		trello
+		githubIssues
+	}
 
-type githubIssues{
-	authenticated: Boolean!
-}
+	type integration {
+		accessToken: String
+		authenticated: Boolean
+	}
 
-interface UUID{
-	propertyName: String
-	uuid: ID!
-}
+	type activity {
+		title: String
+		date: DateTime
+	}
 
-enum continuousIntegrationProvider{
-	circleCI
-	gitlabCI
-	bitbucketCI
-	githubActions
-}
+	type User {
+		id: ID!
+		name: String
+		email: EmailAddress!
+		avatar: String
+		intercomID: ID
+	}
 
-enum projectManagementProvider{
-	linear
-	jira
-	trello
-	githubIssues
-}
-
-"""
-Configuration details as a union since it will conditionally be available.
-"""
-union continuousIntegration = bitbucketCI | circleCI | gitlabCI | githubActions
-
-union projectManagement = linear | jira | trello | githubIssues
-schema{
-	query: Query
-}
+	scalar DateTime
+	scalar EmailAddress
+	scalar URL
+	scalar UUID
+	schema {
+		query: Query
+	}
 `;

@@ -68,6 +68,7 @@
     "gatsby-transformer-sharp": "2.3.19",
     "gatsby-transformer-yaml": "2.3.1",
     "graphql": "^15.4.0",
+    "graphql-scalars": "^1.4.1",
     "graphql-tools": "^7.0.1",
     "mixpanel-browser": "2.38.0",
     "next": "^10.0.1",
