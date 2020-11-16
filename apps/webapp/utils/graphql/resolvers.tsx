@@ -1,6 +1,8 @@
 import {
 	DateTimeResolver,
 	EmailAddressResolver,
+	IPv6Resolver,
+	JSONObjectResolver,
 	URLResolver,
 	UUIDResolver,
 } from 'graphql-scalars';
@@ -60,7 +62,6 @@ let projects = [
 				accessToken: 'XYZABC',
 				authenticated: true,
 			},
-
 			projectManagementProvider: 'linear',
 			projectManagement: {
 				accessToken: 'XXXXXX',
@@ -75,6 +76,33 @@ let projects = [
 			{
 				title: '4 recordings added for review',
 				date: '2020-11-16T06:35:49Z',
+			},
+		],
+		userStories: [
+			{
+				id: 'ABC123',
+				title: 'Hello world, first test',
+				recording: {
+					environment: {
+						ipAddress: '2a01:261:0:6::40d8',
+						browser: 'Firefox',
+						browserVersion: '82.0',
+						operatingSystem: 'Intel Mac OS X 10.16',
+						language: 'English',
+					},
+				},
+				isTestCase: false,
+				groupedFlows: 25,
+				created: 'user',
+				isExpected: true,
+				testRuns: [
+					{
+						id: 'ABCDEF12345',
+						status: 'queued',
+						dateTime: '2020-11-16T14:25:14Z',
+						ciRun: 'https://circleCI.com.runzzzz',
+					},
+				],
 			},
 		],
 	},
@@ -123,6 +151,50 @@ let projects = [
 				date: '2020-11-16T06:34:51Z',
 			},
 		],
+		userStories: [
+			{
+				id: 'ABC123',
+				title: 'Hello world, first test',
+				recording: {
+					environment: {
+						ipAddress: '2a01:261:0:6::40d8',
+						browser: 'Firefox',
+						browserVersion: '82.0',
+						operatingSystem: 'Intel Mac OS X 10.16',
+						language: 'English',
+					},
+				},
+				isTestCase: true,
+				groupedFlows: 25,
+				created: 'user',
+				isExpected: true,
+				testRuns: [
+					{
+						id: 'ABCDEF12345',
+						status: 'passing',
+						dateTime: '2020-11-16T14:25:14Z',
+						ciRun: 'https://circleCI.com.runnnnzzzz',
+					},
+				],
+			},
+			{
+				id: 'XYZ987',
+				title: 'Hello world, second test',
+				recording: {
+					environment: {
+						ipAddress: '2a01:261:0:6::40d8',
+						browser: 'Firefox',
+						browserVersion: '82.0',
+						operatingSystem: 'Intel Mac OS X 10.16',
+						language: 'English',
+					},
+				},
+				isTestCase: false,
+				groupedFlows: 1,
+				created: 'manual',
+				isExpected: true,
+			},
+		],
 	},
 ];
 
@@ -143,6 +215,8 @@ export const resolvers = {
 	},
 	DateTime: DateTimeResolver,
 	EmailAddress: EmailAddressResolver,
+	IPv6: IPv6Resolver,
+	JSONObject: JSONObjectResolver,
 	URL: URLResolver,
 	UUID: UUIDResolver,
 	// Mutation: {
