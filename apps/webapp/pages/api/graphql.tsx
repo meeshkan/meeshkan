@@ -7,7 +7,7 @@ const apolloServer = new ApolloServer({
 	playground: true,
 	// mocks: true,
 	apollo: {
-		key: 'service:Meeshkan-deoux:mdh4KcLcbbdrR3ZXPExkjg',
+		key: process.env.APOLLO_API_KEY,
 	},
 	context(ctx) {
 		return ctx;
