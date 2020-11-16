@@ -61,6 +61,7 @@ const SideBar = (props) => {
                     <Spacer />
                     <Flex align="center">
                         <IconButton
+                            aria-label="Inbox"
                             variant="ghost"
                             size="sm"
                             icon={<InboxIcon w={4} h={4} />}
@@ -124,6 +125,7 @@ const SideBar = (props) => {
                                     size="sm"
                                 />
                                 <IconButton
+                                    aria-label="Settings"
                                     icon={<SettingsIcon color={useColorModeValue('gray.600', 'gray.500')} />}
                                     variant="ghost"
                                     size="sm"
