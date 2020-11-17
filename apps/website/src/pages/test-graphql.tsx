@@ -14,7 +14,7 @@ import {
 	Collapse,
 	useColorModeValue,
 	LightMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons"
 import { CheckmarkIcon, GraphQLSnippetIcon } from "../../theme/icons"
 import { useMixpanel } from "gatsby-plugin-mixpanel"

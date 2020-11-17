@@ -11,7 +11,7 @@ import {
 	Button,
 	useColorMode,
 	useColorModeValue,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import {
 	GitHubIcon,
 	LinkedInIcon,

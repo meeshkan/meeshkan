@@ -1,6 +1,6 @@
 import React from "react"
 import { Link as GatsbyLink } from "gatsby"
-import { Link as ChakraLink } from "@chakra-ui/core"
+import { Link as ChakraLink } from "@chakra-ui/react"
 
 type UniversalLinkProps = {
   children?: any // string or Object

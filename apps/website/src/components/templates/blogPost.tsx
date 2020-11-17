@@ -15,7 +15,7 @@ import {
 	Link as ChakraLink,
 	Box,
 	DarkMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { graphql } from "gatsby"

@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, useColorModeValue } from "@chakra-ui/core"
+import { Box, useColorModeValue } from "@chakra-ui/react"
 import { MDXProvider } from "@mdx-js/react"
 import MDXComponents from "../molecules/mdxComponents"
 import SideNav from "../docsComponents/sideNavigation"

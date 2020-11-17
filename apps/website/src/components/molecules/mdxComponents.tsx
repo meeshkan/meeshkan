@@ -10,7 +10,7 @@ import {
 	Code,
 	Alert,
 	useColorModeValue,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import CodeBlock from "./codeBlock"
 import { UniversalLink } from "../atoms/UniversalLink"
 import Video from "../atoms/video"

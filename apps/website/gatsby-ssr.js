@@ -1,5 +1,5 @@
 import React from "react"
-import { ColorModeScript } from "@chakra-ui/core"
+import { ColorModeScript } from "@chakra-ui/react"
 import customTheme from "./theme/theme"
 export { wrapPageElement, wrapRootElement } from "./gatsby-browser"
 

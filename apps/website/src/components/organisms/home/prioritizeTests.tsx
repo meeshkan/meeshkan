@@ -7,7 +7,7 @@ import {
 	IconButton,
 	DarkMode,
 	useColorMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { motion, useReducedMotion } from "framer-motion"
 import {
 	CheckmarkIcon,

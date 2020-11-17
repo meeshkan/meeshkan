@@ -7,7 +7,7 @@ import {
 	Box,
 	Link,
 	useColorModeValue,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { SingleSection } from "../components/organisms/singleSection"
 import SEO from "../components/molecules/seo"
 import { graphql, useStaticQuery } from "gatsby"

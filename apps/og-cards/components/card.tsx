@@ -1,4 +1,4 @@
-import { Flex, Image, Text, Box, Code, DarkMode } from '@chakra-ui/core'
+import { Flex, Image, Text, Box, Code, DarkMode } from '@chakra-ui/react'
 
 type CardProps = {
 	title: string,

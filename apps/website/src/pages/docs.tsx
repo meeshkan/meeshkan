@@ -9,7 +9,7 @@ import {
 	Code,
 	Image,
 	useColorModeValue,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import SEO from "../components/molecules/seo"
 import { MDXProvider } from "@mdx-js/react"
 import DocsNavigation from "../components/docsComponents/docsNavigation"

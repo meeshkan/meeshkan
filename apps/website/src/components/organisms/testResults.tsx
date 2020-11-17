@@ -10,7 +10,7 @@ import {
 	AccordionIcon,
 	AccordionPanel,
 	Code,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import CodeBlock from "../molecules/codeBlock"
 import prettier from "prettier/standalone"
 import parserGraphql from "prettier/parser-graphql"
