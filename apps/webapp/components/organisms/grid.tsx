@@ -1,4 +1,4 @@
-import { Box, useColorModeValue } from '@chakra-ui/core'
+import { Box, useColorModeValue } from '@chakra-ui/react'
 
 const Grid = (props) => {
     return (

@@ -6,7 +6,7 @@ import {
     IconButton,
     useColorModeValue,
     Avatar,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import {
     LogoIcon,
     InboxIcon,

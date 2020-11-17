@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/core'
+import { Button } from '@chakra-ui/react'
 import MenuIconPath from '../atoms/menu-icon-path'
 
 const MenuToggleButton = ({ toggle }) => (

@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@chakra-ui/core'
+import { useMediaQuery } from '@chakra-ui/react'
 import MotionButton from '../atoms/motion-button'
 
 const variants = {

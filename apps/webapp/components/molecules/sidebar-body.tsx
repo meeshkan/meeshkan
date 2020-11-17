@@ -7,7 +7,7 @@ import {
     useColorModeValue,
     Select,
     Divider,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { ChatIcon } from '@chakra-ui/icons'
 import {
     ActivityIcon,

@@ -1,4 +1,4 @@
-import { Stack, useColorModeValue } from '@chakra-ui/core'
+import { Stack, useColorModeValue } from '@chakra-ui/react'
 import './layout.module.css'
 
 const Layout = ({ children, ...props }) => {

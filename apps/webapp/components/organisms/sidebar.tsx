@@ -2,7 +2,7 @@ import {
     Flex,
     useColorModeValue,
     useMediaQuery,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import { useCycle } from 'framer-motion'
 import MotionStack from '../atoms/motion-stack'
 import SideBarHeader from '../molecules/sidebar-header'
