@@ -1,5 +1,5 @@
 import React from "react"
-import { SimpleGrid, Box, Code, Heading, Text } from "@chakra-ui/core"
+import { SimpleGrid, Box, Code, Heading, Text } from "@chakra-ui/react"
 import { graphql, useStaticQuery } from "gatsby"
 import Img from "gatsby-image"
 import { SingleSection } from "../singleSection"

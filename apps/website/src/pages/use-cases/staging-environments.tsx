@@ -27,7 +27,7 @@ import {
 	ModalOverlay,
 	Select,
 	LightMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { Card } from "../../components/atoms/card"
 import { useForm } from "react-hook-form"
 import SEO from "../../components/molecules/seo"

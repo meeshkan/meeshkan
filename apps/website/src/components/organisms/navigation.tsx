@@ -15,7 +15,7 @@ import {
 	Divider,
 	useColorModeValue,
 	useColorMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import NavLink from "../atoms/navLink"
 import { UniversalLink } from "../atoms/UniversalLink"
 import { motion } from "framer-motion"

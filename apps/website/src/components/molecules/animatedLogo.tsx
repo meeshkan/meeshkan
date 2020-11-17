@@ -1,6 +1,6 @@
 import React from "react"
 import { motion } from "framer-motion"
-import { useColorModeValue } from "@chakra-ui/core"
+import { useColorModeValue } from "@chakra-ui/react"
 
 export const AnimatedLogo = () => {
 	const icon = {

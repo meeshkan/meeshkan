@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/core"
+import { Box, Heading } from "@chakra-ui/react"
 import { Link as GatsbyLink } from "gatsby"
 import React, { forwardRef } from "react"
 import { useLocation } from "@reach/router"

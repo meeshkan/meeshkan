@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import meeshkanTheme from "./codeTheme"
 import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live"
 import { mdx } from "@mdx-js/react"
-import * as Chakra from "@chakra-ui/core"
+import * as Chakra from "@chakra-ui/react"
 import * as Formik from "formik"
 import FocusLock from "react-focus-lock"
-import { DarkMode } from "@chakra-ui/core"
+import { DarkMode } from "@chakra-ui/react"
 
 const { Box, Button, useClipboard } = Chakra
 

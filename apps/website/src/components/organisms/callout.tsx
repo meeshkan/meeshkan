@@ -6,7 +6,7 @@ import {
 	Button,
 	Link as ChakraLink,
 	DarkMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import Img from "gatsby-image"
 import { graphql, useStaticQuery } from "gatsby"
 

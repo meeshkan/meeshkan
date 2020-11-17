@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Stack } from "@chakra-ui/core"
+import { Box, Stack } from "@chakra-ui/react"
 import items from "./items"
 import { ItemLink, stringToUrl } from "./navLink"
 

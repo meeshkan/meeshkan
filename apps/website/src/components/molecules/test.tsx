@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Flex, Text } from "@chakra-ui/core"
+import { Box, Flex, Text } from "@chakra-ui/react"
 import { CheckmarkIcon, XmarkIcon } from "../../../theme/icons"
 
 type TestProps = {

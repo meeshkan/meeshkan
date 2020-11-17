@@ -13,7 +13,7 @@ import {
 	Collapse,
 	useDisclosure,
 	LightMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import Codeblock from "../../molecules/codeBlock"
 import { CloseIcon, ChevronDownIcon, ArrowForwardIcon } from "@chakra-ui/icons"
 import { XmarkIcon } from "../../../../theme/icons"

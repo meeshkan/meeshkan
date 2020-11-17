@@ -1,6 +1,6 @@
 import React from "react"
 import { Link as GatsbyLink } from "gatsby"
-import { Button } from "@chakra-ui/core"
+import { Button } from "@chakra-ui/react"
 
 type NavLinkProps = {
 	text: string

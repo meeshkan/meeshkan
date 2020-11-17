@@ -8,7 +8,7 @@ import {
 	Button,
 	Code,
 	Box,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { XmarkIcon, CheckmarkIcon } from "../../theme/icons"
 import { Card } from "../components/atoms/card"
 import { useMixpanel } from "gatsby-plugin-mixpanel"

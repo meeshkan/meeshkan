@@ -12,7 +12,7 @@ import {
 	DrawerBody,
 	useDisclosure,
 	useColorMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import {
 	HamburgerIcon,
 	LogoIcon,

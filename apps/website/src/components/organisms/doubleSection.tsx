@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Heading, Link, Grid, Text, Code, Flex } from "@chakra-ui/core"
+import { Box, Heading, Link, Grid, Text, Code, Flex } from "@chakra-ui/react"
 
 type DoubleSectionProps = {
 	children: Object

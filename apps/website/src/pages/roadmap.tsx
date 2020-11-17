@@ -18,7 +18,7 @@ import {
 	CircularProgress,
 	CircularProgressLabel,
 	useColorMode,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { SingleSection } from "../components/organisms/singleSection"
 import Layout from "../components/templates/layout"
 import { graphql, useStaticQuery } from "gatsby"

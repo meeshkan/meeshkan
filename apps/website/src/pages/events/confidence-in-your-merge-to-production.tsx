@@ -12,7 +12,7 @@ import {
 	Divider,
 	Avatar,
 	useColorModeValue,
-} from "@chakra-ui/core"
+} from "@chakra-ui/react"
 import { SingleSection } from "../../components/organisms/singleSection"
 import SEO from "../../components/molecules/seo"
 import Layout from "../../components/templates/layout"
