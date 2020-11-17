@@ -1,4 +1,3 @@
-import React from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 import ChakraProvider from '../components/molecules/chakra'
