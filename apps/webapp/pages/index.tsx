@@ -1,10 +1,10 @@
 import React from 'react'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { ApolloClient, InMemoryCache } from '@apollo/client'
-import ChakraProvider from '../components/chakra'
-import Layout from '../components/layout'
-import SideBar from '../components/sidebar'
-import Grid from '../components/grid'
+import ChakraProvider from '../components/molecules/chakra'
+import Layout from '../components/templates/layout'
+import SideBar from '../components/organisms/sidebar'
+import Grid from '../components/organisms/grid'
 
 export const Index = ({ cookies }) => {
   const client = new ApolloClient({
@@ -26,4 +26,4 @@ export const Index = ({ cookies }) => {
 
 export default Index;
 
-export { getServerSideProps } from '../components/chakra'
+export { getServerSideProps } from '../components/molecules/chakra'

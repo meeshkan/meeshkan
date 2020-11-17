@@ -17,7 +17,7 @@ import {
     ArrowUpDownIcon,
     ChatIcon,
 } from '@chakra-ui/icons'
-import { motion, useCycle } from 'framer-motion'
+import { useCycle } from 'framer-motion'
 import {
     LogoIcon,
     InboxIcon,
@@ -27,11 +27,10 @@ import {
     PackageIcon,
     SettingsIcon,
 } from '@frontend/chakra-theme'
-import NavButton from './nav-button'
-import ColorModeButton from './color-mode-button'
-import MenuToggleButton from './menu-toggle-button'
-
-const MotionStack = motion.custom(Stack)
+import NavButton from '../molecules/nav-button'
+import ColorModeButton from '../molecules/color-mode-button'
+import MenuToggleButton from '../molecules/menu-toggle-button'
+import MotionStack from '../atoms/motion-stack'
 
 const SideBar = (props) => {
     const [isOpen, toggleOpen] = useCycle(false, true)

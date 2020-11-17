@@ -1,7 +1,5 @@
-import { Button, useMediaQuery } from '@chakra-ui/core'
-import { motion } from 'framer-motion'
-
-const MotionButton = motion.custom(Button)
+import { useMediaQuery } from '@chakra-ui/core'
+import MotionButton from '../atoms/motion-button'
 
 const variants = {
     open: {
@@ -18,7 +16,7 @@ const variants = {
             y: { stiffness: 300 }
         }
     }
-};
+}
 
 const NavButton = (props) => {
     const [isMobile] = useMediaQuery('(max-width: 30em)')
