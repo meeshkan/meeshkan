@@ -215,7 +215,7 @@
     "react-hooks/rules-of-hooks": "error",
     "default-case": "off",
     "no-dupe-class-members": "off",
-    "no-undef": "off",
+    "no-undef": "warn",
     "@typescript-eslint/consistent-type-assertions": "warn",
     "no-array-constructor": "off",
     "@typescript-eslint/no-array-constructor": "warn",
