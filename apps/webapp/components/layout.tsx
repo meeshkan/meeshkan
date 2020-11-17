@@ -6,8 +6,8 @@ const Layout = ({ children, ...props }) => {
     return (
         <Flex
             p={[0, 8, 8, 8]}
+            bg={useColorModeValue('gray.200', 'gray.900')}
             w="100%"
-            bg={useColorModeValue('gray.100', 'gray.900')}
             h="100vh"
             direction={['column', 'row', 'row', 'row']}
             {...props}

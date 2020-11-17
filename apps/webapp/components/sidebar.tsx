@@ -42,7 +42,7 @@ const SideBar = (props) => {
             p={4}
             as="nav"
             rounded="lg"
-            bg={useColorModeValue('gray.200', 'gray.800')}
+            bg={useColorModeValue('gray.100', 'gray.800')}
             w="100%"
             maxW={['100%', '256px', '256px', '256px']}
             h={[isOpen ? '100vh' : 'auto', '100%', '100%', '100%']}
