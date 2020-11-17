@@ -26,7 +26,6 @@ const NavButton = (props) => {
         <MotionButton
             size="sm"
             variant="ghost"
-            colorScheme="black"
             width="100%"
             justifyContent="flex-start"
             alignItems="center"
