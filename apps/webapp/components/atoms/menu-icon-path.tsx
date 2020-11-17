@@ -1,13 +1,13 @@
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
 
-const MenuIconPath = props => (
-    <motion.path
-        fill="transparent"
-        strokeWidth="2"
-        stroke="currentColor"
-        strokeLinecap="round"
-        {...props}
-    />
-)
+const MenuIconPath = (props) => (
+	<motion.path
+		fill="transparent"
+		strokeWidth="2"
+		stroke="currentColor"
+		strokeLinecap="round"
+		{...props}
+	/>
+);
 
-export default MenuIconPath
+export default MenuIconPath;
