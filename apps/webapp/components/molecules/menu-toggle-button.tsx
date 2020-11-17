@@ -1,7 +1,11 @@
 import { Button } from '@chakra-ui/react'
 import MenuIconPath from '../atoms/menu-icon-path'
 
-const MenuToggleButton = ({ toggle }) => (
+type MenuToggleButtonProps = {
+    toggle: (i?: number) => void
+}
+
+const MenuToggleButton = ({ toggle }: MenuToggleButtonProps) => (
     <Button
         onClick={toggle}
         size="sm"

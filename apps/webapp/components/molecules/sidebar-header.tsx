@@ -14,7 +14,11 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import MenuToggleButton from '../molecules/menu-toggle-button'
 
-const SideBarHeader = ({ toggle }) => {
+type SideBarHeaderProps = {
+    toggle: (i?: number) => void
+}
+
+const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
     return (
         <Flex align="center">
             <Box>

@@ -1,7 +1,12 @@
+import { ReactNode } from 'react'
 import { Stack, useColorModeValue } from '@chakra-ui/react'
 import './layout.module.css'
 
-const Layout = ({ children, ...props }) => {
+type LayoutProps = {
+    children: ReactNode
+}
+
+const Layout = ({ children, ...props }: LayoutProps) => {
     return (
         <Stack
             p={[0, 8, 8, 8]}

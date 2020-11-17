@@ -1,10 +1,16 @@
+import { ReactNode } from 'react'
 import {
   ChakraProvider,
   cookieStorageManager,
   localStorageManager,
 } from '@chakra-ui/react'
 
-const Chakra = ({ cookies, children }) => {
+type ChakraProps = {
+    cookies: string | undefined
+    children: ReactNode
+}
+
+const Chakra = ({ cookies, children }: ChakraProps) => {
     const colorModeManager = typeof cookies === 'string'
         ? cookieStorageManager(cookies)
         : localStorageManager
