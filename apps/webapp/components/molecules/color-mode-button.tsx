@@ -1,4 +1,4 @@
-import { Stack, Button, useColorMode } from '@chakra-ui/core'
+import { Button, useColorMode } from '@chakra-ui/core'
 import {
 	MoonIcon,
 	SunIcon,
