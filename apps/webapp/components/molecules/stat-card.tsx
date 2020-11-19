@@ -27,6 +27,13 @@ const colorFromValue = value => {
     return color;
 }
 
+type StatCardProps = {
+    title: string;
+    value: number;
+    isPercentage: boolean;
+    dataPoints: number;
+};
+
 const StatCard = ({
     title,
     value,
@@ -34,7 +41,7 @@ const StatCard = ({
     percentageChange,
     dataPoints,
     ...props
-}) => {
+}: StatCardProps) => {
     const isPositiveChange = percentageChange >= 0;
     const valueColor = isPercentage ? colorFromValue(value) : useColorModeValue('gray.600', 'gray.200');
     return (
