@@ -26,8 +26,8 @@ const SideBarBody = () => {
 				<NavButton isActive leftIcon={<ActivityIcon />}>
 					Health dashboard
 				</NavButton>
-				<NavButton leftIcon={<VideoIcon />}>User flows</NavButton>
-				<NavButton leftIcon={<CheckSquareIcon />}>Test cases</NavButton>
+				<NavButton leftIcon={<VideoIcon />}>User stories</NavButton>
+				<NavButton leftIcon={<CheckSquareIcon />}>Test runs</NavButton>
 				<NavButton leftIcon={<PackageIcon />}>Releases</NavButton>
 			</Stack>
 			<Spacer />

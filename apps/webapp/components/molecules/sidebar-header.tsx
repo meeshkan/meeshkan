@@ -19,7 +19,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	return (
 		<Flex align="center">
 			<Box>
-				<LogoIcon width="120px" height="25px" />
+				<LogoIcon width="auto" height={6} />
 			</Box>
 			<Spacer />
 			<Flex align="center">

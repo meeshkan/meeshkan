@@ -4,6 +4,7 @@ import {
 	cookieStorageManager,
 	localStorageManager,
 } from '@chakra-ui/react';
+import customTheme from '@frontend/chakra-theme';
 
 type ChakraProps = {
 	cookies: string | undefined;
@@ -17,7 +18,7 @@ const Chakra = ({ cookies, children }: ChakraProps) => {
 			: localStorageManager;
 
 	return (
-		<ChakraProvider colorModeManager={colorModeManager}>
+		<ChakraProvider colorModeManager={colorModeManager} theme={customTheme}>
 			{children}
 		</ChakraProvider>
 	);
