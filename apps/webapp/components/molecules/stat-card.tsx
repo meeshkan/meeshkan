@@ -21,7 +21,7 @@ const colorFromValue = value => {
     } else if (value > 50 && value <= 75) {
         color = useColorModeValue('yellow.500', 'yellow.400');
     } else {
-        color = useColorModeValue('green.500', 'green.400');
+        color = useColorModeValue('cyan.500', 'cyan.400');
     }
 
     return color;
@@ -40,18 +40,17 @@ const StatCard = ({
     return (
         <Flex {...props}>
             <Stat>
-                <StatLabel
-                    fontSize="md"
-                >
+                <StatLabel fontSize="md">
                     {title}
                 </StatLabel>
                 <StatNumber
                     mt={4}
-                    mb={2}
+                    mb={3}
                 >
                     <Heading
                         color={valueColor}
-                        fontSize="5xl"
+                        fontSize="4xl"
+                        fontWeight={800}
                         d="inline"
                     >
                         {isPercentage ? value : commaNumber(value)}
@@ -69,7 +68,7 @@ const StatCard = ({
                 <StatHelpText>
                     <Badge
                         variant="subtle"
-                        colorScheme={isPositiveChange ? 'green' : 'red'}
+                        colorScheme={isPositiveChange ? 'cyan' : 'red'}
                         rounded="lg"
                         mr={2}
                     >
@@ -82,6 +81,7 @@ const StatCard = ({
                         fontWeight={400}
                         rounded="lg"
                         textTransform="none"
+                        p={2}
                     >
                         from {commaNumber(dataPoints)} data points
                     </Badge>
