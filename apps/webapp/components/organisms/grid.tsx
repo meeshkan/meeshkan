@@ -4,10 +4,10 @@ const Grid = (props) => {
 	return (
 		<Box
 			p={8}
-			bg={useColorModeValue('gray.100', 'gray.800')}
+			bg={useColorModeValue('white', 'gray.800')}
 			w="100%"
 			h="100%"
-			rounded="md"
+			rounded="lg"
 			{...props}
 		/>
 	);
