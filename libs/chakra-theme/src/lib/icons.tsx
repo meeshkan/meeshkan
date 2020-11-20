@@ -149,6 +149,14 @@ export const GitMergeIcon = createIcon({
 	),
 })
 
+export const GitLabIcon = createIcon({
+	displayName: "GitLabIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<path d="M 15.1 9.593 L 8 14.753 L 0.9 9.593 C 0.705 9.45 0.624 9.197 0.7 8.967 L 1.513 6.447 L 3.14 1.44 C 3.156 1.399 3.181 1.363 3.213 1.333 C 3.323 1.233 3.491 1.233 3.6 1.333 C 3.634 1.366 3.659 1.408 3.673 1.453 L 5.3 6.447 L 10.7 6.447 L 12.327 1.44 C 12.342 1.399 12.368 1.363 12.4 1.333 C 12.509 1.233 12.677 1.233 12.787 1.333 C 12.821 1.366 12.846 1.408 12.86 1.453 L 14.487 6.46 L 15.333 8.967 C 15.402 9.204 15.308 9.459 15.1 9.593 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+	),
+})
+
 export const HamburgerIcon = createIcon({
 	displayName: "HamburgerIcon",
 	viewBox: "0 0 18 14",
