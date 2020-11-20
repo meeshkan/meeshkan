@@ -180,6 +180,19 @@ export const GitPullRequestIcon = createIcon({
 	),
 })
 
+export const GitBranchIcon = createIcon({
+	displayName: "GitBranchIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 4 2 L 4 10" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 10 4 C 10 2.895 10.895 2 12 2 C 13.105 2 14 2.895 14 4 C 14 5.105 13.105 6 12 6 C 10.895 6 10 5.105 10 4 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2 12 C 2 10.895 2.895 10 4 10 C 5.105 10 6 10.895 6 12 C 6 13.105 5.105 14 4 14 C 2.895 14 2 13.105 2 12 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 12 6 C 12 9.314 9.314 12 6 12" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	),
+})
+
 export const HamburgerIcon = createIcon({
 	displayName: "HamburgerIcon",
 	viewBox: "0 0 18 14",
