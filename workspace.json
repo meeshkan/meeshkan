@@ -11,7 +11,7 @@
           "builder": "@nrwl/next:build",
           "options": {
             "root": "apps/webapp",
-            "outputPath": "apps/webapp/dist"
+            "outputPath": "dist/apps/webapp"
           },
           "configurations": {
             "production": {}
