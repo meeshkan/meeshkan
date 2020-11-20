@@ -157,6 +157,17 @@ export const GitLabIcon = createIcon({
 	),
 })
 
+export const GitCommitIcon = createIcon({
+	displayName: "GitCommitIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 5.333 8 C 5.333 6.527 6.527 5.333 8 5.333 C 9.473 5.333 10.667 6.527 10.667 8 C 10.667 9.473 9.473 10.667 8 10.667 C 6.527 10.667 5.333 9.473 5.333 8 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 0.7 8 L 4.667 8 M 11.34 8 L 15.307 8" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	),
+})
+
 export const HamburgerIcon = createIcon({
 	displayName: "HamburgerIcon",
 	viewBox: "0 0 18 14",
