@@ -9,6 +9,7 @@ const ColorModeButton = () => {
 			leftIcon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
 			onClick={toggleColorMode}
 			w="100%"
+			colorScheme="gray"
 		>
 			{colorMode === 'light' ? 'dark' : 'light'} mode
 		</Button>

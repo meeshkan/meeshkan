@@ -10,7 +10,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 	return (
 		<Stack
 			p={[0, 8, 8, 8]}
-			bg={useColorModeValue('gray.100', 'gray.900')}
+			bg={useColorModeValue('gray.100', 'gray.800')}
 			w="100%"
 			h="100vh"
 			d="flex"
