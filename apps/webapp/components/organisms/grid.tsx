@@ -19,6 +19,7 @@ import {
 	Divider,
 	useColorModeValue
 } from '@chakra-ui/react';
+import { Bar, Doughnut } from 'react-chartjs-2'
 import {
 	GitMergeIcon,
 	GitCommitIcon,
@@ -79,7 +80,107 @@ const LinearListItem = ({ title, avatar }) => {
 	)
 }
 
+const barData = {
+	labels: ['1', '2', '3', '4', '5', '6'],
+	datasets: [
+		{
+			label: '# of recordings',
+			data: [1000, 4000, 3000, 5000, 2000, 3000, 5000, 2000],
+			backgroundColor: '#7de8d3',
+		},
+		{
+			label: '# of tests',
+			data: [2000, 3584, 2485, 4300, 1000, 4000, 5000, 1294],
+			backgroundColor: '#7d92e8',
+		},
+	],
+}
+
+const barOptions = {
+	scales: {
+		yAxes: [
+			{
+				ticks: {
+					beginAtZero: true,
+					display: false,
+				},
+				gridLines: {
+					display: false,
+				},
+			},
+		],
+		xAxes: [
+			{
+				ticks: {
+					display: false,
+				},
+				gridLines: {
+					display: false,
+				},
+				barPercentage: 0.5,
+			},
+		],
+	},
+}
+
+const doughnutData = {
+	labels: ['Passing', 'Warning', 'Failure', 'Error Running'],
+	datasets: [
+		{
+			label: '# of Votes',
+			data: [80, 12, 5, 3],
+			backgroundColor: [
+				'rgba(75, 192, 192, 0.2)',
+				'rgba(255, 206, 86, 0.2)',
+				'rgba(255, 99, 132, 0.2)',
+				'rgba(54, 162, 235, 0.2)',
+			],
+			borderColor: [
+				'rgba(75, 192, 192, 1)',
+				'rgba(255, 206, 86, 1)',
+				'rgba(255, 99, 132, 1)',
+				'rgba(54, 162, 235, 1)',
+			],
+			borderWidth: 1,
+		},
+	],
+}
+
+const colorFromValue = value => {
+    let color;
+
+    if (value > 0) {
+		color = useColorModeValue('cyan.500', 'cyan.400');
+    } else if (value < 0 && value > -1) {
+        color = useColorModeValue('yellow.500', 'yellow.400');
+    } else {
+        color = useColorModeValue('red.500', 'red.400');
+    }
+
+    return color;
+}
+
+const ConfidenceBreakdownItem = ({ value, description }) => {
+	value = (Math.round(value * 100) / 100).toFixed(2);
+	return (
+		<ListItem as={Flex} align="center" lineHeight="tall">
+			<Text as="span" mr={3} color={colorFromValue(value)} w="45px">
+				{value > 0 ? `+${value}` : value}
+			</Text>
+			{description}
+		</ListItem>
+	)
+}
+
 const Grid = (props) => {
+	const chartOptions = {
+		legend: {
+            labels: {
+                fontColor: useColorModeValue('#4A5568', '#CBD5E0'),
+            },
+        },
+	};
+
 	return (
 		<Stack
 			p={[6, 6, 0, 0]}
@@ -166,10 +267,40 @@ const Grid = (props) => {
 							w="100%"
 							h="100%"
 						>
-							<GridCard title="Confidence Breakdown" height={['200px', '150px', 'auto', "auto"]} />
-							<GridCard title="Recordings vs. Tests" height={['200px', '150px', 'auto', "auto"]} />
-							<Card height={['200px', '150px', 'auto', "auto"]} />
-							<Card height={['200px', '150px', 'auto', "auto"]} />
+							<GridCard title="Confidence Breakdown" h="auto">
+								<List
+									spacing={3}
+									color={useColorModeValue('gray.600', 'gray.400')}
+								>
+									<ConfidenceBreakdownItem
+										value={0.05}
+										description="Users can successfully upgrade their subscription."
+									/>
+									<ConfidenceBreakdownItem
+										value={0.05}
+										description="Lorem ipsum dolor sit amet."
+									/>
+									<ConfidenceBreakdownItem
+										value={-0.10}
+										description="Lorem ipsum dolor sit amet."
+									/>
+									<ConfidenceBreakdownItem
+										value={0.05}
+										description="Lorem ipsum dolor sit amet."
+									/>
+									<ConfidenceBreakdownItem
+										value={-2.00}
+										description="Lorem ipsum dolor sit amet."
+									/>
+								</List>
+							</GridCard>
+							<GridCard title="Recordings vs. Tests" h="auto">
+								<Bar data={barData} options={{ ...barOptions, ...chartOptions }} />
+							</GridCard>
+							<GridCard title="Test Suite State" h="auto">
+								<Doughnut data={doughnutData} options={chartOptions} />
+							</GridCard>
+							<Card h={['200px', '150px', 'auto', "auto"]} />
 						</SimpleGrid>
 					</Flex>
 				</Stack>
