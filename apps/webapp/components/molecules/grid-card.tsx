@@ -1,4 +1,6 @@
+import { ReactNode } from 'react'
 import {
+    BoxProps,
 	Heading,
 	Divider,
 } from '@chakra-ui/react';
@@ -6,8 +8,8 @@ import Card from '../atoms/card'
 
 type GridCardProps = {
     title: string;
-    children: ReactNode;
-};
+    children?: ReactNode;
+} & BoxProps;
 
 const GridCard = ({
     title,
@@ -15,7 +17,10 @@ const GridCard = ({
     ...props
 }: GridCardProps) => {
     return (
-        <Card>
+        <Card
+            overflowY="scroll"
+            {...props}
+        >
             <Heading
                 as="h2"
                 fontSize="lg"
@@ -24,7 +29,7 @@ const GridCard = ({
             >
                 {title}
             </Heading>
-            <Divider mt={1} />
+            <Divider mt={1} mb={4} />
             {children}
         </Card>
     )

@@ -1,6 +1,7 @@
 import {
 	Box,
 	Flex,
+    FlexProps,
 	Text,
 	Badge,
 	Stat,
@@ -30,9 +31,10 @@ const colorFromValue = value => {
 type StatCardProps = {
     title: string;
     value: number;
-    isPercentage: boolean;
+    isPercentage?: boolean;
+    percentageChange: number;
     dataPoints: number;
-};
+} & FlexProps;
 
 const StatCard = ({
     title,
