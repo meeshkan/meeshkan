@@ -12,11 +12,11 @@ type ConfidenceBreakdownItemProps = {
 
 const ConfidenceBreakdownItem = ({ value, description }: ConfidenceBreakdownItemProps) => {
 	const colorFromValue = useColorFromNumber('decimal');
-	value = (Math.round(value * 100) / 100).toFixed(2);
+	const valueAsString = (Math.round(value * 100) / 100).toFixed(2);
 	return (
 		<ListItem as={Flex} align="center" lineHeight="tall">
 			<Text as="span" mr={3} color={colorFromValue(value)} w="45px">
-				{value > 0 ? `+${value}` : value}
+				{value > 0 ? `+${valueAsString}` : valueAsString}
 			</Text>
 			{description}
 		</ListItem>
