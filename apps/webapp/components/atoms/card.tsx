@@ -5,7 +5,7 @@ const Card = (props) => {
         <Box
             p={4}
             rounded="lg"
-			bg={useColorModeValue('white', 'gray.800')}
+			bg={useColorModeValue('white', 'gray.900')}
             {...props}
         />
     )
