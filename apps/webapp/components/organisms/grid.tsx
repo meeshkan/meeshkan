@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import truncate from 'truncate';
-import {
+import theme, {
 	GitMergeIcon,
 	GitCommitIcon,
 	GitLabIcon,
@@ -66,12 +66,12 @@ const barData = {
 		{
 			label: '# of recordings',
 			data: [1000, 4000, 3000, 5000, 2000, 3000, 5000, 2000],
-			backgroundColor: '#7de8d3',
+			backgroundColor: theme.colors.cyan[300],
 		},
 		{
 			label: '# of tests',
 			data: [2000, 3584, 2485, 4300, 1000, 4000, 5000, 1294],
-			backgroundColor: '#7d92e8',
+			backgroundColor: theme.colors.blue[300],
 		},
 	],
 };
@@ -156,7 +156,7 @@ const Grid = (props) => {
 	const chartOptions = {
 		legend: {
 			labels: {
-				fontColor: useColorModeValue('#4A5568', '#CBD5E0'),
+				fontColor: useColorModeValue(theme.colors.gray[600], theme.colors.gray[400]),
 			},
 		},
 	};
