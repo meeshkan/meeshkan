@@ -22,7 +22,6 @@ import {
 	PackageIcon,
 	SettingsIcon,
 } from '@frontend/chakra-theme';
-import ColorModeButton from '../molecules/color-mode-button';
 import NavButton from '../molecules/nav-button';
 import { transparentize } from '@chakra-ui/theme-tools';
 
@@ -55,6 +54,7 @@ const SideBarBody = () => {
 							as={Button}
 							size="sm"
 							colorScheme="gray"
+							// @ts-expect-error
 							backgroundColor={useColorModeValue(
 								'gray.50',
 								transparentize('gray.800', 0.75)
@@ -85,15 +85,14 @@ const SideBarBody = () => {
 					</Menu>
 					<IconButton
 						aria-label="Settings"
-						icon={
-							<SettingsIcon color={useColorModeValue('gray.600', 'gray.500')} />
-						}
+						colorScheme="gray"
+						color={useColorModeValue('gray.500', 'gray.400')}
+						icon={<SettingsIcon />}
 						variant="ghost"
 						size="sm"
 						ml={2}
 					/>
 				</Flex>
-				{/* <ColorModeButton /> */}
 			</Box>
 		</>
 	);
