@@ -43,13 +43,13 @@ const ActivityListItem = ({ title, subtitle, icon }) => {
 	);
 };
 
-const LinearListItem = ({ title, avatar }) => {
+const LinearListItem = ({ title, author, avatar }) => {
 	return (
 		<ListItem as={Flex} align="center" justify="space-between">
 			<Text color={useColorModeValue('gray.900', 'gray.200')}>{title}</Text>
 			<Avatar
 				size="xs"
-				// name="Ryan Florence"
+				name={author}
 				src={avatar}
 				ml={4}
 			/>
@@ -318,22 +318,27 @@ const Grid = (props) => {
 							>
 								<LinearListItem
 									title="User can't schedule pickup"
+									author="Ryan Florence"
 									avatar="https://bit.ly/ryan-florence"
 								/>
 								<LinearListItem
 									title="`basic` user is authorized to s..."
+									author="Kent C. Dodds"
 									avatar="https://bit.ly/kent-c-dodds"
 								/>
 								<LinearListItem
 									title="User can't schedule pickup"
+									author="Ryan Florence"
 									avatar="https://bit.ly/ryan-florence"
 								/>
 								<LinearListItem
 									title="User can't reschedule delivery..."
+									author="Sage Adebayo"
 									avatar="https://bit.ly/sage-adebayo"
 								/>
 								<LinearListItem
 									title="`basic` user is authorized to s..."
+									author="Code Beast"
 									avatar="https://bit.ly/code-beast"
 								/>
 							</List>
