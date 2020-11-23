@@ -31,15 +31,15 @@ const NavButton = (props) => {
 			alignItems="center"
 			fontWeight={500}
 			fontSize="16px"
-			color={useColorModeValue('gray.500', 'gray.300')}
+			color={useColorModeValue('gray.500', 'gray.400')}
 			_active={{
 				backgroundColor: useColorModeValue('gray.100', 'gray.800'),
 				color: useColorModeValue('gray.900', 'white'),
 			}}
 			_hover={{
 				backgroundColor: useColorModeValue(
-					transparentize('gray.100', 0.5),
-					transparentize('gray.800', 0.5)
+					transparentize('gray.100', 0.75),
+					transparentize('gray.800', 0.75)
 				),
 			}}
 			variants={isMobile ? variants : {}}

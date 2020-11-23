@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
 	Stack,
 	Box,
@@ -5,10 +6,15 @@ import {
 	Spacer,
 	IconButton,
 	useColorModeValue,
-	Select,
 	Divider,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuOptionGroup,
+	MenuItemOption,
+	Button,
 } from '@chakra-ui/react';
-import { ChatIcon } from '@chakra-ui/icons';
+import { ChatIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
 import {
 	ActivityIcon,
 	VideoIcon,
@@ -18,8 +24,15 @@ import {
 } from '@frontend/chakra-theme';
 import ColorModeButton from '../molecules/color-mode-button';
 import NavButton from '../molecules/nav-button';
+import { transparentize } from '@chakra-ui/theme-tools';
+
+let projects = [
+	{ name: 'Acme Industries', avatar: 'https://example.com' },
+	{ name: 'Meeshkan', avatar: 'https://example.com' },
+];
 
 const SideBarBody = () => {
+	const [project, setProject] = useState(projects[0]);
 	return (
 		<>
 			<Stack mt={6}>
@@ -35,14 +48,41 @@ const SideBarBody = () => {
 				<NavButton leftIcon={<ChatIcon />} mt={2}>
 					Help and Feedback
 				</NavButton>
-				<Divider my={5} />
-				<Flex align="center" mb={3}>
-					<Select
-						placeholder="Acme Industries"
-						variant="outline"
-						rounded="md"
-						size="sm"
-					/>
+				<Divider my={4} />
+				<Flex align="center">
+					<Menu>
+						<MenuButton
+							as={Button}
+							size="sm"
+							colorScheme="gray"
+							backgroundColor={useColorModeValue(
+								'gray.50',
+								transparentize('gray.800', 0.75)
+							)}
+							rightIcon={<ArrowUpDownIcon />}
+							w="100%"
+							textAlign="left"
+						>
+							{project.name}
+						</MenuButton>
+						<MenuList>
+							<MenuOptionGroup
+								defaultValue={project.name}
+								title="Projects"
+								type="radio"
+							>
+								{projects.map((project, index) => (
+									<MenuItemOption
+										key={index}
+										value={project.name}
+										onClick={() => setProject(project)}
+									>
+										{project.name}
+									</MenuItemOption>
+								))}
+							</MenuOptionGroup>
+						</MenuList>
+					</Menu>
 					<IconButton
 						aria-label="Settings"
 						icon={
@@ -53,7 +93,7 @@ const SideBarBody = () => {
 						ml={2}
 					/>
 				</Flex>
-				<ColorModeButton />
+				{/* <ColorModeButton /> */}
 			</Box>
 		</>
 	);
