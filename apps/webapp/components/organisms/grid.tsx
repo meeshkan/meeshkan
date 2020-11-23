@@ -20,6 +20,7 @@ import {
 	useColorModeValue,
 } from '@chakra-ui/react';
 import { Bar, Doughnut } from 'react-chartjs-2';
+import truncate from 'truncate';
 import {
 	GitMergeIcon,
 	GitCommitIcon,
@@ -46,7 +47,9 @@ const ActivityListItem = ({ title, subtitle, icon }) => {
 const LinearListItem = ({ title, author, avatar }) => {
 	return (
 		<ListItem as={Flex} align="center" justify="space-between">
-			<Text color={useColorModeValue('gray.900', 'gray.200')}>{title}</Text>
+			<Text color={useColorModeValue('gray.900', 'gray.200')}>
+				{truncate(title, 30)}
+			</Text>
 			<Avatar
 				size="xs"
 				name={author}
@@ -322,7 +325,7 @@ const Grid = (props) => {
 									avatar="https://bit.ly/ryan-florence"
 								/>
 								<LinearListItem
-									title="`basic` user is authorized to s..."
+									title="`basic` user is authorized to save"
 									author="Kent C. Dodds"
 									avatar="https://bit.ly/kent-c-dodds"
 								/>
@@ -332,12 +335,12 @@ const Grid = (props) => {
 									avatar="https://bit.ly/ryan-florence"
 								/>
 								<LinearListItem
-									title="User can't reschedule delivery..."
+									title="User can't reschedule a delivery"
 									author="Sage Adebayo"
 									avatar="https://bit.ly/sage-adebayo"
 								/>
 								<LinearListItem
-									title="`basic` user is authorized to s..."
+									title="`basic` user is authorized to save"
 									author="Code Beast"
 									avatar="https://bit.ly/code-beast"
 								/>

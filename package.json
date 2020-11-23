@@ -88,7 +88,8 @@
     "react-hook-form": "5.7.2",
     "react-live": "2.2.2",
     "react-player": "1.15.3",
-    "subscriptions-transport-ws": "^0.9.18"
+    "subscriptions-transport-ws": "^0.9.18",
+    "truncate": "^2.1.0"
   },
   "devDependencies": {
     "@angular-devkit/schematics": "9.1.7",
