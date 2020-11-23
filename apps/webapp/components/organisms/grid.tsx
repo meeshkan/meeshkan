@@ -9,14 +9,13 @@ import {
 	MenuList,
 	MenuOptionGroup,
 	MenuItemOption,
-	Select,
 	SimpleGrid,
 	Heading,
 	useColorModeValue,
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
-import { transparentize } from '@chakra-ui/theme-tools';
 import { Bar, Doughnut } from 'react-chartjs-2';
+require('../molecules/rounded-chart');
 import theme, {
 	GitMergeIcon,
 	GitCommitIcon,
@@ -29,6 +28,7 @@ import GridCard from '../molecules/grid-card';
 import ActivityListItem from '../molecules/activity-list-item';
 import LinearListItem from '../molecules/linear-list-item';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+import { transparentize } from '@chakra-ui/theme-tools';
 
 const barData = {
 	labels: ['1', '2', '3', '4', '5', '6'],
@@ -36,20 +36,26 @@ const barData = {
 		{
 			label: '# of recordings',
 			data: [1000, 4000, 3000, 5000, 2000, 3000, 5000, 2000],
-			backgroundColor: theme.colors.cyan[300],
+			borderWidth: 1,
+			borderColor: theme.colors.cyan[500],
+			backgroundColor: transparentize(theme.colors.cyan[300], 0.25),
 		},
 		{
 			label: '# of tests',
 			data: [2000, 3584, 2485, 4300, 1000, 4000, 5000, 1294],
-			backgroundColor: theme.colors.blue[300],
+			borderWidth: 1,
+			borderColor: theme.colors.blue[500],
+			backgroundColor: transparentize(theme.colors.blue[300], 0.25),
 		},
 	],
 };
 
 const barOptions = {
+	cornerRadius: 6,
 	scales: {
 		yAxes: [
 			{
+				stacked: false,
 				ticks: {
 					beginAtZero: true,
 					display: false,
@@ -61,6 +67,7 @@ const barOptions = {
 		],
 		xAxes: [
 			{
+				stacked: false,
 				ticks: {
 					display: false,
 				},
