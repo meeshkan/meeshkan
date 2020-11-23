@@ -4,11 +4,11 @@ const customComponents = {
 			container: {
 				px: 4,
 				py: 3,
-				rounded: "md",
-				fontStyle: "italic"
+				rounded: 'md',
+				fontStyle: 'italic',
 			},
 			title: {
-				fontWeight: "bold",
+				fontWeight: 'bold',
 				lineHeight: 6,
 				mr: 2,
 			},
@@ -24,36 +24,36 @@ const customComponents = {
 	},
 	Button: {
 		baseStyle: {
-			borderRadius: "md",
+			borderRadius: 'md',
 			fontWeight: 900,
-			lineHeight: "1.2",
-			minW: "fit-content",
+			lineHeight: '1',
+			minW: 'fit-content',
 			_focus: {
-				boxShadow: "outline",
+				boxShadow: 'outline',
 			},
 			_disabled: {
 				opacity: 0.4,
-				cursor: "not-allowed",
-				boxShadow: "none",
+				cursor: 'not-allowed',
+				boxShadow: 'none',
 			},
 			_hover: {
-				textDecoration: "none",
+				textDecoration: 'none',
 				_disabled: {
-					bg: "initial",
+					bg: 'initial',
 				},
 			},
 		},
 		defaultProps: {
-			colorScheme: "blue",
+			colorScheme: 'blue',
 		},
 	},
 	Text: {
 		baseStyle: {
-			fontSize: "16px",
-			lineHeight: "1.6",
-			fontFamily: "body",
+			fontSize: '16px',
+			lineHeight: '1.6',
+			fontFamily: 'body',
 		},
 	},
-}
+};
 
-export default customComponents
+export default customComponents;

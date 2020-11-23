@@ -72,6 +72,60 @@ export const TwitterIcon = createIcon({
 	),
 })
 
+export const InboxIcon = createIcon({
+	displayName: "InboxIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 14.667 8 L 10.667 8 L 9.333 10 L 6.667 10 L 5.333 8 L 1.333 8" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 3.633 3.407 L 1.333 8 L 1.333 12 C 1.333 12.736 1.93 13.333 2.667 13.333 L 13.333 13.333 C 14.07 13.333 14.667 12.736 14.667 12 L 14.667 8 L 12.367 3.407 C 12.142 2.954 11.679 2.667 11.173 2.667 L 4.827 2.667 C 4.321 2.667 3.858 2.954 3.633 3.407 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
+export const VideoIcon = createIcon({
+	displayName: "VideoIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 15.333 4.667 L 10.667 8 L 15.333 11.333 Z" fill="transparent" strokeWidth="0.99" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2 12.667 C 1.264 12.667 0.667 12.07 0.667 11.333 L 0.667 4.667 C 0.667 3.93 1.264 3.333 2 3.333 L 9.333 3.333 C 10.07 3.333 10.667 3.93 10.667 4.667 L 10.667 11.333 C 10.667 12.07 10.07 12.667 9.333 12.667 Z" fill="transparent" strokeWidth="0.99" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
+export const CheckSquareIcon = createIcon({
+	displayName: "CheckSquareIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 6 7.333 L 8 9.333 L 14.667 2.667" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 14 8 L 14 12.667 C 14 13.403 13.403 14 12.667 14 L 3.333 14 C 2.597 14 2 13.403 2 12.667 L 2 3.333 C 2 2.597 2.597 2 3.333 2 L 10.667 2" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
+export const PackageIcon = createIcon({
+	displayName: "PackageIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 11 6.51 L 5 3.15 M 14 10.783 L 14 5.604 C 14 5.141 13.745 4.714 13.333 4.483 L 8.667 1.893 C 8.254 1.662 7.746 1.662 7.333 1.893 L 2.667 4.483 C 2.255 4.714 2 5.141 2 5.604 L 2 10.783 C 2 11.246 2.255 11.672 2.667 11.903 L 7.333 14.493 C 7.746 14.725 8.254 14.725 8.667 14.493 L 13.333 11.903 C 13.745 11.672 14 11.246 14 10.783 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2.18 4.93 L 8 8.2 L 13.82 4.93 M 8 14.72 L 8 8.193" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
+export const SettingsIcon = createIcon({
+	displayName: "SettingsIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 2.667 14 L 2.667 9.333 M 2.667 6.667 L 2.667 2 M 8 14 L 8 8 M 8 5.333 L 8 2 M 13.333 14 L 13.333 10.667 M 13.333 8 L 13.333 2 M 0.667 9.333 L 4.667 9.333 M 6 5.333 L 10 5.333 M 11.333 10.667 L 15.333 10.667" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
 export const GitHubIcon = createIcon({
 	displayName: "GitHubIcon",
 	viewBox: "0 0 16 16",
