@@ -25,7 +25,7 @@ import {
 import NavButton from '../molecules/nav-button';
 import { transparentize } from '@chakra-ui/theme-tools';
 
-let projects = [
+const projects = [
 	{ name: 'Acme Industries', avatar: 'https://example.com' },
 	{ name: 'Meeshkan', avatar: 'https://example.com' },
 ];
