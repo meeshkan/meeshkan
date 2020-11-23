@@ -50,3 +50,5 @@ Thumbs.db
 .local.env
 .env.local
 apps/webapp/.env
+
+.vercel
