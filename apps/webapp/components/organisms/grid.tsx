@@ -1,22 +1,14 @@
 import {
-	Box,
 	Stack,
 	Flex,
 	Avatar,
 	Text,
-	Badge,
-	Stat,
-	StatLabel,
 	List,
 	ListItem,
 	ListIcon,
-	StatNumber,
-	StatHelpText,
-	StatArrow,
 	Select,
 	SimpleGrid,
 	Heading,
-	Divider,
 	useColorModeValue,
 } from '@chakra-ui/react';
 import { Bar, Doughnut } from 'react-chartjs-2';
@@ -26,7 +18,6 @@ import theme, {
 	GitCommitIcon,
 	GitLabIcon,
 	GitPullRequestIcon,
-	GitBranchIcon,
 } from '@frontend/chakra-theme';
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
