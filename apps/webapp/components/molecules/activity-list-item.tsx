@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
 	Text,
     Flex,
@@ -5,11 +6,12 @@ import {
 	ListIcon,
 	useColorModeValue,
 } from '@chakra-ui/react';
+import { IconProps } from '@chakra-ui/icon';
 
 type ActivityListItemProps = {
     title: string;
     subtitle: string;
-    icon: string;
+    icon: FC<IconProps>;
 };
 
 const ActivityListItem = ({ title, subtitle, icon }: ActivityListItemProps) => {
