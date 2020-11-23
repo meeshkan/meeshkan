@@ -1,12 +1,21 @@
+import { useState } from 'react';
 import {
 	Stack,
 	Flex,
 	List,
+	Button,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuOptionGroup,
+	MenuItemOption,
 	Select,
 	SimpleGrid,
 	Heading,
 	useColorModeValue,
 } from '@chakra-ui/react';
+import { ArrowUpDownIcon } from '@chakra-ui/icons';
+import { transparentize } from '@chakra-ui/theme-tools';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme, {
 	GitMergeIcon,
@@ -87,7 +96,10 @@ const doughnutData = {
 	],
 };
 
+const versions = ['v0.0.2', 'v0.0.1'];
+
 const Grid = (props) => {
+	const [version, setVersion] = useState(versions[0]);
 	const chartOptions = {
 		legend: {
 			labels: {
@@ -120,12 +132,36 @@ const Grid = (props) => {
 					>
 						Release
 					</Heading>
-					<Select
-						placeholder="v0.0.1"
-						variant="outline"
-						rounded="md"
-						size="sm"
-					/>
+					<Menu>
+						<MenuButton
+							as={Button}
+							size="sm"
+							variant="outline"
+							colorScheme="gray"
+							rightIcon={<ArrowUpDownIcon />}
+							w="100%"
+							textAlign="left"
+						>
+							{version}
+						</MenuButton>
+						<MenuList>
+							<MenuOptionGroup
+								defaultValue={version}
+								title="Versions"
+								type="radio"
+							>
+								{versions.map((version, index) => (
+									<MenuItemOption
+										key={index}
+										value={version}
+										onClick={() => setVersion(version)}
+									>
+										{version}
+									</MenuItemOption>
+								))}
+							</MenuOptionGroup>
+						</MenuList>
+					</Menu>
 				</Flex>
 			</Flex>
 			<Flex
