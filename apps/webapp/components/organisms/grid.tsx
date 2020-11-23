@@ -1,7 +1,6 @@
 import {
 	Stack,
 	Flex,
-	Avatar,
 	Text,
 	List,
 	ListItem,
@@ -11,7 +10,6 @@ import {
 	useColorModeValue,
 } from '@chakra-ui/react';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import truncate from 'truncate';
 import theme, {
 	GitMergeIcon,
 	GitCommitIcon,
@@ -22,23 +20,8 @@ import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
 import ActivityListItem from '../molecules/activity-list-item';
+import LinearListItem from '../molecules/linear-list-item';
 import { useColorFromNumber } from '../../hooks/use-color-from-number';
-
-const LinearListItem = ({ title, author, avatar }) => {
-	return (
-		<ListItem as={Flex} align="center" justify="space-between">
-			<Text color={useColorModeValue('gray.900', 'gray.200')}>
-				{truncate(title, 30)}
-			</Text>
-			<Avatar
-				size="xs"
-				name={author}
-				src={avatar}
-				ml={4}
-			/>
-		</ListItem>
-	);
-};
 
 const barData = {
 	labels: ['1', '2', '3', '4', '5', '6'],
