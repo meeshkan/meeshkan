@@ -22,7 +22,7 @@ import theme, {
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
-import { useColorFromValue } from '../../hooks/use-color-from-value';
+import { useColorFromNumber } from '../../hooks/use-color-from-number';
 
 const ActivityListItem = ({ title, subtitle, icon }) => {
 	return (
@@ -119,7 +119,7 @@ const doughnutData = {
 };
 
 const ConfidenceBreakdownItem = ({ value, description }) => {
-	const colorFromValue = useColorFromValue('decimal');
+	const colorFromValue = useColorFromNumber('decimal');
 	value = (Math.round(value * 100) / 100).toFixed(2);
 	return (
 		<ListItem as={Flex} align="center" lineHeight="tall">

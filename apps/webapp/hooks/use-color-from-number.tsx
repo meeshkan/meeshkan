@@ -1,6 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/react';
 
-export const useColorFromValue = (type = 'percentage') => {
+export const useColorFromNumber = (type = 'percentage') => {
     const cyan = useColorModeValue('cyan.500', 'cyan.400');
     const yellow = useColorModeValue('yellow.500', 'yellow.400');
     const red = useColorModeValue('red.500', 'red.400');

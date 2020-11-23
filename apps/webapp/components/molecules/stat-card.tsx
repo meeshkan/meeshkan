@@ -12,7 +12,7 @@ import {
 	useColorModeValue,
 } from '@chakra-ui/react';
 import commaNumber from 'comma-number';
-import { useColorFromValue } from '../../hooks/use-color-from-value'
+import { useColorFromNumber } from '../../hooks/use-color-from-number'
 
 type StatCardProps = {
 	title: string;
@@ -30,7 +30,7 @@ const StatCard = ({
 	dataPoints,
 	...props
 }: StatCardProps) => {
-    const colorFromValue = useColorFromValue();
+    const colorFromValue = useColorFromNumber();
     const grayColor = useColorModeValue('gray.600', 'gray.200');
 	const isPositiveChange = percentageChange >= 0;
 	const valueColor = isPercentage
