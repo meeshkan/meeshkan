@@ -1,16 +1,15 @@
-import {
-    ListItem,
-    Flex,
-    Text,
-} from '@chakra-ui/react';
+import { ListItem, Flex, Text } from '@chakra-ui/react';
 import { useColorFromNumber } from '../../hooks/use-color-from-number';
 
 type ConfidenceBreakdownItemProps = {
-    value: number;
-    description: string;
+	value: number;
+	description: string;
 };
 
-const ConfidenceBreakdownItem = ({ value, description }: ConfidenceBreakdownItemProps) => {
+const ConfidenceBreakdownItem = ({
+	value,
+	description,
+}: ConfidenceBreakdownItemProps) => {
 	const colorFromValue = useColorFromNumber('decimal');
 	const valueAsString = (Math.round(value * 100) / 100).toFixed(2);
 	return (

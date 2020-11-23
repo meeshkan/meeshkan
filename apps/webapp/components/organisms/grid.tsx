@@ -103,7 +103,10 @@ const Grid = (props) => {
 	const chartOptions = {
 		legend: {
 			labels: {
-				fontColor: useColorModeValue(theme.colors.gray[600], theme.colors.gray[400]),
+				fontColor: useColorModeValue(
+					theme.colors.gray[600],
+					theme.colors.gray[400]
+				),
 			},
 		},
 	};

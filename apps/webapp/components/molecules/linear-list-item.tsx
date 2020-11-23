@@ -1,16 +1,16 @@
 import {
-    ListItem,
-    Flex,
-    Text,
-    Avatar,
-    useColorModeValue,
+	ListItem,
+	Flex,
+	Text,
+	Avatar,
+	useColorModeValue,
 } from '@chakra-ui/react';
 import truncate from 'truncate';
 
 type LinearListItemProps = {
-    title: string;
-    author: string;
-    avatar: string;
+	title: string;
+	author: string;
+	avatar: string;
 };
 
 const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
@@ -19,12 +19,7 @@ const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
 			<Text color={useColorModeValue('gray.900', 'gray.200')}>
 				{truncate(title, 30)}
 			</Text>
-			<Avatar
-				size="xs"
-				name={author}
-				src={avatar}
-				ml={4}
-			/>
+			<Avatar size="xs" name={author} src={avatar} ml={4} />
 		</ListItem>
 	);
 };
