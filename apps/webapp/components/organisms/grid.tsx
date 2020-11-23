@@ -1,9 +1,7 @@
 import {
 	Stack,
 	Flex,
-	Text,
 	List,
-	ListItem,
 	Select,
 	SimpleGrid,
 	Heading,
@@ -21,7 +19,7 @@ import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
 import ActivityListItem from '../molecules/activity-list-item';
 import LinearListItem from '../molecules/linear-list-item';
-import { useColorFromNumber } from '../../hooks/use-color-from-number';
+import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 
 const barData = {
 	labels: ['1', '2', '3', '4', '5', '6'],
@@ -87,19 +85,6 @@ const doughnutData = {
 			borderWidth: 1,
 		},
 	],
-};
-
-const ConfidenceBreakdownItem = ({ value, description }) => {
-	const colorFromValue = useColorFromNumber('decimal');
-	value = (Math.round(value * 100) / 100).toFixed(2);
-	return (
-		<ListItem as={Flex} align="center" lineHeight="tall">
-			<Text as="span" mr={3} color={colorFromValue(value)} w="45px">
-				{value > 0 ? `+${value}` : value}
-			</Text>
-			{description}
-		</ListItem>
-	);
 };
 
 const Grid = (props) => {
