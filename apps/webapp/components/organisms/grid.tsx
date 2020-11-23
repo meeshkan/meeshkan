@@ -5,7 +5,6 @@ import {
 	Text,
 	List,
 	ListItem,
-	ListIcon,
 	Select,
 	SimpleGrid,
 	Heading,
@@ -22,19 +21,8 @@ import theme, {
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
+import ActivityListItem from '../molecules/activity-list-item';
 import { useColorFromNumber } from '../../hooks/use-color-from-number';
-
-const ActivityListItem = ({ title, subtitle, icon }) => {
-	return (
-		<ListItem as={Flex} align="center">
-			<ListIcon as={icon} ml={2} mr={4} />
-			<Flex direction="column">
-				<Text color={useColorModeValue('gray.900', 'gray.200')}>{title}</Text>
-				<Text fontSize="sm">{subtitle}</Text>
-			</Flex>
-		</ListItem>
-	);
-};
 
 const LinearListItem = ({ title, author, avatar }) => {
 	return (
