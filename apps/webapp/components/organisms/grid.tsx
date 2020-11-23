@@ -17,59 +17,36 @@ import {
 	SimpleGrid,
 	Heading,
 	Divider,
-	useColorModeValue
+	useColorModeValue,
 } from '@chakra-ui/react';
-import { Bar, Doughnut } from 'react-chartjs-2'
+import { Bar, Doughnut } from 'react-chartjs-2';
 import {
 	GitMergeIcon,
 	GitCommitIcon,
 	GitLabIcon,
 	GitPullRequestIcon,
 	GitBranchIcon,
-} from '@frontend/chakra-theme'
-import Card from '../atoms/card'
-import StatCard from '../molecules/stat-card'
-import GridCard from '../molecules/grid-card'
+} from '@frontend/chakra-theme';
+import Card from '../atoms/card';
+import StatCard from '../molecules/stat-card';
+import GridCard from '../molecules/grid-card';
 
 const ActivityListItem = ({ title, subtitle, icon }) => {
 	return (
-		<ListItem
-			as={Flex}
-			align="center"
-		>
-			<ListIcon
-				as={icon}
-				ml={2}
-				mr={4}
-			/>
+		<ListItem as={Flex} align="center">
+			<ListIcon as={icon} ml={2} mr={4} />
 			<Flex direction="column">
-				<Text
-					color={useColorModeValue('gray.900', 'gray.200')}
-				>
-					{title}
-				</Text>
-				<Text
-					fontSize="sm"
-				>
-					{subtitle}
-				</Text>
+				<Text color={useColorModeValue('gray.900', 'gray.200')}>{title}</Text>
+				<Text fontSize="sm">{subtitle}</Text>
 			</Flex>
 		</ListItem>
-	)
-}
+	);
+};
 
 const LinearListItem = ({ title, avatar }) => {
 	return (
-		<ListItem
-			as={Flex}
-			align="center"
-			justify="space-between"
-		>
-			<Text
-				color={useColorModeValue('gray.900', 'gray.200')}
-			>
-				{title}
-			</Text>
+		<ListItem as={Flex} align="center" justify="space-between">
+			<Text color={useColorModeValue('gray.900', 'gray.200')}>{title}</Text>
 			<Avatar
 				size="xs"
 				// name="Ryan Florence"
@@ -77,8 +54,8 @@ const LinearListItem = ({ title, avatar }) => {
 				ml={4}
 			/>
 		</ListItem>
-	)
-}
+	);
+};
 
 const barData = {
 	labels: ['1', '2', '3', '4', '5', '6'],
@@ -94,7 +71,7 @@ const barData = {
 			backgroundColor: '#7d92e8',
 		},
 	],
-}
+};
 
 const barOptions = {
 	scales: {
@@ -121,7 +98,7 @@ const barOptions = {
 			},
 		],
 	},
-}
+};
 
 const doughnutData = {
 	labels: ['Passing', 'Warning', 'Failure', 'Error Running'],
@@ -144,21 +121,21 @@ const doughnutData = {
 			borderWidth: 1,
 		},
 	],
-}
+};
 
-const colorFromValue = value => {
-    let color;
+const colorFromValue = (value) => {
+	let color;
 
-    if (value > 0) {
+	if (value > 0) {
 		color = useColorModeValue('cyan.500', 'cyan.400');
-    } else if (value < 0 && value > -1) {
-        color = useColorModeValue('yellow.500', 'yellow.400');
-    } else {
-        color = useColorModeValue('red.500', 'red.400');
-    }
+	} else if (value < 0 && value > -1) {
+		color = useColorModeValue('yellow.500', 'yellow.400');
+	} else {
+		color = useColorModeValue('red.500', 'red.400');
+	}
 
-    return color;
-}
+	return color;
+};
 
 const ConfidenceBreakdownItem = ({ value, description }) => {
 	value = (Math.round(value * 100) / 100).toFixed(2);
@@ -169,16 +146,16 @@ const ConfidenceBreakdownItem = ({ value, description }) => {
 			</Text>
 			{description}
 		</ListItem>
-	)
-}
+	);
+};
 
 const Grid = (props) => {
 	const chartOptions = {
 		legend: {
-            labels: {
-                fontColor: useColorModeValue('#4A5568', '#CBD5E0'),
-            },
-        },
+			labels: {
+				fontColor: useColorModeValue('#4A5568', '#CBD5E0'),
+			},
+		},
 	};
 
 	return (
@@ -190,15 +167,8 @@ const Grid = (props) => {
 			spacing={6}
 			{...props}
 		>
-			<Flex
-				align="center"
-				justify="space-between"
-			>
-				<Heading
-					as="h2"
-					fontSize="md"
-					lineHeight="short"
-				>
+			<Flex align="center" justify="space-between">
+				<Heading as="h2" fontSize="md" lineHeight="short">
 					Last 7 Days
 				</Heading>
 				<Flex align="center">
@@ -226,12 +196,7 @@ const Grid = (props) => {
 				w="100%"
 				overflow="auto"
 			>
-				<Stack
-					spacing={6}
-					h="100%"
-					w="100%"
-					flex="1"
-				>
+				<Stack spacing={6} h="100%" w="100%" flex="1">
 					<Flex
 						as={Card}
 						justify="space-between"
@@ -281,7 +246,7 @@ const Grid = (props) => {
 										description="Lorem ipsum dolor sit amet."
 									/>
 									<ConfidenceBreakdownItem
-										value={-0.10}
+										value={-0.1}
 										description="Lorem ipsum dolor sit amet."
 									/>
 									<ConfidenceBreakdownItem
@@ -289,31 +254,26 @@ const Grid = (props) => {
 										description="Lorem ipsum dolor sit amet."
 									/>
 									<ConfidenceBreakdownItem
-										value={-2.00}
+										value={-2.0}
 										description="Lorem ipsum dolor sit amet."
 									/>
 								</List>
 							</GridCard>
 							<GridCard title="Recordings vs. Tests" h="auto">
-								<Bar data={barData} options={{ ...barOptions, ...chartOptions }} />
+								<Bar
+									data={barData}
+									options={{ ...barOptions, ...chartOptions }}
+								/>
 							</GridCard>
 							<GridCard title="Test Suite State" h="auto">
 								<Doughnut data={doughnutData} options={chartOptions} />
 							</GridCard>
-							<Card h={['200px', '150px', 'auto', "auto"]} />
+							<Card h={['200px', '150px', 'auto', 'auto']} />
 						</SimpleGrid>
 					</Flex>
 				</Stack>
-				<Flex
-					mt={[6, 6, 0, 0]}
-					ml={[0, 0, 6, 6]}
-					h="100%"
-				>
-					<SimpleGrid
-						columns={1}
-						spacingY={6}
-						w="100%"
-					>
+				<Flex mt={[6, 6, 0, 0]} ml={[0, 0, 6, 6]} h="100%">
+					<SimpleGrid columns={1} spacingY={6} w="100%">
 						<GridCard title="Activity">
 							<List
 								spacing={3}
