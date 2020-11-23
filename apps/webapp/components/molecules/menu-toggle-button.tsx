@@ -7,7 +7,7 @@ type MenuToggleButtonProps = {
 
 const MenuToggleButton = ({ toggle }: MenuToggleButtonProps) => (
 	<Button
-		onClick={() => toggle}
+		onClick={() => toggle()}
 		size="sm"
 		display={['inline', 'none', 'none', 'none']}
 		variant="ghost"
