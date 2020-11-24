@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+	Box,
 	Stack,
 	Flex,
 	List,
@@ -114,14 +115,15 @@ const Grid = (props) => {
 					theme.colors.gray[400]
 				),
 			},
+			position: 'right',
+			align: 'center',
 		},
 	};
 
 	return (
 		<Stack
-			p={[6, 6, 0, 0]}
+			p={[6, 0, 0, 0]}
 			w="100%"
-			h="100%"
 			rounded="lg"
 			spacing={6}
 			{...props}
@@ -173,162 +175,167 @@ const Grid = (props) => {
 					</Menu>
 				</Flex>
 			</Flex>
-			<Flex
-				direction={['column', 'column', 'row', 'row']}
-				h="100%"
-				w="100%"
-				overflow="auto"
-			>
-				<Stack spacing={6} h="100%" w="100%" flex="1">
-					<Flex
-						as={Card}
-						justify="space-between"
-						align={['center', 'stretch', 'stretch', 'stretch']}
-						direction={['column', 'row', 'row', 'row']}
-					>
-						<StatCard
-							title="Confidence Score"
-							value={98}
-							percentageChange={19}
-							dataPoints={4036}
-						/>
-						<StatCard
-							title="Test Coverage"
-							value={68}
-							percentageChange={-2}
-							dataPoints={2227}
-							my={[8, 0, 0, 0]}
-						/>
-						<StatCard
-							isPercentage={false}
-							title="Test Run"
-							value={71897}
-							percentageChange={12}
-							dataPoints={70946}
-						/>
-					</Flex>
-					<Flex flex="1" w="full">
+			<Box overflowY="scroll">
+				<Flex
+					direction={['column', 'column', 'column', 'column', 'row']}
+					align="stretch"
+					w="100%"
+				>
+					<Stack spacing={6} w="100%" flex="1">
+						<Flex
+							as={Card}
+							justify="space-between"
+							align={['center', 'stretch', 'stretch', 'stretch']}
+							direction={['column', 'row', 'row', 'row']}
+						>
+							<StatCard
+								title="Confidence Score"
+								value={98}
+								percentageChange={19}
+								dataPoints={4036}
+							/>
+							<StatCard
+								title="Test Coverage"
+								value={68}
+								percentageChange={-2}
+								dataPoints={2227}
+								my={[8, 0, 0, 0]}
+							/>
+							<StatCard
+								isPercentage={false}
+								title="Test Run"
+								value={71897}
+								percentageChange={12}
+								dataPoints={70946}
+							/>
+						</Flex>
+						<Flex flex="1">
+							<SimpleGrid
+								columns={[1, 1, 2, 2]}
+								spacingX={6}
+								spacingY={6}
+								w="100%"
+							>
+								<GridCard title="Confidence Breakdown">
+									<List
+										spacing={3}
+										color={useColorModeValue('gray.600', 'gray.400')}
+									>
+										<ConfidenceBreakdownItem
+											value={0.05}
+											description="Users can successfully upgrade their subscription."
+										/>
+										<ConfidenceBreakdownItem
+											value={0.05}
+											description="Lorem ipsum dolor sit amet."
+										/>
+										<ConfidenceBreakdownItem
+											value={-0.1}
+											description="Lorem ipsum dolor sit amet."
+										/>
+										<ConfidenceBreakdownItem
+											value={0.05}
+											description="Lorem ipsum dolor sit amet."
+										/>
+										<ConfidenceBreakdownItem
+											value={-2.0}
+											description="Lorem ipsum dolor sit amet."
+										/>
+									</List>
+								</GridCard>
+								<GridCard title="Recordings vs. Tests">
+									<Bar
+										data={barData}
+										options={{ ...barOptions, ...chartOptions }}
+									/>
+								</GridCard>
+								<GridCard title="Test Suite State">
+									<Doughnut data={doughnutData} options={chartOptions} />
+								</GridCard>
+								<Card h={['200px', '150px', 'auto', 'auto']} />
+							</SimpleGrid>
+						</Flex>
+					</Stack>
+					<Flex mt={[6, 6, 6, 6, 0]} ml={[0, 0, 0, 0, 6]}>
 						<SimpleGrid
-							columns={[1, 1, 2, 2]}
+							columns={[1, 1, 2, 2, 1]}
 							spacingX={6}
 							spacingY={6}
 							w="100%"
-							h="100%"
 						>
-							<GridCard title="Confidence Breakdown" h="auto">
+							<GridCard title="Activity">
 								<List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
 								>
-									<ConfidenceBreakdownItem
-										value={0.05}
-										description="Users can successfully upgrade their subscription."
+									<ActivityListItem
+										title="Release successfully merged"
+										subtitle="MEM-123 | Improve settings UX"
+										icon={GitMergeIcon}
 									/>
-									<ConfidenceBreakdownItem
-										value={0.05}
-										description="Lorem ipsum dolor sit amet."
+									<ActivityListItem
+										title="Deploy preview ready"
+										subtitle="MEM-123 | Improve settings UX"
+										icon={GitLabIcon}
 									/>
-									<ConfidenceBreakdownItem
-										value={-0.1}
-										description="Lorem ipsum dolor sit amet."
+									<ActivityListItem
+										title="Deploy preview ready"
+										subtitle="MEM-123 | Improve settings UX"
+										icon={GitLabIcon}
 									/>
-									<ConfidenceBreakdownItem
-										value={0.05}
-										description="Lorem ipsum dolor sit amet."
+									<ActivityListItem
+										title="Changes from code review"
+										subtitle="MEM-123 | Improve settings UX"
+										icon={GitCommitIcon}
 									/>
-									<ConfidenceBreakdownItem
-										value={-2.0}
-										description="Lorem ipsum dolor sit amet."
+									<ActivityListItem
+										title="Pull request opened"
+										subtitle="MEM-123 | Improve settings UX"
+										icon={GitPullRequestIcon}
+									/>
+									<ActivityListItem
+										title="Changes from code review"
+										subtitle="MEM-123 | Improve settings UX"
+										icon={GitCommitIcon}
 									/>
 								</List>
 							</GridCard>
-							<GridCard title="Recordings vs. Tests" h="auto">
-								<Bar
-									data={barData}
-									options={{ ...barOptions, ...chartOptions }}
-								/>
+							<GridCard title="Linear Tickets">
+								<List
+									spacing={3}
+									color={useColorModeValue('gray.600', 'gray.400')}
+								>
+									<LinearListItem
+										title="User can't schedule pickup"
+										author="Ryan Florence"
+										avatar="https://bit.ly/ryan-florence"
+									/>
+									<LinearListItem
+										title="`basic` user is authorized to save"
+										author="Kent C. Dodds"
+										avatar="https://bit.ly/kent-c-dodds"
+									/>
+									<LinearListItem
+										title="User can't schedule pickup"
+										author="Ryan Florence"
+										avatar="https://bit.ly/ryan-florence"
+									/>
+									<LinearListItem
+										title="User can't reschedule a delivery"
+										author="Sage Adebayo"
+										avatar="https://bit.ly/sage-adebayo"
+									/>
+									<LinearListItem
+										title="`basic` user is authorized to save"
+										author="Code Beast"
+										avatar="https://bit.ly/code-beast"
+									/>
+								</List>
 							</GridCard>
-							<GridCard title="Test Suite State" h="auto">
-								<Doughnut data={doughnutData} options={chartOptions} />
-							</GridCard>
-							<Card h={['200px', '150px', 'auto', 'auto']} />
 						</SimpleGrid>
 					</Flex>
-				</Stack>
-				<Flex mt={[6, 6, 0, 0]} ml={[0, 0, 6, 6]} h="100%">
-					<SimpleGrid columns={1} spacingY={6} w="100%">
-						<GridCard title="Activity">
-							<List
-								spacing={3}
-								color={useColorModeValue('gray.600', 'gray.400')}
-							>
-								<ActivityListItem
-									title="Release successfully merged"
-									subtitle="MEM-123 | Improve settings UX"
-									icon={GitMergeIcon}
-								/>
-								<ActivityListItem
-									title="Deploy preview ready"
-									subtitle="MEM-123 | Improve settings UX"
-									icon={GitLabIcon}
-								/>
-								<ActivityListItem
-									title="Deploy preview ready"
-									subtitle="MEM-123 | Improve settings UX"
-									icon={GitLabIcon}
-								/>
-								<ActivityListItem
-									title="Changes from code review"
-									subtitle="MEM-123 | Improve settings UX"
-									icon={GitCommitIcon}
-								/>
-								<ActivityListItem
-									title="Pull request opened"
-									subtitle="MEM-123 | Improve settings UX"
-									icon={GitPullRequestIcon}
-								/>
-								<ActivityListItem
-									title="Changes from code review"
-									subtitle="MEM-123 | Improve settings UX"
-									icon={GitCommitIcon}
-								/>
-							</List>
-						</GridCard>
-						<GridCard title="Linear Tickets">
-							<List
-								spacing={3}
-								color={useColorModeValue('gray.600', 'gray.400')}
-							>
-								<LinearListItem
-									title="User can't schedule pickup"
-									author="Ryan Florence"
-									avatar="https://bit.ly/ryan-florence"
-								/>
-								<LinearListItem
-									title="`basic` user is authorized to save"
-									author="Kent C. Dodds"
-									avatar="https://bit.ly/kent-c-dodds"
-								/>
-								<LinearListItem
-									title="User can't schedule pickup"
-									author="Ryan Florence"
-									avatar="https://bit.ly/ryan-florence"
-								/>
-								<LinearListItem
-									title="User can't reschedule a delivery"
-									author="Sage Adebayo"
-									avatar="https://bit.ly/sage-adebayo"
-								/>
-								<LinearListItem
-									title="`basic` user is authorized to save"
-									author="Code Beast"
-									avatar="https://bit.ly/code-beast"
-								/>
-							</List>
-						</GridCard>
-					</SimpleGrid>
 				</Flex>
-			</Flex>
+			</Box>
 		</Stack>
 	);
 };

@@ -39,7 +39,9 @@ const StatCard = ({
 	return (
 		<Flex {...props}>
 			<Stat>
-				<StatLabel fontSize="md">{title}</StatLabel>
+				<StatLabel fontSize={['sm', 'sm', 'md', 'md']}>
+					{title}
+				</StatLabel>
 				<StatNumber mt={4} mb={3}>
 					<Heading
 						color={valueColor}
@@ -61,7 +63,7 @@ const StatCard = ({
 						colorScheme={isPositiveChange ? 'cyan' : 'red'}
 						rounded="lg"
 						mr={2}
-						fontSize="sm"
+						fontSize={['xs', 'xs', 'sm', 'sm']}
 					>
 						{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
 						{Math.abs(percentageChange)}%
@@ -73,7 +75,7 @@ const StatCard = ({
 						rounded="lg"
 						textTransform="none"
 						p={1}
-						fontSize="sm"
+						fontSize={['xs', 'xs', 'sm', 'sm']}
 					>
 						from {commaNumber(dataPoints)} data points
 					</Badge>

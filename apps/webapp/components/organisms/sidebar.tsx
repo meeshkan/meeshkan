@@ -6,8 +6,8 @@ import SideBarBody from '../molecules/sidebar-body';
 
 const SideBar = (props) => {
 	const [isOpen, toggleOpen] = useCycle(false, true);
-	const [isMdScreen] = useMediaQuery('(max-width: 48em)');
-	const stackMdHeight = isOpen ? '100vh' : 'auto';
+	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
+	const stackSmallHeight = isOpen ? '100vh' : 'auto';
 
 	return (
 		<MotionStack
@@ -16,15 +16,15 @@ const SideBar = (props) => {
 			rounded="lg"
 			bg={useColorModeValue('white', 'gray.900')}
 			w="100%"
-			maxW={['100%', '100%', '256px', '256px']}
-			h={[stackMdHeight, stackMdHeight, '100%', '100%']}
+			maxW={['100%', '100%', '100%', '256px']}
+			h={[stackSmallHeight, '100%', '100%', '100%']}
 			animate={isOpen ? 'open' : 'closed'}
 			initial={false}
 			{...props}
 		>
 			<Flex direction="column" h="full">
 				<SideBarHeader toggle={() => toggleOpen()} />
-				{(isOpen || !isMdScreen) && <SideBarBody />}
+				{(isOpen || !isSmallScreen) && <SideBarBody />}
 			</Flex>
 		</MotionStack>
 	);

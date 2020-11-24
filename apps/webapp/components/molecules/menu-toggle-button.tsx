@@ -9,7 +9,7 @@ const MenuToggleButton = ({ toggle }: MenuToggleButtonProps) => (
 	<Button
 		onClick={() => toggle()}
 		size="sm"
-		display={['inline', 'inline', 'none', 'none']}
+		display={['inline', 'inline', 'inline', 'none']}
 		variant="ghost"
 	>
 		<svg height="19" viewBox="0 0 21.5 19" width="21.5">
