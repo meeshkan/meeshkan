@@ -30,6 +30,7 @@
   "dependencies": {
     "@apollo/client": "^3.2.5",
     "@apollo/react-hooks": "^4.0.0",
+    "@auth0/nextjs-auth0": "^0.16.0",
     "@chakra-ui/icons": "^1.0.0",
     "@chakra-ui/react": "^1.0.0",
     "@chakra-ui/theme-tools": "^1.0.0",
@@ -75,7 +76,9 @@
     "graphql": "14.7.0",
     "graphql-scalars": "^1.4.1",
     "graphql-tools": "^7.0.1",
+    "lodash": "^4.17.20",
     "mixpanel-browser": "2.38.0",
+    "ms": "^2.1.2",
     "next": "^10.0.1",
     "prismjs": "1.21.0",
     "prop-types": "15.7.2",
@@ -89,7 +92,8 @@
     "react-live": "2.2.2",
     "react-player": "1.15.3",
     "subscriptions-transport-ws": "^0.9.18",
-    "truncate": "^2.1.0"
+    "truncate": "^2.1.0",
+    "swr": "^0.3.9"
   },
   "devDependencies": {
     "@angular-devkit/schematics": "9.1.7",

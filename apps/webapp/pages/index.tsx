@@ -4,12 +4,13 @@ import ChakraProvider from '../components/molecules/chakra';
 import Layout from '../components/templates/layout';
 import SideBar from '../components/organisms/sidebar';
 import Grid from '../components/organisms/grid';
+import withAuth from '../components/with-auth';
 
 type IndexProps = {
 	cookies: string | undefined;
 };
 
-export const Index = ({ cookies }: IndexProps) => {
+const Index = ({ cookies }: IndexProps) => {
 	const client = new ApolloClient({
 		uri: 'http://localhost:4200/api/graphql',
 		cache: new InMemoryCache(),
@@ -27,6 +28,6 @@ export const Index = ({ cookies }: IndexProps) => {
 	);
 };
 
-export default Index;
+export default withAuth(Index);
 
 export { getServerSideProps } from '../components/molecules/chakra';

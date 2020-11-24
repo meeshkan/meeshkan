@@ -16,12 +16,15 @@ import {
 import { LogoIcon, InboxIcon, MoonIcon, SunIcon } from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
+import useUser from '../../hooks/use-user';
+import Router from 'next/router';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
+	const { picture: avatar, nickname } = useUser();
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<Flex align="center">
@@ -47,7 +50,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						size="sm"
 						px={2}
 					>
-						<Avatar w={4} h={4} rounded="md" />
+						<Avatar name={nickname} src={avatar} w={4} h={4} />
 						<ChevronDownIcon
 							color={useColorModeValue('gray.600', 'gray.500')}
 						/>
@@ -61,7 +64,9 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							{colorMode === 'light' ? 'Dark' : 'Light'} mode
 						</MenuItem>
 						<MenuDivider />
-						<MenuItem>Log out</MenuItem>
+						<MenuItem onClick={() => Router.push('/api/logout')}>
+							Log out
+						</MenuItem>
 					</MenuList>
 				</Menu>
 			</Flex>
