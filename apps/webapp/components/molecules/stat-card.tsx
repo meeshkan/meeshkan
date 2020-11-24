@@ -64,6 +64,7 @@ const StatCard = ({
 						rounded="lg"
 						mr={2}
 						fontSize={['xs', 'xs', 'sm', 'sm']}
+						p={1}
 					>
 						{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
 						{Math.abs(percentageChange)}%
