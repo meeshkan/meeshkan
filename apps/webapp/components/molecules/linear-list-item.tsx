@@ -1,7 +1,7 @@
 import {
 	ListItem,
 	Flex,
-	Text,
+	Link,
 	Avatar,
 	useColorModeValue,
 } from '@chakra-ui/react';
@@ -16,9 +16,9 @@ type LinearListItemProps = {
 const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
 	return (
 		<ListItem as={Flex} align="center" justify="space-between">
-			<Text color={useColorModeValue('gray.900', 'gray.200')}>
+			<Link color={useColorModeValue('gray.900', 'gray.200')}>
 				{truncate(title, 30)}
-			</Text>
+			</Link>
 			<Avatar size="xs" name={author} src={avatar} ml={4} />
 		</ListItem>
 	);
