@@ -14,7 +14,7 @@ const ConfidenceBreakdownItem = ({
 	const valueAsString = (Math.round(value * 100) / 100).toFixed(2);
 	return (
 		<ListItem as={Flex} align="center" lineHeight="tall">
-			<Text as="span" mr={3} color={colorFromValue(value)} w="45px">
+			<Text as="span" mr={3} color={colorFromValue(value)} flex="0 0 50px">
 				{value > 0 ? `+${valueAsString}` : valueAsString}
 			</Text>
 			{description}
