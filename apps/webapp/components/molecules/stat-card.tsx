@@ -1,3 +1,4 @@
+import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 import {
 	Flex,
 	FlexProps,
@@ -60,8 +61,9 @@ const StatCard = ({
 						colorScheme={isPositiveChange ? 'cyan' : 'red'}
 						rounded="lg"
 						mr={2}
+						fontSize="sm"
 					>
-						<StatArrow type={isPositiveChange ? 'increase' : 'decrease'} />
+						{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
 						{Math.abs(percentageChange)}%
 					</Badge>
 					<Badge
@@ -70,7 +72,8 @@ const StatCard = ({
 						fontWeight={400}
 						rounded="lg"
 						textTransform="none"
-						p={2}
+						p={1}
+						fontSize="sm"
 					>
 						from {commaNumber(dataPoints)} data points
 					</Badge>

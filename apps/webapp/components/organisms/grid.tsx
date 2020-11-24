@@ -74,7 +74,6 @@ const barOptions = {
 				gridLines: {
 					display: false,
 				},
-				barPercentage: 0.5,
 			},
 		],
 	},
