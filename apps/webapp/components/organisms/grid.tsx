@@ -300,7 +300,10 @@ const Grid = (props) => {
 									/>
 								</List>
 							</GridCard>
-							<GridCard title="Linear Tickets">
+							<GridCard
+								title="Linear Tickets"
+								leftIconSrc="https://media.graphcms.com/AIPdNiTtReCzrrRorDL5"
+							>
 								<List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
