@@ -54,10 +54,6 @@ export const storeUser = (user: IUser): void => {
 	window.__user = user;
 }
 
-export const getIdToken = (): string | void => {
-	return get(getUser(), 'idToken');
-}
-
 const goToLogin = () => {
 	if (isServer || isDisabled) {
     return;
