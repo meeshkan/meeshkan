@@ -1,17 +1,16 @@
 import get from 'lodash/get';
-import { createContext, useEffect } from 'react';
-import useSWR from 'swr';
+import { createContext } from 'react';
 
 const isServer = typeof window === 'undefined';
 const isDisabled = process.env.NEXT_PUBLIC_AUTH_DISABLED === 'true';
 
 export interface IUser {
 	email: string;
-  name?: string;
+	name?: string;
 	picture: string;
 	nickname: string;
-  idToken?: string;
-  error?: string;
+	idToken?: string;
+	error?: string;
 }
 
 declare global {
@@ -56,7 +55,7 @@ export const storeUser = (user: IUser): void => {
 	window.__user = user;
 }
 
-const goToLogin = () => {
+export const goToLogin = () => {
 	if (isServer || isDisabled) {
     return;
   }
@@ -66,26 +65,4 @@ const goToLogin = () => {
 	);
 	const loginHref = `/api/login?redirectTo=${redirectTo}`;
 	window.location.href = loginHref;
-}
-
-export const useFetchUser = (
-	serverSideUser?: IUser
-): {
-	user: void | IUser;
-	loading: boolean;
-} => {
-	const { data: user, error, isValidating } = useSWR('/api/session', {
-		initialData: getUser(serverSideUser),
-	});
-
-	if (error || (user && user.error)) {
-		removeUser();
-		goToLogin();
-	}
-
-	useEffect(() => {
-		if (user) storeUser(user);
-	}, [user]);
-
-	return { user, loading: isValidating };
 }

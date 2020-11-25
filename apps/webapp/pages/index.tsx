@@ -4,7 +4,7 @@ import ChakraProvider from '../components/molecules/chakra';
 import Layout from '../components/templates/layout';
 import SideBar from '../components/organisms/sidebar';
 import Grid from '../components/organisms/grid';
-import withAuth from '../components/with-auth';
+import withAuth from '../hocs/with-auth';
 
 type IndexProps = {
 	cookies: string | undefined;

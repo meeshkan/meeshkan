@@ -24,7 +24,7 @@ const createAuth0 = (origin: string): ISignInWithAuth0 => {
 				user: {
 					name: 'local',
 				},
-        idToken: 'fake',
+				idToken: 'fake',
 			}),
 			requireAuthentication: (fn) => fn,
 			tokenCache: () => ({
@@ -42,7 +42,7 @@ const createAuth0 = (origin: string): ISignInWithAuth0 => {
 			session: {
 				cookieSecret: process.env.SESSION_COOKIE_SECRET,
 				cookieLifetime,
-        storeIdToken: true,
+				storeIdToken: true,
 			},
 			oidcClient: {
 				httpTimeout,
@@ -70,13 +70,13 @@ export const getUser = async (req: IncomingMessage): Promise<IUser> => {
 		throw new Error('User session does not exist. User must be logged in.');
 	}
 
-  const { email, name, picture, nickname } = session.user;
+	const { email, name, picture, nickname } = session.user;
 	const user = {
 		email: email ? email : name,
-    name: email ? name : undefined,
+		name: email ? name : undefined,
 		picture,
 		nickname,
-    idToken: session.idToken,
+		idToken: session.idToken,
 	};
 
 	return user;

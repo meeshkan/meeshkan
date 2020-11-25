@@ -1,6 +1,7 @@
-import ChakraProvider from './molecules/chakra';
-import LoadingScreen from './organisms/loading-screen';
-import { useFetchUser, UserContext, IUser } from '../utils/user';
+import ChakraProvider from '../components/molecules/chakra';
+import LoadingScreen from '../components/organisms/loading-screen';
+import { UserContext, IUser } from '../utils/user';
+import { useFetchUser } from '../hooks/use-user-fetch';
 
 export interface IWithAuthProps {
 	user?: IUser;

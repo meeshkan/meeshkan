@@ -16,7 +16,7 @@ import {
 import { LogoIcon, InboxIcon, MoonIcon, SunIcon } from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
-import useUser from '../../hooks/use-user';
+import { useUser } from '../../hooks/use-user';
 import Router from 'next/router';
 
 type SideBarHeaderProps = {
