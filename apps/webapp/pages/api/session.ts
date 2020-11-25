@@ -8,7 +8,8 @@ export default function session(
 	const auth0 = initAuth0(req);
 	return auth0.requireAuthentication(async (req, res) => {
 		try {
-			res.json(await getUser(req));
+			const user = await getUser(req);
+			res.json(user);
 		} catch (error) {
 			console.error(error);
 			res.status(error.status || 500).end(error.message);

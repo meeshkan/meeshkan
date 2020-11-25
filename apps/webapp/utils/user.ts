@@ -7,7 +7,7 @@ const isDisabled = process.env.NEXT_PUBLIC_AUTH_DISABLED === 'true';
 export interface IUser {
 	email: string;
 	name?: string;
-	picture: string;
+	avatar: string;
 	nickname: string;
 	idToken?: string;
 	error?: string;
@@ -21,7 +21,7 @@ declare global {
 
 const localUser: IUser = {
 	email: 'local',
-	picture: 'https://meeshkan.com/icons/icon-384x384.png',
+	avatar: 'https://meeshkan.com/icons/icon-384x384.png',
 	nickname: 'local',
 };
 

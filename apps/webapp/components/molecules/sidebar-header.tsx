@@ -24,7 +24,7 @@ type SideBarHeaderProps = {
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
-	const { picture: avatar, nickname } = useUser();
+	const { avatar, nickname } = useUser();
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<Flex align="center">

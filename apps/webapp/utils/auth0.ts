@@ -74,7 +74,7 @@ export const getUser = async (req: IncomingMessage): Promise<IUser> => {
 	const user = {
 		email: email ? email : name,
 		name: email ? name : undefined,
-		picture,
+		avatar: picture,
 		nickname,
 		idToken: session.idToken,
 	};
