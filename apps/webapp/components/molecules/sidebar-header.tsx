@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
 	Box,
 	Flex,
@@ -13,18 +14,18 @@ import {
 	MenuDivider,
 	useColorMode,
 } from '@chakra-ui/react';
+import Router from 'next/router';
 import { LogoIcon, InboxIcon, MoonIcon, SunIcon } from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
-import { useUser } from '../../hooks/use-user';
-import Router from 'next/router';
+import { UserContext } from '../../utils/user';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
-	const { avatar, nickname } = useUser();
+	const { avatar, nickname } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<Flex align="center">
