@@ -2,7 +2,6 @@ import get from 'lodash/get';
 import { createContext } from 'react';
 
 const isServer = typeof window === 'undefined';
-const isDisabled = process.env.NEXT_PUBLIC_AUTH_DISABLED === 'true';
 
 export interface IUser {
 	email: string;
@@ -19,19 +18,9 @@ declare global {
 	}
 }
 
-const localUser: IUser = {
-	email: 'local',
-	avatar: 'https://meeshkan.com/icons/icon-384x384.png',
-	nickname: 'local',
-};
-
 export const UserContext = createContext(null);
 
 export const getUser = (serverSideUser?: IUser): IUser | void => {
-	if (isDisabled) {
-		return localUser;
-	}
-
 	if (isServer) {
 		return serverSideUser;
 	}
@@ -56,7 +45,7 @@ export const storeUser = (user: IUser): void => {
 }
 
 export const goToLogin = () => {
-	if (isServer || isDisabled) {
+	if (isServer) {
     return;
   }
 
