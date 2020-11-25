@@ -7,8 +7,10 @@ const isDisabled = process.env.NEXT_PUBLIC_AUTH_DISABLED === 'true';
 
 export interface IUser {
 	email: string;
+  name?: string;
 	picture: string;
 	nickname: string;
+  idToken?: string;
   error?: string;
 }
 

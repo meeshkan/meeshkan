@@ -8,7 +8,7 @@ import { IUser } from './user';
 
 const cookieLifetime = ms('30 days') / 1000;
 const httpTimeout = ms('10s');
-const scope = 'openid profile';
+const scope = 'openid profile email id_token';
 
 const auth0s = {};
 
@@ -24,6 +24,7 @@ const createAuth0 = (origin: string): ISignInWithAuth0 => {
 				user: {
 					name: 'local',
 				},
+        idToken: 'fake',
 			}),
 			requireAuthentication: (fn) => fn,
 			tokenCache: () => ({
@@ -41,6 +42,7 @@ const createAuth0 = (origin: string): ISignInWithAuth0 => {
 			session: {
 				cookieSecret: process.env.SESSION_COOKIE_SECRET,
 				cookieLifetime,
+        storeIdToken: true,
 			},
 			oidcClient: {
 				httpTimeout,
@@ -68,10 +70,13 @@ export const getUser = async (req: IncomingMessage): Promise<IUser> => {
 		throw new Error('User session does not exist. User must be logged in.');
 	}
 
+  const { email, name, picture, nickname } = session.user;
 	const user = {
-		email: session.user.name,
-		picture: session.user.picture,
-		nickname: session.user.nickname,
+		email: email ? email : name,
+    name: email ? name : undefined,
+		picture,
+		nickname,
+    idToken: session.idToken,
 	};
 
 	return user;
