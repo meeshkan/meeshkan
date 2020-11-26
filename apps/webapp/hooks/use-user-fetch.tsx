@@ -30,4 +30,4 @@ export const useFetchUser = (
 	}, [user]);
 
 	return { user, loading: isValidating };
-}
+};

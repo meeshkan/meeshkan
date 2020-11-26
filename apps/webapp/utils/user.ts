@@ -28,7 +28,7 @@ export const getUser = (serverSideUser?: IUser): IUser | void => {
 	}
 
 	return window.__user || serverSideUser;
-}
+};
 
 export const removeUser = (): void => {
 	if (isServer) {
@@ -36,7 +36,7 @@ export const removeUser = (): void => {
 	}
 
 	delete window.__user;
-}
+};
 
 export const storeUser = (user: IUser): void => {
 	if (isServer) {
@@ -44,19 +44,19 @@ export const storeUser = (user: IUser): void => {
 	}
 
 	window.__user = user;
-}
+};
 
 export const goToLogin = () => {
 	if (isServer) {
-    return;
-  }
+		return;
+	}
 
 	const redirectTo = encodeURIComponent(
 		window.location.pathname + window.location.search
 	);
 	const loginHref = `/api/login?redirectTo=${redirectTo}`;
 	window.location.href = loginHref;
-}
+};
 
 const CURRENT_USER_QUERY = gql`
 	query CurrentUser {
@@ -77,17 +77,13 @@ const USER_SIGN_UP_MUTATION = gql`
 `;
 
 export const confirmOrCreateUser = async (user: IUser) => {
-  const client = eightBaseClient(user.idToken);
-	await client.request(
-		CURRENT_USER_QUERY,
-	)
-		.catch(() => client.request(
-			USER_SIGN_UP_MUTATION,
-			{
-				user: {
-					email: user.email,
-				},
-				authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
-			}
-		));
-}
+	const client = eightBaseClient(user.idToken);
+	await client.request(CURRENT_USER_QUERY).catch(() =>
+		client.request(USER_SIGN_UP_MUTATION, {
+			user: {
+				email: user.email,
+			},
+			authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
+		})
+	);
+};

@@ -7,10 +7,7 @@ export const eightBaseClient = (token: string) => {
 		},
 	};
 
-	const client = new GraphQLClient(
-		process.env.EIGHT_BASE_ENDPOINT,
-		context
-	);
+	const client = new GraphQLClient(process.env.EIGHT_BASE_ENDPOINT, context);
 
 	return client;
 };
