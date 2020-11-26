@@ -8,9 +8,7 @@ export default async function callback(
 	try {
 		const auth0 = initAuth0(req);
 		await auth0.handleCallback(req, res, {
-			redirectTo: Array.isArray(req.query.redirectTo)
-				? req.query.redirectTo[0]
-				: req.query.redirectTo,
+			redirectTo: '/api/after-auth-hook',
 		});
 	} catch (error) {
 		console.error(error);

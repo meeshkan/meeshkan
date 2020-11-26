@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import initAuth0, { getUser } from '../../utils/auth0';
-import { confirmOrCreateUser } from '../../utils/user';
 
 export default function session(
 	req: NextApiRequest,
@@ -10,7 +9,6 @@ export default function session(
 	return auth0.requireAuthentication(async (req, res) => {
 		try {
 			const user = await getUser(req);
-			await confirmOrCreateUser(user);
 			res.json(user);
 		} catch (error) {
 			console.error(error);
