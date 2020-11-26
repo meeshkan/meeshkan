@@ -20,19 +20,19 @@ const withAuth = (PageComponent) => {
 			);
 		}
 
-		if (!user || (user && user.error)) {
+		if (user && !user.error) {
 			return (
 				<ChakraProvider cookies={props.cookies}>
-					<AuthScreen />
+					<UserContext.Provider value={user}>
+						<PageComponent {...props} />
+					</UserContext.Provider>
 				</ChakraProvider>
 			);
 		}
 
 		return (
 			<ChakraProvider cookies={props.cookies}>
-				<UserContext.Provider value={user}>
-					<PageComponent {...props} />
-				</UserContext.Provider>
+				<AuthScreen />
 			</ChakraProvider>
 		);
 	};
