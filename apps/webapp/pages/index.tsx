@@ -10,12 +10,10 @@ type IndexProps = {
 
 const Index = ({ cookies }: IndexProps) => {
 	return (
-		<ChakraProvider cookies={cookies}>
-			<Layout>
-				<SideBar />
-				<Grid />
-			</Layout>
-		</ChakraProvider>
+		<Layout>
+			<SideBar />
+			<Grid />
+		</Layout>
 	);
 };
 

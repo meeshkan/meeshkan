@@ -3,7 +3,6 @@ import useSWR from 'swr';
 import {
 	getUser,
 	removeUser,
-	goToLogin,
 	storeUser,
 	IUser,
 } from '../utils/user';
@@ -20,7 +19,6 @@ export const useFetchUser = (
 
 	if (error || (user && user.error)) {
 		removeUser();
-		goToLogin();
 	}
 
 	useEffect(() => {
