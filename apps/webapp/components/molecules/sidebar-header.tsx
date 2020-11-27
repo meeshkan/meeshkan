@@ -51,7 +51,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						size="sm"
 						px={2}
 					>
-						<Avatar name={nickname} src={avatar} w={4} h={4} />
+						<Avatar name={nickname} src={avatar} size="2xs" borderRadius="md" />
 						<ChevronDownIcon
 							color={useColorModeValue('gray.600', 'gray.500')}
 						/>

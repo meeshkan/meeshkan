@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	Box,
 	Stack,
@@ -14,11 +16,19 @@ import {
 	Heading,
 	useColorModeValue,
 	Text,
+	IconButton,
+	Alert,
+	AlertTitle,
+	AlertDescription,
+	Code,
+	CloseButton,
+	useClipboard,
+	useToast,
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-require('../molecules/rounded-chart');
 import theme, {
+	CopyIcon,
 	GitMergeIcon,
 	GitCommitIcon,
 	GitLabIcon,
@@ -30,6 +40,8 @@ import GridCard from '../molecules/grid-card';
 import ActivityListItem from '../molecules/activity-list-item';
 import LinearListItem from '../molecules/linear-list-item';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+import { UserContext } from '../../utils/user';
+require('../molecules/rounded-chart');
 
 const barData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -67,7 +79,17 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
-const Grid = (props) => {
+type GridProps = {
+	isOnboarding: boolean;
+};
+
+const Grid = ({ isOnboarding = false, ...props }: GridProps) => {
+	const toast = useToast();
+	const { projects } = useContext(UserContext);
+	const scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?clientId=${projects[0].id}"></script>`;
+	const { hasCopied, onCopy } = useClipboard(scriptTag);
+	const router = useRouter();
+
 	const doughnutOptions = {
 		legend: {
 			labels: {
@@ -124,6 +146,34 @@ const Grid = (props) => {
 	};
 
 	const [version, setVersion] = useState(versions[0]);
+
+	const handleClose = () => {
+		router.push({
+			pathname: '/',
+			query: {},
+		});
+	};
+
+	useEffect(() => {
+		if (hasCopied) {
+			toast({
+				position: 'bottom-right',
+				render: () => (
+					<Box
+						color="white"
+						p={4}
+						// @ts-expect-error
+						bg={transparentize('cyan.500', 0.2)}
+						borderRadius="lg"
+					>
+						The script tag was copied to your clipboard!
+					</Box>
+				),
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	}, [hasCopied, toast]);
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -208,6 +258,38 @@ const Grid = (props) => {
 								dataPoints={70946}
 							/>
 						</Flex>
+						{isOnboarding && (
+							// @ts-expect-error
+							<Alert rounded="lg" bg={transparentize('cyan.500', 0.2)} py={5}>
+								<Box flex="1" my={2}>
+									<AlertTitle>
+										Install this script in the head of your application:
+									</AlertTitle>
+									<AlertDescription d="flex" w="100%" alignItems="center">
+										<Code bg="cyan.100" onClick={onCopy} color="cyan.900" p={2}>
+											{scriptTag}
+										</Code>
+										<IconButton
+											ml={2}
+											size="sm"
+											colorScheme="cyan"
+											variant="ghost"
+											aria-label="Copy Script Tag"
+											icon={<CopyIcon />}
+											onClick={onCopy}
+										/>
+									</AlertDescription>
+								</Box>
+								<CloseButton
+									position="absolute"
+									colorScheme="cyan"
+									size="sm"
+									right="8px"
+									top="8px"
+									onClick={handleClose}
+								/>
+							</Alert>
+						)}
 						<Flex flex="1">
 							<SimpleGrid
 								columns={[1, 1, 2, 2]}

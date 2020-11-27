@@ -1,6 +1,5 @@
 import { initAuth0 } from '@auth0/nextjs-auth0';
 import { ISignInWithAuth0 } from '@auth0/nextjs-auth0/dist/instance';
-import { ISession } from '@auth0/nextjs-auth0/dist/session/session';
 import { IncomingMessage } from 'http';
 import ms from 'ms';
 import { IUser } from './user';

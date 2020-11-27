@@ -1,11 +1,6 @@
 import { useEffect } from 'react';
 import useSWR from 'swr';
-import {
-	getUser,
-	removeUser,
-	storeUser,
-	IUser,
-} from '../utils/user';
+import { getUser, removeUser, storeUser, IUser } from '../utils/user';
 
 export const useFetchUser = (
 	serverSideUser?: IUser

@@ -7,7 +7,10 @@ export const eightBaseClient = (token: string) => {
 		},
 	};
 
-	const client = new GraphQLClient(process.env.EIGHT_BASE_ENDPOINT, context);
+	const client = new GraphQLClient(
+		'https://api.8base.com/ckhqdz5mu01r307mn6szcbdke',
+		context
+	);
 
 	return client;
 };

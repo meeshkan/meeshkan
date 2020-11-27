@@ -1,9 +1,23 @@
-import get from 'lodash/get';
 import { createContext } from 'react';
 import { gql } from 'graphql-request';
 import { eightBaseClient } from './graphql';
 
 const isServer = typeof window === 'undefined';
+
+type Avatar = {
+	downloadUrl: string;
+};
+
+type Configuration = {
+	inviteLink: string;
+};
+
+export type Project = {
+	id: string;
+	name: string;
+	avatar: Avatar;
+	configuration: Configuration;
+};
 
 export interface IUser {
 	email: string;
@@ -12,6 +26,7 @@ export interface IUser {
 	nickname: string;
 	idToken?: string;
 	error?: string;
+	projects?: Array<Project>;
 }
 
 declare global {
@@ -58,7 +73,7 @@ export const goToLogin = () => {
 	window.location.href = loginHref;
 };
 
-const CURRENT_USER_QUERY = gql`
+export const CURRENT_USER_QUERY = gql`
 	query CurrentUser {
 		user {
 			id
@@ -75,6 +90,12 @@ const USER_SIGN_UP_MUTATION = gql`
 		}
 	}
 `;
+
+export const getUserId = async (idToken: string) => {
+	const client = eightBaseClient(idToken);
+	const data = await client.request(CURRENT_USER_QUERY);
+	return data.user.id;
+};
 
 export const confirmOrCreateUser = async (user: IUser) => {
 	const client = eightBaseClient(user.idToken);

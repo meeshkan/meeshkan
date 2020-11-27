@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
 	Stack,
 	Box,
@@ -15,6 +15,7 @@ import {
 	Button,
 } from '@chakra-ui/react';
 import { ChatIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
+import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	ActivityIcon,
 	VideoIcon,
@@ -23,14 +24,10 @@ import {
 	SettingsIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
-import { transparentize } from '@chakra-ui/theme-tools';
-
-const projects = [
-	{ name: 'Acme Industries', avatar: 'https://example.com' },
-	{ name: 'Meeshkan', avatar: 'https://example.com' },
-];
+import { UserContext } from '../../utils/user';
 
 const SideBarBody = () => {
+	const { projects } = useContext(UserContext);
 	const [project, setProject] = useState(projects[0]);
 	return (
 		<>
@@ -71,9 +68,9 @@ const SideBarBody = () => {
 								title="Projects"
 								type="radio"
 							>
-								{projects.map((project, index) => (
+								{projects.map((project) => (
 									<MenuItemOption
-										key={index}
+										key={project.id}
 										value={project.name}
 										onClick={() => setProject(project)}
 									>
