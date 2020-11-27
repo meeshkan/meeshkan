@@ -335,6 +335,17 @@ export const ZapIcon = createIcon({
 	),
 })
 
+export const CopyIcon = createIcon({
+	displayName: "CopyIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 10.667 2.667 L 12 2.667 C 12.736 2.667 13.333 3.264 13.333 4 L 13.333 13.333 C 13.333 14.07 12.736 14.667 12 14.667 L 4 14.667 C 3.264 14.667 2.667 14.07 2.667 13.333 L 2.667 4 C 2.667 3.264 3.264 2.667 4 2.667 L 5.333 2.667" fill="transparent" strokeWidth="1.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 6 4 C 5.632 4 5.333 3.702 5.333 3.333 L 5.333 2 C 5.333 1.632 5.632 1.333 6 1.333 L 10 1.333 C 10.368 1.333 10.667 1.632 10.667 2 L 10.667 3.333 C 10.667 3.702 10.368 4 10 4 Z" fill="transparent" strokeWidth="1.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	),
+})
+
 export const XmarkIcon = createIcon({
 	displayName: "XmarkIcon",
 	viewBox: "0 0 14 14",
