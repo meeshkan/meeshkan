@@ -79,16 +79,13 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
-type GridProps = {
-	isOnboarding: boolean;
-};
-
-const Grid = ({ isOnboarding = false, ...props }: GridProps) => {
+const Grid = (props) => {
 	const toast = useToast();
 	const { projects } = useContext(UserContext);
 	const scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?clientId=${projects[0].id}"></script>`;
 	const { hasCopied, onCopy } = useClipboard(scriptTag);
 	const router = useRouter();
+	const isOnboarding = router.query.onboarding;
 
 	const doughnutOptions = {
 		legend: {

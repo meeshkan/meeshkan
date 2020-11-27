@@ -5,25 +5,17 @@ import withAuth from '../hocs/with-auth';
 
 type IndexProps = {
 	cookies: string | undefined;
-	isOnboarding: boolean;
 };
 
-const Index = ({ cookies, isOnboarding }: IndexProps) => {
+const Index = ({ cookies }: IndexProps) => {
 	return (
 		<Layout>
 			<SideBar />
-			<Grid isOnboarding={isOnboarding} />
+			<Grid />
 		</Layout>
 	);
 };
 
 export default withAuth(Index);
 
-export const getServerSideProps = ({ req: request }) => {
-	return {
-		props: {
-			cookies: request.headers.cookie ?? '',
-			isOnboarding: (request.query && request.query.onboarding) ?? null,
-		},
-	};
-};
+export { getServerSideProps } from '../components/molecules/chakra';
