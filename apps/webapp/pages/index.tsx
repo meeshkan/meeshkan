@@ -23,7 +23,7 @@ export const getServerSideProps = ({ req: request }) => {
 	return {
 		props: {
 			cookies: request.headers.cookie ?? '',
-			isOnboarding: request.query.onboarding ?? null,
+			isOnboarding: (request.query && request.query.onboarding) ?? null,
 		},
 	};
 };
