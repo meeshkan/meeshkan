@@ -32,21 +32,17 @@ import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import { transparentize } from '@chakra-ui/theme-tools';
 
 const barData = {
-	labels: ['1', '2', '3', '4', '5', '6'],
+	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
 	datasets: [
 		{
 			label: '# of recordings',
 			data: [1000, 4000, 3000, 5000, 2000, 3000, 5000, 2000],
-			borderWidth: 1,
-			borderColor: theme.colors.cyan[500],
-			backgroundColor: transparentize(theme.colors.cyan[300], 0.25),
+			backgroundColor: theme.colors.cyan[500],
 		},
 		{
 			label: '# of tests',
 			data: [2000, 3584, 2485, 4300, 1000, 4000, 5000, 1294],
-			borderWidth: 1,
-			borderColor: theme.colors.blue[500],
-			backgroundColor: transparentize(theme.colors.blue[300], 0.25),
+			backgroundColor: theme.colors.blue[500],
 		},
 	],
 };
@@ -56,10 +52,12 @@ const barOptions = {
 	scales: {
 		yAxes: [
 			{
+				type: 'linear',
 				stacked: false,
 				ticks: {
+					maxTicksLimit: 4,
 					beginAtZero: true,
-					display: false,
+					display: true,
 				},
 				gridLines: {
 					display: false,
@@ -70,7 +68,7 @@ const barOptions = {
 			{
 				stacked: false,
 				ticks: {
-					display: false,
+					display: true,
 				},
 				gridLines: {
 					display: false,
@@ -81,24 +79,18 @@ const barOptions = {
 };
 
 const doughnutData = {
-	labels: ['Passing', 'Warning', 'Failure', 'Error Running'],
+	labels: ['Queued', 'Running', 'Passing', 'Run error', 'Failing'],
 	datasets: [
 		{
 			label: '# of Votes',
 			data: [80, 12, 5, 3],
 			backgroundColor: [
-				'rgba(75, 192, 192, 0.2)',
-				'rgba(255, 206, 86, 0.2)',
-				'rgba(255, 99, 132, 0.2)',
-				'rgba(54, 162, 235, 0.2)',
+				theme.colors.blue[50],
+				theme.colors.blue[200],
+				theme.colors.blue[500],
+				theme.colors.blue[700],
+				theme.colors.blue[900],
 			],
-			borderColor: [
-				'rgba(75, 192, 192, 1)',
-				'rgba(255, 206, 86, 1)',
-				'rgba(255, 99, 132, 1)',
-				'rgba(54, 162, 235, 1)',
-			],
-			borderWidth: 1,
 		},
 	],
 };
@@ -107,7 +99,19 @@ const versions = ['v0.0.2', 'v0.0.1'];
 
 const Grid = (props) => {
 	const [version, setVersion] = useState(versions[0]);
-	const chartOptions = {
+	const barChartOptions = {
+		legend: {
+			labels: {
+				fontColor: useColorModeValue(
+					theme.colors.gray[600],
+					theme.colors.gray[400]
+				),
+			},
+			position: 'bottom',
+			align: 'center',
+		},
+	};
+	const doughnutChartOptions = {
 		legend: {
 			labels: {
 				fontColor: useColorModeValue(
@@ -121,13 +125,7 @@ const Grid = (props) => {
 	};
 
 	return (
-		<Stack
-			p={[6, 0, 0, 0]}
-			w="100%"
-			rounded="lg"
-			spacing={6}
-			{...props}
-		>
+		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
 				<Heading as="h2" fontSize="md" lineHeight="short">
 					Last 7 Days
@@ -246,11 +244,14 @@ const Grid = (props) => {
 								<GridCard title="Recordings vs. Tests">
 									<Bar
 										data={barData}
-										options={{ ...barOptions, ...chartOptions }}
+										options={{ ...barOptions, ...barChartOptions }}
 									/>
 								</GridCard>
 								<GridCard title="Test Suite State">
-									<Doughnut data={doughnutData} options={chartOptions} />
+									<Doughnut
+										data={doughnutData}
+										options={doughnutChartOptions}
+									/>
 								</GridCard>
 								<Card h={['200px', '150px', 'auto', 'auto']} />
 							</SimpleGrid>
