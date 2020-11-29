@@ -29,7 +29,6 @@ import GridCard from '../molecules/grid-card';
 import ActivityListItem from '../molecules/activity-list-item';
 import LinearListItem from '../molecules/linear-list-item';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
-import { transparentize } from '@chakra-ui/theme-tools';
 
 const barData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -45,37 +44,6 @@ const barData = {
 			backgroundColor: theme.colors.blue[500],
 		},
 	],
-};
-
-const barOptions = {
-	cornerRadius: 6,
-	scales: {
-		yAxes: [
-			{
-				type: 'linear',
-				stacked: false,
-				ticks: {
-					maxTicksLimit: 4,
-					beginAtZero: true,
-					display: true,
-				},
-				gridLines: {
-					display: false,
-				},
-			},
-		],
-		xAxes: [
-			{
-				stacked: false,
-				ticks: {
-					display: true,
-				},
-				gridLines: {
-					display: false,
-				},
-			},
-		],
-	},
 };
 
 const doughnutData = {
@@ -98,20 +66,7 @@ const doughnutData = {
 const versions = ['v0.0.2', 'v0.0.1'];
 
 const Grid = (props) => {
-	const [version, setVersion] = useState(versions[0]);
-	const barChartOptions = {
-		legend: {
-			labels: {
-				fontColor: useColorModeValue(
-					theme.colors.gray[600],
-					theme.colors.gray[400]
-				),
-			},
-			position: 'bottom',
-			align: 'center',
-		},
-	};
-	const doughnutChartOptions = {
+	const doughnutOptions = {
 		legend: {
 			labels: {
 				fontColor: useColorModeValue(
@@ -123,6 +78,48 @@ const Grid = (props) => {
 			align: 'center',
 		},
 	};
+	const barOptions = {
+		legend: {
+			labels: {
+				fontColor: useColorModeValue(
+					theme.colors.gray[600],
+					theme.colors.gray[400]
+				),
+			},
+			position: 'bottom',
+			align: 'center',
+		},
+		cornerRadius: 6,
+		scales: {
+			yAxes: [
+				{
+					type: 'linear',
+					stacked: false,
+					ticks: {
+						maxTicksLimit: 4,
+						beginAtZero: true,
+						display: true,
+					},
+					gridLines: {
+						display: false,
+					},
+				},
+			],
+			xAxes: [
+				{
+					stacked: false,
+					ticks: {
+						display: true,
+					},
+					gridLines: {
+						display: false,
+					},
+				},
+			],
+		},
+	};
+
+	const [version, setVersion] = useState(versions[0]);
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -242,16 +239,10 @@ const Grid = (props) => {
 									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
-									<Bar
-										data={barData}
-										options={{ ...barOptions, ...barChartOptions }}
-									/>
+									<Bar data={barData} options={barOptions} />
 								</GridCard>
 								<GridCard title="Test Suite State">
-									<Doughnut
-										data={doughnutData}
-										options={doughnutChartOptions}
-									/>
+									<Doughnut data={doughnutData} options={doughnutOptions} />
 								</GridCard>
 								<Card h={['200px', '150px', 'auto', 'auto']} />
 							</SimpleGrid>
