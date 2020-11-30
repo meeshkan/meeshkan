@@ -36,12 +36,15 @@ type ProfileFormInputs = {
 
 const jobTitles = ['Product manager', 'CTO', 'Other'];
 
-const StepOne = ({ setStep }) => {
-	const router = useRouter();
+type StepOneProps = {
+	setStep: (step: 1 | 2) => void;
+};
+
+const StepOne = ({ setStep }: StepOneProps) => {
 	const [error, setError] = useState('');
 	const [title, setTitle] = useState(jobTitles[0]);
 	const [loading, setLoading] = useState(false);
-	const { id, idToken } = useContext(UserContext);
+	const { idToken } = useContext(UserContext);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
 
 	const onSubmit = async (formData: ProfileFormInputs): Promise<void> => {
@@ -121,7 +124,11 @@ const StepOne = ({ setStep }) => {
 	);
 };
 
-const StepTwo = ({ setStep }) => {
+type StepTwoProps = {
+	setStep: (step: 1 | 2) => void;
+};
+
+const StepTwo = ({ setStep }: StepTwoProps) => {
 	const router = useRouter();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -142,7 +149,6 @@ const StepTwo = ({ setStep }) => {
 
 		setLoading(false);
 		router.reload();
-		window.location.href = `${window.location.pathname}?onboarding=true`;
 	};
 
 	return (

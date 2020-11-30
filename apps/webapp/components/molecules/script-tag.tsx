@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	Box,
@@ -15,9 +14,12 @@ import {
 import { CopyIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
 
-const ScriptCard = () => {
+type ScriptCardProps = {
+    handleClose: () => void;
+};
+
+const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	const toast = useToast();
-    const router = useRouter();
 	const { projects } = useContext(UserContext);
     const hasProjects = projects.length > 0;
 
@@ -27,13 +29,6 @@ const ScriptCard = () => {
     }
 
     const { hasCopied, onCopy } = useClipboard(scriptTag);
-
-	const handleClose = () => {
-		router.push({
-			pathname: '/',
-			query: {},
-		});
-	};
 
 	useEffect(() => {
 		if (hasCopied) {

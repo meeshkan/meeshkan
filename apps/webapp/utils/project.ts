@@ -37,6 +37,7 @@ const PROJECTS = gql`
 					configuration {
 						inviteLink
 					}
+					hasReceivedEvents
 				}
 			}
 		}

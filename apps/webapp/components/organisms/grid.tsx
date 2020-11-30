@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import {
 	Box,
 	Stack,
@@ -41,7 +40,7 @@ import LinearListItem from '../molecules/linear-list-item';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import Onboarding from '../../components/organisms/onboarding';
-import { UserContext } from '../../utils/user';
+import { UserContext, Project } from '../../utils/user';
 require('../molecules/rounded-chart');
 
 const barData = {
@@ -80,11 +79,15 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
-const Grid = (props) => {
-	const router = useRouter();
+type GridProps = {
+	project: Project;
+};
+
+const Grid = ({ project, ...props }: GridProps) => {
 	const { projects } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
-	const isOnboarding = router.query.onboarding;
+	const selectedProject = project;
+	const [showScript, setShowScript] = useState<boolean>(!selectedProject?.hasReceivedEvents);
 
 	const doughnutOptions = {
 		legend: {
@@ -235,8 +238,8 @@ const Grid = (props) => {
 								dataPoints={70946}
 							/>
 						</Flex>
-						{isOnboarding && (
-							<ScriptTag />
+						{showScript && (
+							<ScriptTag handleClose={() => setShowScript(false)} />
 						)}
 						<Flex flex="1">
 							<SimpleGrid

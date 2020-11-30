@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import {
 	Stack,
 	Box,
@@ -25,12 +25,16 @@ import {
 	SettingsIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
-import { UserContext } from '../../utils/user';
+import { UserContext, Project } from '../../utils/user';
 
-const SideBarBody = () => {
+type SideBarBodyProps = {
+	project: Project;
+	setProject: (project: Project) => void;
+};
+
+const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 	const { projects } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
-	const [project, setProject] = useState(projects[0] || { id: -1, name: '' });
 	return (
 		<>
 			{hasProjects ? (

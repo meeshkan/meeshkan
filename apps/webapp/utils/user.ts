@@ -17,6 +17,7 @@ export type Project = {
 	name: string;
 	avatar: Avatar;
 	configuration: Configuration;
+	hasReceivedEvents: boolean;
 };
 
 export interface IUser {
