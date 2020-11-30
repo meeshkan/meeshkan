@@ -281,7 +281,7 @@ const Grid = (props) => {
 								</GridCard>
 								<GridCard title="Overview">
 									<Stack
-										direction={['column', 'column', 'row']}
+										direction={['column', 'row']}
 										justify="space-around"
 										mb={6}
 									>
@@ -317,10 +317,7 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 									</Stack>
-									<Stack
-										direction={['column', 'column', 'row']}
-										justify="space-around"
-									>
+									<Stack direction={['column', 'row']} justify="space-around">
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
