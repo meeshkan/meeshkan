@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react';
-import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	Box,
 	IconButton,
@@ -10,25 +9,28 @@ import {
 	CloseButton,
 	useClipboard,
 	useToast,
+	useColorModeValue,
+	Flex,
+	Text,
 } from '@chakra-ui/react';
 import { CopyIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
 
 type ScriptCardProps = {
-    handleClose: () => void;
+	handleClose: () => void;
 };
 
 const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	const toast = useToast();
 	const { projects } = useContext(UserContext);
-    const hasProjects = projects.length > 0;
+	const hasProjects = projects.length > 0;
 
-    let scriptTag = '';
-    if (hasProjects) {
-        scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?clientId=${projects[0].id}"></script>`;
-    }
+	let scriptTag = '';
+	if (hasProjects) {
+		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?clientId=${projects[0].id}"></script>`;
+	}
 
-    const { hasCopied, onCopy } = useClipboard(scriptTag);
+	const { hasCopied, onCopy } = useClipboard(scriptTag);
 
 	useEffect(() => {
 		if (hasCopied) {
@@ -38,9 +40,9 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 					<Box
 						color="white"
 						p={4}
-						// @ts-expect-error
-						bg={transparentize('cyan.500', 0.2)}
-						borderRadius="lg"
+						bg="blue.500"
+						borderRadius="md"
+						fontSize="md"
 					>
 						The script tag was copied to your clipboard!
 					</Box>
@@ -51,48 +53,69 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 		}
 	}, [hasCopied, toast]);
 
-    if (!hasProjects) {
-        return null;
-    }
+	if (!hasProjects) {
+		return null;
+	}
 
-    return (
-        // @ts-expect-error
-        <Alert rounded="lg" bg={transparentize('cyan.500', 0.2)} py={5} overflowX="scroll">
-            <Box flex="1" my={2}>
-                <AlertTitle>
-                    Install this script in the head of your application:
-                </AlertTitle>
-                <AlertDescription d="flex" alignItems="center">
-                    <Code
-                        bg="cyan.100"
-                        onClick={onCopy}
-                        color="cyan.900"
-                        borderRadius="lg"
-                        p={2}
-                    >
-                        {scriptTag}
-                    </Code>
-                    <IconButton
-                        ml={2}
-                        size="sm"
-                        colorScheme="cyan"
-                        variant="outline"
-                        aria-label="Copy Script Tag"
-                        icon={<CopyIcon />}
-                        onClick={onCopy}
-                    />
-                </AlertDescription>
-            </Box>
-            <CloseButton
-                position="absolute"
-                colorScheme="cyan"
-                size="sm"
-                right="8px"
-                top="8px"
-                onClick={handleClose}
-            />
-        </Alert>
-    );
+	return (
+		<Alert
+			rounded="lg"
+			bg={useColorModeValue('white', 'gray.900')}
+			py={5}
+			overflowX="scroll"
+			p={4}
+		>
+			<Box flex="1" my={2}>
+				<AlertTitle mb={2} fontStyle="normal">
+					Install this script in the{' '}
+					<Code fontSize="inherit" lineHeight="1">
+						head
+					</Code>{' '}
+					of your application:
+				</AlertTitle>
+				<AlertDescription>
+					<Flex
+						as={Code}
+						onClick={onCopy}
+						fontWeight={700}
+						pl={3}
+						pr={0}
+						backgroundColor={useColorModeValue('gray.100', 'gray.800')}
+						borderRadius="md"
+						w="full"
+						justifyContent="space-between"
+						alignItems="center"
+					>
+						<Text
+							d="inline"
+							fontFamily="mono"
+							fontStyle="normal"
+							fontSize="sm"
+							overflow="hidden"
+						>
+							{scriptTag}
+						</Text>
+						<IconButton
+							ml={4}
+							size="sm"
+							colorScheme="gray"
+							variant="outline"
+							aria-label="Copy Script Tag"
+							icon={<CopyIcon />}
+							onClick={onCopy}
+						/>
+					</Flex>
+				</AlertDescription>
+			</Box>
+			<CloseButton
+				position="absolute"
+				size="sm"
+				right="16px"
+				top="16px"
+				onClick={handleClose}
+			/>
+		</Alert>
+	);
 };
 
 export default ScriptCard;
