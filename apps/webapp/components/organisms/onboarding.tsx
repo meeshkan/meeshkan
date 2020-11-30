@@ -8,27 +8,127 @@ import {
 	FormControl,
 	FormLabel,
 	FormErrorMessage,
+	Menu,
+	MenuButton,
+	MenuList,
+	MenuOptionGroup,
+	MenuItemOption,
 	Input,
 	Button,
+	useColorModeValue,
 } from '@chakra-ui/react';
+import { transparentize } from '@chakra-ui/theme-tools';
+import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { FilePlusIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';
+import { updateProfile } from '../../utils/user';
 
-type FormInputs = {
+type ProjectFormInputs = {
 	name: string;
-	avatarUrl?: string;
 };
 
-const Onboarding = () => {
+type ProfileFormInputs = {
+	name: string;
+	jobTitle: string;
+};
+
+const jobTitles = ['Product manager', 'CTO', 'Other'];
+
+const StepOne = ({ setStep }) => {
+	const router = useRouter();
+	const [error, setError] = useState('');
+	const [title, setTitle] = useState(jobTitles[0]);
+	const [loading, setLoading] = useState(false);
+	const { id, idToken } = useContext(UserContext);
+	const { register, handleSubmit } = useForm<ProfileFormInputs>();
+
+	const onSubmit = async (formData: ProfileFormInputs): Promise<void> => {
+		setLoading(true);
+		const data = await updateProfile(idToken, {
+			name: formData.name,
+			jobTitle: title,
+		});
+
+		if (data.error) {
+			setError(data.error.message);
+			setLoading(false);
+			return;
+		}
+
+		setStep(2);
+		setLoading(false);
+	};
+
+	return (
+		<>
+			<Box>
+				<Heading as="h1" fontSize="3xl" mb={8} textAlign="center">
+					Onboarding — Set up your profile
+				</Heading>
+				<form onSubmit={handleSubmit(onSubmit)} id="profileForm">
+					<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
+						<FormLabel>What's your name?</FormLabel>
+						<Input
+							name="name"
+							type="text"
+							ref={register}
+						/>
+					</FormControl>
+					<FormControl id="title" isRequired isInvalid={!!error}>
+						<FormLabel>What's your job title?</FormLabel>
+						<Menu>
+							<MenuButton
+								as={Button}
+								colorScheme="gray"
+								rightIcon={<ArrowUpDownIcon />}
+								w="100%"
+								textAlign="left"
+							>
+								{title}
+							</MenuButton>
+							<MenuList>
+								<MenuOptionGroup
+									defaultValue={title}
+									title="Projects"
+									type="radio"
+								>
+									{jobTitles.map((title) => (
+										<MenuItemOption
+											key={title}
+											value={title}
+											onClick={() => setTitle(title)}
+										>
+											{title}
+										</MenuItemOption>
+									))}
+								</MenuOptionGroup>
+							</MenuList>
+						</Menu>
+						<FormErrorMessage>Error: {error}</FormErrorMessage>
+					</FormControl>
+				</form>
+			</Box>
+			<Flex justify="space-between" align="center" w="100%">
+				<Box />
+				<Text color="gray.500">Step 1 of 2</Text>
+				<Button mt={4} type="submit" isLoading={loading} form="profileForm">
+					Next step
+				</Button>
+			</Flex>
+		</>
+	);
+};
+
+const StepTwo = ({ setStep }) => {
 	const router = useRouter();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { idToken } = useContext(UserContext);
-	const { register, handleSubmit } = useForm<FormInputs>();
+	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 
-	const onSubmit = async (formData: FormInputs): Promise<void> => {
+	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
 		const data = await createProject(idToken, {
 			name: formData.name,
@@ -36,6 +136,7 @@ const Onboarding = () => {
 
 		if (data.error) {
 			setError(data.error.message);
+			setLoading(false);
 			return;
 		}
 
@@ -45,42 +146,12 @@ const Onboarding = () => {
 	};
 
 	return (
-		<Flex
-			align="center"
-			justify="space-between"
-			direction="column"
-			h="100%"
-			w="100%"
-			p={8}
-		>
+		<>
 			<Box>
 				<Heading as="h1" fontSize="3xl" mb={8} textAlign="center">
 					Onboarding — Create your first project
 				</Heading>
-				<form onSubmit={handleSubmit(onSubmit)} id="onboardingForm">
-					<FormControl id="avatar" isInvalid={!!error} mb={6}>
-						<Flex justify="space-between">
-							<Box>
-								<FormLabel>Upload an avatar</FormLabel>
-								<Text mt={3} color="gray.500">
-									We suggest an image that is 200px by 200px or bigger.
-								</Text>
-							</Box>
-							<Flex
-								align="center"
-								justify="center"
-								borderWidth="1px"
-								borderRadius="md"
-								borderColor="gray.500"
-								borderStyle="dashed"
-								p={[4, 5, 6, 8]}
-								ml={4}
-							>
-								<FilePlusIcon w={8} h={8} />
-							</Flex>
-						</Flex>
-						<FormErrorMessage>{error}</FormErrorMessage>
-					</FormControl>
+				<form onSubmit={handleSubmit(onSubmit)} id="projectForm">
 					<FormControl id="name" isRequired isInvalid={!!error}>
 						<FormLabel>Name your project</FormLabel>
 						<Input
@@ -90,11 +161,39 @@ const Onboarding = () => {
 							ref={register}
 						/>
 					</FormControl>
+					<FormErrorMessage>Error: {error}</FormErrorMessage>
 				</form>
 			</Box>
-			<Button mt={4} type="submit" isLoading={loading} form="onboardingForm">
-				Create project
-			</Button>
+			<Flex justify="space-between" align="center" w="100%">
+				<Button mt={4} colorScheme="gray" onClick={() => setStep(1)}>
+					Back
+				</Button>
+				<Text color="gray.500">Step 2 of 2</Text>
+				<Button mt={4} type="submit" isLoading={loading} form="projectForm">
+					Create project
+				</Button>
+			</Flex>
+		</>
+	);
+};
+
+
+const Onboarding = () => {
+	const [step, setStep] = useState<1 | 2>(1);
+	return (
+		<Flex
+			align="center"
+			justify="space-between"
+			direction="column"
+			h="100%"
+			w="100%"
+			p={8}
+		>
+			{step === 1 ? (
+				<StepOne setStep={setStep} />
+			) : (
+				<StepTwo setStep={setStep} />
+			)}
 		</Flex>
 	);
 };

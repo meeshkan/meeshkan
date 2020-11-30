@@ -108,3 +108,44 @@ export const confirmOrCreateUser = async (user: IUser) => {
 		})
 	);
 };
+
+const UPDATE_PROFILE_MUTATION = gql`
+	mutation UpdateProfile($id: ID!, $firstName: String!, $lastName: String!, $jobTitle: String!) {
+		userUpdate(
+			filter: {
+				id: $id
+			}
+			data: {
+				firstName: $firstName
+				lastName: $lastName
+				jobTitle: $jobTitle
+			}
+		) {
+			id
+		}
+	}
+`;
+
+export const updateProfile = async (idToken: string, data: { name: string, jobTitle: string }) => {
+	const client = eightBaseClient(idToken);
+	const id = await getUserId(idToken);
+	const nameArray = data.name.split(' ');
+	const firstName = nameArray.slice(0, -1).join(' ');
+	const lastName = nameArray.slice(-1).join(' ');
+
+	let result;
+	try {
+		result = await client.request(UPDATE_PROFILE_MUTATION, {
+			id,
+			firstName,
+			lastName,
+			jobTitle: data.jobTitle,
+		});
+	} catch (error) {
+		result = {
+			error: error.response.errors[0],
+		};
+	}
+
+	return result;
+};
