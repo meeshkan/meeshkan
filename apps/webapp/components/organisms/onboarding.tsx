@@ -15,11 +15,8 @@ import {
 	MenuItemOption,
 	Input,
 	Button,
-	useColorModeValue,
 } from '@chakra-ui/react';
-import { transparentize } from '@chakra-ui/theme-tools';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
-import { FilePlusIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';

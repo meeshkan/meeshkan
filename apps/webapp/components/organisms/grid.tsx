@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import {
 	Box,
 	Stack,
@@ -14,19 +14,10 @@ import {
 	Heading,
 	useColorModeValue,
 	Text,
-	IconButton,
-	Alert,
-	AlertTitle,
-	AlertDescription,
-	Code,
-	CloseButton,
-	useClipboard,
-	useToast,
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme, {
-	CopyIcon,
 	GitMergeIcon,
 	GitCommitIcon,
 	GitLabIcon,
