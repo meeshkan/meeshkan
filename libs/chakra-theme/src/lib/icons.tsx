@@ -335,6 +335,28 @@ export const ZapIcon = createIcon({
 	),
 })
 
+export const CopyIcon = createIcon({
+	displayName: "CopyIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 10.667 2.667 L 12 2.667 C 12.736 2.667 13.333 3.264 13.333 4 L 13.333 13.333 C 13.333 14.07 12.736 14.667 12 14.667 L 4 14.667 C 3.264 14.667 2.667 14.07 2.667 13.333 L 2.667 4 C 2.667 3.264 3.264 2.667 4 2.667 L 5.333 2.667" fill="transparent" strokeWidth="1.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 6 4 C 5.632 4 5.333 3.702 5.333 3.333 L 5.333 2 C 5.333 1.632 5.632 1.333 6 1.333 L 10 1.333 C 10.368 1.333 10.667 1.632 10.667 2 L 10.667 3.333 C 10.667 3.702 10.368 4 10 4 Z" fill="transparent" strokeWidth="1.5" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	),
+})
+
+export const FilePlusIcon = createIcon({
+	displayName: "FilePlusIcon",
+	viewBox: "0 0 40 40",
+	path: (
+		<g>
+			<path d="M 23.333 3.333 L 10 3.333 C 8.159 3.333 6.667 4.826 6.667 6.667 L 6.667 33.333 C 6.667 35.174 8.159 36.667 10 36.667 L 30 36.667 C 31.841 36.667 33.333 35.174 33.333 33.333 L 33.333 13.333 Z" fill="transparent" strokeWidth="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 23.333 3.333 L 23.333 13.333 L 33.333 13.333 M 20 30 L 20 20 M 15 25 L 25 25" fill="transparent" stroke-width="2" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	)
+})
+
 export const XmarkIcon = createIcon({
 	displayName: "XmarkIcon",
 	viewBox: "0 0 14 14",

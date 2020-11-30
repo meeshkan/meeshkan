@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useContext } from 'react';
 import {
 	Stack,
 	Box,
@@ -13,8 +13,10 @@ import {
 	MenuOptionGroup,
 	MenuItemOption,
 	Button,
+	Text,
 } from '@chakra-ui/react';
 import { ChatIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
+import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	ActivityIcon,
 	VideoIcon,
@@ -23,25 +25,32 @@ import {
 	SettingsIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
-import { transparentize } from '@chakra-ui/theme-tools';
+import { UserContext, Project } from '../../utils/user';
 
-const projects = [
-	{ name: 'Acme Industries', avatar: 'https://example.com' },
-	{ name: 'Meeshkan', avatar: 'https://example.com' },
-];
+type SideBarBodyProps = {
+	project: Project;
+	setProject: (project: Project) => void;
+};
 
-const SideBarBody = () => {
-	const [project, setProject] = useState(projects[0]);
+const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
+	const { projects } = useContext(UserContext);
+	const hasProjects = projects.length > 0;
 	return (
 		<>
-			<Stack mt={6}>
-				<NavButton isActive leftIcon={<ActivityIcon />}>
-					Health dashboard
-				</NavButton>
-				<NavButton leftIcon={<VideoIcon />}>User stories</NavButton>
-				<NavButton leftIcon={<CheckSquareIcon />}>Test runs</NavButton>
-				<NavButton leftIcon={<PackageIcon />}>Releases</NavButton>
-			</Stack>
+			{hasProjects ? (
+				<Stack mt={6}>
+					<NavButton isActive leftIcon={<ActivityIcon />}>
+						Health dashboard
+					</NavButton>
+					<NavButton leftIcon={<VideoIcon />}>User stories</NavButton>
+					<NavButton leftIcon={<CheckSquareIcon />}>Test runs</NavButton>
+					<NavButton leftIcon={<PackageIcon />}>Releases</NavButton>
+				</Stack>
+			) : (
+				<Text mt={4} fontStyle="italic">
+					You need to finish creating your first project.
+				</Text>
+			)}
 			<Spacer />
 			<Box>
 				<NavButton leftIcon={<ChatIcon />} mt={2}>
@@ -71,9 +80,9 @@ const SideBarBody = () => {
 								title="Projects"
 								type="radio"
 							>
-								{projects.map((project, index) => (
+								{projects.map((project) => (
 									<MenuItemOption
-										key={index}
+										key={project.id}
 										value={project.name}
 										onClick={() => setProject(project)}
 									>

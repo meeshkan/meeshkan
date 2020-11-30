@@ -3,8 +3,14 @@ import { useCycle } from 'framer-motion';
 import MotionStack from '../atoms/motion-stack';
 import SideBarHeader from '../molecules/sidebar-header';
 import SideBarBody from '../molecules/sidebar-body';
+import { Project } from '../../utils/user';
 
-const SideBar = (props) => {
+type SideBarProps = {
+	project: Project;
+	setProject: (project: Project) => void;
+};
+
+const SideBar = ({ project, setProject, ...props }: SideBarProps) => {
 	const [isOpen, toggleOpen] = useCycle(false, true);
 	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
 	const stackSmallHeight = isOpen ? '100vh' : 'auto';
@@ -24,7 +30,12 @@ const SideBar = (props) => {
 		>
 			<Flex direction="column" h="full">
 				<SideBarHeader toggle={() => toggleOpen()} />
-				{(isOpen || !isSmallScreen) && <SideBarBody />}
+				{(isOpen || !isSmallScreen) && (
+					<SideBarBody
+						project={project}
+						setProject={setProject}
+					/>
+				)}
 			</Flex>
 		</MotionStack>
 	);

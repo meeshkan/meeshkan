@@ -12,7 +12,7 @@ ChartJS.elements.Rectangle.prototype.draw = function () {
 	if (cornerRadius < 0) {
 		cornerRadius = 0;
 	}
-	if (typeof cornerRadius == 'undefined') {
+	if (typeof cornerRadius === 'undefined') {
 		cornerRadius = 0;
 	}
 
@@ -86,7 +86,7 @@ ChartJS.elements.Rectangle.prototype.draw = function () {
 	for (let i = 1; i < 4; i++) {
 		corner = cornerAt(i);
 		let nextCornerId = i + 1;
-		if (nextCornerId == 4) {
+		if (nextCornerId === 4) {
 			nextCornerId = 0;
 		}
 

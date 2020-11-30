@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
 	Box,
 	Flex,
@@ -13,15 +14,18 @@ import {
 	MenuDivider,
 	useColorMode,
 } from '@chakra-ui/react';
+import Router from 'next/router';
 import { LogoIcon, InboxIcon, MoonIcon, SunIcon } from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
+import { UserContext } from '../../utils/user';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
+	const { avatar, nickname } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<Flex align="center">
@@ -47,7 +51,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						size="sm"
 						px={2}
 					>
-						<Avatar w={4} h={4} rounded="md" />
+						<Avatar name={nickname} src={avatar} size="2xs" borderRadius="md" />
 						<ChevronDownIcon
 							color={useColorModeValue('gray.600', 'gray.500')}
 						/>
@@ -61,7 +65,9 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							{colorMode === 'light' ? 'Dark' : 'Light'} mode
 						</MenuItem>
 						<MenuDivider />
-						<MenuItem>Log out</MenuItem>
+						<MenuItem onClick={() => Router.push('/api/logout')}>
+							Log out
+						</MenuItem>
 					</MenuList>
 				</Menu>
 			</Flex>

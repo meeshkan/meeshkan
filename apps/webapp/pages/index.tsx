@@ -1,32 +1,28 @@
-import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
-import ChakraProvider from '../components/molecules/chakra';
+import { useState, useContext } from 'react';
 import Layout from '../components/templates/layout';
 import SideBar from '../components/organisms/sidebar';
 import Grid from '../components/organisms/grid';
+import withAuth from '../hocs/with-auth';
+import { UserContext } from '../utils/user';
 
 type IndexProps = {
 	cookies: string | undefined;
 };
 
-export const Index = ({ cookies }: IndexProps) => {
-	const client = new ApolloClient({
-		uri: 'http://localhost:4200/api/graphql',
-		cache: new InMemoryCache(),
-	});
-
+const Index = ({ cookies }: IndexProps) => {
+	const { projects } = useContext(UserContext);
+	const [project, setProject] = useState(projects[0] || { id: -1, name: '' });
 	return (
-		<ApolloProvider client={client}>
-			<ChakraProvider cookies={cookies}>
-				<Layout>
-					<SideBar />
-					<Grid />
-				</Layout>
-			</ChakraProvider>
-		</ApolloProvider>
+		<Layout>
+			<SideBar
+				project={project}
+				setProject={setProject}
+			/>
+			<Grid project={project} />
+		</Layout>
 	);
 };
 
-export default Index;
+export default withAuth(Index);
 
 export { getServerSideProps } from '../components/molecules/chakra';

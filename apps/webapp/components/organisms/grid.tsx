@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
 	Box,
 	Stack,
@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-require('../molecules/rounded-chart');
 import theme, {
 	GitMergeIcon,
 	GitCommitIcon,
@@ -30,6 +29,10 @@ import GridCard from '../molecules/grid-card';
 import ActivityListItem from '../molecules/activity-list-item';
 import LinearListItem from '../molecules/linear-list-item';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+import ScriptTag from '../../components/molecules/script-tag';
+import Onboarding from '../../components/organisms/onboarding';
+import { UserContext, Project } from '../../utils/user';
+require('../molecules/rounded-chart');
 
 const barData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -67,7 +70,16 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
-const Grid = (props) => {
+type GridProps = {
+	project: Project;
+};
+
+const Grid = ({ project, ...props }: GridProps) => {
+	const { projects } = useContext(UserContext);
+	const hasProjects = projects.length > 0;
+	const selectedProject = project;
+	const [showScript, setShowScript] = useState<boolean>(!selectedProject?.hasReceivedEvents);
+
 	const doughnutOptions = {
 		legend: {
 			labels: {
@@ -81,6 +93,7 @@ const Grid = (props) => {
 			align: 'center',
 		},
 	};
+
 	const barOptions = {
 		legend: {
 			labels: {
@@ -124,6 +137,14 @@ const Grid = (props) => {
 	};
 
 	const [version, setVersion] = useState(versions[0]);
+
+	if (!hasProjects) {
+		return (
+			<Stack as={Card} p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
+				<Onboarding />
+			</Stack>
+		);
+	}
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -208,6 +229,9 @@ const Grid = (props) => {
 								dataPoints={70946}
 							/>
 						</Flex>
+						{showScript && (
+							<ScriptTag handleClose={() => setShowScript(false)} />
+						)}
 						<Flex flex="1">
 							<SimpleGrid
 								columns={[1, 1, 2, 2]}
