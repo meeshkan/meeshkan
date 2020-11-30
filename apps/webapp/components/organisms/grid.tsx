@@ -13,6 +13,7 @@ import {
 	SimpleGrid,
 	Heading,
 	useColorModeValue,
+	Text,
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
@@ -36,7 +37,7 @@ const barData = {
 		{
 			label: '# of recordings',
 			data: [1000, 4000, 3000, 5000, 2000, 3000, 5000, 2000],
-			backgroundColor: theme.colors.cyan[500],
+			backgroundColor: theme.colors.blue[200],
 		},
 		{
 			label: '# of tests',
@@ -59,6 +60,7 @@ const doughnutData = {
 				theme.colors.blue[700],
 				theme.colors.blue[900],
 			],
+			borderColor: theme.colors.transparent,
 		},
 	],
 };
@@ -69,6 +71,7 @@ const Grid = (props) => {
 	const doughnutOptions = {
 		legend: {
 			labels: {
+				boxWidth: 12,
 				fontColor: useColorModeValue(
 					theme.colors.gray[600],
 					theme.colors.gray[400]
@@ -81,6 +84,7 @@ const Grid = (props) => {
 	const barOptions = {
 		legend: {
 			labels: {
+				boxWidth: 12,
 				fontColor: useColorModeValue(
 					theme.colors.gray[600],
 					theme.colors.gray[400]
@@ -184,13 +188,13 @@ const Grid = (props) => {
 							direction={['column', 'row', 'row', 'row']}
 						>
 							<StatCard
-								title="Confidence Score"
+								title="Confidence score"
 								value={98}
 								percentageChange={19}
 								dataPoints={4036}
 							/>
 							<StatCard
-								title="Test Coverage"
+								title="Test coverage"
 								value={68}
 								percentageChange={-2}
 								dataPoints={2227}
@@ -198,7 +202,7 @@ const Grid = (props) => {
 							/>
 							<StatCard
 								isPercentage={false}
-								title="Test Run"
+								title="Test run"
 								value={71897}
 								percentageChange={12}
 								dataPoints={70946}
@@ -240,11 +244,126 @@ const Grid = (props) => {
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
+									<Stack
+										direction={['column', 'row']}
+										justify="space-between"
+										mt={4}
+									>
+										<Flex>
+											<Text fontWeight={900} mr={2}>
+												629
+											</Text>
+											<Text color={useColorModeValue('gray.500', 'gray.400')}>
+												Recordings
+											</Text>
+										</Flex>
+										<Flex>
+											<Text fontWeight={900} mr={2}>
+												331
+											</Text>
+											<Text color={useColorModeValue('gray.500', 'gray.400')}>
+												Tests
+											</Text>
+										</Flex>
+									</Stack>
+									<Button
+										mt={4}
+										size="sm"
+										colorScheme="gray"
+										w="full"
+									>{`Review recordings  ->`}</Button>
 								</GridCard>
-								<GridCard title="Test Suite State">
-									<Doughnut data={doughnutData} options={doughnutOptions} />
+								<GridCard title="Test suite state">
+									<Box w="275px">
+										<Doughnut data={doughnutData} options={doughnutOptions} />
+									</Box>
 								</GridCard>
-								<Card h={['200px', '150px', 'auto', 'auto']} />
+								<GridCard title="Overview">
+									<Stack
+										direction={['column', 'column', 'row']}
+										justify="space-around"
+										mb={6}
+									>
+										<Box w="100px">
+											<Flex align="baseline">
+												<Text fontWeight={900} mr={2}>
+													12
+												</Text>
+												<Text
+													fontSize="sm"
+													color={useColorModeValue('gray.500', 'gray.300')}
+													fontWeight={500}
+												>
+													days
+												</Text>
+											</Flex>
+											<Text
+												color={useColorModeValue('gray.700', 'gray.100')}
+												fontWeight={700}
+												fontSize="sm"
+											>
+												until release
+											</Text>
+										</Box>
+										<Box w="100px">
+											<Text fontWeight={900}>Ready</Text>
+											<Text
+												color={useColorModeValue('gray.700', 'gray.100')}
+												fontWeight={700}
+												fontSize="sm"
+											>
+												merge status
+											</Text>
+										</Box>
+									</Stack>
+									<Stack
+										direction={['column', 'column', 'row']}
+										justify="space-around"
+									>
+										<Box w="100px">
+											<Flex align="baseline">
+												<Text fontWeight={900} mr={2}>
+													23
+												</Text>
+												<Text
+													fontSize="sm"
+													color={useColorModeValue('gray.500', 'gray.300')}
+													fontWeight={500}
+												>
+													bugs
+												</Text>
+											</Flex>
+											<Text
+												color={useColorModeValue('gray.700', 'gray.100')}
+												fontWeight={700}
+												fontSize="sm"
+											>
+												introduced
+											</Text>
+										</Box>
+										<Box w="100px">
+											<Flex align="baseline">
+												<Text fontWeight={900} mr={2}>
+													22
+												</Text>
+												<Text
+													fontSize="sm"
+													color={useColorModeValue('gray.500', 'gray.300')}
+													fontWeight={500}
+												>
+													bugs
+												</Text>
+											</Flex>
+											<Text
+												color={useColorModeValue('gray.700', 'gray.100')}
+												fontWeight={700}
+												fontSize="sm"
+											>
+												fixed
+											</Text>
+										</Box>
+									</Stack>
+								</GridCard>
 							</SimpleGrid>
 						</Flex>
 					</Stack>
