@@ -10,8 +10,8 @@ import {
 	FormErrorMessage,
 	Input,
 	Button,
-	useColorModeValue,
 } from '@chakra-ui/react';
+import { FilePlusIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';
@@ -21,7 +21,7 @@ type FormInputs = {
 	avatarUrl?: string;
 };
 
-const OnboardingScreen = () => {
+const Onboarding = () => {
 	const router = useRouter();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -47,26 +47,42 @@ const OnboardingScreen = () => {
 	return (
 		<Flex
 			align="center"
-			justify="center"
+			justify="space-between"
 			direction="column"
-			h="100vh"
-			bg={useColorModeValue('gray.100', 'gray.800')}
+			h="100%"
+			w="100%"
+			p={8}
 		>
-			<Box
-				maxW="500px"
-				p={8}
-				bg={useColorModeValue('white', 'gray.900')}
-				rounded="lg"
-			>
-				<Box textAlign="center">
-					<Heading as="h1" fontSize="3xl" mb={3}>
-						Welcome to Meeshkan!
-					</Heading>
-					<Text mb={5}>Let's start off by creating a new project.</Text>
-				</Box>
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<FormControl id="name" isRequired isInvalid={!!error} mb={4}>
-						<FormLabel>Project Name</FormLabel>
+			<Box>
+				<Heading as="h1" fontSize="3xl" mb={8} textAlign="center">
+					Onboarding — Create your first project
+				</Heading>
+				<form onSubmit={handleSubmit(onSubmit)} id="onboardingForm">
+					<FormControl id="avatar" isInvalid={!!error} mb={6}>
+						<Flex justify="space-between">
+							<Box>
+								<FormLabel>Upload an avatar</FormLabel>
+								<Text mt={3} color="gray.500">
+									We suggest an image that is 200px by 200px or bigger.
+								</Text>
+							</Box>
+							<Flex
+								align="center"
+								justify="center"
+								borderWidth="1px"
+								borderRadius="md"
+								borderColor="gray.500"
+								borderStyle="dashed"
+								p={[4, 5, 6, 8]}
+								ml={4}
+							>
+								<FilePlusIcon w={8} h={8} />
+							</Flex>
+						</Flex>
+						<FormErrorMessage>{error}</FormErrorMessage>
+					</FormControl>
+					<FormControl id="name" isRequired isInvalid={!!error}>
+						<FormLabel>Name your project</FormLabel>
 						<Input
 							name="name"
 							type="text"
@@ -74,23 +90,13 @@ const OnboardingScreen = () => {
 							ref={register}
 						/>
 					</FormControl>
-					<FormControl id="avatar" isInvalid={!!error}>
-						<FormLabel>Avatar URL</FormLabel>
-						<Input
-							name="avatar"
-							type="text"
-							placeholder="https://meeshkan.com/icons/icon.png"
-							ref={register}
-						/>
-						<FormErrorMessage>{error}</FormErrorMessage>
-					</FormControl>
-					<Button mt={4} colorScheme="red" type="submit" isLoading={loading}>
-						Create
-					</Button>
 				</form>
 			</Box>
+			<Button mt={4} type="submit" isLoading={loading} form="onboardingForm">
+				Create project
+			</Button>
 		</Flex>
 	);
 };
 
-export default OnboardingScreen;
+export default Onboarding;

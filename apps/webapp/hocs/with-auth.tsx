@@ -1,7 +1,6 @@
 import ChakraProvider from '../components/molecules/chakra';
 import LoadingScreen from '../components/organisms/loading-screen';
 import AuthScreen from '../components/organisms/auth-screen';
-import OnboardingScreen from '../components/organisms/onboarding-screen';
 import { UserContext, IUser } from '../utils/user';
 import { useFetchUser } from '../hooks/use-fetch-user';
 
@@ -25,11 +24,7 @@ const withAuth = (PageComponent) => {
 			return (
 				<ChakraProvider cookies={props.cookies}>
 					<UserContext.Provider value={user}>
-						{user.projects.length === 0 ? (
-							<OnboardingScreen />
-						) : (
-							<PageComponent {...props} />
-						)}
+						<PageComponent {...props} />
 					</UserContext.Provider>
 				</ChakraProvider>
 			);

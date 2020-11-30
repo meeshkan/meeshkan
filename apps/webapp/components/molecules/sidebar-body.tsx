@@ -13,6 +13,7 @@ import {
 	MenuOptionGroup,
 	MenuItemOption,
 	Button,
+	Text,
 } from '@chakra-ui/react';
 import { ChatIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
 import { transparentize } from '@chakra-ui/theme-tools';
@@ -28,17 +29,24 @@ import { UserContext } from '../../utils/user';
 
 const SideBarBody = () => {
 	const { projects } = useContext(UserContext);
-	const [project, setProject] = useState(projects[0]);
+	const hasProjects = projects.length > 0;
+	const [project, setProject] = useState(projects[0] || { id: -1, name: '' });
 	return (
 		<>
-			<Stack mt={6}>
-				<NavButton isActive leftIcon={<ActivityIcon />}>
-					Health dashboard
-				</NavButton>
-				<NavButton leftIcon={<VideoIcon />}>User stories</NavButton>
-				<NavButton leftIcon={<CheckSquareIcon />}>Test runs</NavButton>
-				<NavButton leftIcon={<PackageIcon />}>Releases</NavButton>
-			</Stack>
+			{hasProjects ? (
+				<Stack mt={6}>
+					<NavButton isActive leftIcon={<ActivityIcon />}>
+						Health dashboard
+					</NavButton>
+					<NavButton leftIcon={<VideoIcon />}>User stories</NavButton>
+					<NavButton leftIcon={<CheckSquareIcon />}>Test runs</NavButton>
+					<NavButton leftIcon={<PackageIcon />}>Releases</NavButton>
+				</Stack>
+			) : (
+				<Text mt={4} fontStyle="italic">
+					You need to finish creating your first project.
+				</Text>
+			)}
 			<Spacer />
 			<Box>
 				<NavButton leftIcon={<ChatIcon />} mt={2}>
