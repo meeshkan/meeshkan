@@ -41,7 +41,9 @@
     "apollo-boost": "^0.4.9",
     "apollo-server-micro": "^2.19.0",
     "capture-website": "1.2.4",
+    "chart.js": "^2.9.4",
     "chrome-aws-lambda": "5.3.1",
+    "comma-number": "^2.0.1",
     "core-js": "3.7.0",
     "document-register-element": "1.13.1",
     "emotion-theming": "^11.0.0",
@@ -79,13 +81,15 @@
     "prop-types": "15.7.2",
     "puppeteer-core": "5.4.1",
     "react": "16.13.1",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "16.13.1",
     "react-focus-lock": "2.2.1",
     "react-helmet": "5.2.1",
     "react-hook-form": "5.7.2",
     "react-live": "2.2.2",
     "react-player": "1.15.3",
-    "subscriptions-transport-ws": "^0.9.18"
+    "subscriptions-transport-ws": "^0.9.18",
+    "truncate": "^2.1.0"
   },
   "devDependencies": {
     "@angular-devkit/schematics": "9.1.7",

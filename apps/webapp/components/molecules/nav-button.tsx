@@ -20,7 +20,8 @@ const variants = {
 };
 
 const NavButton = (props) => {
-	const [isMobile] = useMediaQuery('(max-width: 30em)');
+	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
+
 	return (
 		<MotionButton
 			size="sm"
@@ -42,7 +43,7 @@ const NavButton = (props) => {
 					transparentize('gray.800', 0.75)
 				),
 			}}
-			variants={isMobile ? variants : {}}
+			variants={isSmallScreen ? variants : {}}
 			{...props}
 		/>
 	);

@@ -9,13 +9,13 @@ type LayoutProps = {
 const Layout = ({ children, ...props }: LayoutProps) => {
 	return (
 		<Stack
-			p={[0, 8, 8, 8]}
+			p={[0, 6, 6, 6]}
 			bg={useColorModeValue('gray.100', 'gray.800')}
 			w="100%"
-			h="100vh"
+			h={['100%', '100%', '100%', '100vh']}
 			d="flex"
-			direction={['column', 'row', 'row', 'row']}
-			spacing={[4, 8, 8, 8]}
+			direction={['column', 'column', 'column', 'row']}
+			spacing={[0, 6, 6, 6]}
 			{...props}
 		>
 			{children}

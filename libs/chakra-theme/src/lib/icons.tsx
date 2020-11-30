@@ -137,6 +137,62 @@ export const GitHubIcon = createIcon({
 	),
 })
 
+export const GitMergeIcon = createIcon({
+	displayName: "GitMergeIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 10 12 C 10 10.895 10.895 10 12 10 C 13.105 10 14 10.895 14 12 C 14 13.105 13.105 14 12 14 C 10.895 14 10 13.105 10 12 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2 4 C 2 2.895 2.895 2 4 2 C 5.105 2 6 2.895 6 4 C 6 5.105 5.105 6 4 6 C 2.895 6 2 5.105 2 4 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+			<path d="M 4 14 L 4 6 C 4 9.314 6.686 12 10 12" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"></path>
+		</g>
+	),
+})
+
+export const GitLabIcon = createIcon({
+	displayName: "GitLabIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<path d="M 15.1 9.593 L 8 14.753 L 0.9 9.593 C 0.705 9.45 0.624 9.197 0.7 8.967 L 1.513 6.447 L 3.14 1.44 C 3.156 1.399 3.181 1.363 3.213 1.333 C 3.323 1.233 3.491 1.233 3.6 1.333 C 3.634 1.366 3.659 1.408 3.673 1.453 L 5.3 6.447 L 10.7 6.447 L 12.327 1.44 C 12.342 1.399 12.368 1.363 12.4 1.333 C 12.509 1.233 12.677 1.233 12.787 1.333 C 12.821 1.366 12.846 1.408 12.86 1.453 L 14.487 6.46 L 15.333 8.967 C 15.402 9.204 15.308 9.459 15.1 9.593 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+	),
+})
+
+export const GitCommitIcon = createIcon({
+	displayName: "GitCommitIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 5.333 8 C 5.333 6.527 6.527 5.333 8 5.333 C 9.473 5.333 10.667 6.527 10.667 8 C 10.667 9.473 9.473 10.667 8 10.667 C 6.527 10.667 5.333 9.473 5.333 8 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 0.7 8 L 4.667 8 M 11.34 8 L 15.307 8" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	),
+})
+
+export const GitPullRequestIcon = createIcon({
+	displayName: "GitPullRequestIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 10 12 C 10 10.895 10.895 10 12 10 C 13.105 10 14 10.895 14 12 C 14 13.105 13.105 14 12 14 C 10.895 14 10 13.105 10 12 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2 4 C 2 2.895 2.895 2 4 2 C 5.105 2 6 2.895 6 4 C 6 5.105 5.105 6 4 6 C 2.895 6 2 5.105 2 4 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 8.667 4 L 10.667 4 C 11.403 4 12 4.597 12 5.333 L 12 10 M 4 6 L 4 14" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	),
+})
+
+export const GitBranchIcon = createIcon({
+	displayName: "GitBranchIcon",
+	viewBox: "0 0 16 16",
+	path: (
+		<g>
+			<path d="M 4 2 L 4 10" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 10 4 C 10 2.895 10.895 2 12 2 C 13.105 2 14 2.895 14 4 C 14 5.105 13.105 6 12 6 C 10.895 6 10 5.105 10 4 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 2 12 C 2 10.895 2.895 10 4 10 C 5.105 10 6 10.895 6 12 C 6 13.105 5.105 14 4 14 C 2.895 14 2 13.105 2 12 Z" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+			<path d="M 12 6 C 12 9.314 9.314 12 6 12" fill="transparent" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+		</g>
+	),
+})
+
 export const HamburgerIcon = createIcon({
 	displayName: "HamburgerIcon",
 	viewBox: "0 0 18 14",
