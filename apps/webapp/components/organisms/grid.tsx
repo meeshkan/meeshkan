@@ -219,6 +219,7 @@ const Grid = (props) => {
 									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
+										fontSize="sm"
 									>
 										<ConfidenceBreakdownItem
 											value={0.05}
