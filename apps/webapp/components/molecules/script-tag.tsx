@@ -62,7 +62,7 @@ const ScriptCard = () => {
 
     return (
         // @ts-expect-error
-        <Alert rounded="lg" bg={transparentize('cyan.500', 0.2)} py={5}>
+        <Alert rounded="lg" bg={transparentize('cyan.500', 0.2)} py={5} overflowX="scroll">
             <Box flex="1" my={2}>
                 <AlertTitle>
                     Install this script in the head of your application:

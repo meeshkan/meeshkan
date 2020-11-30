@@ -146,7 +146,7 @@ const Grid = (props) => {
 
 	if (!hasProjects) {
 		return (
-			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
+			<Stack as={Card} p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 				<Onboarding />
 			</Stack>
 		);
