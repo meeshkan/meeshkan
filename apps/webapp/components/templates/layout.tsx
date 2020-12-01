@@ -1,12 +1,18 @@
-import { ReactNode } from 'react';
+import React, { ReactNode, useState, useContext } from 'react';
+import { UserContext } from '../../utils/user';
 import { Stack, useColorModeValue } from '@chakra-ui/react';
+import SideBar from '../../components/organisms/sidebar';
+import withAuth from '../../hocs/with-auth';
 import './layout.module.css';
 
 type LayoutProps = {
 	children: ReactNode;
+	cookies?: string | undefined;
 };
 
-const Layout = ({ children, ...props }: LayoutProps) => {
+const Layout = ({ children, cookies, ...props }: LayoutProps) => {
+	const { projects } = useContext(UserContext);
+	const [project, setProject] = useState(projects[0] || { id: -1, name: '' });
 	return (
 		<Stack
 			p={[0, 6, 6, 6]}
@@ -18,9 +24,11 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			spacing={[0, 6, 6, 6]}
 			{...props}
 		>
+			<SideBar project={project} setProject={setProject} />
 			{children}
 		</Stack>
 	);
 };
+export default withAuth(Layout);
 
-export default Layout;
+export { getServerSideProps } from '../../components/molecules/chakra';

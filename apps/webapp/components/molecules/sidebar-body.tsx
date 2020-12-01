@@ -39,12 +39,18 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 		<>
 			{hasProjects ? (
 				<Stack mt={6}>
-					<NavButton isActive leftIcon={<ActivityIcon />}>
+					<NavButton leftIcon={<ActivityIcon />} href={`/`}>
 						Health dashboard
 					</NavButton>
-					<NavButton leftIcon={<VideoIcon />}>User stories</NavButton>
-					<NavButton leftIcon={<CheckSquareIcon />}>Test runs</NavButton>
-					<NavButton leftIcon={<PackageIcon />}>Releases</NavButton>
+					<NavButton leftIcon={<VideoIcon />} href={`/user-stories`}>
+						User stories
+					</NavButton>
+					<NavButton leftIcon={<CheckSquareIcon />} href={`/test-runs`}>
+						Test runs
+					</NavButton>
+					<NavButton leftIcon={<PackageIcon />} href={`/releases`}>
+						Releases
+					</NavButton>
 				</Stack>
 			) : (
 				<Text mt={4} fontStyle="italic">
@@ -53,7 +59,7 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 			)}
 			<Spacer />
 			<Box>
-				<NavButton leftIcon={<ChatIcon />} mt={2}>
+				<NavButton leftIcon={<ChatIcon />} mt={2} href="/help">
 					Help and Feedback
 				</NavButton>
 				<Divider my={4} />
