@@ -6,6 +6,10 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 		<>
 			<Head>
 				<title>Meeshkan Webapp</title>
+				<link
+					rel="icon"
+					href="https://media.graphcms.com/ZUjeEBiaT9iGYxhI5kzq"
+				/>
 				{/* Meeshkan Recorder */}
 				<script
 					async
