@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { gql } from 'graphql-request';
 import { eightBaseClient } from './graphql';
+import { Intercom } from './intercom';
 
 const isServer = typeof window === 'undefined';
 
@@ -21,6 +22,7 @@ export type Project = {
 };
 
 export interface IUser {
+	id?: string;
 	email: string;
 	name?: string;
 	avatar: string;
@@ -33,6 +35,7 @@ export interface IUser {
 declare global {
 	interface Window {
 		__user?: IUser;
+		Intercom?: Intercom;
 	}
 }
 

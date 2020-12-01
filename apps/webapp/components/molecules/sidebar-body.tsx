@@ -26,6 +26,7 @@ import {
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
 import { UserContext, Project } from '../../utils/user';
+import { show as showIntercom } from '../../utils/intercom';
 
 type SideBarBodyProps = {
 	project: Project;
@@ -53,7 +54,11 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 			)}
 			<Spacer />
 			<Box>
-				<NavButton leftIcon={<ChatIcon />} mt={2}>
+				<NavButton
+					onClick={showIntercom}
+					leftIcon={<ChatIcon />}
+					mt={2}
+				>
 					Help and Feedback
 				</NavButton>
 				<Divider my={4} />
