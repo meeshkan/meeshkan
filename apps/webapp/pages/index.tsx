@@ -14,4 +14,6 @@ const Index = () => {
 	);
 };
 
+export { getServerSideProps } from '../components/molecules/chakra';
+
 export default withAuth(Index);

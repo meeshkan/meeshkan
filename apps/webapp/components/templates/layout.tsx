@@ -30,5 +30,3 @@ const Layout = ({ children, cookies, ...props }: LayoutProps) => {
 	);
 };
 export default withAuth(Layout);
-
-export { getServerSideProps } from '../../components/molecules/chakra';
