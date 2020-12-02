@@ -122,22 +122,31 @@ const UPDATE_USER_MUTATION = gql`
 	}
 `;
 
+const uploadAvatar = async (idToken: string, avatar: string) => {
+	const { filename, url } = await uploadFileFromUrl(idToken, avatar);
+	const fileId = url.split('/').slice(-1)[0];
+	return {
+		fileId,
+		filename,
+	}
+};
+
 export const confirmOrCreateUser = async (user: IUser) => {
 	const client = eightBaseClient(user.idToken);
 	await client.request(CURRENT_USER_QUERY).catch(async () => {
-		const data = await client.request(USER_SIGN_UP_MUTATION, {
-			user: {
-				email: user.email,
-			},
-			authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
-		});
-		const { id } = data.userSignUpWithToken;
+		const { userSignUpWithToken } = await client.request(
+			USER_SIGN_UP_MUTATION,
+			{
+				user: {
+					email: user.email,
+				},
+				authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
+			}
+		);
 		const { firstName, lastName } = splitName(user.name);
-		const response = await uploadFileFromUrl(user.idToken, user.avatar);
-		const { filename, url } = await response.json();
-		const fileId = url.split('/').slice(-1)[0];
+		const { fileId, filename } = await uploadAvatar(user.idToken, user.avatar);
 		await client.request(UPDATE_USER_MUTATION, {
-			id,
+			id: userSignUpWithToken.id,
 			user: {
 				firstName,
 				lastName,

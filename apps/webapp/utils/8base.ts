@@ -21,11 +21,12 @@ export const getFileUploadInfo = async (idToken: string) => {
 export const uploadFileFromUrl = async (idToken: string, url: string) => {
     const fileUploadInfo = await getFileUploadInfo(idToken);
     const { apiKey, policy, signature, path } = fileUploadInfo;
-    return fetch(
+    const response = await fetch(
         `https://www.filestackapi.com/api/store/S3?key=${apiKey}&policy=${policy}&signature=${signature}&path=${path}`,
         {
             method: 'post',
             body: new URLSearchParams({ url }),
         }
     );
+    return response.json();
 };
