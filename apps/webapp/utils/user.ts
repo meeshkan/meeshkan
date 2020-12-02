@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { gql } from 'graphql-request';
 import { eightBaseClient } from './graphql';
+import { uploadFileFromUrl } from './8base';
 
 const isServer = typeof window === 'undefined';
 
@@ -98,49 +99,73 @@ export const getUserId = async (idToken: string) => {
 	return data.user.id;
 };
 
-export const confirmOrCreateUser = async (user: IUser) => {
-	const client = eightBaseClient(user.idToken);
-	await client.request(CURRENT_USER_QUERY).catch(() =>
-		client.request(USER_SIGN_UP_MUTATION, {
-			user: {
-				email: user.email,
-			},
-			authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
-		})
-	);
+const splitName = (name: string): { firstName: string, lastName: string } => {
+	const nameArray = name.split(' ');
+	const firstName = nameArray.slice(0, -1).join(' ');
+	const lastName = nameArray.slice(-1).join(' ');
+	return {
+		firstName,
+		lastName,
+	}
 };
 
-const UPDATE_PROFILE_MUTATION = gql`
-	mutation UpdateProfile($id: ID!, $firstName: String!, $lastName: String!, $jobTitle: String!) {
+const UPDATE_USER_MUTATION = gql`
+	mutation UpdateUser($id: ID!, $user: UserUpdateInput!) {
 		userUpdate(
 			filter: {
 				id: $id
 			}
-			data: {
-				firstName: $firstName
-				lastName: $lastName
-				jobTitle: $jobTitle
-			}
+			data: $user
 		) {
 			id
 		}
 	}
 `;
 
+export const confirmOrCreateUser = async (user: IUser) => {
+	const client = eightBaseClient(user.idToken);
+	await client.request(CURRENT_USER_QUERY).catch(async () => {
+		const data = await client.request(USER_SIGN_UP_MUTATION, {
+			user: {
+				email: user.email,
+			},
+			authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
+		});
+		const { id } = data.userSignUpWithToken;
+		const { firstName, lastName } = splitName(user.name);
+		const response = await uploadFileFromUrl(user.idToken, user.avatar);
+		const { filename, url } = await response.json();
+		const fileId = url.split('/').slice(-1)[0];
+		await client.request(UPDATE_USER_MUTATION, {
+			id,
+			user: {
+				firstName,
+				lastName,
+				avatar: {
+					create: {
+						fileId,
+						filename,
+					},
+				},
+			},
+		});
+	});
+};
+
 export const updateProfile = async (idToken: string, data: { name: string, jobTitle: string }) => {
 	const client = eightBaseClient(idToken);
 	const id = await getUserId(idToken);
-	const nameArray = data.name.split(' ');
-	const firstName = nameArray.slice(0, -1).join(' ');
-	const lastName = nameArray.slice(-1).join(' ');
+	const { firstName, lastName } = splitName(data.name);
 
 	let result;
 	try {
-		result = await client.request(UPDATE_PROFILE_MUTATION, {
+		result = await client.request(UPDATE_USER_MUTATION, {
 			id,
-			firstName,
-			lastName,
-			jobTitle: data.jobTitle,
+			user: {
+				firstName,
+				lastName,
+				jobTitle: data.jobTitle,
+			},
 		});
 	} catch (error) {
 		result = {
@@ -193,4 +218,26 @@ export const updateAvatar = async (idToken: string, data: { fileId: string, file
 	}
 
 	return result;
+};
+
+const USER_AVATAR_QUERY = gql`
+	query CurrentUser {
+		user {
+			avatar {
+				downloadUrl
+				shareUrl
+			}
+		}
+	}
+`;
+
+export const getUserAvatar = async (idToken: string) => {
+	const client = eightBaseClient(idToken);
+	try {
+		const data = await client.request(USER_AVATAR_QUERY);
+		return data.user.avatar?.downloadUrl || '';
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
 };

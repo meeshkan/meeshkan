@@ -25,7 +25,7 @@ type SideBarHeaderProps = {
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
-	const { avatar, nickname } = useContext(UserContext);
+	const { avatar, name } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 	return (
 		<Flex align="center">
@@ -51,7 +51,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						size="sm"
 						px={2}
 					>
-						<Avatar name={nickname} src={avatar} size="2xs" borderRadius="md" />
+						<Avatar name={name} src={avatar && avatar} size="2xs" borderRadius="md" />
 						<ChevronDownIcon
 							color={useColorModeValue('gray.600', 'gray.500')}
 						/>

@@ -42,7 +42,7 @@ const StepOne = ({ setStep }: StepOneProps) => {
 	const [error, setError] = useState('');
 	const [title, setTitle] = useState(jobTitles[0]);
 	const [loading, setLoading] = useState(false);
-	const { idToken } = useContext(UserContext);
+	const { name, idToken } = useContext(UserContext);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
 
 	const onSubmit = async (formData: ProfileFormInputs): Promise<void> => {
@@ -74,6 +74,7 @@ const StepOne = ({ setStep }: StepOneProps) => {
 						<FormLabel>What's your name?</FormLabel>
 						<Input
 							name="name"
+							value={name}
 							type="text"
 							ref={register}
 						/>

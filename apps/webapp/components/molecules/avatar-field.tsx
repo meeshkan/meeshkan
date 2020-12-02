@@ -12,7 +12,7 @@ import {
     Spinner,
 } from '@chakra-ui/react';
 import { FilePlusIcon } from '@frontend/chakra-theme';
-import { UserContext, updateAvatar } from '../../utils/user';
+import { UserContext, updateAvatar as updateUserAvatar } from '../../utils/user';
 import { FILE_UPLOAD_INFO } from '../../utils/8base';
 import { eightBaseClient } from '../../utils/graphql';
 
@@ -20,8 +20,8 @@ const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });
 
 const AvatarField = () => {
     const [error, setError] = useState('');
-    const [imageOriginalPath, setImageOriginalPath] = useState('');
-    const { idToken } = useContext(UserContext);
+    const { avatar, idToken } = useContext(UserContext);
+    const [imageOriginalPath, setImageOriginalPath] = useState(avatar);
     const client = eightBaseClient(idToken);
     const fetcher = query => client.request(query);
     const { data, error: uploadInfoError, isValidating } = useSWR(
@@ -35,6 +35,10 @@ const AvatarField = () => {
                 <Spinner />
             </Flex>
         );
+    }
+
+    if (uploadInfoError) {
+        setError(uploadInfoError);
     }
 
     const { apiKey, path, policy, signature } = data?.fileUploadInfo;
@@ -94,7 +98,7 @@ const AvatarField = () => {
                         const [image] = response.filesUploaded;
                         setImageOriginalPath(image.originalPath);
 
-                        const result = await updateAvatar(idToken, {
+                        const result = await updateUserAvatar(idToken, {
                             fileId: image.handle,
                             filename: image.key.split('/').slice(-1)[0],
                         });

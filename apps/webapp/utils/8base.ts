@@ -17,3 +17,15 @@ export const getFileUploadInfo = async (idToken: string) => {
 	const data = await client.request(FILE_UPLOAD_INFO);
 	return data.fileUploadInfo;
 };
+
+export const uploadFileFromUrl = async (idToken: string, url: string) => {
+    const fileUploadInfo = await getFileUploadInfo(idToken);
+    const { apiKey, policy, signature, path } = fileUploadInfo;
+    return fetch(
+        `https://www.filestackapi.com/api/store/S3?key=${apiKey}&policy=${policy}&signature=${signature}&path=${path}`,
+        {
+            method: 'post',
+            body: new URLSearchParams({ url }),
+        }
+    );
+};
