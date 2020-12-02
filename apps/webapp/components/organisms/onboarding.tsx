@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import AvatarField from '../molecules/avatar-field';
 import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';
 import { updateProfile } from '../../utils/user';
@@ -68,6 +69,7 @@ const StepOne = ({ setStep }: StepOneProps) => {
 					Onboarding — Set up your profile
 				</Heading>
 				<form onSubmit={handleSubmit(onSubmit)} id="profileForm">
+					<AvatarField />
 					<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 						<FormLabel>What's your name?</FormLabel>
 						<Input

@@ -150,3 +150,47 @@ export const updateProfile = async (idToken: string, data: { name: string, jobTi
 
 	return result;
 };
+
+const UPDATE_AVATAR_MUTATION = gql`
+	mutation UpdateAvatar($id: ID!, $fileId: String!, $filename: String!) {
+		userUpdate(
+			filter: {
+				id: $id
+			},
+			data: {
+				avatar: {
+					create: {
+						fileId: $fileId,
+						filename: $filename
+					}
+				}
+			}
+		) {
+			avatar {
+				id
+				downloadUrl
+				shareUrl
+			}
+		}
+	}
+`;
+
+export const updateAvatar = async (idToken: string, data: { fileId: string, filename: string }) => {
+	const client = eightBaseClient(idToken);
+	const id = await getUserId(idToken);
+
+	let result;
+	try {
+		result = await client.request(UPDATE_AVATAR_MUTATION, {
+			id,
+			fileId: data.fileId,
+			filename: data.filename,
+		});
+	} catch (error) {
+		result = {
+			error: error.response.errors[0],
+		};
+	}
+
+	return result;
+};
