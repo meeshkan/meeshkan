@@ -41,6 +41,12 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 		}
 
 		setLoading(false);
+
+        if (router.pathname === '/new-project') {
+            router.push('/');
+            return;
+        }
+
 		router.reload();
 	};
 

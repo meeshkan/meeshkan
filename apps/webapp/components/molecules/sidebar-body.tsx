@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import Router from 'next/router';
 import {
 	Stack,
 	Box,
@@ -116,7 +117,7 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 								))}
 							</MenuOptionGroup>
 							<MenuDivider />
-							<MenuItem>
+							<MenuItem onClick={() => Router.push('/new-project')}>
 								Create project
 							</MenuItem>
 						</MenuList>
