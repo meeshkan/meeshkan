@@ -12,8 +12,7 @@ import {
 	Spinner,
 } from '@chakra-ui/react';
 import { FilePlusIcon } from '@frontend/chakra-theme';
-import { AvatarFile } from '../organisms/onboarding';
-import { UserContext } from '../../utils/user';
+import { UserContext, AvatarFile } from '../../utils/user';
 import { FILE_UPLOAD_INFO } from '../../utils/8base';
 import { eightBaseClient } from '../../utils/graphql';
 

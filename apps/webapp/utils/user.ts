@@ -11,6 +11,11 @@ type Avatar = {
 	shareUrl?: string;
 };
 
+export interface AvatarFile {
+	fileId: string;
+	filename: string;
+}
+
 type Configuration = {
 	inviteLink: string;
 };
