@@ -16,11 +16,7 @@ import {
 	Text,
 	Avatar,
 } from '@chakra-ui/react';
-import {
-	ChatIcon,
-	ArrowUpDownIcon,
-	QuestionIcon,
-} from '@chakra-ui/icons';
+import { ChatIcon, ArrowUpDownIcon, QuestionIcon } from '@chakra-ui/icons';
 import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	ActivityIcon,
@@ -82,7 +78,12 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 								<Avatar
 									src={avatarUrl}
 									name={project.name}
-									icon={<QuestionIcon color={useColorModeValue('gray.400', 'white')} fontSize="1rem" />}
+									icon={
+										<QuestionIcon
+											color={useColorModeValue('gray.400', 'white')}
+											fontSize="1rem"
+										/>
+									}
 									bg={useColorModeValue('gray.200', 'gray.600')}
 									size="xs"
 									borderRadius="md"

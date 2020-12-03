@@ -100,24 +100,19 @@ export const getUserId = async (idToken: string) => {
 	return data.user.id;
 };
 
-const splitName = (name: string): { firstName: string, lastName: string } => {
+const splitName = (name: string): { firstName: string; lastName: string } => {
 	const nameArray = name.split(' ');
 	const firstName = nameArray.slice(0, -1).join(' ');
 	const lastName = nameArray.slice(-1).join(' ');
 	return {
 		firstName,
 		lastName,
-	}
+	};
 };
 
 const UPDATE_USER_MUTATION = gql`
 	mutation UpdateUser($id: ID!, $user: UserUpdateInput!) {
-		userUpdate(
-			filter: {
-				id: $id
-			}
-			data: $user
-		) {
+		userUpdate(filter: { id: $id }, data: $user) {
 			id
 		}
 	}
@@ -129,7 +124,7 @@ const uploadAvatar = async (idToken: string, avatar: string) => {
 	return {
 		fileId,
 		filename,
-	}
+	};
 };
 
 export const confirmOrCreateUser = async (user: IUser) => {
@@ -162,7 +157,10 @@ export const confirmOrCreateUser = async (user: IUser) => {
 	});
 };
 
-export const updateProfile = async (idToken: string, data: { name: string, jobTitle: string }) => {
+export const updateProfile = async (
+	idToken: string,
+	data: { name: string; jobTitle: string }
+) => {
 	const client = eightBaseClient(idToken);
 	const id = await getUserId(idToken);
 	const { firstName, lastName } = splitName(data.name);
@@ -189,17 +187,8 @@ export const updateProfile = async (idToken: string, data: { name: string, jobTi
 const UPDATE_AVATAR_MUTATION = gql`
 	mutation UpdateAvatar($id: ID!, $fileId: String!, $filename: String!) {
 		userUpdate(
-			filter: {
-				id: $id
-			},
-			data: {
-				avatar: {
-					create: {
-						fileId: $fileId,
-						filename: $filename
-					}
-				}
-			}
+			filter: { id: $id }
+			data: { avatar: { create: { fileId: $fileId, filename: $filename } } }
 		) {
 			avatar {
 				id
@@ -210,7 +199,10 @@ const UPDATE_AVATAR_MUTATION = gql`
 	}
 `;
 
-export const updateAvatar = async (idToken: string, data: { fileId: string, filename: string }) => {
+export const updateAvatar = async (
+	idToken: string,
+	data: { fileId: string; filename: string }
+) => {
 	const client = eightBaseClient(idToken);
 	const id = await getUserId(idToken);
 

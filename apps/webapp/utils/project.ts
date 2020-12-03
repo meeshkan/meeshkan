@@ -3,7 +3,12 @@ import { eightBaseClient } from './graphql';
 import { CURRENT_USER_QUERY } from './user';
 
 const PROJECT_CREATE_MUTATION = gql`
-	mutation($userId: ID!, $projectName: String!, $inviteLink: String!, $avatar: ProjectAvatarRelationInput) {
+	mutation(
+		$userId: ID!
+		$projectName: String!
+		$inviteLink: String!
+		$avatar: ProjectAvatarRelationInput
+	) {
 		userUpdate(
 			filter: { id: $userId }
 			data: {
@@ -16,9 +21,7 @@ const PROJECT_CREATE_MUTATION = gql`
 				}
 			}
 		) {
-			projects(filter: {
-				name: { equals: $projectName }
-			}) {
+			projects(filter: { name: { equals: $projectName } }) {
 				items {
 					id
 				}
@@ -50,7 +53,7 @@ const PROJECTS = gql`
 
 export const createProject = async (
 	idToken: string,
-	data: { name: string, fileId: string, filename: string },
+	data: { name: string; fileId: string; filename: string }
 ) => {
 	const client = eightBaseClient(idToken);
 	const { user } = await client.request(CURRENT_USER_QUERY);
@@ -69,7 +72,7 @@ export const createProject = async (
 			userId: user.id,
 			projectName: name,
 			inviteLink: Math.random().toString(36).substring(7),
-			avatar: (fileId && filename) ? avatar : undefined,
+			avatar: fileId && filename ? avatar : undefined,
 		});
 	} catch (error) {
 		console.error(error);

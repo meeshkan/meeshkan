@@ -31,10 +31,7 @@ const SideBar = ({ project, setProject, ...props }: SideBarProps) => {
 			<Flex direction="column" h="full">
 				<SideBarHeader toggle={() => toggleOpen()} />
 				{(isOpen || !isSmallScreen) && (
-					<SideBarBody
-						project={project}
-						setProject={setProject}
-					/>
+					<SideBarBody project={project} setProject={setProject} />
 				)}
 			</Flex>
 		</MotionStack>

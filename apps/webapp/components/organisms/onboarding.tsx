@@ -75,18 +75,10 @@ const StepOne = ({ setStep }: StepOneProps) => {
 					Onboarding — Set up your profile
 				</Heading>
 				<form onSubmit={handleSubmit(onSubmit)} id="profileForm">
-					<AvatarField
-						isProfileAvatar
-						onUpload={onUpload}
-					/>
+					<AvatarField isProfileAvatar onUpload={onUpload} />
 					<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 						<FormLabel>What's your name?</FormLabel>
-						<Input
-							name="name"
-							value={name}
-							type="text"
-							ref={register}
-						/>
+						<Input name="name" value={name} type="text" ref={register} />
 					</FormControl>
 					<FormControl id="title" isRequired isInvalid={!!error}>
 						<FormLabel>What's your job title?</FormLabel>
@@ -155,7 +147,7 @@ const StepTwo = ({ setStep }: StepTwoProps) => {
 		setError('');
 		const data = await createProject(idToken, {
 			name: formData.name,
-			...avatarFile
+			...avatarFile,
 		});
 
 		if (data.error) {
@@ -175,10 +167,7 @@ const StepTwo = ({ setStep }: StepTwoProps) => {
 					Onboarding — Create your first project
 				</Heading>
 				<form onSubmit={handleSubmit(onSubmit)} id="projectForm">
-					<AvatarField
-						isProfileAvatar={false}
-						onUpload={setAvatarFile}
-					/>
+					<AvatarField isProfileAvatar={false} onUpload={setAvatarFile} />
 					<FormControl id="name" isRequired isInvalid={!!error}>
 						<FormLabel>Name your project</FormLabel>
 						<Input

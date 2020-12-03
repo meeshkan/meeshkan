@@ -14,10 +14,7 @@ const Index = ({ cookies }: IndexProps) => {
 	const [project, setProject] = useState(projects[0] || { id: -1, name: '' });
 	return (
 		<Layout>
-			<SideBar
-				project={project}
-				setProject={setProject}
-			/>
+			<SideBar project={project} setProject={setProject} />
 			<Grid project={project} />
 		</Layout>
 	);
