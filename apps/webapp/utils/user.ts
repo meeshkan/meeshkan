@@ -7,6 +7,7 @@ const isServer = typeof window === 'undefined';
 
 type Avatar = {
 	downloadUrl: string;
+	shareUrl?: string;
 };
 
 type Configuration = {

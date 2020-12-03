@@ -19,9 +19,12 @@ import {
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
-import { UserContext } from '../../utils/user';
+import {
+	UserContext,
+	updateProfile,
+	updateAvatar as updateUserAvatar,
+} from '../../utils/user';
 import { createProject } from '../../utils/project';
-import { updateProfile } from '../../utils/user';
 
 type ProjectFormInputs = {
 	name: string;
@@ -47,6 +50,7 @@ const StepOne = ({ setStep }: StepOneProps) => {
 
 	const onSubmit = async (formData: ProfileFormInputs): Promise<void> => {
 		setLoading(true);
+		setError('');
 		const data = await updateProfile(idToken, {
 			name: formData.name,
 			jobTitle: title,
@@ -62,6 +66,8 @@ const StepOne = ({ setStep }: StepOneProps) => {
 		setLoading(false);
 	};
 
+	const onUpload = (data: AvatarFile) => updateUserAvatar(idToken, data);
+
 	return (
 		<>
 			<Box>
@@ -69,7 +75,10 @@ const StepOne = ({ setStep }: StepOneProps) => {
 					Onboarding — Set up your profile
 				</Heading>
 				<form onSubmit={handleSubmit(onSubmit)} id="profileForm">
-					<AvatarField />
+					<AvatarField
+						isProfileAvatar
+						onUpload={onUpload}
+					/>
 					<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 						<FormLabel>What's your name?</FormLabel>
 						<Input
@@ -128,8 +137,14 @@ type StepTwoProps = {
 	setStep: (step: 1 | 2) => void;
 };
 
+export interface AvatarFile {
+	fileId: string;
+	filename: string;
+}
+
 const StepTwo = ({ setStep }: StepTwoProps) => {
 	const router = useRouter();
+	const [avatarFile, setAvatarFile] = useState<AvatarFile>();
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { idToken } = useContext(UserContext);
@@ -137,8 +152,10 @@ const StepTwo = ({ setStep }: StepTwoProps) => {
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
+		setError('');
 		const data = await createProject(idToken, {
 			name: formData.name,
+			...avatarFile
 		});
 
 		if (data.error) {
@@ -158,6 +175,10 @@ const StepTwo = ({ setStep }: StepTwoProps) => {
 					Onboarding — Create your first project
 				</Heading>
 				<form onSubmit={handleSubmit(onSubmit)} id="projectForm">
+					<AvatarField
+						isProfileAvatar={false}
+						onUpload={setAvatarFile}
+					/>
 					<FormControl id="name" isRequired isInvalid={!!error}>
 						<FormLabel>Name your project</FormLabel>
 						<Input
@@ -166,8 +187,8 @@ const StepTwo = ({ setStep }: StepTwoProps) => {
 							placeholder="Acme Industries"
 							ref={register}
 						/>
+						<FormErrorMessage>Error: {error}</FormErrorMessage>
 					</FormControl>
-					<FormErrorMessage>Error: {error}</FormErrorMessage>
 				</form>
 			</Box>
 			<Flex justify="space-between" align="center" w="100%">
@@ -182,7 +203,6 @@ const StepTwo = ({ setStep }: StepTwoProps) => {
 		</>
 	);
 };
-
 
 const Onboarding = () => {
 	const [step, setStep] = useState<1 | 2>(1);

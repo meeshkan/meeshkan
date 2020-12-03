@@ -14,8 +14,13 @@ import {
 	MenuItemOption,
 	Button,
 	Text,
+	Avatar,
 } from '@chakra-ui/react';
-import { ChatIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
+import {
+	ChatIcon,
+	ArrowUpDownIcon,
+	QuestionIcon,
+} from '@chakra-ui/icons';
 import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	ActivityIcon,
@@ -35,6 +40,7 @@ type SideBarBodyProps = {
 const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 	const { projects } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
+	const avatarUrl = project.avatar?.downloadUrl;
 	return (
 		<>
 			{hasProjects ? (
@@ -72,7 +78,18 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 							w="100%"
 							textAlign="left"
 						>
-							{project.name}
+							<Flex align="center">
+								<Avatar
+									src={avatarUrl}
+									name={project.name}
+									icon={<QuestionIcon color={useColorModeValue('gray.400', 'white')} fontSize="1rem" />}
+									bg={useColorModeValue('gray.200', 'gray.600')}
+									size="xs"
+									borderRadius="md"
+									mr={3}
+								/>
+								{project.name}
+							</Flex>
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
