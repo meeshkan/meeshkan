@@ -12,6 +12,8 @@ import {
 	MenuList,
 	MenuOptionGroup,
 	MenuItemOption,
+	MenuItem,
+	MenuDivider,
 	Button,
 	Text,
 	Avatar,
@@ -113,6 +115,10 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>
+							<MenuDivider />
+							<MenuItem>
+								Create project
+							</MenuItem>
 						</MenuList>
 					</Menu>
 					<IconButton
