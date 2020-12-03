@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import initAuth0, { getUser } from '../../utils/auth0';
-import { getUserAvatar } from '../../utils/user';
+import { getUserId, getUserAvatar } from '../../utils/user';
 import { getProjects } from '../../utils/project';
 
 export default function session(
@@ -12,6 +12,7 @@ export default function session(
 		try {
 			const user = await getUser(req);
 			user.avatar = await getUserAvatar(user.idToken);
+			user.id = await getUserId(user.idToken);
 			user.projects = await getProjects(user.idToken);
 			res.json(user);
 		} catch (error) {
