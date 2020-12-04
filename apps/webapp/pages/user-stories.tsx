@@ -4,6 +4,7 @@ import Card from '../components/atoms/card';
 import GridCard from '../components/molecules/grid-card';
 import { BookIcon, ChatIcon, PlusIcon } from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
+import SegmentedControl from '../components/molecules/segmented-control';
 import { motion, AnimateSharedLayout } from 'framer-motion';
 
 function StartButton({ icon, text }) {
@@ -75,28 +76,7 @@ const UserStoriesPage = () => {
 					</Stack>
 				</GridCard>
 
-				<AnimateSharedLayout>
-					<Stack
-						direction="row"
-						align="center"
-						backgroundColor="gray.50"
-						p={2}
-						borderTopRadius="md"
-						w="max-content"
-						fontWeight={700}
-					>
-						<Box
-							p={2}
-							backgroundColor="white"
-							borderRadius="md"
-							boxShadow="0px 1px 2px 0px rgba(149, 157, 165, 0.2)"
-						>
-							Recordings
-						</Box>
-						<Box>{`->`}</Box>
-						<Box p={2}>Test cases</Box>
-					</Stack>
-				</AnimateSharedLayout>
+				<SegmentedControl values={['Recordings', 'Test cases']} />
 				<Card>
 					<Box>yo</Box>
 				</Card>
