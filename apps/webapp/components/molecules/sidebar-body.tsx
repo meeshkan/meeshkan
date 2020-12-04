@@ -68,6 +68,8 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 					<Menu>
 						<MenuButton
 							as={Button}
+							p={0}
+							m={0}
 							size="sm"
 							colorScheme="gray"
 							// @ts-expect-error
@@ -75,7 +77,7 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 								'gray.50',
 								transparentize('gray.800', 0.75)
 							)}
-							rightIcon={<ArrowUpDownIcon />}
+							rightIcon={<ArrowUpDownIcon mr={3} />}
 							w="100%"
 							textAlign="left"
 						>
@@ -90,7 +92,8 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 										/>
 									}
 									bg={useColorModeValue('gray.200', 'gray.600')}
-									size="xs"
+									size="sm"
+									showBorder
 									borderRadius="md"
 									mr={3}
 								/>
