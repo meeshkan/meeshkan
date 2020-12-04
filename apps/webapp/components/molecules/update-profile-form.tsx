@@ -81,7 +81,6 @@ const UpdateProfileForm = ({ setLoading, setStep }: UpdateProfileFormProps) => {
 					<MenuList>
 						<MenuOptionGroup
 							defaultValue={title}
-							title="Projects"
 							type="radio"
 						>
 							{jobTitles.map((title) => (
