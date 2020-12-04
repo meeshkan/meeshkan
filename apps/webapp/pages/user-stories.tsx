@@ -1,3 +1,4 @@
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import Layout from '../components/templates/layout';
 import {
 	Box,
@@ -6,13 +7,17 @@ import {
 	useColorModeValue,
 	Flex,
 	Button,
+	useDisclosure,
 } from '@chakra-ui/react';
 import Card from '../components/atoms/card';
 import GridCard from '../components/molecules/grid-card';
 import { BookIcon, ChatIcon, PlusIcon } from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
 import SegmentedControl from '../components/molecules/segmented-control';
-import { motion, AnimateSharedLayout } from 'framer-motion';
+import Table from '../components/organisms/table';
+import { Column } from 'react-table';
+
+const ROWS_PER_PAGE = 10;
 
 function StartButton({ icon, text }) {
 	return (
@@ -37,6 +42,83 @@ function StartButton({ icon, text }) {
 }
 
 const UserStoriesPage = () => {
+	const [state, setState] = useState({ data: [], loading: true });
+	const [pagination, setPagination] = useState({
+		page: 0,
+		rowsPerPage: ROWS_PER_PAGE,
+	});
+	const [search, setSearch] = useState<string | undefined>();
+	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const columns: Column[] = useMemo(
+		() => [
+			{
+				Header: 'First Name',
+				accessor: 'first_name',
+				editable: true,
+			},
+			{
+				Header: 'Last Name',
+				accessor: 'last_name',
+				editable: true,
+			},
+			{
+				Header: 'Email',
+				accessor: 'email',
+				editable: false,
+				collapse: true,
+			},
+			{
+				Header: 'Active',
+				type: 'boolean',
+				accessor: 'active',
+				collapse: true,
+			},
+		],
+		[]
+	);
+
+	useEffect(() => {
+		function fetchData() {
+			setState((state) => ({
+				...state,
+				loading: true,
+			}));
+			fetch(
+				`https://random-data-api.com/api/users/random_user?size=${pagination.rowsPerPage}`
+			)
+				.then((res) => res.json())
+				.then((data) => {
+					setState({ data, loading: false });
+				});
+		}
+		fetchData();
+	}, [pagination]);
+
+	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
+		setPagination({ page: pageIndex, rowsPerPage: pageSize });
+	}, []);
+
+	const handleSearch = (searchText: string) => {
+		console.log('search', searchText);
+		setSearch(searchText);
+	};
+
+	const handleRemove = async (id: string) => {
+		console.log('delete', id);
+	};
+
+	const handleEdit = (id: string) => {
+		console.log('edit', id);
+	};
+
+	const handleClone = (id: string) => {
+		console.log('clone', id);
+	};
+
+	const handleUpdateData = async (id: string, field: string, value: any) => {
+		console.log('update data', id, field, value);
+	};
 	return (
 		<Layout>
 			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
@@ -87,9 +169,24 @@ const UserStoriesPage = () => {
 						<SegmentedControl values={['Recordings', 'Test cases']} />
 						<Button size="sm">Review recordings</Button>
 					</Flex>
-					<Card borderTopLeftRadius="0">
-						<Box>yo</Box>
-					</Card>
+					<Table
+						columns={columns}
+						data={state.data}
+						loading={state.loading}
+						totalCount={state.data.length} // this should be the total amount of data, not only the returned data length
+						onPaginate={handlePagination}
+						initialPageIndex={pagination.page}
+						initialPageSize={pagination.rowsPerPage}
+						onSearch={handleSearch}
+						initialSearch={search}
+						searchPlaceholder={'Search by...'}
+						onAdd={onOpen}
+						onRemove={handleRemove}
+						onEdit={handleEdit}
+						onClone={handleClone}
+						onUpdateData={handleUpdateData}
+						isSelectable={false}
+					/>
 				</Box>
 			</Stack>
 		</Layout>
