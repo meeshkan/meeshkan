@@ -1,5 +1,12 @@
 import Layout from '../components/templates/layout';
-import { Box, Stack, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+	Box,
+	Stack,
+	Text,
+	useColorModeValue,
+	Flex,
+	Button,
+} from '@chakra-ui/react';
 import Card from '../components/atoms/card';
 import GridCard from '../components/molecules/grid-card';
 import { BookIcon, ChatIcon, PlusIcon } from '@frontend/chakra-theme';
@@ -75,11 +82,15 @@ const UserStoriesPage = () => {
 						</Box>
 					</Stack>
 				</GridCard>
-
-				<SegmentedControl values={['Recordings', 'Test cases']} />
-				<Card>
-					<Box>yo</Box>
-				</Card>
+				<Box>
+					<Flex justify="space-between" align="center">
+						<SegmentedControl values={['Recordings', 'Test cases']} />
+						<Button size="sm">Review recordings</Button>
+					</Flex>
+					<Card borderTopLeftRadius="0">
+						<Box>yo</Box>
+					</Card>
+				</Box>
 			</Stack>
 		</Layout>
 	);

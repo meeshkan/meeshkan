@@ -1,13 +1,14 @@
 import React from 'react';
-import { Stack, Box, Flex } from '@chakra-ui/react';
-import { AnimateSharedLayout } from 'framer-motion';
+import { Stack, Box, Flex, useColorModeValue } from '@chakra-ui/react';
+import { AnimateSharedLayout, motion } from 'framer-motion';
+
+const MotionBox = motion.custom(Box);
 
 type SegmentedControlTabProps = {
 	children?: React.ReactNode;
-	selectedIndex?: number;
 	onSelect?: React.MouseEventHandler<HTMLDivElement>;
-	selected?: boolean;
 	disabled?: boolean;
+	selected: boolean;
 };
 
 function SegmentedControlTab({
@@ -18,103 +19,83 @@ function SegmentedControlTab({
 }: SegmentedControlTabProps) {
 	return (
 		<Flex
+			position="relative"
 			justify="center"
 			backgroundColor="transparent"
-			zIndex={2}
+			zIndex={0}
 			cursor="default"
 			userSelect="none"
 			role="button"
 			onClick={!disabled ? onSelect : undefined}
 		>
 			<Box
-				p={2}
-				backgroundColor="white"
-				borderRadius="md"
-				boxShadow="0px 1px 2px 0px rgba(149, 157, 165, 0.2)"
+				px={2}
+				py={3}
+				textAlign="center"
+				color={
+					selected
+						? useColorModeValue('gray.900', 'white')
+						: useColorModeValue('gray.700', 'gray.200')
+				}
 			>
 				{children}
 			</Box>
 		</Flex>
-		// <Container role="button" onClick={!disabled ? onSelect : undefined}>
-		// 	<Default selected={selected}>{children}</Default>
-		// </Container>
 	);
 }
-
-export interface SegmentedControlChangeEvent {
-	nativeEvent: {
-		value: string;
-		selectedSegmentIndex: number;
-	};
-}
-
-export type SegmentedControlChangeEventHandler = (
-	event: SegmentedControlChangeEvent
-) => void;
-
-export type SegmentedValueChangedEventHandler = (value: string) => void;
 
 type SegmentedControlProps = {
 	values: string[];
-	renderItem?(item: {
-		value: string;
-		index: number;
-		selected: boolean;
-	}): React.ReactNode;
-	selectedIndex?: number;
-	onValueChange?: SegmentedValueChangedEventHandler;
-	onChange?: SegmentedControlChangeEventHandler;
 	disabled?: boolean;
-	style?: React.CSSProperties;
-	className?: string;
 };
 
-const SegmentedControl = ({
-	style,
-	className,
-	values,
-	onChange,
-	onValueChange,
-	disabled,
-	selectedIndex,
-	renderItem = (value) => value,
-}: SegmentedControlProps) => {
-	const handleChange = React.useCallback(
-		(index: number) => {
-			const event: SegmentedControlChangeEvent = {
-				nativeEvent: {
-					value: values[index],
-					selectedSegmentIndex: index,
-				},
-			};
+const SegmentedControl = ({ values, disabled }: SegmentedControlProps) => {
+	const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-			if (typeof onChange === 'function') {
-				onChange(event);
-			}
-
-			if (typeof onValueChange === 'function') {
-				onValueChange(values[index]);
-			}
-		},
-		[values, onChange, onValueChange]
-	);
 	return (
 		<>
 			<AnimateSharedLayout>
 				<Stack
 					direction="row"
 					align="center"
-					backgroundColor="gray.50"
+					backgroundColor={useColorModeValue('gray.200', 'gray.700')}
 					p={2}
 					borderTopRadius="md"
 					w="max-content"
 					fontWeight={700}
 				>
-					{values.map((value, index) => (
-						<SegmentedControlTab>
-							{selected && <Slider layoutId="slider" />}
-						</SegmentedControlTab>
-					))}
+					{values.map((value, index) => {
+						const selected = selectedIndex === index;
+						return (
+							<SegmentedControlTab
+								selected={selected}
+								disabled={disabled}
+								key={index}
+								onSelect={() => setSelectedIndex(index)}
+							>
+								{value}
+								{selected && (
+									<MotionBox
+										layoutId="slider"
+										position="absolute"
+										px={2}
+										py={3}
+										top="2px"
+										left="0px"
+										right="0px"
+										bottom="2px"
+										borderRadius="6px"
+										backgroundColor={useColorModeValue('white', 'gray.900')}
+										cursor="default"
+										width="100%"
+										userSelect="none"
+										zIndex="-1"
+										boxShadow="0px 1px 2px 0px rgba(149, 157, 165, 0.2)"
+									/>
+								)}
+							</SegmentedControlTab>
+						);
+					})}
 				</Stack>
 			</AnimateSharedLayout>
 		</>
