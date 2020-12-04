@@ -62,10 +62,9 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 			rounded="lg"
 			bg={useColorModeValue('white', 'gray.900')}
 			py={5}
-			overflowX="scroll"
 			p={4}
 		>
-			<Box flex="1" my={2}>
+			<Box flex="1" my={2} overflow="auto">
 				<Flex justify="space-between">
 					<AlertTitle mb={2} fontStyle="normal">
 						Install this script in the{' '}
