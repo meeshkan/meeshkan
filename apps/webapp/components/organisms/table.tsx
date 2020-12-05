@@ -13,7 +13,9 @@ import {
 	TableBody,
 	TableIconButton,
 	TablePagination,
+	LinearProgressBar,
 } from '../molecules/table';
+import PromptDialog from '../molecules/prompt-dialog';
 import ActionButton from '../atoms/action-button';
 import {
 	Text,
@@ -32,6 +34,7 @@ import {
 	useDisclosure,
 	Skeleton,
 	useColorModeValue,
+	ButtonGroup,
 } from '@chakra-ui/react';
 import {
 	usePagination,
@@ -49,7 +52,6 @@ import Card from '../atoms/card';
 import {
 	ArrowLeftIcon,
 	ArrowRightIcon,
-	ArrowUpDownIcon,
 	ChevronDownIcon,
 	ChevronLeftIcon,
 	ChevronRightIcon,
@@ -420,7 +422,7 @@ const Table = ({
 											// {...column.getSortByToggleProps()}
 										>
 											<Text
-												fontSize="xs"
+												fontSize="md"
 												fontWeight="medium"
 												textAlign={
 													column.type === 'boolean'
@@ -470,7 +472,7 @@ const Table = ({
 							{loading && page.length > 0 && (
 								<TableRow>
 									<TableCell p={0} colSpan={visibleColumns.length}>
-										{/* <LinearProgressBar key="progress" /> */}
+										<LinearProgressBar key="progress" />
 									</TableCell>
 								</TableRow>
 							)}
@@ -566,7 +568,7 @@ const Table = ({
 									rowSpan={pageSize}
 									colSpan={hasActions ? columns.length + 1 : columns.length}
 								>
-									<Text fontSize="sm">{noDataMessage || 'No Data'}</Text>
+									<Text fontSize="md">{noDataMessage || 'No Data'}</Text>
 								</TableCell>
 							</TableRow>
 						) : null}
@@ -575,29 +577,31 @@ const Table = ({
 			</Box>
 			{onPaginate && (
 				<TablePagination
-					justifyContent="space-between"
+					justifyContent="center"
 					flexDirection="row"
 					roundedBottom="lg"
 				>
 					<Stack isInline spacing={2}>
-						<TableIconButton
-							onClick={() => gotoPage(0)}
-							isDisabled={!canPreviousPage}
-							icon={<ArrowLeftIcon />}
-						/>
-						<TableIconButton
-							isDisabled={!canPreviousPage}
-							onClick={() => previousPage()}
-							icon={<ChevronLeftIcon />}
-						/>
+						<ButtonGroup isAttached mr={4}>
+							<TableIconButton
+								onClick={() => gotoPage(0)}
+								isDisabled={!canPreviousPage}
+								icon={<ArrowLeftIcon />}
+							/>
+							<TableIconButton
+								isDisabled={!canPreviousPage}
+								onClick={() => previousPage()}
+								icon={<ChevronLeftIcon />}
+							/>
+						</ButtonGroup>
 					</Stack>
 					<Stack isInline flexWrap="nowrap" justify="center" align="center">
-						<Text whiteSpace="nowrap" fontSize="xs">
+						<Text whiteSpace="nowrap" fontSize="md">
 							Page {pageIndex + 1} of {pageOptions.length}
 						</Text>
 						<Select
 							size="sm"
-							icon={<ArrowUpDownIcon />}
+							borderRadius="md"
 							value={pageSize}
 							onChange={(e) => {
 								setPageSize(Number(e.target.value));
@@ -612,26 +616,28 @@ const Table = ({
 						</Select>
 					</Stack>
 					<Stack isInline spacing={2}>
-						<TableIconButton
-							isDisabled={!canNextPage}
-							onClick={() => nextPage()}
-							icon={<ChevronRightIcon />}
-						/>
-						<TableIconButton
-							onClick={() => gotoPage(pageCount ? pageCount - 1 : 1)}
-							isDisabled={!canNextPage}
-							icon={<ArrowRightIcon />}
-						/>
+						<ButtonGroup isAttached ml={4}>
+							<TableIconButton
+								isDisabled={!canNextPage}
+								onClick={() => nextPage()}
+								icon={<ChevronRightIcon />}
+							/>
+							<TableIconButton
+								onClick={() => gotoPage(pageCount ? pageCount - 1 : 1)}
+								isDisabled={!canNextPage}
+								icon={<ArrowRightIcon />}
+							/>
+						</ButtonGroup>
 					</Stack>
 				</TablePagination>
 			)}
-			{/* <PromptDialog
+			<PromptDialog
 				title={removeTitle!}
 				message={removeMessage || ''}
 				isOpen={isRemoveAlertOpen}
 				onCancel={onCancelRemove}
 				onConfirm={handleConfirmRemove}
-			/> */}
+			/>
 		</>
 	);
 };

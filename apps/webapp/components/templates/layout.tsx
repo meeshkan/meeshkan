@@ -2,15 +2,13 @@ import React, { ReactNode, useState, useContext } from 'react';
 import { UserContext } from '../../utils/user';
 import { Stack, useColorModeValue } from '@chakra-ui/react';
 import SideBar from '../../components/organisms/sidebar';
-import withAuth from '../../hocs/with-auth';
 import './layout.module.css';
 
 type LayoutProps = {
 	children: ReactNode;
-	cookies?: string | undefined;
 };
 
-const Layout = ({ children, cookies, ...props }: LayoutProps) => {
+const Layout = ({ children, ...props }: LayoutProps) => {
 	const { projects } = useContext(UserContext);
 	const [project, setProject] = useState(projects[0] || { id: -1, name: '' });
 	return (
@@ -29,4 +27,4 @@ const Layout = ({ children, cookies, ...props }: LayoutProps) => {
 		</Stack>
 	);
 };
-export default withAuth(Layout);
+export default Layout;

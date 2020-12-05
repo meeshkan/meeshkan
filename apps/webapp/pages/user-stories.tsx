@@ -9,7 +9,6 @@ import {
 	Button,
 	useDisclosure,
 } from '@chakra-ui/react';
-import Card from '../components/atoms/card';
 import GridCard from '../components/molecules/grid-card';
 import { BookIcon, ChatIcon, PlusIcon } from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
@@ -41,7 +40,11 @@ function StartButton({ icon, text }) {
 	);
 }
 
-const UserStoriesPage = () => {
+type UserStoryProps = {
+	cookies: string | undefined;
+};
+
+const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [state, setState] = useState({ data: [], loading: true });
 	const [pagination, setPagination] = useState({
 		page: 0,
@@ -123,7 +126,7 @@ const UserStoriesPage = () => {
 		<Layout>
 			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
 				<GridCard title="Getting started">
-					<Stack direction="row" spacing="32px">
+					<Stack direction={['column', 'column', 'row']} spacing="32px">
 						<StartButton
 							icon={
 								<BookIcon

@@ -23,6 +23,7 @@ const TableIconButton: FC<TableIconButtonProps> = ({
 			icon={icon}
 			onClick={() => onClick}
 			colorScheme="gray"
+			variant="ghost"
 			isDisabled={isDisabled}
 			aria-label="Table Icon button"
 		>

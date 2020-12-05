@@ -19,10 +19,7 @@ const TablePagination: FC<TablePaginationProps> = ({ children, ...rest }) => {
 };
 
 TablePagination.defaultProps = {
-	px: 4,
-	py: 2,
-	roundedBottomLeft: 4,
-	roundedBottomRight: 4,
+	p: 2,
 	flexDirection: 'column',
 };
 
