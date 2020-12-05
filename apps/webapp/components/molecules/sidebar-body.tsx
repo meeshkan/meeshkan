@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import Router from 'next/router';
 import {
 	Stack,
 	Box,
@@ -12,6 +13,8 @@ import {
 	MenuList,
 	MenuOptionGroup,
 	MenuItemOption,
+	MenuItem,
+	MenuDivider,
 	Button,
 	Text,
 	Avatar,
@@ -24,6 +27,7 @@ import {
 	CheckSquareIcon,
 	PackageIcon,
 	SettingsIcon,
+	PlusIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
 import { UserContext, Project } from '../../utils/user';
@@ -117,6 +121,11 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>
+							<MenuDivider />
+							<MenuItem onClick={() => Router.push('/new-project')}>
+								<PlusIcon mr={3} />
+								Create project
+							</MenuItem>
 						</MenuList>
 					</Menu>
 					<IconButton
