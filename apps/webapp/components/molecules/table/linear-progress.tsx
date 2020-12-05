@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { Box } from '@chakra-ui/react';
 import { motion, Variants } from 'framer-motion';
 
-export const Bar = React.forwardRef(function Bar(props, ref) {
+export const Bar = forwardRef(function Bar(props, ref) {
 	return (
-		<Box as="span" pos="absolute" h="1" bg="blue.500" ref={ref} {...props} />
+		<Box
+			as="span"
+			pos="absolute"
+			h="1"
+			bg="blue.500"
+			// @ts-ignore
+			ref={ref}
+			{...props}
+		/>
 	);
 });
 
