@@ -56,11 +56,7 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 			)}
 			<Spacer />
 			<Box>
-				<NavButton
-					onClick={showIntercom}
-					leftIcon={<ChatIcon />}
-					mt={2}
-				>
+				<NavButton onClick={showIntercom} leftIcon={<ChatIcon />} mt={2}>
 					Help and Feedback
 				</NavButton>
 				<Divider my={4} />
@@ -81,7 +77,11 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 							w="100%"
 							textAlign="left"
 						>
-							<Flex align="center">
+							<Flex
+								align="center"
+								color={useColorModeValue('gray.500', 'gray.300')}
+								fontWeight={600}
+							>
 								<Avatar
 									src={avatarUrl}
 									name={project.name}
@@ -94,6 +94,7 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 									bg={useColorModeValue('gray.200', 'gray.600')}
 									size="sm"
 									showBorder
+									borderColor={useColorModeValue('gray.50', 'gray.800')}
 									borderRadius="md"
 									mr={3}
 								/>
