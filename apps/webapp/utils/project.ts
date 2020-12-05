@@ -3,7 +3,12 @@ import { eightBaseClient } from './graphql';
 import { CURRENT_USER_QUERY } from './user';
 
 const PROJECT_CREATE_MUTATION = gql`
-	mutation($userId: ID!, $projectName: String!, $inviteLink: String!) {
+	mutation(
+		$userId: ID!
+		$projectName: String!
+		$inviteLink: String!
+		$avatar: ProjectAvatarRelationInput
+	) {
 		userUpdate(
 			filter: { id: $userId }
 			data: {
@@ -11,6 +16,7 @@ const PROJECT_CREATE_MUTATION = gql`
 					create: {
 						name: $projectName
 						configuration: { create: { inviteLink: $inviteLink } }
+						avatar: $avatar
 					}
 				}
 			}
@@ -33,6 +39,7 @@ const PROJECTS = gql`
 					name
 					avatar {
 						downloadUrl
+						shareUrl
 					}
 					configuration {
 						inviteLink
@@ -44,17 +51,31 @@ const PROJECTS = gql`
 	}
 `;
 
-export const createProject = async (userIdToken, data) => {
-	const client = eightBaseClient(userIdToken);
+export const createProject = async (
+	idToken: string,
+	data: { name: string; fileId: string; filename: string }
+) => {
+	const client = eightBaseClient(idToken);
 	const { user } = await client.request(CURRENT_USER_QUERY);
+
+	const { name, fileId, filename } = data;
+	const avatar = {
+		create: {
+			fileId,
+			filename,
+		},
+	};
+
 	let result;
 	try {
 		result = await client.request(PROJECT_CREATE_MUTATION, {
 			userId: user.id,
-			projectName: data.name,
+			projectName: name,
 			inviteLink: Math.random().toString(36).substring(7),
+			avatar: fileId && filename ? avatar : undefined,
 		});
 	} catch (error) {
+		console.error(error);
 		result = {
 			error: error.response.errors[0],
 		};

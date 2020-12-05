@@ -38,9 +38,7 @@ const StatCard = ({
 	return (
 		<Flex {...props}>
 			<Stat>
-				<StatLabel fontSize={['sm', 'sm', 'md', 'md']}>
-					{title}
-				</StatLabel>
+				<StatLabel fontSize={['sm', 'sm', 'md', 'md']}>{title}</StatLabel>
 				<StatNumber mt={4} mb={3}>
 					<Heading
 						color={valueColor}

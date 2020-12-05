@@ -78,7 +78,9 @@ const Grid = ({ project, ...props }: GridProps) => {
 	const { projects } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
 	const selectedProject = project;
-	const [showScript, setShowScript] = useState<boolean>(!selectedProject?.hasReceivedEvents);
+	const [showScript, setShowScript] = useState<boolean>(
+		!selectedProject?.hasReceivedEvents
+	);
 
 	const doughnutOptions = {
 		legend: {
@@ -140,7 +142,14 @@ const Grid = ({ project, ...props }: GridProps) => {
 
 	if (!hasProjects) {
 		return (
-			<Stack as={Card} p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
+			<Stack
+				as={Card}
+				p={[6, 0, 0, 0]}
+				w="100%"
+				rounded="lg"
+				spacing={6}
+				{...props}
+			>
 				<Onboarding />
 			</Stack>
 		);

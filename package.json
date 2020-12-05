@@ -48,6 +48,7 @@
 		"core-js": "3.7.0",
 		"document-register-element": "1.13.1",
 		"emotion-theming": "^11.0.0",
+		"filestack-react": "^3.2.1",
 		"formik": "2.1.4",
 		"framer-motion": "^2.9.4",
 		"gatsby": "2.25.0",
@@ -93,8 +94,8 @@
 		"react-live": "2.2.2",
 		"react-player": "1.15.3",
 		"subscriptions-transport-ws": "^0.9.18",
-		"truncate": "^2.1.0",
-		"swr": "^0.3.9"
+		"swr": "^0.3.9",
+		"truncate": "^2.1.0"
 	},
 	"devDependencies": {
 		"@angular-devkit/schematics": "9.1.7",

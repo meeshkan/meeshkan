@@ -14,8 +14,9 @@ import {
 	MenuItemOption,
 	Button,
 	Text,
+	Avatar,
 } from '@chakra-ui/react';
-import { ChatIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
+import { ChatIcon, ArrowUpDownIcon, QuestionIcon } from '@chakra-ui/icons';
 import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	ActivityIcon,
@@ -36,6 +37,7 @@ type SideBarBodyProps = {
 const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 	const { projects } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
+	const avatarUrl = project.avatar?.downloadUrl;
 	return (
 		<>
 			{hasProjects ? (
@@ -54,11 +56,7 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 			)}
 			<Spacer />
 			<Box>
-				<NavButton
-					onClick={showIntercom}
-					leftIcon={<ChatIcon />}
-					mt={2}
-				>
+				<NavButton onClick={showIntercom} leftIcon={<ChatIcon />} mt={2}>
 					Help and Feedback
 				</NavButton>
 				<Divider my={4} />
@@ -66,6 +64,8 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 					<Menu>
 						<MenuButton
 							as={Button}
+							p={0}
+							m={0}
 							size="sm"
 							colorScheme="gray"
 							// @ts-expect-error
@@ -73,11 +73,33 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 								'gray.50',
 								transparentize('gray.800', 0.75)
 							)}
-							rightIcon={<ArrowUpDownIcon />}
+							rightIcon={<ArrowUpDownIcon mr={3} />}
 							w="100%"
 							textAlign="left"
 						>
-							{project.name}
+							<Flex
+								align="center"
+								color={useColorModeValue('gray.500', 'gray.300')}
+								fontWeight={600}
+							>
+								<Avatar
+									src={avatarUrl}
+									name={project.name}
+									icon={
+										<QuestionIcon
+											color={useColorModeValue('gray.400', 'white')}
+											fontSize="1rem"
+										/>
+									}
+									bg={useColorModeValue('gray.200', 'gray.600')}
+									size="sm"
+									showBorder
+									borderColor={useColorModeValue('gray.50', 'gray.800')}
+									borderRadius="md"
+									mr={3}
+								/>
+								{project.name}
+							</Flex>
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
