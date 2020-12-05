@@ -21,7 +21,7 @@ const TableRow = forwardRef<typeof Box, TableRowProps>(function TableHead(
 			// @ts-ignore
 			ref={ref}
 			as={As}
-			_hover={{
+			__hover={{
 				cursor: 'pointer',
 				backgroundColor: isSelected
 					? 'pink.50'
