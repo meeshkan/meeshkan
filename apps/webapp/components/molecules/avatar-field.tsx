@@ -84,6 +84,7 @@ const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
 					customRender={({ onPick }) => (
 						<Button
 							as={Flex}
+							role="group"
 							variant="ghost"
 							cursor="pointer"
 							align="center"
@@ -100,7 +101,12 @@ const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
 							bgPosition="center"
 							bgRepeat="no-repeat"
 						>
-							{!imageOriginalPath && <FilePlusIcon w={8} h={8} />}
+							<FilePlusIcon
+								w={8}
+								h={8}
+								visibility={imageOriginalPath ? 'hidden' : 'visible'}
+								_groupHover={{ visibility: 'visible' }}
+							/>
 						</Button>
 					)}
 					onSuccess={async (response) => {
