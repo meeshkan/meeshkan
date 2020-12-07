@@ -159,9 +159,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const testRunsTotal = _.sumBy(selectedProject.userStories.items, 'testRuns.count');
 	const pastTestRunsTotal = 0;
 	const testRuns = {
-		total: testRunsTotal,
+		value: testRunsTotal,
 		percentageChange: testRunsTotal > 0 ? (pastTestRunsTotal / testRunsTotal) * 100 : 0,
-		pastTotal: pastTestRunsTotal, 
+		dataPoints: pastTestRunsTotal, 
 	};
 
 	const [release] = selectedProject.release.items;
@@ -259,9 +259,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 							<StatCard
 								isPercentage={false}
 								title="Test run"
-								value={testRuns.total}
+								value={testRuns.value}
 								percentageChange={testRuns.percentageChange}
-								dataPoints={testRuns.pastTotal}
+								dataPoints={testRuns.dataPoints}
 							/>
 						</Flex>
 						{showScript && (
