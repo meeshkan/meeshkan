@@ -171,9 +171,12 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const daysUntilDate = (date: moment.Moment): number => date.diff(moment(), 'days');
 
 	const bugsIntroduced = _.sumBy(userStories, 'failing.count');
-	const bugsFixed = _.sumBy(userStories?.failing?.items, ({ item }) => Number(item.isFailing));
+	const bugsFixed = _.sumBy(userStories, (story) => {
+		const failingItems = story?.failing.items;
+		return _.sumBy(failingItems, (item) => Number(item.isResolved));
+	});
 
-	const numberOfTests = _.sumBy(userStories, ({ item }) => item?.isTestCase ? 1 : 0);
+	const numberOfTests = _.sumBy(userStories, (item) => item?.isTestCase ? 1 : 0);
 	const numberOfRecordings = selectedProject.userStories.count;
 	const testCoverageValue = numberOfRecordings !== 0 ? (numberOfTests / numberOfRecordings) * 100 : 0;
 	const pastTestCoverageValue = 0;
@@ -183,10 +186,10 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 		dataPoints: numberOfRecordings, 
 	};
 
-	const latestTestStates = {};
+	const latestTestStates: { [key: string]: number } = {};
 	userStories?.forEach(story => {
 		const [latestTestRun] = story.testRuns.items
-			.sort((a, b) => new Date(b) - new Date(a))
+			.sort((a, b) => (new Date(b.dateTime)).getTime() - (new Date(a.dateTime)).getTime())
 			.slice(-1);
 
 		const status = latestTestRun?.status;
@@ -354,7 +357,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
-										{doughnutDataValues > 0 ? (
+										{doughnutDataValues.length > 0 ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
 											<Text fontStyle="italic">No tests have been run yet.</Text>
