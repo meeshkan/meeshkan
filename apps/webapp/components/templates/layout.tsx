@@ -3,6 +3,7 @@ import { UserContext } from '../../utils/user';
 import { Stack, useColorModeValue } from '@chakra-ui/react';
 import SideBar from '../../components/organisms/sidebar';
 import './layout.module.css';
+import withAuth from 'apps/webapp/hocs/with-auth';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -27,4 +28,4 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		</Stack>
 	);
 };
-export default Layout;
+export default withAuth(Layout);
