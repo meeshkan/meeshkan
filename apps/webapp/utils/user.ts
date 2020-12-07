@@ -20,12 +20,53 @@ type Configuration = {
 	inviteLink: string;
 };
 
+type TestRun = {
+	status: string;
+	dateTime: string;
+	userStories: {
+		items: Array<{ id: string }>;
+	}
+};
+
+type TestRuns = {
+	count: number;
+	items: Array<TestRun>;
+};
+
+type UserStoryFailing = {
+	count: number
+	items: Array<{
+		firstIntroduction: string;
+		isResolved: boolean;
+	}>
+};
+
+type UserStory = {
+	id: string;
+	failing: UserStoryFailing;
+	title: string;
+	isTestCase: boolean;
+	testRuns: TestRuns;
+};
+
+type UserStories = {
+	count: number;
+	items: Array<UserStory>
+};
+
+type Release = {
+	count: number;
+	items: Array<{ releaseDate: string }>
+};
+
 export type Project = {
 	id: string;
 	name: string;
 	avatar: Avatar;
 	configuration: Configuration;
 	hasReceivedEvents: boolean;
+	userStories: UserStories;
+	release?: Release;
 };
 
 export interface IUser {
