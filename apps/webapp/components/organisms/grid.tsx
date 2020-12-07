@@ -24,6 +24,7 @@ import theme, {
 	GitPullRequestIcon,
 } from '@frontend/chakra-theme';
 import _ from 'lodash';
+import moment from 'moment';
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
@@ -162,6 +163,10 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 		percentageChange: testRunsTotal > 0 ? (pastTestRunsTotal / testRunsTotal) * 100 : 0,
 		pastTotal: pastTestRunsTotal, 
 	};
+
+	const [release] = selectedProject.release.items;
+	const releaseDate = release.releaseDate;
+	const daysUntilDate = (date: moment.Moment) => date.diff(moment(), 'days');
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -329,7 +334,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													12
+													{releaseDate ? daysUntilDate(moment(releaseDate)) : 'N/A'}
 												</Text>
 												<Text
 													fontSize="sm"
