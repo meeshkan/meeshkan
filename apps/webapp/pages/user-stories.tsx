@@ -5,8 +5,6 @@ import React, {
 	useEffect,
 	useCallback,
 } from 'react';
-import { UserContext } from '../utils/user';
-import Layout from '../components/templates/layout';
 import {
 	Box,
 	Stack,
@@ -130,76 +128,74 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		console.log('update data', id, field, value);
 	};
 	return (
-		<Layout>
-			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
-				<GridCard title="Getting started">
-					<Stack direction={['column', 'column', 'row']} spacing="32px">
-						<StartButton
-							icon={
-								<BookIcon
-									boxSize={8}
-									color={useColorModeValue('cyan.500', 'cyan.300')}
-									strokeWidth="2.5"
-								/>
-							}
-							text="Read the documentation"
-						/>
-						<StartButton
-							icon={
-								<ChatIcon
-									boxSize={8}
-									color={useColorModeValue('cyan.500', 'cyan.300')}
-									strokeWidth="2.5"
-								/>
-							}
-							text="Chat with an expert"
-						/>
-						<Box
-							d="flex"
-							alignItems="center"
-							border="1px dashed"
-							// @ts-ignore
-							borderColor={useColorModeValue('gray.500', 'gray.400')}
-							fontWeight={600}
-							p={4}
-							w="100%"
-							borderRadius="md"
-						>
-							<PlusIcon
+		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
+			<GridCard title="Getting started">
+				<Stack direction={['column', 'column', 'row']} spacing="32px">
+					<StartButton
+						icon={
+							<BookIcon
 								boxSize={8}
-								color={useColorModeValue('gray.500', 'gray.400')}
+								color={useColorModeValue('cyan.500', 'cyan.300')}
 								strokeWidth="2.5"
 							/>
-							<Text ml={4}>Create a new user story</Text>
-						</Box>
-					</Stack>
-				</GridCard>
-				<Box>
-					<Flex justify="space-between" align="center">
-						<SegmentedControl values={['Recordings', 'Test cases']} />
-						<Button size="sm">Review recordings</Button>
-					</Flex>
-					<Table
-						columns={columns}
-						data={state.data}
-						loading={state.loading}
-						totalCount={state.data.length} // this should be the total amount of data, not only the returned data length
-						onPaginate={handlePagination}
-						initialPageIndex={pagination.page}
-						initialPageSize={pagination.rowsPerPage}
-						onSearch={handleSearch}
-						initialSearch={search}
-						searchPlaceholder={'Search by...'}
-						onAdd={onOpen}
-						onRemove={handleRemove}
-						onEdit={handleEdit}
-						onClone={handleClone}
-						onUpdateData={handleUpdateData}
-						isSelectable={false}
+						}
+						text="Read the documentation"
 					/>
-				</Box>
-			</Stack>
-		</Layout>
+					<StartButton
+						icon={
+							<ChatIcon
+								boxSize={8}
+								color={useColorModeValue('cyan.500', 'cyan.300')}
+								strokeWidth="2.5"
+							/>
+						}
+						text="Chat with an expert"
+					/>
+					<Box
+						d="flex"
+						alignItems="center"
+						border="1px dashed"
+						// @ts-ignore
+						borderColor={useColorModeValue('gray.500', 'gray.400')}
+						fontWeight={600}
+						p={4}
+						w="100%"
+						borderRadius="md"
+					>
+						<PlusIcon
+							boxSize={8}
+							color={useColorModeValue('gray.500', 'gray.400')}
+							strokeWidth="2.5"
+						/>
+						<Text ml={4}>Create a new user story</Text>
+					</Box>
+				</Stack>
+			</GridCard>
+			<Box>
+				<Flex justify="space-between" align="center">
+					<SegmentedControl values={['Recordings', 'Test cases']} />
+					<Button size="sm">Review recordings</Button>
+				</Flex>
+				<Table
+					columns={columns}
+					data={state.data}
+					loading={state.loading}
+					totalCount={state.data.length} // this should be the total amount of data, not only the returned data length
+					onPaginate={handlePagination}
+					initialPageIndex={pagination.page}
+					initialPageSize={pagination.rowsPerPage}
+					onSearch={handleSearch}
+					initialSearch={search}
+					searchPlaceholder={'Search by...'}
+					onAdd={onOpen}
+					onRemove={handleRemove}
+					onEdit={handleEdit}
+					onClone={handleClone}
+					onUpdateData={handleUpdateData}
+					isSelectable={false}
+				/>
+			</Box>
+		</Stack>
 	);
 };
 

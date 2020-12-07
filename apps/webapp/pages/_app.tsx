@@ -1,7 +1,15 @@
+import { useState, useContext } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import Layout from '../components/templates/layout';
+import SideBar from '../components/organisms/sidebar';
+import '../components/templates/layout.css';
+import { UserContext } from '../utils/user';
+import withAuth from '../hocs/with-auth';
 
 const CustomApp = ({ Component, pageProps }: AppProps) => {
+	const { projects } = useContext(UserContext);
+	const [project, setProject] = useState(projects[0] || { id: -1, name: '' });
 	return (
 		<>
 			<Head>
@@ -16,9 +24,12 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 					src="https://recorder.meeshkan.com/record.js?client_id=ad677264-73c2-4101-b910-28b1d698607c"
 				/>
 			</Head>
-			<Component {...pageProps} />
+			<Layout>
+				<SideBar project={project} setProject={setProject} />
+				<Component {...pageProps} />
+			</Layout>
 		</>
 	);
 };
 
-export default CustomApp;
+export default withAuth(CustomApp);
