@@ -203,6 +203,29 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	doughnutData.datasets[0].data = doughnutDataValues;
 	doughnutData.labels = doughnutDataLabels;
 
+	const lastSevenDays = [...Array(7).keys()].map(i => moment().subtract(i + 1, 'days'));
+
+	const recordingsByDay = {};
+	const testsByDay = {};
+	lastSevenDays.forEach(day => {
+		const userStoriesOnThisDay = userStories.filter(story => {
+			const { testCreatedDate } = story;
+			return testCreatedDate ? moment(testCreatedDate).isSame(day, 'day') : false;
+		});
+		const dayValue = day.valueOf();
+		recordingsByDay[dayValue] = userStoriesOnThisDay.length;
+		testsByDay[dayValue] = _.sumBy(userStoriesOnThisDay, (item) => Number(item.isTestCase));
+	});
+
+	barData.datasets[0].data = Object.values(recordingsByDay);
+	barData.datasets[1].data = Object.values(testsByDay);
+
+	const barDataLabels = lastSevenDays.map(day => day.format('MMM DD'));
+	barData.labels = barDataLabels;
+
+	const totalRecordings = _.sum(_.values(recordingsByDay));
+	const totalTests = _.sum(_.values(testsByDay)); 
+
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
@@ -333,7 +356,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 									>
 										<Flex>
 											<Text fontWeight={900} mr={2}>
-												629
+												{totalRecordings}
 											</Text>
 											<Text color={useColorModeValue('gray.500', 'gray.400')}>
 												Recordings
@@ -341,7 +364,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										</Flex>
 										<Flex>
 											<Text fontWeight={900} mr={2}>
-												331
+												{totalTests}
 											</Text>
 											<Text color={useColorModeValue('gray.500', 'gray.400')}>
 												Tests

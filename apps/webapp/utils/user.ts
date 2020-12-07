@@ -46,6 +46,7 @@ type UserStory = {
 	failing: UserStoryFailing;
 	title: string;
 	isTestCase: boolean;
+	testCreatedDate: string;
 	testRuns: TestRuns;
 };
 
