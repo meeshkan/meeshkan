@@ -454,7 +454,15 @@ const Grid = ({ project, ...props }: GridProps) => {
 								title="Linear Tickets"
 								leftIconSrc="https://media.graphcms.com/AIPdNiTtReCzrrRorDL5"
 							>
-								<List
+								<Flex
+									align="center"
+									justify="center"
+									fontStyle="italic"
+									my={6}
+								>
+									Coming soon, stay tuned!
+								</Flex>
+								{/* <List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
 								>
@@ -483,7 +491,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 										author="Code Beast"
 										avatar="https://bit.ly/code-beast"
 									/>
-								</List>
+								</List> */}
 							</GridCard>
 						</SimpleGrid>
 					</Flex>
