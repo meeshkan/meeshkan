@@ -1,4 +1,11 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, {
+	useState,
+	useContext,
+	useMemo,
+	useEffect,
+	useCallback,
+} from 'react';
+import { UserContext } from '../utils/user';
 import Layout from '../components/templates/layout';
 import {
 	Box,

@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react';
 import { Box, BoxProps, useColorModeValue } from '@chakra-ui/react';
-import { transparentize } from '@chakra-ui/theme-tools';
 
 const defaultRowComponent = 'tr';
 
@@ -21,11 +20,11 @@ const TableRow = forwardRef<typeof Box, TableRowProps>(function TableHead(
 			// @ts-ignore
 			ref={ref}
 			as={As}
-			__hover={{
+			_hover={{
 				cursor: 'pointer',
 				backgroundColor: isSelected
 					? 'pink.50'
-					: useColorModeValue('gray.50', transparentize('gray.800', 0.5)),
+					: useColorModeValue('gray.50', 'gray.800'),
 			}}
 			bg={isSelected ? 'pink.100' : undefined}
 			{...other}
