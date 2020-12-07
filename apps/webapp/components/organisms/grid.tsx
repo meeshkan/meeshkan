@@ -23,6 +23,7 @@ import theme, {
 	GitLabIcon,
 	GitPullRequestIcon,
 } from '@frontend/chakra-theme';
+import _ from 'lodash';
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
@@ -74,10 +75,9 @@ type GridProps = {
 	project: Project;
 };
 
-const Grid = ({ project, ...props }: GridProps) => {
+const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const { projects } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
-	const selectedProject = project;
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
 	);
@@ -154,6 +154,14 @@ const Grid = ({ project, ...props }: GridProps) => {
 			</Stack>
 		);
 	}
+
+	const testRunsTotal = _.sumBy(selectedProject.userStories.items, 'testRuns.count');
+	const pastTestRunsTotal = 0;
+	const testRuns = {
+		total: testRunsTotal,
+		percentageChange: testRunsTotal > 0 ? (pastTestRunsTotal / testRunsTotal) * 100 : 0,
+		pastTotal: pastTestRunsTotal, 
+	};
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -233,9 +241,9 @@ const Grid = ({ project, ...props }: GridProps) => {
 							<StatCard
 								isPercentage={false}
 								title="Test run"
-								value={71897}
-								percentageChange={12}
-								dataPoints={70946}
+								value={testRuns.total}
+								percentageChange={testRuns.percentageChange}
+								dataPoints={testRuns.pastTotal}
 							/>
 						</Flex>
 						{showScript && (
