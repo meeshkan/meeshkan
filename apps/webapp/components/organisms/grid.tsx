@@ -156,7 +156,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 		);
 	}
 
-	const testRunsTotal = _.sumBy(selectedProject.userStories.items, 'testRuns.count');
+	const userStories = selectedProject.userStories.items;
+
+	const testRunsTotal = _.sumBy(userStories, 'testRuns.count');
 	const pastTestRunsTotal = 0;
 	const testRuns = {
 		value: testRunsTotal,
@@ -168,10 +170,10 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const releaseDate = release.releaseDate;
 	const daysUntilDate = (date: moment.Moment): number => date.diff(moment(), 'days');
 
-	const bugsIntroduced = _.sumBy(selectedProject.userStories.items, 'failing.count');
-	const bugsFixed = _.sumBy(selectedProject.userStories.items?.failing?.items, ({ item }) => Number(item.isFailing));
+	const bugsIntroduced = _.sumBy(userStories, 'failing.count');
+	const bugsFixed = _.sumBy(userStories?.failing?.items, ({ item }) => Number(item.isFailing));
 
-	const numberOfTests = _.sumBy(selectedProject.userStories.items, ({ item }) => item?.isTestCase ? 1 : 0);
+	const numberOfTests = _.sumBy(userStories, ({ item }) => item?.isTestCase ? 1 : 0);
 	const numberOfRecordings = selectedProject.userStories.count;
 	const testCoverageValue = numberOfRecordings !== 0 ? (numberOfTests / numberOfRecordings) * 100 : 0;
 	const pastTestCoverageValue = 0;
@@ -180,6 +182,23 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 		percentageChange: testCoverageValue > 0 ? (pastTestCoverageValue / testCoverageValue) * 100 : 0, 
 		dataPoints: numberOfRecordings, 
 	};
+
+	const latestTestStates = {};
+	userStories?.forEach(story => {
+		const [latestTestRun] = story.testRuns.items
+			.sort((a, b) => new Date(b) - new Date(a))
+			.slice(-1);
+
+		const status = latestTestRun?.status;
+		if (status) {
+			latestTestStates[status]++;
+		}
+	});
+
+	const doughnutDataValues = Object.values(latestTestStates);
+	const doughnutDataLabels = Object.keys(latestTestStates); 
+	doughnutData.datasets[0].data = doughnutDataValues;
+	doughnutData.labels = doughnutDataLabels;
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -335,7 +354,11 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
-										<Doughnut data={doughnutData} options={doughnutOptions} />
+										{doughnutDataValues > 0 ? (
+											<Doughnut data={doughnutData} options={doughnutOptions} />
+										) : (
+											<Text fontStyle="italic">No tests have been run yet.</Text>
+										)}
 									</Box>
 								</GridCard>
 								<GridCard title="Overview">
