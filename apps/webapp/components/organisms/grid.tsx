@@ -171,6 +171,16 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const bugsIntroduced = _.sumBy(selectedProject.userStories.items, 'failing.count');
 	const bugsFixed = _.sumBy(selectedProject.userStories.items?.failing?.items, ({ item }) => Number(item.isFailing));
 
+	const numberOfTests = _.sumBy(selectedProject.userStories.items, ({ item }) => item?.isTestCase ? 1 : 0);
+	const numberOfRecordings = selectedProject.userStories.count;
+	const testCoverageValue = numberOfRecordings !== 0 ? (numberOfTests / numberOfRecordings) * 100 : 0;
+	const pastTestCoverageValue = 0;
+	const testCoverage = {
+		value: testCoverageValue,
+		percentageChange: testCoverageValue > 0 ? (pastTestCoverageValue / testCoverageValue) * 100 : 0, 
+		dataPoints: numberOfRecordings, 
+	};
+
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
@@ -241,9 +251,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 							/>
 							<StatCard
 								title="Test coverage"
-								value={68}
-								percentageChange={-2}
-								dataPoints={2227}
+								value={testCoverage.value}
+								percentageChange={testCoverage.percentageChange}
+								dataPoints={testCoverage.dataPoints}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
