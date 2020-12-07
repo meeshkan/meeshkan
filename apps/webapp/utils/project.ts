@@ -53,6 +53,7 @@ const PROJECTS = gql`
 								count
 								items {
 									firstIntroduction
+									isResolved
 								}
 							}
 							title

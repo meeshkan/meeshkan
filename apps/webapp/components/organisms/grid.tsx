@@ -168,6 +168,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const releaseDate = release.releaseDate;
 	const daysUntilDate = (date: moment.Moment) => date.diff(moment(), 'days');
 
+	const bugsIntroduced = _.sumBy(selectedProject.userStories.items, 'failing.count');
+	const bugsFixed = _.sumBy(selectedProject.userStories.items?.failing?.items, ({ item }) => Number(item.isFailing));
+
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
@@ -367,7 +370,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													23
+													{bugsIntroduced}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -388,7 +391,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													22
+													{bugsFixed}
 												</Text>
 												<Text
 													fontSize="sm"
