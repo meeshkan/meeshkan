@@ -35,7 +35,7 @@ const StatCard = ({
 	const colorFromValue = useColorFromNumber();
 	const grayColor = useColorModeValue('gray.600', 'gray.200');
 	const isPositiveChange = percentageChange >= 0;
-	const valueColor = (isNA || !isPercentage) ? grayColor : colorFromValue(value);
+	const valueColor = isNA || !isPercentage ? grayColor : colorFromValue(value);
 
 	return (
 		<Flex {...props}>
@@ -48,11 +48,9 @@ const StatCard = ({
 						fontWeight={800}
 						d="inline"
 					>
-						{isNA ? 'N/A' : (
-							isPercentage ? value : commaNumber(value)
-						)}
+						{isNA ? 'N/A' : isPercentage ? value : commaNumber(value)}
 					</Heading>
-					{(isPercentage && !isNA) && (
+					{isPercentage && !isNA && (
 						<Text fontSize="md" fontWeight={300} d="inline">
 							/100
 						</Text>
@@ -60,9 +58,7 @@ const StatCard = ({
 				</StatNumber>
 				<StatHelpText>
 					{isNA ? (
-						<Text fontStyle="italic">
-							coming soon!
-						</Text>	
+						<Text fontStyle="italic">coming soon!</Text>
 					) : (
 						<>
 							<Badge

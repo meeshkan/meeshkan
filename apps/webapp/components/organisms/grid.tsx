@@ -3,7 +3,7 @@ import {
 	Box,
 	Stack,
 	Flex,
-	List,
+	// List,
 	Button,
 	Menu,
 	MenuButton,
@@ -17,20 +17,19 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import theme, {
-	GitMergeIcon,
-	GitCommitIcon,
-	GitLabIcon,
-	GitPullRequestIcon,
-} from '@frontend/chakra-theme';
+import theme from // GitMergeIcon,
+// GitCommitIcon,
+// GitLabIcon,
+// GitPullRequestIcon,
+'@frontend/chakra-theme';
 import _ from 'lodash';
 import moment from 'moment';
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
-import ActivityListItem from '../molecules/activity-list-item';
-import LinearListItem from '../molecules/linear-list-item';
-import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+// import ActivityListItem from '../molecules/activity-list-item';
+// import LinearListItem from '../molecules/linear-list-item';
+// import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import Onboarding from '../../components/organisms/onboarding';
 import { UserContext, Project } from '../../utils/user';
@@ -162,13 +161,15 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const pastTestRunsTotal = 0;
 	const testRuns = {
 		value: testRunsTotal,
-		percentageChange: testRunsTotal > 0 ? (pastTestRunsTotal / testRunsTotal) * 100 : 0,
-		dataPoints: pastTestRunsTotal, 
+		percentageChange:
+			testRunsTotal > 0 ? (pastTestRunsTotal / testRunsTotal) * 100 : 0,
+		dataPoints: pastTestRunsTotal,
 	};
 
 	const [release] = selectedProject.release.items;
 	const releaseDate = release?.releaseDate;
-	const daysUntilDate = (date: moment.Moment): number => date.diff(moment(), 'days');
+	const daysUntilDate = (date: moment.Moment): number =>
+		date.diff(moment(), 'days');
 
 	const bugsIntroduced = _.sumBy(userStories, 'failing.count');
 	const bugsFixed = _.sumBy(userStories, (story) => {
@@ -176,20 +177,29 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 		return _.sumBy(failingItems, (item) => Number(item.isResolved));
 	});
 
-	const numberOfTests = _.sumBy(userStories, (item) => item?.isTestCase ? 1 : 0);
+	const numberOfTests = _.sumBy(userStories, (item) =>
+		item?.isTestCase ? 1 : 0
+	);
 	const numberOfRecordings = selectedProject.userStories.count;
-	const testCoverageValue = numberOfRecordings !== 0 ? (numberOfTests / numberOfRecordings) * 100 : 0;
+	const testCoverageValue =
+		numberOfRecordings !== 0 ? (numberOfTests / numberOfRecordings) * 100 : 0;
 	const pastTestCoverageValue = 0;
 	const testCoverage = {
 		value: testCoverageValue,
-		percentageChange: testCoverageValue > 0 ? (pastTestCoverageValue / testCoverageValue) * 100 : 0, 
-		dataPoints: numberOfRecordings, 
+		percentageChange:
+			testCoverageValue > 0
+				? (pastTestCoverageValue / testCoverageValue) * 100
+				: 0,
+		dataPoints: numberOfRecordings,
 	};
 
 	const latestTestStates: { [key: string]: number } = {};
-	userStories?.forEach(story => {
+	userStories?.forEach((story) => {
 		const [latestTestRun] = story.testRuns.items
-			.sort((a, b) => (new Date(b.dateTime)).getTime() - (new Date(a.dateTime)).getTime())
+			.sort(
+				(a, b) =>
+					new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()
+			)
 			.slice(-1);
 
 		const status = latestTestRun?.status;
@@ -199,32 +209,38 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	});
 
 	const doughnutDataValues = Object.values(latestTestStates);
-	const doughnutDataLabels = Object.keys(latestTestStates); 
+	const doughnutDataLabels = Object.keys(latestTestStates);
 	doughnutData.datasets[0].data = doughnutDataValues;
 	doughnutData.labels = doughnutDataLabels;
 
-	const lastSevenDays = [...Array(7).keys()].map(i => moment().subtract(i + 1, 'days'));
+	const lastSevenDays = [...Array(7).keys()].map((i) =>
+		moment().subtract(i + 1, 'days')
+	);
 
 	const recordingsByDay = {};
 	const testsByDay = {};
-	lastSevenDays.forEach(day => {
-		const userStoriesOnThisDay = userStories.filter(story => {
+	lastSevenDays.forEach((day) => {
+		const userStoriesOnThisDay = userStories.filter((story) => {
 			const { testCreatedDate } = story;
-			return testCreatedDate ? moment(testCreatedDate).isSame(day, 'day') : false;
+			return testCreatedDate
+				? moment(testCreatedDate).isSame(day, 'day')
+				: false;
 		});
 		const dayValue = day.valueOf();
 		recordingsByDay[dayValue] = userStoriesOnThisDay.length;
-		testsByDay[dayValue] = _.sumBy(userStoriesOnThisDay, (item) => Number(item.isTestCase));
+		testsByDay[dayValue] = _.sumBy(userStoriesOnThisDay, (item) =>
+			Number(item.isTestCase)
+		);
 	});
 
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
 
-	const barDataLabels = lastSevenDays.map(day => day.format('MMM DD'));
+	const barDataLabels = lastSevenDays.map((day) => day.format('MMM DD'));
 	barData.labels = barDataLabels;
 
 	const totalRecordings = _.sum(_.values(recordingsByDay));
-	const totalTests = _.sum(_.values(testsByDay)); 
+	const totalTests = _.sum(_.values(testsByDay));
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -288,10 +304,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							<StatCard
-								isNA
-								title="Confidence score"
-							/>
+							<StatCard isNA title="Confidence score" />
 							<StatCard
 								title="Test coverage"
 								value={testCoverage.value}
@@ -318,9 +331,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 								w="100%"
 							>
 								<GridCard title="Confidence Breakdown">
-									<Text fontStyle="italic">
-										Coming soon, stay tuned!
-									</Text>
+									<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 									{/* <List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
@@ -384,7 +395,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										{doughnutDataValues.length > 0 ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
-											<Text fontStyle="italic">No tests have been run yet.</Text>
+											<Text fontStyle="italic">
+												No tests have been run yet.
+											</Text>
 										)}
 									</Box>
 								</GridCard>
@@ -397,7 +410,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													{releaseDate ? daysUntilDate(moment(releaseDate)) : 'N/A'}
+													{releaseDate
+														? daysUntilDate(moment(releaseDate))
+														: 'N/A'}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -482,9 +497,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 							w="100%"
 						>
 							<GridCard title="Activity">
-								<Text fontStyle="italic">
-									Coming soon, stay tuned!
-								</Text>
+								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 								{/* <List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
@@ -525,9 +538,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 								title="Linear Tickets"
 								leftIconSrc="https://media.graphcms.com/AIPdNiTtReCzrrRorDL5"
 							>
-								<Text fontStyle="italic">
-									Coming soon, stay tuned!
-								</Text>
+								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 								{/* <List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
