@@ -482,14 +482,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 							w="100%"
 						>
 							<GridCard title="Activity">
-								<Flex
-									align="center"
-									justify="center"
-									fontStyle="italic"
-									my={6}
-								>
+								<Text fontStyle="italic">
 									Coming soon, stay tuned!
-								</Flex>
+								</Text>
 								{/* <List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
@@ -530,14 +525,9 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 								title="Linear Tickets"
 								leftIconSrc="https://media.graphcms.com/AIPdNiTtReCzrrRorDL5"
 							>
-								<Flex
-									align="center"
-									justify="center"
-									fontStyle="italic"
-									my={6}
-								>
+								<Text fontStyle="italic">
 									Coming soon, stay tuned!
-								</Flex>
+								</Text>
 								{/* <List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
