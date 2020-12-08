@@ -17,11 +17,12 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import theme from // GitMergeIcon,
-// GitCommitIcon,
-// GitLabIcon,
-// GitPullRequestIcon,
-'@frontend/chakra-theme';
+import theme, {
+	// GitMergeIcon,
+	// GitCommitIcon,
+	// GitLabIcon,
+	// GitPullRequestIcon,
+} from '@frontend/chakra-theme';
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
