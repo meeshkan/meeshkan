@@ -16,11 +16,11 @@ export interface AvatarFile {
 	filename: string;
 }
 
-type Configuration = {
+interface Configuration {
 	inviteLink: string;
 };
 
-type TestRun = {
+interface TestRun {
 	status: string;
 	dateTime: string;
 	userStories: {
@@ -28,12 +28,12 @@ type TestRun = {
 	}
 };
 
-type TestRuns = {
+interface TestRuns {
 	count: number;
 	items: Array<TestRun>;
 };
 
-type UserStoryFailing = {
+interface UserStoryFailing {
 	count: number
 	items: Array<{
 		firstIntroduction: string;
@@ -41,7 +41,7 @@ type UserStoryFailing = {
 	}>
 };
 
-type UserStory = {
+interface UserStory {
 	id: string;
 	failing: UserStoryFailing;
 	title: string;
@@ -50,17 +50,17 @@ type UserStory = {
 	testRuns: TestRuns;
 };
 
-export type UserStories = {
+export interface UserStories {
 	count: number;
 	items: Array<UserStory>
 };
 
-type Release = {
+interface Release {
 	count: number;
 	items: Array<{ releaseDate: string }>
 };
 
-export type Project = {
+export interface Project {
 	id: string;
 	name: string;
 	avatar: Avatar;
