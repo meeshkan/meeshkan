@@ -38,7 +38,7 @@ import {
 	getTestCoverage,
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
-	sumOfObjectArrayValues,
+	sumOfObjectValues,
 	getLastSevenDaysInFormat,
 } from '../../utils/metrics';
 require('../molecules/rounded-chart');
@@ -182,8 +182,8 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	const barDataLabels = getLastSevenDaysInFormat('MMM DD');
 	barData.labels = barDataLabels;
 
-	const totalRecordings = sumOfObjectArrayValues(recordingsByDay);
-	const totalTests = sumOfObjectArrayValues(testsByDay);
+	const totalRecordings = sumOfObjectValues(recordingsByDay);
+	const totalTests = sumOfObjectValues(testsByDay);
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>

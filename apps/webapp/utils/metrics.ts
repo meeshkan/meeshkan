@@ -5,7 +5,7 @@ import { UserStories, Project } from './user';
 const daysUntilDate = (date: moment.Moment): number =>
 	date.diff(moment(), 'days');
 
-export const getTestRuns = (userStories: UserStories) => {
+export const getTestRuns = (userStories: UserStories['items']) => {
 	const testRunsTotal = _.sumBy(userStories, 'testRuns.count');
 	const pastTestRunsTotal = 0;
 	return {
@@ -22,7 +22,7 @@ export const getDaysUntilRelease = (project: Project) => {
 	return releaseDate ? daysUntilDate(moment(releaseDate)) : null;
 };
 
-export const getBugs = (userStories: UserStories) => {
+export const getBugs = (userStories: UserStories['items']) => {
 	const introduced = _.sumBy(userStories, 'failing.count');
 	const fixed = _.sumBy(userStories, (story) => {
 		const failingItems = story?.failing.items;
@@ -34,7 +34,7 @@ export const getBugs = (userStories: UserStories) => {
 	}
 };
 
-export const getTestCoverage = (userStories: UserStories) => {
+export const getTestCoverage = (userStories: UserStories['items']) => {
 	const numberOfTests = _.sumBy(userStories, (item) =>
 		item?.isTestCase ? 1 : 0
 	);
@@ -52,7 +52,7 @@ export const getTestCoverage = (userStories: UserStories) => {
 	}
 };
 
-export const getLatestTestStates = (userStories: UserStories) => {
+export const getLatestTestStates = (userStories: UserStories['items']) => {
 	const latestTestStates: { [key: string]: number } = {};
 	userStories?.forEach((story) => {
 		const [latestTestRun] = story.testRuns.items
@@ -74,7 +74,7 @@ const lastSevenDays = [...Array(7).keys()].map((i) =>
 	moment().subtract(i + 1, 'days')
 );
 
-export const getRecordingsAndTestsByDay = (userStories: UserStories) => {
+export const getRecordingsAndTestsByDay = (userStories: UserStories['items']) => {
 	const recordingsByDay = {};
 	const testsByDay = {};
 	lastSevenDays.forEach((day) => {
@@ -96,9 +96,9 @@ export const getRecordingsAndTestsByDay = (userStories: UserStories) => {
 	}
 };
 
-export const sumOfObjectArrayValues = (
-	array: Array<{ [key: string]: number }>
-) => _.sum(_.values(array));
+export const sumOfObjectValues = (
+	object: { [key: string]: number }
+) => _.sum(_.values(object));
 
 export const getLastSevenDaysInFormat = (format: string) =>
 	lastSevenDays.map((day) => day.format(format));	
