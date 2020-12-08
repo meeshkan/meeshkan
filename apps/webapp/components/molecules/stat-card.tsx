@@ -16,10 +16,10 @@ import { useColorFromNumber } from '../../hooks/use-color-from-number';
 
 type StatCardProps = {
 	title: string;
-	value: number;
+	value?: number;
 	isPercentage?: boolean;
-	percentageChange: number;
-	dataPoints: number;
+	percentageChange?: number;
+	dataPoints?: number;
 	isNA?: boolean;
 } & FlexProps;
 
