@@ -167,7 +167,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 	};
 
 	const [release] = selectedProject.release.items;
-	const releaseDate = release.releaseDate;
+	const releaseDate = release?.releaseDate;
 	const daysUntilDate = (date: moment.Moment): number => date.diff(moment(), 'days');
 
 	const bugsIntroduced = _.sumBy(userStories, 'failing.count');
