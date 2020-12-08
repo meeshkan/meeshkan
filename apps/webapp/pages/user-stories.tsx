@@ -12,9 +12,17 @@ import {
 	useColorModeValue,
 	Flex,
 	Button,
+	Code,
+	Badge,
 } from '@chakra-ui/react';
 import GridCard from '../components/molecules/grid-card';
-import { BookIcon, ChatIcon, PlusIcon } from '@frontend/chakra-theme';
+import {
+	BookIcon,
+	ChatIcon,
+	PlusIcon,
+	VideoIcon,
+	CrosshairIcon,
+} from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
 import SegmentedControl from '../components/molecules/segmented-control';
 import Table from '../components/organisms/table';
@@ -83,20 +91,56 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			},
 			{
 				Header: 'Flows included',
-				accessor: 'flowIDs',
+				accessor: (originalRow, rowIndex) => {
+					return originalRow.flowIDs.length;
+				},
 			},
 			{
 				Header: 'Origin',
-				accessor: 'created',
+				accessor: (originalRow, rowIndex) => {
+					return (
+						<Badge fontSize="sm" textTransform="capitalize">
+							{originalRow.created == 'user' ? (
+								<VideoIcon mr={2} />
+							) : (
+								<CrosshairIcon mr={2} />
+							)}
+							{originalRow.created}
+						</Badge>
+					);
+				},
 			},
 			{
 				Header: 'Priority',
-				accessor: 'significance',
+				accessor: (originalRow, rowIndex) => {
+					let significance = originalRow.significance;
+					return (
+						<Badge
+							fontSize="sm"
+							textTransform="capitalize"
+							colorScheme={
+								significance == 'low'
+									? 'gray'
+									: significance == 'medium'
+									? 'orange'
+									: significance == 'high'
+									? 'cyan'
+									: null
+							}
+						>
+							{significance}
+						</Badge>
+					);
+				},
 			},
-			// {
-			// 	Header: 'Steps',
-			// 	accessor: 'recording.sideScript',
-			// },
+			{
+				Header: 'Steps',
+				accessor: (originalRow, rowIndex) => {
+					let stepCount = JSON.parse(originalRow.recording.sideScript).tests[0]
+						.commands.length;
+					return stepCount;
+				},
+			},
 		],
 		[]
 	);
@@ -119,8 +163,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		}
 		fetchData();
 	}, [pagination]);
-
-	console.log(tableData.recordings.items);
 
 	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });

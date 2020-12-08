@@ -26,6 +26,7 @@ import {
 	Skeleton,
 	useColorModeValue,
 	ButtonGroup,
+	Flex,
 } from '@chakra-ui/react';
 import {
 	usePagination,
@@ -303,12 +304,12 @@ const Table = ({
 			>
 				{filters}
 			</Stack>
-			{/* This is required to make the table full-width */}
 			<Box
 				maxW="full"
 				display="block"
-				overflowX={isFormOpen ? 'visible' : 'scroll'}
-				overflowY={isFormOpen ? 'visible' : 'hidden'}
+				overflowX={isFormOpen ? 'visible' : 'auto'}
+				overflowY={isFormOpen ? 'visible' : 'auto'}
+				maxH="64vh"
 				css={{
 					'::-webkit-scrollbar': {
 						width: 0,
@@ -325,7 +326,7 @@ const Table = ({
 					w="full"
 					{...(getTableProps() as any)}
 				>
-					<TableHead>
+					<TableHead pos="sticky" top={0}>
 						{headerGroups.map((headerGroup) => (
 							<TableRow {...(headerGroup.getHeaderGroupProps() as any)}>
 								{headerGroup.headers.map((column) => {
@@ -338,28 +339,30 @@ const Table = ({
 												// : '0.0000000001%'
 											}
 											{...(column.getHeaderProps() as any)}
-											// {...column.getSortByToggleProps()}
+											{...column.getSortByToggleProps()}
 										>
-											<Text
-												fontSize="md"
-												fontWeight="medium"
-												textAlign={
-													column.type === 'boolean'
-														? 'center'
-														: column.align || 'left'
-												}
-											>
-												{column.render('Header')}
-											</Text>
-											{column.isSorted ? (
-												column.isSortedDesc ? (
-													<ChevronDownIcon size={20} />
+											<Flex align="baseline">
+												<Text
+													fontSize="md"
+													fontWeight="medium"
+													textAlign={
+														column.type === 'boolean'
+															? 'center'
+															: column.align || 'left'
+													}
+												>
+													{column.render('Header')}
+												</Text>
+												{column.isSorted ? (
+													column.isSortedDesc ? (
+														<ChevronDownIcon size={20} />
+													) : (
+														<ChevronUpIcon size={20} />
+													)
 												) : (
-													<ChevronUpIcon size={20} />
-												)
-											) : (
-												''
-											)}
+													''
+												)}
+											</Flex>
 										</TableCell>
 									);
 								})}
@@ -542,7 +545,7 @@ const Table = ({
 								icon={<ChevronRightIcon />}
 							/>
 							<TableIconButton
-								onClick={() => gotoPage(pageCount ? pageCount - 1 : 1)}
+								onClick={() => gotoPage(pageCount - 1)}
 								isDisabled={!canNextPage}
 								icon={<ArrowRightIcon />}
 							/>

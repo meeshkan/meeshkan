@@ -31,7 +31,6 @@ const TableCell = ({
 			/* Each cell should grow equally */
 			w="1%"
 			/* But "collapsed" cells should be as small as possible */
-			// _last={{ w: '0.0000000001%' }}
 			_last={{ w: '0.1%' }}
 			{...props}
 		>

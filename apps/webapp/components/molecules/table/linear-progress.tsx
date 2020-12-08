@@ -77,7 +77,7 @@ function LinearProgressBar() {
 	return (
 		<MotionBox
 			pos="absolute"
-			w="full"
+			w="75.6%"
 			h="1"
 			overflow="hidden"
 			role="progressbar"
