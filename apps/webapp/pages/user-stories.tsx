@@ -1,9 +1,9 @@
 import React, {
 	useState,
-	useContext,
 	useMemo,
 	useEffect,
 	useCallback,
+	useContext,
 } from 'react';
 import {
 	Box,
@@ -12,7 +12,6 @@ import {
 	useColorModeValue,
 	Flex,
 	Button,
-	useDisclosure,
 } from '@chakra-ui/react';
 import GridCard from '../components/molecules/grid-card';
 import { BookIcon, ChatIcon, PlusIcon } from '@frontend/chakra-theme';
@@ -20,6 +19,9 @@ import { transparentize } from '@chakra-ui/theme-tools';
 import SegmentedControl from '../components/molecules/segmented-control';
 import Table from '../components/organisms/table';
 import { Column } from 'react-table';
+import { eightBaseClient } from '../utils/graphql';
+import { UserContext } from '../utils/user';
+import { PROJECT_USER_STORIES } from '../graphql/user-stories';
 
 const ROWS_PER_PAGE = 10;
 
@@ -49,68 +51,80 @@ type UserStoryProps = {
 	cookies: string | undefined;
 };
 
+interface Recordings {
+	recordings: {
+		count: number;
+		items: Array<JSON>;
+	};
+	testCases: {
+		count: number;
+		items: Array<JSON>;
+	};
+}
+
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
-	const [state, setState] = useState({ data: [], loading: true });
+	const { idToken, projects } = useContext(UserContext);
+	const [tableLoading, setTableLoading] = useState(false);
+	const [tableData, setTableData] = useState<Recordings>({
+		recordings: { count: 0, items: [] },
+		testCases: { count: 0, items: [] },
+	});
+	const [toggleIndex, setToggleIndex] = React.useState(0);
 	const [pagination, setPagination] = useState({
 		page: 0,
 		rowsPerPage: ROWS_PER_PAGE,
 	});
-	const [search, setSearch] = useState<string | undefined>();
-	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const columns: Column[] = useMemo(
 		() => [
 			{
-				Header: 'First Name',
-				accessor: 'first_name',
-				editable: true,
+				Header: 'Title',
+				accessor: 'title',
 			},
 			{
-				Header: 'Last Name',
-				accessor: 'last_name',
-				editable: true,
+				Header: 'Flows included',
+				accessor: 'flowIDs',
 			},
 			{
-				Header: 'Email',
-				accessor: 'email',
-				editable: false,
-				collapse: true,
+				Header: 'Origin',
+				accessor: 'created',
 			},
 			{
-				Header: 'Active',
-				type: 'boolean',
-				accessor: 'active',
-				collapse: true,
+				Header: 'Priority',
+				accessor: 'significance',
 			},
+			// {
+			// 	Header: 'Steps',
+			// 	accessor: 'recording.sideScript',
+			// },
 		],
 		[]
 	);
 
 	useEffect(() => {
-		function fetchData() {
-			setState((state) => ({
-				...state,
-				loading: true,
-			}));
-			fetch(
-				`https://random-data-api.com/api/users/random_user?size=${pagination.rowsPerPage}`
-			)
-				.then((res) => res.json())
-				.then((data) => {
-					setState({ data, loading: false });
+		async function fetchData() {
+			const client = eightBaseClient(idToken);
+			setTableLoading(true);
+			let request = await client
+				.request(PROJECT_USER_STORIES, {
+					projectId: projects[0].id,
+					first: pagination.rowsPerPage,
+					skip: pagination.rowsPerPage * pagination.page,
+				})
+				.then((res) => {
+					setTableData(res);
+					setTableLoading(false);
 				});
+			return request;
 		}
 		fetchData();
 	}, [pagination]);
 
+	console.log(tableData.recordings.items);
+
 	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
-
-	const handleSearch = (searchText: string) => {
-		console.log('search', searchText);
-		setSearch(searchText);
-	};
 
 	const handleRemove = async (id: string) => {
 		console.log('delete', id);
@@ -118,10 +132,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 
 	const handleEdit = (id: string) => {
 		console.log('edit', id);
-	};
-
-	const handleClone = (id: string) => {
-		console.log('clone', id);
 	};
 
 	const handleUpdateData = async (id: string, field: string, value: any) => {
@@ -173,24 +183,33 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			</GridCard>
 			<Box>
 				<Flex justify="space-between" align="center">
-					<SegmentedControl values={['Recordings', 'Test cases']} />
-					<Button size="sm">Review recordings</Button>
+					<SegmentedControl
+						values={['Recordings', 'Test cases']}
+						selectedIndex={toggleIndex}
+						setSelectedIndex={setToggleIndex}
+					/>
+					{toggleIndex === 0 ? (
+						<Button size="sm">Review recordings</Button>
+					) : null}
 				</Flex>
 				<Table
 					columns={columns}
-					data={state.data}
-					loading={state.loading}
-					totalCount={state.data.length} // this should be the total amount of data, not only the returned data length
+					data={
+						toggleIndex === 0
+							? tableData.recordings.items
+							: tableData.testCases.items
+					}
+					loading={tableLoading}
+					totalCount={
+						toggleIndex === 0
+							? tableData.recordings.count
+							: tableData.testCases.count
+					} // this should be the total amount of data, not only the returned data length
 					onPaginate={handlePagination}
 					initialPageIndex={pagination.page}
 					initialPageSize={pagination.rowsPerPage}
-					onSearch={handleSearch}
-					initialSearch={search}
-					searchPlaceholder={'Search by...'}
-					onAdd={onOpen}
 					onRemove={handleRemove}
 					onEdit={handleEdit}
-					onClone={handleClone}
 					onUpdateData={handleUpdateData}
 					isSelectable={false}
 				/>

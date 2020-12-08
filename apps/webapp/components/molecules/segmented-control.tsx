@@ -23,7 +23,7 @@ function SegmentedControlTab({
 			justify="center"
 			backgroundColor="transparent"
 			zIndex={0}
-			cursor="default"
+			cursor="pointer"
 			userSelect="none"
 			role="button"
 			onClick={!disabled ? onSelect : undefined}
@@ -47,11 +47,16 @@ function SegmentedControlTab({
 type SegmentedControlProps = {
 	values: string[];
 	disabled?: boolean;
+	selectedIndex: number;
+	setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const SegmentedControl = ({ values, disabled }: SegmentedControlProps) => {
-	const [selectedIndex, setSelectedIndex] = React.useState(0);
-
+const SegmentedControl = ({
+	values,
+	disabled,
+	selectedIndex,
+	setSelectedIndex,
+}: SegmentedControlProps) => {
 	return (
 		<>
 			<AnimateSharedLayout>

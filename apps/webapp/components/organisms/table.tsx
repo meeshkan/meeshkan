@@ -1,5 +1,4 @@
 import React, {
-	useState,
 	ReactElement,
 	useRef,
 	useEffect,
@@ -21,15 +20,7 @@ import {
 	Text,
 	Select,
 	Stack,
-	InputGroup,
-	InputLeftElement,
-	InputRightElement,
-	Icon,
-	Input,
-	Button,
-	IconButton,
 	Box,
-	Checkbox,
 	usePrevious,
 	useDisclosure,
 	Skeleton,
@@ -58,24 +49,15 @@ import {
 	ChevronUpIcon,
 	DeleteIcon,
 	EditIcon,
-	SmallCloseIcon,
 } from '@chakra-ui/icons';
-import { CopyIcon } from '@frontend/chakra-theme';
 import { useDebounce } from '../../hooks/use-debounce';
 
 type UpdateDataFn = (id: string, field: string, value: any) => void;
-
-type Actions = {
-	label: string;
-	icon: ComponentType;
-	action: (rowId: string) => void;
-};
 
 type TableProps<T extends object = {}> = {
 	data: any;
 	initialPageSize?: number;
 	initialPageIndex?: number;
-	initialSearch?: string;
 	totalCount?: number;
 	loading?: boolean;
 	columns: Column<T>[];
@@ -87,18 +69,13 @@ type TableProps<T extends object = {}> = {
 		pageIndex: number;
 		pageSize: number;
 	}) => void;
-	onSearch?: (search: string) => void;
-	onAdd?: () => void;
 	onEdit?: (id: string) => void;
 	onRemove?: (id: string) => void;
-	onClone?: (id: string) => void;
 	onUpdateData?: UpdateDataFn;
-	searchPlaceholder?: string;
 	addButtonText?: string;
 	isSelectable?: boolean;
 	getRowId?: (row: any, relativeIndex: number, parent: any) => string;
 	isRemoveAllowed?: (row: any) => boolean;
-	customActions?: Actions[];
 	filters?: ReactElement;
 	form?: ReactElement;
 	isFormOpen?: boolean;
@@ -118,21 +95,15 @@ const Table = ({
 	data,
 	initialPageIndex = 0,
 	initialPageSize = 10,
-	initialSearch,
 	totalCount,
 	loading,
 	onPaginate,
-	onSearch,
-	onAdd,
 	onRemove,
 	onEdit,
-	onClone,
 	onUpdateData,
-	searchPlaceholder,
 	addButtonText,
 	isSelectable = true,
 	getRowId,
-	customActions,
 	filters,
 	form,
 	isFormOpen,
@@ -150,7 +121,7 @@ const Table = ({
 		? Math.ceil(totalCount / initialPageSize)
 		: 1;
 
-	const hasActions = !!(onEdit || onClone || onRemove || customActions);
+	const hasActions = !!(onEdit || onRemove);
 
 	const _getRowId = () => {
 		if (getRowId) {
@@ -166,7 +137,7 @@ const Table = ({
 		onOpen: onOpenRemoveAlert,
 		onClose: onCancelRemove,
 	} = useDisclosure();
-	const idRef = React.useRef<string>();
+	const idRef = useRef<string>();
 
 	const {
 		getTableProps,
@@ -225,12 +196,11 @@ const Table = ({
 										// We can use the getToggleRowExpandedProps prop-getter
 										// to build the expander.
 										<Box {...row.getToggleRowExpandedProps()}>
-											<Icon
-												name={`${
-													row.isExpanded ? 'chevron-down' : 'chevron-right'
-												}`}
-												size="24px"
-											/>
+											{row.isExpanded ? (
+												<ChevronDownIcon />
+											) : (
+												<ChevronRightIcon />
+											)}
 										</Box>
 									),
 								},
@@ -252,18 +222,6 @@ const Table = ({
 											opacity={0}
 											_groupHover={{ opacity: 1 }}
 										>
-											{customActions?.map((action, i) => {
-												return (
-													<ActionButton
-														key={`${action.label}_${i}`}
-														aria-label={action.label}
-														// icon={action.icon}
-														onClick={() => {
-															action.action(row.id);
-														}}
-													/>
-												);
-											})}
 											{onEdit && (
 												<ActionButton
 													aria-label="Edit"
@@ -286,16 +244,6 @@ const Table = ({
 													isDisabled={isRemoveAllowed && !isRemoveAllowed(row)}
 												/>
 											)}
-											{onClone && (
-												<ActionButton
-													aria-label="Clone row"
-													icon={<CopyIcon />}
-													ml={1}
-													onClick={() => {
-														onClone(row.id);
-													}}
-												/>
-											)}
 										</Box>
 									),
 								},
@@ -306,9 +254,6 @@ const Table = ({
 		}
 	);
 
-	const [search, setSearch] = useState<string | undefined>(initialSearch);
-	const [isSearchActive, setSearchActive] = useState<boolean>(false);
-
 	// this prevents calling paginate on first mount
 	useMountedLayoutEffect(() => {
 		if (onPaginate) {
@@ -316,47 +261,21 @@ const Table = ({
 		}
 	}, [onPaginate, pageIndex, pageSize]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (defaultRowsExpanded) {
 			toggleAllRowsExpanded(defaultRowsExpanded);
 		}
 	}, [defaultRowsExpanded, toggleAllRowsExpanded, loading]);
 
-	const debouncedSearchTerm = useDebounce(search, 250);
-
-	useEffect(
-		() => {
-			if (typeof debouncedSearchTerm !== 'undefined') {
-				onSearch?.(debouncedSearchTerm);
-			}
-		},
-		[debouncedSearchTerm, onSearch] // Only call effect if debounced search term changes
-	);
-
 	const prevIndex = usePrevious(pageIndex) || 0;
 
-	React.useEffect(() => {
+	useEffect(() => {
 		if (!data.length && !loading && prevIndex > 0) {
 			gotoPage(prevIndex - 1);
 		}
 	}, [data, gotoPage, loading, prevIndex]);
 
-	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-		setSearch(event.target.value);
-
 	const timeoutIdRef = useRef<NodeJS.Timeout>();
-	const handleSearchBlur = (event: React.FocusEvent<any>) => {
-		const currentTarget = event.currentTarget;
-
-		// Check the newly focused element in the next tick of the event loop
-		timeoutIdRef.current = setTimeout(() => {
-			// Check if the new activeElement is a child of the original container
-			if (!currentTarget.contains(document.activeElement)) {
-				// You can invoke a callback or add custom logic here
-				setSearchActive(false);
-			}
-		}, 0);
-	};
 
 	useEffect(() => {
 		return () => {
