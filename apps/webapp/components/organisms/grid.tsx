@@ -289,10 +289,8 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 							direction={['column', 'row', 'row', 'row']}
 						>
 							<StatCard
+								isNA
 								title="Confidence score"
-								value={98}
-								percentageChange={19}
-								dataPoints={4036}
 							/>
 							<StatCard
 								title="Test coverage"

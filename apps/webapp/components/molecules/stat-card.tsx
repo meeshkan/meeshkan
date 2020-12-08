@@ -20,6 +20,7 @@ type StatCardProps = {
 	isPercentage?: boolean;
 	percentageChange: number;
 	dataPoints: number;
+	isNA?: boolean;
 } & FlexProps;
 
 const StatCard = ({
@@ -28,12 +29,13 @@ const StatCard = ({
 	isPercentage = true,
 	percentageChange,
 	dataPoints,
+	isNA = false,
 	...props
 }: StatCardProps) => {
 	const colorFromValue = useColorFromNumber();
 	const grayColor = useColorModeValue('gray.600', 'gray.200');
 	const isPositiveChange = percentageChange >= 0;
-	const valueColor = isPercentage ? colorFromValue(value) : grayColor;
+	const valueColor = (isNA || !isPercentage) ? grayColor : colorFromValue(value);
 
 	return (
 		<Flex {...props}>
@@ -46,37 +48,47 @@ const StatCard = ({
 						fontWeight={800}
 						d="inline"
 					>
-						{isPercentage ? value : commaNumber(value)}
+						{isNA ? 'N/A' : (
+							isPercentage ? value : commaNumber(value)
+						)}
 					</Heading>
-					{isPercentage && (
+					{(isPercentage && !isNA) && (
 						<Text fontSize="md" fontWeight={300} d="inline">
 							/100
 						</Text>
 					)}
 				</StatNumber>
 				<StatHelpText>
-					<Badge
-						variant="subtle"
-						colorScheme={isPositiveChange ? 'cyan' : 'red'}
-						rounded="lg"
-						mr={2}
-						fontSize={['xs', 'xs', 'sm', 'sm']}
-						p={1}
-					>
-						{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
-						{Math.abs(percentageChange)}%
-					</Badge>
-					<Badge
-						variant="subtle"
-						colorScheme="gray"
-						fontWeight={400}
-						rounded="lg"
-						textTransform="none"
-						p={1}
-						fontSize={['xs', 'xs', 'sm', 'sm']}
-					>
-						from {commaNumber(dataPoints)} data points
-					</Badge>
+					{isNA ? (
+						<Text fontStyle="italic">
+							coming soon!
+						</Text>	
+					) : (
+						<>
+							<Badge
+								variant="subtle"
+								colorScheme={isPositiveChange ? 'cyan' : 'red'}
+								rounded="lg"
+								mr={2}
+								fontSize={['xs', 'xs', 'sm', 'sm']}
+								p={1}
+							>
+								{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
+								{Math.abs(percentageChange)}%
+							</Badge>
+							<Badge
+								variant="subtle"
+								colorScheme="gray"
+								fontWeight={400}
+								rounded="lg"
+								textTransform="none"
+								p={1}
+								fontSize={['xs', 'xs', 'sm', 'sm']}
+							>
+								from {commaNumber(dataPoints)} data points
+							</Badge>
+						</>
+					)}
 				</StatHelpText>
 			</Stat>
 		</Flex>
