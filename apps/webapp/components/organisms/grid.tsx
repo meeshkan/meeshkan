@@ -318,7 +318,10 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 								w="100%"
 							>
 								<GridCard title="Confidence Breakdown">
-									<List
+									<Text fontStyle="italic">
+										Coming soon, stay tuned!
+									</Text>
+									{/* <List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
@@ -343,7 +346,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 											value={-2.0}
 											description="Lorem ipsum dolor sit amet."
 										/>
-									</List>
+									</List> */}
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
