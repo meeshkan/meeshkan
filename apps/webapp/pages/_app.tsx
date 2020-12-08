@@ -19,10 +19,12 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 					href="https://media.graphcms.com/ZUjeEBiaT9iGYxhI5kzq"
 				/>
 				{/* Meeshkan Recorder */}
-				<script
-					async
-					src="https://recorder.meeshkan.com/record.js?client_id=ad677264-73c2-4101-b910-28b1d698607c"
-				/>
+				{process.env.NODE_ENV === 'production' ? (
+					<script
+						async
+						src="https://recorder.meeshkan.com/record.js?client_id=ad677264-73c2-4101-b910-28b1d698607c"
+					/>
+				) : null}
 			</Head>
 			<Layout>
 				<SideBar project={project} setProject={setProject} />
