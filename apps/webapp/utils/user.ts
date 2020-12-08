@@ -50,7 +50,7 @@ type UserStory = {
 	testRuns: TestRuns;
 };
 
-type UserStories = {
+export type UserStories = {
 	count: number;
 	items: Array<UserStory>
 };

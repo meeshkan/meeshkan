@@ -22,8 +22,6 @@ import theme from // GitMergeIcon,
 // GitLabIcon,
 // GitPullRequestIcon,
 '@frontend/chakra-theme';
-import _ from 'lodash';
-import moment from 'moment';
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
@@ -33,6 +31,16 @@ import GridCard from '../molecules/grid-card';
 import ScriptTag from '../../components/molecules/script-tag';
 import Onboarding from '../../components/organisms/onboarding';
 import { UserContext, Project } from '../../utils/user';
+import {
+	getTestRuns,
+	getDaysUntilRelease,
+	getBugs,
+	getTestCoverage,
+	getLatestTestStates,
+	getRecordingsAndTestsByDay,
+	sumOfObjectArrayValues,
+	getLastSevenDaysInFormat,
+} from '../../utils/metrics';
 require('../molecules/rounded-chart');
 
 const barData = {
@@ -157,90 +165,25 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 
 	const userStories = selectedProject.userStories.items;
 
-	const testRunsTotal = _.sumBy(userStories, 'testRuns.count');
-	const pastTestRunsTotal = 0;
-	const testRuns = {
-		value: testRunsTotal,
-		percentageChange:
-			testRunsTotal > 0 ? (pastTestRunsTotal / testRunsTotal) * 100 : 0,
-		dataPoints: pastTestRunsTotal,
-	};
+	const testRuns = getTestRuns(userStories);
+	const daysUntilRelease = getDaysUntilRelease(selectedProject);
+	const bugs = getBugs(userStories);
+	const testCoverage = getTestCoverage(userStories);
 
-	const [release] = selectedProject.release.items;
-	const releaseDate = release?.releaseDate;
-	const daysUntilDate = (date: moment.Moment): number =>
-		date.diff(moment(), 'days');
-
-	const bugsIntroduced = _.sumBy(userStories, 'failing.count');
-	const bugsFixed = _.sumBy(userStories, (story) => {
-		const failingItems = story?.failing.items;
-		return _.sumBy(failingItems, (item) => Number(item.isResolved));
-	});
-
-	const numberOfTests = _.sumBy(userStories, (item) =>
-		item?.isTestCase ? 1 : 0
-	);
-	const numberOfRecordings = selectedProject.userStories.count;
-	const testCoverageValue =
-		numberOfRecordings !== 0 ? (numberOfTests / numberOfRecordings) * 100 : 0;
-	const pastTestCoverageValue = 0;
-	const testCoverage = {
-		value: testCoverageValue,
-		percentageChange:
-			testCoverageValue > 0
-				? (pastTestCoverageValue / testCoverageValue) * 100
-				: 0,
-		dataPoints: numberOfRecordings,
-	};
-
-	const latestTestStates: { [key: string]: number } = {};
-	userStories?.forEach((story) => {
-		const [latestTestRun] = story.testRuns.items
-			.sort(
-				(a, b) =>
-					new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()
-			)
-			.slice(-1);
-
-		const status = latestTestRun?.status;
-		if (status) {
-			latestTestStates[status]++;
-		}
-	});
-
+	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
 	const doughnutDataLabels = Object.keys(latestTestStates);
 	doughnutData.datasets[0].data = doughnutDataValues;
 	doughnutData.labels = doughnutDataLabels;
 
-	const lastSevenDays = [...Array(7).keys()].map((i) =>
-		moment().subtract(i + 1, 'days')
-	);
-
-	const recordingsByDay = {};
-	const testsByDay = {};
-	lastSevenDays.forEach((day) => {
-		const userStoriesOnThisDay = userStories.filter((story) => {
-			const { testCreatedDate } = story;
-			return testCreatedDate
-				? moment(testCreatedDate).isSame(day, 'day')
-				: false;
-		});
-		const dayValue = day.valueOf();
-		recordingsByDay[dayValue] = userStoriesOnThisDay.length;
-		testsByDay[dayValue] = _.sumBy(userStoriesOnThisDay, (item) =>
-			Number(item.isTestCase)
-		);
-	});
-
+	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(userStories);
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
-
-	const barDataLabels = lastSevenDays.map((day) => day.format('MMM DD'));
+	const barDataLabels = getLastSevenDaysInFormat('MMM DD');
 	barData.labels = barDataLabels;
 
-	const totalRecordings = _.sum(_.values(recordingsByDay));
-	const totalTests = _.sum(_.values(testsByDay));
+	const totalRecordings = sumOfObjectArrayValues(recordingsByDay);
+	const totalTests = sumOfObjectArrayValues(testsByDay);
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -410,9 +353,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													{releaseDate
-														? daysUntilDate(moment(releaseDate))
-														: 'N/A'}
+													{daysUntilRelease || 'N/A'}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -445,7 +386,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													{bugsIntroduced}
+													{bugs.introduced}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -466,7 +407,7 @@ const Grid = ({ project: selectedProject, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													{bugsFixed}
+													{bugs.fixed}
 												</Text>
 												<Text
 													fontSize="sm"
