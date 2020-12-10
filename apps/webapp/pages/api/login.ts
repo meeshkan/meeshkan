@@ -1,6 +1,5 @@
 import get from 'lodash/get';
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import initAuth0 from '../../utils/auth0';
 
 export default async function login(
@@ -14,9 +13,7 @@ export default async function login(
 			authParams: {
 				login_hint: get(session, 'user.name'),
 			},
-			redirectTo: Array.isArray(req.query.redirectTo)
-				? req.query.redirectTo[0]
-				: req.query.redirectTo,
+			getState: (req) => (req.query.inviteId ? { inviteId: req.query.inviteId } : {}),
 		});
 	} catch (error) {
 		console.error(error);
