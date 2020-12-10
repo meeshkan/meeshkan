@@ -4,12 +4,11 @@ import ChakraProvider from '../components/molecules/chakra';
 
 type ErrorProps = {
 	status: number;
-    cookies: string | undefined;
 };
 
-const Error: NextPage<ErrorProps> = ({ status, cookies }: ErrorProps) => {
+const Error: NextPage<ErrorProps> = ({ status }: ErrorProps) => {
 	return (
-        <ChakraProvider cookies={cookies}>
+        <ChakraProvider cookies={undefined}>
             <Flex align="center" justify="center" direction="column" h="100vh">
                 <Heading as="h1">
                     {status}
@@ -26,8 +25,7 @@ const Error: NextPage<ErrorProps> = ({ status, cookies }: ErrorProps) => {
 
 Error.getInitialProps = ({ res, err }: NextPageContext) => {
 	const status = res ? res.statusCode : (err ? err.statusCode : 404);
-	const cookies = res?.headers?.cookie ?? '';
-	return { status, cookies };
+	return { status };
 };
 
 export default Error;
