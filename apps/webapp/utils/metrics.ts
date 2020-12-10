@@ -70,9 +70,9 @@ export const getLatestTestStates = (userStories: UserStories['items']) => {
 	return latestTestStates; 
 };
 
-const lastSevenDays = [...Array(7).keys()].map((i) =>
-	moment().subtract(i + 1, 'days')
-);
+const lastSevenDays = [...Array(7).keys()]
+	.map((i) => moment().subtract(i + 1, 'days'))
+	.reverse();
 
 export const getRecordingsAndTestsByDay = (userStories: UserStories['items']) => {
 	const recordingsByDay = {};
