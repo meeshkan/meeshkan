@@ -59,6 +59,7 @@ const PROJECTS = gql`
 							title
 							testCreatedDate
 							isTestCase
+							createdAt
 							testRuns {
 								count
 								items {

@@ -78,17 +78,19 @@ export const getRecordingsAndTestsByDay = (userStories: UserStories['items']) =>
 	const recordingsByDay = {};
 	const testsByDay = {};
 	lastSevenDays.forEach((day) => {
-		const userStoriesOnThisDay = userStories.filter((story) => {
-			const { testCreatedDate } = story;
+		const recordingsOnThisDay = userStories.filter((story) => {
+			const { createdAt, isTestCase } = story;
+			return moment(createdAt).isSame(day, 'day') && !isTestCase;
+		});
+		const testsOnThisDay = userStories.filter((story) => {
+			const { testCreatedDate, isTestCase } = story;
 			return testCreatedDate
-				? moment(testCreatedDate).isSame(day, 'day')
+				? moment(testCreatedDate).isSame(day, 'day') && isTestCase 
 				: false;
 		});
 		const dayValue = day.valueOf();
-		recordingsByDay[dayValue] = userStoriesOnThisDay.length;
-		testsByDay[dayValue] = _.sumBy(userStoriesOnThisDay, (item) =>
-			Number(item.isTestCase)
-		);
+		recordingsByDay[dayValue] = recordingsOnThisDay.length;
+		testsByDay[dayValue] = testsOnThisDay.length;
 	});
 	return {
 		recordingsByDay,

@@ -46,6 +46,7 @@ interface UserStory {
 	failing: UserStoryFailing;
 	title: string;
 	isTestCase: boolean;
+	createdAt: string;
 	testCreatedDate: string;
 	testRuns: TestRuns;
 };
