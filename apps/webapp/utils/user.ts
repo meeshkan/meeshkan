@@ -16,16 +16,59 @@ export interface AvatarFile {
 	filename: string;
 }
 
-type Configuration = {
+interface Configuration {
 	inviteLink: string;
 };
 
-export type Project = {
+interface TestRun {
+	status: string;
+	dateTime: string;
+	userStories: {
+		items: Array<{ id: string }>;
+	}
+};
+
+interface TestRuns {
+	count: number;
+	items: Array<TestRun>;
+};
+
+interface UserStoryFailing {
+	count: number
+	items: Array<{
+		firstIntroduction: string;
+		isResolved: boolean;
+	}>
+};
+
+interface UserStory {
+	id: string;
+	failing: UserStoryFailing;
+	title: string;
+	isTestCase: boolean;
+	createdAt: string;
+	testCreatedDate: string;
+	testRuns: TestRuns;
+};
+
+export interface UserStories {
+	count: number;
+	items: Array<UserStory>
+};
+
+interface Release {
+	count: number;
+	items: Array<{ releaseDate: string }>
+};
+
+export interface Project {
 	id: string;
 	name: string;
 	avatar: Avatar;
 	configuration: Configuration;
 	hasReceivedEvents: boolean;
+	userStories: UserStories;
+	release?: Release;
 };
 
 export interface IUser {

@@ -45,6 +45,41 @@ const PROJECTS = gql`
 						inviteLink
 					}
 					hasReceivedEvents
+					userStories {
+						count
+						items {
+							id
+							failing {
+								count
+								items {
+									firstIntroduction
+									isResolved
+								}
+							}
+							title
+							testCreatedDate
+							isTestCase
+							createdAt
+							testRuns {
+								count
+								items {
+									status
+									dateTime
+									userStories {
+										items {
+											id
+										}
+									}
+								}
+							}
+						}
+					}
+					release {
+						count
+						items {
+							releaseDate
+						}
+					}
 				}
 			}
 		}
