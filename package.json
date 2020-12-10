@@ -93,6 +93,7 @@
 		"react-hook-form": "5.7.2",
 		"react-live": "2.2.2",
 		"react-player": "1.15.3",
+		"slugify": "^1.4.6",
 		"subscriptions-transport-ws": "^0.9.18",
 		"swr": "^0.3.9",
 		"truncate": "^2.1.0"

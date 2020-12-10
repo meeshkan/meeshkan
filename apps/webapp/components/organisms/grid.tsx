@@ -80,13 +80,10 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
-type GridProps = {
-	project: Project;
-};
-
-const Grid = ({ project: selectedProject, ...props }: GridProps) => {
-	const { projects } = useContext(UserContext);
+const Grid = (props) => {
+	const { projects, project: selectedProject } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
+
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
 	);
