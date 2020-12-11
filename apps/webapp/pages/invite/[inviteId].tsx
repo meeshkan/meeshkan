@@ -27,7 +27,6 @@ const Invite = (props: InviteProps) => {
         );
     }
 
-    console.log(data)
     if (data?.redirectTo) {
         router.push(data.redirectTo);
     }
