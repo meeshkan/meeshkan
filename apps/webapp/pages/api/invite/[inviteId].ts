@@ -19,15 +19,21 @@ export default async function invite(
                     ? req.query.inviteId
                     : req.query.inviteId[0],
                 userId
-            ); // TODO: handle invalid link
-			res.redirect(301, `/${slugify(
+            );
+
+            if (response.error) {
+                return res.status(401).json({ invalidInvite: true });
+            }
+
+            const redirectTo = `/${slugify(
                 response.configurationUpdate?.project?.name, { lower: true }
-            )}`);
+            )}`;
+			res.json({ redirectTo });
 		} catch (error) {
 			console.error(error);
 			res.status(error.status || 500).end(error.message);
 		}
 	} else {
-        res.redirect(301, `/api/login?inviteId=${req.query.inviteId}`);
+        res.json({ redirectTo: `/api/login?inviteId=${req.query.inviteId}` });
     }
 }

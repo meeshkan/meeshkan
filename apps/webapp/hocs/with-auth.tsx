@@ -27,26 +27,20 @@ const withAuth = (PageComponent) => {
 		if (user && !user.error) {
 			const providerValue = { ...user, project, setProject };
 			return (
-				<ChakraProvider cookies={props.cookies}>
-					<UserContext.Provider value={providerValue}>
-						<PageComponent {...props} />
-					</UserContext.Provider>
-				</ChakraProvider>
+				<UserContext.Provider value={providerValue}>
+					<PageComponent {...props} />
+				</UserContext.Provider>
 			);
 		}
 
 		if (loading) {
 			return (
-				<ChakraProvider cookies={props.cookies}>
-					<LoadingScreen />
-				</ChakraProvider>
+				<LoadingScreen />
 			);
 		}
 
 		return (
-			<ChakraProvider cookies={props.cookies}>
-				<AuthScreen />
-			</ChakraProvider>
+			<AuthScreen />
 		);
 	};
 };

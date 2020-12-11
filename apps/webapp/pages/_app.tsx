@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import withChakra from '../hocs/with-chakra';
 
 const CustomApp = ({ Component, pageProps }: AppProps) => {
 	return (
@@ -27,4 +28,4 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 	);
 };
 
-export default CustomApp;
+export default withChakra(CustomApp);

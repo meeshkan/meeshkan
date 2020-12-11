@@ -14,10 +14,10 @@ export default async function callback(
 			onUserLoaded: async (_, __, session, state) => {
 				if (state.inviteId) {
 					const userId = await getUserId(session.idToken);
-					await propagateInviteToDb(state.inviteId, userId);
+					const response = await propagateInviteToDb(state.inviteId, userId);
 				}
 
-				return Promise.resolve(session);
+				return session;
 			}
 		});
 	} catch (error) {

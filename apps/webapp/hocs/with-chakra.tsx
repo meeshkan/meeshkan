@@ -1,0 +1,17 @@
+import ChakraProvider from '../components/molecules/chakra';
+
+export interface IWithChakraProps {
+	cookies: string | undefined;
+}
+
+const withChakra = (PageComponent) => {
+	return (props: IWithChakraProps): JSX.Element => {
+        return (
+            <ChakraProvider cookies={props.cookies}>
+                <PageComponent {...props} />
+            </ChakraProvider>
+		);
+	};
+};
+
+export default withChakra;
