@@ -9,20 +9,22 @@ export const PROJECT_USER_STORIES = gql`
 		significance
 		isExpected
 		recording {
-			environment {
-				items {
-					ipAddress
-					browser
-					browserVersion
-					operatingSystem
-					language
+			items {
+				environment {
+					items {
+						ipAddress
+						browser
+						browserVersion
+						operatingSystem
+						language
+					}
 				}
+				sideScript
 			}
-			sideScript
 		}
 	}
 
-	query PROJECT_USER_STORIES($projectId: ID!, $first: Int, $skip: Int) {
+	query PROJECT_USER_STORIES($projectId: ID!, $first: Int!, $skip: Int!) {
 		recordings: userStoriesList(
 			filter: {
 				project: { id: { equals: $projectId } }

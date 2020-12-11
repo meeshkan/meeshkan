@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	TableCell,
 	TableRow,
 	TableHead,
 	TableBody,
-	TableIconButton,
 	TablePagination,
 	LinearProgressBar,
 } from '../molecules/table';
@@ -16,7 +15,6 @@ import {
 	Box,
 	Skeleton,
 	useColorModeValue,
-	ButtonGroup,
 	Flex,
 } from '@chakra-ui/react';
 import {
@@ -27,24 +25,17 @@ import {
 	useMountedLayoutEffect,
 } from 'react-table';
 import { AnimatePresence } from 'framer-motion';
-import {
-	ArrowLeftIcon,
-	ArrowRightIcon,
-	ChevronDownIcon,
-	ChevronLeftIcon,
-	ChevronRightIcon,
-	ChevronUpIcon,
-	DeleteIcon,
-	EditIcon,
-} from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, EditIcon } from '@chakra-ui/icons';
 
 type TableProps<T extends object = {}> = {
-	data: any;
-	initialPageSize?: number;
-	initialPageIndex?: number;
-	totalCount?: number;
-	loading?: boolean;
 	columns: Column<T>[];
+	data: any;
+	fetchData: any;
+	getRowId?: (row: any, relativeIndex: number, parent: any) => string;
+	initialPageIndex?: number;
+	initialPageSize?: number;
+	loading?: boolean;
+	onEdit?: (id: string) => void;
 	onPaginate?: ({
 		pageIndex,
 		pageSize,
@@ -52,33 +43,26 @@ type TableProps<T extends object = {}> = {
 		pageIndex: number;
 		pageSize: number;
 	}) => void;
-	onEdit?: (id: string) => void;
-	onRemove?: (id: string) => void;
-	getRowId?: (row: any, relativeIndex: number, parent: any) => string;
-	defaultGroupByColumnIds?: string[];
-	getRowProps?: (row: any) => void;
+	totalCount?: number;
 };
-
-const defaultPropGetter = () => ({});
 
 const Table = ({
 	columns,
 	data,
+	fetchData,
+	getRowId,
 	initialPageIndex,
 	initialPageSize,
-	totalCount,
 	loading,
-	onPaginate,
-	onRemove,
 	onEdit,
-	getRowId,
-	getRowProps = defaultPropGetter,
+	onPaginate,
+	totalCount,
 }: TableProps) => {
 	const controlledPageCount = totalCount
 		? Math.ceil(totalCount / initialPageSize)
 		: 1;
 
-	const hasActions = !!(onEdit || onRemove);
+	const hasActions = !!onEdit;
 
 	const _getRowId = () => {
 		if (getRowId) {
@@ -94,13 +78,6 @@ const Table = ({
 		headerGroups,
 		prepareRow,
 		page,
-		canPreviousPage,
-		canNextPage,
-		pageOptions,
-		pageCount,
-		gotoPage,
-		nextPage,
-		previousPage,
 		setPageSize,
 		visibleColumns,
 		state: { pageIndex, pageSize },
@@ -113,6 +90,7 @@ const Table = ({
 				pageSize: initialPageSize,
 			},
 			manualPagination: true,
+			autoResetPage: false,
 			pageCount: controlledPageCount,
 			getRowId: _getRowId(),
 		},
@@ -153,13 +131,6 @@ const Table = ({
 													}}
 												/>
 											)}
-											{onRemove && (
-												<ActionButton
-													aria-label="Delete"
-													icon={<DeleteIcon />}
-													ml={1}
-												/>
-											)}
 										</Box>
 									),
 								},
@@ -169,6 +140,10 @@ const Table = ({
 			});
 		}
 	);
+
+	useEffect(() => {
+		fetchData({ pageIndex, pageSize });
+	}, [fetchData, pageIndex, pageSize]);
 
 	// this prevents calling paginate on first mount
 	useMountedLayoutEffect(() => {
@@ -306,23 +281,9 @@ const Table = ({
 					flexDirection="row"
 					roundedBottom="lg"
 				>
-					<Stack isInline spacing={2}>
-						<ButtonGroup isAttached mr={4}>
-							<TableIconButton
-								onClick={() => gotoPage(0)}
-								isDisabled={!canPreviousPage}
-								icon={<ArrowLeftIcon />}
-							/>
-							<TableIconButton
-								isDisabled={!canPreviousPage}
-								onClick={() => previousPage()}
-								icon={<ChevronLeftIcon />}
-							/>
-						</ButtonGroup>
-					</Stack>
 					<Stack isInline flexWrap="nowrap" justify="center" align="center">
 						<Text whiteSpace="nowrap" fontSize="md">
-							Page {pageIndex + 1} of {pageOptions.length}
+							{totalCount} total stories
 						</Text>
 						<Select
 							size="sm"
@@ -338,21 +299,8 @@ const Table = ({
 									Show {pageSize}
 								</option>
 							))}
+							<option value={totalCount}>Show all</option>
 						</Select>
-					</Stack>
-					<Stack isInline spacing={2}>
-						<ButtonGroup isAttached ml={4}>
-							<TableIconButton
-								isDisabled={!canNextPage}
-								onClick={() => nextPage()}
-								icon={<ChevronRightIcon />}
-							/>
-							<TableIconButton
-								onClick={() => gotoPage(pageCount - 1)}
-								isDisabled={!canNextPage}
-								icon={<ArrowRightIcon />}
-							/>
-						</ButtonGroup>
 					</Stack>
 				</TablePagination>
 			)}

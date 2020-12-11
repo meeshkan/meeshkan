@@ -1,10 +1,4 @@
-import React, {
-	useState,
-	useMemo,
-	useEffect,
-	useCallback,
-	useContext,
-} from 'react';
+import React, { useState, useMemo, useCallback, useContext } from 'react';
 import {
 	Box,
 	Stack,
@@ -12,7 +6,6 @@ import {
 	useColorModeValue,
 	Flex,
 	Button,
-	Code,
 	Badge,
 } from '@chakra-ui/react';
 import GridCard from '../components/molecules/grid-card';
@@ -30,8 +23,6 @@ import { Column } from 'react-table';
 import { eightBaseClient } from '../utils/graphql';
 import { UserContext } from '../utils/user';
 import { PROJECT_USER_STORIES } from '../graphql/user-stories';
-
-const ROWS_PER_PAGE = 10;
 
 function StartButton({ icon, text }) {
 	return (
@@ -72,15 +63,17 @@ interface Recordings {
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { idToken, projects } = useContext(UserContext);
+
+	const [toggleIndex, setToggleIndex] = React.useState(0);
+
 	const [tableLoading, setTableLoading] = useState(false);
 	const [tableData, setTableData] = useState<Recordings>({
 		recordings: { count: 0, items: [] },
 		testCases: { count: 0, items: [] },
 	});
-	const [toggleIndex, setToggleIndex] = React.useState(0);
 	const [pagination, setPagination] = useState({
 		page: 0,
-		rowsPerPage: ROWS_PER_PAGE,
+		rowsPerPage: 10,
 	});
 
 	const columns: Column[] = useMemo(
@@ -136,8 +129,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					let stepCount = JSON.parse(originalRow.recording.sideScript).tests[0]
-						.commands.length;
+					let stepCount = JSON.parse(originalRow.recording.items[0].sideScript)
+						.tests[0].commands.length;
 					return stepCount;
 				},
 			},
@@ -145,11 +138,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
-	useEffect(() => {
-		async function fetchData() {
+	const fetchData = React.useCallback(
+		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
-			let request = await client
+			let request = client
 				.request(PROJECT_USER_STORIES, {
 					projectId: projects[0].id,
 					first: pagination.rowsPerPage,
@@ -160,25 +153,18 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					setTableLoading(false);
 				});
 			return request;
-		}
-		fetchData();
-	}, [pagination]);
+		},
+		[pagination.page, pagination.rowsPerPage]
+	);
 
 	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
 
-	const handleRemove = async (id: string) => {
-		console.log('delete', id);
-	};
-
 	const handleEdit = (id: string) => {
 		console.log('edit', id);
 	};
 
-	const handleUpdateData = async (id: string, field: string, value: any) => {
-		console.log('update data', id, field, value);
-	};
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
 			<GridCard title="Getting started">
@@ -234,6 +220,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						<Button size="sm">Review recordings</Button>
 					) : null}
 				</Flex>
+
 				<Table
 					columns={columns}
 					data={
@@ -241,6 +228,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							? tableData.recordings.items
 							: tableData.testCases.items
 					}
+					fetchData={fetchData}
 					loading={tableLoading}
 					totalCount={
 						toggleIndex === 0
@@ -250,7 +238,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					onPaginate={handlePagination}
 					initialPageIndex={pagination.page}
 					initialPageSize={pagination.rowsPerPage}
-					onRemove={handleRemove}
 					onEdit={handleEdit}
 				/>
 			</Box>
