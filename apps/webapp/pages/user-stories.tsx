@@ -252,8 +252,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					initialPageSize={pagination.rowsPerPage}
 					onRemove={handleRemove}
 					onEdit={handleEdit}
-					onUpdateData={handleUpdateData}
-					isSelectable={false}
 				/>
 			</Box>
 		</Stack>
