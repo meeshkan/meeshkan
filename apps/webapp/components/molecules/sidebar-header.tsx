@@ -19,14 +19,21 @@ import { LogoIcon, InboxIcon, MoonIcon, SunIcon } from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
 import { UserContext } from '../../utils/user';
+import { shutdown as shutdownIntercom } from '../../utils/intercom';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
-	const { avatar, nickname } = useContext(UserContext);
+	const { avatar, name } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
+
+	const handleLogoutClick = () => {
+		Router.push('/api/logout');
+		shutdownIntercom();
+	};
+
 	return (
 		<Flex align="center">
 			<Box>
@@ -51,7 +58,12 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						size="sm"
 						px={2}
 					>
-						<Avatar name={nickname} src={avatar} size="2xs" borderRadius="md" />
+						<Avatar
+							name={name}
+							src={avatar && avatar}
+							size="2xs"
+							borderRadius="md"
+						/>
 						<ChevronDownIcon
 							color={useColorModeValue('gray.600', 'gray.500')}
 						/>
@@ -65,7 +77,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							{colorMode === 'light' ? 'Dark' : 'Light'} mode
 						</MenuItem>
 						<MenuDivider />
-						<MenuItem onClick={() => Router.push('/api/logout')}>
+						<MenuItem onClick={handleLogoutClick}>
 							Log out
 						</MenuItem>
 					</MenuList>

@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react';
 import Grid from '../components/organisms/grid';
-import withAuth from '../hocs/with-auth';
 import { UserContext } from '../utils/user';
 
 type IndexProps = {

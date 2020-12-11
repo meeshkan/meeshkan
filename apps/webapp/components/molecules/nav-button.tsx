@@ -28,7 +28,7 @@ const variants = {
 };
 
 type SidebarLinkProps = PropsOf<typeof MotionButton> & {
-	href: string;
+	href?: string;
 	icon?: React.ReactElement;
 };
 
@@ -39,8 +39,43 @@ const SidebarLink = (props: SidebarLinkProps) => {
 	const isActive = pathname === href;
 	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
 
-	return (
-		<NextLink href={href} passHref>
+	if (href) {
+		return (
+			<NextLink href={href} passHref>
+				<MotionButton
+					as={Link}
+					aria-current={isActive ? 'page' : undefined}
+					isActive={isActive}
+					size="sm"
+					variant="ghost"
+					colorScheme="gray"
+					width="100%"
+					justifyContent="flex-start"
+					alignItems="center"
+					fontWeight={500}
+					fontSize="16px"
+					color={useColorModeValue('gray.500', 'gray.400')}
+					_active={{
+						backgroundColor: useColorModeValue('gray.100', 'gray.800'),
+						color: useColorModeValue('gray.900', 'white'),
+					}}
+					// @ts-ignore
+					_hover={{
+						backgroundColor: useColorModeValue(
+							transparentize('gray.100', 0.75),
+							transparentize('gray.800', 0.75)
+						),
+						textDecor: 'none',
+					}}
+					variants={isSmallScreen ? variants : {}}
+					{...rest}
+				>
+					{children}
+				</MotionButton>
+			</NextLink>
+		);
+	} else {
+		return (
 			<MotionButton
 				as={Link}
 				aria-current={isActive ? 'page' : undefined}
@@ -71,8 +106,8 @@ const SidebarLink = (props: SidebarLinkProps) => {
 			>
 				{children}
 			</MotionButton>
-		</NextLink>
-	);
+		);
+	}
 };
 
 export default SidebarLink;

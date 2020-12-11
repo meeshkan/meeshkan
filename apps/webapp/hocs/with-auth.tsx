@@ -12,20 +12,20 @@ export interface IWithAuthProps {
 const withAuth = (PageComponent) => {
 	return (props: IWithAuthProps): JSX.Element => {
 		const { user, loading } = useFetchUser(props.user);
-		if (loading) {
-			return (
-				<ChakraProvider cookies={props.cookies}>
-					<LoadingScreen />
-				</ChakraProvider>
-			);
-		}
-
 		if (user && !user.error) {
 			return (
 				<ChakraProvider cookies={props.cookies}>
 					<UserContext.Provider value={user}>
 						<PageComponent {...props} />
 					</UserContext.Provider>
+				</ChakraProvider>
+			);
+		}
+
+		if (loading) {
+			return (
+				<ChakraProvider cookies={props.cookies}>
+					<LoadingScreen />
 				</ChakraProvider>
 			);
 		}

@@ -8,7 +8,12 @@ type GridCardProps = {
 	leftIconSrc?: string;
 } & BoxProps;
 
-const GridCard = ({ title, children, leftIconSrc, ...props }: GridCardProps) => {
+const GridCard = ({
+	title,
+	children,
+	leftIconSrc,
+	...props
+}: GridCardProps) => {
 	return (
 		<Card overflowY="scroll" {...props}>
 			<Heading
@@ -20,12 +25,7 @@ const GridCard = ({ title, children, leftIconSrc, ...props }: GridCardProps) => 
 				lineHeight="short"
 			>
 				{leftIconSrc && (
-					<Image
-						src={leftIconSrc}
-						boxSize="16px"
-						alt={title}
-						mr={3}
-					/>
+					<Image src={leftIconSrc} boxSize="16px" alt={title} mr={3} />
 				)}
 				{title}
 			</Heading>
