@@ -37,7 +37,7 @@ export const propagateInviteToDb = async (
 	try {
 		result = await client.request(PROJECT_JOIN_MUTATION, {
 			userId: userId,
-			inviteLink: `https://app.meeshkan.com/api/invite/${inviteId}`,
+			inviteLink: `https://app.meeshkan.com/invite/${inviteId}`,
 		});
 	} catch (error) {
 		console.error(error);
