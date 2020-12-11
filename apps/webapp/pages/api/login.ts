@@ -13,7 +13,8 @@ export default async function login(
 			authParams: {
 				login_hint: get(session, 'user.name'),
 			},
-			getState: (req) => (req.query.inviteId ? { inviteId: req.query.inviteId } : {}),
+			getState: (req) =>
+				req.query.inviteId ? { inviteId: req.query.inviteId } : {},
 		});
 	} catch (error) {
 		console.error(error);

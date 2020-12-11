@@ -11,26 +11,24 @@ type IndexProps = {
 };
 
 const Index = (props: IndexProps) => {
-    const { projects, project, setProject } = useContext(UserContext);
+	const { projects, project, setProject } = useContext(UserContext);
 
-    useEffect(() => {
-        if (projects.length > 0) {
-            setProject(projects[0]);
-        }
-    }, [projects, setProject]);
+	useEffect(() => {
+		if (projects.length > 0) {
+			setProject(projects[0]);
+		}
+	}, [projects, setProject]);
 
-    if (projects.length > 0 && project.id === -1) {
-        return (
-            <LoadingScreen />
-        );
-    } 
+	if (projects.length > 0 && project.id === -1) {
+		return <LoadingScreen />;
+	}
 
-    return (
+	return (
 		<Layout>
 			<SideBar />
 			<Grid />
 		</Layout>
-    );
+	);
 };
 
 export default withAuth(Index);

@@ -12,28 +12,26 @@ type InviteProps = {
 };
 
 const Invite = (props: InviteProps) => {
-    const router = useRouter();
-    const { inviteId } = router.query;
-    const { data, loading } = useInviteLink(inviteId as string);
+	const router = useRouter();
+	const { inviteId } = router.query;
+	const { data, loading } = useInviteLink(inviteId as string);
 
-    if (inviteId === 'invalid' || data?.invalidInvite) {
-        return (
-            <Flex align="center" justify="center" direction="column" h="100vh">
-                <LogoIcon width="auto" height={10} />
-                <Heading fontSize="2xl" fontStyle="italic" mt={5}>
-                    This invite link seems to be invalid.
-                </Heading>
-            </Flex>
-        );
-    }
+	if (inviteId === 'invalid' || data?.invalidInvite) {
+		return (
+			<Flex align="center" justify="center" direction="column" h="100vh">
+				<LogoIcon width="auto" height={10} />
+				<Heading fontSize="2xl" fontStyle="italic" mt={5}>
+					This invite link seems to be invalid.
+				</Heading>
+			</Flex>
+		);
+	}
 
-    if (data?.redirectTo) {
-        router.push(data.redirectTo);
-    }
+	if (data?.redirectTo) {
+		router.push(data.redirectTo);
+	}
 
-    return (
-        <LoadingScreen />
-    );
+	return <LoadingScreen />;
 };
 
 export default Invite;

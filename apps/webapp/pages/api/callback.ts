@@ -30,10 +30,10 @@ export default async function callback(
 				return {
 					session,
 					options: {
-						redirectTo: `/api/after-auth-hook?${redirectParams}`, 
+						redirectTo: `/api/after-auth-hook?${redirectParams}`,
 					},
 				};
-			}
+			},
 		});
 	} catch (error) {
 		console.error(error);

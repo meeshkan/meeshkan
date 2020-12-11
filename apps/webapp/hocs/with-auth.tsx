@@ -34,14 +34,10 @@ const withAuth = (PageComponent) => {
 		}
 
 		if (loading) {
-			return (
-				<LoadingScreen />
-			);
+			return <LoadingScreen />;
 		}
 
-		return (
-			<AuthScreen />
-		);
+		return <AuthScreen />;
 	};
 };
 

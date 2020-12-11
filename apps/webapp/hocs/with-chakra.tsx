@@ -6,10 +6,10 @@ export interface IWithChakraProps {
 
 const withChakra = (PageComponent) => {
 	return (props: IWithChakraProps): JSX.Element => {
-        return (
-            <ChakraProvider cookies={props.cookies}>
-                <PageComponent {...props} />
-            </ChakraProvider>
+		return (
+			<ChakraProvider cookies={props.cookies}>
+				<PageComponent {...props} />
+			</ChakraProvider>
 		);
 	};
 };

@@ -18,16 +18,15 @@ const Project = (props: ProjectProps) => {
 	const { projectName } = router.query;
 
 	useEffect(() => {
-		const selectedProject = projects
-			.find(project => slugify(project.name, { lower: true}) === projectName);
+		const selectedProject = projects.find(
+			(project) => slugify(project.name, { lower: true }) === projectName
+		);
 
 		selectedProject ? setProject(selectedProject) : router.push('/404');
 	}, [projectName, projects, setProject]);
 
 	if (project.id === -1) {
-		return (
-			<LoadingScreen />
-		);
+		return <LoadingScreen />;
 	}
 
 	return (
