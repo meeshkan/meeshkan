@@ -1,10 +1,7 @@
 import { Flex, Heading } from '@chakra-ui/react';
-import { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
 import { LogoIcon } from '@frontend/chakra-theme';
 import LoadingScreen from '../../components/organisms/loading-screen';
-import { UserContext } from '../../utils/user';
 import { useInviteLink } from '../../hooks/use-invite-link';
 
 type InviteProps = {
@@ -14,9 +11,9 @@ type InviteProps = {
 const Invite = (props: InviteProps) => {
 	const router = useRouter();
 	const { inviteId } = router.query;
-	const { data, loading } = useInviteLink(inviteId as string);
+	const { data, error } = useInviteLink(inviteId as string);
 
-	if (inviteId === 'invalid' || data?.invalidInvite) {
+	if (inviteId === 'invalid' || data?.invalidInvite || error) {
 		return (
 			<Flex align="center" justify="center" direction="column" h="100vh">
 				<LogoIcon width="auto" height={10} />

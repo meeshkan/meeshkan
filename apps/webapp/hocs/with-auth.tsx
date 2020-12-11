@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify';
-import ChakraProvider from '../components/molecules/chakra';
 import LoadingScreen from '../components/organisms/loading-screen';
 import AuthScreen from '../components/organisms/auth-screen';
 import { UserContext, IUser } from '../utils/user';

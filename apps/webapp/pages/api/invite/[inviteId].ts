@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import slugify from 'slugify';
-import initAuth0, { getUser } from '../../../utils/auth0';
+import initAuth0 from '../../../utils/auth0';
 import { getUserId } from '../../../utils/user';
-import { getProjects } from '../../../utils/project';
 import { propagateInviteToDb } from '../../../utils/invite';
 
 export default async function invite(
