@@ -30,7 +30,7 @@
 	"dependencies": {
 		"@apollo/client": "^3.2.5",
 		"@apollo/react-hooks": "^4.0.0",
-		"@auth0/nextjs-auth0": "^0.16.0",
+		"@auth0/nextjs-auth0": "meeshkan/nextjs-auth0",
 		"@chakra-ui/icons": "^1.0.0",
 		"@chakra-ui/react": "^1.0.0",
 		"@chakra-ui/theme-tools": "^1.0.0",
@@ -93,6 +93,7 @@
 		"react-hook-form": "5.7.2",
 		"react-live": "2.2.2",
 		"react-player": "1.15.3",
+		"slugify": "^1.4.6",
 		"subscriptions-transport-ws": "^0.9.18",
 		"swr": "^0.3.9",
 		"truncate": "^2.1.0"
