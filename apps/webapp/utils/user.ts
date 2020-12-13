@@ -18,28 +18,28 @@ export interface AvatarFile {
 
 interface Configuration {
 	inviteLink: string;
-};
+}
 
 interface TestRun {
 	status: string;
 	dateTime: string;
 	userStories: {
 		items: Array<{ id: string }>;
-	}
-};
+	};
+}
 
 interface TestRuns {
 	count: number;
 	items: Array<TestRun>;
-};
+}
 
 interface UserStoryFailing {
-	count: number
+	count: number;
 	items: Array<{
 		firstIntroduction: string;
 		isResolved: boolean;
-	}>
-};
+	}>;
+}
 
 interface UserStory {
 	id: string;
@@ -49,17 +49,17 @@ interface UserStory {
 	createdAt: string;
 	testCreatedDate: string;
 	testRuns: TestRuns;
-};
+}
 
 export interface UserStories {
 	count: number;
-	items: Array<UserStory>
-};
+	items: Array<UserStory>;
+}
 
 interface Release {
 	count: number;
-	items: Array<{ releaseDate: string }>
-};
+	items: Array<{ releaseDate: string }>;
+}
 
 export interface Project {
 	id: string;
@@ -69,7 +69,7 @@ export interface Project {
 	hasReceivedEvents: boolean;
 	userStories: UserStories;
 	release?: Release;
-};
+}
 
 export interface IUser {
 	id?: string;

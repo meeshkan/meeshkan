@@ -30,18 +30,14 @@ import {
 	PlusIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
-import { UserContext, Project } from '../../utils/user';
+import { UserContext } from '../../utils/user';
 import { show as showIntercom } from '../../utils/intercom';
 
-type SideBarBodyProps = {
-	project: Project;
-	setProject: (project: Project) => void;
-};
-
-const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
-	const { projects } = useContext(UserContext);
+const SideBarBody = () => {
+	const { projects, project, setProject } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
 	const avatarUrl = project.avatar?.downloadUrl;
+
 	return (
 		<>
 			{hasProjects ? (
