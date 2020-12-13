@@ -52,10 +52,18 @@ const SideBarBody = ({ project, setProject }: SideBarBodyProps) => {
 					<NavButton leftIcon={<VideoIcon />} href={`/user-stories`}>
 						User stories
 					</NavButton>
-					<NavButton leftIcon={<CheckSquareIcon />} href={`/test-runs`}>
+					<NavButton
+						leftIcon={<CheckSquareIcon />}
+						href={`/test-runs`}
+						disabled={true}
+					>
 						Test runs
 					</NavButton>
-					<NavButton leftIcon={<PackageIcon />} href={`/releases`}>
+					<NavButton
+						leftIcon={<PackageIcon />}
+						href={`/releases`}
+						disabled={true}
+					>
 						Releases
 					</NavButton>
 				</Stack>

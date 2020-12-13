@@ -15,7 +15,13 @@ import {
 	useColorMode,
 } from '@chakra-ui/react';
 import Router from 'next/router';
-import { LogoIcon, InboxIcon, MoonIcon, SunIcon } from '@frontend/chakra-theme';
+import {
+	LogoIcon,
+	InboxIcon,
+	MoonIcon,
+	SunIcon,
+	LogoutIcon,
+} from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
 import { UserContext } from '../../utils/user';
@@ -63,6 +69,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							src={avatar && avatar}
 							size="2xs"
 							borderRadius="md"
+							backgroundColor="transparent"
 						/>
 						<ChevronDownIcon
 							color={useColorModeValue('gray.600', 'gray.500')}
@@ -73,12 +80,13 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						<MenuItem>View settings</MenuItem>
 						<MenuDivider />
 						<MenuItem onClick={toggleColorMode}>
-							{colorMode === 'light' ? <MoonIcon mr={2} /> : <SunIcon mr={2} />}
+							{colorMode === 'light' ? <MoonIcon mr={3} /> : <SunIcon mr={3} />}
 							{colorMode === 'light' ? 'Dark' : 'Light'} mode
 						</MenuItem>
 						<MenuDivider />
 						<MenuItem onClick={handleLogoutClick}>
-							Log out
+							{' '}
+							<LogoutIcon mr={3} /> Log out
 						</MenuItem>
 					</MenuList>
 				</Menu>

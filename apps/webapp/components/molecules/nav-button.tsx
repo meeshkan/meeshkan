@@ -30,16 +30,17 @@ const variants = {
 type SidebarLinkProps = PropsOf<typeof MotionButton> & {
 	href?: string;
 	icon?: React.ReactElement;
+	disabled?: boolean;
 };
 
 const SidebarLink = (props: SidebarLinkProps) => {
-	const { href, children, ...rest } = props;
+	const { href, children, disabled, ...rest } = props;
 
 	const { pathname } = useRouter();
 	const isActive = pathname === href;
 	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
 
-	if (href) {
+	if (href && disabled !== true) {
 		return (
 			<NextLink href={href} passHref>
 				<MotionButton
@@ -80,6 +81,7 @@ const SidebarLink = (props: SidebarLinkProps) => {
 				as={Link}
 				aria-current={isActive ? 'page' : undefined}
 				isActive={isActive}
+				disabled={disabled}
 				size="sm"
 				variant="ghost"
 				colorScheme="gray"
