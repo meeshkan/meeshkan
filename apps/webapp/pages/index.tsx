@@ -1,6 +1,7 @@
 import { useEffect, useContext } from 'react';
 import LoadingScreen from '../components/organisms/loading-screen';
 import Grid from '../components/organisms/grid';
+import withAuth from '../hocs/with-auth';
 import { UserContext } from '../utils/user';
 
 type IndexProps = {
@@ -27,6 +28,6 @@ const Index = (props: IndexProps) => {
 	);
 };
 
-export { getServerSideProps } from '../components/molecules/chakra';
+export default withAuth(Index);
 
-export default Index;
+export { getServerSideProps } from '../components/molecules/chakra';
