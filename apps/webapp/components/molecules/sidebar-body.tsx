@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import slugify from 'slugify';
 import {
 	Stack,
@@ -36,35 +36,46 @@ import { show as showIntercom } from '../../utils/intercom';
 
 const SideBarBody = () => {
 	const { projects, project, setProject } = useContext(UserContext);
+	const router = useRouter();
 	const hasProjects = projects.length > 0;
 	const avatarUrl = project.avatar?.downloadUrl;
+	const slugifiedProjectName = slugify(project.name, { lower: true });
+	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 
 	return (
 		<>
 			{hasProjects ? (
 				<Stack mt={6}>
-					<NavButton leftIcon={<ActivityIcon />} href={`/`}>
+					<NavButton
+						leftIcon={<ActivityIcon />}
+						href="/"
+						isActive={
+							router.pathname === '/' ||
+							router.pathname === `/[projectName]`
+						}
+					>
 						Health dashboard
 					</NavButton>
 					<NavButton
 						leftIcon={<VideoIcon />}
-						href={`/${
-							slugify(project.name, { lower: true })
-						}/user-stories`}
+						href={userStoriesHref}
+						isActive={
+							router.pathname.split('/').slice(-1)[0] === 'user-stories'
+						}
 					>
 						User stories
 					</NavButton>
 					<NavButton
 						leftIcon={<CheckSquareIcon />}
-						href={`/test-runs`}
-						disabled={true}
+						href="/test-runs"
+						disabled
 					>
 						Test runs
 					</NavButton>
 					<NavButton
 						leftIcon={<PackageIcon />}
-						href={`/releases`}
-						disabled={true}
+						href="/releases"
+						disabled
 					>
 						Releases
 					</NavButton>
@@ -138,7 +149,7 @@ const SideBarBody = () => {
 								))}
 							</MenuOptionGroup>
 							<MenuDivider />
-							<MenuItem onClick={() => Router.push('/new-project')}>
+							<MenuItem onClick={() => router.push('/new-project')}>
 								<PlusIcon mr={3} />
 								Create project
 							</MenuItem>

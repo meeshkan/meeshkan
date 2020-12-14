@@ -8,7 +8,6 @@ import {
 import MotionButton from '../atoms/motion-button';
 import { transparentize } from '@chakra-ui/theme-tools';
 import NextLink from 'next/link';
-import { useRouter } from 'next/router';
 
 const variants = {
 	open: {
@@ -30,14 +29,12 @@ const variants = {
 type NavButtonProps = PropsOf<typeof MotionButton> & {
 	href?: string;
 	icon?: ReactElement;
+	isActive?: boolean;
 	disabled?: boolean;
 };
 
 const NavButton = (props: NavButtonProps) => {
-	const { href, children, disabled, ...rest } = props;
-
-	const { pathname } = useRouter();
-	const isActive = pathname === href;
+	const { href, children, disabled, isActive = false, ...rest } = props;
 	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
 
 	if (href && disabled !== true) {
