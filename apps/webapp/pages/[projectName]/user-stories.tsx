@@ -5,6 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
+import Router from 'next/router';
 import {
 	Box,
 	Stack,
@@ -13,6 +14,7 @@ import {
 	Flex,
 	Button,
 	Badge,
+	BoxProps,
 } from '@chakra-ui/react';
 import GridCard from '../../components/molecules/grid-card';
 import {
@@ -28,14 +30,16 @@ import Table from '../../components/organisms/table';
 import { Column } from 'react-table';
 import { eightBaseClient } from '../../utils/graphql';
 import { UserContext } from '../../utils/user';
+import { show as showIntercom } from '../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../graphql/user-stories';
 
 type StartButtonProps = {
 	icon: ReactElement;
 	text: string;
+	props?: BoxProps;
 };
 
-const StartButton = ({ icon, text }: StartButtonProps) => {
+const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
 	return (
 		<Box
 			d="flex"
@@ -50,6 +54,8 @@ const StartButton = ({ icon, text }: StartButtonProps) => {
 			p={4}
 			w="100%"
 			borderRadius="md"
+			cursor="pointer"
+			{...props}
 		>
 			{icon}
 			<Text ml={4}>{text}</Text>
@@ -190,6 +196,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Read the documentation"
+						onClick={() => Router.push('https://meeshkan.com/docs')}
 					/>
 					<StartButton
 						icon={
@@ -200,6 +207,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Chat with an expert"
+						onClick={showIntercom}
 					/>
 					<Box
 						d="flex"

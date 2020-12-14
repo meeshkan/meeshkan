@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import Router from 'next/router';
+import slugify from 'slugify';
 import {
 	Stack,
 	Box,
@@ -47,7 +48,9 @@ const SideBarBody = () => {
 					</NavButton>
 					<NavButton
 						leftIcon={<VideoIcon />}
-						href={`/${project.name}/user-stories`}
+						href={`/${
+							slugify(project.name, { lower: true })
+						}/user-stories`}
 					>
 						User stories
 					</NavButton>
