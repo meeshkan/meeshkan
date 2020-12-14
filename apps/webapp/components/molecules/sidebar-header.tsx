@@ -77,7 +77,6 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 					</MenuButton>
 					<MenuList>
 						<MenuItem>View profile</MenuItem>
-						<MenuItem>View settings</MenuItem>
 						<MenuDivider />
 						<MenuItem onClick={toggleColorMode}>
 							{colorMode === 'light' ? <MoonIcon mr={3} /> : <SunIcon mr={3} />}
