@@ -48,7 +48,7 @@ const SideBarBody = () => {
 				<Stack mt={6}>
 					<NavButton
 						leftIcon={<ActivityIcon />}
-						href="/"
+						href={`/${slugifiedProjectName}`}
 						isActive={
 							router.pathname === '/' ||
 							router.pathname === `/[projectName]`
