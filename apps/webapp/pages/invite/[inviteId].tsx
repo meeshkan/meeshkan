@@ -15,7 +15,7 @@ const Invite = (props: InviteProps) => {
 
 	if (inviteId === 'invalid' || data?.invalidInvite || error) {
 		return (
-			<Flex align="center" justify="center" direction="column" h="100vh">
+			<Flex align="center" justify="center" direction="column" w="100%">
 				<LogoIcon width="auto" height={10} />
 				<Heading fontSize="2xl" fontStyle="italic" mt={5}>
 					This invite link seems to be invalid.
