@@ -184,7 +184,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	};
 
 	return (
-		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
+		<Stack p={[6, 0, 0, 0]} w="100%" spacing={6}>
 			<GridCard title="Getting started">
 				<Stack direction={['column', 'column', 'row']} spacing="32px">
 					<StartButton
@@ -229,7 +229,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				</Stack>
 			</GridCard>
 			<Box>
-				<Flex justify="space-between" align="center">
+				<Flex justify="space-between" align="center" flex="1">
 					<SegmentedControl
 						values={['Recordings', 'Test cases']}
 						selectedIndex={toggleIndex}

@@ -160,14 +160,6 @@ const Table = ({
 				overflowX="auto"
 				overflowY="auto"
 				maxH="64vh"
-				css={{
-					'::-webkit-scrollbar': {
-						width: 0,
-						height: 0,
-					},
-					scrollbarWidth: 'none',
-					msOverflowStyle: 'none',
-				}}
 			>
 				<Box
 					as="table"
