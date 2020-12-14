@@ -1,6 +1,6 @@
 import { useEffect, useContext } from 'react';
 import LoadingScreen from '../components/organisms/loading-screen';
-import Grid from '../components/organisms/grid';
+import Card from '../components/atoms/card';
 import { UserContext } from '../utils/user';
 
 type IndexProps = {
@@ -16,15 +16,7 @@ const Index = (props: IndexProps) => {
 		}
 	}, [projects, setProject]);
 
-	if (projects.length > 0 && project.id === -1) {
-		return (
-			<LoadingScreen />
-		);
-	}
-
-	return (
-		<Grid />
-	);
+	return <LoadingScreen as={Card} />;
 };
 
 export default Index;
