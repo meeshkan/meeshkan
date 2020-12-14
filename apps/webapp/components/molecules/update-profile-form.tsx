@@ -31,9 +31,10 @@ const jobTitles = ['Product manager', 'CTO', 'Other'];
 type UpdateProfileFormProps = {
 	setLoading: (value: boolean) => void;
 	setStep?: (step: 1 | 2) => void;
+	formId?: string;
 };
 
-const UpdateProfileForm = ({ setLoading, setStep }: UpdateProfileFormProps) => {
+const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfileFormProps) => {
 	const [error, setError] = useState('');
 	const { name: currentName, jobTitle, idToken } = useContext(UserContext);
 	const [name, setName] = useState<string>(currentName);
@@ -68,7 +69,7 @@ const UpdateProfileForm = ({ setLoading, setStep }: UpdateProfileFormProps) => {
 	const onUpload = (data: AvatarFile) => updateUserAvatar(idToken, data);
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} id="form">
+		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
 			<AvatarField isProfileAvatar onUpload={onUpload} />
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>What's your name?</FormLabel>

@@ -21,6 +21,7 @@ import { useValidateSelectedProject } from '../../hooks/use-validate-selected-pr
 import LoadingScreen from '../../components/organisms/loading-screen';
 import GridCard from '../../components/molecules/grid-card';
 import UpdateProfileForm from '../../components/molecules/update-profile-form';
+import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
 import { UserContext, updateProductNotifications } from '../../utils/user';
 
@@ -29,6 +30,7 @@ const Settings = () => {
 	const toast = useToast();
 	const { productNotifications, idToken, project } = useContext(UserContext);
     const [profileLoading, setProfileLoading] = useState(false);
+	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
 
 	const { hasCopied, onCopy } = useClipboard(project?.configuration?.inviteLink);
@@ -71,8 +73,8 @@ const Settings = () => {
             <Stack spacing={6}>
                 <Heading fontSize="20px" color="gray.500" lineHeight="short">Personal</Heading>
                 <GridCard title="Profile" subtitle="Manage your Meeshkan Profile">
-                    <UpdateProfileForm setLoading={setProfileLoading} />
-                    <Button mt={4} type="submit" isLoading={profileLoading} form="form" ml="auto" d="block">
+                    <UpdateProfileForm setLoading={setProfileLoading} formId="profileUpdateForm" />
+                    <Button mt={4} type="submit" isLoading={profileLoading} form="profileUpdateForm" ml="auto" d="block">
 						Update profile
 					</Button>
                 </GridCard>
@@ -92,6 +94,10 @@ const Settings = () => {
                 </GridCard>
                 <Heading fontSize="20px" color="gray.500" lineHeight="short" pt={5}>Project</Heading>
                 <GridCard title="General" subtitle="Manage your Project settings">
+					<UpdateProjectForm setLoading={setProjectLoading} />
+                    <Button mt={4} type="submit" isLoading={projectLoading} form="projectUpdateForm" ml="auto" d="block">
+						Update project
+					</Button>
                 </GridCard>
                 <GridCard title="Team Members" subtitle="Manage your Project settings">
 					<Heading fontSize="18px" fontWeight={500}>Invite link</Heading>
