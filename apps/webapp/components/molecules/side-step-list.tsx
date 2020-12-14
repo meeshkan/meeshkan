@@ -5,8 +5,8 @@ export const StepList = ({ steps }) =>
 	steps.map((step, index) => (
 		<StoryStep
 			key={index}
-			stepName={step.stepName}
+			stepName={step.command}
 			stepNumber={index + 1}
-			subSteps={step.subSteps}
+			subSteps={[step.target]}
 		/>
 	));

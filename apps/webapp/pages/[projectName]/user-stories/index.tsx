@@ -236,8 +236,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					</Box>
 				</Stack>
 			</GridCard>
-			<Box>
-				<Flex justify="space-between" align="center" flex="1">
+			<Box overflow="auto" flex="1">
+				<Flex justify="space-between" align="center">
 					<SegmentedControl
 						values={['Recordings', 'Test cases']}
 						selectedIndex={toggleIndex}

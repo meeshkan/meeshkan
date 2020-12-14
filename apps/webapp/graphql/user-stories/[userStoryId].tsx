@@ -12,6 +12,9 @@ export const USER_STORY = gql`
 			significance
 			recording {
 				items {
+					video {
+						downloadUrl
+					}
 					environment {
 						items {
 							ipAddress

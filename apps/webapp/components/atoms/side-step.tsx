@@ -11,7 +11,7 @@ import {
 type StoryStepProps = {
 	stepNumber: number;
 	stepName: string;
-	subSteps: Array<string>;
+	subSteps?: Array<string>;
 };
 
 export const StoryStep = ({
@@ -60,11 +60,12 @@ export const StoryStep = ({
 				borderLeft="1px solid"
 				borderColor="gray.300"
 			>
-				{subSteps.map((step, index) => (
-					<ListItem key={index} lineHeight="1.6">
-						{step}
-					</ListItem>
-				))}
+				{subSteps &&
+					subSteps.map((step, index) => (
+						<ListItem key={index} lineHeight="1.6">
+							{step}
+						</ListItem>
+					))}
 			</List>
 		</Box>
 	);

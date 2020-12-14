@@ -24,6 +24,7 @@ import {
 import LoadingScreen from 'apps/webapp/components/organisms/loading-screen';
 import { StepList } from '../../../components/molecules/side-step-list';
 import { useRouter } from 'next/router';
+import Video from 'apps/webapp/components/atoms/video';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -80,10 +81,12 @@ const UserStory = (props: UserStoryProps) => {
 			w="100%"
 			p={8}
 		>
-			<Box>
+			<Box flex="1" overflow="auto">
 				<Flex align="baseline" mb={8}>
 					<Editable
 						defaultValue={data.userStory.title}
+						// Callback invoked when user confirms value with `enter` key or by blurring input.
+						onSubmit={() => null}
 						fontSize="xl"
 						fontWeight={900}
 						mr={4}
@@ -125,20 +128,37 @@ const UserStory = (props: UserStoryProps) => {
 					)}
 				</Flex>
 
-				<StepList steps={userStorySteps} />
-				<Flex
-					justify="center"
-					align="center"
-					borderRadius="full"
-					h={6}
-					w={6}
-					border="1px solid"
-					borderColor={useColorModeValue('cyan.500', 'cyan.300')}
-					backgroundColor="transparentCyan.200"
-					ml={8}
-				>
-					<CheckmarkIcon color={useColorModeValue('cyan.500', 'cyan.300')} />
-				</Flex>
+				{/* <StepList steps={userStorySteps} /> */}
+				<Box>
+					{data.userStory.recording.items[0].video && (
+						<Box maxW="500px">
+							<Video
+								url={data.userStory.recording.items[0].video.downloadUrl}
+								title="User story replay recording"
+							/>
+						</Box>
+					)}
+
+					<StepList
+						steps={
+							JSON.parse(data.userStory.recording.items[0].sideScript).tests[0]
+								.commands
+						}
+					/>
+					<Flex
+						justify="center"
+						align="center"
+						borderRadius="full"
+						h={6}
+						w={6}
+						border="1px solid"
+						borderColor={useColorModeValue('cyan.500', 'cyan.300')}
+						backgroundColor="transparentCyan.200"
+						ml={8}
+					>
+						<CheckmarkIcon color={useColorModeValue('cyan.500', 'cyan.300')} />
+					</Flex>
+				</Box>
 			</Box>
 
 			{data.userStory.isTestCase === true ? null : (
@@ -146,6 +166,7 @@ const UserStory = (props: UserStoryProps) => {
 					<Button
 						colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
 						leftIcon={<CheckmarkIcon />}
+						onClick={() => null}
 						mr={4}
 					>
 						Expected
@@ -153,6 +174,7 @@ const UserStory = (props: UserStoryProps) => {
 					<Button
 						colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
 						leftIcon={<XmarkIcon />}
+						onClick={() => null}
 					>
 						Reject
 					</Button>
