@@ -24,7 +24,6 @@ import {
 	VideoIcon,
 	CrosshairIcon,
 } from '@frontend/chakra-theme';
-import { transparentize } from '@chakra-ui/theme-tools';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
@@ -48,11 +47,7 @@ const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
 		<Box
 			d="flex"
 			alignItems="center"
-			// @ts-ignore
-			backgroundColor={useColorModeValue(
-				'cyan.50',
-				transparentize('cyan.500', 0.15)
-			)}
+			backgroundColor={useColorModeValue('cyan.50', 'transparentCyan.200')}
 			color={useColorModeValue('cyan.700', 'cyan.50')}
 			fontWeight={600}
 			p={4}

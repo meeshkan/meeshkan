@@ -50,8 +50,7 @@ const SideBarBody = () => {
 						leftIcon={<ActivityIcon />}
 						href={`/${slugifiedProjectName}`}
 						isActive={
-							router.pathname === '/' ||
-							router.pathname === `/[projectName]`
+							router.pathname === '/' || router.pathname === `/[projectName]`
 						}
 					>
 						Health dashboard
@@ -60,23 +59,16 @@ const SideBarBody = () => {
 						leftIcon={<VideoIcon />}
 						href={userStoriesHref}
 						isActive={
-							router.pathname.split('/').slice(-1)[0] === 'user-stories'
+							router.pathname.split('/').slice(-1)[0] === 'user-stories' ||
+							router.asPath.includes('/user-stories')
 						}
 					>
 						User stories
 					</NavButton>
-					<NavButton
-						leftIcon={<CheckSquareIcon />}
-						href="/test-runs"
-						disabled
-					>
+					<NavButton leftIcon={<CheckSquareIcon />} href="/test-runs" disabled>
 						Test runs
 					</NavButton>
-					<NavButton
-						leftIcon={<PackageIcon />}
-						href="/releases"
-						disabled
-					>
+					<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
 						Releases
 					</NavButton>
 				</Stack>
