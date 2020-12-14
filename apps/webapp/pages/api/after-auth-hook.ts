@@ -10,7 +10,7 @@ export default async function afterAuthHook(
 		const user = await getUser(req);
 		await confirmOrCreateUser(user);
 		res.redirect(
-			`/${req.query?.invalidInvite ? 'invite/invalid' : req.query?.redirectTo}`
+			`/${req.query?.invalidInvite ? 'invite/invalid' : req.query?.redirectTo || ''}`
 		);
 	} catch (error) {
 		console.error(error);
