@@ -1,11 +1,8 @@
 import { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify';
-import Layout from '../../components/templates/layout';
-import SideBar from '../../components/organisms/sidebar';
 import LoadingScreen from '../../components/organisms/loading-screen';
 import Grid from '../../components/organisms/grid';
-import withAuth from '../../hocs/with-auth';
 import { UserContext } from '../../utils/user';
 
 type ProjectProps = {
@@ -30,13 +27,10 @@ const Project = (props: ProjectProps) => {
 	}
 
 	return (
-		<Layout>
-			<SideBar />
-			<Grid />
-		</Layout>
+		<Grid />
 	);
 };
 
-export default withAuth(Project);
+export default Project;
 
 export { getServerSideProps } from '../../components/molecules/chakra';

@@ -1,7 +1,6 @@
 import { useEffect, useContext } from 'react';
 import LoadingScreen from '../components/organisms/loading-screen';
 import Grid from '../components/organisms/grid';
-import withAuth from '../hocs/with-auth';
 import { UserContext } from '../utils/user';
 
 type IndexProps = {
@@ -18,16 +17,16 @@ const Index = (props: IndexProps) => {
 	}, [projects, setProject]);
 
 	if (projects.length > 0 && project.id === -1) {
-		return <LoadingScreen />;
+		return (
+			<LoadingScreen />
+		);
 	}
 
 	return (
-		<>
-			<Grid project={project} />
-		</>
+		<Grid />
 	);
 };
 
-export default withAuth(Index);
+export default Index;
 
 export { getServerSideProps } from '../components/molecules/chakra';

@@ -1,5 +1,8 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import Layout from '../components/templates/layout';
+import SideBar from '../components/organisms/sidebar';
+import withAuth from '../hocs/with-auth';
 import withChakra from '../hocs/with-chakra';
 
 const CustomApp = ({ Component, pageProps }: AppProps) => {
@@ -8,9 +11,12 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 			<Head>
 				<title>Meeshkan Webapp</title>
 			</Head>
-			<Component {...pageProps} />
+			<Layout>
+				<SideBar />
+				<Component {...pageProps} />
+			</Layout>
 		</>
 	);
 };
 
-export default withChakra(CustomApp);
+export default withChakra(withAuth(CustomApp));
