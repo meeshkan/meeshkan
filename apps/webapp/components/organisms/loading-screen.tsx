@@ -1,9 +1,15 @@
+import { Flex, Spinner, FlexProps } from '@chakra-ui/react';
 import { LogoIcon } from '@frontend/chakra-theme';
-import { Flex, Spinner } from '@chakra-ui/react';
 
-const LoadingScreen = () => {
+const LoadingScreen = (props: FlexProps) => {
 	return (
-		<Flex align="center" justify="center" direction="column" h="100vh">
+		<Flex
+			align="center"
+			justify="center"
+			direction="column"
+			w="100%"
+			{...props}
+		>
 			<LogoIcon width="auto" height={10} />
 			<Spinner size="xl" mt={5} />
 		</Flex>

@@ -1,6 +1,5 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Stack, useColorModeValue } from '@chakra-ui/react';
-import './layout.module.css';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -22,5 +21,4 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		</Stack>
 	);
 };
-
 export default Layout;
