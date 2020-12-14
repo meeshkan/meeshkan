@@ -18,9 +18,16 @@ import {
 	MenuDivider,
 	Button,
 	Text,
+	Link,
+	Heading,
 	Avatar,
 } from '@chakra-ui/react';
-import { ChatIcon, ArrowUpDownIcon, QuestionIcon } from '@chakra-ui/icons';
+import {
+	ChatIcon,
+	ArrowUpDownIcon,
+	QuestionIcon,
+	ChevronLeftIcon,
+} from '@chakra-ui/icons';
 import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	ActivityIcon,
@@ -29,6 +36,8 @@ import {
 	PackageIcon,
 	SettingsIcon,
 	PlusIcon,
+	SuitcaseIcon,
+	ProfileIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
 import { UserContext } from '../../utils/user';
@@ -41,6 +50,87 @@ const SideBarBody = () => {
 	const avatarUrl = project.avatar?.downloadUrl;
 	const slugifiedProjectName = slugify(project.name, { lower: true });
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
+	const isSettingsPage = router.pathname.endsWith('settings'); 
+
+	if (isSettingsPage) {
+		return (
+			<>
+				<Heading
+					as={Flex}
+					align="center"
+					fontSize="20px"
+					fontWeight={500}
+					color={useColorModeValue('gray.900', 'gray.200')}
+					lineHeight="1"
+					mt={6}
+				>
+					<IconButton
+						aria-label="Back"
+						variant="ghost"
+						size="2xs"
+						mr={1}
+						icon={<ChevronLeftIcon w={6} h={6} color="gray.500" />}
+						onClick={() => router.back()}
+					/>
+					Settings
+				</Heading>
+				<Stack mt={6} spacing={6}>
+					<Box>
+						<Flex align="flex-start">
+							<Box
+								rounded="xl"
+								bg={useColorModeValue('gray.100', 'gray.800')}
+								p={2}
+								mr={4}
+							>
+								<ProfileIcon color={useColorModeValue('gray.400', 'gray.500')} w={4} h={4} />
+							</Box>
+							<Stack spacing={4}>
+								<Heading
+									fontSize="15px"
+									fontWeight={400}
+									color={useColorModeValue('gray.400', 'gray.500')}
+									lineHeight="short"
+									mt={1}
+								>
+									Personal
+								</Heading>
+								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Profile</Link>
+								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Notifications</Link>
+							</Stack>
+						</Flex>
+					</Box>
+					<Box>
+						<Flex align="flex-start">
+							<Box
+								rounded="xl"
+								bg={useColorModeValue('gray.100', 'gray.800')}
+								p={2}
+								mr={4}
+							>
+								<SuitcaseIcon color={useColorModeValue('gray.400', 'gray.500')} w={4} h={4} />
+							</Box>
+							<Stack spacing={4}>
+								<Heading
+									fontSize="15px"
+									fontWeight={400}
+									color={useColorModeValue('gray.400', 'gray.500')}
+									lineHeight="short"
+									mt={1}
+								>
+									Project
+								</Heading>
+								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>General</Link>
+								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Team Members</Link>
+								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Plan &amp; Billing</Link>
+								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Integrations</Link>
+							</Stack>
+						</Flex>
+					</Box>
+				</Stack>
+			</>
+		);
+	}
 
 	return (
 		<>
@@ -160,6 +250,7 @@ const SideBarBody = () => {
 						colorScheme="gray"
 						color={useColorModeValue('gray.500', 'gray.400')}
 						icon={<SettingsIcon />}
+						onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
 						variant="ghost"
 						size="sm"
 						ml={2}
