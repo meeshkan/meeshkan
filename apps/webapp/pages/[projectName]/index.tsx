@@ -1,29 +1,17 @@
-import { useEffect, useContext } from 'react';
-import { useRouter } from 'next/router';
-import slugify from 'slugify';
+import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
 import Grid from '../../components/organisms/grid';
-import { UserContext } from '../../utils/user';
+import Card from '../../components/atoms/card';
 
 type ProjectProps = {
 	cookies: string | undefined;
 };
 
 const Project = (props: ProjectProps) => {
-	const { projects, project, setProject } = useContext(UserContext);
-	const router = useRouter();
-	const { projectName } = router.query;
+	const { loading } = useValidateSelectedProject();
 
-	useEffect(() => {
-		const selectedProject = projects.find(
-			(project) => slugify(project.name, { lower: true }) === projectName
-		);
-
-		selectedProject ? setProject(selectedProject) : router.push('/404');
-	}, [projectName, projects, setProject]);
-
-	if (project.id === -1) {
-		return <LoadingScreen />;
+	if (loading) {
+		return <LoadingScreen as={Card} />;
 	}
 
 	return (

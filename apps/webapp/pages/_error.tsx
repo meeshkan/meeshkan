@@ -1,6 +1,7 @@
 import { Flex, Heading, Text } from '@chakra-ui/react';
 import { NextPage, NextPageContext } from 'next';
 import ChakraProvider from '../components/molecules/chakra';
+import Card from '../components/atoms/card';
 
 type ErrorProps = {
 	status: number;
@@ -8,14 +9,12 @@ type ErrorProps = {
 
 const Error: NextPage<ErrorProps> = ({ status }: ErrorProps) => {
 	return (
-		<ChakraProvider cookies={undefined}>
-			<Flex align="center" justify="center" direction="column" h="100vh">
+			<Flex as={Card} align="center" justify="center" w="100%">
 				<Heading as="h1">{status}</Heading>
 				{status !== 404 && (
 					<Text fontSize="md">An unexpected error has occured.</Text>
 				)}
 			</Flex>
-		</ChakraProvider>
 	);
 };
 

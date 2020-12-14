@@ -16,7 +16,7 @@ import {
 	Badge,
 	BoxProps,
 } from '@chakra-ui/react';
-import GridCard from '../../components/molecules/grid-card';
+import { Column } from 'react-table';
 import {
 	BookIcon,
 	ChatIcon,
@@ -25,9 +25,12 @@ import {
 	CrosshairIcon,
 } from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
+import GridCard from '../../components/molecules/grid-card';
+import Card from '../../components/atoms/card';
+import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import SegmentedControl from '../../components/molecules/segmented-control';
 import Table from '../../components/organisms/table';
-import { Column } from 'react-table';
+import LoadingScreen from '../../components/organisms/loading-screen';
 import { eightBaseClient } from '../../utils/graphql';
 import { UserContext } from '../../utils/user';
 import { show as showIntercom } from '../../utils/intercom';
@@ -182,6 +185,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const handleEdit = (id: string) => {
 		console.log('edit', id);
 	};
+
+	const { loading } = useValidateSelectedProject();
+
+	if (loading) {
+		return <LoadingScreen as={Card} />;
+	}
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>

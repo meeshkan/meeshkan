@@ -33,7 +33,7 @@ const withAuth = (PageComponent) => {
 		}
 
 		if (loading) {
-			return <LoadingScreen />;
+			return <LoadingScreen h="100vh" />;
 		}
 
 		return <AuthScreen />;
