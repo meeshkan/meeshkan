@@ -1,12 +1,4 @@
 import React, { useEffect } from 'react';
-import {
-	TableCell,
-	TableRow,
-	TableHead,
-	TableBody,
-	TablePagination,
-	LinearProgressBar,
-} from '../molecules/table';
 import ActionButton from '../atoms/action-button';
 import {
 	Text,
@@ -26,11 +18,19 @@ import {
 } from 'react-table';
 import { AnimatePresence } from 'framer-motion';
 import { ChevronDownIcon, ChevronUpIcon, EditIcon } from '@chakra-ui/icons';
+import {
+	TableCell,
+	TableRow,
+	TableHead,
+	TableBody,
+	TablePagination,
+	LinearProgressBar,
+} from '../molecules/table';
 
 type TableProps<T extends object = {}> = {
 	columns: Column<T>[];
-	data: any;
-	fetchData: any;
+	data: JSON[];
+	fetchData: ({ pageSize, pageIndex, ...rest }: any) => Promise<void>;
 	getRowId?: (row: any, relativeIndex: number, parent: any) => string;
 	initialPageIndex?: number;
 	initialPageSize?: number;
@@ -145,7 +145,7 @@ const Table = ({
 		fetchData({ pageIndex, pageSize });
 	}, [fetchData, pageIndex, pageSize]);
 
-	// this prevents calling paginate on first mount
+	// This prevents calling paginate on first mount
 	useMountedLayoutEffect(() => {
 		if (onPaginate) {
 			onPaginate({ pageIndex, pageSize });

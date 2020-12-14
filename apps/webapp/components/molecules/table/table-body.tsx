@@ -3,7 +3,7 @@ import { Box, BoxProps, useColorModeValue } from '@chakra-ui/react';
 
 import TableContext from './table-context';
 
-const defaultBodyComponent = 'tbody';
+const DEFAULT_BODY_COMPONENT = 'tbody';
 
 interface TableBodyProps extends BoxProps {
 	as?: ElementType;
@@ -11,7 +11,7 @@ interface TableBodyProps extends BoxProps {
 
 const TableBody = forwardRef<any, PropsWithChildren<TableBodyProps>>(
 	function TableHead(props, ref) {
-		const { as: As = defaultBodyComponent, ...other } = props;
+		const { as: As = DEFAULT_BODY_COMPONENT, ...other } = props;
 
 		return (
 			<TableContext.Provider

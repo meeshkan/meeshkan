@@ -211,14 +211,14 @@ export const GitMergeIcon = createIcon({
 				stroke="currentColor"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-			></path>
+			/>
 			<path
 				d="M 4 14 L 4 6 C 4 9.314 6.686 12 10 12"
 				fill="transparent"
 				stroke="currentColor"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-			></path>
+			/>
 		</g>
 	),
 });
@@ -510,7 +510,7 @@ export const FilePlusIcon = createIcon({
 			<path
 				d="M 23.333 3.333 L 23.333 13.333 L 33.333 13.333 M 20 30 L 20 20 M 15 25 L 25 25"
 				fill="transparent"
-				stroke-width="2"
+				strokeWidth="2"
 				stroke="currentColor"
 				strokeLinecap="round"
 				strokeLinejoin="round"

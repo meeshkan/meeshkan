@@ -1,8 +1,9 @@
 import React, { forwardRef } from 'react';
 import { Box } from '@chakra-ui/react';
 import { motion, Variants } from 'framer-motion';
+import MotionBox from '../../atoms/motion-box';
 
-export const Bar = forwardRef(function Bar(props, ref) {
+export const Bar = forwardRef((props, ref) => {
 	return (
 		<Box
 			as="span"
@@ -16,7 +17,6 @@ export const Bar = forwardRef(function Bar(props, ref) {
 	);
 });
 
-const MotionBox = motion.custom(Box);
 const MotionBar = motion.custom(Bar);
 
 const variants: Variants = {
@@ -41,14 +41,6 @@ const bar1Variants: Variants = {
 			repeat: Infinity,
 		},
 	},
-	// exit: {
-	//   left: '130%',
-	//   width: '100%',
-	//   transition: {
-	//     duration: 2,
-	//     ease: 'easeInOut',
-	//   },
-	// },
 };
 
 const bar2Variants: Variants = {
@@ -73,7 +65,7 @@ const bar2Variants: Variants = {
 	},
 };
 
-function LinearProgressBar() {
+const LinearProgressBar = () => {
 	return (
 		<MotionBox
 			pos="absolute"
@@ -90,6 +82,6 @@ function LinearProgressBar() {
 			<MotionBar variants={bar2Variants} />
 		</MotionBox>
 	);
-}
+};
 
 export default LinearProgressBar;

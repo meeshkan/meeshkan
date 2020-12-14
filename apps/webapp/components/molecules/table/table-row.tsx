@@ -1,18 +1,15 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, ElementType } from 'react';
 import { Box, BoxProps, useColorModeValue } from '@chakra-ui/react';
 
-const defaultRowComponent = 'tr';
+const DEFAULT_ROW_COMPONENT = 'tr';
 
 interface TableRowProps extends BoxProps {
-	as?: React.ElementType;
+	as?: ElementType;
 	isSelected?: boolean;
 }
 
-const TableRow = forwardRef<typeof Box, TableRowProps>(function TableHead(
-	props,
-	ref
-) {
-	const { as: As = defaultRowComponent, isSelected, ...other } = props;
+const TableRow = forwardRef<typeof Box, TableRowProps>((props, ref) => {
+	const { as: As = DEFAULT_ROW_COMPONENT, isSelected, ...other } = props;
 
 	return (
 		<Box

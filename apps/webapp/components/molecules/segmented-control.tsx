@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {
+	ReactNode,
+	MouseEventHandler,
+	Dispatch,
+	SetStateAction,
+} from 'react';
 import { Stack, Box, Flex, useColorModeValue } from '@chakra-ui/react';
-import { AnimateSharedLayout, motion } from 'framer-motion';
-
-const MotionBox = motion.custom(Box);
+import { AnimateSharedLayout } from 'framer-motion';
+import MotionBox from '../atoms/motion-box';
 
 type SegmentedControlTabProps = {
-	children?: React.ReactNode;
-	onSelect?: React.MouseEventHandler<HTMLDivElement>;
+	children?: ReactNode;
+	onSelect?: MouseEventHandler<HTMLDivElement>;
 	disabled?: boolean;
 	selected: boolean;
 };
@@ -48,7 +52,7 @@ type SegmentedControlProps = {
 	values: string[];
 	disabled?: boolean;
 	selectedIndex: number;
-	setSelectedIndex: React.Dispatch<React.SetStateAction<number>>;
+	setSelectedIndex: Dispatch<SetStateAction<number>>;
 };
 
 const SegmentedControl = ({

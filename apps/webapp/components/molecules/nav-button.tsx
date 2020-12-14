@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
 	useColorModeValue,
 	useMediaQuery,
@@ -27,13 +27,13 @@ const variants = {
 	},
 };
 
-type SidebarLinkProps = PropsOf<typeof MotionButton> & {
+type NavButtonProps = PropsOf<typeof MotionButton> & {
 	href?: string;
-	icon?: React.ReactElement;
+	icon?: ReactElement;
 	disabled?: boolean;
 };
 
-const SidebarLink = (props: SidebarLinkProps) => {
+const NavButton = (props: NavButtonProps) => {
 	const { href, children, disabled, ...rest } = props;
 
 	const { pathname } = useRouter();
@@ -66,7 +66,7 @@ const SidebarLink = (props: SidebarLinkProps) => {
 							transparentize('gray.100', 0.75),
 							transparentize('gray.800', 0.75)
 						),
-						textDecor: 'none',
+						textDecoration: 'none',
 					}}
 					variants={isSmallScreen ? variants : {}}
 					{...rest}
@@ -101,7 +101,7 @@ const SidebarLink = (props: SidebarLinkProps) => {
 						transparentize('gray.100', 0.75),
 						transparentize('gray.800', 0.75)
 					),
-					textDecor: 'none',
+					textDecoration: 'none',
 				}}
 				variants={isSmallScreen ? variants : {}}
 				{...rest}
@@ -112,4 +112,4 @@ const SidebarLink = (props: SidebarLinkProps) => {
 	}
 };
 
-export default SidebarLink;
+export default NavButton;

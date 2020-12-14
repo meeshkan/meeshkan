@@ -1,8 +1,8 @@
-import React, { MouseEvent, FC } from 'react';
+import React, { MouseEvent, FC, ReactElement } from 'react';
 import { IconButton } from '@chakra-ui/react';
 
 type TableIconButtonProps = {
-	icon: any;
+	icon: ReactElement;
 	onClick: ((event: MouseEvent<HTMLElement, MouseEvent>) => void) | undefined;
 	isDisabled: boolean;
 	colorScheme?: string;
@@ -25,7 +25,7 @@ const TableIconButton: FC<TableIconButtonProps> = ({
 			colorScheme="gray"
 			variant="ghost"
 			isDisabled={isDisabled}
-			aria-label="Table Icon button"
+			aria-label="Table icon button"
 		>
 			{children}
 		</IconButton>

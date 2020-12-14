@@ -1,17 +1,17 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, ElementType, forwardRef } from 'react';
 import { Box, BoxProps } from '@chakra-ui/react';
 
 import TableContext from './table-context';
 
-const defaultHeadComponent = 'thead';
+const DEFAULT_HEAD_COMPONENT = 'thead';
 
 interface TableHeadProps extends BoxProps {
-	as?: React.ElementType;
+	as?: ElementType;
 }
 
-const TableHead = React.forwardRef<any, PropsWithChildren<TableHeadProps>>(
+const TableHead = forwardRef<any, PropsWithChildren<TableHeadProps>>(
 	function TableHead(props, ref) {
-		const { as: As = defaultHeadComponent, ...other } = props;
+		const { as: As = DEFAULT_HEAD_COMPONENT, ...other } = props;
 
 		return (
 			<TableContext.Provider

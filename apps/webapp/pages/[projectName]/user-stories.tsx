@@ -1,4 +1,10 @@
-import React, { useState, useMemo, useCallback, useContext } from 'react';
+import React, {
+	useState,
+	useMemo,
+	useCallback,
+	useContext,
+	ReactElement,
+} from 'react';
 import {
 	Box,
 	Stack,
@@ -23,9 +29,13 @@ import { Column } from 'react-table';
 import { eightBaseClient } from '../../utils/graphql';
 import { UserContext } from '../../utils/user';
 import { PROJECT_USER_STORIES } from '../../graphql/user-stories';
-import withAuth from 'apps/webapp/hocs/with-auth';
 
-function StartButton({ icon, text }) {
+type StartButtonProps = {
+	icon: ReactElement;
+	text: string;
+};
+
+const StartButton = ({ icon, text }: StartButtonProps) => {
 	return (
 		<Box
 			d="flex"
@@ -45,7 +55,7 @@ function StartButton({ icon, text }) {
 			<Text ml={4}>{text}</Text>
 		</Box>
 	);
-}
+};
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -65,7 +75,7 @@ interface Recordings {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 
-	const [toggleIndex, setToggleIndex] = React.useState(0);
+	const [toggleIndex, setToggleIndex] = useState(0);
 
 	const [tableLoading, setTableLoading] = useState(false);
 	const [tableData, setTableData] = useState<Recordings>({
@@ -107,7 +117,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Priority',
 				accessor: (originalRow, rowIndex) => {
-					let significance = originalRow.significance;
+					const { significance } = originalRow;
 					return (
 						<Badge
 							fontSize="sm"
@@ -130,8 +140,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					let stepCount = JSON.parse(originalRow.recording.items[0].sideScript)
-						.tests[0].commands.length;
+					const stepCount = JSON.parse(
+						originalRow.recording.items[0].sideScript
+					).tests[0].commands.length;
 					return stepCount;
 				},
 			},
@@ -139,7 +150,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
-	const fetchData = React.useCallback(
+	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
@@ -194,7 +205,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						d="flex"
 						alignItems="center"
 						border="1px dashed"
-						// @ts-ignore
 						borderColor={useColorModeValue('gray.500', 'gray.400')}
 						fontWeight={600}
 						p={4}

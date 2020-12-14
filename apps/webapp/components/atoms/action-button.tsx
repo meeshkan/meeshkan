@@ -6,7 +6,7 @@ interface ActionButtonProps extends IconButtonProps {
 	'aria-label': string;
 }
 
-function ActionButton({ icon, onClick, ...props }: ActionButtonProps) {
+const ActionButton = ({ icon, onClick, ...props }: ActionButtonProps) => {
 	return (
 		<IconButton
 			icon={icon}
@@ -20,5 +20,5 @@ function ActionButton({ icon, onClick, ...props }: ActionButtonProps) {
 			{...props}
 		/>
 	);
-}
+};
 export default ActionButton;
