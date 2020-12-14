@@ -61,12 +61,25 @@ interface Release {
 	items: Array<{ releaseDate: string }>;
 }
 
+interface Member {
+	firstName: string;
+	lastName: string;
+	avatar: Avatar;
+	email: string;
+}
+
+interface Members {
+	count: number;
+	items: Array<Member>;
+}
+
 export interface Project {
 	id: string;
 	name: string;
 	avatar: Avatar;
 	configuration: Configuration;
 	hasReceivedEvents: boolean;
+	members: Members;
 	userStories: UserStories;
 	release?: Release;
 }

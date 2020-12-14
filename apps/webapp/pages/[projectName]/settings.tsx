@@ -1,4 +1,4 @@
-import { useState, useContext, ChangeEvent } from 'react';
+import { useState, useEffect, useContext, ChangeEvent } from 'react';
 import {
     Box,
     FormControl,
@@ -7,7 +7,16 @@ import {
     Button,
     Text,
     Switch,
+	InputGroup,
+	Input,
+	InputRightElement,
+	IconButton,
+	useClipboard,
+	useToast,
+	Avatar,
 } from '@chakra-ui/react';
+import { Table, Tbody, Tr, Td } from '@chakra-ui/table';
+import { CopyIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
 import GridCard from '../../components/molecules/grid-card';
@@ -17,9 +26,33 @@ import { UserContext, updateProductNotifications } from '../../utils/user';
 
 const Settings = () => {
     const { loading } = useValidateSelectedProject();
-	const { productNotifications, idToken } = useContext(UserContext);
+	const toast = useToast();
+	const { productNotifications, idToken, project } = useContext(UserContext);
     const [profileLoading, setProfileLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
+
+	const { hasCopied, onCopy } = useClipboard(project?.configuration?.inviteLink);
+
+	useEffect(() => {
+		if (hasCopied) {
+			toast({
+				position: 'bottom-right',
+				render: () => (
+					<Box
+						color="white"
+						p={4}
+						bg="blue.500"
+						borderRadius="md"
+						fontSize="md"
+					>
+						The project invite link was copied to your clipboard!
+					</Box>
+				),
+				duration: 2000,
+				isClosable: true,
+			});
+		}
+	}, [hasCopied, toast]);
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
@@ -61,6 +94,71 @@ const Settings = () => {
                 <GridCard title="General" subtitle="Manage your Project settings">
                 </GridCard>
                 <GridCard title="Team Members" subtitle="Manage your Project settings">
+					<Heading fontSize="18px" fontWeight={500}>Invite link</Heading>
+					<InputGroup>
+						<Input
+							value={project.configuration.inviteLink}
+							color="blue.400"
+							onClick={onCopy}
+							isReadOnly
+						/>
+						<InputRightElement>
+							<IconButton
+								icon={<CopyIcon color="gray.500" />}
+								aria-label="Copy invite link"
+								onClick={onCopy}
+								size="md"
+								variant="ghost"
+							/>
+						</InputRightElement>
+					</InputGroup>
+					<Table mt={4} w="100%">
+						<Tbody>
+							{project.members.items.map(member => {
+								const memberName = `${member.firstName} ${member.lastName}`;
+								const memberAvatar = member.avatar.downloadUrl;
+								return (
+									<Tr key={member.email} h={8}>
+										<Td>
+											<Avatar
+												name={memberName}
+												src={memberAvatar && memberAvatar}
+												size="xs"
+												borderRadius="md"
+												backgroundColor="transparent"
+											/>
+										</Td>
+										<Td>
+											<Text
+												fontWeight={600}
+												fontSize="14px"
+											>
+												{memberName}
+											</Text>
+										</Td>
+										<Td>
+											<Text
+												fontSize="14px"
+												color="gray.500"
+											>
+												{member.email}
+											</Text>
+										</Td>
+										<Td>
+											<IconButton
+												aria-label={`Remove ${member.firstName} from ${project.name}`}
+												icon={<TrashIcon w={4} h={4} />}
+												size="sm"
+												variant="ghost"
+												color="gray.500"
+												isDisabled
+											/>
+										</Td>
+									</Tr>
+								);
+							})}
+						</Tbody>
+					</Table>
                 </GridCard>
             </Stack>
         </Box>
