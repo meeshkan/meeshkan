@@ -176,6 +176,8 @@ export default (confidenceFactors: ConfidenceFactors): number => {
 		[]
 	);
 
+	// this takes each test result (LOW, MEDIUM, or HIGH confidence)
+	// and finds the average from 0.0 to 1.0
 	const testResultScore =
 		testCaseConfidenceLevels
 			.map((testCaseConfidence) =>
@@ -187,11 +189,22 @@ export default (confidenceFactors: ConfidenceFactors): number => {
 			)
 			.reduce((a, b) => a + b, 0) / testCaseConfidenceLevels.length;
 
+	// This looks at the number of test cases versus the total number
+	// of test results present on 8base. It treats each branch as having equal
+	// weight for the time being, although we can change this to operate using
+	// totals across branches instead.
 	const testCoverageScore =
 		allBranches
 			.map((branch) => branch.testCases.length / branch.totalRecordings)
 			.reduce((a, b) => a + b, 0.0) / allBranches.length;
 
+	// this looks at the difference between the main branch and other branches
+	// in terms of confidence levels. If there is a substantial diff in _either_
+	// direction, the score is low. This is under the assumption that what we
+	// are measuring is volatility, so that even if things improve on a branch
+	// from a low baseline on main, we still rate it as low because it signifies
+	// a lot of substantive changes (albeit for the better). We can change this
+	// if it feels too counterintuitive.
 	const ambiguityScore =
 		testCaseConfidenceLevelDiffs.length === 0.0
 			? 0.0
