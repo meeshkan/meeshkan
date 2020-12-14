@@ -15,7 +15,7 @@ const GridCard = ({
 	...props
 }: GridCardProps) => {
 	return (
-		<Card overflowY="scroll" {...props}>
+		<Card overflowY="auto" {...props}>
 			<Heading
 				as="h2"
 				d="flex"
