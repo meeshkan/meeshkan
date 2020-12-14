@@ -244,7 +244,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						setSelectedIndex={setToggleIndex}
 					/>
 					{toggleIndex === 0 ? (
-						<Button size="sm">Review recordings</Button>
+						<Button size="sm" disabled={true}>
+							Review recordings
+						</Button>
 					) : null}
 				</Flex>
 

@@ -217,6 +217,7 @@ const Table = ({
 									// Merge user row props in
 									{...(row.getRowProps() as any)}
 									role="group"
+									onClick={() => onEdit(row.id)}
 								>
 									{row.cells.map((cell) => {
 										return (
