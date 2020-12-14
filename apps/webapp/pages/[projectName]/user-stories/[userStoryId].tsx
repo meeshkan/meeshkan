@@ -178,6 +178,7 @@ const UserStory = (props: UserStoryProps) => {
 				<Flex justify="center" align="center" w="100%">
 					<Button
 						colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
+						variant="subtle"
 						leftIcon={<CheckmarkIcon />}
 						onClick={() => null}
 						mr={4}
@@ -186,6 +187,7 @@ const UserStory = (props: UserStoryProps) => {
 					</Button>
 					<Button
 						colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
+						variant="subtle"
 						leftIcon={<XmarkIcon />}
 						onClick={() => null}
 					>
