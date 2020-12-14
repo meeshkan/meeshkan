@@ -21,6 +21,7 @@ export default function session(
 				user.jobTitle = profile.jobTitle;
 			}
 
+			user.productNotifications = profile.productNotifications;
 			user.avatar = await getUserAvatar(user.idToken);
 			user.id = await getUserId(user.idToken);
 			user.projects = await getProjects(user.idToken);

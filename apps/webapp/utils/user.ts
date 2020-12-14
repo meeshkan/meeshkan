@@ -79,6 +79,7 @@ export interface IUser {
 	nickname: string;
 	idToken?: string;
 	jobTitle?: string;
+	productNotifications?: boolean;
 	error?: string;
 	projects?: Array<Project>;
 }
@@ -302,6 +303,7 @@ const USER_PROFILE_QUERY = gql`
 			firstName
 			lastName
 			jobTitle
+			productNotifications
 		}
 	}
 `;
@@ -315,4 +317,37 @@ export const getUserProfile = async (idToken: string) => {
 		console.error(error);
 		return error;
 	}
+};
+
+const UPDATE_PRODUCT_NOTIFICATIONS_MUTATION = gql`
+	mutation UpdateProductNotifications($id: ID!, $productNotifications: Boolean!) {
+		userUpdate(
+			filter: { id: $id }
+			data: { productNotifications: $productNotifications }
+		) {
+			id
+		}
+	}
+`;
+
+export const updateProductNotifications = async (
+	idToken: string,
+	data: { productNotifications: boolean }
+) => {
+	const client = eightBaseClient(idToken);
+	const id = await getUserId(idToken);
+
+	let result;
+	try {
+		result = await client.request(UPDATE_PRODUCT_NOTIFICATIONS_MUTATION, {
+			id,
+			productNotifications: data.productNotifications,
+		});
+	} catch (error) {
+		result = {
+			error: error.response.errors[0],
+		};
+	}
+
+	return result;
 };
