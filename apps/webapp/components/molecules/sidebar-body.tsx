@@ -60,7 +60,7 @@ const SideBarBody = () => {
 						leftIcon={<VideoIcon />}
 						href={userStoriesHref}
 						isActive={
-							router.pathname.split('/').slice(-1)[0] === 'user-stories'
+							router.pathname.endsWith('user-stories')
 						}
 					>
 						User stories
