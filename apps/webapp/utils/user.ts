@@ -78,6 +78,7 @@ export interface IUser {
 	avatar: string;
 	nickname: string;
 	idToken?: string;
+	jobTitle?: string;
 	error?: string;
 	projects?: Array<Project>;
 }
@@ -289,6 +290,27 @@ export const getUserAvatar = async (idToken: string) => {
 	try {
 		const data = await client.request(USER_AVATAR_QUERY);
 		return data.user.avatar?.downloadUrl || '';
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+};
+
+const USER_PROFILE_QUERY = gql`
+	query CurrentUser {
+		user {
+			firstName
+			lastName
+			jobTitle
+		}
+	}
+`;
+
+export const getUserProfile = async (idToken: string) => {
+	const client = eightBaseClient(idToken);
+	try {
+		const data = await client.request(USER_PROFILE_QUERY);
+		return data.user;
 	} catch (error) {
 		console.error(error);
 		return error;
