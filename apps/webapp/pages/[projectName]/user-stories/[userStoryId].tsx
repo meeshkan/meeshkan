@@ -10,6 +10,7 @@ import {
 	Box,
 	useColorModeValue,
 	Button,
+	Select,
 } from '@chakra-ui/react';
 import { UserContext } from 'apps/webapp/utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
@@ -82,50 +83,62 @@ const UserStory = (props: UserStoryProps) => {
 			p={8}
 		>
 			<Box flex="1" overflow="auto">
-				<Flex align="baseline" mb={8}>
-					<Editable
-						defaultValue={data.userStory.title}
-						// Callback invoked when user confirms value with `enter` key or by blurring input.
-						onSubmit={() => null}
-						fontSize="xl"
-						fontWeight={900}
-						mr={4}
-					>
-						<EditablePreview />
-						<EditableInput />
-					</Editable>
-					<Badge
-						fontWeight={700}
-						fontSize="md"
-						mr={2}
-						textTransform="capitalize"
-					>
-						{data.userStory.created[0] == 'user' ? (
-							<VideoIcon mr={2} />
+				<Flex align="baseline" justify="space-between" mb={8}>
+					<Flex align="baseline">
+						<Editable
+							defaultValue={data.userStory.title}
+							// Callback invoked when user confirms value with `enter` key or by blurring input.
+							onSubmit={() => null}
+							fontSize="xl"
+							fontWeight={900}
+							mr={4}
+						>
+							<EditablePreview />
+							<EditableInput />
+						</Editable>
+						<Badge
+							fontWeight={700}
+							fontSize="md"
+							mr={2}
+							textTransform="capitalize"
+						>
+							{data.userStory.created[0] == 'user' ? (
+								<VideoIcon mr={2} />
+							) : (
+								<CrosshairIcon mr={2} />
+							)}
+							{data.userStory.created[0]}
+						</Badge>
+						{data.userStory.isExpected ? (
+							<Badge
+								colorScheme="cyan"
+								fontWeight={700}
+								fontSize="md"
+								textTransform="capitalize"
+							>
+								Expected behavior
+							</Badge>
 						) : (
-							<CrosshairIcon mr={2} />
+							<Badge
+								colorScheme="red"
+								fontWeight={700}
+								fontSize="md"
+								textTransform="capitalize"
+							>
+								Buggy behavior
+							</Badge>
 						)}
-						{data.userStory.created[0]}
-					</Badge>
-					{data.userStory.isExpected ? (
-						<Badge
-							colorScheme="cyan"
-							fontWeight={700}
-							fontSize="md"
-							textTransform="capitalize"
-						>
-							Expected behavior
-						</Badge>
-					) : (
-						<Badge
-							colorScheme="red"
-							fontWeight={700}
-							fontSize="md"
-							textTransform="capitalize"
-						>
-							Buggy behavior
-						</Badge>
-					)}
+					</Flex>
+					<Select
+						defaultValue={data.userStory.significance}
+						size="sm"
+						borderRadius="md"
+						w="fit-content"
+					>
+						<option value="low">Low priority</option>
+						<option value="medium">Medium priority</option>
+						<option value="high">High priority</option>
+					</Select>
 				</Flex>
 
 				{/* <StepList steps={userStorySteps} /> */}
