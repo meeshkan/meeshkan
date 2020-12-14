@@ -275,7 +275,7 @@ const Table = ({
 				>
 					<Stack isInline flexWrap="nowrap" justify="center" align="center">
 						<Text whiteSpace="nowrap" fontSize="md">
-							{totalCount} total stories
+							{totalCount} total stor{totalCount === 1 ? 'y' : 'ies'}
 						</Text>
 						<Select
 							size="sm"

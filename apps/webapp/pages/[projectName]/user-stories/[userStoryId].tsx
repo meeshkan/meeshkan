@@ -11,10 +11,17 @@ import {
 	useColorModeValue,
 	Button,
 	Select,
+	toast,
+	useToast,
 } from '@chakra-ui/react';
 import { UserContext } from 'apps/webapp/utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { USER_STORY } from '../../../graphql/user-stories/[userStoryId]';
+import {
+	USER_STORY,
+	UPDATE_EXPECTED_TEST,
+	DELETE_REJECTED_RECORDING,
+	UPDATE_STORY_TITLE,
+} from '../../../graphql/user-stories/[userStoryId]';
 import useSWR from 'swr';
 import {
 	CrosshairIcon,
@@ -26,44 +33,55 @@ import LoadingScreen from 'apps/webapp/components/organisms/loading-screen';
 import { StepList } from '../../../components/molecules/side-step-list';
 import { useRouter } from 'next/router';
 import Video from 'apps/webapp/components/atoms/video';
+import slugify from 'slugify';
 
 type UserStoryProps = {
 	cookies: string | undefined;
 };
 
-const userStorySteps = [
-	{
-		stepName: 'Load `/home` path',
-		subSteps: ['Navigate to `/dashboard`'],
-	},
-	{
-		stepName: 'Load `/home` path',
-		subSteps: ['Select `div.calendar-create-collect`', 'Click button'],
-	},
-	{
-		stepName: 'Request collection',
-		subSteps: [
-			'Focus `input.ant-calendar-picker-input`',
-			'Type date (0-25 days from today)',
-			'Click button to submit form',
-		],
-	},
-];
-
 const UserStory = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const router = useRouter();
+	const toast = useToast();
 
-	var currentPath = router.asPath;
-	var userStoryId = currentPath.substr(currentPath.length - 25);
+	let currentPath = router.asPath;
+	let userStoryId = currentPath.substr(currentPath.length - 25);
+	let date = new Date().toISOString().replace('Z', '') + '+00:00';
+	console.log(date);
 
 	const client = eightBaseClient(idToken);
+
+	// Initial data fetch
 	const fetcher = (query) =>
 		client.request(query, {
 			projectId: project.id,
 			userStoryId: userStoryId,
 		});
 	const { data, error, isValidating } = useSWR(USER_STORY, fetcher);
+
+	// Functions that call mutations for updating the user stories
+	const updateTitle = (newTitle: string) => {
+		const request = client.request(UPDATE_STORY_TITLE, {
+			userStoryId: userStoryId,
+			newTitle: newTitle,
+		});
+		return request;
+	};
+
+	const updateExpectedTest = (testCreatedDate: string) => {
+		const request = client.request(UPDATE_EXPECTED_TEST, {
+			userStoryId: userStoryId,
+			testCreatedDate: testCreatedDate,
+		});
+		return request;
+	};
+
+	const deleteRejectedRecording = (testCreatedDate: string) => {
+		const request = client.request(DELETE_REJECTED_RECORDING, {
+			userStoryId: userStoryId,
+		});
+		return request;
+	};
 
 	if (isValidating || !data) {
 		return <LoadingScreen as={Card} />;
@@ -88,7 +106,7 @@ const UserStory = (props: UserStoryProps) => {
 						<Editable
 							defaultValue={data.userStory.title}
 							// Callback invoked when user confirms value with `enter` key or by blurring input.
-							onSubmit={() => null}
+							onSubmit={(e) => updateTitle(e)}
 							fontSize="xl"
 							fontWeight={900}
 							mr={4}
@@ -141,7 +159,6 @@ const UserStory = (props: UserStoryProps) => {
 					</Select>
 				</Flex>
 
-				{/* <StepList steps={userStorySteps} /> */}
 				<Box>
 					{data.userStory.recording.items[0].video && (
 						<Box maxW="500px">
@@ -180,7 +197,28 @@ const UserStory = (props: UserStoryProps) => {
 						colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
 						variant="subtle"
 						leftIcon={<CheckmarkIcon />}
-						onClick={() => null}
+						onClick={() => {
+							updateExpectedTest(date);
+							toast({
+								position: 'bottom-right',
+								render: () => (
+									<Box
+										color="white"
+										p={4}
+										bg="blue.500"
+										borderRadius="md"
+										fontSize="md"
+									>
+										Success. The User story has been marked as a test case!
+									</Box>
+								),
+								duration: 5000,
+								isClosable: true,
+							});
+							router.push(
+								`/${slugify(project.name, { lower: true })}/user-stories`
+							);
+						}}
 						mr={4}
 					>
 						Expected
@@ -189,7 +227,28 @@ const UserStory = (props: UserStoryProps) => {
 						colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
 						variant="subtle"
 						leftIcon={<XmarkIcon />}
-						onClick={() => null}
+						onClick={() => {
+							deleteRejectedRecording;
+							toast({
+								position: 'bottom-right',
+								render: () => (
+									<Box
+										color="white"
+										p={4}
+										bg="blue.500"
+										borderRadius="md"
+										fontSize="md"
+									>
+										Rejected. The User story has been deleted!
+									</Box>
+								),
+								duration: 5000,
+								isClosable: true,
+							});
+							router.push(
+								`/${slugify(project.name, { lower: true })}/user-stories`
+							);
+						}}
 					>
 						Reject
 					</Button>
