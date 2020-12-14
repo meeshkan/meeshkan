@@ -16,12 +16,17 @@ const withAuth = (PageComponent) => {
 		const router = useRouter();
 		const { user, loading } = useFetchUser(props.user);
 		const [project, setProject] = useState({ id: -1, name: '' });
+		const isInvitePage = router.pathname === '/invite/[inviteId]'; 
 
 		useEffect(() => {
 			if (project.name) {
 				router.push(`/${slugify(project.name, { lower: true })}`);
 			}
 		}, [project]);
+
+		if (isInvitePage) {
+			return <PageComponent {...props} />;
+		}
 
 		if (user && !user.error) {
 			const providerValue = { ...user, project, setProject };
@@ -33,7 +38,7 @@ const withAuth = (PageComponent) => {
 		}
 
 		if (loading) {
-			return <LoadingScreen />;
+			return <LoadingScreen h="100vh" />;
 		}
 
 		return <AuthScreen />;

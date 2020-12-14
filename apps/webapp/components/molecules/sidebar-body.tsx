@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
+import slugify from 'slugify';
 import {
 	Stack,
 	Box,
@@ -35,19 +36,49 @@ import { show as showIntercom } from '../../utils/intercom';
 
 const SideBarBody = () => {
 	const { projects, project, setProject } = useContext(UserContext);
+	const router = useRouter();
 	const hasProjects = projects.length > 0;
 	const avatarUrl = project.avatar?.downloadUrl;
+	const slugifiedProjectName = slugify(project.name, { lower: true });
+	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 
 	return (
 		<>
 			{hasProjects ? (
 				<Stack mt={6}>
-					<NavButton isActive leftIcon={<ActivityIcon />}>
+					<NavButton
+						leftIcon={<ActivityIcon />}
+						href={`/${slugifiedProjectName}`}
+						isActive={
+							router.pathname === '/' ||
+							router.pathname === `/[projectName]`
+						}
+					>
 						Health dashboard
 					</NavButton>
-					<NavButton leftIcon={<VideoIcon />}>User stories</NavButton>
-					<NavButton leftIcon={<CheckSquareIcon />}>Test runs</NavButton>
-					<NavButton leftIcon={<PackageIcon />}>Releases</NavButton>
+					<NavButton
+						leftIcon={<VideoIcon />}
+						href={userStoriesHref}
+						isActive={
+							router.pathname.split('/').slice(-1)[0] === 'user-stories'
+						}
+					>
+						User stories
+					</NavButton>
+					<NavButton
+						leftIcon={<CheckSquareIcon />}
+						href="/test-runs"
+						disabled
+					>
+						Test runs
+					</NavButton>
+					<NavButton
+						leftIcon={<PackageIcon />}
+						href="/releases"
+						disabled
+					>
+						Releases
+					</NavButton>
 				</Stack>
 			) : (
 				<Text mt={4} fontStyle="italic">
@@ -118,7 +149,7 @@ const SideBarBody = () => {
 								))}
 							</MenuOptionGroup>
 							<MenuDivider />
-							<MenuItem onClick={() => Router.push('/new-project')}>
+							<MenuItem onClick={() => router.push('/new-project')}>
 								<PlusIcon mr={3} />
 								Create project
 							</MenuItem>
