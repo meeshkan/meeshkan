@@ -4,12 +4,14 @@ import Card from '../atoms/card';
 
 type GridCardProps = {
 	title: string;
+	subtitle?: string;
 	children?: ReactNode;
 	leftIconSrc?: string;
 } & BoxProps;
 
 const GridCard = ({
 	title,
+	subtitle,
 	children,
 	leftIconSrc,
 	...props
@@ -29,6 +31,19 @@ const GridCard = ({
 				)}
 				{title}
 			</Heading>
+			{subtitle && (
+				<Heading
+					as="h3"
+					fontSize="12px"
+					fontWeight={400}
+					lineHeight="short"
+					color="gray.500"
+					mb={3}
+					mt={1}
+				>
+					{subtitle}
+				</Heading>
+			)}
 			<Divider mt={1} mb={4} />
 			{children}
 		</Card>
