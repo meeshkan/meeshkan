@@ -32,6 +32,7 @@ type ConfidenceFactors = {
 	mainBranch: Branch;
 	otherBranches: Array<Branch>;
 };
+type MainPlusOtherBranches = [Branch, ...Branch[]];
 
 const testStatusAndPriorityToTestCaseConfidence = (
 	testStatus: TestStatus,
@@ -124,9 +125,10 @@ const testResultWeight = 0.4;
 const testCoverageWeight = 0.4;
 const ambiguityWeight = 0.2;
 export default (confidenceFactors: ConfidenceFactors): number => {
-	const allBranches: Array<Branch> = [confidenceFactors.mainBranch].concat(
-		confidenceFactors.otherBranches
-	);
+	const allBranches: MainPlusOtherBranches = [
+		confidenceFactors.mainBranch,
+		...confidenceFactors.otherBranches,
+	];
 	const blockingTests: number = allBranches
 		.map(
 			(branch) =>
@@ -156,14 +158,7 @@ export default (confidenceFactors: ConfidenceFactors): number => {
 		.map((testCaseConfidencePercentages) =>
 			testCaseConfidencePercentagesDiff(
 				testCaseConfidencePercentages,
-				testCaseConfidencePercentagesPerBranch[0] || {
-					// should never be empty
-					// can use something like fp-ts NonEmptyArray in the future
-					// to avoid clumsy syntax like this
-					low: 1.0,
-					medium: 0.0,
-					high: 0.0,
-				}
+				testCaseConfidencePercentagesPerBranch[0]
 			)
 		);
 
