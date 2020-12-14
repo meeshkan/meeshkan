@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, useContext } from 'react';
+import Router from 'next/router';
 import {
 	Box,
 	Stack,
@@ -22,10 +23,10 @@ import Table from '../../components/organisms/table';
 import { Column } from 'react-table';
 import { eightBaseClient } from '../../utils/graphql';
 import { UserContext } from '../../utils/user';
+import { show as showIntercom } from '../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../graphql/user-stories';
-import withAuth from 'apps/webapp/hocs/with-auth';
 
-function StartButton({ icon, text }) {
+function StartButton({ icon, text, ...props }) {
 	return (
 		<Box
 			d="flex"
@@ -40,6 +41,8 @@ function StartButton({ icon, text }) {
 			p={4}
 			w="100%"
 			borderRadius="md"
+			cursor="pointer"
+			{...props}
 		>
 			{icon}
 			<Text ml={4}>{text}</Text>
@@ -179,6 +182,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Read the documentation"
+						onClick={() => Router.push('https://meeshkan.com/docs')}
 					/>
 					<StartButton
 						icon={
@@ -189,6 +193,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Chat with an expert"
+						onClick={showIntercom}
 					/>
 					<Box
 						d="flex"
