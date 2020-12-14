@@ -45,7 +45,10 @@ const SideBarBody = () => {
 					<NavButton leftIcon={<ActivityIcon />} href={`/`}>
 						Health dashboard
 					</NavButton>
-					<NavButton leftIcon={<VideoIcon />} href={`/user-stories`}>
+					<NavButton
+						leftIcon={<VideoIcon />}
+						href={`/${project.name}/user-stories`}
+					>
 						User stories
 					</NavButton>
 					<NavButton

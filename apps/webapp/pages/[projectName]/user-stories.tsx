@@ -8,7 +8,7 @@ import {
 	Button,
 	Badge,
 } from '@chakra-ui/react';
-import GridCard from '../components/molecules/grid-card';
+import GridCard from '../../components/molecules/grid-card';
 import {
 	BookIcon,
 	ChatIcon,
@@ -17,12 +17,13 @@ import {
 	CrosshairIcon,
 } from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
-import SegmentedControl from '../components/molecules/segmented-control';
-import Table from '../components/organisms/table';
+import SegmentedControl from '../../components/molecules/segmented-control';
+import Table from '../../components/organisms/table';
 import { Column } from 'react-table';
-import { eightBaseClient } from '../utils/graphql';
-import { UserContext } from '../utils/user';
-import { PROJECT_USER_STORIES } from '../graphql/user-stories';
+import { eightBaseClient } from '../../utils/graphql';
+import { UserContext } from '../../utils/user';
+import { PROJECT_USER_STORIES } from '../../graphql/user-stories';
+import withAuth from 'apps/webapp/hocs/with-auth';
 
 function StartButton({ icon, text }) {
 	return (
@@ -62,7 +63,7 @@ interface Recordings {
 }
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
-	const { idToken, projects } = useContext(UserContext);
+	const { project, idToken } = useContext(UserContext);
 
 	const [toggleIndex, setToggleIndex] = React.useState(0);
 
@@ -144,7 +145,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			setTableLoading(true);
 			let request = client
 				.request(PROJECT_USER_STORIES, {
-					projectId: projects[0].id,
+					projectId: project.id,
 					first: pagination.rowsPerPage,
 					skip: pagination.rowsPerPage * pagination.page,
 				})
@@ -245,6 +246,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 };
 
-export { getServerSideProps } from '../components/molecules/chakra';
+export { getServerSideProps } from '../../components/molecules/chakra';
 
 export default UserStoriesPage;

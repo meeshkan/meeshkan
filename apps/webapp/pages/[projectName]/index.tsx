@@ -1,12 +1,12 @@
 import { useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify';
-import Layout from '../components/templates/layout';
-import SideBar from '../components/organisms/sidebar';
-import LoadingScreen from '../components/organisms/loading-screen';
-import Grid from '../components/organisms/grid';
-import withAuth from '../hocs/with-auth';
-import { UserContext } from '../utils/user';
+import Layout from '../../components/templates/layout';
+import SideBar from '../../components/organisms/sidebar';
+import LoadingScreen from '../../components/organisms/loading-screen';
+import Grid from '../../components/organisms/grid';
+import withAuth from '../../hocs/with-auth';
+import { UserContext } from '../../utils/user';
 
 type ProjectProps = {
 	cookies: string | undefined;
@@ -39,4 +39,4 @@ const Project = (props: ProjectProps) => {
 
 export default withAuth(Project);
 
-export { getServerSideProps } from '../components/molecules/chakra';
+export { getServerSideProps } from '../../components/molecules/chakra';
