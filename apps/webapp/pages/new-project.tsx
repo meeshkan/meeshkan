@@ -7,9 +7,7 @@ type NewProjectProps = {
 
 const NewProject = ({ cookies }: NewProjectProps) => {
 	return (
-		<>
-			<CreateProject />
-		</>
+		<CreateProject />
 	);
 };
 
