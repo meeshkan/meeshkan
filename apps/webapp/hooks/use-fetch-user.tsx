@@ -20,11 +20,10 @@ export const useFetchUser = (
 	useEffect(() => {
 		if (user) {
 			storeUser(user);
-			// Temporarily comment out intercom code that causes an error.
-			// bootIntercom({
-			// 	id: user.id,
-			// 	email: user.email,
-			// });
+			bootIntercom({
+				id: user.id,
+				email: user.email,
+			});
 		}
 	}, [user]);
 
