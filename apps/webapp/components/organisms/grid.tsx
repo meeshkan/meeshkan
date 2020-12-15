@@ -17,12 +17,10 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import theme, {
-	// GitMergeIcon,
-	// GitCommitIcon,
-	// GitLabIcon,
-	// GitPullRequestIcon,
-} from '@frontend/chakra-theme';
+import theme from // GitCommitIcon, // GitMergeIcon,
+// GitLabIcon,
+// GitPullRequestIcon,
+'@frontend/chakra-theme';
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
@@ -174,7 +172,9 @@ const Grid = (props) => {
 	doughnutData.datasets[0].data = doughnutDataValues;
 	doughnutData.labels = doughnutDataLabels;
 
-	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(userStories);
+	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
+		userStories
+	);
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
 	const barDataLabels = getLastSevenDaysInFormat('MMM DD');
@@ -248,7 +248,7 @@ const Grid = (props) => {
 							<StatCard isNA title="Confidence score" />
 							<StatCard
 								title="Test coverage"
-								value={testCoverage.value}
+								value={Number(testCoverage.value.toFixed(1))}
 								percentageChange={testCoverage.percentageChange}
 								dataPoints={testCoverage.dataPoints}
 								my={[8, 0, 0, 0]}
