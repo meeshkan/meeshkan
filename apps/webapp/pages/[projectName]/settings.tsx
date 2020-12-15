@@ -165,7 +165,7 @@ const Settings = () => {
 					</InputGroup>
 					<Table mt={4} w="100%">
 						<Tbody>
-							{project.members.items.map((member) => {
+							{project?.members?.items.map((member) => {
 								const memberName = `${member.firstName} ${member.lastName}`;
 								const memberAvatar = member.avatar.downloadUrl;
 								return (
