@@ -26,6 +26,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
 import { UserContext } from '../../utils/user';
 import { shutdown as shutdownIntercom } from '../../utils/intercom';
+import Link from 'next/link';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
@@ -43,7 +44,11 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	return (
 		<Flex align="center">
 			<Box>
-				<LogoIcon width="auto" height={6} />
+				<Link href="/" passHref>
+					<a>
+						<LogoIcon width="auto" height={6} />
+					</a>
+				</Link>
 			</Box>
 			<Spacer />
 			<Flex align="center">
