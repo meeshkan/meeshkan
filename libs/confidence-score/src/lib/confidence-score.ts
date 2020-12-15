@@ -1,9 +1,9 @@
-enum TestStatus {
+export enum TestStatus {
 	PASSING = 0,
 	FAILING = 1,
 	DID_NOT_RUN = 2,
 }
-enum TestPriority {
+export enum TestPriority {
 	LOW = 0,
 	WARNING = 1,
 	BLOCKING = 2,
@@ -18,17 +18,17 @@ type TestCaseConfidencePercentanges = {
 	medium: number;
 	high: number;
 };
-type TestCase = {
+export type TestCase = {
 	status: TestStatus;
 	priority: TestPriority;
 	timestampUTC: number;
 };
-type Branch = {
+export type Branch = {
 	name: string;
 	testCases: Array<TestCase>;
 	totalRecordings: number;
 };
-type ConfidenceFactors = {
+export type ConfidenceFactors = {
 	mainBranch: Branch;
 	otherBranches: Array<Branch>;
 };
@@ -124,7 +124,9 @@ export const filterConfidenceFactorsByTimeRange = (
 const testResultWeight = 0.4;
 const testCoverageWeight = 0.4;
 const ambiguityWeight = 0.2;
-export default (confidenceFactors: ConfidenceFactors): number => {
+export const createConfidenceScore = (
+	confidenceFactors: ConfidenceFactors
+): number => {
 	const allBranches: MainPlusOtherBranches = [
 		confidenceFactors.mainBranch,
 		...confidenceFactors.otherBranches,

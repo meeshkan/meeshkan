@@ -17,10 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import theme from // GitCommitIcon, // GitMergeIcon,
-// GitLabIcon,
-// GitPullRequestIcon,
-'@frontend/chakra-theme';
+import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
@@ -29,12 +26,13 @@ import GridCard from '../molecules/grid-card';
 // import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import Onboarding from '../../components/organisms/onboarding';
-import { UserContext, Project } from '../../utils/user';
+import { UserContext } from '../../utils/user';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
 	getBugs,
 	getTestCoverage,
+	getConfidenceScore,
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
@@ -165,6 +163,7 @@ const Grid = (props) => {
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
 	const testCoverage = getTestCoverage(userStories);
+	const confidenceScore = getConfidenceScore(userStories);
 
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
@@ -245,10 +244,16 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							<StatCard isNA title="Confidence score" />
+							<StatCard
+								title="Confidence score"
+								value={Number(confidenceScore.value.toFixed(2))}
+								percentageChange={confidenceScore.percentChange}
+								dataPoints={confidenceScore.dataPoints}
+								my={[8, 0, 0, 0]}
+							/>
 							<StatCard
 								title="Test coverage"
-								value={Number(testCoverage.value.toFixed(1))}
+								value={Number(testCoverage.value.toFixed(2))}
 								percentageChange={testCoverage.percentageChange}
 								dataPoints={testCoverage.dataPoints}
 								my={[8, 0, 0, 0]}
