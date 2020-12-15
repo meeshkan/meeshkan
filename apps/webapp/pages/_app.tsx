@@ -1,20 +1,25 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import Layout from '../components/templates/layout';
+import SideBar from '../components/organisms/sidebar';
+import withAuth from '../hocs/with-auth';
+import withChakra from '../hocs/with-chakra';
 
 const CustomApp = ({ Component, pageProps }: AppProps) => {
+	const router = useRouter();
+	const isInvitePage = router.pathname === '/invite/[inviteId]';
 	return (
 		<>
 			<Head>
 				<title>Meeshkan Webapp</title>
-				{/* Meeshkan Recorder */}
-				<script
-					async
-					src="https://recorder.meeshkan.com/record.js?client_id=ad677264-73c2-4101-b910-28b1d698607c"
-				/>
 			</Head>
-			<Component {...pageProps} />
+			<Layout>
+				{!isInvitePage && <SideBar />}
+				<Component {...pageProps} />
+			</Layout>
 		</>
 	);
 };
 
-export default CustomApp;
+export default withChakra(withAuth(CustomApp));

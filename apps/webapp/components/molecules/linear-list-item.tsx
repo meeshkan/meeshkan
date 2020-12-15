@@ -32,7 +32,7 @@ const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
 					transparentize('gray.100', 0.75),
 					transparentize('gray.800', 0.75)
 				),
-				textDecor: 'none',
+				textDecoration: 'none',
 			}}
 			w="full"
 			d="flex"

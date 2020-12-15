@@ -62,17 +62,22 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 			rounded="lg"
 			bg={useColorModeValue('white', 'gray.900')}
 			py={5}
-			overflowX="scroll"
 			p={4}
 		>
-			<Box flex="1" my={2}>
-				<AlertTitle mb={2} fontStyle="normal">
-					Install this script in the{' '}
-					<Code fontSize="inherit" lineHeight="1">
-						head
-					</Code>{' '}
-					of your application:
-				</AlertTitle>
+			<Box flex="1" my={2} overflow="auto">
+				<Flex justify="space-between">
+					<AlertTitle mb={2} fontStyle="normal">
+						Install this script in the{' '}
+						<Code fontSize="inherit" lineHeight="1">
+							head
+						</Code>{' '}
+						of your application:
+					</AlertTitle>
+					<CloseButton
+						size="sm"
+						onClick={handleClose}
+					/>
+				</Flex>
 				<AlertDescription>
 					<Flex
 						as={Code}
@@ -107,13 +112,6 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 					</Flex>
 				</AlertDescription>
 			</Box>
-			<CloseButton
-				position="absolute"
-				size="sm"
-				right="16px"
-				top="16px"
-				onClick={handleClose}
-			/>
 		</Alert>
 	);
 };

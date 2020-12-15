@@ -15,26 +15,45 @@ import {
 	useColorMode,
 } from '@chakra-ui/react';
 import Router from 'next/router';
-import { LogoIcon, InboxIcon, MoonIcon, SunIcon } from '@frontend/chakra-theme';
+import {
+	LogoIcon,
+	InboxIcon,
+	MoonIcon,
+	SunIcon,
+	LogoutIcon,
+} from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import MenuToggleButton from '../molecules/menu-toggle-button';
 import { UserContext } from '../../utils/user';
+import { shutdown as shutdownIntercom } from '../../utils/intercom';
+import Link from 'next/link';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
-	const { avatar, nickname } = useContext(UserContext);
+	const { avatar, name } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
+
+	const handleLogoutClick = () => {
+		Router.push('/api/logout');
+		shutdownIntercom();
+	};
+
 	return (
 		<Flex align="center">
 			<Box>
-				<LogoIcon width="auto" height={6} />
+				<Link href="/" passHref>
+					<a>
+						<LogoIcon width="auto" height={6} />
+					</a>
+				</Link>
 			</Box>
 			<Spacer />
 			<Flex align="center">
 				<IconButton
+					disabled={true}
 					aria-label="Inbox"
 					variant="ghost"
 					size="sm"
@@ -51,22 +70,28 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						size="sm"
 						px={2}
 					>
-						<Avatar name={nickname} src={avatar} size="2xs" borderRadius="md" />
+						<Avatar
+							name={name}
+							src={avatar && avatar}
+							size="2xs"
+							borderRadius="md"
+							backgroundColor="transparent"
+						/>
 						<ChevronDownIcon
 							color={useColorModeValue('gray.600', 'gray.500')}
 						/>
 					</MenuButton>
 					<MenuList>
 						<MenuItem>View profile</MenuItem>
-						<MenuItem>View settings</MenuItem>
 						<MenuDivider />
 						<MenuItem onClick={toggleColorMode}>
-							{colorMode === 'light' ? <MoonIcon mr={2} /> : <SunIcon mr={2} />}
+							{colorMode === 'light' ? <MoonIcon mr={3} /> : <SunIcon mr={3} />}
 							{colorMode === 'light' ? 'Dark' : 'Light'} mode
 						</MenuItem>
 						<MenuDivider />
-						<MenuItem onClick={() => Router.push('/api/logout')}>
-							Log out
+						<MenuItem onClick={handleLogoutClick}>
+							{' '}
+							<LogoutIcon mr={3} /> Log out
 						</MenuItem>
 					</MenuList>
 				</Menu>

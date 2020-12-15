@@ -1,4 +1,6 @@
-import ChakraProvider from '../components/molecules/chakra';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import slugify from 'slugify';
 import LoadingScreen from '../components/organisms/loading-screen';
 import AuthScreen from '../components/organisms/auth-screen';
 import { UserContext, IUser } from '../utils/user';
@@ -11,30 +13,35 @@ export interface IWithAuthProps {
 
 const withAuth = (PageComponent) => {
 	return (props: IWithAuthProps): JSX.Element => {
+		const router = useRouter();
 		const { user, loading } = useFetchUser(props.user);
-		if (loading) {
-			return (
-				<ChakraProvider cookies={props.cookies}>
-					<LoadingScreen />
-				</ChakraProvider>
-			);
+		const [project, setProject] = useState({ id: -1, name: '' });
+		const isInvitePage = router.pathname === '/invite/[inviteId]'; 
+
+		useEffect(() => {
+			if (project.name) {
+				router.push(`/${slugify(project.name, { lower: true })}`);
+			}
+		}, [project]);
+
+		if (isInvitePage) {
+			return <PageComponent {...props} />;
 		}
 
 		if (user && !user.error) {
+			const providerValue = { ...user, project, setProject };
 			return (
-				<ChakraProvider cookies={props.cookies}>
-					<UserContext.Provider value={user}>
-						<PageComponent {...props} />
-					</UserContext.Provider>
-				</ChakraProvider>
+				<UserContext.Provider value={providerValue}>
+					<PageComponent {...props} />
+				</UserContext.Provider>
 			);
 		}
 
-		return (
-			<ChakraProvider cookies={props.cookies}>
-				<AuthScreen />
-			</ChakraProvider>
-		);
+		if (loading) {
+			return <LoadingScreen h="100vh" />;
+		}
+
+		return <AuthScreen />;
 	};
 };
 

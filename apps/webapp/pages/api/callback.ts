@@ -1,5 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import slugify from 'slugify';
 import initAuth0 from '../../utils/auth0';
+import { getUserId } from '../../utils/user';
+import { propagateInviteToDb } from '../../utils/invite';
 
 export default async function callback(
 	req: NextApiRequest,
@@ -8,7 +11,29 @@ export default async function callback(
 	try {
 		const auth0 = initAuth0(req);
 		await auth0.handleCallback(req, res, {
-			redirectTo: '/api/after-auth-hook',
+			onUserLoaded: async (_, __, session, state) => {
+				const redirectParams = new URLSearchParams();
+				if (state.inviteId) {
+					const userId = await getUserId(session.idToken);
+					const response = await propagateInviteToDb(state.inviteId, userId);
+					if (response.error) {
+						redirectParams.append('invalidInvite', 'true');
+					} else {
+						const redirectTo = slugify(
+							response.configurationUpdate?.project?.name,
+							{ lower: true }
+						);
+						redirectParams.append('redirectTo', redirectTo);
+					}
+				}
+
+				return {
+					session,
+					options: {
+						redirectTo: `/api/after-auth-hook?${redirectParams}`,
+					},
+				};
+			},
 		});
 	} catch (error) {
 		console.error(error);

@@ -3,7 +3,7 @@ import {
 	Box,
 	Stack,
 	Flex,
-	List,
+	// List,
 	Button,
 	Menu,
 	MenuButton,
@@ -17,21 +17,27 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import theme, {
-	GitMergeIcon,
-	GitCommitIcon,
-	GitLabIcon,
-	GitPullRequestIcon,
-} from '@frontend/chakra-theme';
+import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
-import ActivityListItem from '../molecules/activity-list-item';
-import LinearListItem from '../molecules/linear-list-item';
-import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+// import ActivityListItem from '../molecules/activity-list-item';
+// import LinearListItem from '../molecules/linear-list-item';
+// import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import Onboarding from '../../components/organisms/onboarding';
-import { UserContext, Project } from '../../utils/user';
+import { UserContext } from '../../utils/user';
+import {
+	getTestRuns,
+	getDaysUntilRelease,
+	getBugs,
+	getTestCoverage,
+	// getConfidenceScore,
+	getLatestTestStates,
+	getRecordingsAndTestsByDay,
+	sumOfObjectValues,
+	getLastSevenDaysInFormat,
+} from '../../utils/metrics';
 require('../molecules/rounded-chart');
 
 const barData = {
@@ -70,15 +76,13 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
-type GridProps = {
-	project: Project;
-};
-
-const Grid = ({ project, ...props }: GridProps) => {
-	const { projects } = useContext(UserContext);
+const Grid = (props) => {
+	const { projects, project: selectedProject } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
-	const selectedProject = project;
-	const [showScript, setShowScript] = useState<boolean>(!selectedProject?.hasReceivedEvents);
+
+	const [showScript, setShowScript] = useState<boolean>(
+		!selectedProject?.hasReceivedEvents
+	);
 
 	const doughnutOptions = {
 		legend: {
@@ -140,11 +144,43 @@ const Grid = ({ project, ...props }: GridProps) => {
 
 	if (!hasProjects) {
 		return (
-			<Stack as={Card} p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
+			<Stack
+				as={Card}
+				p={[6, 0, 0, 0]}
+				w="100%"
+				rounded="lg"
+				spacing={6}
+				{...props}
+			>
 				<Onboarding />
 			</Stack>
 		);
 	}
+
+	const userStories = selectedProject.userStories.items;
+
+	const testRuns = getTestRuns(userStories);
+	const daysUntilRelease = getDaysUntilRelease(selectedProject);
+	const bugs = getBugs(userStories);
+	const testCoverage = getTestCoverage(userStories);
+	// const confidenceScore = getConfidenceScore(userStories);
+
+	const latestTestStates = getLatestTestStates(userStories);
+	const doughnutDataValues = Object.values(latestTestStates);
+	const doughnutDataLabels = Object.keys(latestTestStates);
+	doughnutData.datasets[0].data = doughnutDataValues;
+	doughnutData.labels = doughnutDataLabels;
+
+	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
+		userStories
+	);
+	barData.datasets[0].data = Object.values(recordingsByDay);
+	barData.datasets[1].data = Object.values(testsByDay);
+	const barDataLabels = getLastSevenDaysInFormat('MMM DD');
+	barData.labels = barDataLabels;
+
+	const totalRecordings = sumOfObjectValues(recordingsByDay);
+	const totalTests = sumOfObjectValues(testsByDay);
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
@@ -210,23 +246,22 @@ const Grid = ({ project, ...props }: GridProps) => {
 						>
 							<StatCard
 								title="Confidence score"
-								value={98}
-								percentageChange={19}
-								dataPoints={4036}
+								isNA
+								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								title="Test coverage"
-								value={68}
-								percentageChange={-2}
-								dataPoints={2227}
+								value={Number(testCoverage.value.toFixed(2))}
+								percentageChange={testCoverage.percentageChange}
+								dataPoints={testCoverage.dataPoints}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								isPercentage={false}
 								title="Test run"
-								value={71897}
-								percentageChange={12}
-								dataPoints={70946}
+								value={testRuns.value}
+								percentageChange={testRuns.percentageChange}
+								dataPoints={testRuns.dataPoints}
 							/>
 						</Flex>
 						{showScript && (
@@ -240,7 +275,8 @@ const Grid = ({ project, ...props }: GridProps) => {
 								w="100%"
 							>
 								<GridCard title="Confidence Breakdown">
-									<List
+									<Text fontStyle="italic">Coming soon, stay tuned!</Text>
+									{/* <List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
@@ -265,7 +301,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 											value={-2.0}
 											description="Lorem ipsum dolor sit amet."
 										/>
-									</List>
+									</List> */}
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
@@ -276,7 +312,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 									>
 										<Flex>
 											<Text fontWeight={900} mr={2}>
-												629
+												{totalRecordings}
 											</Text>
 											<Text color={useColorModeValue('gray.500', 'gray.400')}>
 												Recordings
@@ -284,7 +320,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 										</Flex>
 										<Flex>
 											<Text fontWeight={900} mr={2}>
-												331
+												{totalTests}
 											</Text>
 											<Text color={useColorModeValue('gray.500', 'gray.400')}>
 												Tests
@@ -300,7 +336,13 @@ const Grid = ({ project, ...props }: GridProps) => {
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
-										<Doughnut data={doughnutData} options={doughnutOptions} />
+										{doughnutDataValues.length > 0 ? (
+											<Doughnut data={doughnutData} options={doughnutOptions} />
+										) : (
+											<Text fontStyle="italic">
+												No tests have been run yet.
+											</Text>
+										)}
 									</Box>
 								</GridCard>
 								<GridCard title="Overview">
@@ -312,7 +354,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													12
+													{daysUntilRelease || 'N/A'}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -331,6 +373,13 @@ const Grid = ({ project, ...props }: GridProps) => {
 											</Text>
 										</Box>
 										<Box w="100px">
+											{/* <Text fontWeight={900}>
+												{confidenceScore.value >= 90
+													? 'Ready'
+													: confidenceScore.value >= 50
+													? 'Proceed with caution'
+													: 'Do not release'}
+											</Text> */}
 											<Text fontWeight={900}>Ready</Text>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
@@ -345,7 +394,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													23
+													{bugs.introduced}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -366,7 +415,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													22
+													{bugs.fixed}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -397,7 +446,8 @@ const Grid = ({ project, ...props }: GridProps) => {
 							w="100%"
 						>
 							<GridCard title="Activity">
-								<List
+								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
+								{/* <List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
 								>
@@ -431,13 +481,14 @@ const Grid = ({ project, ...props }: GridProps) => {
 										subtitle="MEM-123 | Improve settings UX"
 										icon={GitCommitIcon}
 									/>
-								</List>
+								</List> */}
 							</GridCard>
 							<GridCard
 								title="Linear Tickets"
 								leftIconSrc="https://media.graphcms.com/AIPdNiTtReCzrrRorDL5"
 							>
-								<List
+								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
+								{/* <List
 									spacing={3}
 									color={useColorModeValue('gray.600', 'gray.400')}
 								>
@@ -466,7 +517,7 @@ const Grid = ({ project, ...props }: GridProps) => {
 										author="Code Beast"
 										avatar="https://bit.ly/code-beast"
 									/>
-								</List>
+								</List> */}
 							</GridCard>
 						</SimpleGrid>
 					</Flex>
