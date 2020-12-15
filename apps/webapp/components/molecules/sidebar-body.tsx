@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import slugify from 'slugify';
 import {
 	Stack,
@@ -18,7 +19,6 @@ import {
 	MenuDivider,
 	Button,
 	Text,
-	Link,
 	Heading,
 	Avatar,
 	Tooltip,
@@ -56,25 +56,22 @@ const SideBarBody = () => {
 	if (isSettingsPage) {
 		return (
 			<>
-				<Heading
-					as={Flex}
-					align="center"
-					fontSize="20px"
-					fontWeight={500}
-					color={useColorModeValue('gray.900', 'gray.200')}
-					lineHeight="1"
-					mt={6}
-				>
-					<IconButton
-						aria-label="Back"
-						variant="ghost"
-						size="2xs"
-						mr={1}
-						icon={<ChevronLeftIcon w={6} h={6} color="gray.500" />}
-						onClick={() => router.back()}
-					/>
-					Settings
-				</Heading>
+				<Link href={`/${slugifiedProjectName}`} passHref>
+					<a>
+						<Heading
+							as={Flex}
+							align="center"
+							fontSize="20px"
+							fontWeight={500}
+							color={useColorModeValue('gray.900', 'gray.200')}
+							lineHeight="1"
+							mt={6}
+						>
+							<ChevronLeftIcon w={6} h={6} color="gray.500" />
+							Settings
+						</Heading>
+					</a>
+				</Link>
 				<Stack mt={6} spacing={6}>
 					<Box>
 						<Flex align="flex-start">

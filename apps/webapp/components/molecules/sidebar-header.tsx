@@ -37,6 +37,8 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 
+	const slugifiedProjectName = slugify(project.name, { lower: true });
+
 	const handleLogoutClick = () => {
 		Router.push('/api/logout');
 		shutdownIntercom();
@@ -45,7 +47,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	return (
 		<Flex align="center">
 			<Box>
-				<Link href="/" passHref>
+				<Link href={`/${slugifiedProjectName}`} passHref>
 					<a>
 						<LogoIcon width="auto" height={6} />
 					</a>
@@ -84,12 +86,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 					</MenuButton>
 					<MenuList>
 						<MenuItem>
-							<Link
-								href={`/${slugify(project.name, {
-									lower: true,
-								})}/settings#profile`}
-								passHref
-							>
+							<Link href={`/${slugifiedProjectName}/settings#profile`} passHref>
 								<a>View profile</a>
 							</Link>
 						</MenuItem>
