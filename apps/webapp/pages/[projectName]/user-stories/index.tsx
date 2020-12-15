@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import {
 	Box,
 	Stack,
@@ -24,17 +24,17 @@ import {
 	VideoIcon,
 	CrosshairIcon,
 } from '@frontend/chakra-theme';
-import { transparentize } from '@chakra-ui/theme-tools';
-import GridCard from '../../components/molecules/grid-card';
-import Card from '../../components/atoms/card';
-import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
-import SegmentedControl from '../../components/molecules/segmented-control';
-import Table from '../../components/organisms/table';
-import LoadingScreen from '../../components/organisms/loading-screen';
-import { eightBaseClient } from '../../utils/graphql';
-import { UserContext } from '../../utils/user';
-import { show as showIntercom } from '../../utils/intercom';
-import { PROJECT_USER_STORIES } from '../../graphql/user-stories';
+import GridCard from '../../../components/molecules/grid-card';
+import Card from '../../../components/atoms/card';
+import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
+import SegmentedControl from '../../../components/molecules/segmented-control';
+import Table from '../../../components/organisms/table';
+import LoadingScreen from '../../../components/organisms/loading-screen';
+import { eightBaseClient } from '../../../utils/graphql';
+import { UserContext } from '../../../utils/user';
+import { show as showIntercom } from '../../../utils/intercom';
+import { PROJECT_USER_STORIES } from '../../../graphql/user-stories/index';
+import slugify from 'slugify';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -47,11 +47,7 @@ const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
 		<Box
 			d="flex"
 			alignItems="center"
-			// @ts-ignore
-			backgroundColor={useColorModeValue(
-				'cyan.50',
-				transparentize('cyan.500', 0.15)
-			)}
+			backgroundColor={useColorModeValue('cyan.50', 'transparentCyan.200')}
 			color={useColorModeValue('cyan.700', 'cyan.50')}
 			fontWeight={600}
 			p={4}
@@ -82,6 +78,7 @@ interface Recordings {
 }
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
+	const router = useRouter();
 	const { project, idToken } = useContext(UserContext);
 
 	const [toggleIndex, setToggleIndex] = useState(0);
@@ -183,7 +180,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	}, []);
 
 	const handleEdit = (id: string) => {
-		console.log('edit', id);
+		router.push(
+			`/${slugify(project.name, { lower: true })}/user-stories/${id}`
+		);
 	};
 
 	const { loading } = useValidateSelectedProject();
@@ -237,15 +236,17 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					</Box>
 				</Stack>
 			</GridCard>
-			<Box>
-				<Flex justify="space-between" align="center" flex="1">
+			<Box overflow="auto" flex="1">
+				<Flex justify="space-between" align="center">
 					<SegmentedControl
 						values={['Recordings', 'Test cases']}
 						selectedIndex={toggleIndex}
 						setSelectedIndex={setToggleIndex}
 					/>
 					{toggleIndex === 0 ? (
-						<Button size="sm">Review recordings</Button>
+						<Button size="sm" disabled={true}>
+							Review recordings
+						</Button>
 					) : null}
 				</Flex>
 
@@ -273,6 +274,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 };
 
-export { getServerSideProps } from '../../components/molecules/chakra';
+export { getServerSideProps } from '../../../components/molecules/chakra';
 
 export default UserStoriesPage;
