@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, ChangeEvent } from 'react';
+import React, { useState, useEffect, useContext, ChangeEvent } from 'react';
 import {
 	Box,
 	FormControl,
@@ -14,6 +14,8 @@ import {
 	useClipboard,
 	useToast,
 	Avatar,
+	Flex,
+	useColorModeValue,
 } from '@chakra-ui/react';
 import { Table, Tbody, Tr, Td } from '@chakra-ui/table';
 import { CopyIcon, TrashIcon } from '@frontend/chakra-theme';
@@ -146,7 +148,7 @@ const Settings = () => {
 					<Heading fontSize="18px" fontWeight={500}>
 						Invite link
 					</Heading>
-					<InputGroup>
+					<InputGroup mb={4}>
 						<Input
 							value={project.configuration.inviteLink}
 							color="blue.400"
@@ -163,47 +165,47 @@ const Settings = () => {
 							/>
 						</InputRightElement>
 					</InputGroup>
-					<Table mt={4} w="100%">
-						<Tbody>
-							{project?.members?.items.map((member) => {
-								const memberName = `${member.firstName} ${member.lastName}`;
-								const memberAvatar = member?.avatar?.downloadUrl;
-								return (
-									<Tr key={member.email} h={8}>
-										<Td>
-											<Avatar
-												name={memberName}
-												src={memberAvatar && memberAvatar}
-												size="xs"
-												borderRadius="md"
-												backgroundColor="transparent"
-											/>
-										</Td>
-										<Td>
-											<Text fontWeight={600} fontSize="14px">
-												{memberName}
-											</Text>
-										</Td>
-										<Td>
-											<Text fontSize="14px" color="gray.500">
-												{member.email}
-											</Text>
-										</Td>
-										<Td>
-											<IconButton
-												aria-label={`Remove ${member.firstName} from ${project.name}`}
-												icon={<TrashIcon w={4} h={4} />}
-												size="sm"
-												variant="ghost"
-												color="gray.500"
-												isDisabled
-											/>
-										</Td>
-									</Tr>
-								);
-							})}
-						</Tbody>
-					</Table>
+					{project?.members?.items.map((member) => {
+						const memberName = `${member.firstName} ${member.lastName}`;
+						const memberAvatar = member?.avatar?.downloadUrl;
+						return (
+							<Flex
+								key={member.email}
+								w="100%"
+								p={2}
+								borderRadius="md"
+								justify="space-between"
+								align="center"
+								_hover={{
+									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+								}}
+							>
+								<Flex w="250px">
+									<Avatar
+										name={memberName}
+										src={memberAvatar && memberAvatar}
+										size="xs"
+										borderRadius="md"
+										mr={4}
+									/>
+									<Text fontWeight={600} fontSize="14px" textAlign="left">
+										{memberName}
+									</Text>
+								</Flex>
+								<Text fontSize="14px" color="gray.500" w="250px">
+									{member.email}
+								</Text>
+								<IconButton
+									aria-label={`Remove ${member.firstName} from ${project.name}`}
+									icon={<TrashIcon w={4} h={4} />}
+									size="sm"
+									variant="ghost"
+									color="gray.500"
+									isDisabled
+								/>
+							</Flex>
+						);
+					})}
 				</GridCard>
 			</Stack>
 		</Box>
