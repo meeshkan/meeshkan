@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify';
 import {
@@ -21,6 +21,7 @@ import {
 	Link,
 	Heading,
 	Avatar,
+	Tooltip,
 } from '@chakra-ui/react';
 import {
 	ChatIcon,
@@ -50,8 +51,8 @@ const SideBarBody = () => {
 	const avatarUrl = project.avatar?.downloadUrl;
 	const slugifiedProjectName = slugify(project.name, { lower: true });
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
-	const isSettingsPage = router.pathname.endsWith('settings'); 
-
+	const isSettingsPage = router.pathname.endsWith('settings');
+	console.log(router.pathname);
 	if (isSettingsPage) {
 		return (
 			<>
@@ -83,9 +84,13 @@ const SideBarBody = () => {
 								p={2}
 								mr={4}
 							>
-								<ProfileIcon color={useColorModeValue('gray.400', 'gray.500')} w={4} h={4} />
+								<ProfileIcon
+									color={useColorModeValue('gray.400', 'gray.500')}
+									w={4}
+									h={4}
+								/>
 							</Box>
-							<Stack spacing={4}>
+							<Stack spacing={2} w="full">
 								<Heading
 									fontSize="15px"
 									fontWeight={400}
@@ -95,8 +100,26 @@ const SideBarBody = () => {
 								>
 									Personal
 								</Heading>
-								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Profile</Link>
-								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Notifications</Link>
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#profile`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#profile`
+									}
+								>
+									Profile
+								</NavButton>
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#notifications`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#notifications`
+									}
+								>
+									Notifications
+								</NavButton>
 							</Stack>
 						</Flex>
 					</Box>
@@ -108,9 +131,13 @@ const SideBarBody = () => {
 								p={2}
 								mr={4}
 							>
-								<SuitcaseIcon color={useColorModeValue('gray.400', 'gray.500')} w={4} h={4} />
+								<SuitcaseIcon
+									color={useColorModeValue('gray.400', 'gray.500')}
+									w={4}
+									h={4}
+								/>
 							</Box>
-							<Stack spacing={4}>
+							<Stack spacing={2} w="full">
 								<Heading
 									fontSize="15px"
 									fontWeight={400}
@@ -120,10 +147,49 @@ const SideBarBody = () => {
 								>
 									Project
 								</Heading>
-								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>General</Link>
-								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Team Members</Link>
-								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Plan &amp; Billing</Link>
-								<Link fontSize="14px" color={useColorModeValue('gray.500', 'gray.400')}>Integrations</Link>
+
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#general`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#general`
+									}
+								>
+									General
+								</NavButton>
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#team-members`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#team-members`
+									}
+								>
+									Team members
+								</NavButton>
+								<NavButton
+									disabled={true}
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#plan-and-billing`
+									}
+								>
+									Plan &amp; Billing
+								</NavButton>
+								<NavButton
+									disabled={true}
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#integrations`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#integrations`
+									}
+								>
+									Integrations
+								</NavButton>
 							</Stack>
 						</Flex>
 					</Box>
@@ -140,8 +206,7 @@ const SideBarBody = () => {
 						leftIcon={<ActivityIcon />}
 						href={`/${slugifiedProjectName}`}
 						isActive={
-							router.pathname === '/' ||
-							router.pathname === `/[projectName]`
+							router.pathname === '/' || router.pathname === `/[projectName]`
 						}
 					>
 						Health dashboard
@@ -149,24 +214,14 @@ const SideBarBody = () => {
 					<NavButton
 						leftIcon={<VideoIcon />}
 						href={userStoriesHref}
-						isActive={
-							router.pathname.endsWith('user-stories')
-						}
+						isActive={router.pathname.endsWith('user-stories')}
 					>
 						User stories
 					</NavButton>
-					<NavButton
-						leftIcon={<CheckSquareIcon />}
-						href="/test-runs"
-						disabled
-					>
+					<NavButton leftIcon={<CheckSquareIcon />} href="/test-runs" disabled>
 						Test runs
 					</NavButton>
-					<NavButton
-						leftIcon={<PackageIcon />}
-						href="/releases"
-						disabled
-					>
+					<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
 						Releases
 					</NavButton>
 				</Stack>
@@ -245,16 +300,18 @@ const SideBarBody = () => {
 							</MenuItem>
 						</MenuList>
 					</Menu>
-					<IconButton
-						aria-label="Settings"
-						colorScheme="gray"
-						color={useColorModeValue('gray.500', 'gray.400')}
-						icon={<SettingsIcon />}
-						onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
-						variant="ghost"
-						size="sm"
-						ml={2}
-					/>
+					<Tooltip hasArrow label="Settings" borderRadius="md" p={2}>
+						<IconButton
+							aria-label="Settings"
+							colorScheme="gray"
+							color={useColorModeValue('gray.500', 'gray.400')}
+							icon={<SettingsIcon />}
+							onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
+							variant="ghost"
+							size="sm"
+							ml={2}
+						/>
+					</Tooltip>
 				</Flex>
 			</Box>
 		</>

@@ -48,6 +48,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 			<Spacer />
 			<Flex align="center">
 				<IconButton
+					disabled={true}
 					aria-label="Inbox"
 					variant="ghost"
 					size="sm"

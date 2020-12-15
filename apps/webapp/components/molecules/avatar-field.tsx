@@ -95,6 +95,8 @@ const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
 							borderStyle="dashed"
 							p={[4, 5, 6, 8]}
 							ml={4}
+							h={16}
+							w={16}
 							onClick={onPick}
 							bgImage={imageOriginalPath && `url(${imageOriginalPath})`}
 							bgSize="contain"

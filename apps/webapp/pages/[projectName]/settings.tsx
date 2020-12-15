@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext, ChangeEvent } from 'react';
 import {
-    Box,
-    FormControl,
-    Stack,
-    Heading,
-    Button,
-    Text,
-    Switch,
+	Box,
+	FormControl,
+	Stack,
+	Heading,
+	Button,
+	Text,
+	Switch,
 	InputGroup,
 	Input,
 	InputRightElement,
@@ -26,14 +26,16 @@ import Card from '../../components/atoms/card';
 import { UserContext, updateProductNotifications } from '../../utils/user';
 
 const Settings = () => {
-    const { loading } = useValidateSelectedProject();
+	const { loading } = useValidateSelectedProject();
 	const toast = useToast();
 	const { productNotifications, idToken, project } = useContext(UserContext);
-    const [profileLoading, setProfileLoading] = useState(false);
+	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
 
-	const { hasCopied, onCopy } = useClipboard(project?.configuration?.inviteLink);
+	const { hasCopied, onCopy } = useClipboard(
+		project?.configuration?.inviteLink
+	);
 
 	useEffect(() => {
 		if (hasCopied) {
@@ -68,39 +70,69 @@ const Settings = () => {
 		});
 	};
 
-    return (
-        <Box overflowY="scroll" w="100%">
-            <Stack spacing={6}>
-                <Heading fontSize="20px" color="gray.500" lineHeight="short">Personal</Heading>
-                <GridCard title="Profile" subtitle="Manage your Meeshkan Profile">
-                    <UpdateProfileForm setLoading={setProfileLoading} formId="profileUpdateForm" />
-                    <Button mt={4} type="submit" isLoading={profileLoading} form="profileUpdateForm" ml="auto" d="block">
+	return (
+		<Box overflowY="scroll" w="100%">
+			<Stack spacing={6}>
+				<Heading fontSize="20px" color="gray.500" lineHeight="short">
+					Personal
+				</Heading>
+				<GridCard title="Profile" subtitle="Manage your Meeshkan Profile">
+					<UpdateProfileForm
+						setLoading={setProfileLoading}
+						formId="profileUpdateForm"
+					/>
+					<Button
+						mt={4}
+						type="submit"
+						isLoading={profileLoading}
+						form="profileUpdateForm"
+						ml="auto"
+						d="block"
+					>
 						Update profile
 					</Button>
-                </GridCard>
-                <GridCard title="Notifications" subtitle="Manage the notifications you receive from Meeshkan.">
-                    <FormControl display="flex" alignItems="center">
-                        <Box>
-                            <Heading fontSize="18px" fontWeight={500}>Product updates</Heading>
-                            <Text fontSize="14px" color="gray.500">Receive emails when we have important Meeshkan updates to share.</Text>
-                        </Box>
-                        <Switch
+				</GridCard>
+				<GridCard
+					title="Notifications"
+					subtitle="Manage the notifications you receive from Meeshkan."
+				>
+					<FormControl display="flex" alignItems="center">
+						<Box>
+							<Heading fontSize="18px" fontWeight={500}>
+								Product updates
+							</Heading>
+							<Text fontSize="14px" color="gray.500">
+								Receive emails when we have important Meeshkan updates to share.
+							</Text>
+						</Box>
+						<Switch
 							id="product-updates"
 							ml={5}
 							onChange={handleSwitchToggle}
 							isChecked={productUpdates}
 						/>
-                    </FormControl>
-                </GridCard>
-                <Heading fontSize="20px" color="gray.500" lineHeight="short" pt={5}>Project</Heading>
-                <GridCard title="General" subtitle="Manage your Project settings">
+					</FormControl>
+				</GridCard>
+				<Heading fontSize="20px" color="gray.500" lineHeight="short" pt={5}>
+					Project
+				</Heading>
+				<GridCard title="General" subtitle="Manage your Project settings">
 					<UpdateProjectForm setLoading={setProjectLoading} />
-                    <Button mt={4} type="submit" isLoading={projectLoading} form="projectUpdateForm" ml="auto" d="block">
+					<Button
+						mt={4}
+						type="submit"
+						isLoading={projectLoading}
+						form="projectUpdateForm"
+						ml="auto"
+						d="block"
+					>
 						Update project
 					</Button>
-                </GridCard>
-                <GridCard title="Team Members" subtitle="Manage your Project settings">
-					<Heading fontSize="18px" fontWeight={500}>Invite link</Heading>
+				</GridCard>
+				<GridCard title="Team Members" subtitle="Manage your Project settings">
+					<Heading fontSize="18px" fontWeight={500}>
+						Invite link
+					</Heading>
 					<InputGroup>
 						<Input
 							value={project.configuration.inviteLink}
@@ -120,7 +152,7 @@ const Settings = () => {
 					</InputGroup>
 					<Table mt={4} w="100%">
 						<Tbody>
-							{project.members.items.map(member => {
+							{project.members.items.map((member) => {
 								const memberName = `${member.firstName} ${member.lastName}`;
 								const memberAvatar = member.avatar.downloadUrl;
 								return (
@@ -135,18 +167,12 @@ const Settings = () => {
 											/>
 										</Td>
 										<Td>
-											<Text
-												fontWeight={600}
-												fontSize="14px"
-											>
+											<Text fontWeight={600} fontSize="14px">
 												{memberName}
 											</Text>
 										</Td>
 										<Td>
-											<Text
-												fontSize="14px"
-												color="gray.500"
-											>
+											<Text fontSize="14px" color="gray.500">
 												{member.email}
 											</Text>
 										</Td>
@@ -165,10 +191,10 @@ const Settings = () => {
 							})}
 						</Tbody>
 					</Table>
-                </GridCard>
-            </Stack>
-        </Box>
-    );
+				</GridCard>
+			</Stack>
+		</Box>
+	);
 };
 
 export default Settings;
