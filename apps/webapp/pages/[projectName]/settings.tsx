@@ -167,7 +167,7 @@ const Settings = () => {
 						<Tbody>
 							{project?.members?.items.map((member) => {
 								const memberName = `${member.firstName} ${member.lastName}`;
-								const memberAvatar = member.avatar.downloadUrl;
+								const memberAvatar = member?.avatar?.downloadUrl;
 								return (
 									<Tr key={member.email} h={8}>
 										<Td>
