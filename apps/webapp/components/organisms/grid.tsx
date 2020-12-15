@@ -17,12 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import theme, {
-	// GitMergeIcon,
-	// GitCommitIcon,
-	// GitLabIcon,
-	// GitPullRequestIcon,
-} from '@frontend/chakra-theme';
+import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
@@ -31,12 +26,13 @@ import GridCard from '../molecules/grid-card';
 // import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import Onboarding from '../../components/organisms/onboarding';
-import { UserContext, Project } from '../../utils/user';
+import { UserContext } from '../../utils/user';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
 	getBugs,
 	getTestCoverage,
+	getConfidenceScore,
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
@@ -167,6 +163,7 @@ const Grid = (props) => {
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
 	const testCoverage = getTestCoverage(userStories);
+	const confidenceScore = getConfidenceScore(userStories);
 
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
@@ -174,7 +171,9 @@ const Grid = (props) => {
 	doughnutData.datasets[0].data = doughnutDataValues;
 	doughnutData.labels = doughnutDataLabels;
 
-	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(userStories);
+	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
+		userStories
+	);
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
 	const barDataLabels = getLastSevenDaysInFormat('MMM DD');
@@ -245,10 +244,16 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							<StatCard isNA title="Confidence score" />
+							<StatCard
+								title="Confidence score"
+								value={Number(confidenceScore.value.toFixed(2))}
+								percentageChange={confidenceScore.percentageChange}
+								dataPoints={confidenceScore.dataPoints}
+								my={[8, 0, 0, 0]}
+							/>
 							<StatCard
 								title="Test coverage"
-								value={testCoverage.value}
+								value={Number(testCoverage.value.toFixed(2))}
 								percentageChange={testCoverage.percentageChange}
 								dataPoints={testCoverage.dataPoints}
 								my={[8, 0, 0, 0]}
@@ -370,7 +375,13 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 										<Box w="100px">
-											<Text fontWeight={900}>Ready</Text>
+											<Text fontWeight={900}>
+												{confidenceScore.value >= 90
+													? 'Ready'
+													: confidenceScore.value >= 50
+													? 'Proceed with caution'
+													: 'Do not release'}
+											</Text>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
 												fontWeight={700}
