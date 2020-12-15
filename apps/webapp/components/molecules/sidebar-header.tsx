@@ -27,13 +27,14 @@ import MenuToggleButton from '../molecules/menu-toggle-button';
 import { UserContext } from '../../utils/user';
 import { shutdown as shutdownIntercom } from '../../utils/intercom';
 import Link from 'next/link';
+import slugify from 'slugify';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
-	const { avatar, name } = useContext(UserContext);
+	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 
 	const handleLogoutClick = () => {
@@ -82,7 +83,16 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						/>
 					</MenuButton>
 					<MenuList>
-						<MenuItem>View profile</MenuItem>
+						<MenuItem>
+							<Link
+								href={`/${slugify(project.name, {
+									lower: true,
+								})}/settings#profile`}
+								passHref
+							>
+								<a>View profile</a>
+							</Link>
+						</MenuItem>
 						<MenuDivider />
 						<MenuItem onClick={toggleColorMode}>
 							{colorMode === 'light' ? <MoonIcon mr={3} /> : <SunIcon mr={3} />}
