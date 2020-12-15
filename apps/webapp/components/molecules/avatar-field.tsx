@@ -27,9 +27,9 @@ type AvatarFieldProps = {
 
 const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
 	const [error, setError] = useState('');
-	const { avatar, idToken } = useContext(UserContext);
+	const { project, avatar, idToken } = useContext(UserContext);
 	const [imageOriginalPath, setImageOriginalPath] = useState(
-		isProfileAvatar ? avatar : ''
+		isProfileAvatar ? avatar : project?.avatar?.downloadUrl || ''
 	);
 	const client = eightBaseClient(idToken);
 	const fetcher = (query) => client.request(query);
@@ -95,6 +95,8 @@ const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
 							borderStyle="dashed"
 							p={[4, 5, 6, 8]}
 							ml={4}
+							h={16}
+							w={16}
 							onClick={onPick}
 							bgImage={imageOriginalPath && `url(${imageOriginalPath})`}
 							bgSize="contain"

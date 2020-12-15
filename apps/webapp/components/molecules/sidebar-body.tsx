@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import slugify from 'slugify';
 import {
@@ -18,9 +18,17 @@ import {
 	MenuDivider,
 	Button,
 	Text,
+	Link,
+	Heading,
 	Avatar,
+	Tooltip,
 } from '@chakra-ui/react';
-import { ChatIcon, ArrowUpDownIcon, QuestionIcon } from '@chakra-ui/icons';
+import {
+	ChatIcon,
+	ArrowUpDownIcon,
+	QuestionIcon,
+	ChevronLeftIcon,
+} from '@chakra-ui/icons';
 import { transparentize } from '@chakra-ui/theme-tools';
 import {
 	ActivityIcon,
@@ -29,6 +37,8 @@ import {
 	PackageIcon,
 	SettingsIcon,
 	PlusIcon,
+	SuitcaseIcon,
+	ProfileIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
 import { UserContext } from '../../utils/user';
@@ -41,6 +51,152 @@ const SideBarBody = () => {
 	const avatarUrl = project.avatar?.downloadUrl;
 	const slugifiedProjectName = slugify(project.name, { lower: true });
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
+	const isSettingsPage = router.pathname.endsWith('settings');
+
+	if (isSettingsPage) {
+		return (
+			<>
+				<Heading
+					as={Flex}
+					align="center"
+					fontSize="20px"
+					fontWeight={500}
+					color={useColorModeValue('gray.900', 'gray.200')}
+					lineHeight="1"
+					mt={6}
+				>
+					<IconButton
+						aria-label="Back"
+						variant="ghost"
+						size="2xs"
+						mr={1}
+						icon={<ChevronLeftIcon w={6} h={6} color="gray.500" />}
+						onClick={() => router.back()}
+					/>
+					Settings
+				</Heading>
+				<Stack mt={6} spacing={6}>
+					<Box>
+						<Flex align="flex-start">
+							<Box
+								rounded="xl"
+								bg={useColorModeValue('gray.100', 'gray.800')}
+								p={2}
+								mr={4}
+							>
+								<ProfileIcon
+									color={useColorModeValue('gray.400', 'gray.500')}
+									w={4}
+									h={4}
+								/>
+							</Box>
+							<Stack spacing={2} w="full">
+								<Heading
+									fontSize="16px"
+									fontWeight={500}
+									color={useColorModeValue('gray.400', 'gray.500')}
+									lineHeight="short"
+									mt={1}
+								>
+									Personal
+								</Heading>
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#profile`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#profile`
+									}
+								>
+									Profile
+								</NavButton>
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#notifications`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#notifications`
+									}
+								>
+									Notifications
+								</NavButton>
+							</Stack>
+						</Flex>
+					</Box>
+					<Box>
+						<Flex align="flex-start">
+							<Box
+								rounded="xl"
+								bg={useColorModeValue('gray.100', 'gray.800')}
+								p={2}
+								mr={4}
+							>
+								<SuitcaseIcon
+									color={useColorModeValue('gray.400', 'gray.500')}
+									w={4}
+									h={4}
+								/>
+							</Box>
+							<Stack spacing={2} w="full">
+								<Heading
+									fontSize="16px"
+									fontWeight={500}
+									color={useColorModeValue('gray.400', 'gray.500')}
+									lineHeight="short"
+									mt={1}
+								>
+									Project
+								</Heading>
+
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#general`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#general`
+									}
+								>
+									General
+								</NavButton>
+								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#team-members`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#team-members`
+									}
+								>
+									Team members
+								</NavButton>
+								<NavButton
+									disabled={true}
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#plan-and-billing`
+									}
+								>
+									Plan and Billing
+								</NavButton>
+								<NavButton
+									disabled={true}
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#integrations`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#integrations`
+									}
+								>
+									Integrations
+								</NavButton>
+							</Stack>
+						</Flex>
+					</Box>
+				</Stack>
+			</>
+		);
+	}
 
 	return (
 		<>
@@ -147,15 +303,18 @@ const SideBarBody = () => {
 							</MenuItem>
 						</MenuList>
 					</Menu>
-					<IconButton
-						aria-label="Settings"
-						colorScheme="gray"
-						color={useColorModeValue('gray.500', 'gray.400')}
-						icon={<SettingsIcon />}
-						variant="ghost"
-						size="sm"
-						ml={2}
-					/>
+					<Tooltip hasArrow label="Settings" borderRadius="md" p={2}>
+						<IconButton
+							aria-label="Settings"
+							colorScheme="gray"
+							color={useColorModeValue('gray.500', 'gray.400')}
+							icon={<SettingsIcon />}
+							onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
+							variant="ghost"
+							size="sm"
+							ml={2}
+						/>
+					</Tooltip>
 				</Flex>
 			</Box>
 		</>

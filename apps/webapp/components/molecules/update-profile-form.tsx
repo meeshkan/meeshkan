@@ -30,13 +30,15 @@ const jobTitles = ['Product manager', 'CTO', 'Other'];
 
 type UpdateProfileFormProps = {
 	setLoading: (value: boolean) => void;
-	setStep: (step: 1 | 2) => void;
+	setStep?: (step: 1 | 2) => void;
+	formId?: string;
 };
 
-const UpdateProfileForm = ({ setLoading, setStep }: UpdateProfileFormProps) => {
+const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfileFormProps) => {
 	const [error, setError] = useState('');
-	const [title, setTitle] = useState(jobTitles[0]);
-	const { name, idToken } = useContext(UserContext);
+	const { name: currentName, jobTitle, idToken } = useContext(UserContext);
+	const [name, setName] = useState<string>(currentName);
+	const [title, setTitle] = useState(jobTitle || jobTitles[0]);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
 
 	const onSubmit = async (formData: ProfileFormInputs): Promise<void> => {
@@ -53,18 +55,25 @@ const UpdateProfileForm = ({ setLoading, setStep }: UpdateProfileFormProps) => {
 			return;
 		}
 
-		setStep(2);
+		if (setStep) {
+			setStep(2);
+		}
+
 		setLoading(false);
 	};
+
+	const handleChange = (event) => {
+		setName(event.target.value);
+	}
 
 	const onUpload = (data: AvatarFile) => updateUserAvatar(idToken, data);
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} id="form">
+		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
 			<AvatarField isProfileAvatar onUpload={onUpload} />
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>What's your name?</FormLabel>
-				<Input name="name" value={name} type="text" ref={register} />
+				<Input name="name" value={name} onChange={handleChange} type="text" ref={register} />
 			</FormControl>
 			<FormControl id="title" isRequired isInvalid={!!error}>
 				<FormLabel>What's your job title?</FormLabel>

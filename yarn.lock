@@ -2145,6 +2145,13 @@
     "@chakra-ui/utils" "1.0.0"
     react-fast-compare "3.2.0"
 
+"@chakra-ui/table@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/table/-/table-1.0.1.tgz#827dd8735e663835bce2c5393bab4a20345b3712"
+  integrity sha512-pv/XiWrCUk3XJAwbSa5/6RaBQryoqbn2NTgCbZ2riuil4m18U0vMBAcxzG2M0+mYXdNdB1MZmm5/yj8UdQ7qtQ==
+  dependencies:
+    "@chakra-ui/utils" "1.0.1"
+
 "@chakra-ui/tabs@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@chakra-ui/tabs/-/tabs-1.0.0.tgz#71ef4beda7bc638f21238cc06d28ceafc2d8edf6"
@@ -2223,6 +2230,17 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-1.0.0.tgz#d3e693ed069c164034777ccca80d62fb16f1207e"
   integrity sha512-1PZodfSDlbv9fwwJKaOyfCs+MRHqCiSGzSUab6+wQmm1MQQ0LQsBTDBz6d6NJ8ytalTsk8LzZmCSghN0P62a1w==
+  dependencies:
+    "@types/lodash.mergewith" "4.6.6"
+    "@types/object-assign" "4.0.30"
+    css-box-model "1.2.1"
+    lodash.mergewith "4.6.2"
+    object-assign "4.1.1"
+
+"@chakra-ui/utils@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-1.0.1.tgz#b050af53ecd346163479b386d189f40c995509cf"
+  integrity sha512-ASxUtuBcZwwFTk51Lz+yt6fTbZVOWJy2kbwS+7AMXWVrZrXxMIe90zO9AMgL2oXQzHUTzBL0O+T2qK5ezAZDSw==
   dependencies:
     "@types/lodash.mergewith" "4.6.6"
     "@types/object-assign" "4.0.30"

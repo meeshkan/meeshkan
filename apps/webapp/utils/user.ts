@@ -61,12 +61,25 @@ interface Release {
 	items: Array<{ releaseDate: string }>;
 }
 
+interface Member {
+	firstName: string;
+	lastName: string;
+	avatar: Avatar;
+	email: string;
+}
+
+interface Members {
+	count: number;
+	items: Array<Member>;
+}
+
 export interface Project {
 	id: string;
 	name: string;
 	avatar: Avatar;
 	configuration: Configuration;
 	hasReceivedEvents: boolean;
+	members: Members;
 	userStories: UserStories;
 	release?: Release;
 }
@@ -78,6 +91,8 @@ export interface IUser {
 	avatar: string;
 	nickname: string;
 	idToken?: string;
+	jobTitle?: string;
+	productNotifications?: boolean;
 	error?: string;
 	projects?: Array<Project>;
 }
@@ -293,4 +308,59 @@ export const getUserAvatar = async (idToken: string) => {
 		console.error(error);
 		return error;
 	}
+};
+
+const USER_PROFILE_QUERY = gql`
+	query CurrentUser {
+		user {
+			firstName
+			lastName
+			jobTitle
+			productNotifications
+		}
+	}
+`;
+
+export const getUserProfile = async (idToken: string) => {
+	const client = eightBaseClient(idToken);
+	try {
+		const data = await client.request(USER_PROFILE_QUERY);
+		return data.user;
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+};
+
+const UPDATE_PRODUCT_NOTIFICATIONS_MUTATION = gql`
+	mutation UpdateProductNotifications($id: ID!, $productNotifications: Boolean!) {
+		userUpdate(
+			filter: { id: $id }
+			data: { productNotifications: $productNotifications }
+		) {
+			id
+		}
+	}
+`;
+
+export const updateProductNotifications = async (
+	idToken: string,
+	data: { productNotifications: boolean }
+) => {
+	const client = eightBaseClient(idToken);
+	const id = await getUserId(idToken);
+
+	let result;
+	try {
+		result = await client.request(UPDATE_PRODUCT_NOTIFICATIONS_MUTATION, {
+			id,
+			productNotifications: data.productNotifications,
+		});
+	} catch (error) {
+		result = {
+			error: error.response.errors[0],
+		};
+	}
+
+	return result;
 };
