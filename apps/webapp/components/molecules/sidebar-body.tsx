@@ -52,7 +52,7 @@ const SideBarBody = () => {
 	const slugifiedProjectName = slugify(project.name, { lower: true });
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const isSettingsPage = router.pathname.endsWith('settings');
-	console.log(router.pathname);
+
 	if (isSettingsPage) {
 		return (
 			<>
@@ -92,8 +92,8 @@ const SideBarBody = () => {
 							</Box>
 							<Stack spacing={2} w="full">
 								<Heading
-									fontSize="15px"
-									fontWeight={400}
+									fontSize="16px"
+									fontWeight={500}
 									color={useColorModeValue('gray.400', 'gray.500')}
 									lineHeight="short"
 									mt={1}
@@ -139,8 +139,8 @@ const SideBarBody = () => {
 							</Box>
 							<Stack spacing={2} w="full">
 								<Heading
-									fontSize="15px"
-									fontWeight={400}
+									fontSize="16px"
+									fontWeight={500}
 									color={useColorModeValue('gray.400', 'gray.500')}
 									lineHeight="short"
 									mt={1}
@@ -177,7 +177,7 @@ const SideBarBody = () => {
 										`/${slugifiedProjectName}/settings#plan-and-billing`
 									}
 								>
-									Plan &amp; Billing
+									Plan and Billing
 								</NavButton>
 								<NavButton
 									disabled={true}

@@ -1,9 +1,11 @@
 import { ReactNode } from 'react';
 import { BoxProps, Heading, Divider, Image } from '@chakra-ui/react';
 import Card from '../atoms/card';
+import slugify from 'slugify';
 
 type GridCardProps = {
 	title: string;
+	anchor?: boolean;
 	subtitle?: string;
 	children?: ReactNode;
 	leftIconSrc?: string;
@@ -11,6 +13,7 @@ type GridCardProps = {
 
 const GridCard = ({
 	title,
+	anchor,
 	subtitle,
 	children,
 	leftIconSrc,
@@ -18,19 +21,21 @@ const GridCard = ({
 }: GridCardProps) => {
 	return (
 		<Card overflowY="scroll" {...props}>
-			<Heading
-				as="h2"
-				d="flex"
-				alignItems="center"
-				fontSize="lg"
-				fontWeight={800}
-				lineHeight="short"
-			>
-				{leftIconSrc && (
-					<Image src={leftIconSrc} boxSize="16px" alt={title} mr={3} />
-				)}
-				{title}
-			</Heading>
+			<a id={anchor && slugify(title, { lower: true })}>
+				<Heading
+					as="h2"
+					d="flex"
+					alignItems="center"
+					fontSize="lg"
+					fontWeight={800}
+					lineHeight="short"
+				>
+					{leftIconSrc && (
+						<Image src={leftIconSrc} boxSize="16px" alt={title} mr={3} />
+					)}
+					{title}
+				</Heading>
+			</a>
 			{subtitle && (
 				<Heading
 					as="h3"

@@ -72,11 +72,15 @@ const Settings = () => {
 
 	return (
 		<Box overflowY="scroll" w="100%">
-			<Stack spacing={6}>
+			<Stack spacing={6} mb={20}>
 				<Heading fontSize="20px" color="gray.500" lineHeight="short">
 					Personal
 				</Heading>
-				<GridCard title="Profile" subtitle="Manage your Meeshkan Profile">
+				<GridCard
+					title="Profile"
+					anchor
+					subtitle="Manage your Meeshkan Profile"
+				>
 					<UpdateProfileForm
 						setLoading={setProfileLoading}
 						formId="profileUpdateForm"
@@ -94,6 +98,7 @@ const Settings = () => {
 				</GridCard>
 				<GridCard
 					title="Notifications"
+					anchor
 					subtitle="Manage the notifications you receive from Meeshkan."
 				>
 					<FormControl display="flex" alignItems="center">
@@ -116,7 +121,11 @@ const Settings = () => {
 				<Heading fontSize="20px" color="gray.500" lineHeight="short" pt={5}>
 					Project
 				</Heading>
-				<GridCard title="General" subtitle="Manage your Project settings">
+				<GridCard
+					title="General"
+					anchor
+					subtitle="Manage your Project settings"
+				>
 					<UpdateProjectForm setLoading={setProjectLoading} />
 					<Button
 						mt={4}
@@ -129,7 +138,11 @@ const Settings = () => {
 						Update project
 					</Button>
 				</GridCard>
-				<GridCard title="Team Members" subtitle="Manage your Project settings">
+				<GridCard
+					title="Team Members"
+					anchor
+					subtitle="Manage your Project settings"
+				>
 					<Heading fontSize="18px" fontWeight={500}>
 						Invite link
 					</Heading>
