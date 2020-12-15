@@ -48,7 +48,9 @@ const StatCard = ({
 						fontWeight={800}
 						d="inline"
 					>
-						{isNA ? 'N/A' : isPercentage ? value : commaNumber(value)}
+						{isNA ? 'N/A' : isPercentage
+							? value.toPrecision(3)
+							: commaNumber(value)}
 					</Heading>
 					{isPercentage && !isNA && (
 						<Text fontSize="md" fontWeight={300} d="inline">
