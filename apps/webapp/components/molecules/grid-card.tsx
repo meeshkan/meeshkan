@@ -20,7 +20,7 @@ const GridCard = ({
 	...props
 }: GridCardProps) => {
 	return (
-		<Card overflowY="scroll" {...props}>
+		<Card overflowY="auto" {...props}>
 			<a id={anchor && slugify(title, { lower: true })}>
 				<Heading
 					as="h2"

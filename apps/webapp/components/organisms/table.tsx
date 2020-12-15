@@ -217,6 +217,7 @@ const Table = ({
 									// Merge user row props in
 									{...(row.getRowProps() as any)}
 									role="group"
+									onClick={() => onEdit(row.id)}
 								>
 									{row.cells.map((cell) => {
 										return (
@@ -275,7 +276,7 @@ const Table = ({
 				>
 					<Stack isInline flexWrap="nowrap" justify="center" align="center">
 						<Text whiteSpace="nowrap" fontSize="md">
-							{totalCount} total stories
+							{totalCount} total stor{totalCount === 1 ? 'y' : 'ies'}
 						</Text>
 						<Select
 							size="sm"

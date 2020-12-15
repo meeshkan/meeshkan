@@ -1,3 +1,5 @@
+import { transparentize, mode } from '@chakra-ui/theme-tools';
+
 const customComponents = {
 	Alert: {
 		baseStyle: {
@@ -42,6 +44,30 @@ const customComponents = {
 					bg: 'initial',
 				},
 			},
+		},
+		variants: {
+			subtle: (props) => ({
+				bg: mode(
+					`${props.colorScheme}.50`,
+					transparentize(`${props.colorScheme}.500`, 0.2)
+				)(props),
+				color: mode(
+					`${props.colorScheme}.700`,
+					`${props.colorScheme}.200`
+				)(props),
+				_hover: {
+					bg: mode(
+						`${props.colorScheme}.100`,
+						transparentize(`${props.colorScheme}.500`, 0.1)
+					)(props),
+				},
+				_active: {
+					bg: mode(
+						`${props.colorScheme}.200`,
+						`${props.colorScheme}.900`
+					)(props),
+				},
+			}),
 		},
 		defaultProps: {
 			colorScheme: 'blue',

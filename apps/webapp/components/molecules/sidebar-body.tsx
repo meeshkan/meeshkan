@@ -214,7 +214,10 @@ const SideBarBody = () => {
 					<NavButton
 						leftIcon={<VideoIcon />}
 						href={userStoriesHref}
-						isActive={router.pathname.endsWith('user-stories')}
+						isActive={
+							router.pathname.split('/').slice(-1)[0] === 'user-stories' ||
+							router.asPath.includes('/user-stories')
+						}
 					>
 						User stories
 					</NavButton>
