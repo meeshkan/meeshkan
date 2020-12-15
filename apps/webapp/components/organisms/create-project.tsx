@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import Router from 'next/router';
-import {
-	Heading,
-	Text,
-	Box,
-	Flex,
-	Button,
-} from '@chakra-ui/react';
+import { Heading, Box, Flex, Button } from '@chakra-ui/react';
 import Card from '../atoms/card';
 import CreateProjectForm from '../molecules/create-project-form';
 
@@ -14,7 +8,7 @@ const CreateProject = () => {
 	const [loading, setLoading] = useState(false);
 	return (
 		<Flex
-            as={Card}
+			as={Card}
 			align="center"
 			justify="space-between"
 			direction="column"
@@ -30,11 +24,7 @@ const CreateProject = () => {
 					<CreateProjectForm setLoading={setLoading} />
 				</Box>
 				<Flex justify="space-between" align="center" w="100%">
-					<Button
-						mt={4}
-						colorScheme="gray"
-                        onClick={() => Router.push('/')}
-					>
+					<Button mt={4} colorScheme="gray" onClick={() => Router.push('/')}>
 						Back
 					</Button>
 					<Button mt={4} type="submit" isLoading={loading} form="form">
