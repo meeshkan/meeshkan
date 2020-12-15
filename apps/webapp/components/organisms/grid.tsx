@@ -247,7 +247,7 @@ const Grid = (props) => {
 							<StatCard
 								title="Confidence score"
 								value={Number(confidenceScore.value.toFixed(2))}
-								percentageChange={confidenceScore.percentChange}
+								percentageChange={confidenceScore.percentageChange}
 								dataPoints={confidenceScore.dataPoints}
 								my={[8, 0, 0, 0]}
 							/>
