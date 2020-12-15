@@ -128,8 +128,7 @@ export const getConfidenceScore = (
 		mainBranch: {
 			name: 'main',
 			totalRecordings: userStories.count,
-			testCases: userStories.items
-				.filter((story) => story.isTestCase)
+			testCases: userStories?.items?.filter((story) => story.isTestCase)
 				.map((story) =>
 					story.testRuns.items
 						.filter(
