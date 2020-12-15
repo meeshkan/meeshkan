@@ -375,7 +375,13 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 										<Box w="100px">
-											<Text fontWeight={900}>Ready</Text>
+											<Text fontWeight={900}>
+												{confidenceScore.value >= 90
+													? 'Ready'
+													: confidenceScore.value >= 50
+													? 'Proceed with caution'
+													: 'Do not release'}
+											</Text>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
 												fontWeight={700}
