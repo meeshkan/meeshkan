@@ -16,7 +16,7 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import slugify from 'slugify';
+import { createSlug } from '../../utils/createSlug';
 import { ArrowForwardIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
@@ -81,7 +81,7 @@ const versions = ['v0.0.2', 'v0.0.1'];
 const Grid = (props) => {
 	const { projects, project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
-	const slugifiedProjectName = slugify(selectedProject.name, { lower: true });
+	const slugifiedProjectName = createSlug(selectedProject.name);
 	const hasProjects = projects.length > 0;
 
 	const [showScript, setShowScript] = useState<boolean>(

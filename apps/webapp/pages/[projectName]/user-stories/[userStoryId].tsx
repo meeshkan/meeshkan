@@ -33,7 +33,7 @@ import LoadingScreen from 'apps/webapp/components/organisms/loading-screen';
 import { StepList } from '../../../components/molecules/side-step-list';
 import { useRouter } from 'next/router';
 import Video from 'apps/webapp/components/atoms/video';
-import slugify from 'slugify';
+import { createSlug } from '../../../utils/createSlug';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -44,6 +44,7 @@ const UserStory = (props: UserStoryProps) => {
 	const router = useRouter();
 	const toast = useToast();
 
+	const slugifiedProjectName = createSlug(project.name);
 	let currentPath = router.asPath;
 	let userStoryId = currentPath.substr(currentPath.length - 25);
 	let date = new Date().toISOString().replace('Z', '') + '+00:00';
@@ -215,9 +216,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 						mr={4}
 					>
@@ -245,9 +244,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 					>
 						Reject

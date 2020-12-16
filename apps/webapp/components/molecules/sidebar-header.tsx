@@ -27,7 +27,7 @@ import MenuToggleButton from '../molecules/menu-toggle-button';
 import { UserContext } from '../../utils/user';
 import { shutdown as shutdownIntercom } from '../../utils/intercom';
 import Link from 'next/link';
-import slugify from 'slugify';
+import { createSlug } from '../../utils/createSlug';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
@@ -37,7 +37,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const slugifiedProjectName = slugify(project.name, { lower: true });
+	const slugifiedProjectName = createSlug(project.name);
 
 	const handleLogoutClick = () => {
 		Router.push('/api/logout');

@@ -34,7 +34,7 @@ import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/user-stories/index';
-import slugify from 'slugify';
+import { createSlug } from '../../../utils/createSlug';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -180,9 +180,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	}, []);
 
 	const handleEdit = (id: string) => {
-		router.push(
-			`/${slugify(project.name, { lower: true })}/user-stories/${id}`
-		);
+		router.push(`/${createSlug(project.name)}/user-stories/${id}`);
 	};
 
 	const { loading } = useValidateSelectedProject();

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import slugify from 'slugify';
+import { createSlug } from '../../utils/createSlug';
 import {
 	Stack,
 	Box,
@@ -49,7 +49,7 @@ const SideBarBody = () => {
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
 	const avatarUrl = project.avatar?.downloadUrl;
-	const slugifiedProjectName = slugify(project.name, { lower: true });
+	const slugifiedProjectName = createSlug(project.name);
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
