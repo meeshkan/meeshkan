@@ -22,12 +22,12 @@ type ScriptCardProps = {
 
 const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	const toast = useToast();
-	const { projects } = useContext(UserContext);
-	const hasProjects = projects.length > 0;
+	const { project } = useContext(UserContext);
+	const hasSelectedProject = project.id !== -1;
 
 	let scriptTag = '';
-	if (hasProjects) {
-		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?clientId=${projects[0].id}"></script>`;
+	if (hasSelectedProject) {
+		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?clientId=${project.id}"></script>`;
 	}
 
 	const { hasCopied, onCopy } = useClipboard(scriptTag);
@@ -53,7 +53,7 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 		}
 	}, [hasCopied, toast]);
 
-	if (!hasProjects) {
+	if (!hasSelectedProject) {
 		return null;
 	}
 
