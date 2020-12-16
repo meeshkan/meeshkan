@@ -87,16 +87,17 @@ const Settings = () => {
 						setLoading={setProfileLoading}
 						formId="profileUpdateForm"
 					/>
-					<Button
-						mt={4}
-						type="submit"
-						isLoading={profileLoading}
-						form="profileUpdateForm"
-						ml="auto"
-						d="block"
-					>
-						Update profile
-					</Button>
+					<Flex justify="right" mt={4}>
+						<Button
+							mt={4}
+							type="submit"
+							isLoading={profileLoading}
+							loadingText="Updating"
+							form="profileUpdateForm"
+						>
+							Update profile
+						</Button>
+					</Flex>
 				</GridCard>
 				<GridCard
 					title="Notifications"
@@ -129,16 +130,16 @@ const Settings = () => {
 					subtitle="Manage your Project settings"
 				>
 					<UpdateProjectForm setLoading={setProjectLoading} />
-					<Button
-						mt={4}
-						type="submit"
-						isLoading={projectLoading}
-						form="projectUpdateForm"
-						ml="auto"
-						d="block"
-					>
-						Update project
-					</Button>
+					<Flex justify="right" mt={4}>
+						<Button
+							type="submit"
+							isLoading={projectLoading}
+							loadingText="Updating"
+							form="projectUpdateForm"
+						>
+							Update project
+						</Button>
+					</Flex>
 				</GridCard>
 				<GridCard
 					title="Team Members"

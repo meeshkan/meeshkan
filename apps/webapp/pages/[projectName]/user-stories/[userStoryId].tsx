@@ -48,7 +48,6 @@ const UserStory = (props: UserStoryProps) => {
 	let currentPath = router.asPath;
 	let userStoryId = currentPath.substr(currentPath.length - 25);
 	let date = new Date().toISOString().replace('Z', '') + '+00:00';
-	console.log(date);
 
 	const client = eightBaseClient(idToken);
 
