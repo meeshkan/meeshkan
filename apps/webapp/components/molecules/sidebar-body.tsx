@@ -267,10 +267,9 @@ const SideBarBody = () => {
 											fontSize="1rem"
 										/>
 									}
+									color={useColorModeValue('gray.700', 'gray.200')}
 									bg={useColorModeValue('gray.200', 'gray.600')}
 									size="sm"
-									showBorder
-									borderColor={useColorModeValue('gray.50', 'gray.800')}
 									borderRadius="md"
 									mr={3}
 								/>
@@ -289,7 +288,26 @@ const SideBarBody = () => {
 										value={project.name}
 										onClick={() => setProject(project)}
 									>
-										{project.name}
+										<Flex display="flex" alignItems="center">
+											<Avatar
+												src={project.avatar?.downloadUrl}
+												name={project.name}
+												icon={
+													<QuestionIcon
+														color={useColorModeValue('gray.400', 'white')}
+														fontSize="1rem"
+													/>
+												}
+												color={useColorModeValue('gray.700', 'gray.200')}
+												bg={useColorModeValue('gray.200', 'gray.600')}
+												size="xs"
+												borderRadius="md"
+												mr={3}
+											/>
+											<Text fontSize="sm" fontWeight={600}>
+												{project.name}
+											</Text>
+										</Flex>
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>

@@ -187,6 +187,8 @@ const Settings = () => {
 										size="xs"
 										borderRadius="md"
 										mr={4}
+										color={useColorModeValue('gray.700', 'gray.200')}
+										bg={useColorModeValue('gray.200', 'gray.600')}
 									/>
 									<Text fontWeight={600} fontSize="14px" textAlign="left">
 										{memberName}

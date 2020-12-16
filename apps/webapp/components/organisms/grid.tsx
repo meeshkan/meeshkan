@@ -331,6 +331,7 @@ const Grid = (props) => {
 										mt={4}
 										size="sm"
 										colorScheme="gray"
+										variant="subtle"
 										w="full"
 										onClick={() =>
 											router.push(`/${slugifiedProjectName}/user-stories`)
