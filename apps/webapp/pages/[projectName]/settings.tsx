@@ -167,7 +167,9 @@ const Settings = () => {
 						</InputRightElement>
 					</InputGroup>
 					{project?.members?.items.map((member) => {
-						const memberName = `${member.firstName} ${member.lastName}`;
+						const memberName = `${member.firstName || ''} ${
+							member.lastName || ''
+						}`;
 						const memberAvatar = member?.avatar?.downloadUrl;
 						return (
 							<Flex
