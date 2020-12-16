@@ -23,13 +23,18 @@ type AvatarFieldProps = {
 	onUpload: (
 		avatarFile: AvatarFile
 	) => void | Promise<{ error?: typeof Error }>;
+	existingImageUrl?: string;
 };
 
-const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
+const AvatarField = ({
+	isProfileAvatar,
+	onUpload,
+	existingImageUrl,
+}: AvatarFieldProps) => {
 	const [error, setError] = useState('');
 	const { project, avatar, idToken } = useContext(UserContext);
 	const [imageOriginalPath, setImageOriginalPath] = useState(
-		isProfileAvatar ? avatar : project?.avatar?.downloadUrl || ''
+		existingImageUrl || ''
 	);
 	const client = eightBaseClient(idToken);
 	const fetcher = (query) => client.request(query);
@@ -40,7 +45,7 @@ const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
 
 	if (isValidating || !data) {
 		return (
-			<Flex justify="center">
+			<Flex justify="center" mb={5}>
 				<Spinner />
 			</Flex>
 		);

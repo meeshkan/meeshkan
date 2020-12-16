@@ -56,7 +56,11 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="projectUpdateForm">
-			<AvatarField isProfileAvatar={false} onUpload={setAvatarFile} />
+			<AvatarField
+				isProfileAvatar={false}
+				onUpload={setAvatarFile}
+				existingImageUrl={project?.avatar?.downloadUrl}
+			/>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Project name</FormLabel>
 				<Input name="name" value={name} onChange={handleChange} type="text" ref={register} />
