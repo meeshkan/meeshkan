@@ -17,6 +17,7 @@ import {
 	BoxProps,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
+import slugify from 'slugify';
 import {
 	BookIcon,
 	ChatIcon,
@@ -30,11 +31,11 @@ import { useValidateSelectedProject } from '../../../hooks/use-validate-selected
 import SegmentedControl from '../../../components/molecules/segmented-control';
 import Table from '../../../components/organisms/table';
 import LoadingScreen from '../../../components/organisms/loading-screen';
+import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/user-stories/index';
-import slugify from 'slugify';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -185,10 +186,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		);
 	};
 
-	const { loading } = useValidateSelectedProject();
+	const { found, loading } = useValidateSelectedProject();
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
+	}
+
+	if (!found) {
+		return <NotFoundError />;
 	}
 
 	return (

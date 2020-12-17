@@ -23,10 +23,11 @@ import GridCard from '../../components/molecules/grid-card';
 import UpdateProfileForm from '../../components/molecules/update-profile-form';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
+import NotFoundError from '../404';
 import { UserContext, updateProductNotifications } from '../../utils/user';
 
 const Settings = () => {
-	const { loading } = useValidateSelectedProject();
+	const { found, loading } = useValidateSelectedProject();
 	const toast = useToast();
 	const { productNotifications, idToken, project } = useContext(UserContext);
 	const [profileLoading, setProfileLoading] = useState(false);
@@ -60,6 +61,10 @@ const Settings = () => {
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
+	}
+
+	if (!found) {
+		return <NotFoundError />;
 	}
 
 	const handleSwitchToggle = async (event: ChangeEvent<HTMLInputElement>) => {

@@ -49,7 +49,7 @@ const SideBarBody = () => {
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
 	const avatarUrl = project.avatar?.downloadUrl;
-	const slugifiedProjectName = slugify(project.name, { lower: true });
+	const slugifiedProjectName = slugify(project.name || router.query.projectName, { lower: true });
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
