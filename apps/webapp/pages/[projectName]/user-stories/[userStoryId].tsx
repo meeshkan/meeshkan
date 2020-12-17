@@ -76,7 +76,7 @@ const UserStory = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const deleteRejectedRecording = (testCreatedDate: string) => {
+	const deleteRejectedRecording = () => {
 		const request = client.request(DELETE_REJECTED_RECORDING, {
 			userStoryId: userStoryId,
 		});

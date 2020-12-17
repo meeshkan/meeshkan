@@ -17,7 +17,6 @@ import {
 	Flex,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { Table, Tbody, Tr, Td } from '@chakra-ui/table';
 import { CopyIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -26,6 +25,8 @@ import UpdateProfileForm from '../../components/molecules/update-profile-form';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
 import { UserContext, updateProductNotifications } from '../../utils/user';
+import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { REMOVE_TEAM_MEMBER } from '../../graphql/settings';
 
 const Settings = () => {
 	const { loading } = useValidateSelectedProject();
@@ -34,6 +35,8 @@ const Settings = () => {
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
+
+	const client = eightBaseClient(idToken);
 
 	const { hasCopied, onCopy } = useClipboard(
 		project?.configuration?.inviteLink
@@ -70,6 +73,14 @@ const Settings = () => {
 		await updateProductNotifications(idToken, {
 			productNotifications: checked,
 		});
+	};
+
+	const removeTeamMember = (memberEmail: string) => {
+		const request = client.request(REMOVE_TEAM_MEMBER, {
+			projectId: project.id,
+			memberEmail: memberEmail,
+		});
+		return request;
 	};
 
 	return (
@@ -205,8 +216,27 @@ const Settings = () => {
 									icon={<TrashIcon w={4} h={4} />}
 									size="sm"
 									variant="ghost"
-									color="gray.500"
-									isDisabled
+									colorScheme="red"
+									onClick={() => {
+										removeTeamMember(member.email);
+										toast({
+											position: 'bottom-right',
+											render: () => (
+												<Box
+													color="white"
+													p={4}
+													bg="blue.500"
+													borderRadius="md"
+													fontSize="md"
+												>
+													{member.email} has been successfully removed from{' '}
+													{project.name}.
+												</Box>
+											),
+											duration: 2000,
+											isClosable: true,
+										});
+									}}
 								/>
 							</Flex>
 						);
