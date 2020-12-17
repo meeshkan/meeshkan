@@ -25,7 +25,6 @@ import GridCard from '../molecules/grid-card';
 // import LinearListItem from '../molecules/linear-list-item';
 // import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
-import Onboarding from '../../components/organisms/onboarding';
 import { UserContext } from '../../utils/user';
 import {
 	getTestRuns,
@@ -77,8 +76,7 @@ const doughnutData = {
 const versions = ['v0.0.2', 'v0.0.1'];
 
 const Grid = (props) => {
-	const { projects, project: selectedProject } = useContext(UserContext);
-	const hasProjects = projects.length > 0;
+	const { project: selectedProject } = useContext(UserContext);
 
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
@@ -141,21 +139,6 @@ const Grid = (props) => {
 	};
 
 	const [version, setVersion] = useState(versions[0]);
-
-	if (!hasProjects) {
-		return (
-			<Stack
-				as={Card}
-				p={[6, 0, 0, 0]}
-				w="100%"
-				rounded="lg"
-				spacing={6}
-				{...props}
-			>
-				<Onboarding />
-			</Stack>
-		);
-	}
 
 	const userStories = selectedProject.userStories.items;
 
