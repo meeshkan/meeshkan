@@ -29,11 +29,13 @@ import {
 	CheckmarkIcon,
 	XmarkIcon,
 } from '@frontend/chakra-theme';
-import LoadingScreen from 'apps/webapp/components/organisms/loading-screen';
-import { StepList } from '../../../components/molecules/side-step-list';
 import { useRouter } from 'next/router';
-import Video from 'apps/webapp/components/atoms/video';
 import slugify from 'slugify';
+import LoadingScreen from '../../../components/organisms/loading-screen';
+import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
+import { StepList } from '../../../components/molecules/side-step-list';
+import Video from '../../../components/atoms/video';
+import NotFoundError from '../../404';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -41,6 +43,10 @@ type UserStoryProps = {
 
 const UserStory = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
+	const {
+		found: foundProject,
+		loading: validatingProject,
+	} = useValidateSelectedProject();
 	const router = useRouter();
 	const toast = useToast();
 
@@ -57,7 +63,8 @@ const UserStory = (props: UserStoryProps) => {
 			projectId: project.id,
 			userStoryId: userStoryId,
 		});
-	const { data, error, isValidating } = useSWR(USER_STORY, fetcher);
+
+	const { data, error, isValidating: validatingQuery } = useSWR(USER_STORY, fetcher);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -83,8 +90,12 @@ const UserStory = (props: UserStoryProps) => {
 		return request;
 	};
 
-	if (isValidating || !data) {
+	if (validatingQuery || validatingProject || !data) {
 		return <LoadingScreen as={Card} />;
+	}
+
+	if (!foundProject) {
+		return <NotFoundError />;
 	}
 
 	if (error) {
