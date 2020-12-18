@@ -10,7 +10,7 @@ type IndexProps = {
 };
 
 const Index = (props: IndexProps) => {
-	const { projects, project, setProject } = useContext(UserContext);
+	const { projects, setProject } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
 
 	useEffect(() => {
