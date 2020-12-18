@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
 	Box,
 	Stack,
@@ -15,7 +15,9 @@ import {
 	useColorModeValue,
 	Text,
 } from '@chakra-ui/react';
-import { ArrowUpDownIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
+import { createSlug } from '../../utils/createSlug';
+import { ArrowForwardIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
@@ -78,6 +80,8 @@ const versions = ['v0.0.2', 'v0.0.1'];
 
 const Grid = (props) => {
 	const { projects, project: selectedProject } = useContext(UserContext);
+	const router = useRouter();
+	const slugifiedProjectName = createSlug(selectedProject.name);
 	const hasProjects = projects.length > 0;
 
 	const [showScript, setShowScript] = useState<boolean>(
@@ -244,11 +248,7 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							<StatCard
-								title="Confidence score"
-								isNA
-								my={[8, 0, 0, 0]}
-							/>
+							<StatCard title="Confidence score" isNA my={[8, 0, 0, 0]} />
 							<StatCard
 								title="Test coverage"
 								value={Number(testCoverage.value.toFixed(2))}
@@ -331,8 +331,14 @@ const Grid = (props) => {
 										mt={4}
 										size="sm"
 										colorScheme="gray"
+										variant="subtle"
 										w="full"
-									>{`Review recordings  ->`}</Button>
+										onClick={() =>
+											router.push(`/${slugifiedProjectName}/user-stories`)
+										}
+									>
+										Review recordings <ArrowForwardIcon ml={2} />
+									</Button>
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">

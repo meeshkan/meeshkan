@@ -27,14 +27,17 @@ import MenuToggleButton from '../molecules/menu-toggle-button';
 import { UserContext } from '../../utils/user';
 import { shutdown as shutdownIntercom } from '../../utils/intercom';
 import Link from 'next/link';
+import { createSlug } from '../../utils/createSlug';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
 };
 
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
-	const { avatar, name } = useContext(UserContext);
+	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
+
+	const slugifiedProjectName = createSlug(project.name);
 
 	const handleLogoutClick = () => {
 		Router.push('/api/logout');
@@ -44,7 +47,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	return (
 		<Flex align="center">
 			<Box>
-				<Link href="/" passHref>
+				<Link href={`/${slugifiedProjectName}`} passHref>
 					<a>
 						<LogoIcon width="auto" height={6} />
 					</a>
@@ -82,7 +85,11 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						/>
 					</MenuButton>
 					<MenuList>
-						<MenuItem>View profile</MenuItem>
+						<MenuItem>
+							<Link href={`/${slugifiedProjectName}/settings#profile`} passHref>
+								<a>View profile</a>
+							</Link>
+						</MenuItem>
 						<MenuDivider />
 						<MenuItem onClick={toggleColorMode}>
 							{colorMode === 'light' ? <MoonIcon mr={3} /> : <SunIcon mr={3} />}
