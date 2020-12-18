@@ -7,7 +7,7 @@ import SideBarBody from '../molecules/sidebar-body';
 const SideBar = (props) => {
 	const [isOpen, toggleOpen] = useCycle(false, true);
 	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
-	const stackSmallHeight = isOpen ? '100vh' : 'auto';
+	const stackSmallHeight = isOpen ? '100%' : 'auto';
 
 	return (
 		<MotionStack
