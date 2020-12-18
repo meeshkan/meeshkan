@@ -17,6 +17,7 @@ import {
 	Flex,
 	useColorModeValue,
 } from '@chakra-ui/react';
+import { mutate } from 'swr';
 import { CopyIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -82,6 +83,7 @@ const Settings = () => {
 			memberEmail: memberEmail,
 		});
 		setMembers(members.filter(member => member.email !== memberEmail));
+		mutate('/api/session');
 		return request;
 	};
 
