@@ -27,7 +27,6 @@ import GridCard from '../molecules/grid-card';
 // import LinearListItem from '../molecules/linear-list-item';
 // import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
-import Onboarding from '../../components/organisms/onboarding';
 import { UserContext, UserStories } from '../../utils/user';
 import {
 	getTestRuns,
