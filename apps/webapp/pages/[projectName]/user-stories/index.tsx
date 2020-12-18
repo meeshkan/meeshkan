@@ -110,7 +110,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: (originalRow, rowIndex) => {
 					return (
 						<Badge fontSize="sm" textTransform="capitalize">
-							{originalRow.created == 'user' ? (
+							{originalRow.created === 'user' ? (
 								<VideoIcon mr={2} />
 							) : (
 								<CrosshairIcon mr={2} />
@@ -129,11 +129,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							colorScheme={
-								significance == 'low'
+								significance === 'low'
 									? 'gray'
-									: significance == 'medium'
+									: significance === 'medium'
 									? 'orange'
-									: significance == 'high'
+									: significance === 'high'
 									? 'cyan'
 									: null
 							}

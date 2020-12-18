@@ -118,7 +118,7 @@ const UserStory = (props: UserStoryProps) => {
 							mr={2}
 							textTransform="capitalize"
 						>
-							{data.userStory.created[0] == 'user' ? (
+							{data.userStory.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
 							) : (
 								<CrosshairIcon mr={2} />
