@@ -25,18 +25,25 @@ import GridCard from '../../components/molecules/grid-card';
 import UpdateProfileForm from '../../components/molecules/update-profile-form';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
-import { UserContext, updateProductNotifications, Member } from '../../utils/user';
+import NotFoundError from '../404';
+import {
+	UserContext,
+	updateProductNotifications,
+	Member,
+} from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { REMOVE_TEAM_MEMBER } from '../../graphql/settings';
 
 const Settings = () => {
-	const { loading } = useValidateSelectedProject();
+	const { found, loading } = useValidateSelectedProject();
 	const toast = useToast();
 	const { productNotifications, idToken, project } = useContext(UserContext);
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
-	const [members, setMembers] = useState<Array<Member>>(project?.members?.items || []);
+	const [members, setMembers] = useState<Array<Member>>(
+		project?.members?.items || []
+	);
 
 	const client = eightBaseClient(idToken);
 
@@ -69,6 +76,10 @@ const Settings = () => {
 		return <LoadingScreen as={Card} />;
 	}
 
+	if (!found) {
+		return <NotFoundError />;
+	}
+
 	const handleSwitchToggle = async (event: ChangeEvent<HTMLInputElement>) => {
 		const { checked } = event.target;
 		setProductUpdates(checked);
@@ -82,7 +93,7 @@ const Settings = () => {
 			projectId: project.id,
 			memberEmail: memberEmail,
 		});
-		setMembers(members.filter(member => member.email !== memberEmail));
+		setMembers(members.filter((member) => member.email !== memberEmail));
 		mutate('/api/session');
 		return request;
 	};

@@ -2,16 +2,21 @@ import { useValidateSelectedProject } from '../../hooks/use-validate-selected-pr
 import LoadingScreen from '../../components/organisms/loading-screen';
 import Grid from '../../components/organisms/grid';
 import Card from '../../components/atoms/card';
+import NotFoundError from '../404';
 
 type ProjectProps = {
 	cookies: string | undefined;
 };
 
 const Project = (props: ProjectProps) => {
-	const { loading } = useValidateSelectedProject();
+	const { found, loading } = useValidateSelectedProject();
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
+	}
+
+	if (!found) {
+		return <NotFoundError />;
 	}
 
 	return (

@@ -5,6 +5,7 @@ import { UserContext } from '../utils/user';
 
 export const useValidateSelectedProject = () => {
 	const [loading, setLoading] = useState(true);
+	const [found, setFound] = useState(true);
 	const { projects, project, setProject } = useContext(UserContext);
 	const router = useRouter();
 	const { projectName } = router.query;
@@ -15,8 +16,14 @@ export const useValidateSelectedProject = () => {
 		);
 
 		setLoading(project.id === -1);
-		selectedProject ? setProject(selectedProject) : router.push('/404');
-	}, [projectName, projects, setProject, router]);
+		if (selectedProject) {
+			setProject(selectedProject);
+			setFound(true);
+		} else {
+			setLoading(false);
+			setFound(false);
+		}
+	}, [projectName, projects, setProject]);
 
-	return { loading };
+	return { found, loading };
 };
