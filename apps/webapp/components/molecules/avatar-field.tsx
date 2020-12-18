@@ -32,7 +32,7 @@ const AvatarField = ({
 	existingImageUrl,
 }: AvatarFieldProps) => {
 	const [error, setError] = useState('');
-	const { project, avatar, idToken } = useContext(UserContext);
+	const { idToken } = useContext(UserContext);
 	const [imageOriginalPath, setImageOriginalPath] = useState(
 		existingImageUrl || ''
 	);
