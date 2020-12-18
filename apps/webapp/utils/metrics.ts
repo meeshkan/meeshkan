@@ -150,7 +150,7 @@ export const getConfidenceScore = (
 							timestampUTC: new Date(testRun.dateTime).getTime(),
 						}))
 				)
-				.reduce((a, b) => [...a, ...b]),
+				.reduce((a, b) => [...a, ...b], []),
 		},
 		// for now, there is no information regarding other branches
 		otherBranches: [],
