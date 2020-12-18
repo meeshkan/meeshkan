@@ -11,7 +11,6 @@ import {
 	useColorModeValue,
 	Button,
 	Select,
-	toast,
 	useToast,
 } from '@chakra-ui/react';
 import { UserContext } from 'apps/webapp/utils/user';
@@ -64,7 +63,10 @@ const UserStory = (props: UserStoryProps) => {
 			userStoryId: userStoryId,
 		});
 
-	const { data, error, isValidating: validatingQuery } = useSWR(USER_STORY, fetcher);
+	const { data, error, isValidating: validatingQuery } = useSWR(
+		USER_STORY,
+		fetcher
+	);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
