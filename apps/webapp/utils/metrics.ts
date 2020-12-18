@@ -122,13 +122,15 @@ export const getLastSevenDaysInFormat = (format: string) =>
 	lastSevenDays.map((day) => day.format(format));
 
 export const getConfidenceScore = (
-	userStories: UserStories
+	userStories: UserStories['items']
 ): DisplayableMetric => {
 	const confidenceFactors: ConfidenceFactors = {
 		mainBranch: {
 			name: 'main',
-			totalRecordings: userStories.count,
-			testCases: userStories?.items?.filter((story) => story.isTestCase)
+			totalRecordings: userStories.length,
+			totalIsTestCase: userStories.filter((story) => story.isTestCase).length,
+			testRuns: userStories
+				.filter((story) => story.isTestCase)
 				.map((story) =>
 					story.testRuns.items
 						.filter(
@@ -156,6 +158,6 @@ export const getConfidenceScore = (
 	return {
 		value: createConfidenceScore(confidenceFactors) * 100,
 		percentageChange: 0.0, // TODO: un-hard-code when we have a meaningful sense of window
-		dataPoints: userStories.count,
+		dataPoints: userStories.length,
 	};
 };
