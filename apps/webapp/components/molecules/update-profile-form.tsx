@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import { mutate } from 'swr';
 import AvatarField from '../molecules/avatar-field';
 import {
 	UserContext,
@@ -59,6 +60,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 			setStep(2);
 		}
 
+		mutate('/api/session');
 		setLoading(false);
 	};
 

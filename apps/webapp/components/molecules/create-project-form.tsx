@@ -7,6 +7,7 @@ import {
 	Input,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { mutate } from 'swr';
 import AvatarField from './avatar-field';
 import { UserContext, AvatarFile } from '../../utils/user';
 import { createProject } from '../../utils/project';
@@ -47,6 +48,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
             return;
         }
 
+		mutate('/api/session');
 		router.reload();
 	};
 

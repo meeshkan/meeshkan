@@ -6,6 +6,7 @@ import {
 	Input,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { mutate } from 'swr';
 import AvatarField from '../molecules/avatar-field';
 import { UserContext, AvatarFile } from '../../utils/user';
 import { updateProject } from '../../utils/project';
@@ -40,6 +41,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 			return;
 		}
 
+		mutate('/api/session');
 		setLoading(false);
 	};
 
