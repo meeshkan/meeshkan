@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { BoxProps, Heading, Divider, Image } from '@chakra-ui/react';
 import Card from '../atoms/card';
-import slugify from 'slugify';
+import { createSlug } from '../../utils/createSlug';
 
 type GridCardProps = {
 	title: string;
@@ -21,7 +21,7 @@ const GridCard = ({
 }: GridCardProps) => {
 	return (
 		<Card overflowY="auto" {...props}>
-			<a id={anchor && slugify(title, { lower: true })}>
+			<a id={anchor && createSlug(title)}>
 				<Heading
 					as="h2"
 					d="flex"
