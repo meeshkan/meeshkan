@@ -4,7 +4,7 @@ interface IntercomSettings {
     name?:  string,
     user_id?: string,
     hide_default_launcher?: boolean,
-};
+}
 
 export interface Intercom {
     (command: 'boot', param: IntercomSettings): void;
@@ -14,7 +14,7 @@ export interface Intercom {
     (command: 'show'): void;
     (command: 'showMessages'): void;
     (command: 'onHide', param?: () => void): void;
-};
+}
 
 export const boot = ({ email, id }: { email: string, id: string }) => {
     const intercomSettings = {
