@@ -11,6 +11,7 @@ import { mutate } from 'swr';
 import AvatarField from './avatar-field';
 import { UserContext, AvatarFile } from '../../utils/user';
 import { createProject } from '../../utils/project';
+import { createSlug } from '../../utils/createSlug';
 
 type ProjectFormInputs = {
 	name: string;
@@ -41,14 +42,14 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 			return;
 		}
 
+		await mutate('/api/session');
 		setLoading(false);
 
         if (router.pathname === '/new-project') {
-            router.push('/');
+            router.push(`/${createSlug(formData.name)}`);
             return;
         }
 
-		mutate('/api/session');
 		router.reload();
 	};
 
