@@ -1,5 +1,5 @@
+import { createSlug } from './../../../utils/createSlug';
 import { NextApiRequest, NextApiResponse } from 'next';
-import slugify from 'slugify';
 import initAuth0 from '../../../utils/auth0';
 import { getUserId } from '../../../utils/user';
 import { propagateInviteToDb } from '../../../utils/invite';
@@ -24,9 +24,8 @@ export default async function invite(
 				return res.status(401).json({ invalidInvite: true });
 			}
 
-			const redirectTo = `/${slugify(
-				response.configurationUpdate?.project?.name,
-				{ lower: true }
+			const redirectTo = `/${createSlug(
+				response.configurationUpdate?.project?.name
 			)}`;
 			res.json({ redirectTo });
 		} catch (error) {

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
 	Box,
 	Stack,
@@ -15,7 +15,9 @@ import {
 	useColorModeValue,
 	Text,
 } from '@chakra-ui/react';
-import { ArrowUpDownIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
+import { createSlug } from '../../utils/createSlug';
+import { ArrowForwardIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
@@ -25,14 +27,13 @@ import GridCard from '../molecules/grid-card';
 // import LinearListItem from '../molecules/linear-list-item';
 // import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
-import Onboarding from '../../components/organisms/onboarding';
-import { UserContext } from '../../utils/user';
+import { UserContext, UserStories } from '../../utils/user';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
 	getBugs,
 	getTestCoverage,
-	// getConfidenceScore,
+	getConfidenceScore,
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
@@ -77,8 +78,9 @@ const doughnutData = {
 const versions = ['v0.0.2', 'v0.0.1'];
 
 const Grid = (props) => {
-	const { projects, project: selectedProject } = useContext(UserContext);
-	const hasProjects = projects.length > 0;
+	const { project: selectedProject } = useContext(UserContext);
+	const router = useRouter();
+	const slugifiedProjectName = createSlug(selectedProject.name);
 
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
@@ -142,28 +144,13 @@ const Grid = (props) => {
 
 	const [version, setVersion] = useState(versions[0]);
 
-	if (!hasProjects) {
-		return (
-			<Stack
-				as={Card}
-				p={[6, 0, 0, 0]}
-				w="100%"
-				rounded="lg"
-				spacing={6}
-				{...props}
-			>
-				<Onboarding />
-			</Stack>
-		);
-	}
-
-	const userStories = selectedProject.userStories.items;
+	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
 	const testRuns = getTestRuns(userStories);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
 	const testCoverage = getTestCoverage(userStories);
-	// const confidenceScore = getConfidenceScore(userStories);
+	const confidenceScore = getConfidenceScore(userStories);
 
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
@@ -246,7 +233,9 @@ const Grid = (props) => {
 						>
 							<StatCard
 								title="Confidence score"
-								isNA
+								value={Number(confidenceScore.value.toFixed(2))}
+								percentageChange={confidenceScore.percentageChange}
+								dataPoints={confidenceScore.dataPoints}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
@@ -331,8 +320,14 @@ const Grid = (props) => {
 										mt={4}
 										size="sm"
 										colorScheme="gray"
+										variant="subtle"
 										w="full"
-									>{`Review recordings  ->`}</Button>
+										onClick={() =>
+											router.push(`/${slugifiedProjectName}/user-stories`)
+										}
+									>
+										Review recordings <ArrowForwardIcon ml={2} />
+									</Button>
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
@@ -373,14 +368,14 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 										<Box w="100px">
-											{/* <Text fontWeight={900}>
+											<Text fontWeight={900}>
 												{confidenceScore.value >= 90
 													? 'Ready'
 													: confidenceScore.value >= 50
 													? 'Proceed with caution'
 													: 'Do not release'}
-											</Text> */}
-											<Text fontWeight={900}>Ready</Text>
+											</Text>
+
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
 												fontWeight={700}

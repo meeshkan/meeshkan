@@ -8,24 +8,25 @@ export enum TestPriority {
 	WARNING = 1,
 	BLOCKING = 2,
 }
-enum TestCaseConfidence {
+enum TestRunConfidence {
 	LOW = 0,
 	MEDIUM = 1,
 	HIGH = 2,
 }
-type TestCaseConfidencePercentanges = {
+type TestRunConfidencePercentanges = {
 	low: number;
 	medium: number;
 	high: number;
 };
-export type TestCase = {
+export type TestRun = {
 	status: TestStatus;
 	priority: TestPriority;
 	timestampUTC: number;
 };
 export type Branch = {
 	name: string;
-	testCases: Array<TestCase>;
+	testRuns: Array<TestRun>;
+	totalIsTestCase: number;
 	totalRecordings: number;
 };
 export type ConfidenceFactors = {
@@ -34,63 +35,63 @@ export type ConfidenceFactors = {
 };
 type MainPlusOtherBranches = [Branch, ...Branch[]];
 
-const testStatusAndPriorityToTestCaseConfidence = (
+const testStatusAndPriorityToTestRunConfidence = (
 	testStatus: TestStatus,
 	testPriority: TestPriority
-): TestCaseConfidence =>
+): TestRunConfidence =>
 	testPriority === TestPriority.BLOCKING &&
 	testStatus === TestStatus.DID_NOT_RUN
-		? TestCaseConfidence.LOW
+		? TestRunConfidence.LOW
 		: testPriority === TestPriority.WARNING &&
 		  testStatus === TestStatus.DID_NOT_RUN
-		? TestCaseConfidence.MEDIUM
+		? TestRunConfidence.MEDIUM
 		: testPriority === TestPriority.BLOCKING &&
 		  testStatus === TestStatus.DID_NOT_RUN
-		? TestCaseConfidence.LOW
+		? TestRunConfidence.LOW
 		: testPriority === TestPriority.LOW && testStatus === TestStatus.DID_NOT_RUN
-		? TestCaseConfidence.MEDIUM
+		? TestRunConfidence.MEDIUM
 		: testPriority === TestPriority.LOW && testStatus === TestStatus.FAILING
-		? TestCaseConfidence.MEDIUM
-		: TestCaseConfidence.HIGH;
+		? TestRunConfidence.MEDIUM
+		: TestRunConfidence.HIGH;
 
-const testCaseConfidenceScoresToTestCaseConfidencePercentage = (
-	confidenceLevel: TestCaseConfidence,
-	testCaseConfidences: Array<TestCaseConfidence>
+const testRunConfidenceScoresToTestRunConfidencePercentage = (
+	confidenceLevel: TestRunConfidence,
+	testRunConfidences: Array<TestRunConfidence>
 ): number =>
-	testCaseConfidences.filter(
-		(testCaseConfidence) => testCaseConfidence === confidenceLevel
-	).length / testCaseConfidences.length;
+	testRunConfidences.filter(
+		(testRunConfidence) => testRunConfidence === confidenceLevel
+	).length / testRunConfidences.length;
 
-const maxTestCaseConfidencePercentagesDiff = 2.0;
-const testCaseConfidencePercentagesDiff = (
-	testCaseConfidencePercentanges0: TestCaseConfidencePercentanges,
-	testCaseConfidencePercentanges1: TestCaseConfidencePercentanges
+const maxTestRunConfidencePercentagesDiff = 2.0;
+const testRunConfidencePercentagesDiff = (
+	testRunConfidencePercentanges0: TestRunConfidencePercentanges,
+	testRunConfidencePercentanges1: TestRunConfidencePercentanges
 ): number =>
 	Math.abs(
-		testCaseConfidencePercentanges0.low - testCaseConfidencePercentanges1.low
+		testRunConfidencePercentanges0.low - testRunConfidencePercentanges1.low
 	) +
 	Math.abs(
-		testCaseConfidencePercentanges0.medium -
-			testCaseConfidencePercentanges1.medium
+		testRunConfidencePercentanges0.medium -
+			testRunConfidencePercentanges1.medium
 	) +
 	Math.abs(
-		testCaseConfidencePercentanges0.high - testCaseConfidencePercentanges1.high
+		testRunConfidencePercentanges0.high - testRunConfidencePercentanges1.high
 	);
 
-const testCaseConfidenceScoresToTestCaseConfidencePercentages = (
-	testCaseConfidences: Array<TestCaseConfidence>
-): TestCaseConfidencePercentanges => ({
-	low: testCaseConfidenceScoresToTestCaseConfidencePercentage(
-		TestCaseConfidence.LOW,
-		testCaseConfidences
+const testRunConfidenceScoresToTestRunConfidencePercentages = (
+	testRunConfidences: Array<TestRunConfidence>
+): TestRunConfidencePercentanges => ({
+	low: testRunConfidenceScoresToTestRunConfidencePercentage(
+		TestRunConfidence.LOW,
+		testRunConfidences
 	),
-	medium: testCaseConfidenceScoresToTestCaseConfidencePercentage(
-		TestCaseConfidence.MEDIUM,
-		testCaseConfidences
+	medium: testRunConfidenceScoresToTestRunConfidencePercentage(
+		TestRunConfidence.MEDIUM,
+		testRunConfidences
 	),
-	high: testCaseConfidenceScoresToTestCaseConfidencePercentage(
-		TestCaseConfidence.HIGH,
-		testCaseConfidences
+	high: testRunConfidenceScoresToTestRunConfidencePercentage(
+		TestRunConfidence.HIGH,
+		testRunConfidences
 	),
 });
 
@@ -100,9 +101,9 @@ const filterBranchByTimeRange = (
 	endTime: number
 ): Branch => ({
 	...branch,
-	testCases: branch.testCases.filter(
-		(testCase) =>
-			testCase.timestampUTC >= startTime && testCase.timestampUTC < endTime
+	testRuns: branch.testRuns.filter(
+		(testRun) =>
+			testRun.timestampUTC >= startTime && testRun.timestampUTC < endTime
 	),
 });
 
@@ -131,36 +132,34 @@ export const createConfidenceScore = (
 		confidenceFactors.mainBranch,
 		...confidenceFactors.otherBranches,
 	];
+
 	const blockingTests: number = allBranches
 		.map(
 			(branch) =>
-				branch.testCases.map(
-					(testCase) =>
-						testCase.status === TestStatus.FAILING &&
-						testCase.priority === TestPriority.BLOCKING
+				branch.testRuns.map(
+					(testRun) =>
+						testRun.status === TestStatus.FAILING &&
+						testRun.priority === TestPriority.BLOCKING
 				).length
 		)
 		.reduce((a, b) => a + b, 0);
 	if (blockingTests > 0) {
 		return 0.0;
 	}
-	const testCaseConfidenceLevelsPerBranch = allBranches.map((branch) =>
-		branch.testCases.map((testCase) =>
-			testStatusAndPriorityToTestCaseConfidence(
-				testCase.status,
-				testCase.priority
-			)
+	const testRunConfidenceLevelsPerBranch = allBranches.map((branch) =>
+		branch.testRuns.map((testRun) =>
+			testStatusAndPriorityToTestRunConfidence(testRun.status, testRun.priority)
 		)
 	);
-	const testCaseConfidencePercentagesPerBranch = testCaseConfidenceLevelsPerBranch.map(
-		testCaseConfidenceScoresToTestCaseConfidencePercentages
+	const testRunConfidencePercentagesPerBranch = testRunConfidenceLevelsPerBranch.map(
+		testRunConfidenceScoresToTestRunConfidencePercentages
 	);
-	const testCaseConfidenceLevelDiffs = testCaseConfidencePercentagesPerBranch
+	const testRunConfidenceLevelDiffs = testRunConfidencePercentagesPerBranch
 		.slice(1) // after master branch
-		.map((testCaseConfidencePercentages) =>
-			testCaseConfidencePercentagesDiff(
-				testCaseConfidencePercentages,
-				testCaseConfidencePercentagesPerBranch[0]
+		.map((testRunConfidencePercentages) =>
+			testRunConfidencePercentagesDiff(
+				testRunConfidencePercentages,
+				testRunConfidencePercentagesPerBranch[0]
 			)
 		);
 
@@ -168,7 +167,7 @@ export const createConfidenceScore = (
 	// on all branches. for example, we may have 2 cases with
 	// confidence level "HIGH", 3 cases with LOW and 2 cases with MEDIUM
 	// [HIGH, HIGH, LOW, LOW, LOW, MEDIUM, MEDIUM]
-	const testCaseConfidenceLevels = testCaseConfidenceLevelsPerBranch.reduce(
+	const testRunConfidenceLevels = testRunConfidenceLevelsPerBranch.reduce(
 		(a, b) => [...a, ...b],
 		[]
 	);
@@ -176,24 +175,32 @@ export const createConfidenceScore = (
 	// this takes each test result (LOW, MEDIUM, or HIGH confidence)
 	// and finds the average from 0.0 to 1.0
 	const testResultScore =
-		testCaseConfidenceLevels
-			.map((testCaseConfidence) =>
-				testCaseConfidence === TestCaseConfidence.LOW
-					? 0.0
-					: testCaseConfidence === TestCaseConfidence.MEDIUM
-					? 0.5
-					: 1.0
-			)
-			.reduce((a, b) => a + b, 0) / testCaseConfidenceLevels.length;
+		testRunConfidenceLevels.length === 0
+			? 0
+			: testRunConfidenceLevels
+					.map((testRunConfidence) =>
+						testRunConfidence === TestRunConfidence.LOW
+							? 0.0
+							: testRunConfidence === TestRunConfidence.MEDIUM
+							? 0.5
+							: 1.0
+					)
+					.reduce((a, b) => a + b, 0) / testRunConfidenceLevels.length;
 
 	// This looks at the number of test cases versus the total number
 	// of test results present on 8base. It treats each branch as having equal
 	// weight for the time being, although we can change this to operate using
 	// totals across branches instead.
 	const testCoverageScore =
-		allBranches
-			.map((branch) => branch.testCases.length / branch.totalRecordings)
-			.reduce((a, b) => a + b, 0.0) / allBranches.length;
+		allBranches.length === 0
+			? 0
+			: allBranches
+					.map((branch) =>
+						branch.totalRecordings === 0
+							? 0
+							: branch.totalIsTestCase / branch.totalRecordings
+					)
+					.reduce((a, b) => a + b, 0.0) / allBranches.length;
 
 	// this looks at the difference between the main branch and other branches
 	// in terms of confidence levels. If there is a substantial diff in _either_
@@ -203,11 +210,12 @@ export const createConfidenceScore = (
 	// a lot of substantive changes (albeit for the better). We can change this
 	// if it feels too counterintuitive.
 	const ambiguityScore =
-		testCaseConfidenceLevelDiffs.length === 0.0
+		testRunConfidenceLevelDiffs.length === 0.0
 			? 0.0
-			: testCaseConfidenceLevelDiffs
-					.map((diff) => diff / maxTestCaseConfidencePercentagesDiff)
-					.reduce((a, b) => a + b, 0.0) / testCaseConfidenceLevelDiffs.length;
+			: testRunConfidenceLevelDiffs
+					.map((diff) => diff / maxTestRunConfidencePercentagesDiff)
+					.reduce((a, b) => a + b, 0.0) / testRunConfidenceLevelDiffs.length;
+
 	return (
 		testResultWeight * testResultScore +
 		testCoverageWeight * testCoverageScore +

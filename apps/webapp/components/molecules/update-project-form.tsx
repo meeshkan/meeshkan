@@ -6,6 +6,7 @@ import {
 	Input,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { mutate } from 'swr';
 import AvatarField from '../molecules/avatar-field';
 import { UserContext, AvatarFile } from '../../utils/user';
 import { updateProject } from '../../utils/project';
@@ -22,14 +23,14 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const [error, setError] = useState('');
 	const { project, idToken } = useContext(UserContext);
 	const [name, setName] = useState<string>(project.name);
-    const [avatarFile, setAvatarFile] = useState<AvatarFile>();
+	const [avatarFile, setAvatarFile] = useState<AvatarFile>();
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
 		setError('');
 		const data = await updateProject(idToken, {
-            id: project.id,
+			id: project.id,
 			name: formData.name,
 			...avatarFile,
 		});
@@ -40,19 +41,30 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 			return;
 		}
 
+		mutate('/api/session');
 		setLoading(false);
 	};
 
 	const handleChange = (event) => {
 		setName(event.target.value);
-	}
+	};
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="projectUpdateForm">
-			<AvatarField isProfileAvatar={false} onUpload={setAvatarFile} />
+			<AvatarField
+				isProfileAvatar={false}
+				onUpload={setAvatarFile}
+				existingImageUrl={project?.avatar?.downloadUrl}
+			/>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Project name</FormLabel>
-				<Input name="name" value={name} onChange={handleChange} type="text" ref={register} />
+				<Input
+					name="name"
+					value={name}
+					onChange={handleChange}
+					type="text"
+					ref={register}
+				/>
 				<FormErrorMessage>Error: {error}</FormErrorMessage>
 			</FormControl>
 		</form>

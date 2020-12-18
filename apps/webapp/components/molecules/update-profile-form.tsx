@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import { mutate } from 'swr';
 import AvatarField from '../molecules/avatar-field';
 import {
 	UserContext,
@@ -36,7 +37,7 @@ type UpdateProfileFormProps = {
 
 const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfileFormProps) => {
 	const [error, setError] = useState('');
-	const { name: currentName, jobTitle, idToken } = useContext(UserContext);
+	const { name: currentName, jobTitle, avatar, idToken } = useContext(UserContext);
 	const [name, setName] = useState<string>(currentName);
 	const [title, setTitle] = useState(jobTitle || jobTitles[0]);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
@@ -59,6 +60,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 			setStep(2);
 		}
 
+		mutate('/api/session');
 		setLoading(false);
 	};
 
@@ -70,7 +72,11 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
-			<AvatarField isProfileAvatar onUpload={onUpload} />
+			<AvatarField
+				isProfileAvatar
+				onUpload={onUpload}
+				existingImageUrl={avatar}
+			/>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>What's your name?</FormLabel>
 				<Input name="name" value={name} onChange={handleChange} type="text" ref={register} />

@@ -1,5 +1,7 @@
 import { useEffect, useContext } from 'react';
+import { Stack } from '@chakra-ui/react';
 import LoadingScreen from '../components/organisms/loading-screen';
+import Onboarding from '../components/organisms/onboarding';
 import Card from '../components/atoms/card';
 import { UserContext } from '../utils/user';
 
@@ -9,12 +11,28 @@ type IndexProps = {
 
 const Index = (props: IndexProps) => {
 	const { projects, setProject } = useContext(UserContext);
+	const hasProjects = projects.length > 0;
 
 	useEffect(() => {
-		if (projects.length > 0) {
+		if (hasProjects) {
 			setProject(projects[0]);
 		}
 	}, [projects, setProject]);
+
+	if (!hasProjects) {
+		return (
+			<Stack
+				as={Card}
+				p={[6, 0, 0, 0]}
+				w="100%"
+				rounded="lg"
+				spacing={6}
+				{...props}
+			>
+				<Onboarding />
+			</Stack>
+		);
+	}
 
 	return <LoadingScreen as={Card} />;
 };

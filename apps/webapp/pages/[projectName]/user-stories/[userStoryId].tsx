@@ -28,11 +28,13 @@ import {
 	CheckmarkIcon,
 	XmarkIcon,
 } from '@frontend/chakra-theme';
-import LoadingScreen from '../../../components/organisms/loading-screen';
-import { StepList } from '../../../components/molecules/side-step-list';
 import { useRouter } from 'next/router';
+import LoadingScreen from '../../../components/organisms/loading-screen';
+import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
+import { StepList } from '../../../components/molecules/side-step-list';
 import Video from '../../../components/atoms/video';
-import slugify from 'slugify';
+import NotFoundError from '../../404';
+import { createSlug } from '../../../utils/createSlug';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -40,9 +42,14 @@ type UserStoryProps = {
 
 const UserStory = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
+	const {
+		found: foundProject,
+		loading: validatingProject,
+	} = useValidateSelectedProject();
 	const router = useRouter();
 	const toast = useToast();
 
+	const slugifiedProjectName = createSlug(project.name);
 	const currentPath = router.asPath;
 	const userStoryId = currentPath.substr(currentPath.length - 25);
 	const date = new Date().toISOString().replace('Z', '') + '+00:00';
@@ -55,7 +62,11 @@ const UserStory = (props: UserStoryProps) => {
 			projectId: project.id,
 			userStoryId: userStoryId,
 		});
-	const { data, error, isValidating } = useSWR(USER_STORY, fetcher);
+
+	const { data, error, isValidating: validatingQuery } = useSWR(
+		USER_STORY,
+		fetcher
+	);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -74,15 +85,19 @@ const UserStory = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const deleteRejectedRecording = (testCreatedDate: string) => {
+	const deleteRejectedRecording = () => {
 		const request = client.request(DELETE_REJECTED_RECORDING, {
 			userStoryId: userStoryId,
 		});
 		return request;
 	};
 
-	if (isValidating || !data) {
+	if (validatingQuery || validatingProject || !data) {
 		return <LoadingScreen as={Card} />;
+	}
+
+	if (!foundProject) {
+		return <NotFoundError />;
 	}
 
 	if (error) {
@@ -213,9 +228,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 						mr={4}
 					>
@@ -243,9 +256,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 					>
 						Reject

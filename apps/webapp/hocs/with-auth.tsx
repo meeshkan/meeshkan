@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import slugify from 'slugify';
+import { createSlug } from '../utils/createSlug';
 import LoadingScreen from '../components/organisms/loading-screen';
 import AuthScreen from '../components/organisms/auth-screen';
 import { UserContext, IUser } from '../utils/user';
@@ -16,11 +16,11 @@ const withAuth = (PageComponent) => {
 		const router = useRouter();
 		const { user, loading } = useFetchUser(props.user);
 		const [project, setProject] = useState({ id: -1, name: '' });
-		const isInvitePage = router.pathname === '/invite/[inviteId]'; 
+		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
 		useEffect(() => {
 			if (project.name) {
-				router.push(`/${slugify(project.name, { lower: true })}`);
+				router.push(`/${createSlug(project.name)}`);
 			}
 		}, [project, router]);
 
