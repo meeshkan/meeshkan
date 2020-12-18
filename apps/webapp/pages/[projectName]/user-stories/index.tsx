@@ -156,13 +156,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
+	const projectId = project.id;
 	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
 			const request = client
 				.request(PROJECT_USER_STORIES, {
-					projectId: project.id,
+					projectId,
 					first: pagination.rowsPerPage,
 					skip: pagination.rowsPerPage * pagination.page,
 				})
@@ -172,7 +173,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[pagination.page, pagination.rowsPerPage]
+		[pagination.page, pagination.rowsPerPage, idToken, projectId]
 	);
 
 	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
