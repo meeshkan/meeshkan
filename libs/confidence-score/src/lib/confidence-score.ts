@@ -215,7 +215,7 @@ export const createConfidenceScore = (
 			: testRunConfidenceLevelDiffs
 					.map((diff) => diff / maxTestRunConfidencePercentagesDiff)
 					.reduce((a, b) => a + b, 0.0) / testRunConfidenceLevelDiffs.length;
-	console.log(testResultScore, testCoverageScore, ambiguityScore);
+
 	return (
 		testResultWeight * testResultScore +
 		testCoverageWeight * testCoverageScore +
