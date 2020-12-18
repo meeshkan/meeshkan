@@ -24,7 +24,7 @@ import GridCard from '../../components/molecules/grid-card';
 import UpdateProfileForm from '../../components/molecules/update-profile-form';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
-import { UserContext, updateProductNotifications } from '../../utils/user';
+import { UserContext, updateProductNotifications, Member } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { REMOVE_TEAM_MEMBER } from '../../graphql/settings';
 
@@ -35,6 +35,7 @@ const Settings = () => {
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
+	const [members, setMembers] = useState<Array<Member>>(project?.members?.items || []);
 
 	const client = eightBaseClient(idToken);
 
@@ -80,6 +81,7 @@ const Settings = () => {
 			projectId: project.id,
 			memberEmail: memberEmail,
 		});
+		setMembers(members.filter(member => member.email !== memberEmail));
 		return request;
 	};
 
@@ -177,7 +179,7 @@ const Settings = () => {
 							/>
 						</InputRightElement>
 					</InputGroup>
-					{project?.members?.items.map((member) => {
+					{members.map((member: Member) => {
 						const memberName = `${member.firstName || ''} ${
 							member.lastName || ''
 						}`;
