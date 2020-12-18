@@ -22,7 +22,7 @@ const withAuth = (PageComponent) => {
 			if (project.name) {
 				router.push(`/${slugify(project.name, { lower: true })}`);
 			}
-		}, [project]);
+		}, [project, router]);
 
 		if (isInvitePage) {
 			return <PageComponent {...props} />;
