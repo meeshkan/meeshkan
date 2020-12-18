@@ -158,6 +158,11 @@ export const getConfidenceScore = (
 	return {
 		value: createConfidenceScore(confidenceFactors) * 100,
 		percentageChange: 0.0, // TODO: un-hard-code when we have a meaningful sense of window
-		dataPoints: userStories.length,
+		dataPoints:
+			userStories.length +
+			confidenceFactors.mainBranch.testRuns.length +
+			confidenceFactors.otherBranches
+				.map((branch) => branch.testRuns.length)
+				.reduce((a, b) => a + b, 0),
 	};
 };
