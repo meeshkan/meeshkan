@@ -8,7 +8,7 @@ type IndexProps = {
 };
 
 const Index = (props: IndexProps) => {
-	const { projects, project, setProject } = useContext(UserContext);
+	const { projects, setProject } = useContext(UserContext);
 
 	useEffect(() => {
 		if (projects.length > 0) {

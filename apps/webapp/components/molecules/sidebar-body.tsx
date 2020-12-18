@@ -18,7 +18,6 @@ import {
 	MenuDivider,
 	Button,
 	Text,
-	Link,
 	Heading,
 	Avatar,
 	Tooltip,

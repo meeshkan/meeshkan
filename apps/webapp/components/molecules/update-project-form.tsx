@@ -3,15 +3,8 @@ import {
 	FormControl,
 	FormLabel,
 	FormErrorMessage,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuOptionGroup,
-	MenuItemOption,
 	Input,
-	Button,
 } from '@chakra-ui/react';
-import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
 import { UserContext, AvatarFile } from '../../utils/user';

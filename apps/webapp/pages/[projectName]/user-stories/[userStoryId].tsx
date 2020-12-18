@@ -11,7 +11,6 @@ import {
 	useColorModeValue,
 	Button,
 	Select,
-	toast,
 	useToast,
 } from '@chakra-ui/react';
 import { UserContext } from 'apps/webapp/utils/user';
