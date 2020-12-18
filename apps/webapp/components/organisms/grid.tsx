@@ -245,7 +245,7 @@ const Grid = (props) => {
 							direction={['column', 'row', 'row', 'row']}
 						>
 							<StatCard
-								title="Test coverage"
+								title="Confidence score"
 								value={Number(confidenceScore.value.toFixed(2))}
 								percentageChange={confidenceScore.percentageChange}
 								dataPoints={confidenceScore.dataPoints}
