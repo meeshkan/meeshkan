@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, ChangeEvent } from 'react';
+import React, { useState, useEffect, useContext, ChangeEvent } from 'react';
 import {
 	Box,
 	FormControl,
@@ -14,8 +14,10 @@ import {
 	useClipboard,
 	useToast,
 	Avatar,
+	Flex,
+	useColorModeValue,
 } from '@chakra-ui/react';
-import { Table, Tbody, Tr, Td } from '@chakra-ui/table';
+import { mutate } from 'swr';
 import { CopyIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -24,7 +26,13 @@ import UpdateProfileForm from '../../components/molecules/update-profile-form';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
 import NotFoundError from '../404';
-import { UserContext, updateProductNotifications } from '../../utils/user';
+import {
+	UserContext,
+	updateProductNotifications,
+	Member,
+} from '../../utils/user';
+import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { REMOVE_TEAM_MEMBER } from '../../graphql/settings';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -33,6 +41,11 @@ const Settings = () => {
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
+	const [members, setMembers] = useState<Array<Member>>(
+		project?.members?.items || []
+	);
+
+	const client = eightBaseClient(idToken);
 
 	const { hasCopied, onCopy } = useClipboard(
 		project?.configuration?.inviteLink
@@ -75,6 +88,16 @@ const Settings = () => {
 		});
 	};
 
+	const removeTeamMember = (memberEmail: string) => {
+		const request = client.request(REMOVE_TEAM_MEMBER, {
+			projectId: project.id,
+			memberEmail: memberEmail,
+		});
+		setMembers(members.filter((member) => member.email !== memberEmail));
+		mutate('/api/session');
+		return request;
+	};
+
 	return (
 		<Box overflowY="scroll" w="100%">
 			<Stack spacing={6} mb={20}>
@@ -90,16 +113,17 @@ const Settings = () => {
 						setLoading={setProfileLoading}
 						formId="profileUpdateForm"
 					/>
-					<Button
-						mt={4}
-						type="submit"
-						isLoading={profileLoading}
-						form="profileUpdateForm"
-						ml="auto"
-						d="block"
-					>
-						Update profile
-					</Button>
+					<Flex justify="right" mt={4}>
+						<Button
+							mt={4}
+							type="submit"
+							isLoading={profileLoading}
+							loadingText="Updating"
+							form="profileUpdateForm"
+						>
+							Update profile
+						</Button>
+					</Flex>
 				</GridCard>
 				<GridCard
 					title="Notifications"
@@ -132,16 +156,16 @@ const Settings = () => {
 					subtitle="Manage your Project settings"
 				>
 					<UpdateProjectForm setLoading={setProjectLoading} />
-					<Button
-						mt={4}
-						type="submit"
-						isLoading={projectLoading}
-						form="projectUpdateForm"
-						ml="auto"
-						d="block"
-					>
-						Update project
-					</Button>
+					<Flex justify="right" mt={4}>
+						<Button
+							type="submit"
+							isLoading={projectLoading}
+							loadingText="Updating"
+							form="projectUpdateForm"
+						>
+							Update project
+						</Button>
+					</Flex>
 				</GridCard>
 				<GridCard
 					title="Team Members"
@@ -151,7 +175,7 @@ const Settings = () => {
 					<Heading fontSize="18px" fontWeight={500}>
 						Invite link
 					</Heading>
-					<InputGroup>
+					<InputGroup mb={4}>
 						<Input
 							value={project.configuration.inviteLink}
 							color="blue.400"
@@ -168,47 +192,70 @@ const Settings = () => {
 							/>
 						</InputRightElement>
 					</InputGroup>
-					<Table mt={4} w="100%">
-						<Tbody>
-							{project?.members?.items.map((member) => {
-								const memberName = `${member.firstName} ${member.lastName}`;
-								const memberAvatar = member?.avatar?.downloadUrl;
-								return (
-									<Tr key={member.email} h={8}>
-										<Td>
-											<Avatar
-												name={memberName}
-												src={memberAvatar && memberAvatar}
-												size="xs"
-												borderRadius="md"
-												backgroundColor="transparent"
-											/>
-										</Td>
-										<Td>
-											<Text fontWeight={600} fontSize="14px">
-												{memberName}
-											</Text>
-										</Td>
-										<Td>
-											<Text fontSize="14px" color="gray.500">
-												{member.email}
-											</Text>
-										</Td>
-										<Td>
-											<IconButton
-												aria-label={`Remove ${member.firstName} from ${project.name}`}
-												icon={<TrashIcon w={4} h={4} />}
-												size="sm"
-												variant="ghost"
-												color="gray.500"
-												isDisabled
-											/>
-										</Td>
-									</Tr>
-								);
-							})}
-						</Tbody>
-					</Table>
+					{members.map((member: Member) => {
+						const memberName = `${member.firstName || ''} ${
+							member.lastName || ''
+						}`;
+						const memberAvatar = member?.avatar?.downloadUrl;
+						return (
+							<Flex
+								key={member.email}
+								w="100%"
+								p={2}
+								borderRadius="md"
+								justify="space-between"
+								align="center"
+								_hover={{
+									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+								}}
+							>
+								<Flex w="250px">
+									<Avatar
+										name={memberName}
+										src={memberAvatar && memberAvatar}
+										size="xs"
+										borderRadius="md"
+										mr={4}
+										color={useColorModeValue('gray.700', 'gray.200')}
+										bg={useColorModeValue('gray.200', 'gray.600')}
+									/>
+									<Text fontWeight={600} fontSize="14px" textAlign="left">
+										{memberName}
+									</Text>
+								</Flex>
+								<Text fontSize="14px" color="gray.500" w="250px">
+									{member.email}
+								</Text>
+								<IconButton
+									aria-label={`Remove ${member.firstName} from ${project.name}`}
+									icon={<TrashIcon w={4} h={4} />}
+									size="sm"
+									variant="ghost"
+									colorScheme="red"
+									onClick={() => {
+										removeTeamMember(member.email);
+										toast({
+											position: 'bottom-right',
+											render: () => (
+												<Box
+													color="white"
+													p={4}
+													bg="blue.500"
+													borderRadius="md"
+													fontSize="md"
+												>
+													{member.email} has been successfully removed from{' '}
+													{project.name}.
+												</Box>
+											),
+											duration: 2000,
+											isClosable: true,
+										});
+									}}
+								/>
+							</Flex>
+						);
+					})}
 				</GridCard>
 			</Stack>
 		</Box>

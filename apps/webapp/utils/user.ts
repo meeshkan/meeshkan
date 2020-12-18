@@ -61,7 +61,7 @@ interface Release {
 	items: Array<{ releaseDate: string }>;
 }
 
-interface Member {
+export interface Member {
 	firstName: string;
 	lastName: string;
 	avatar: Avatar;

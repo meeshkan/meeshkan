@@ -29,12 +29,12 @@ import {
 	XmarkIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
-import slugify from 'slugify';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
 import { StepList } from '../../../components/molecules/side-step-list';
 import Video from '../../../components/atoms/video';
 import NotFoundError from '../../404';
+import { createSlug } from '../../../utils/createSlug';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -49,10 +49,10 @@ const UserStory = (props: UserStoryProps) => {
 	const router = useRouter();
 	const toast = useToast();
 
+	const slugifiedProjectName = createSlug(project.name);
 	let currentPath = router.asPath;
 	let userStoryId = currentPath.substr(currentPath.length - 25);
 	let date = new Date().toISOString().replace('Z', '') + '+00:00';
-	console.log(date);
 
 	const client = eightBaseClient(idToken);
 
@@ -85,7 +85,7 @@ const UserStory = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const deleteRejectedRecording = (testCreatedDate: string) => {
+	const deleteRejectedRecording = () => {
 		const request = client.request(DELETE_REJECTED_RECORDING, {
 			userStoryId: userStoryId,
 		});
@@ -228,9 +228,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 						mr={4}
 					>
@@ -258,9 +256,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 					>
 						Reject
