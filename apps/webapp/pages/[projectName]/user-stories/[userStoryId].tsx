@@ -13,8 +13,8 @@ import {
 	Select,
 	useToast,
 } from '@chakra-ui/react';
-import { UserContext } from 'apps/webapp/utils/user';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { UserContext } from '../../../utils/user';
+import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
 	UPDATE_EXPECTED_TEST,
@@ -28,10 +28,10 @@ import {
 	CheckmarkIcon,
 	XmarkIcon,
 } from '@frontend/chakra-theme';
-import LoadingScreen from 'apps/webapp/components/organisms/loading-screen';
+import LoadingScreen from '../../../components/organisms/loading-screen';
 import { StepList } from '../../../components/molecules/side-step-list';
 import { useRouter } from 'next/router';
-import Video from 'apps/webapp/components/atoms/video';
+import Video from '../../../components/atoms/video';
 import slugify from 'slugify';
 
 type UserStoryProps = {
