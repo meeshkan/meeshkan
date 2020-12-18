@@ -160,7 +160,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
-			let request = client
+			const request = client
 				.request(PROJECT_USER_STORIES, {
 					projectId: project.id,
 					first: pagination.rowsPerPage,
