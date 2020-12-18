@@ -192,9 +192,15 @@ export const createConfidenceScore = (
 	// weight for the time being, although we can change this to operate using
 	// totals across branches instead.
 	const testCoverageScore =
-		allBranches
-			.map((branch) => branch.totalIsTestCase / branch.totalRecordings)
-			.reduce((a, b) => a + b, 0.0) / allBranches.length;
+		allBranches.length === 0
+			? 0
+			: allBranches
+					.map((branch) =>
+						branch.totalRecordings === 0
+							? 0
+							: branch.totalIsTestCase / branch.totalRecordings
+					)
+					.reduce((a, b) => a + b, 0.0) / allBranches.length;
 
 	// this looks at the difference between the main branch and other branches
 	// in terms of confidence levels. If there is a substantial diff in _either_
@@ -209,7 +215,7 @@ export const createConfidenceScore = (
 			: testRunConfidenceLevelDiffs
 					.map((diff) => diff / maxTestRunConfidencePercentagesDiff)
 					.reduce((a, b) => a + b, 0.0) / testRunConfidenceLevelDiffs.length;
-
+	console.log(testResultScore, testCoverageScore, ambiguityScore);
 	return (
 		testResultWeight * testResultScore +
 		testCoverageWeight * testCoverageScore +
