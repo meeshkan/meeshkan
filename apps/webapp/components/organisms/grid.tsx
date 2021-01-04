@@ -248,7 +248,7 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							<StatCard title="Confidence score" isNA my={[8, 0, 0, 0]} />
+							<StatCard title="Confidence score" isNA />
 							<StatCard
 								title="Test coverage"
 								value={Number(testCoverage.value.toFixed(2))}
