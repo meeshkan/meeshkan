@@ -22,7 +22,7 @@ const SideBar = (props) => {
 		<MotionStack
 			p={4}
 			as="nav"
-			rounded="lg"
+			borderRadius={[0, '0.5rem', '0.5rem', '0.5rem']}
 			bg={useColorModeValue('white', 'gray.900')}
 			w="100%"
 			maxW={['100%', '100%', '100%', '256px']}
