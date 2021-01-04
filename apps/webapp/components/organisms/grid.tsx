@@ -236,6 +236,7 @@ const Grid = (props) => {
 								value={Number(confidenceScore.value.toFixed(2))}
 								percentageChange={confidenceScore.percentageChange}
 								dataPoints={confidenceScore.dataPoints}
+								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								title="Test coverage"
@@ -340,11 +341,7 @@ const Grid = (props) => {
 									</Box>
 								</GridCard>
 								<GridCard title="Overview">
-									<Stack
-										direction="row"
-										justify="space-around"
-										mb={6}
-									>
+									<Stack direction="row" justify="space-around" mb={6}>
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
