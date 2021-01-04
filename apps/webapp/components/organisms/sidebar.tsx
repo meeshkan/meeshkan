@@ -27,6 +27,9 @@ const SideBar = (props) => {
 			w="100%"
 			maxW={['100%', '100%', '100%', '256px']}
 			h={[stackSmallHeight, '100%', '100%', '100%']}
+			position={['fixed', 'static', 'static', 'static']}
+			top={[0, 'auto', 'auto', 'auto']}
+			zIndex={10}
 			animate={isOpen ? 'open' : 'closed'}
 			initial={false}
 			{...props}
