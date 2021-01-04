@@ -60,7 +60,7 @@ const StatCard = ({
 				</StatNumber>
 				<StatHelpText>
 					{isNA ? (
-						<Text fontStyle="italic">coming soon!</Text>
+						<Text as="span" fontStyle="italic">coming soon!</Text>
 					) : (
 						<>
 							<Badge

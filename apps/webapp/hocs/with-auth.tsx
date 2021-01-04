@@ -22,7 +22,7 @@ const withAuth = (PageComponent) => {
 			if (project.name) {
 				router.push(`/${createSlug(project.name)}`);
 			}
-		}, [project]);
+		}, [project, router]);
 
 		if (isInvitePage) {
 			return <PageComponent {...props} />;
