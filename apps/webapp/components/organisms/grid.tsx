@@ -27,14 +27,13 @@ import GridCard from '../molecules/grid-card';
 // import LinearListItem from '../molecules/linear-list-item';
 // import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
-import Onboarding from '../../components/organisms/onboarding';
-import { UserContext } from '../../utils/user';
+import { UserContext, UserStories } from '../../utils/user';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
 	getBugs,
 	getTestCoverage,
-	// getConfidenceScore,
+	getConfidenceScore,
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
@@ -79,10 +78,9 @@ const doughnutData = {
 const versions = ['v0.0.2', 'v0.0.1'];
 
 const Grid = (props) => {
-	const { projects, project: selectedProject } = useContext(UserContext);
+	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
 	const slugifiedProjectName = createSlug(selectedProject.name);
-	const hasProjects = projects.length > 0;
 
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
@@ -146,28 +144,13 @@ const Grid = (props) => {
 
 	const [version, setVersion] = useState(versions[0]);
 
-	if (!hasProjects) {
-		return (
-			<Stack
-				as={Card}
-				p={[6, 0, 0, 0]}
-				w="100%"
-				rounded="lg"
-				spacing={6}
-				{...props}
-			>
-				<Onboarding />
-			</Stack>
-		);
-	}
-
-	const userStories = selectedProject.userStories.items;
+	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
 	const testRuns = getTestRuns(userStories);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
 	const testCoverage = getTestCoverage(userStories);
-	// const confidenceScore = getConfidenceScore(userStories);
+	const confidenceScore = getConfidenceScore(userStories);
 
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
@@ -248,7 +231,12 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							<StatCard title="Confidence score" isNA />
+							<StatCard
+								title="Confidence score"
+								value={Number(confidenceScore.value.toFixed(2))}
+								percentageChange={confidenceScore.percentageChange}
+								dataPoints={confidenceScore.dataPoints}
+							/>
 							<StatCard
 								title="Test coverage"
 								value={Number(testCoverage.value.toFixed(2))}
@@ -379,14 +367,14 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 										<Box w="100px">
-											{/* <Text fontWeight={900}>
+											<Text fontWeight={900}>
 												{confidenceScore.value >= 90
 													? 'Ready'
 													: confidenceScore.value >= 50
 													? 'Proceed with caution'
 													: 'Do not release'}
-											</Text> */}
-											<Text fontWeight={900}>Ready</Text>
+											</Text>
+
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
 												fontWeight={700}
