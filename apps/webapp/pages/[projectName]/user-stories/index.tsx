@@ -180,8 +180,13 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
 
+	const slugifiedProjectName = useMemo(
+		() => createSlug(project.name),
+		[project.name]
+	);
+
 	const handleEdit = (id: string) => {
-		router.push(`/${createSlug(project.name)}/user-stories/${id}`);
+		router.push(`/${slugifiedProjectName}/user-stories/${id}`);
 	};
 
 	const { found, loading } = useValidateSelectedProject();
