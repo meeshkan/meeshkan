@@ -13,8 +13,8 @@ import {
 	Select,
 	useToast,
 } from '@chakra-ui/react';
-import { UserContext } from 'apps/webapp/utils/user';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { UserContext } from '../../../utils/user';
+import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
 	UPDATE_EXPECTED_TEST,
@@ -137,7 +137,7 @@ const UserStory = (props: UserStoryProps) => {
 							mr={2}
 							textTransform="capitalize"
 						>
-							{data.userStory.created[0] == 'user' ? (
+							{data.userStory.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
 							) : (
 								<CrosshairIcon mr={2} />

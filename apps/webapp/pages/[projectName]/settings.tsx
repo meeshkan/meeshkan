@@ -100,7 +100,7 @@ const Settings = () => {
 
 	return (
 		<Box overflowY="scroll" w="100%">
-			<Stack spacing={6} mb={20}>
+			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} mb={20}>
 				<Heading fontSize="20px" color="gray.500" lineHeight="short">
 					Personal
 				</Heading>

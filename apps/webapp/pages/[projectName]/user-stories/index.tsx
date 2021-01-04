@@ -111,7 +111,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: (originalRow, rowIndex) => {
 					return (
 						<Badge fontSize="sm" textTransform="capitalize">
-							{originalRow.created == 'user' ? (
+							{originalRow.created === 'user' ? (
 								<VideoIcon mr={2} />
 							) : (
 								<CrosshairIcon mr={2} />
@@ -130,11 +130,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							colorScheme={
-								significance == 'low'
+								significance === 'low'
 									? 'gray'
-									: significance == 'medium'
+									: significance === 'medium'
 									? 'orange'
-									: significance == 'high'
+									: significance === 'high'
 									? 'cyan'
 									: null
 							}
@@ -157,13 +157,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
+	const projectId = project.id;
 	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
-			let request = client
+			const request = client
 				.request(PROJECT_USER_STORIES, {
-					projectId: project.id,
+					projectId,
 					first: pagination.rowsPerPage,
 					skip: pagination.rowsPerPage * pagination.page,
 				})
@@ -173,7 +174,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[pagination.page, pagination.rowsPerPage]
+		[pagination.page, pagination.rowsPerPage, idToken, projectId]
 	);
 
 	const handlePagination = useCallback(({ pageSize, pageIndex }) => {

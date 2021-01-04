@@ -173,7 +173,7 @@ const Grid = (props) => {
 	const totalTests = sumOfObjectValues(testsByDay);
 
 	return (
-		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
+		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
 				<Heading as="h2" fontSize="md" lineHeight="short">
 					Last 7 Days
@@ -344,11 +344,7 @@ const Grid = (props) => {
 									</Box>
 								</GridCard>
 								<GridCard title="Overview">
-									<Stack
-										direction={['column', 'row']}
-										justify="space-around"
-										mb={6}
-									>
+									<Stack direction="row" justify="space-around" mb={6}>
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
@@ -388,7 +384,7 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 									</Stack>
-									<Stack direction={['column', 'row']} justify="space-around">
+									<Stack direction="row" justify="space-around">
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
