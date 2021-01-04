@@ -12,7 +12,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			bg={useColorModeValue('gray.100', 'gray.800')}
 			w="100%"
 			h={['100%', '100%', '100%', '100vh']}
-			mt={[10, 0, 0, 0]}
+			mt={[12, 0, 0, 0]}
 			d="flex"
 			direction={['column', 'column', 'column', 'row']}
 			spacing={[0, 6, 6, 6]}
