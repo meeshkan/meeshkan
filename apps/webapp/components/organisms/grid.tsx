@@ -170,7 +170,7 @@ const Grid = (props) => {
 	const totalTests = sumOfObjectValues(testsByDay);
 
 	return (
-		<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
+		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
 				<Heading as="h2" fontSize="md" lineHeight="short">
 					Last 7 Days
@@ -236,7 +236,6 @@ const Grid = (props) => {
 								value={Number(confidenceScore.value.toFixed(2))}
 								percentageChange={confidenceScore.percentageChange}
 								dataPoints={confidenceScore.dataPoints}
-								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								title="Test coverage"
@@ -342,7 +341,7 @@ const Grid = (props) => {
 								</GridCard>
 								<GridCard title="Overview">
 									<Stack
-										direction={['column', 'row']}
+										direction="row"
 										justify="space-around"
 										mb={6}
 									>
@@ -385,7 +384,7 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 									</Stack>
-									<Stack direction={['column', 'row']} justify="space-around">
+									<Stack direction="row" justify="space-around">
 										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
