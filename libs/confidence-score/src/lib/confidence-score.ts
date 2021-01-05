@@ -162,7 +162,7 @@ export const getConfidenceScorePieces = (
 	);
 
 	const testRunConfidencePercentagesPerBranch = testRunConfidenceLevelsPerBranch
-		.map((v) => v.map((i) => i.confidence).reduce((a, b) => a + b, 0))
+		.map((v) => v.map((i) => i.confidence))
 		.map(testRunConfidenceScoresToTestRunConfidencePercentages);
 	const testRunConfidenceLevelDiffs = testRunConfidencePercentagesPerBranch
 		.slice(1) // after master branch
@@ -184,33 +184,35 @@ export const getConfidenceScorePieces = (
 
 	// this takes each test result (LOW, MEDIUM, or HIGH confidence)
 	// and finds the average from 0.0 to 1.0
-	const testResultScore =
-		testRunConfidenceLevels.length === 0
-			? 0
-			: testRunConfidenceLevels
-					.map((testRunConfidence) =>
-						testRunConfidence === TestRunConfidence.LOW
-							? 0.0
-							: testRunConfidence === TestRunConfidence.MEDIUM
-							? 0.5
-							: 1.0
-					)
-					.reduce((a, b) => a + b, 0) / testRunConfidenceLevels.length;
+	const testResultScore: Array<DataPoint> = testRunConfidenceLevels.map(
+		(testRunConfidence) => ({
+			title: testRunConfidence.parentStoryTitle,
+			score:
+				((testRunConfidence.confidence === TestRunConfidence.LOW
+					? 0.0
+					: testRunConfidence.confidence === TestRunConfidence.MEDIUM
+					? 0.5
+					: 1.0) *
+					testResultWeight) /
+				testRunConfidenceLevels.length,
+			timestamp: testRunConfidence.timestampUTC,
+		})
+	);
 
 	// This looks at the number of test cases versus the total number
 	// of test results present on 8base. It treats each branch as having equal
 	// weight for the time being, although we can change this to operate using
 	// totals across branches instead.
-	const testCoverageScore =
-		allBranches.length === 0
-			? 0
-			: allBranches
-					.map((branch) =>
-						branch.totalRecordings === 0
-							? 0
-							: branch.totalIsTestCase / branch.totalRecordings
-					)
-					.reduce((a, b) => a + b, 0.0) / allBranches.length;
+	const testCoverageScore: Array<DataPoint> = allBranches.map((branch) => ({
+		title: 'Coverage for branch: ' + branch.name + '.',
+		score:
+			branch.totalRecordings === 0
+				? 0
+				: (branch.totalIsTestCase * testCoverageWeight) /
+				  (allBranches.length * branch.totalRecordings),
+		// for now, we make the timestamp now
+		timestamp: new Date().getTime(),
+	}));
 
 	// this looks at the difference between the main branch and other branches
 	// in terms of confidence levels. If there is a substantial diff in _either_
@@ -219,16 +221,22 @@ export const getConfidenceScorePieces = (
 	// from a low baseline on main, we still rate it as low because it signifies
 	// a lot of substantive changes (albeit for the better). We can change this
 	// if it feels too counterintuitive.
-	const ambiguityScore =
-		testRunConfidenceLevelDiffs.length === 0.0
-			? 0.0
-			: testRunConfidenceLevelDiffs
-					.map((diff) => diff / maxTestRunConfidencePercentagesDiff)
-					.reduce((a, b) => a + b, 0.0) / testRunConfidenceLevelDiffs.length;
-
-	return (
-		testResultWeight * testResultScore +
-		testCoverageWeight * testCoverageScore +
-		ambiguityWeight * ambiguityScore
+	const ambiguityScore: Array<DataPoint> = testRunConfidenceLevelDiffs.map(
+		(diff, i) => ({
+			// TODO: hack in that the branch name is pulled back into the computation
+			// which requires that the length of testRunConfidenceLevelDiffs
+			// equals the length of allBranches
+			// Find a way to push the branch name through the computation so that
+			// this is not necessary.
+			title: 'Coverage for branch: ' + allBranches[i].name + '.',
+			score:
+				(diff * ambiguityWeight) /
+				(maxTestRunConfidencePercentagesDiff *
+					testRunConfidenceLevelDiffs.length),
+			// for now, we make the timestamp now
+			timestamp: new Date().getTime(),
+		})
 	);
+
+	return testResultScore.concat(testCoverageScore).concat(ambiguityScore);
 };

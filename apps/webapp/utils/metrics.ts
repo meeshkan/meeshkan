@@ -124,12 +124,12 @@ export const getLastSevenDaysInFormat = (format: string) =>
 
 type DisplayableMetricAndDataPoints = {
 	displayableMetric: DisplayableMetric;
-	dataPoinst: Array<DataPoint>;
+	dataPoints: Array<DataPoint>;
 };
 
 export const getConfidenceScore = (
 	userStories: UserStories['items']
-): DisplayableMetric => {
+): DisplayableMetricAndDataPoints => {
 	const confidenceFactors: ConfidenceFactors = {
 		mainBranch: {
 			name: 'main',
@@ -164,15 +164,18 @@ export const getConfidenceScore = (
 	};
 	const confidenceScorePieces = getConfidenceScorePieces(confidenceFactors);
 	return {
-		value:
-			confidenceScorePieces.map((v) => v.score).reduce((a, b) => a + b, 0.0) *
-			100,
-		percentageChange: 0.0, // TODO: un-hard-code when we have a meaningful sense of window
-		dataPoints:
-			userStories.length +
-			confidenceFactors.mainBranch.testRuns.length +
-			confidenceFactors.otherBranches
-				.map((branch) => branch.testRuns.length)
-				.reduce((a, b) => a + b, 0),
+		displayableMetric: {
+			value:
+				confidenceScorePieces.map((v) => v.score).reduce((a, b) => a + b, 0.0) *
+				100,
+			percentageChange: 0.0, // TODO: un-hard-code when we have a meaningful sense of window
+			dataPoints:
+				userStories.length +
+				confidenceFactors.mainBranch.testRuns.length +
+				confidenceFactors.otherBranches
+					.map((branch) => branch.testRuns.length)
+					.reduce((a, b) => a + b, 0),
+		},
+		dataPoints: confidenceScorePieces,
 	};
 };

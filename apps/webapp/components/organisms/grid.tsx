@@ -14,6 +14,7 @@ import {
 	Heading,
 	useColorModeValue,
 	Text,
+	List,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -39,6 +40,7 @@ import {
 	sumOfObjectValues,
 	getLastSevenDaysInFormat,
 } from '../../utils/metrics';
+import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 require('../molecules/rounded-chart');
 
 const barData = {
@@ -233,9 +235,13 @@ const Grid = (props) => {
 						>
 							<StatCard
 								title="Confidence score"
-								value={Number(confidenceScore.value.toFixed(2))}
-								percentageChange={confidenceScore.percentageChange}
-								dataPoints={confidenceScore.dataPoints}
+								value={Number(
+									confidenceScore.displayableMetric.value.toFixed(2)
+								)}
+								percentageChange={
+									confidenceScore.displayableMetric.percentageChange
+								}
+								dataPoints={confidenceScore.displayableMetric.dataPoints}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
@@ -265,32 +271,18 @@ const Grid = (props) => {
 							>
 								<GridCard title="Confidence Breakdown">
 									<Text fontStyle="italic">Coming soon, stay tuned!</Text>
-									{/* <List
+									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
 									>
-										<ConfidenceBreakdownItem
-											value={0.05}
-											description="Users can successfully upgrade their subscription."
-										/>
-										<ConfidenceBreakdownItem
-											value={0.05}
-											description="Lorem ipsum dolor sit amet."
-										/>
-										<ConfidenceBreakdownItem
-											value={-0.1}
-											description="Lorem ipsum dolor sit amet."
-										/>
-										<ConfidenceBreakdownItem
-											value={0.05}
-											description="Lorem ipsum dolor sit amet."
-										/>
-										<ConfidenceBreakdownItem
-											value={-2.0}
-											description="Lorem ipsum dolor sit amet."
-										/>
-									</List> */}
+										{confidenceScore.dataPoints.map((dp) => (
+											<ConfidenceBreakdownItem
+												value={dp.score * 100}
+												description={dp.title}
+											/>
+										))}
+									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
@@ -365,9 +357,9 @@ const Grid = (props) => {
 										</Box>
 										<Box w="100px">
 											<Text fontWeight={900}>
-												{confidenceScore.value >= 90
+												{confidenceScore.displayableMetric.value >= 90
 													? 'Ready'
-													: confidenceScore.value >= 50
+													: confidenceScore.displayableMetric.value >= 50
 													? 'Proceed with caution'
 													: 'Do not release'}
 											</Text>
