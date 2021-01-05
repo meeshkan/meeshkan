@@ -37,7 +37,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const slugifiedProjectName = createSlug(project.name);
+	const slugifiedProjectName = createSlug(project?.name || '');
 
 	const handleLogoutClick = () => {
 		Router.push('/api/logout');

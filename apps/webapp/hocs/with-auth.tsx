@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { createSlug } from '../utils/createSlug';
 import LoadingScreen from '../components/organisms/loading-screen';
 import AuthScreen from '../components/organisms/auth-screen';
-import { UserContext, IUser } from '../utils/user';
+import { UserContext, IUser, Project } from '../utils/user';
 import { useFetchUser } from '../hooks/use-fetch-user';
 
 export interface IWithAuthProps {
@@ -14,13 +14,16 @@ export interface IWithAuthProps {
 const withAuth = (PageComponent) => {
 	return (props: IWithAuthProps): JSX.Element => {
 		const router = useRouter();
-		const { user, loading } = useFetchUser(props.user);
-		const [project, setProject] = useState({ id: -1, name: '' });
+		const { user, loading, mutate } = useFetchUser(props.user);
+		const [project, setProject] = useState<Project>(null);
 		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
 		useEffect(() => {
-			if (project.name) {
-				router.push(`/${createSlug(project.name)}`);
+			if (project?.name) {
+				const slugifiedProjectName = createSlug(project?.name || ''); 
+				router.push(router.pathname.includes('[projectName]')
+					? router.pathname.replace('[projectName]', slugifiedProjectName)
+					: `/${slugifiedProjectName}`);
 			}
 		}, [project]);
 
@@ -29,7 +32,7 @@ const withAuth = (PageComponent) => {
 		}
 
 		if (user && !user.error) {
-			const providerValue = { ...user, project, setProject };
+			const providerValue = { ...user, mutate, project, setProject };
 			return (
 				<UserContext.Provider value={providerValue}>
 					<PageComponent {...props} />

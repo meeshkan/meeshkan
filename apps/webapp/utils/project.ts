@@ -24,6 +24,26 @@ const PROJECT_CREATE_MUTATION = gql`
 			projects(filter: { name: { equals: $projectName } }) {
 				items {
 					id
+					name
+					avatar {
+						downloadUrl
+						shareUrl
+					}
+					configuration {
+						inviteLink
+					}
+					hasReceivedEvents
+					members {
+						count
+						items {
+							firstName
+							lastName
+							email
+							avatar {
+								downloadUrl
+							}
+						}
+					}	
 				}
 			}
 		}

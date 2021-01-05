@@ -48,9 +48,9 @@ const SideBarBody = () => {
 	const { projects, project, setProject } = useContext(UserContext);
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
-	const avatarUrl = project.avatar?.downloadUrl;
+	const avatarUrl = project?.avatar?.downloadUrl;
 	const slugifiedProjectName = createSlug(
-		project.name || router.query.projectName || ''
+		project?.name || router.query.projectName as string || ''
 	);
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const isSettingsPage = router.pathname.endsWith('settings');
@@ -262,7 +262,7 @@ const SideBarBody = () => {
 							>
 								<Avatar
 									src={avatarUrl}
-									name={project.name}
+									name={project?.name}
 									icon={
 										<QuestionIcon
 											color={useColorModeValue('gray.400', 'white')}
@@ -275,12 +275,12 @@ const SideBarBody = () => {
 									borderRadius="md"
 									mr={3}
 								/>
-								{project.name}
+								{project?.name}
 							</Flex>
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={project.name}
+								defaultValue={project?.name}
 								title="Projects"
 								type="radio"
 							>
