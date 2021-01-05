@@ -270,7 +270,6 @@ const Grid = (props) => {
 								w="100%"
 							>
 								<GridCard title="Confidence Breakdown">
-									<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
