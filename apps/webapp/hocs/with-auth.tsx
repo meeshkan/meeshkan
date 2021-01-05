@@ -8,13 +8,12 @@ import { useFetchUser } from '../hooks/use-fetch-user';
 
 export interface IWithAuthProps {
 	cookies: string | undefined;
-	user?: IUser;
 }
 
 const withAuth = (PageComponent) => {
 	return (props: IWithAuthProps): JSX.Element => {
 		const router = useRouter();
-		const { user, loading } = useFetchUser(props.user);
+		const { user, loading } = useFetchUser();
 		const [project, setProject] = useState({ id: -1, name: '' });
 		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
