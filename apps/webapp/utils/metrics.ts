@@ -3,10 +3,11 @@ import moment from 'moment';
 import { UserStories, Project } from './user';
 
 import {
-	createConfidenceScore,
+	getConfidenceScorePieces,
 	ConfidenceFactors,
 	TestPriority,
 	TestStatus,
+	DataPoint,
 } from '@frontend/confidence-score';
 
 const daysUntilDate = (date: moment.Moment): number =>
@@ -121,6 +122,11 @@ export const sumOfObjectValues = (object: { [key: string]: number }) =>
 export const getLastSevenDaysInFormat = (format: string) =>
 	lastSevenDays.map((day) => day.format(format));
 
+type DisplayableMetricAndDataPoints = {
+	displayableMetric: DisplayableMetric;
+	dataPoinst: Array<DataPoint>;
+};
+
 export const getConfidenceScore = (
 	userStories: UserStories['items']
 ): DisplayableMetric => {
@@ -138,6 +144,7 @@ export const getConfidenceScore = (
 								testRun.status !== 'queued' && testRun.status !== 'running'
 						)
 						.map((testRun) => ({
+							parentStoryTitle: story.title,
 							status:
 								testRun.status === 'failing'
 									? TestStatus.FAILING
@@ -155,8 +162,11 @@ export const getConfidenceScore = (
 		// for now, there is no information regarding other branches
 		otherBranches: [],
 	};
+	const confidenceScorePieces = getConfidenceScorePieces(confidenceFactors);
 	return {
-		value: createConfidenceScore(confidenceFactors) * 100,
+		value:
+			confidenceScorePieces.map((v) => v.score).reduce((a, b) => a + b, 0.0) *
+			100,
 		percentageChange: 0.0, // TODO: un-hard-code when we have a meaningful sense of window
 		dataPoints:
 			userStories.length +

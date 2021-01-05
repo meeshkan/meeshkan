@@ -19,10 +19,19 @@ type TestRunConfidencePercentanges = {
 	high: number;
 };
 export type TestRun = {
+	parentStoryTitle: string;
 	status: TestStatus;
 	priority: TestPriority;
 	timestampUTC: number;
 };
+export type TestRunWithConfidence = {
+	parentStoryTitle: string;
+	status: TestStatus;
+	priority: TestPriority;
+	timestampUTC: number;
+	confidence: TestRunConfidence;
+};
+
 export type Branch = {
 	name: string;
 	testRuns: Array<TestRun>;
@@ -39,8 +48,10 @@ const testStatusAndPriorityToTestRunConfidence = (
 	testStatus: TestStatus,
 	testPriority: TestPriority
 ): TestRunConfidence =>
-	testPriority === TestPriority.BLOCKING &&
-	testStatus === TestStatus.DID_NOT_RUN
+	testPriority === TestPriority.BLOCKING && testStatus === TestStatus.FAILING
+		? TestRunConfidence.LOW // make worse than this somehow
+		: testPriority === TestPriority.BLOCKING &&
+		  testStatus === TestStatus.DID_NOT_RUN
 		? TestRunConfidence.LOW
 		: testPriority === TestPriority.WARNING &&
 		  testStatus === TestStatus.DID_NOT_RUN
@@ -121,39 +132,38 @@ export const filterConfidenceFactorsByTimeRange = (
 		filterBranchByTimeRange(branch, startTime, endTime)
 	),
 });
+export type DataPoint = {
+	title: string;
+	score: number;
+	timestamp: number;
+};
 
 const testResultWeight = 0.4;
 const testCoverageWeight = 0.4;
 const ambiguityWeight = 0.2;
-export const createConfidenceScore = (
+export const getConfidenceScorePieces = (
 	confidenceFactors: ConfidenceFactors
-): number => {
+): Array<DataPoint> => {
 	const allBranches: MainPlusOtherBranches = [
 		confidenceFactors.mainBranch,
 		...confidenceFactors.otherBranches,
 	];
 
-	const blockingTests: number = allBranches
-		.map(
-			(branch) =>
-				branch.testRuns.map(
-					(testRun) =>
-						testRun.status === TestStatus.FAILING &&
-						testRun.priority === TestPriority.BLOCKING
-				).length
-		)
-		.reduce((a, b) => a + b, 0);
-	if (blockingTests > 0) {
-		return 0.0;
-	}
-	const testRunConfidenceLevelsPerBranch = allBranches.map((branch) =>
-		branch.testRuns.map((testRun) =>
-			testStatusAndPriorityToTestRunConfidence(testRun.status, testRun.priority)
-		)
+	const testRunConfidenceLevelsPerBranch: Array<Array<
+		TestRunWithConfidence
+	>> = allBranches.map((branch) =>
+		branch.testRuns.map((testRun) => ({
+			...testRun,
+			confidence: testStatusAndPriorityToTestRunConfidence(
+				testRun.status,
+				testRun.priority
+			),
+		}))
 	);
-	const testRunConfidencePercentagesPerBranch = testRunConfidenceLevelsPerBranch.map(
-		testRunConfidenceScoresToTestRunConfidencePercentages
-	);
+
+	const testRunConfidencePercentagesPerBranch = testRunConfidenceLevelsPerBranch
+		.map((v) => v.map((i) => i.confidence).reduce((a, b) => a + b, 0))
+		.map(testRunConfidenceScoresToTestRunConfidencePercentages);
 	const testRunConfidenceLevelDiffs = testRunConfidencePercentagesPerBranch
 		.slice(1) // after master branch
 		.map((testRunConfidencePercentages) =>
