@@ -20,7 +20,9 @@ const withAuth = (PageComponent) => {
 
 		useEffect(() => {
 			if (project.name) {
-				router.push(`/${createSlug(project.name)}`);
+				router.push(router.pathname.includes('[projectName]')
+					? router.pathname.replace('[projectName]', createSlug(project.name))
+					: `/${createSlug(project.name)}`);
 			}
 		}, [project]);
 
