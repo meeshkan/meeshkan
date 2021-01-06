@@ -1,14 +1,13 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { UserStories, Project } from './user';
+import { UserStories, Project, UserStory } from './user';
 
-import {
-	getConfidenceScorePieces,
-	ConfidenceFactors,
-	TestPriority,
-	TestStatus,
-	DataPoint,
-} from '@frontend/confidence-score';
+export interface DataPoint {
+	title: string;
+	score: number;
+	maxPossible: number;
+	timestamp: number;
+}
 
 const daysUntilDate = (date: moment.Moment): number =>
 	date.diff(moment(), 'days');
@@ -124,58 +123,83 @@ export const getLastSevenDaysInFormat = (format: string) =>
 
 type DisplayableMetricAndDataPoints = {
 	displayableMetric: DisplayableMetric;
-	dataPoints: Array<DataPoint>;
+	dataPoints: Record<string, DataPoint>;
 };
 
+export const COVERAGE_DATA_POINT = 'COVERAGE_DATA_POINT';
+export const MAX_POSSIBLE_TEST_COVERAGE_SCORE = 30;
+export const MAX_POSSIBLE_TEST_RUN_SCORE = 70;
+const MS_IN_14_DAYS = 1209600000;
+const storySignificance = (story: UserStory): number => 10.0;
+
 export const getConfidenceScore = (
+	releaseStarted: number,
 	userStories: UserStories['items']
 ): DisplayableMetricAndDataPoints => {
-	const confidenceFactors: ConfidenceFactors = {
-		mainBranch: {
-			name: 'main',
-			totalRecordings: userStories.length,
-			totalIsTestCase: userStories.filter((story) => story.isTestCase).length,
-			testRuns: userStories
-				.filter((story) => story.isTestCase)
-				.map((story) =>
-					story.testRuns.items
-						.filter(
-							(testRun) =>
-								testRun.status !== 'queued' && testRun.status !== 'running'
-						)
-						.map((testRun) => ({
-							parentStoryTitle: story.title,
-							status:
-								testRun.status === 'failing'
-									? TestStatus.FAILING
-									: testRun.status === 'passing'
-									? TestStatus.PASSING
-									: TestStatus.DID_NOT_RUN,
-							// TODO: add more meaningful priority
-							priority: TestPriority.LOW,
-							// TODO: change to updatedAt
-							timestampUTC: new Date(testRun.dateTime).getTime(),
-						}))
-				)
-				.reduce((a, b) => [...a, ...b], []),
+	const now = new Date().getTime();
+	const totalSignificance = userStories
+		.map((story) => storySignificance(story))
+		.reduce((a, b) => a + b, 0);
+	const dataPoints: Record<string, DataPoint> = {
+		[COVERAGE_DATA_POINT]: {
+			title: 'Test Coverage Score',
+			maxPossible: 30,
+			score:
+				(userStories.filter((story) => story.isTestCase).length *
+					MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
+				userStories.length,
+			timestamp: new Date().getTime(),
 		},
-		// for now, there is no information regarding other branches
-		otherBranches: [],
+		...userStories
+			.map((story) => {
+				const significance = storySignificance(story);
+				const testRunScoreComponents = story.testRuns.items.map((run) => {
+					const runTime = new Date(run.dateTime).getTime();
+					return {
+						maxPossible:
+							runTime < now - MS_IN_14_DAYS
+								? 0
+								: ((MS_IN_14_DAYS - (now - runTime)) / MS_IN_14_DAYS) *
+								  (runTime >= releaseStarted ? 1.0 : 0.5),
+						status: run.status,
+					};
+				});
+				const maxPossibleTestRunScore = testRunScoreComponents
+					.map((a) => a.maxPossible)
+					.reduce((a, b) => a + b, 0);
+				const actualTestRunScore = testRunScoreComponents
+					.map(
+						(a) =>
+							a.maxPossible *
+							(a.status === 'failing'
+								? 0.0
+								: a.status === 'passing'
+								? 1.0
+								: 0.5)
+					)
+					.reduce((a, b) => a + b, 0);
+				const maxPossible =
+					(significance * MAX_POSSIBLE_TEST_RUN_SCORE) / totalSignificance;
+				return {
+					[story.id]: {
+						title: story.title,
+						timestamp: story.createdAt,
+						score: (maxPossible * actualTestRunScore) / maxPossibleTestRunScore,
+						maxPossible,
+					},
+				};
+			})
+			.reduce((a, b) => ({ ...a, ...b }), {}),
 	};
-	const confidenceScorePieces = getConfidenceScorePieces(confidenceFactors);
+
 	return {
 		displayableMetric: {
-			value:
-				confidenceScorePieces.map((v) => v.score).reduce((a, b) => a + b, 0.0) *
-				100,
+			value: Object.values(dataPoints)
+				.map((v) => v.score)
+				.reduce((a, b) => a + b, 0.0),
 			percentageChange: 0.0, // TODO: un-hard-code when we have a meaningful sense of window
-			dataPoints:
-				userStories.length +
-				confidenceFactors.mainBranch.testRuns.length +
-				confidenceFactors.otherBranches
-					.map((branch) => branch.testRuns.length)
-					.reduce((a, b) => a + b, 0),
+			dataPoints: Object.values(dataPoints).length,
 		},
-		dataPoints: confidenceScorePieces,
+		dataPoints: dataPoints,
 	};
 };

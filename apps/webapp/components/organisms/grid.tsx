@@ -79,6 +79,10 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
+// TODO: fill me in with correct info!
+const getReleaseStartFromProject = (a) =>
+	new Date().getTime() - 1000 * 60 * 60 * 24 * 5;
+
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
@@ -152,7 +156,8 @@ const Grid = (props) => {
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
 	const testCoverage = getTestCoverage(userStories);
-	const confidenceScore = getConfidenceScore(userStories);
+	const releaseStart = getReleaseStartFromProject(selectedProject);
+	const confidenceScore = getConfidenceScore(releaseStart, userStories);
 
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
@@ -275,7 +280,7 @@ const Grid = (props) => {
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
 									>
-										{confidenceScore.dataPoints.map((dp) => (
+										{Object.values(confidenceScore.dataPoints).map((dp) => (
 											<ConfidenceBreakdownItem
 												value={dp.score * 100}
 												description={dp.title}

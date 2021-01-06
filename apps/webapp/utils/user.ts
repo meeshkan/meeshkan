@@ -41,7 +41,7 @@ interface UserStoryFailing {
 	}>;
 }
 
-interface UserStory {
+export interface UserStory {
 	id: string;
 	failing: UserStoryFailing;
 	title: string;
@@ -333,7 +333,10 @@ export const getUserProfile = async (idToken: string) => {
 };
 
 const UPDATE_PRODUCT_NOTIFICATIONS_MUTATION = gql`
-	mutation UpdateProductNotifications($id: ID!, $productNotifications: Boolean!) {
+	mutation UpdateProductNotifications(
+		$id: ID!
+		$productNotifications: Boolean!
+	) {
 		userUpdate(
 			filter: { id: $id }
 			data: { productNotifications: $productNotifications }
