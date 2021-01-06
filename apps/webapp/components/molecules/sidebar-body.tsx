@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { createSlug } from '../../utils/createSlug';
@@ -49,9 +49,12 @@ const SideBarBody = () => {
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
 	const avatarUrl = project.avatar?.downloadUrl;
-	const slugifiedProjectName = createSlug(
-		project.name || router.query.projectName || ''
+	const projectName = project.name || router.query.projectName || ''
+	const slugifiedProjectName = useMemo(
+		() => createSlug(projectName),
+		[projectName]
 	);
+
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
