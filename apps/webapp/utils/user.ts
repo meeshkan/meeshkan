@@ -47,6 +47,7 @@ interface UserStory {
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
+	significance: 'low' | 'medium' | 'high';
 	testCreatedDate: string;
 	testRuns: TestRuns;
 }
