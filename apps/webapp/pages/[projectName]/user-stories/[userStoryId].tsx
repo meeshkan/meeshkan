@@ -20,7 +20,7 @@ import {
 	UPDATE_EXPECTED_TEST,
 	DELETE_REJECTED_RECORDING,
 	UPDATE_STORY_TITLE,
-} from '../../../graphql/user-stories/[userStoryId]';
+} from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
 	CrosshairIcon,

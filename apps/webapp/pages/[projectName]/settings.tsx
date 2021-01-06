@@ -32,7 +32,7 @@ import {
 	Member,
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { REMOVE_TEAM_MEMBER } from '../../graphql/settings';
+import { REMOVE_TEAM_MEMBER } from '../../graphql/project';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
