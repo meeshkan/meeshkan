@@ -302,7 +302,21 @@ const Grid = (props) => {
 											.map(([k, dataPoints], index) => (
 												<ConfidenceBreakdownItem
 													key={index}
-													value={dataPoints.score * 100}
+													value={
+														confidenceScoreSevenDaysAgo.dataPoints[k]
+															? confidenceScoreSevenDaysAgo.dataPoints[k]
+																	.score === 0
+																? dataPoints.score === 0
+																	? 0
+																	: 100
+																: ((confidenceScoreSevenDaysAgo.dataPoints[k]
+																		.score -
+																		dataPoints.score) *
+																		100) /
+																  confidenceScoreSevenDaysAgo.dataPoints[k]
+																		.score
+															: 0
+													}
 													description={dataPoints.title}
 												/>
 											))}
