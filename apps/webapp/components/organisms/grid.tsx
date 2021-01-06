@@ -3,7 +3,7 @@ import {
 	Box,
 	Stack,
 	Flex,
-	// List,
+	List,
 	Button,
 	Menu,
 	MenuButton,
@@ -14,7 +14,6 @@ import {
 	Heading,
 	useColorModeValue,
 	Text,
-	List,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -26,7 +25,7 @@ import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
 // import ActivityListItem from '../molecules/activity-list-item';
 // import LinearListItem from '../molecules/linear-list-item';
-// import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
 import {
@@ -40,7 +39,6 @@ import {
 	sumOfObjectValues,
 	getLastSevenDaysInFormat,
 } from '../../utils/metrics';
-import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 require('../molecules/rounded-chart');
 
 const barData = {
@@ -317,7 +315,7 @@ const Grid = (props) => {
 																	.score
 														: 0)
 											)
-											.slice(0, 10)
+											.slice(0, 8)
 											.map(([key, dataPoint]) => (
 												<ConfidenceBreakdownItem
 													key={key}
