@@ -94,6 +94,7 @@ const PROJECTS = gql`
 							title
 							testCreatedDate
 							isTestCase
+							significance
 							createdAt
 							testRuns {
 								count
