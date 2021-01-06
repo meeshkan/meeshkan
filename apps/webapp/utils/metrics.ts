@@ -135,8 +135,11 @@ const storySignificance = (story: UserStory): number => 10.0;
 export const getConfidenceScore = (
 	howLongAgo: number,
 	releaseStarted: number,
-	userStories: UserStories['items']
+	userStories_: UserStories['items']
 ): DisplayableMetricAndDataPoints => {
+	const userStories = userStories_.filter(
+		(story) => new Date(story.createdAt).getTime() < howLongAgo
+	);
 	const totalSignificance = userStories
 		.map((story) => storySignificance(story))
 		.reduce((a, b) => a + b, 0);

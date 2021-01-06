@@ -82,6 +82,17 @@ const versions = ['v0.0.2', 'v0.0.1'];
 const getReleaseStartFromProject = (a) =>
 	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
 
+const calcPctChange = (key, confidenceScoreSevenDaysAgo, dataPoint) =>
+	confidenceScoreSevenDaysAgo.dataPoints[key]
+		? confidenceScoreSevenDaysAgo.dataPoints[key].score === 0
+			? dataPoint.score === 0
+				? 0
+				: 100
+			: ((confidenceScoreSevenDaysAgo.dataPoints[key].score - dataPoint.score) *
+					100) /
+			  confidenceScoreSevenDaysAgo.dataPoints[key].score
+		: 0;
+
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
@@ -168,7 +179,6 @@ const Grid = (props) => {
 		releaseStart,
 		userStories
 	);
-	console.log(confidenceScoreSevenDaysAgo);
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
 	const doughnutDataLabels = Object.keys(latestTestStates);
@@ -301,39 +311,21 @@ const Grid = (props) => {
 											.filter(
 												([key, dataPoint]) =>
 													0 !==
-													(confidenceScoreSevenDaysAgo.dataPoints[key]
-														? confidenceScoreSevenDaysAgo.dataPoints[key]
-																.score === 0
-															? dataPoint.score === 0
-																? 0
-																: 100
-															: ((confidenceScoreSevenDaysAgo.dataPoints[key]
-																	.score -
-																	dataPoint.score) *
-																	100) /
-															  confidenceScoreSevenDaysAgo.dataPoints[key]
-																	.score
-														: 0)
+													calcPctChange(
+														key,
+														confidenceScoreSevenDaysAgo,
+														dataPoint
+													)
 											)
 											.slice(0, 8)
 											.map(([key, dataPoint]) => (
 												<ConfidenceBreakdownItem
 													key={key}
-													value={
-														confidenceScoreSevenDaysAgo.dataPoints[key]
-															? confidenceScoreSevenDaysAgo.dataPoints[key]
-																	.score === 0
-																? dataPoint.score === 0
-																	? 0
-																	: 100
-																: ((confidenceScoreSevenDaysAgo.dataPoints[key]
-																		.score -
-																		dataPoint.score) *
-																		100) /
-																  confidenceScoreSevenDaysAgo.dataPoints[key]
-																		.score
-															: 0
-													}
+													value={calcPctChange(
+														key,
+														confidenceScoreSevenDaysAgo,
+														dataPoint
+													)}
 													description={dataPoint.title}
 												/>
 											))}
