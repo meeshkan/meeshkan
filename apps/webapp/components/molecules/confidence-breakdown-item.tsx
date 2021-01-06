@@ -1,4 +1,3 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
 import { ListItem, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { useColorFromNumber } from '../../hooks/use-color-from-number';
 

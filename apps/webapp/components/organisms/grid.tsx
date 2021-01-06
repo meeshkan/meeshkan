@@ -87,10 +87,9 @@ const getReleaseStartFromProject = (a) =>
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
-	const slugifiedProjectName = useMemo(
-		() => createSlug(selectedProject.name),
-		[selectedProject.name]
-	);
+	const slugifiedProjectName = useMemo(() => createSlug(selectedProject.name), [
+		selectedProject.name,
+	]);
 
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
