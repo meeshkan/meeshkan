@@ -145,9 +145,11 @@ export const getConfidenceScore = (
 			title: 'Test Coverage Score',
 			maxPossible: 30,
 			score:
-				(userStories.filter((story) => story.isTestCase).length *
-					MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
-				userStories.length,
+				userStories.length === 0
+					? 0
+					: (userStories.filter((story) => story.isTestCase).length *
+							MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
+					  userStories.length,
 			timestamp: new Date().getTime(),
 		},
 		...userStories
