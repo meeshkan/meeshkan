@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { FilePlusIcon } from '@frontend/chakra-theme';
 import { UserContext, AvatarFile } from '../../utils/user';
-import { FILE_UPLOAD_INFO } from '../../utils/8base';
+import { FILE_UPLOAD_INFO } from '../../graphql/file';
 import { eightBaseClient } from '../../utils/graphql';
 
 const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });

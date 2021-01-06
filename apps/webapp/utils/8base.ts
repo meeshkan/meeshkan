@@ -1,16 +1,5 @@
-import { gql } from 'graphql-request';
 import { eightBaseClient } from './graphql';
-
-export const FILE_UPLOAD_INFO = gql`
-	query FileUploadInfo {
-		fileUploadInfo {
-			policy
-			signature
-			apiKey
-			path
-		}
-	}
-`;
+import { FILE_UPLOAD_INFO } from '../graphql/file';
 
 export const getFileUploadInfo = async (idToken: string) => {
 	const client = eightBaseClient(idToken);

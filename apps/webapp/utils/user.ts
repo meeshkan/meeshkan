@@ -1,5 +1,13 @@
 import { createContext } from 'react';
-import { gql } from 'graphql-request';
+import {
+	CURRENT_USER_QUERY,
+	USER_SIGN_UP_MUTATION,
+	UPDATE_USER_MUTATION,
+	UPDATE_AVATAR_MUTATION,
+	USER_AVATAR_QUERY,
+	USER_PROFILE_QUERY,
+	UPDATE_PRODUCT_NOTIFICATIONS_MUTATION,
+} from '../graphql/user';
 import { eightBaseClient } from './graphql';
 import { uploadFileFromUrl } from './8base';
 import { Intercom } from './intercom';
@@ -142,24 +150,6 @@ export const goToLogin = () => {
 	window.location.href = loginHref;
 };
 
-export const CURRENT_USER_QUERY = gql`
-	query CurrentUser {
-		user {
-			id
-			email
-		}
-	}
-`;
-
-const USER_SIGN_UP_MUTATION = gql`
-	mutation UserSignUp($user: UserCreateInput!, $authProfileId: ID) {
-		userSignUpWithToken(user: $user, authProfileId: $authProfileId) {
-			id
-			email
-		}
-	}
-`;
-
 export const getUserId = async (idToken: string) => {
 	const client = eightBaseClient(idToken);
 	const data = await client.request(CURRENT_USER_QUERY);
@@ -175,14 +165,6 @@ const splitName = (name: string): { firstName: string; lastName: string } => {
 		lastName,
 	};
 };
-
-const UPDATE_USER_MUTATION = gql`
-	mutation UpdateUser($id: ID!, $user: UserUpdateInput!) {
-		userUpdate(filter: { id: $id }, data: $user) {
-			id
-		}
-	}
-`;
 
 const uploadAvatar = async (idToken: string, avatar: string) => {
 	const { filename, url } = await uploadFileFromUrl(idToken, avatar);
@@ -250,21 +232,6 @@ export const updateProfile = async (
 	return result;
 };
 
-const UPDATE_AVATAR_MUTATION = gql`
-	mutation UpdateAvatar($id: ID!, $fileId: String!, $filename: String!) {
-		userUpdate(
-			filter: { id: $id }
-			data: { avatar: { create: { fileId: $fileId, filename: $filename } } }
-		) {
-			avatar {
-				id
-				downloadUrl
-				shareUrl
-			}
-		}
-	}
-`;
-
 export const updateAvatar = async (
 	idToken: string,
 	data: { fileId: string; filename: string }
@@ -288,17 +255,6 @@ export const updateAvatar = async (
 	return result;
 };
 
-const USER_AVATAR_QUERY = gql`
-	query CurrentUser {
-		user {
-			avatar {
-				downloadUrl
-				shareUrl
-			}
-		}
-	}
-`;
-
 export const getUserAvatar = async (idToken: string) => {
 	const client = eightBaseClient(idToken);
 	try {
@@ -310,17 +266,6 @@ export const getUserAvatar = async (idToken: string) => {
 	}
 };
 
-const USER_PROFILE_QUERY = gql`
-	query CurrentUser {
-		user {
-			firstName
-			lastName
-			jobTitle
-			productNotifications
-		}
-	}
-`;
-
 export const getUserProfile = async (idToken: string) => {
 	const client = eightBaseClient(idToken);
 	try {
@@ -331,17 +276,6 @@ export const getUserProfile = async (idToken: string) => {
 		return error;
 	}
 };
-
-const UPDATE_PRODUCT_NOTIFICATIONS_MUTATION = gql`
-	mutation UpdateProductNotifications($id: ID!, $productNotifications: Boolean!) {
-		userUpdate(
-			filter: { id: $id }
-			data: { productNotifications: $productNotifications }
-		) {
-			id
-		}
-	}
-`;
 
 export const updateProductNotifications = async (
 	idToken: string,
