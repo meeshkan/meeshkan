@@ -17,8 +17,8 @@ import {
 	Flex,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { mutate } from 'swr';
 import { CopyIcon, TrashIcon } from '@frontend/chakra-theme';
+import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
 import GridCard from '../../components/molecules/grid-card';
@@ -32,12 +32,13 @@ import {
 	Member,
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { REMOVE_TEAM_MEMBER } from '../../graphql/settings';
+import { REMOVE_TEAM_MEMBER } from '../../graphql/project';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
 	const toast = useToast();
-	const { productNotifications, idToken, project } = useContext(UserContext);
+	const user = useContext(UserContext);
+	const { productNotifications, idToken, project, projects, mutate: mutateUser } = user;
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
@@ -83,18 +84,31 @@ const Settings = () => {
 	const handleSwitchToggle = async (event: ChangeEvent<HTMLInputElement>) => {
 		const { checked } = event.target;
 		setProductUpdates(checked);
+
 		await updateProductNotifications(idToken, {
 			productNotifications: checked,
 		});
+
+		await mutateUser({ ...user, productNotifications: checked }, false);
 	};
 
-	const removeTeamMember = (memberEmail: string) => {
+	const removeTeamMember = async (memberEmail: string) => {
 		const request = client.request(REMOVE_TEAM_MEMBER, {
 			projectId: project.id,
 			memberEmail: memberEmail,
 		});
-		setMembers(members.filter((member) => member.email !== memberEmail));
-		mutate('/api/session');
+
+		const updatedMembers = members.filter((member) => member.email !== memberEmail);
+		setMembers(updatedMembers);
+
+		const selectedProjectIndex = _.findIndex(
+			projects,
+			currentProject => currentProject.id === project.id
+		);
+
+		projects[selectedProjectIndex].members.items = members;
+		await mutateUser({ ...user, projects });
+
 		return request;
 	};
 

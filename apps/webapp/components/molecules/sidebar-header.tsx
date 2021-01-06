@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import {
 	Box,
 	Flex,
@@ -37,7 +37,10 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const slugifiedProjectName = createSlug(project.name);
+	const slugifiedProjectName = useMemo(
+		() => createSlug(project?.name || ''),
+		[project?.name]
+	);
 
 	const handleLogoutClick = () => {
 		Router.push('/api/logout');

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import {
 	Box,
 	Stack,
@@ -87,7 +87,10 @@ const getReleaseStartFromProject = (a) =>
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
-	const slugifiedProjectName = createSlug(selectedProject.name);
+	const slugifiedProjectName = useMemo(
+		() => createSlug(selectedProject.name),
+		[selectedProject.name]
+	);
 
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents

@@ -7,7 +7,6 @@ import {
 	Input,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { mutate } from 'swr';
 import AvatarField from './avatar-field';
 import { UserContext, AvatarFile } from '../../utils/user';
 import { createProject } from '../../utils/project';
@@ -23,7 +22,8 @@ type CreateProjectFormProps = {
 
 const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 	const router = useRouter();
-	const { idToken } = useContext(UserContext);
+	const user = useContext(UserContext);
+	const { idToken, mutate: mutateUser, projects } = user;
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 	const [avatarFile, setAvatarFile] = useState<AvatarFile>();
 	const [error, setError] = useState('');
@@ -42,7 +42,9 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 			return;
 		}
 
-		await mutate('/api/session');
+		const [newProject] = data.userUpdate.projects.items;
+		projects.push(newProject)
+		await mutateUser({ ...user, projects });
 		setLoading(false);
 
         if (router.pathname === '/new-project') {

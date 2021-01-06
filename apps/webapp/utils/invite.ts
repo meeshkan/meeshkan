@@ -1,26 +1,12 @@
-import { gql } from 'graphql-request';
 import { eightBaseClient } from './graphql';
-
-const PROJECT_JOIN_MUTATION = gql`
-	mutation JoinProject($userId: ID!, $inviteLink: String!) {
-		configurationUpdate(
-			filter: { inviteLink: $inviteLink }
-			data: { project: { update: { members: { connect: { id: $userId } } } } }
-		) {
-			project {
-				id
-				name
-			}
-		}
-	}
-`;
+import { JOIN_PROJECT } from '../graphql/project';
 
 export const propagateInviteToDb = async (inviteId: string, userId: string) => {
 	const client = eightBaseClient(process.env.EIGHTBASE_TOKEN);
 
 	let result;
 	try {
-		result = await client.request(PROJECT_JOIN_MUTATION, {
+		result = await client.request(JOIN_PROJECT, {
 			userId: userId,
 			inviteLink: `https://app.meeshkan.com/invite/${inviteId}`,
 		});

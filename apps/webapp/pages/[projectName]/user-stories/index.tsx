@@ -34,7 +34,7 @@ import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
 import { show as showIntercom } from '../../../utils/intercom';
-import { PROJECT_USER_STORIES } from '../../../graphql/user-stories/index';
+import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 
 type StartButtonProps = {
@@ -181,8 +181,13 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
 
+	const slugifiedProjectName = useMemo(
+		() => createSlug(project.name),
+		[project.name]
+	);
+
 	const handleEdit = (id: string) => {
-		router.push(`/${createSlug(project.name)}/user-stories/${id}`);
+		router.push(`/${slugifiedProjectName}/user-stories/${id}`);
 	};
 
 	const { found, loading } = useValidateSelectedProject();

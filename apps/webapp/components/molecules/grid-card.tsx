@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 import { BoxProps, Heading, Divider, Image } from '@chakra-ui/react';
 import Card from '../atoms/card';
 import { createSlug } from '../../utils/createSlug';
@@ -21,7 +21,7 @@ const GridCard = ({
 }: GridCardProps) => {
 	return (
 		<Card overflowY="auto" {...props}>
-			<a id={anchor && createSlug(title)}>
+			<a id={anchor && useMemo(() => createSlug(title), [title])}>
 				<Heading
 					as="h2"
 					d="flex"
