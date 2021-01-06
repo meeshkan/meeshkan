@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../utils/createSlug';
 import LoadingScreen from '../components/organisms/loading-screen';
@@ -18,11 +18,16 @@ const withAuth = (PageComponent) => {
 		const [project, setProject] = useState({ id: -1, name: '' });
 		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
+		const slugifiedProjectName = useMemo(
+			() => createSlug(project.name),
+			[project.name]
+		);
+
 		useEffect(() => {
-			if (project.name) {
-				router.push(`/${createSlug(project.name)}`);
+			if (slugifiedProjectName) {
+				router.push(`/${slugifiedProjectName}`);
 			}
-		}, [project]);
+		}, [slugifiedProjectName]);
 
 		if (isInvitePage) {
 			return <PageComponent {...props} />;
