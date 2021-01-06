@@ -1,6 +1,6 @@
 import { gql } from 'graphql-request';
 
-export const PROJECT_CREATE_MUTATION = gql`
+export const CREATE_PROJECT = gql`
 	mutation(
 		$userId: ID!
 		$projectName: String!
@@ -28,7 +28,7 @@ export const PROJECT_CREATE_MUTATION = gql`
 	}
 `;
 
-export const PROJECT_UPDATE_MUTATION = gql`
+export const UPDATE_PROJECT = gql`
 	mutation UpdateProject(
 		$projectId: ID!
 		$projectName: String!
@@ -119,7 +119,7 @@ export const PROJECTS = gql`
 	}
 `;
 
-export const PROJECT_JOIN_MUTATION = gql`
+export const JOIN_PROJECT = gql`
 	mutation JoinProject($userId: ID!, $inviteLink: String!) {
 		configurationUpdate(
 			filter: { inviteLink: $inviteLink }

@@ -1,12 +1,12 @@
 import { createContext } from 'react';
 import {
-	CURRENT_USER_QUERY,
-	USER_SIGN_UP_MUTATION,
-	UPDATE_USER_MUTATION,
-	UPDATE_AVATAR_MUTATION,
-	USER_AVATAR_QUERY,
-	USER_PROFILE_QUERY,
-	UPDATE_PRODUCT_NOTIFICATIONS_MUTATION,
+	CURRENT_USER,
+	SIGN_UP_USER,
+	UPDATE_USER,
+	UPDATE_AVATAR,
+	USER_AVATAR,
+	USER_PROFILE,
+	UPDATE_PRODUCT_NOTIFICATIONS,
 } from '../graphql/user';
 import { eightBaseClient } from './graphql';
 import { uploadFileFromUrl } from './8base';
@@ -152,7 +152,7 @@ export const goToLogin = () => {
 
 export const getUserId = async (idToken: string) => {
 	const client = eightBaseClient(idToken);
-	const data = await client.request(CURRENT_USER_QUERY);
+	const data = await client.request(CURRENT_USER);
 	return data.user.id;
 };
 
@@ -177,9 +177,9 @@ const uploadAvatar = async (idToken: string, avatar: string) => {
 
 export const confirmOrCreateUser = async (user: IUser) => {
 	const client = eightBaseClient(user.idToken);
-	await client.request(CURRENT_USER_QUERY).catch(async () => {
+	await client.request(CURRENT_USER).catch(async () => {
 		const { userSignUpWithToken } = await client.request(
-			USER_SIGN_UP_MUTATION,
+			SIGN_UP_USER,
 			{
 				user: {
 					email: user.email,
@@ -189,7 +189,7 @@ export const confirmOrCreateUser = async (user: IUser) => {
 		);
 		const { firstName, lastName } = splitName(user.name);
 		const { fileId, filename } = await uploadAvatar(user.idToken, user.avatar);
-		await client.request(UPDATE_USER_MUTATION, {
+		await client.request(UPDATE_USER, {
 			id: userSignUpWithToken.id,
 			user: {
 				firstName,
@@ -215,7 +215,7 @@ export const updateProfile = async (
 
 	let result;
 	try {
-		result = await client.request(UPDATE_USER_MUTATION, {
+		result = await client.request(UPDATE_USER, {
 			id,
 			user: {
 				firstName,
@@ -241,7 +241,7 @@ export const updateAvatar = async (
 
 	let result;
 	try {
-		result = await client.request(UPDATE_AVATAR_MUTATION, {
+		result = await client.request(UPDATE_AVATAR, {
 			id,
 			fileId: data.fileId,
 			filename: data.filename,
@@ -258,7 +258,7 @@ export const updateAvatar = async (
 export const getUserAvatar = async (idToken: string) => {
 	const client = eightBaseClient(idToken);
 	try {
-		const data = await client.request(USER_AVATAR_QUERY);
+		const data = await client.request(USER_AVATAR);
 		return data.user.avatar?.downloadUrl || '';
 	} catch (error) {
 		console.error(error);
@@ -269,7 +269,7 @@ export const getUserAvatar = async (idToken: string) => {
 export const getUserProfile = async (idToken: string) => {
 	const client = eightBaseClient(idToken);
 	try {
-		const data = await client.request(USER_PROFILE_QUERY);
+		const data = await client.request(USER_PROFILE);
 		return data.user;
 	} catch (error) {
 		console.error(error);
@@ -286,7 +286,7 @@ export const updateProductNotifications = async (
 
 	let result;
 	try {
-		result = await client.request(UPDATE_PRODUCT_NOTIFICATIONS_MUTATION, {
+		result = await client.request(UPDATE_PRODUCT_NOTIFICATIONS, {
 			id,
 			productNotifications: data.productNotifications,
 		});
