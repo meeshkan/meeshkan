@@ -1,153 +1,17 @@
-import { gql } from 'graphql-request';
+import {
+	CREATE_PROJECT,
+	UPDATE_PROJECT,
+	PROJECTS,
+} from '../graphql/project';
+import { CURRENT_USER } from '../graphql/user';
 import { eightBaseClient } from './graphql';
-import { CURRENT_USER_QUERY } from './user';
-
-const PROJECT_CREATE_MUTATION = gql`
-	mutation(
-		$userId: ID!
-		$projectName: String!
-		$inviteLink: String!
-		$avatar: ProjectAvatarRelationInput
-	) {
-		userUpdate(
-			filter: { id: $userId }
-			data: {
-				projects: {
-					create: {
-						name: $projectName
-						configuration: { create: { inviteLink: $inviteLink } }
-						avatar: $avatar
-					}
-				}
-			}
-		) {
-			projects(filter: { name: { equals: $projectName } }) {
-				items {
-					id
-					name
-					avatar {
-						downloadUrl
-						shareUrl
-					}
-					configuration {
-						inviteLink
-					}
-					hasReceivedEvents
-					members {
-						count
-						items {
-							firstName
-							lastName
-							email
-							avatar {
-								downloadUrl
-							}
-						}
-					}	
-				}
-			}
-		}
-	}
-`;
-
-const PROJECT_UPDATE_MUTATION = gql`
-	mutation UpdateProject(
-		$projectId: ID!
-		$projectName: String!
-		$avatar: ProjectAvatarUpdateRelationInput
-	) {
-		projectUpdate(
-			filter: {
-				id: $projectId
-			}
-			data: {
-				name: $projectName
-				avatar: $avatar
-			}
-		) {
-			id
-			name
-			avatar {
-				downloadUrl
-			}
-		}
-	}
-`;
-
-const PROJECTS = gql`
-	query {
-		user {
-			projects {
-				items {
-					id
-					name
-					avatar {
-						downloadUrl
-						shareUrl
-					}
-					configuration {
-						inviteLink
-					}
-					hasReceivedEvents
-					members {
-						count
-						items {
-							firstName
-							lastName
-							email
-							avatar {
-								downloadUrl
-							}
-						}
-					}
-					userStories {
-						count
-						items {
-							id
-							failing {
-								count
-								items {
-									firstIntroduction
-									isResolved
-								}
-							}
-							title
-							testCreatedDate
-							isTestCase
-							significance
-							createdAt
-							testRuns {
-								count
-								items {
-									status
-									dateTime
-									userStories {
-										items {
-											id
-										}
-									}
-								}
-							}
-						}
-					}
-					release {
-						count
-						items {
-							releaseDate
-						}
-					}
-				}
-			}
-		}
-	}
-`;
 
 export const createProject = async (
 	idToken: string,
 	data: { name: string; fileId: string; filename: string }
 ) => {
 	const client = eightBaseClient(idToken);
-	const { user } = await client.request(CURRENT_USER_QUERY);
+	const { user } = await client.request(CURRENT_USER);
 
 	const { name, fileId, filename } = data;
 	const avatar = {
@@ -159,7 +23,7 @@ export const createProject = async (
 
 	let result;
 	try {
-		result = await client.request(PROJECT_CREATE_MUTATION, {
+		result = await client.request(CREATE_PROJECT, {
 			userId: user.id,
 			projectName: name,
 			inviteLink: Math.random().toString(36).substring(7),
@@ -191,7 +55,7 @@ export const updateProject = async (
 
 	let result;
 	try {
-		result = await client.request(PROJECT_UPDATE_MUTATION, {
+		result = await client.request(UPDATE_PROJECT, {
 			projectId: id,
 			projectName: name,
 			avatar: fileId && filename ? avatar : undefined,
