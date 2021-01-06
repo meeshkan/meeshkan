@@ -3,7 +3,7 @@ import {
 	Box,
 	Stack,
 	Flex,
-	// List,
+	List,
 	Button,
 	Menu,
 	MenuButton,
@@ -14,7 +14,6 @@ import {
 	Heading,
 	useColorModeValue,
 	Text,
-	List,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -26,7 +25,7 @@ import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
 // import ActivityListItem from '../molecules/activity-list-item';
 // import LinearListItem from '../molecules/linear-list-item';
-// import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
 import {
@@ -40,7 +39,6 @@ import {
 	sumOfObjectValues,
 	getLastSevenDaysInFormat,
 } from '../../utils/metrics';
-import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 require('../molecules/rounded-chart');
 
 const barData = {
@@ -300,11 +298,12 @@ const Grid = (props) => {
 										fontSize="sm"
 									>
 										{Object.entries(confidenceScore.dataPoints)
-											.slice(0, 10)
-											.map(([k, dp]) => (
+											.slice(0, 8)
+											.map(([k, dataPoints], index) => (
 												<ConfidenceBreakdownItem
-													value={dp.score * 100}
-													description={dp.title}
+													key={index}
+													value={dataPoints.score * 100}
+													description={dataPoints.title}
 												/>
 											))}
 									</List>
