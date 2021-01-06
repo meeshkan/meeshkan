@@ -173,6 +173,11 @@ const Grid = (props) => {
 		releaseStart,
 		userStories
 	);
+	const confidenceChange = Object.entries(confidenceScore.dataPoints).filter(
+		([key, dataPoint]) =>
+			0 !== calcPctChange(key, confidenceScoreSevenDaysAgo, dataPoint)
+	);
+
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
 	const doughnutDataLabels = Object.keys(latestTestStates);
@@ -301,28 +306,23 @@ const Grid = (props) => {
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
 									>
-										{Object.entries(confidenceScore.dataPoints)
-											.filter(
-												([key, dataPoint]) =>
-													0 !==
-													calcPctChange(
-														key,
-														confidenceScoreSevenDaysAgo,
-														dataPoint
-													)
-											)
-											.slice(0, 8)
-											.map(([key, dataPoint]) => (
-												<ConfidenceBreakdownItem
-													key={key}
-													value={calcPctChange(
-														key,
-														confidenceScoreSevenDaysAgo,
-														dataPoint
-													)}
-													description={dataPoint.title}
-												/>
-											))}
+										{confidenceChange.length === 0 ? (
+											<Text>
+												There hasn't been any change to your confidence score in
+												the last 7 days.
+											</Text>
+										) : null}
+										{confidenceChange.slice(0, 8).map(([key, dataPoint]) => (
+											<ConfidenceBreakdownItem
+												key={key}
+												value={calcPctChange(
+													key,
+													confidenceScoreSevenDaysAgo,
+													dataPoint
+												)}
+												description={dataPoint.title}
+											/>
+										))}
 									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
