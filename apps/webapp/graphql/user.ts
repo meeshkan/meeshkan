@@ -22,6 +22,11 @@ export const UPDATE_USER = gql`
 	mutation UPDATE_USER($id: ID!, $user: UserUpdateInput!) {
 		userUpdate(filter: { id: $id }, data: $user) {
 			id
+			firstName
+			lastName
+			avatar {
+				downloadUrl
+			}
 		}
 	}
 `;

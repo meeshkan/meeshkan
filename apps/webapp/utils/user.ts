@@ -4,7 +4,6 @@ import {
 	CURRENT_USER,
 	SIGN_UP_USER,
 	UPDATE_USER,
-	UPDATE_AVATAR,
 	USER_AVATAR,
 	USER_PROFILE,
 	UPDATE_PRODUCT_NOTIFICATIONS,
@@ -187,7 +186,14 @@ export const confirmOrCreateUser = async (user: IUser) => {
 
 export const updateProfile = async (
 	idToken: string,
-	data: { name: string; jobTitle: string }
+	data: {
+		name: string;
+		jobTitle: string;
+		avatar: {
+			id: string;
+			fileId: string;
+		}
+	}
 ) => {
 	const client = eightBaseClient(idToken);
 	const id = await getUserId(idToken);
@@ -201,30 +207,10 @@ export const updateProfile = async (
 				firstName,
 				lastName,
 				jobTitle: data.jobTitle,
+				avatar: {
+					connect: data.avatar,
+				},
 			},
-		});
-	} catch (error) {
-		result = {
-			error: error.response.errors[0],
-		};
-	}
-
-	return result;
-};
-
-export const updateAvatar = async (
-	idToken: string,
-	data: { fileId: string; filename: string }
-) => {
-	const client = eightBaseClient(idToken);
-	const id = await getUserId(idToken);
-
-	let result;
-	try {
-		result = await client.request(UPDATE_AVATAR, {
-			id,
-			fileId: data.fileId,
-			filename: data.filename,
 		});
 	} catch (error) {
 		result = {
