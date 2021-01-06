@@ -13,7 +13,7 @@ export interface IWithAuthProps {
 const withAuth = (PageComponent) => {
 	return (props: IWithAuthProps): JSX.Element => {
 		const router = useRouter();
-		const { user, loading, mutate } = useFetchUser(props.user);
+		const { user, loading, mutate } = useFetchUser();
 		const [project, setProject] = useState<Project>(null);
 		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
