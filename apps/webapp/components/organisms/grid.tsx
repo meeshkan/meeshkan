@@ -84,13 +84,7 @@ const getReleaseStartFromProject = (a) =>
 
 const calcPctChange = (key, confidenceScoreSevenDaysAgo, dataPoint) =>
 	confidenceScoreSevenDaysAgo.dataPoints[key]
-		? confidenceScoreSevenDaysAgo.dataPoints[key].score === 0
-			? dataPoint.score === 0
-				? 0
-				: 100
-			: ((confidenceScoreSevenDaysAgo.dataPoints[key].score - dataPoint.score) *
-					100) /
-			  confidenceScoreSevenDaysAgo.dataPoints[key].score
+		? dataPoint.score - confidenceScoreSevenDaysAgo.dataPoints[key].score
 		: 0;
 
 const Grid = (props) => {
