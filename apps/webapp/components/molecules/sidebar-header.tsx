@@ -39,7 +39,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 
 	const slugifiedProjectName = useMemo(
 		() => createSlug(project?.name || ''),
-		[project.name]
+		[project?.name]
 	);
 
 	const handleLogoutClick = () => {
