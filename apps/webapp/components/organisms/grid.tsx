@@ -300,25 +300,43 @@ const Grid = (props) => {
 										fontSize="sm"
 									>
 										{Object.entries(confidenceScore.dataPoints)
+											.filter(
+												([key, dataPoint]) =>
+													0 !==
+													(confidenceScoreSevenDaysAgo.dataPoints[key]
+														? confidenceScoreSevenDaysAgo.dataPoints[key]
+																.score === 0
+															? dataPoint.score === 0
+																? 0
+																: 100
+															: ((confidenceScoreSevenDaysAgo.dataPoints[key]
+																	.score -
+																	dataPoint.score) *
+																	100) /
+															  confidenceScoreSevenDaysAgo.dataPoints[key]
+																	.score
+														: 0)
+											)
 											.slice(0, 10)
-											.map(([k, dp]) => (
+											.map(([key, dataPoint]) => (
 												<ConfidenceBreakdownItem
+													key={key}
 													value={
-														confidenceScoreSevenDaysAgo.dataPoints[k]
-															? confidenceScoreSevenDaysAgo.dataPoints[k]
+														confidenceScoreSevenDaysAgo.dataPoints[key]
+															? confidenceScoreSevenDaysAgo.dataPoints[key]
 																	.score === 0
-																? dp.score === 0
+																? dataPoint.score === 0
 																	? 0
 																	: 100
-																: ((confidenceScoreSevenDaysAgo.dataPoints[k]
+																: ((confidenceScoreSevenDaysAgo.dataPoints[key]
 																		.score -
-																		dp.score) *
+																		dataPoint.score) *
 																		100) /
-																  confidenceScoreSevenDaysAgo.dataPoints[k]
+																  confidenceScoreSevenDaysAgo.dataPoints[key]
 																		.score
 															: 0
 													}
-													description={dp.title}
+													description={dataPoint.title}
 												/>
 											))}
 									</List>
