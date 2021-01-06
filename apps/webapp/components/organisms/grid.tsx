@@ -254,7 +254,14 @@ const Grid = (props) => {
 									confidenceScore.displayableMetric.value.toFixed(2)
 								)}
 								percentageChange={
-									confidenceScore.displayableMetric.percentageChange
+									confidenceScoreSevenDaysAgo.displayableMetric.value === 0
+										? confidenceScore.displayableMetric.value === 0
+											? 0
+											: 100
+										: ((confidenceScoreSevenDaysAgo.displayableMetric.value -
+												confidenceScore.displayableMetric.value) *
+												100) /
+										  confidenceScoreSevenDaysAgo.displayableMetric.value
 								}
 								dataPoints={confidenceScore.displayableMetric.dataPoints}
 								my={[8, 0, 0, 0]}
@@ -296,21 +303,6 @@ const Grid = (props) => {
 												<ConfidenceBreakdownItem
 													value={dp.score * 100}
 													description={dp.title}
-													pctChange={
-														confidenceScoreSevenDaysAgo.dataPoints[k]
-															? confidenceScoreSevenDaysAgo.dataPoints[k]
-																	.score === 0
-																? dp.score === 0
-																	? 0
-																	: 100
-																: ((confidenceScoreSevenDaysAgo.dataPoints[k]
-																		.score -
-																		dp.score) *
-																		100) /
-																  confidenceScoreSevenDaysAgo.dataPoints[k]
-																		.score
-															: undefined
-													}
 												/>
 											))}
 									</List>
