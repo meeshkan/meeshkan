@@ -285,7 +285,7 @@ const Grid = (props) => {
 							/>
 							<StatCard
 								isPercentage={false}
-								title="Test run"
+								title="Tests ran"
 								value={testRuns.value}
 								percentageChange={testRuns.percentageChange}
 								dataPoints={testRuns.dataPoints}
@@ -301,7 +301,7 @@ const Grid = (props) => {
 								spacingY={6}
 								w="100%"
 							>
-								<GridCard title="Confidence Change">
+								<GridCard title="Confidence change">
 									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
