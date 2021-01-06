@@ -50,9 +50,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 		);
 
 		projects[selectedProjectIndex].name = formData.name;
-		projects[selectedProjectIndex].avatar = {
-			downloadUrl: data.projectUpdate.avatar.downloadUrl,
-		};
+		projects[selectedProjectIndex].avatar = data.projectUpdate.avatar.downloadUrl;
 
 		await mutateUser({ ...user, projects }, false);
 		Router.push(`/${createSlug(formData.name)}/settings`);
