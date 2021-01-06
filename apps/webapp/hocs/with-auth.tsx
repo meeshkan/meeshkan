@@ -25,7 +25,9 @@ const withAuth = (PageComponent) => {
 
 		useEffect(() => {
 			if (slugifiedProjectName) {
-				router.push(`/${slugifiedProjectName}`);
+				router.push(router.pathname.includes('[projectName]')
+					? router.pathname.replace('[projectName]', slugifiedProjectName)
+					: `/${slugifiedProjectName}`);
 			}
 		}, [slugifiedProjectName]);
 

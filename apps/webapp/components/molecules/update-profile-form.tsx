@@ -60,7 +60,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 			setStep(2);
 		}
 
-		mutate('/api/session');
+		await mutate('/api/session');
 		setLoading(false);
 	};
 

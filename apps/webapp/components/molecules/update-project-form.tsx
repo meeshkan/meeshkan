@@ -41,7 +41,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 			return;
 		}
 
-		mutate('/api/session');
+		await mutate('/api/session');
 		setLoading(false);
 	};
 
