@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request';
 
 export const CURRENT_USER = gql`
-	query CurrentUser {
+	query CURRENT_USER {
 		user {
 			id
 			email
@@ -10,7 +10,7 @@ export const CURRENT_USER = gql`
 `;
 
 export const SIGN_UP_USER = gql`
-	mutation UserSignUp($user: UserCreateInput!, $authProfileId: ID) {
+	mutation SIGN_UP_USER($user: UserCreateInput!, $authProfileId: ID) {
 		userSignUpWithToken(user: $user, authProfileId: $authProfileId) {
 			id
 			email
@@ -19,7 +19,7 @@ export const SIGN_UP_USER = gql`
 `;
 
 export const UPDATE_USER = gql`
-	mutation UpdateUser($id: ID!, $user: UserUpdateInput!) {
+	mutation UPDATE_USER($id: ID!, $user: UserUpdateInput!) {
 		userUpdate(filter: { id: $id }, data: $user) {
 			id
 		}
@@ -27,7 +27,7 @@ export const UPDATE_USER = gql`
 `;
 
 export const UPDATE_AVATAR = gql`
-	mutation UpdateAvatar($id: ID!, $fileId: String!, $filename: String!) {
+	mutation UPDATE_AVATAR($id: ID!, $fileId: String!, $filename: String!) {
 		userUpdate(
 			filter: { id: $id }
 			data: { avatar: { create: { fileId: $fileId, filename: $filename } } }
@@ -42,7 +42,7 @@ export const UPDATE_AVATAR = gql`
 `;
 
 export const USER_AVATAR = gql`
-	query CurrentUser {
+	query USER_AVATAR {
 		user {
 			avatar {
 				downloadUrl
@@ -53,7 +53,7 @@ export const USER_AVATAR = gql`
 `;
 
 export const USER_PROFILE = gql`
-	query CurrentUser {
+	query USER_PROFILE {
 		user {
 			firstName
 			lastName
@@ -64,7 +64,10 @@ export const USER_PROFILE = gql`
 `;
 
 export const UPDATE_PRODUCT_NOTIFICATIONS = gql`
-	mutation UpdateProductNotifications($id: ID!, $productNotifications: Boolean!) {
+	mutation UPDATE_PRODUCT_NOTIFICATIONS(
+		$id: ID!
+		$productNotifications: Boolean!
+	) {
 		userUpdate(
 			filter: { id: $id }
 			data: { productNotifications: $productNotifications }

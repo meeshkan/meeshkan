@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request';
 
 export const CREATE_PROJECT = gql`
-	mutation(
+	mutation CREATE_PROJECT(
 		$userId: ID!
 		$projectName: String!
 		$inviteLink: String!
@@ -29,19 +29,14 @@ export const CREATE_PROJECT = gql`
 `;
 
 export const UPDATE_PROJECT = gql`
-	mutation UpdateProject(
+	mutation UPDATE_PROJECT(
 		$projectId: ID!
 		$projectName: String!
 		$avatar: ProjectAvatarUpdateRelationInput
 	) {
 		projectUpdate(
-			filter: {
-				id: $projectId
-			}
-			data: {
-				name: $projectName
-				avatar: $avatar
-			}
+			filter: { id: $projectId }
+			data: { name: $projectName, avatar: $avatar }
 		) {
 			id
 			name
@@ -53,7 +48,7 @@ export const UPDATE_PROJECT = gql`
 `;
 
 export const PROJECTS = gql`
-	query {
+	query PROJECTS {
 		user {
 			projects {
 				items {
@@ -120,7 +115,7 @@ export const PROJECTS = gql`
 `;
 
 export const JOIN_PROJECT = gql`
-	mutation JoinProject($userId: ID!, $inviteLink: String!) {
+	mutation JOIN_PROJECT($userId: ID!, $inviteLink: String!) {
 		configurationUpdate(
 			filter: { inviteLink: $inviteLink }
 			data: { project: { update: { members: { connect: { id: $userId } } } } }

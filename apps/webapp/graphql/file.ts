@@ -1,7 +1,7 @@
 import { gql } from 'graphql-request';
 
 export const FILE_UPLOAD_INFO = gql`
-	query FileUploadInfo {
+	query FILE_UPLOAD_INFO {
 		fileUploadInfo {
 			policy
 			signature
