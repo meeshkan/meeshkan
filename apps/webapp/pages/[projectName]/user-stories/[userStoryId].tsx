@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import Card from '../../../components/atoms/card';
 import {
 	Text,
@@ -49,10 +49,14 @@ const UserStory = (props: UserStoryProps) => {
 	const router = useRouter();
 	const toast = useToast();
 
-	const slugifiedProjectName = createSlug(project.name);
-	const currentPath = router.asPath;
-	const userStoryId = currentPath.substr(currentPath.length - 25);
-	const date = new Date().toISOString().replace('Z', '') + '+00:00';
+	const slugifiedProjectName = useMemo(
+		() => createSlug(project.name),
+		[project.name]
+	);
+
+	let currentPath = router.asPath;
+	let userStoryId = currentPath.substr(currentPath.length - 25);
+	let date = new Date().toISOString().replace('Z', '') + '+00:00';
 
 	const client = eightBaseClient(idToken);
 

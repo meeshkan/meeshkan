@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import { responseInterface } from 'swr';
 import {
 	CURRENT_USER,
 	SIGN_UP_USER,
@@ -11,8 +12,6 @@ import {
 import { eightBaseClient } from './graphql';
 import { uploadFileFromUrl } from './8base';
 import { Intercom } from './intercom';
-
-const isServer = typeof window === 'undefined';
 
 type Avatar = {
 	downloadUrl: string;
@@ -55,6 +54,7 @@ interface UserStory {
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
+	significance: 'low' | 'medium' | 'high';
 	testCreatedDate: string;
 	testRuns: TestRuns;
 }
@@ -95,6 +95,8 @@ export interface Project {
 export interface IUser {
 	id?: string;
 	email: string;
+	firstName?: string;
+	lastName?: string;
 	name?: string;
 	avatar: string;
 	nickname: string;
@@ -112,37 +114,15 @@ declare global {
 	}
 }
 
-export const UserContext = createContext(null);
+type IUserContext = IUser & {
+	project: Project;
+	setProject: (project: Project) => void;
+	mutate: responseInterface<void | IUser, any>['mutate'];
+} | null;
 
-export const getUser = (serverSideUser?: IUser): IUser | void => {
-	if (isServer) {
-		return serverSideUser;
-	}
-
-	return window.__user || serverSideUser;
-};
-
-export const removeUser = (): void => {
-	if (isServer) {
-		return;
-	}
-
-	delete window.__user;
-};
-
-export const storeUser = (user: IUser): void => {
-	if (isServer) {
-		return;
-	}
-
-	window.__user = user;
-};
+export const UserContext = createContext<IUserContext>(null);
 
 export const goToLogin = () => {
-	if (isServer) {
-		return;
-	}
-
 	const redirectTo = encodeURIComponent(
 		window.location.pathname + window.location.search
 	);
