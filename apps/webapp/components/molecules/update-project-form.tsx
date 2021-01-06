@@ -5,11 +5,13 @@ import {
 	FormErrorMessage,
 	Input,
 } from '@chakra-ui/react';
+import _ from 'lodash';
+import Router from 'next/router';
 import { useForm } from 'react-hook-form';
-import { mutate } from 'swr';
 import AvatarField from '../molecules/avatar-field';
 import { UserContext, AvatarFile } from '../../utils/user';
 import { updateProject } from '../../utils/project';
+import { createSlug } from '../../utils/createSlug';
 
 type ProjectFormInputs = {
 	name: string;
@@ -21,7 +23,8 @@ type UpdateProjectFormProps = {
 
 const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const [error, setError] = useState('');
-	const { project, idToken } = useContext(UserContext);
+	const user = useContext(UserContext);
+	const { projects, project, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState<string>(project.name);
 	const [avatarFile, setAvatarFile] = useState<AvatarFile>();
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
@@ -41,7 +44,18 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 			return;
 		}
 
-		await mutate('/api/session');
+		const selectedProjectIndex = _.findIndex(
+			projects,
+			currentProject => currentProject.id === project.id
+		);
+
+		projects[selectedProjectIndex].name = formData.name;
+		projects[selectedProjectIndex].avatar = {
+			downloadUrl: data.projectUpdate.avatar.downloadUrl,
+		};
+
+		await mutateUser({ ...user, projects }, false);
+		Router.push(`/${createSlug(formData.name)}/settings`);
 		setLoading(false);
 	};
 

@@ -12,7 +12,7 @@ export const useValidateSelectedProject = () => {
 
 	useEffect(() => {
 		const selectedProject = projects.find(
-			(project) => createSlug(project.name) === projectName
+			(project) => createSlug(project?.name || '') === projectName
 		);
 
 		if (selectedProject) {

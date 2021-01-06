@@ -1,15 +1,16 @@
 import { useEffect } from 'react';
-import useSWR from 'swr';
+import useSWR, { responseInterface } from 'swr';
 import { IUser } from '../utils/user';
 import { boot as bootIntercom } from '../utils/intercom';
 
 type IUseFetchUser = {
 	user: void | IUser;
 	loading: boolean;
-};
+	mutate: responseInterface<void | IUser, any>['mutate'];
+}
 
 export const useFetchUser = (): IUseFetchUser => {
-	const { data: user, error, isValidating } = useSWR('/api/session');
+	const { data: user, error, isValidating, mutate } = useSWR('/api/session');
 
 	useEffect(() => {
 		if (user) {
@@ -20,5 +21,5 @@ export const useFetchUser = (): IUseFetchUser => {
 		}
 	}, [user]);
 
-	return { user, loading: isValidating };
+	return { user, loading: isValidating, mutate };
 };

@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { gql } from 'graphql-request';
+import { responseInterface } from 'swr';
 import { eightBaseClient } from './graphql';
 import { uploadFileFromUrl } from './8base';
 import { Intercom } from './intercom';
@@ -86,6 +87,8 @@ export interface Project {
 export interface IUser {
 	id?: string;
 	email: string;
+	firstName?: string;
+	lastName?: string;
 	name?: string;
 	avatar: string;
 	nickname: string;
@@ -103,7 +106,13 @@ declare global {
 	}
 }
 
-export const UserContext = createContext(null);
+type IUserContext = IUser & {
+	project: Project;
+	setProject: (project: Project) => void;
+	mutate: responseInterface<void | IUser, any>['mutate'];
+} | null;
+
+export const UserContext = createContext<IUserContext>(null);
 
 export const goToLogin = () => {
 	const redirectTo = encodeURIComponent(
@@ -151,6 +160,11 @@ const UPDATE_USER_MUTATION = gql`
 	mutation UpdateUser($id: ID!, $user: UserUpdateInput!) {
 		userUpdate(filter: { id: $id }, data: $user) {
 			id
+			firstName
+			lastName
+			avatar {
+				downloadUrl
+			}	
 		}
 	}
 `;

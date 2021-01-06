@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
-import { mutate } from 'swr';
 import AvatarField from '../molecules/avatar-field';
 import {
 	UserContext,
@@ -37,7 +36,8 @@ type UpdateProfileFormProps = {
 
 const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfileFormProps) => {
 	const [error, setError] = useState('');
-	const { name: currentName, jobTitle, avatar, idToken } = useContext(UserContext);
+	const user = useContext(UserContext);
+	const { name: currentName, jobTitle, avatar, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState<string>(currentName);
 	const [title, setTitle] = useState(jobTitle || jobTitles[0]);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
@@ -60,7 +60,8 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 			setStep(2);
 		}
 
-		await mutate('/api/session');
+		const { firstName, lastName, avatar } = data.userUpdate;
+		await mutateUser({ ...user, firstName, lastName, avatar: avatar.downloadUrl });
 		setLoading(false);
 	};
 
