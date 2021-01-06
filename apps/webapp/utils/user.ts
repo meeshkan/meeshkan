@@ -5,8 +5,6 @@ import { eightBaseClient } from './graphql';
 import { uploadFileFromUrl } from './8base';
 import { Intercom } from './intercom';
 
-const isServer = typeof window === 'undefined';
-
 type Avatar = {
 	downloadUrl: string;
 	shareUrl?: string;
@@ -48,6 +46,7 @@ interface UserStory {
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
+	significance: 'low' | 'medium' | 'high';
 	testCreatedDate: string;
 	testRuns: TestRuns;
 }
@@ -115,35 +114,7 @@ type IUserContext = IUser & {
 
 export const UserContext = createContext<IUserContext>(null);
 
-export const getUser = (serverSideUser?: IUser): IUser | void => {
-	if (isServer) {
-		return serverSideUser;
-	}
-
-	return window.__user || serverSideUser;
-};
-
-export const removeUser = (): void => {
-	if (isServer) {
-		return;
-	}
-
-	delete window.__user;
-};
-
-export const storeUser = (user: IUser): void => {
-	if (isServer) {
-		return;
-	}
-
-	window.__user = user;
-};
-
 export const goToLogin = () => {
-	if (isServer) {
-		return;
-	}
-
 	const redirectTo = encodeURIComponent(
 		window.location.pathname + window.location.search
 	);

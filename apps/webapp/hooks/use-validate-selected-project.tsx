@@ -15,8 +15,8 @@ export const useValidateSelectedProject = () => {
 			(project) => createSlug(project?.name || '') === projectName
 		);
 
-		setLoading(project === null);
 		if (selectedProject) {
+			setLoading(false);
 			setProject(selectedProject);
 			setFound(true);
 		} else {

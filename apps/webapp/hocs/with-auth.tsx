@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../utils/createSlug';
 import LoadingScreen from '../components/organisms/loading-screen';
@@ -8,7 +8,6 @@ import { useFetchUser } from '../hooks/use-fetch-user';
 
 export interface IWithAuthProps {
 	cookies: string | undefined;
-	user?: IUser;
 }
 
 const withAuth = (PageComponent) => {
@@ -18,14 +17,18 @@ const withAuth = (PageComponent) => {
 		const [project, setProject] = useState<Project>(null);
 		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
+		const slugifiedProjectName = useMemo(
+			() => createSlug(project?.name || ''),
+			[project?.name]
+		);
+
 		useEffect(() => {
-			if (project?.name) {
-				const slugifiedProjectName = createSlug(project?.name || ''); 
+			if (slugifiedProjectName) {
 				router.push(router.pathname.includes('[projectName]')
 					? router.pathname.replace('[projectName]', slugifiedProjectName)
 					: `/${slugifiedProjectName}`);
 			}
-		}, [project]);
+		}, [slugifiedProjectName]);
 
 		if (isInvitePage) {
 			return <PageComponent {...props} />;
