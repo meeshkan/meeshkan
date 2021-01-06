@@ -1,14 +1,23 @@
-import { ListItem, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { ArrowDownIcon, ArrowUpIcon } from '@chakra-ui/icons';
+import {
+	ListItem,
+	Flex,
+	Text,
+	useColorModeValue,
+	Badge,
+} from '@chakra-ui/react';
 import { useColorFromNumber } from '../../hooks/use-color-from-number';
 
 type ConfidenceBreakdownItemProps = {
 	value: number;
 	description: string;
+	pctChange?: number;
 };
 
 const ConfidenceBreakdownItem = ({
 	value,
 	description,
+	pctChange,
 }: ConfidenceBreakdownItemProps) => {
 	const colorFromValue = useColorFromNumber('decimal');
 	const valueAsString = (Math.round(value * 100) / 100).toFixed(2);
@@ -31,6 +40,19 @@ const ConfidenceBreakdownItem = ({
 				{value > 0 ? `+${valueAsString}` : valueAsString}
 			</Text>
 			{description}
+			{typeof pctChange === 'number' && (
+				<Badge
+					variant="subtle"
+					colorScheme={pctChange >= 0 ? 'cyan' : 'red'}
+					rounded="lg"
+					ml={5}
+					fontSize={['xs', 'xs', 'sm', 'sm']}
+					p={1}
+				>
+					{pctChange >= 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}
+					{Math.abs(pctChange)}%
+				</Badge>
+			)}
 		</ListItem>
 	);
 };

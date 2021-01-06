@@ -79,9 +79,10 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
-// TODO: fill me in with correct info!
+// TODO: fill me in with correct info once we can determine
+// the release start date. For now, set arbitrarily to 30 days.
 const getReleaseStartFromProject = (a) =>
-	new Date().getTime() - 1000 * 60 * 60 * 24 * 5;
+	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
 
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
@@ -157,8 +158,17 @@ const Grid = (props) => {
 	const bugs = getBugs(userStories);
 	const testCoverage = getTestCoverage(userStories);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
-	const confidenceScore = getConfidenceScore(releaseStart, userStories);
-
+	const confidenceScore = getConfidenceScore(
+		new Date().getTime(),
+		releaseStart,
+		userStories
+	);
+	const confidenceScoreSevenDaysAgo = getConfidenceScore(
+		new Date().getTime() - 1000 * 60 * 60 * 24 * 7,
+		releaseStart,
+		userStories
+	);
+	console.log(confidenceScoreSevenDaysAgo);
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
 	const doughnutDataLabels = Object.keys(latestTestStates);
@@ -274,18 +284,35 @@ const Grid = (props) => {
 								spacingY={6}
 								w="100%"
 							>
-								<GridCard title="Confidence Breakdown">
+								<GridCard title="Confidence Change">
 									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
 									>
-										{Object.values(confidenceScore.dataPoints).map((dp) => (
-											<ConfidenceBreakdownItem
-												value={dp.score * 100}
-												description={dp.title}
-											/>
-										))}
+										{Object.entries(confidenceScore.dataPoints)
+											.slice(0, 10)
+											.map(([k, dp]) => (
+												<ConfidenceBreakdownItem
+													value={dp.score * 100}
+													description={dp.title}
+													pctChange={
+														confidenceScoreSevenDaysAgo.dataPoints[k]
+															? confidenceScoreSevenDaysAgo.dataPoints[k]
+																	.score === 0
+																? dp.score === 0
+																	? 0
+																	: 100
+																: ((confidenceScoreSevenDaysAgo.dataPoints[k]
+																		.score -
+																		dp.score) *
+																		100) /
+																  confidenceScoreSevenDaysAgo.dataPoints[k]
+																		.score
+															: undefined
+													}
+												/>
+											))}
 									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">

@@ -133,10 +133,10 @@ const MS_IN_14_DAYS = 1209600000;
 const storySignificance = (story: UserStory): number => 10.0;
 
 export const getConfidenceScore = (
+	howLongAgo: number,
 	releaseStarted: number,
 	userStories: UserStories['items']
 ): DisplayableMetricAndDataPoints => {
-	const now = new Date().getTime();
 	const totalSignificance = userStories
 		.map((story) => storySignificance(story))
 		.reduce((a, b) => a + b, 0);
@@ -155,17 +155,19 @@ export const getConfidenceScore = (
 		...userStories
 			.map((story) => {
 				const significance = storySignificance(story);
-				const testRunScoreComponents = story.testRuns.items.map((run) => {
-					const runTime = new Date(run.dateTime).getTime();
-					return {
-						maxPossible:
-							runTime < now - MS_IN_14_DAYS
-								? 0
-								: ((MS_IN_14_DAYS - (now - runTime)) / MS_IN_14_DAYS) *
-								  (runTime >= releaseStarted ? 1.0 : 0.5),
-						status: run.status,
-					};
-				});
+				const testRunScoreComponents = story.testRuns.items
+					.filter((run) => new Date(run.dateTime).getTime() < howLongAgo)
+					.map((run) => {
+						const runTime = new Date(run.dateTime).getTime();
+						return {
+							maxPossible:
+								runTime < howLongAgo - MS_IN_14_DAYS
+									? 0
+									: ((MS_IN_14_DAYS - (howLongAgo - runTime)) / MS_IN_14_DAYS) *
+									  (runTime >= releaseStarted ? 1.0 : 0.5),
+							status: run.status,
+						};
+					});
 				const maxPossibleTestRunScore = testRunScoreComponents
 					.map((a) => a.maxPossible)
 					.reduce((a, b) => a + b, 0);
@@ -181,12 +183,17 @@ export const getConfidenceScore = (
 					)
 					.reduce((a, b) => a + b, 0);
 				const maxPossible =
-					(significance * MAX_POSSIBLE_TEST_RUN_SCORE) / totalSignificance;
+					totalSignificance === 0
+						? 0
+						: (significance * MAX_POSSIBLE_TEST_RUN_SCORE) / totalSignificance;
 				return {
 					[story.id]: {
 						title: story.title,
 						timestamp: story.createdAt,
-						score: (maxPossible * actualTestRunScore) / maxPossibleTestRunScore,
+						score:
+							maxPossibleTestRunScore === 0
+								? 0
+								: (maxPossible * actualTestRunScore) / maxPossibleTestRunScore,
 						maxPossible,
 					},
 				};
