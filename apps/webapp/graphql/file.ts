@@ -10,3 +10,21 @@ export const FILE_UPLOAD_INFO = gql`
 		}
 	}
 `;
+
+export const UPLOAD_FILE = gql`
+	mutation UPLOAD_FILE(
+		$fileId: String!,
+		$filename: String!
+	) {
+		fileCreate(
+			data: {
+				fileId: $fileId
+				filename: $filename
+			}
+		) {
+			id
+			fileId
+			downloadUrl
+		}
+	}
+`;

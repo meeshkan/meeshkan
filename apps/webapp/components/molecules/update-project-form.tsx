@@ -9,7 +9,8 @@ import _ from 'lodash';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
-import { UserContext, AvatarFile } from '../../utils/user';
+import { UserContext } from '../../utils/user';
+import { UploadedFile } from '../../utils/file';
 import { updateProject } from '../../utils/project';
 import { createSlug } from '../../utils/createSlug';
 
@@ -26,7 +27,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const user = useContext(UserContext);
 	const { projects, project, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState<string>(project.name);
-	const [avatarFile, setAvatarFile] = useState<AvatarFile>();
+	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
@@ -35,7 +36,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 		const data = await updateProject(idToken, {
 			id: project.id,
 			name: formData.name,
-			...avatarFile,
+			avatar: avatarFile,
 		});
 
 		if (data.error) {
@@ -46,13 +47,11 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 
 		const selectedProjectIndex = _.findIndex(
 			projects,
-			currentProject => currentProject.id === project.id
+			(currentProject) => currentProject.id === project.id
 		);
 
 		projects[selectedProjectIndex].name = formData.name;
-		projects[selectedProjectIndex].avatar = {
-			downloadUrl: data.projectUpdate.avatar.downloadUrl,
-		};
+		projects[selectedProjectIndex].avatar = data.projectUpdate.avatar;
 
 		await mutateUser({ ...user, projects }, false);
 		Router.push(`/${createSlug(formData.name)}/settings`);
@@ -66,7 +65,6 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="projectUpdateForm">
 			<AvatarField
-				isProfileAvatar={false}
 				onUpload={setAvatarFile}
 				existingImageUrl={project?.avatar?.downloadUrl}
 			/>

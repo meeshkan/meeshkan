@@ -47,7 +47,7 @@ interface UserStoryFailing {
 	}>;
 }
 
-interface UserStory {
+export interface UserStory {
 	id: string;
 	failing: UserStoryFailing;
 	title: string;
@@ -113,11 +113,13 @@ declare global {
 	}
 }
 
-type IUserContext = IUser & {
-	project: Project;
-	setProject: (project: Project) => void;
-	mutate: responseInterface<void | IUser, any>['mutate'];
-} | null;
+type IUserContext =
+	| (IUser & {
+			project: Project;
+			setProject: (project: Project) => void;
+			mutate: responseInterface<void | IUser, any>['mutate'];
+	  })
+	| null;
 
 export const UserContext = createContext<IUserContext>(null);
 
@@ -157,15 +159,12 @@ const uploadAvatar = async (idToken: string, avatar: string) => {
 export const confirmOrCreateUser = async (user: IUser) => {
 	const client = eightBaseClient(user.idToken);
 	await client.request(CURRENT_USER).catch(async () => {
-		const { userSignUpWithToken } = await client.request(
-			SIGN_UP_USER,
-			{
-				user: {
-					email: user.email,
-				},
-				authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
-			}
-		);
+		const { userSignUpWithToken } = await client.request(SIGN_UP_USER, {
+			user: {
+				email: user.email,
+			},
+			authProfileId: process.env.EIGHT_BASE_AUTH_PROFILE_ID,
+		});
 		const { firstName, lastName } = splitName(user.name);
 		const { fileId, filename } = await uploadAvatar(user.idToken, user.avatar);
 		await client.request(UPDATE_USER, {
@@ -186,7 +185,14 @@ export const confirmOrCreateUser = async (user: IUser) => {
 
 export const updateProfile = async (
 	idToken: string,
-	data: { name: string; jobTitle: string }
+	data: {
+		name: string;
+		jobTitle: string;
+		avatar: {
+			id: string;
+			fileId: string;
+		}
+	}
 ) => {
 	const client = eightBaseClient(idToken);
 	const id = await getUserId(idToken);
@@ -200,6 +206,9 @@ export const updateProfile = async (
 				firstName,
 				lastName,
 				jobTitle: data.jobTitle,
+				avatar: {
+					connect: data.avatar,
+				},
 			},
 		});
 	} catch (error) {
