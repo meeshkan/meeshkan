@@ -11,6 +11,7 @@ const MenuToggleButton = ({ toggle }: MenuToggleButtonProps) => (
 		size="sm"
 		display={['inline', 'inline', 'inline', 'none']}
 		variant="ghost"
+		colorScheme="gray"
 	>
 		<svg height="19" viewBox="0 0 21.5 19" width="21.5">
 			<MenuIconPath

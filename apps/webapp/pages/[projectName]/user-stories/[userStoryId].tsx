@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import Card from '../../../components/atoms/card';
+import { mutate } from 'swr';
 import {
 	Text,
 	Flex,
@@ -11,17 +12,16 @@ import {
 	useColorModeValue,
 	Button,
 	Select,
-	toast,
 	useToast,
 } from '@chakra-ui/react';
-import { UserContext } from 'apps/webapp/utils/user';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { UserContext } from '../../../utils/user';
+import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
 	UPDATE_EXPECTED_TEST,
 	DELETE_REJECTED_RECORDING,
 	UPDATE_STORY_TITLE,
-} from '../../../graphql/user-stories/[userStoryId]';
+} from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
 	CrosshairIcon,
@@ -29,11 +29,13 @@ import {
 	CheckmarkIcon,
 	XmarkIcon,
 } from '@frontend/chakra-theme';
-import LoadingScreen from 'apps/webapp/components/organisms/loading-screen';
-import { StepList } from '../../../components/molecules/side-step-list';
 import { useRouter } from 'next/router';
-import Video from 'apps/webapp/components/atoms/video';
-import slugify from 'slugify';
+import LoadingScreen from '../../../components/organisms/loading-screen';
+import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
+import { StepList } from '../../../components/molecules/side-step-list';
+import Video from '../../../components/atoms/video';
+import NotFoundError from '../../404';
+import { createSlug } from '../../../utils/createSlug';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -41,13 +43,20 @@ type UserStoryProps = {
 
 const UserStory = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
+	const {
+		found: foundProject,
+		loading: validatingProject,
+	} = useValidateSelectedProject();
 	const router = useRouter();
 	const toast = useToast();
 
-	let currentPath = router.asPath;
-	let userStoryId = currentPath.substr(currentPath.length - 25);
-	let date = new Date().toISOString().replace('Z', '') + '+00:00';
-	console.log(date);
+	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
+		project.name,
+	]);
+
+	const currentPath = router.asPath;
+	const userStoryId = currentPath.substr(currentPath.length - 25);
+	const date = new Date().toISOString().replace('Z', '') + '+00:00';
 
 	const client = eightBaseClient(idToken);
 
@@ -57,7 +66,11 @@ const UserStory = (props: UserStoryProps) => {
 			projectId: project.id,
 			userStoryId: userStoryId,
 		});
-	const { data, error, isValidating } = useSWR(USER_STORY, fetcher);
+
+	const { data, error, isValidating: validatingQuery } = useSWR(
+		USER_STORY,
+		fetcher
+	);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -68,23 +81,28 @@ const UserStory = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const updateExpectedTest = (testCreatedDate: string) => {
-		const request = client.request(UPDATE_EXPECTED_TEST, {
+	const updateExpectedTest = async (testCreatedDate: string) => {
+		const request = await client.request(UPDATE_EXPECTED_TEST, {
 			userStoryId: userStoryId,
 			testCreatedDate: testCreatedDate,
 		});
+		await mutate('/api/session');
 		return request;
 	};
 
-	const deleteRejectedRecording = (testCreatedDate: string) => {
+	const deleteRejectedRecording = () => {
 		const request = client.request(DELETE_REJECTED_RECORDING, {
 			userStoryId: userStoryId,
 		});
 		return request;
 	};
 
-	if (isValidating || !data) {
+	if (validatingQuery || validatingProject || !data) {
 		return <LoadingScreen as={Card} />;
+	}
+
+	if (!foundProject) {
+		return <NotFoundError />;
 	}
 
 	if (error) {
@@ -120,7 +138,7 @@ const UserStory = (props: UserStoryProps) => {
 							mr={2}
 							textTransform="capitalize"
 						>
-							{data.userStory.created[0] == 'user' ? (
+							{data.userStory.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
 							) : (
 								<CrosshairIcon mr={2} />
@@ -153,9 +171,9 @@ const UserStory = (props: UserStoryProps) => {
 						borderRadius="md"
 						w="fit-content"
 					>
-						<option value="low">Low priority</option>
-						<option value="medium">Medium priority</option>
-						<option value="high">High priority</option>
+						<option value="low">Low significance</option>
+						<option value="medium">Medium significance</option>
+						<option value="high">High significance</option>
 					</Select>
 				</Flex>
 
@@ -215,9 +233,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 						mr={4}
 					>
@@ -245,9 +261,7 @@ const UserStory = (props: UserStoryProps) => {
 								duration: 5000,
 								isClosable: true,
 							});
-							router.push(
-								`/${slugify(project.name, { lower: true })}/user-stories`
-							);
+							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 					>
 						Reject

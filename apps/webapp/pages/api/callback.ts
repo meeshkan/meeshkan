@@ -1,5 +1,5 @@
+import { createSlug } from './../../utils/createSlug';
 import { NextApiRequest, NextApiResponse } from 'next';
-import slugify from 'slugify';
 import initAuth0 from '../../utils/auth0';
 import { getUserId } from '../../utils/user';
 import { propagateInviteToDb } from '../../utils/invite';
@@ -19,9 +19,8 @@ export default async function callback(
 					if (response.error) {
 						redirectParams.append('invalidInvite', 'true');
 					} else {
-						const redirectTo = slugify(
-							response.configurationUpdate?.project?.name,
-							{ lower: true }
+						const redirectTo = createSlug(
+							response.configurationUpdate?.project?.name
 						);
 						redirectParams.append('redirectTo', redirectTo);
 					}

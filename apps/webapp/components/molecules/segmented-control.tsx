@@ -62,52 +62,50 @@ const SegmentedControl = ({
 	setSelectedIndex,
 }: SegmentedControlProps) => {
 	return (
-		<>
-			<AnimateSharedLayout>
-				<Stack
-					direction="row"
-					align="center"
-					backgroundColor={useColorModeValue('gray.200', 'gray.700')}
-					p={2}
-					borderTopRadius="md"
-					w="max-content"
-					fontWeight={700}
-				>
-					{values.map((value, index) => {
-						const selected = selectedIndex === index;
-						return (
-							<SegmentedControlTab
-								selected={selected}
-								disabled={disabled}
-								key={index}
-								onSelect={() => setSelectedIndex(index)}
-							>
-								{value}
-								{selected && (
-									<MotionBox
-										layoutId="slider"
-										position="absolute"
-										px={2}
-										py={3}
-										top="2px"
-										left="0px"
-										right="0px"
-										bottom="2px"
-										borderRadius="6px"
-										backgroundColor={useColorModeValue('white', 'gray.900')}
-										cursor="default"
-										width="100%"
-										userSelect="none"
-										zIndex="-1"
-										boxShadow="0px 1px 2px 0px rgba(149, 157, 165, 0.2)"
-									/>
-								)}
-							</SegmentedControlTab>
-						);
-					})}
-				</Stack>
-			</AnimateSharedLayout>
-		</>
+		<AnimateSharedLayout>
+			<Stack
+				direction="row"
+				align="center"
+				backgroundColor={useColorModeValue('gray.200', 'gray.700')}
+				p={2}
+				borderTopRadius="md"
+				w="max-content"
+				fontWeight={700}
+			>
+				{values.map((value, index) => {
+					const selected = selectedIndex === index;
+					return (
+						<SegmentedControlTab
+							selected={selected}
+							disabled={disabled}
+							key={index}
+							onSelect={() => setSelectedIndex(index)}
+						>
+							{value}
+							{selected && (
+								<MotionBox
+									layoutId="slider"
+									position="absolute"
+									px={2}
+									py={3}
+									top="2px"
+									left="0px"
+									right="0px"
+									bottom="2px"
+									borderRadius="6px"
+									backgroundColor={useColorModeValue('white', 'gray.900')}
+									cursor="default"
+									width="100%"
+									userSelect="none"
+									zIndex="-1"
+									boxShadow="0px 1px 2px 0px rgba(149, 157, 165, 0.2)"
+								/>
+							)}
+						</SegmentedControlTab>
+					);
+				})}
+			</Stack>
+		</AnimateSharedLayout>
 	);
 };
 

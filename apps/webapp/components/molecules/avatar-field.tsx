@@ -11,36 +11,32 @@ import {
 	Button,
 	Spinner,
 } from '@chakra-ui/react';
+import _ from 'lodash';
 import { FilePlusIcon } from '@frontend/chakra-theme';
-import { UserContext, AvatarFile } from '../../utils/user';
-import { FILE_UPLOAD_INFO } from '../../utils/8base';
+import { UserContext } from '../../utils/user';
+import { FILE_UPLOAD_INFO } from '../../graphql/file';
+import { uploadFile, UploadedFile } from '../../utils/file';
 import { eightBaseClient } from '../../utils/graphql';
 
 const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });
 
 type AvatarFieldProps = {
-	isProfileAvatar: boolean;
-	onUpload: (
-		avatarFile: AvatarFile
-	) => void | Promise<{ error?: typeof Error }>;
+	onUpload: (file: UploadedFile) => void | Promise<{ error?: typeof Error }>;
+	existingImageUrl?: string;
 };
 
-const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
+const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
 	const [error, setError] = useState('');
-	const { project, avatar, idToken } = useContext(UserContext);
-	const [imageOriginalPath, setImageOriginalPath] = useState(
-		isProfileAvatar ? avatar : project?.avatar?.downloadUrl || ''
-	);
+	const { idToken } = useContext(UserContext);
+	const [loading, setLoading] = useState(false);
+	const [image, setImage] = useState(existingImageUrl || '');
 	const client = eightBaseClient(idToken);
 	const fetcher = (query) => client.request(query);
-	const { data, error: uploadInfoError, isValidating } = useSWR(
-		FILE_UPLOAD_INFO,
-		fetcher
-	);
+	const { data, error: uploadInfoError } = useSWR(FILE_UPLOAD_INFO, fetcher);
 
-	if (isValidating || !data) {
+	if (!data && !uploadInfoError) {
 		return (
-			<Flex justify="center">
+			<Flex justify="center" mb={5}>
 				<Spinner />
 			</Flex>
 		);
@@ -98,44 +94,48 @@ const AvatarField = ({ isProfileAvatar, onUpload }: AvatarFieldProps) => {
 							h={16}
 							w={16}
 							onClick={onPick}
-							bgImage={imageOriginalPath && `url(${imageOriginalPath})`}
+							bgImage={image && `url(${image})`}
 							bgSize="contain"
 							bgPosition="center"
 							bgRepeat="no-repeat"
 						>
-							<FilePlusIcon
-								w={8}
-								h={8}
-								visibility={imageOriginalPath ? 'hidden' : 'visible'}
-								_groupHover={{ visibility: 'visible' }}
-							/>
+							{loading ? (
+								<Spinner />
+							) : (
+								<FilePlusIcon
+									w={8}
+									h={8}
+									visibility={image ? 'hidden' : 'visible'}
+									_groupHover={{ visibility: 'visible' }}
+								/>
+							)}
 						</Button>
 					)}
 					onSuccess={async (response) => {
-						const [image] = response.filesUploaded;
-						setImageOriginalPath(image.originalPath);
+						setLoading(true);
+						const [newImage] = response.filesUploaded;
 
-						const fileId = image.handle;
-						const filename = image.key.split('/').slice(-1)[0];
+						const fileId = newImage.handle;
+						const filename = newImage.key.split('/').slice(-1)[0];
 
-						if (isProfileAvatar) {
-							const result = await onUpload({
-								fileId,
-								filename,
-							});
+						const uploadResponse = await uploadFile(idToken, {
+							fileId,
+							filename,
+						});
 
-							if (result && result.error) {
-								console.error(result.error);
-								setError('Could not upload image. Please try again.');
-							} else {
-								setError('');
-							}
-						} else {
-							onUpload({
-								fileId,
-								filename,
-							});
+						if (uploadResponse.error) {
+							setError(uploadResponse.error);
+							setLoading(false);
+							return;
 						}
+
+						setImage(uploadResponse?.downloadUrl);
+						onUpload({
+							id: uploadResponse.id,
+							fileId: uploadResponse.fileId,
+						});
+
+						setLoading(false);
 					}}
 				/>
 			</Flex>

@@ -17,9 +17,8 @@ import AvatarField from '../molecules/avatar-field';
 import {
 	UserContext,
 	updateProfile,
-	updateAvatar as updateUserAvatar,
-	AvatarFile,
 } from '../../utils/user';
+import { UploadedFile } from '../../utils/file';
 
 type ProfileFormInputs = {
 	name: string;
@@ -36,9 +35,11 @@ type UpdateProfileFormProps = {
 
 const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfileFormProps) => {
 	const [error, setError] = useState('');
-	const { name: currentName, jobTitle, idToken } = useContext(UserContext);
+	const user = useContext(UserContext);
+	const { name: currentName, jobTitle, avatar, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState<string>(currentName);
 	const [title, setTitle] = useState(jobTitle || jobTitles[0]);
+	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
 
 	const onSubmit = async (formData: ProfileFormInputs): Promise<void> => {
@@ -47,6 +48,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 		const data = await updateProfile(idToken, {
 			name: formData.name,
 			jobTitle: title,
+			avatar: avatarFile,
 		});
 
 		if (data.error) {
@@ -59,6 +61,8 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 			setStep(2);
 		}
 
+		const { firstName, lastName, avatar: newAvatar } = data.userUpdate;
+		await mutateUser({ ...user, firstName, lastName, avatar: newAvatar?.downloadUrl });
 		setLoading(false);
 	};
 
@@ -66,11 +70,12 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 		setName(event.target.value);
 	}
 
-	const onUpload = (data: AvatarFile) => updateUserAvatar(idToken, data);
-
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
-			<AvatarField isProfileAvatar onUpload={onUpload} />
+			<AvatarField
+				onUpload={setAvatarFile}
+				existingImageUrl={avatar}
+			/>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>What's your name?</FormLabel>
 				<Input name="name" value={name} onChange={handleChange} type="text" ref={register} />

@@ -30,11 +30,12 @@ import { useValidateSelectedProject } from '../../../hooks/use-validate-selected
 import SegmentedControl from '../../../components/molecules/segmented-control';
 import Table from '../../../components/organisms/table';
 import LoadingScreen from '../../../components/organisms/loading-screen';
+import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
 import { show as showIntercom } from '../../../utils/intercom';
-import { PROJECT_USER_STORIES } from '../../../graphql/user-stories/index';
-import slugify from 'slugify';
+import { PROJECT_USER_STORIES } from '../../../graphql/project';
+import { createSlug } from '../../../utils/createSlug';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -110,7 +111,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: (originalRow, rowIndex) => {
 					return (
 						<Badge fontSize="sm" textTransform="capitalize">
-							{originalRow.created == 'user' ? (
+							{originalRow.created === 'user' ? (
 								<VideoIcon mr={2} />
 							) : (
 								<CrosshairIcon mr={2} />
@@ -121,7 +122,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				},
 			},
 			{
-				Header: 'Priority',
+				Header: 'Significance',
 				accessor: (originalRow, rowIndex) => {
 					const { significance } = originalRow;
 					return (
@@ -129,11 +130,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							colorScheme={
-								significance == 'low'
+								significance === 'low'
 									? 'gray'
-									: significance == 'medium'
+									: significance === 'medium'
 									? 'orange'
-									: significance == 'high'
+									: significance === 'high'
 									? 'cyan'
 									: null
 							}
@@ -156,13 +157,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
+	const projectId = project.id;
 	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
-			let request = client
+			const request = client
 				.request(PROJECT_USER_STORIES, {
-					projectId: project.id,
+					projectId,
 					first: pagination.rowsPerPage,
 					skip: pagination.rowsPerPage * pagination.page,
 				})
@@ -172,23 +174,29 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[pagination.page, pagination.rowsPerPage]
+		[pagination.page, pagination.rowsPerPage, idToken, projectId]
 	);
 
 	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
 
+	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
+		project.name,
+	]);
+
 	const handleEdit = (id: string) => {
-		router.push(
-			`/${slugify(project.name, { lower: true })}/user-stories/${id}`
-		);
+		router.push(`/${slugifiedProjectName}/user-stories/${id}`);
 	};
 
-	const { loading } = useValidateSelectedProject();
+	const { found, loading } = useValidateSelectedProject();
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
+	}
+
+	if (!found) {
+		return <NotFoundError />;
 	}
 
 	return (

@@ -1,6 +1,5 @@
 import { Flex, Heading, Text } from '@chakra-ui/react';
 import { NextPage, NextPageContext } from 'next';
-import ChakraProvider from '../components/molecules/chakra';
 import Card from '../components/atoms/card';
 
 type ErrorProps = {

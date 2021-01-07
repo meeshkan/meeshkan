@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import slugify from 'slugify';
+import Link from 'next/link';
+import { createSlug } from '../../utils/createSlug';
 import {
 	Stack,
 	Box,
@@ -18,7 +19,6 @@ import {
 	MenuDivider,
 	Button,
 	Text,
-	Link,
 	Heading,
 	Avatar,
 	Tooltip,
@@ -48,33 +48,35 @@ const SideBarBody = () => {
 	const { projects, project, setProject } = useContext(UserContext);
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
-	const avatarUrl = project.avatar?.downloadUrl;
-	const slugifiedProjectName = slugify(project.name, { lower: true });
+	const avatarUrl = project?.avatar?.downloadUrl;
+	const projectName = project?.name || router.query.projectName as string || ''
+	const slugifiedProjectName = useMemo(
+		() => createSlug(projectName),
+		[projectName]
+	);
+
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
 	if (isSettingsPage) {
 		return (
 			<>
-				<Heading
-					as={Flex}
-					align="center"
-					fontSize="20px"
-					fontWeight={500}
-					color={useColorModeValue('gray.900', 'gray.200')}
-					lineHeight="1"
-					mt={6}
-				>
-					<IconButton
-						aria-label="Back"
-						variant="ghost"
-						size="2xs"
-						mr={1}
-						icon={<ChevronLeftIcon w={6} h={6} color="gray.500" />}
-						onClick={() => router.back()}
-					/>
-					Settings
-				</Heading>
+				<Link href={`/${slugifiedProjectName}`} passHref>
+					<a>
+						<Heading
+							as={Flex}
+							align="center"
+							fontSize="20px"
+							fontWeight={500}
+							color={useColorModeValue('gray.900', 'gray.200')}
+							lineHeight="1"
+							mt={6}
+						>
+							<ChevronLeftIcon w={6} h={6} color="gray.500" />
+							Settings
+						</Heading>
+					</a>
+				</Link>
 				<Stack mt={6} spacing={6}>
 					<Box>
 						<Flex align="flex-start">
@@ -263,26 +265,25 @@ const SideBarBody = () => {
 							>
 								<Avatar
 									src={avatarUrl}
-									name={project.name}
+									name={project?.name}
 									icon={
 										<QuestionIcon
 											color={useColorModeValue('gray.400', 'white')}
 											fontSize="1rem"
 										/>
 									}
+									color={useColorModeValue('gray.700', 'gray.200')}
 									bg={useColorModeValue('gray.200', 'gray.600')}
 									size="sm"
-									showBorder
-									borderColor={useColorModeValue('gray.50', 'gray.800')}
 									borderRadius="md"
 									mr={3}
 								/>
-								{project.name}
+								{project?.name}
 							</Flex>
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={project.name}
+								defaultValue={project?.name}
 								title="Projects"
 								type="radio"
 							>
@@ -292,7 +293,26 @@ const SideBarBody = () => {
 										value={project.name}
 										onClick={() => setProject(project)}
 									>
-										{project.name}
+										<Flex display="flex" alignItems="center">
+											<Avatar
+												src={project.avatar?.downloadUrl}
+												name={project.name}
+												icon={
+													<QuestionIcon
+														color={useColorModeValue('gray.400', 'white')}
+														fontSize="1rem"
+													/>
+												}
+												color={useColorModeValue('gray.700', 'gray.200')}
+												bg={useColorModeValue('gray.200', 'gray.600')}
+												size="xs"
+												borderRadius="md"
+												mr={3}
+											/>
+											<Text fontSize="sm" fontWeight={600}>
+												{project.name}
+											</Text>
+										</Flex>
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>

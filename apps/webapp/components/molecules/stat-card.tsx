@@ -40,15 +40,17 @@ const StatCard = ({
 	return (
 		<Flex {...props}>
 			<Stat>
-				<StatLabel fontSize={['sm', 'sm', 'md', 'md']}>{title}</StatLabel>
+				<StatLabel fontSize="md">{title}</StatLabel>
 				<StatNumber mt={4} mb={3}>
 					<Heading
 						color={valueColor}
-						fontSize="4xl"
+						fontSize="5xl"
 						fontWeight={800}
 						d="inline"
 					>
-						{isNA ? 'N/A' : isPercentage
+						{isNA
+							? 'N/A'
+							: isPercentage
 							? value.toPrecision(3)
 							: commaNumber(value)}
 					</Heading>
@@ -60,7 +62,9 @@ const StatCard = ({
 				</StatNumber>
 				<StatHelpText>
 					{isNA ? (
-						<Text fontStyle="italic">coming soon!</Text>
+						<Text as="span" fontStyle="italic">
+							coming soon!
+						</Text>
 					) : (
 						<>
 							<Badge
@@ -68,11 +72,11 @@ const StatCard = ({
 								colorScheme={isPositiveChange ? 'cyan' : 'red'}
 								rounded="lg"
 								mr={2}
-								fontSize={['xs', 'xs', 'sm', 'sm']}
-								p={1}
+								fontSize="sm"
+								p={2}
 							>
 								{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
-								{Math.abs(percentageChange)}%
+								{Math.abs(percentageChange).toFixed(2)}%
 							</Badge>
 							<Badge
 								variant="subtle"
@@ -80,8 +84,8 @@ const StatCard = ({
 								fontWeight={400}
 								rounded="lg"
 								textTransform="none"
-								p={1}
-								fontSize={['xs', 'xs', 'sm', 'sm']}
+								p={2}
+								fontSize="sm"
 							>
 								from {commaNumber(dataPoints)} data points
 							</Badge>

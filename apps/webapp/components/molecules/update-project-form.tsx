@@ -3,19 +3,16 @@ import {
 	FormControl,
 	FormLabel,
 	FormErrorMessage,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuOptionGroup,
-	MenuItemOption,
 	Input,
-	Button,
 } from '@chakra-ui/react';
-import { ArrowUpDownIcon } from '@chakra-ui/icons';
+import _ from 'lodash';
+import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
-import { UserContext, AvatarFile } from '../../utils/user';
+import { UserContext } from '../../utils/user';
+import { UploadedFile } from '../../utils/file';
 import { updateProject } from '../../utils/project';
+import { createSlug } from '../../utils/createSlug';
 
 type ProjectFormInputs = {
 	name: string;
@@ -27,18 +24,19 @@ type UpdateProjectFormProps = {
 
 const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const [error, setError] = useState('');
-	const { project, idToken } = useContext(UserContext);
+	const user = useContext(UserContext);
+	const { projects, project, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState<string>(project.name);
-    const [avatarFile, setAvatarFile] = useState<AvatarFile>();
+	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
 		setError('');
 		const data = await updateProject(idToken, {
-            id: project.id,
+			id: project.id,
 			name: formData.name,
-			...avatarFile,
+			avatar: avatarFile,
 		});
 
 		if (data.error) {
@@ -47,19 +45,38 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 			return;
 		}
 
+		const selectedProjectIndex = _.findIndex(
+			projects,
+			(currentProject) => currentProject.id === project.id
+		);
+
+		projects[selectedProjectIndex].name = formData.name;
+		projects[selectedProjectIndex].avatar = data.projectUpdate.avatar;
+
+		await mutateUser({ ...user, projects }, false);
+		Router.push(`/${createSlug(formData.name)}/settings`);
 		setLoading(false);
 	};
 
 	const handleChange = (event) => {
 		setName(event.target.value);
-	}
+	};
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="projectUpdateForm">
-			<AvatarField isProfileAvatar={false} onUpload={setAvatarFile} />
+			<AvatarField
+				onUpload={setAvatarFile}
+				existingImageUrl={project?.avatar?.downloadUrl}
+			/>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Project name</FormLabel>
-				<Input name="name" value={name} onChange={handleChange} type="text" ref={register} />
+				<Input
+					name="name"
+					value={name}
+					onChange={handleChange}
+					type="text"
+					ref={register}
+				/>
 				<FormErrorMessage>Error: {error}</FormErrorMessage>
 			</FormControl>
 		</form>

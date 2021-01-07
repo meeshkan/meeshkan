@@ -23,7 +23,7 @@ type ScriptCardProps = {
 const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	const toast = useToast();
 	const { project } = useContext(UserContext);
-	const hasSelectedProject = project.id !== -1;
+	const hasSelectedProject = project;
 
 	let scriptTag = '';
 	if (hasSelectedProject) {
