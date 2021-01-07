@@ -85,7 +85,7 @@ const getReleaseStartFromProject = (a) =>
 const calcPctChange = (key, confidenceScoreSevenDaysAgo, dataPoint) =>
 	confidenceScoreSevenDaysAgo[key]
 		? dataPoint.score - confidenceScoreSevenDaysAgo[key].score
-		: 100;
+		: dataPoint.score;
 
 const deltaChange = (oldv, newv) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
