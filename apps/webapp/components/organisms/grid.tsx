@@ -85,7 +85,7 @@ const getReleaseStartFromProject = (a) =>
 const calcPctChange = (key, confidenceScoreSevenDaysAgo, dataPoint) =>
 	confidenceScoreSevenDaysAgo[key]
 		? dataPoint.score - confidenceScoreSevenDaysAgo[key].score
-		: 0;
+		: 100;
 
 const deltaChange = (oldv, newv) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
@@ -172,10 +172,13 @@ const Grid = (props) => {
 	const confidenceScore = Object.values(confidenceDataPoints)
 		.map((a) => a.score)
 		.reduce((a, b) => a + b, 0.0);
-	const testCoverageScore = Object.values(confidenceDataPoints)
-		.filter((a) => a.tag === DataPointTag.TEST_RUN)
-		.map((a) => a.score)
-		.reduce((a, b) => a + b, 0.0);
+	const testCoverageScore =
+		(Object.values(confidenceDataPoints)
+			.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
 
 	const confidenceDataPointsSevenDaysAgo = getConfidenceScore(
 		new Date().getTime() - 1000 * 60 * 60 * 24 * 7,
@@ -188,16 +191,17 @@ const Grid = (props) => {
 		.map((a) => a.score)
 		.reduce((a, b) => a + b, 0.0);
 
-	const testCoverageScoreSevenDaysAgo = Object.values(
-		confidenceDataPointsSevenDaysAgo
-	)
-		.filter((a) => a.tag === DataPointTag.TEST_RUN)
-		.map((a) => a.score)
-		.reduce((a, b) => a + b, 0.0);
+	const testCoverageScoreSevenDaysAgo =
+		(Object.values(confidenceDataPointsSevenDaysAgo)
+			.filter((a) => a.tag === DataPointTag.TEST_RUN)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
 
 	const confidenceChange = Object.entries(confidenceDataPoints).filter(
 		([key, dataPoint]) =>
-			0 !== calcPctChange(key, confidenceScoreSevenDaysAgo, dataPoint)
+			0 !== calcPctChange(key, confidenceDataPointsSevenDaysAgo, dataPoint)
 	);
 
 	const latestTestStates = getLatestTestStates(userStories);
@@ -298,7 +302,7 @@ const Grid = (props) => {
 								)}
 								dataPoints={
 									Object.values(confidenceDataPoints).filter(
-										(a) => a.tag === DataPointTag.TEST_RUN
+										(a) => a.tag === DataPointTag.TEST_COVERAGE
 									).length
 								}
 								my={[8, 0, 0, 0]}
