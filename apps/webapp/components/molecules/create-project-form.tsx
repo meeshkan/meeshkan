@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import AvatarField from './avatar-field';
-import { UserContext, AvatarFile } from '../../utils/user';
+import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';
 import { UploadedFile } from '../../utils/file';
 import { createSlug } from '../../utils/createSlug';
@@ -44,7 +44,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 		}
 
 		const [newProject] = data.userUpdate.projects.items;
-		projects.push(newProject)
+		projects.push(newProject);
 		await mutateUser({ ...user, projects });
 		setLoading(false);
 

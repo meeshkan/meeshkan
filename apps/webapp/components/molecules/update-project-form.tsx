@@ -9,7 +9,7 @@ import _ from 'lodash';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
-import { UserContext, AvatarFile } from '../../utils/user';
+import { UserContext } from '../../utils/user';
 import { UploadedFile } from '../../utils/file';
 import { updateProject } from '../../utils/project';
 import { createSlug } from '../../utils/createSlug';
@@ -47,7 +47,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 
 		const selectedProjectIndex = _.findIndex(
 			projects,
-			currentProject => currentProject.id === project.id
+			(currentProject) => currentProject.id === project.id
 		);
 
 		projects[selectedProjectIndex].name = formData.name;

@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import { FilePlusIcon } from '@frontend/chakra-theme';
-import { UserContext, AvatarFile } from '../../utils/user';
+import { UserContext } from '../../utils/user';
 import { FILE_UPLOAD_INFO } from '../../graphql/file';
 import { uploadFile, UploadedFile } from '../../utils/file';
 import { eightBaseClient } from '../../utils/graphql';
@@ -21,28 +21,18 @@ import { eightBaseClient } from '../../utils/graphql';
 const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });
 
 type AvatarFieldProps = {
-	onUpload: (
-		file: UploadedFile
-	) => void | Promise<{ error?: typeof Error }>;
+	onUpload: (file: UploadedFile) => void | Promise<{ error?: typeof Error }>;
 	existingImageUrl?: string;
 };
 
-const AvatarField = ({
-	onUpload,
-	existingImageUrl,
-}: AvatarFieldProps) => {
+const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
 	const [error, setError] = useState('');
 	const { idToken } = useContext(UserContext);
 	const [loading, setLoading] = useState(false);
-	const [image, setImage] = useState(
-		existingImageUrl || ''
-	);
+	const [image, setImage] = useState(existingImageUrl || '');
 	const client = eightBaseClient(idToken);
 	const fetcher = (query) => client.request(query);
-	const { data, error: uploadInfoError } = useSWR(
-		FILE_UPLOAD_INFO,
-		fetcher
-	);
+	const { data, error: uploadInfoError } = useSWR(FILE_UPLOAD_INFO, fetcher);
 
 	if (!data && !uploadInfoError) {
 		return (
@@ -128,7 +118,10 @@ const AvatarField = ({
 						const fileId = newImage.handle;
 						const filename = newImage.key.split('/').slice(-1)[0];
 
-						const uploadResponse = await uploadFile(idToken, { fileId, filename });
+						const uploadResponse = await uploadFile(idToken, {
+							fileId,
+							filename,
+						});
 
 						if (uploadResponse.error) {
 							setError(uploadResponse.error);
