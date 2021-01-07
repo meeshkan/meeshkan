@@ -66,7 +66,7 @@ export const getLatestTestStates = (userStories: UserStories['items']) => {
 };
 
 const lastSevenDays = [...Array(7).keys()]
-	.map((i) => moment().subtract(i + 1, 'days'))
+	.map((i) => moment().subtract(i, 'days'))
 	.reverse();
 
 export const getRecordingsAndTestsByDay = (
