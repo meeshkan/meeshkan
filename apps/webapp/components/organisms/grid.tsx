@@ -191,9 +191,7 @@ const Grid = (props) => {
 		releaseStart,
 		userStories
 	);
-	const confidenceScoreNDaysAgo = Object.values(
-		confidenceDataPointsNDaysAgo
-	)
+	const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
 		.map((a) => a.score)
 		.reduce((a, b) => a + b, 0.0);
 
@@ -343,17 +341,19 @@ const Grid = (props) => {
 												the last {CURRENT_TIME_PERIOD_IN_DAYS} days.
 											</Text>
 										) : null}
-										{confidenceChange.slice(0, CURRENT_TIME_PERIOD_IN_DAYS + 1).map(([key, dataPoint]) => (
-											<ConfidenceBreakdownItem
-												key={key}
-												value={calcPctChange(
-													key,
-													confidenceScoreNDaysAgo,
-													dataPoint
-												)}
-												description={dataPoint.title}
-											/>
-										))}
+										{confidenceChange
+											.slice(0, CURRENT_TIME_PERIOD_IN_DAYS + 1)
+											.map(([key, dataPoint]) => (
+												<ConfidenceBreakdownItem
+													key={key}
+													value={calcPctChange(
+														key,
+														confidenceScoreNDaysAgo,
+														dataPoint
+													)}
+													description={dataPoint.title}
+												/>
+											))}
 									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
@@ -430,10 +430,10 @@ const Grid = (props) => {
 										<Box w="100px">
 											<Text fontWeight={900}>
 												{confidenceScore >= 90
-													? 'Ready'
+													? `Ready`
 													: confidenceScore >= 50
-													? 'Proceed with caution'
-													: 'Do not release'}
+													? `Caution`
+													: `Not ready`}
 											</Text>
 
 											<Text
