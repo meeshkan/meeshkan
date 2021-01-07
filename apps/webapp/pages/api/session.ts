@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import initAuth0, { getUser } from '../../utils/auth0';
-import { getUserId, getUserAvatar, getUserProfile } from '../../utils/user';
-import { getProjects } from '../../utils/project';
+import initAuth0, { getUser as getAuth0User } from '../../utils/auth0';
+import { getUser as getEightBaseUser } from '../../utils/user';
 
 export default function session(
 	req: NextApiRequest,
@@ -10,22 +9,17 @@ export default function session(
 	const auth0 = initAuth0(req);
 	return auth0.requireAuthentication(async (req, res) => {
 		try {
-			const user = await getUser(req);
-			const profile = await getUserProfile(user.idToken);
-
-			if (profile.firstName && profile.lastName) {
-				user.name = `${profile.firstName} ${profile.lastName}`;
-			}
-
-			if (profile.jobTitle) {
-				user.jobTitle = profile.jobTitle;
-			}
-
-			user.productNotifications = profile.productNotifications;
-			user.avatar = await getUserAvatar(user.idToken);
-			user.id = await getUserId(user.idToken);
-			user.projects = await getProjects(user.idToken);
-			res.json(user);
+			const auth0User = await getAuth0User(req);
+			const eightBaseUser = await getEightBaseUser(auth0User.idToken);
+			eightBaseUser.avatar = eightBaseUser.avatar.downloadUrl;
+			eightBaseUser.projects = eightBaseUser.projects.items; 
+			res.json({
+				...auth0User,
+				...eightBaseUser,
+				name: eightBaseUser.firstName && eightBaseUser.lastName
+					? `${eightBaseUser.firstName} ${eightBaseUser.lastName}`
+					: undefined
+			});
 		} catch (error) {
 			console.error(error);
 			res.status(error.status || 500).end(error.message);
