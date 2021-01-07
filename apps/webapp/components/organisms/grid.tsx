@@ -3,7 +3,7 @@ import {
 	Box,
 	Stack,
 	Flex,
-	// List,
+	List,
 	Button,
 	Menu,
 	MenuButton,
@@ -25,19 +25,19 @@ import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
 // import ActivityListItem from '../molecules/activity-list-item';
 // import LinearListItem from '../molecules/linear-list-item';
-// import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
+import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
 	getBugs,
-	getTestCoverage,
 	getConfidenceScore,
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
 	getLastSevenDaysInFormat,
+	DataPointTag,
 } from '../../utils/metrics';
 require('../molecules/rounded-chart');
 
@@ -77,13 +77,24 @@ const doughnutData = {
 
 const versions = ['v0.0.2', 'v0.0.1'];
 
+// TODO: fill me in with correct info once we can determine
+// the release start date. For now, set arbitrarily to 30 days.
+const getReleaseStartFromProject = (a) =>
+	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
+
+const calcPctChange = (key, confidenceScoreNDaysAgo, dataPoint) =>
+	confidenceScoreNDaysAgo[key]
+		? dataPoint.score - confidenceScoreNDaysAgo[key].score
+		: dataPoint.score;
+
+const deltaChange = (oldv, newv) =>
+	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
-	const slugifiedProjectName = useMemo(
-		() => createSlug(selectedProject.name),
-		[selectedProject.name]
-	);
+	const slugifiedProjectName = useMemo(() => createSlug(selectedProject.name), [
+		selectedProject.name,
+	]);
 
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
@@ -152,8 +163,52 @@ const Grid = (props) => {
 	const testRuns = getTestRuns(userStories);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
-	const testCoverage = getTestCoverage(userStories);
-	const confidenceScore = getConfidenceScore(userStories);
+	const releaseStart = getReleaseStartFromProject(selectedProject);
+
+	const confidenceDataPoints = getConfidenceScore(
+		new Date().getTime(),
+		releaseStart,
+		userStories
+	);
+
+	const confidenceScore = Object.values(confidenceDataPoints)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
+
+	const testCoverageScore =
+		(Object.values(confidenceDataPoints)
+			.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
+
+	// TODO: allow users to change this value
+	const CURRENT_TIME_PERIOD_IN_DAYS = 7;
+
+	const confidenceDataPointsNDaysAgo = getConfidenceScore(
+		new Date().getTime() - 1000 * 60 * 60 * 24 * CURRENT_TIME_PERIOD_IN_DAYS,
+		releaseStart,
+		userStories
+	);
+	const confidenceScoreNDaysAgo = Object.values(
+		confidenceDataPointsNDaysAgo
+	)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
+
+	const testCoverageScoreNDaysAgo =
+		(Object.values(confidenceDataPointsNDaysAgo)
+			.filter((a) => a.tag === DataPointTag.TEST_RUN)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
+
+	const confidenceChange = Object.entries(confidenceDataPoints).filter(
+		([key, dataPoint]) =>
+			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
+	);
 
 	const latestTestStates = getLatestTestStates(userStories);
 	const doughnutDataValues = Object.values(latestTestStates);
@@ -176,7 +231,7 @@ const Grid = (props) => {
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
 				<Heading as="h2" fontSize="md" lineHeight="short">
-					Last 7 Days
+					Last {CURRENT_TIME_PERIOD_IN_DAYS} Days
 				</Heading>
 				<Flex align="center">
 					<Heading
@@ -236,21 +291,31 @@ const Grid = (props) => {
 						>
 							<StatCard
 								title="Confidence score"
-								value={Number(confidenceScore.value.toFixed(2))}
-								percentageChange={confidenceScore.percentageChange}
-								dataPoints={confidenceScore.dataPoints}
+								value={Number(confidenceScore.toFixed(2))}
+								percentageChange={deltaChange(
+									confidenceScoreNDaysAgo,
+									confidenceScore
+								)}
+								dataPoints={Object.keys(confidenceDataPoints).length}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								title="Test coverage"
-								value={Number(testCoverage.value.toFixed(2))}
-								percentageChange={testCoverage.percentageChange}
-								dataPoints={testCoverage.dataPoints}
+								value={Number(testCoverageScore.toFixed(2))}
+								percentageChange={deltaChange(
+									testCoverageScoreNDaysAgo,
+									testCoverageScore
+								)}
+								dataPoints={
+									Object.values(confidenceDataPoints).filter(
+										(a) => a.tag === DataPointTag.TEST_COVERAGE
+									).length
+								}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								isPercentage={false}
-								title="Test run"
+								title="Tests ran"
 								value={testRuns.value}
 								percentageChange={testRuns.percentageChange}
 								dataPoints={testRuns.dataPoints}
@@ -266,34 +331,30 @@ const Grid = (props) => {
 								spacingY={6}
 								w="100%"
 							>
-								<GridCard title="Confidence Breakdown">
-									<Text fontStyle="italic">Coming soon, stay tuned!</Text>
-									{/* <List
+								<GridCard title="Confidence change">
+									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
 									>
-										<ConfidenceBreakdownItem
-											value={0.05}
-											description="Users can successfully upgrade their subscription."
-										/>
-										<ConfidenceBreakdownItem
-											value={0.05}
-											description="Lorem ipsum dolor sit amet."
-										/>
-										<ConfidenceBreakdownItem
-											value={-0.1}
-											description="Lorem ipsum dolor sit amet."
-										/>
-										<ConfidenceBreakdownItem
-											value={0.05}
-											description="Lorem ipsum dolor sit amet."
-										/>
-										<ConfidenceBreakdownItem
-											value={-2.0}
-											description="Lorem ipsum dolor sit amet."
-										/>
-									</List> */}
+										{confidenceChange.length === 0 ? (
+											<Text>
+												There hasn't been any change to your confidence score in
+												the last {CURRENT_TIME_PERIOD_IN_DAYS} days.
+											</Text>
+										) : null}
+										{confidenceChange.slice(0, CURRENT_TIME_PERIOD_IN_DAYS + 1).map(([key, dataPoint]) => (
+											<ConfidenceBreakdownItem
+												key={key}
+												value={calcPctChange(
+													key,
+													confidenceScoreNDaysAgo,
+													dataPoint
+												)}
+												description={dataPoint.title}
+											/>
+										))}
+									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
@@ -368,9 +429,9 @@ const Grid = (props) => {
 										</Box>
 										<Box w="100px">
 											<Text fontWeight={900}>
-												{confidenceScore.value >= 90
+												{confidenceScore >= 90
 													? 'Ready'
-													: confidenceScore.value >= 50
+													: confidenceScore >= 50
 													? 'Proceed with caution'
 													: 'Do not release'}
 											</Text>

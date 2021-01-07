@@ -48,7 +48,9 @@ const StatCard = ({
 						fontWeight={800}
 						d="inline"
 					>
-						{isNA ? 'N/A' : isPercentage
+						{isNA
+							? 'N/A'
+							: isPercentage
 							? value.toPrecision(3)
 							: commaNumber(value)}
 					</Heading>
@@ -60,7 +62,9 @@ const StatCard = ({
 				</StatNumber>
 				<StatHelpText>
 					{isNA ? (
-						<Text as="span" fontStyle="italic">coming soon!</Text>
+						<Text as="span" fontStyle="italic">
+							coming soon!
+						</Text>
 					) : (
 						<>
 							<Badge
@@ -72,7 +76,7 @@ const StatCard = ({
 								p={2}
 							>
 								{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
-								{Math.abs(percentageChange)}%
+								{Math.abs(percentageChange).toFixed(2)}%
 							</Badge>
 							<Badge
 								variant="subtle"

@@ -49,9 +49,6 @@
 		"og-cards-e2e": {
 			"tags": [],
 			"implicitDependencies": ["og-cards"]
-		},
-		"confidence-score": {
-			"tags": []
 		}
 	}
 }

@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import Card from '../../../components/atoms/card';
+import { mutate } from 'swr';
 import {
 	Text,
 	Flex,
@@ -49,14 +50,13 @@ const UserStory = (props: UserStoryProps) => {
 	const router = useRouter();
 	const toast = useToast();
 
-	const slugifiedProjectName = useMemo(
-		() => createSlug(project.name),
-		[project.name]
-	);
+	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
+		project.name,
+	]);
 
-	let currentPath = router.asPath;
-	let userStoryId = currentPath.substr(currentPath.length - 25);
-	let date = new Date().toISOString().replace('Z', '') + '+00:00';
+	const currentPath = router.asPath;
+	const userStoryId = currentPath.substr(currentPath.length - 25);
+	const date = new Date().toISOString().replace('Z', '') + '+00:00';
 
 	const client = eightBaseClient(idToken);
 
@@ -81,11 +81,12 @@ const UserStory = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const updateExpectedTest = (testCreatedDate: string) => {
-		const request = client.request(UPDATE_EXPECTED_TEST, {
+	const updateExpectedTest = async (testCreatedDate: string) => {
+		const request = await client.request(UPDATE_EXPECTED_TEST, {
 			userStoryId: userStoryId,
 			testCreatedDate: testCreatedDate,
 		});
+		await mutate('/api/session');
 		return request;
 	};
 

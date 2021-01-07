@@ -16,8 +16,7 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@frontend/chakra-theme": ["libs/chakra-theme/src/index.ts"],
-			"@frontend/confidence-score": ["libs/confidence-score/src/index.ts"]
+			"@frontend/chakra-theme": ["libs/chakra-theme/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]
