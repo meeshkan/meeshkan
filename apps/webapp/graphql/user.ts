@@ -41,24 +41,79 @@ export const UPDATE_AVATAR = gql`
 	}
 `;
 
-export const USER_AVATAR = gql`
-	query USER_AVATAR {
+export const USER = gql`
+	query USER {
 		user {
-			avatar {
-				downloadUrl
-				shareUrl
-			}
-		}
-	}
-`;
-
-export const USER_PROFILE = gql`
-	query USER_PROFILE {
-		user {
+			id
+			email
 			firstName
 			lastName
 			jobTitle
 			productNotifications
+			avatar {
+				downloadUrl
+				shareUrl
+			}
+			projects {
+				items {
+					id
+					name
+					avatar {
+						downloadUrl
+						shareUrl
+					}
+					configuration {
+						inviteLink
+					}
+					hasReceivedEvents
+					members {
+						count
+						items {
+							firstName
+							lastName
+							email
+							avatar {
+								downloadUrl
+							}
+						}
+					}
+					userStories {
+						count
+						items {
+							id
+							failing {
+								count
+								items {
+									firstIntroduction
+									isResolved
+								}
+							}
+							title
+							testCreatedDate
+							isTestCase
+							createdAt
+							testRuns {
+								count
+								items {
+									status
+									dateTime
+									userStories {
+										items {
+											id
+										}
+									}
+								}
+							}
+						}
+					}
+					release {
+						count
+						items {
+							releaseDate
+						}
+					}
+				}
+			}
 		}
 	}
 `;

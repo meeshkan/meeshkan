@@ -5,8 +5,7 @@ import {
 	SIGN_UP_USER,
 	UPDATE_USER,
 	UPDATE_AVATAR,
-	USER_AVATAR,
-	USER_PROFILE,
+	USER,
 	UPDATE_PRODUCT_NOTIFICATIONS,
 } from '../graphql/user';
 import { eightBaseClient } from './graphql';
@@ -235,21 +234,10 @@ export const updateAvatar = async (
 	return result;
 };
 
-export const getUserAvatar = async (idToken: string) => {
+export const getUser = async (idToken: string) => {
 	const client = eightBaseClient(idToken);
 	try {
-		const data = await client.request(USER_AVATAR);
-		return data.user.avatar?.downloadUrl || '';
-	} catch (error) {
-		console.error(error);
-		return error;
-	}
-};
-
-export const getUserProfile = async (idToken: string) => {
-	const client = eightBaseClient(idToken);
-	try {
-		const data = await client.request(USER_PROFILE);
+		const data = await client.request(USER);
 		return data.user;
 	} catch (error) {
 		console.error(error);
