@@ -82,9 +82,9 @@ const versions = ['v0.0.2', 'v0.0.1'];
 const getReleaseStartFromProject = (a) =>
 	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
 
-const calcPctChange = (key, confidenceScoreSevenDaysAgo, dataPoint) =>
-	confidenceScoreSevenDaysAgo[key]
-		? dataPoint.score - confidenceScoreSevenDaysAgo[key].score
+const calcPctChange = (key, confidenceScoreNDaysAgo, dataPoint) =>
+	confidenceScoreNDaysAgo[key]
+		? dataPoint.score - confidenceScoreNDaysAgo[key].score
 		: dataPoint.score;
 
 const deltaChange = (oldv, newv) =>
@@ -164,14 +164,17 @@ const Grid = (props) => {
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
+
 	const confidenceDataPoints = getConfidenceScore(
 		new Date().getTime(),
 		releaseStart,
 		userStories
 	);
+
 	const confidenceScore = Object.values(confidenceDataPoints)
 		.map((a) => a.score)
 		.reduce((a, b) => a + b, 0.0);
+
 	const testCoverageScore =
 		(Object.values(confidenceDataPoints)
 			.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
@@ -180,19 +183,22 @@ const Grid = (props) => {
 			100) /
 		30;
 
-	const confidenceDataPointsSevenDaysAgo = getConfidenceScore(
-		new Date().getTime() - 1000 * 60 * 60 * 24 * 7,
+	// TODO: allow users to change this value
+	const CURRENT_TIME_PERIOD_IN_DAYS = 7;
+
+	const confidenceDataPointsNDaysAgo = getConfidenceScore(
+		new Date().getTime() - 1000 * 60 * 60 * 24 * CURRENT_TIME_PERIOD_IN_DAYS,
 		releaseStart,
 		userStories
 	);
-	const confidenceScoreSevenDaysAgo = Object.values(
-		confidenceDataPointsSevenDaysAgo
+	const confidenceScoreNDaysAgo = Object.values(
+		confidenceDataPointsNDaysAgo
 	)
 		.map((a) => a.score)
 		.reduce((a, b) => a + b, 0.0);
 
-	const testCoverageScoreSevenDaysAgo =
-		(Object.values(confidenceDataPointsSevenDaysAgo)
+	const testCoverageScoreNDaysAgo =
+		(Object.values(confidenceDataPointsNDaysAgo)
 			.filter((a) => a.tag === DataPointTag.TEST_RUN)
 			.map((a) => a.score)
 			.reduce((a, b) => a + b, 0.0) *
@@ -201,7 +207,7 @@ const Grid = (props) => {
 
 	const confidenceChange = Object.entries(confidenceDataPoints).filter(
 		([key, dataPoint]) =>
-			0 !== calcPctChange(key, confidenceDataPointsSevenDaysAgo, dataPoint)
+			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
 	);
 
 	const latestTestStates = getLatestTestStates(userStories);
@@ -225,7 +231,7 @@ const Grid = (props) => {
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
 				<Heading as="h2" fontSize="md" lineHeight="short">
-					Last 7 Days
+					Last {CURRENT_TIME_PERIOD_IN_DAYS} Days
 				</Heading>
 				<Flex align="center">
 					<Heading
@@ -287,7 +293,7 @@ const Grid = (props) => {
 								title="Confidence score"
 								value={Number(confidenceScore.toFixed(2))}
 								percentageChange={deltaChange(
-									confidenceScoreSevenDaysAgo,
+									confidenceScoreNDaysAgo,
 									confidenceScore
 								)}
 								dataPoints={Object.keys(confidenceDataPoints).length}
@@ -297,7 +303,7 @@ const Grid = (props) => {
 								title="Test coverage"
 								value={Number(testCoverageScore.toFixed(2))}
 								percentageChange={deltaChange(
-									testCoverageScoreSevenDaysAgo,
+									testCoverageScoreNDaysAgo,
 									testCoverageScore
 								)}
 								dataPoints={
@@ -334,15 +340,15 @@ const Grid = (props) => {
 										{confidenceChange.length === 0 ? (
 											<Text>
 												There hasn't been any change to your confidence score in
-												the last 7 days.
+												the last {CURRENT_TIME_PERIOD_IN_DAYS} days.
 											</Text>
 										) : null}
-										{confidenceChange.slice(0, 8).map(([key, dataPoint]) => (
+										{confidenceChange.slice(0, CURRENT_TIME_PERIOD_IN_DAYS + 1).map(([key, dataPoint]) => (
 											<ConfidenceBreakdownItem
 												key={key}
 												value={calcPctChange(
 													key,
-													confidenceScoreSevenDaysAgo,
+													confidenceScoreNDaysAgo,
 													dataPoint
 												)}
 												description={dataPoint.title}
