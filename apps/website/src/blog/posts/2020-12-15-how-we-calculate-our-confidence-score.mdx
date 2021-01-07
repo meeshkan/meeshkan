@@ -20,7 +20,7 @@ Let's unpack how the confidence score is calculated. While confidence in softwar
 
 ## Test results
 
-40% of our confidence score is created by automated tests run by Meeshkan. These tests simulate real user behavior and are created by analyzing millions of data points from your production environment. Each test has a _status_ and a _priority_.
+40% of our confidence score is created by automated tests run by Meeshkan. These tests simulate real user behavior and are created by analyzing millions of data points from your production environment. Each test has a _status_ and a _significance_.
 
 ### Status
 
@@ -30,9 +30,9 @@ A test status can be:
 - Did not run
 - Failing
 
-### Priority
+### Significance
 
-A test priority can be:
+A test significance can be:
 
 - Low
 - Warning
@@ -40,19 +40,19 @@ A test priority can be:
 
 ### Creating a number
 
-The following table shows how we attribute a number between 0 and 1 to each combination of status and priority. We then take an average of these scores for every test, which amounts to 40% of the total confidence score (higher is better).
+The following table shows how we attribute a number between 0 and 1 to each combination of status and significance. We then take an average of these scores for every test, which amounts to 40% of the total confidence score (higher is better).
 
-| Score | Priority | Status      |
-| ----- | -------- | ----------- |
-| 0.0!  | Blocking | Failed      |
-| 0.0   | Blocking | Did not run |
-| 1.0   | Blocking | Passing     |
-| 0.0   | Warning  | Failed      |
-| 0.5   | Warning  | Did not run |
-| 1.0   | Warning  | Passing     |
-| 0.5   | Low      | Failed      |
-| 0.5   | Low      | Did not run |
-| 1.0   | Low      | Passing     |
+| Score | Significance | Status      |
+| ----- | ------------ | ----------- |
+| 0.0!  | Blocking     | Failed      |
+| 0.0   | Blocking     | Did not run |
+| 1.0   | Blocking     | Passing     |
+| 0.0   | Warning      | Failed      |
+| 0.5   | Warning      | Did not run |
+| 1.0   | Warning      | Passing     |
+| 0.5   | Low          | Failed      |
+| 0.5   | Low          | Did not run |
+| 1.0   | Low          | Passing     |
 
 Note that a blocking test that fails triggers a 0% confidence score for the _entire score_. We take blocking tests seriously, and you should too! Blocking means "it is better to stick with our old software than roll out something new", and while it is painful to delay a release by a few hours or days, it is normal to have last-minute blocking issues arise.
 
