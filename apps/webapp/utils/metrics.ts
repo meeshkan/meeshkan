@@ -2,11 +2,17 @@ import _ from 'lodash';
 import moment from 'moment';
 import { UserStories, Project, UserStory } from './user';
 
+export enum DataPointTag {
+	TEST_RUN = 0,
+	TEST_COVERAGE = 1,
+}
+
 export interface DataPoint {
 	title: string;
 	score: number;
 	maxPossible: number;
 	timestamp: number;
+	tag: DataPointTag;
 }
 
 const daysUntilDate = (date: moment.Moment): number =>
@@ -38,32 +44,6 @@ export const getBugs = (userStories: UserStories['items']) => {
 	return {
 		introduced,
 		fixed,
-	};
-};
-
-type DisplayableMetric = {
-	value: number;
-	percentageChange: number;
-	dataPoints: number;
-};
-
-export const getTestCoverage = (
-	userStories: UserStories['items']
-): DisplayableMetric => {
-	const numberOfTests = _.sumBy(userStories, (item) =>
-		item?.isTestCase ? 1 : 0
-	);
-	const numberOfRecordings = userStories.length;
-	const testCoverageValue =
-		numberOfRecordings !== 0 ? (numberOfTests / numberOfRecordings) * 100 : 0;
-	const pastTestCoverageValue = 0;
-	return {
-		value: testCoverageValue,
-		percentageChange:
-			testCoverageValue > 0
-				? (pastTestCoverageValue / testCoverageValue) * 100
-				: 0,
-		dataPoints: numberOfRecordings,
 	};
 };
 
@@ -121,11 +101,6 @@ export const sumOfObjectValues = (object: { [key: string]: number }) =>
 export const getLastSevenDaysInFormat = (format: string) =>
 	lastSevenDays.map((day) => day.format(format));
 
-type DisplayableMetricAndDataPoints = {
-	displayableMetric: DisplayableMetric;
-	dataPoints: Record<string, DataPoint>;
-};
-
 export const COVERAGE_DATA_POINT = 'COVERAGE_DATA_POINT';
 export const MAX_POSSIBLE_TEST_COVERAGE_SCORE = 30;
 export const MAX_POSSIBLE_TEST_RUN_SCORE = 70;
@@ -136,7 +111,7 @@ export const getConfidenceScore = (
 	howLongAgo: number,
 	releaseStarted: number,
 	userStories_: UserStories['items']
-): DisplayableMetricAndDataPoints => {
+): Record<string, DataPoint> => {
 	const userStories = userStories_.filter(
 		(story) => new Date(story.createdAt).getTime() < howLongAgo
 	);
@@ -144,17 +119,25 @@ export const getConfidenceScore = (
 		.map((story) => storySignificance(story))
 		.reduce((a, b) => a + b, 0);
 	const dataPoints: Record<string, DataPoint> = {
-		[COVERAGE_DATA_POINT]: {
-			title: 'Test Coverage Score',
-			maxPossible: 30,
-			score:
-				userStories.length === 0
-					? 0
-					: (userStories.filter((story) => story.isTestCase).length *
+		...userStories
+			.map((story) => ({
+				[story.id + COVERAGE_DATA_POINT]: {
+					score:
+						((story.isTestCase &&
+						typeof story.testCreatedDate === 'string' &&
+						new Date(story.testCreatedDate).getTime() <= howLongAgo
+							? 1
+							: 0) *
 							MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
-					  userStories.length,
-			timestamp: new Date().getTime(),
-		},
+						userStories.length,
+					tag: DataPointTag.TEST_COVERAGE,
+					title: 'Test coverage for ' + story.title,
+					timestamp: new Date(story.createdAt).getTime(),
+					maxPossible: MAX_POSSIBLE_TEST_COVERAGE_SCORE / userStories.length,
+				},
+			}))
+			.reduce((a, b) => ({ ...a, ...b }), {}),
+
 		...userStories
 			.map((story) => {
 				const significance = storySignificance(story);
@@ -192,7 +175,8 @@ export const getConfidenceScore = (
 				return {
 					[story.id]: {
 						title: story.title,
-						timestamp: story.createdAt,
+						timestamp: new Date(story.createdAt).getTime(),
+						tag: DataPointTag.TEST_RUN,
 						score:
 							maxPossibleTestRunScore === 0
 								? 0
@@ -204,14 +188,5 @@ export const getConfidenceScore = (
 			.reduce((a, b) => ({ ...a, ...b }), {}),
 	};
 
-	return {
-		displayableMetric: {
-			value: Object.values(dataPoints)
-				.map((v) => v.score)
-				.reduce((a, b) => a + b, 0.0),
-			percentageChange: 0.0, // TODO: un-hard-code when we have a meaningful sense of window
-			dataPoints: Object.values(dataPoints).length,
-		},
-		dataPoints: dataPoints,
-	};
+	return dataPoints;
 };

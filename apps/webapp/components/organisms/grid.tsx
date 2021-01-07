@@ -32,12 +32,12 @@ import {
 	getTestRuns,
 	getDaysUntilRelease,
 	getBugs,
-	getTestCoverage,
 	getConfidenceScore,
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
 	getLastSevenDaysInFormat,
+	DataPointTag,
 } from '../../utils/metrics';
 require('../molecules/rounded-chart');
 
@@ -83,10 +83,12 @@ const getReleaseStartFromProject = (a) =>
 	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
 
 const calcPctChange = (key, confidenceScoreSevenDaysAgo, dataPoint) =>
-	confidenceScoreSevenDaysAgo.dataPoints[key]
-		? dataPoint.score - confidenceScoreSevenDaysAgo.dataPoints[key].score
+	confidenceScoreSevenDaysAgo[key]
+		? dataPoint.score - confidenceScoreSevenDaysAgo[key].score
 		: 0;
 
+const deltaChange = (oldv, newv) =>
+	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
@@ -161,19 +163,39 @@ const Grid = (props) => {
 	const testRuns = getTestRuns(userStories);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	const bugs = getBugs(userStories);
-	const testCoverage = getTestCoverage(userStories);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
-	const confidenceScore = getConfidenceScore(
+	const confidenceDataPoints = getConfidenceScore(
 		new Date().getTime(),
 		releaseStart,
 		userStories
 	);
-	const confidenceScoreSevenDaysAgo = getConfidenceScore(
+	const confidenceScore = Object.values(confidenceDataPoints)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
+	const testCoverageScore = Object.values(confidenceDataPoints)
+		.filter((a) => a.tag === DataPointTag.TEST_RUN)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
+
+	const confidenceDataPointsSevenDaysAgo = getConfidenceScore(
 		new Date().getTime() - 1000 * 60 * 60 * 24 * 7,
 		releaseStart,
 		userStories
 	);
-	const confidenceChange = Object.entries(confidenceScore.dataPoints).filter(
+	const confidenceScoreSevenDaysAgo = Object.values(
+		confidenceDataPointsSevenDaysAgo
+	)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
+
+	const testCoverageScoreSevenDaysAgo = Object.values(
+		confidenceDataPointsSevenDaysAgo
+	)
+		.filter((a) => a.tag === DataPointTag.TEST_RUN)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
+
+	const confidenceChange = Object.entries(confidenceDataPoints).filter(
 		([key, dataPoint]) =>
 			0 !== calcPctChange(key, confidenceScoreSevenDaysAgo, dataPoint)
 	);
@@ -259,27 +281,26 @@ const Grid = (props) => {
 						>
 							<StatCard
 								title="Confidence score"
-								value={Number(
-									confidenceScore.displayableMetric.value.toFixed(2)
+								value={Number(confidenceScore.toFixed(2))}
+								percentageChange={deltaChange(
+									confidenceScoreSevenDaysAgo,
+									confidenceScore
 								)}
-								percentageChange={
-									confidenceScoreSevenDaysAgo.displayableMetric.value === 0
-										? confidenceScore.displayableMetric.value === 0
-											? 0
-											: 100
-										: ((confidenceScoreSevenDaysAgo.displayableMetric.value -
-												confidenceScore.displayableMetric.value) *
-												100) /
-										  confidenceScoreSevenDaysAgo.displayableMetric.value
-								}
-								dataPoints={confidenceScore.displayableMetric.dataPoints}
+								dataPoints={Object.keys(confidenceDataPoints).length}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								title="Test coverage"
-								value={Number(testCoverage.value.toFixed(2))}
-								percentageChange={testCoverage.percentageChange}
-								dataPoints={testCoverage.dataPoints}
+								value={Number(testCoverageScore.toFixed(2))}
+								percentageChange={deltaChange(
+									testCoverageScoreSevenDaysAgo,
+									testCoverageScore
+								)}
+								dataPoints={
+									Object.values(confidenceDataPoints).filter(
+										(a) => a.tag === DataPointTag.TEST_RUN
+									).length
+								}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
@@ -398,9 +419,9 @@ const Grid = (props) => {
 										</Box>
 										<Box w="100px">
 											<Text fontWeight={900}>
-												{confidenceScore.displayableMetric.value >= 90
+												{confidenceScore >= 90
 													? 'Ready'
-													: confidenceScore.displayableMetric.value >= 50
+													: confidenceScore >= 50
 													? 'Proceed with caution'
 													: 'Do not release'}
 											</Text>
