@@ -16,7 +16,9 @@ export default function session(
 			res.json({
 				...auth0User,
 				...eightBaseUser,
-				name: `${eightBaseUser.firstName} ${eightBaseUser.lastName}`
+				name: eightBaseUser.firstName && eightBaseUser.lastName
+					? `${eightBaseUser.firstName} ${eightBaseUser.lastName}`
+					: undefined
 			});
 		} catch (error) {
 			console.error(error);

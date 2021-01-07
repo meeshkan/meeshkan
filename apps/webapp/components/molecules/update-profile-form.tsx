@@ -61,7 +61,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 		}
 
 		const { firstName, lastName, avatar } = data.userUpdate;
-		await mutateUser({ ...user, firstName, lastName, avatar: avatar.downloadUrl });
+		await mutateUser({ ...user, firstName, lastName, avatar: avatar?.downloadUrl });
 		setLoading(false);
 	};
 
