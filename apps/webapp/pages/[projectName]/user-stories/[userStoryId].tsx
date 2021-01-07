@@ -171,9 +171,9 @@ const UserStory = (props: UserStoryProps) => {
 						borderRadius="md"
 						w="fit-content"
 					>
-						<option value="low">Low priority</option>
-						<option value="medium">Medium priority</option>
-						<option value="high">High priority</option>
+						<option value="low">Low significance</option>
+						<option value="medium">Medium significance</option>
+						<option value="high">High significance</option>
 					</Select>
 				</Flex>
 
