@@ -8,8 +8,9 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import AvatarField from './avatar-field';
-import { UserContext, AvatarFile } from '../../utils/user';
+import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';
+import { UploadedFile } from '../../utils/file';
 import { createSlug } from '../../utils/createSlug';
 
 type ProjectFormInputs = {
@@ -25,7 +26,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 	const user = useContext(UserContext);
 	const { idToken, mutate: mutateUser, projects } = user;
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
-	const [avatarFile, setAvatarFile] = useState<AvatarFile>();
+	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const [error, setError] = useState('');
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
@@ -37,27 +38,22 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 		});
 
 		if (data.error) {
-			setError(data.error.message);
+			setError(data.error);
 			setLoading(false);
 			return;
 		}
 
 		const [newProject] = data.userUpdate.projects.items;
-		projects.push(newProject)
+		projects.push(newProject);
 		await mutateUser({ ...user, projects });
 		setLoading(false);
 
-        if (router.pathname === '/new-project') {
-            router.push(`/${createSlug(formData.name)}`);
-            return;
-        }
-
-		router.reload();
+		router.push(`/${createSlug(formData.name)}`);
 	};
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="form">
-			<AvatarField isProfileAvatar={false} onUpload={setAvatarFile} />
+			<AvatarField onUpload={setAvatarFile} />
 			<FormControl id="name" isRequired isInvalid={!!error}>
 				<FormLabel>Name your project</FormLabel>
 				<Input

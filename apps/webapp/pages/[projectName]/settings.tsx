@@ -38,7 +38,13 @@ const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
 	const toast = useToast();
 	const user = useContext(UserContext);
-	const { productNotifications, idToken, project, projects, mutate: mutateUser } = user;
+	const {
+		productNotifications,
+		idToken,
+		project,
+		projects,
+		mutate: mutateUser,
+	} = user;
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
@@ -98,12 +104,14 @@ const Settings = () => {
 			memberEmail: memberEmail,
 		});
 
-		const updatedMembers = members.filter((member) => member.email !== memberEmail);
+		const updatedMembers = members.filter(
+			(member) => member.email !== memberEmail
+		);
 		setMembers(updatedMembers);
 
 		const selectedProjectIndex = _.findIndex(
 			projects,
-			currentProject => currentProject.id === project.id
+			(currentProject) => currentProject.id === project.id
 		);
 
 		projects[selectedProjectIndex].members.items = members;
@@ -127,7 +135,7 @@ const Settings = () => {
 						setLoading={setProfileLoading}
 						formId="profileUpdateForm"
 					/>
-					<Flex justify="right" mt={4}>
+					<Flex justifyContent="right" mt={4}>
 						<Button
 							mt={4}
 							type="submit"

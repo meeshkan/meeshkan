@@ -17,9 +17,8 @@ import AvatarField from '../molecules/avatar-field';
 import {
 	UserContext,
 	updateProfile,
-	updateAvatar as updateUserAvatar,
-	AvatarFile,
 } from '../../utils/user';
+import { UploadedFile } from '../../utils/file';
 
 type ProfileFormInputs = {
 	name: string;
@@ -40,6 +39,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 	const { name: currentName, jobTitle, avatar, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState<string>(currentName);
 	const [title, setTitle] = useState(jobTitle || jobTitles[0]);
+	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
 
 	const onSubmit = async (formData: ProfileFormInputs): Promise<void> => {
@@ -48,6 +48,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 		const data = await updateProfile(idToken, {
 			name: formData.name,
 			jobTitle: title,
+			avatar: avatarFile,
 		});
 
 		if (data.error) {
@@ -60,8 +61,8 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 			setStep(2);
 		}
 
-		const { firstName, lastName, avatar } = data.userUpdate;
-		await mutateUser({ ...user, firstName, lastName, avatar: avatar.downloadUrl });
+		const { firstName, lastName, avatar: newAvatar } = data.userUpdate;
+		await mutateUser({ ...user, firstName, lastName, avatar: newAvatar.downloadUrl });
 		setLoading(false);
 	};
 
@@ -69,13 +70,10 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 		setName(event.target.value);
 	}
 
-	const onUpload = (data: AvatarFile) => updateUserAvatar(idToken, data);
-
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
 			<AvatarField
-				isProfileAvatar
-				onUpload={onUpload}
+				onUpload={setAvatarFile}
 				existingImageUrl={avatar}
 			/>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
