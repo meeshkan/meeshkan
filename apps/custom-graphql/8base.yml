@@ -1,0 +1,11 @@
+functions:
+  team-create-invite-link-trigger:
+    type: trigger.before
+    handler:
+      code: src/triggers/invite-link/create-handler.ts
+    operation: Configuration.create
+  team-update-invite-link-trigger:
+    type: trigger.before
+    handler:
+      code: src/triggers/invite-link/update-handler.ts
+    operation: Configuration.update
