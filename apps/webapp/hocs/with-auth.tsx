@@ -30,10 +30,6 @@ const withAuth = (PageComponent) => {
 			}
 		}, [slugifiedProjectName]);
 
-		if (isInvitePage) {
-			return <PageComponent {...props} />;
-		}
-
 		if (user && !user.error) {
 			const providerValue = { ...user, mutate, project, setProject };
 			return (
@@ -41,6 +37,10 @@ const withAuth = (PageComponent) => {
 					<PageComponent {...props} />
 				</UserContext.Provider>
 			);
+		}
+
+		if (isInvitePage) {
+			return <PageComponent {...props} />;
 		}
 
 		if (loading) {

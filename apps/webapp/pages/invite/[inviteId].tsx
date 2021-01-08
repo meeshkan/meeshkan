@@ -1,9 +1,12 @@
+import { useContext } from 'react';
 import { Flex, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
+import _ from 'lodash';
 import { LogoIcon } from '@frontend/chakra-theme';
 import LoadingScreen from '../../components/organisms/loading-screen';
 import { useInviteLink } from '../../hooks/use-invite-link';
+import { UserContext, Project } from '../../utils/user';
 
 type InviteProps = {
 	cookies: string | undefined;
@@ -13,10 +16,26 @@ const Invite = (props: InviteProps) => {
 	const router = useRouter();
 	const { inviteId } = router.query;
 	const { data, error } = useInviteLink(inviteId as string);
+	const user = useContext(UserContext);
 
-	const redirect = async (pathname: string) => {
-		await mutate('/api/session');
-		router.push(pathname);
+	const redirect = async () => {
+		if (user) {
+			const { projects, mutate: mutateUser } = user;
+			const joinedProject = data?.project as Project;
+			const projectIndex = _.findIndex(
+				projects, project => project.id === joinedProject?.id
+			);
+
+			if (projectIndex != -1) {
+				projects[projectIndex] = joinedProject;
+			} else {
+				projects.push(joinedProject);
+			}
+
+			await mutateUser({ ...user, projects }, false);
+		}
+
+		router.push(data.redirectTo);
 	}
 
 	if (inviteId === 'invalid' || data?.invalidInvite || error) {
@@ -31,7 +50,7 @@ const Invite = (props: InviteProps) => {
 	}
 
 	if (data?.redirectTo) {
-		redirect(data.redirectTo);
+		redirect();
 	}
 
 	return <LoadingScreen />;
