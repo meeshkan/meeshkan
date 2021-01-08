@@ -11,7 +11,7 @@ export default function session(
 		try {
 			const auth0User = await getAuth0User(req);
 			const eightBaseUser = await getEightBaseUser(auth0User.idToken);
-			eightBaseUser.avatar = eightBaseUser.avatar.downloadUrl;
+			eightBaseUser.avatar = eightBaseUser.avatar?.downloadUrl;
 			eightBaseUser.projects = eightBaseUser.projects.items; 
 			res.json({
 				...auth0User,

@@ -56,6 +56,60 @@ export const JOIN_PROJECT = gql`
 			project {
 				id
 				name
+				avatar {
+					downloadUrl
+					shareUrl
+				}
+				configuration {
+					inviteLink
+				}
+				hasReceivedEvents
+				members {
+					count
+					items {
+						firstName
+						lastName
+						email
+						avatar {
+							downloadUrl
+						}
+					}
+				}
+				userStories {
+					count
+					items {
+						id
+						failing {
+							count
+							items {
+								firstIntroduction
+								isResolved
+							}
+						}
+						title
+						testCreatedDate
+						isTestCase
+						createdAt
+						testRuns {
+							count
+							items {
+								status
+								dateTime
+								userStories {
+									items {
+										id
+									}
+								}
+							}
+						}
+					}
+				}
+				release {
+					count
+					items {
+						releaseDate
+					}
+				}
 			}
 		}
 	}
