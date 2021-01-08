@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "diagnostics": true,
+    "declaration": true,
+    "declarationMap": true,
+    "module": "commonjs",
+    "target": "ES2016",
+    "noImplicitAny": true,
+    "lib": ["es2017", "esnext.asynciterable", "es2016.array.include", "dom"],
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "sourceMap": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["types/**/*"]
+}
