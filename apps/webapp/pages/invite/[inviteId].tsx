@@ -1,5 +1,6 @@
 import { Flex, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 import { LogoIcon } from '@frontend/chakra-theme';
 import LoadingScreen from '../../components/organisms/loading-screen';
 import { useInviteLink } from '../../hooks/use-invite-link';
@@ -13,6 +14,11 @@ const Invite = (props: InviteProps) => {
 	const { inviteId } = router.query;
 	const { data, error } = useInviteLink(inviteId as string);
 
+	const redirect = async (pathname: string) => {
+		await mutate('/api/session');
+		router.push(pathname);
+	}
+
 	if (inviteId === 'invalid' || data?.invalidInvite || error) {
 		return (
 			<Flex align="center" justify="center" direction="column" w="100%">
@@ -25,7 +31,7 @@ const Invite = (props: InviteProps) => {
 	}
 
 	if (data?.redirectTo) {
-		router.push(data.redirectTo);
+		redirect(data.redirectTo);
 	}
 
 	return <LoadingScreen />;
