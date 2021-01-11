@@ -24,10 +24,9 @@ export default async function invite(
 				return res.status(401).json({ invalidInvite: true });
 			}
 
-			const redirectTo = `/${createSlug(
-				response.configurationUpdate?.project?.name
-			)}`;
-			res.json({ redirectTo });
+			const project = response.configurationUpdate?.project;
+			const redirectTo = `/${createSlug(project?.name)}`;
+			res.json({ redirectTo, project });
 		} catch (error) {
 			console.error(error);
 			res.status(error.status || 500).end(error.message);
