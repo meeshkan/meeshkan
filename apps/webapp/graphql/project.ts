@@ -6,6 +6,7 @@ export const CREATE_PROJECT = gql`
 		$projectName: String!
 		$inviteLink: String!
 		$avatar: ProjectAvatarRelationInput
+		$today: Date!
 	) {
 		userUpdate(
 			filter: { id: $userId }
@@ -14,6 +15,7 @@ export const CREATE_PROJECT = gql`
 					create: {
 						name: $projectName
 						configuration: { create: { inviteLink: $inviteLink } }
+						release: { create: { releaseDate: $today } }
 						avatar: $avatar
 					}
 				}
