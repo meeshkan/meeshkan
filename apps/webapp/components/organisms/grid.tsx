@@ -36,7 +36,7 @@ import {
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
-	getLastSevenDaysInFormat,
+	getLastNDaysInFormat,
 	DataPointTag,
 } from '../../utils/metrics';
 require('../molecules/rounded-chart');
@@ -76,6 +76,13 @@ const doughnutData = {
 };
 
 const versions = ['v0.0.2', 'v0.0.1'];
+
+const timePeriodsInDays = {
+	'24 hours': 1,
+	'7 days': 7,
+	'30 days': 30,
+	'6 months': 183,
+};
 
 // TODO: fill me in with correct info once we can determine
 // the release start date. For now, set arbitrarily to 30 days.
@@ -157,6 +164,7 @@ const Grid = (props) => {
 	};
 
 	const [version, setVersion] = useState(versions[0]);
+	const [timePeriod, setTimePeriod] = useState('7 days');
 
 	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
@@ -184,13 +192,14 @@ const Grid = (props) => {
 		30;
 
 	// TODO: allow users to change this value
-	const CURRENT_TIME_PERIOD_IN_DAYS = 7;
+	const selectedTimePeriodInDays = timePeriodsInDays[timePeriod];
 
 	const confidenceDataPointsNDaysAgo = getConfidenceScore(
-		new Date().getTime() - 1000 * 60 * 60 * 24 * CURRENT_TIME_PERIOD_IN_DAYS,
+		new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
 		releaseStart,
 		userStories
 	);
+
 	const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
 		.map((a) => a.score)
 		.reduce((a, b) => a + b, 0.0);
@@ -215,11 +224,13 @@ const Grid = (props) => {
 	doughnutData.labels = doughnutDataLabels;
 
 	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
+		selectedTimePeriodInDays,
 		userStories
 	);
+
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
-	const barDataLabels = getLastSevenDaysInFormat('MMM DD');
+	const barDataLabels = getLastNDaysInFormat(selectedTimePeriodInDays, 'MMM DD');
 	barData.labels = barDataLabels;
 
 	const totalRecordings = sumOfObjectValues(recordingsByDay);
@@ -228,9 +239,46 @@ const Grid = (props) => {
 	return (
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
-				<Heading as="h2" fontSize="md" lineHeight="short">
-					Last {CURRENT_TIME_PERIOD_IN_DAYS} Days
-				</Heading>
+				<Flex align="center">
+					<Heading
+						as="h2"
+						fontSize="md"
+						display="inline"
+						lineHeight="short"
+						mr={3}
+					>
+						Last
+					</Heading>
+					<Menu>
+						<MenuButton
+							as={Button}
+							size="sm"
+							variant="outline"
+							colorScheme="gray"
+							rightIcon={<ArrowUpDownIcon />}
+							w="100%"
+							textAlign="left"
+						>
+							{timePeriod}
+						</MenuButton>
+						<MenuList>
+							<MenuOptionGroup
+								defaultValue={timePeriod}
+								type="radio"
+							>
+								{Object.keys(timePeriodsInDays).map(period => (
+									<MenuItemOption
+										key={timePeriodsInDays[period]}
+										value={period}
+										onClick={() => setTimePeriod(period)}
+									>
+										{period}
+									</MenuItemOption>
+								))}
+							</MenuOptionGroup>
+						</MenuList>
+					</Menu>
+				</Flex>
 				<Flex align="center">
 					<Heading
 						as="h2"
@@ -338,11 +386,11 @@ const Grid = (props) => {
 										{confidenceChange.length === 0 ? (
 											<Text>
 												There hasn't been any change to your confidence score in
-												the last {CURRENT_TIME_PERIOD_IN_DAYS} days.
+												the last {timePeriod}.
 											</Text>
 										) : null}
 										{confidenceChange
-											.slice(0, CURRENT_TIME_PERIOD_IN_DAYS + 1)
+											.slice(0, selectedTimePeriodInDays + 1)
 											.map(([key, dataPoint]) => (
 												<ConfidenceBreakdownItem
 													key={key}

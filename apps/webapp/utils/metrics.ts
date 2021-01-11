@@ -65,16 +65,17 @@ export const getLatestTestStates = (userStories: UserStories['items']) => {
 	return latestTestStates;
 };
 
-const lastSevenDays = [...Array(7).keys()]
+const lastNDays = n => [...Array(n).keys()]
 	.map((i) => moment().subtract(i, 'days'))
 	.reverse();
 
 export const getRecordingsAndTestsByDay = (
+	days: number,
 	userStories: UserStories['items']
 ) => {
 	const recordingsByDay = {};
 	const testsByDay = {};
-	lastSevenDays.forEach((day) => {
+	lastNDays(days).forEach((day) => {
 		const recordingsOnThisDay = userStories.filter((story) => {
 			const { createdAt, isTestCase } = story;
 			return moment(createdAt).isSame(day, 'day') && !isTestCase;
@@ -98,8 +99,8 @@ export const getRecordingsAndTestsByDay = (
 export const sumOfObjectValues = (object: { [key: string]: number }) =>
 	_.sum(_.values(object));
 
-export const getLastSevenDaysInFormat = (format: string) =>
-	lastSevenDays.map((day) => day.format(format));
+export const getLastNDaysInFormat = (days: number, format: string) =>
+	lastNDays(days).map((day) => day.format(format));
 
 export const COVERAGE_DATA_POINT = 'COVERAGE_DATA_POINT';
 export const MAX_POSSIBLE_TEST_COVERAGE_SCORE = 30;
