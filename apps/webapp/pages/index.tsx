@@ -10,7 +10,7 @@ type IndexProps = {
 };
 
 const Index = (props: IndexProps) => {
-	const { projects, setProject } = useContext(UserContext);
+	const { idToken, projects, setProject } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
 
 	useEffect(() => {
@@ -19,7 +19,7 @@ const Index = (props: IndexProps) => {
 		}
 	}, [projects, setProject]);
 
-	if (!hasProjects) {
+	if (idToken && !hasProjects) {
 		return (
 			<Stack
 				as={Card}
