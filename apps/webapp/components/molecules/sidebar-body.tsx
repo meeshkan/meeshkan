@@ -175,7 +175,7 @@ const SideBarBody = () => {
 									href={`/${slugifiedProjectName}/settings#script-tag`}
 									isActive={
 										router.asPath ===
-										`/${slugifiedProjectName}/settings#script-tag`
+										`/${slugifiedProjectName}/settings#details`
 									}
 								>
 									Script tag

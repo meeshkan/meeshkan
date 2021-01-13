@@ -237,9 +237,9 @@ const Settings = () => {
 					})}
 				</GridCard>
 				<GridCard
-					title="Script Tag"
+					title="Details"
 					anchor
-					subtitle="Install this script in the head of your application"
+					subtitle="Detailed information about your project."
 				>
 					<ScriptTagInput />
 				</GridCard>
