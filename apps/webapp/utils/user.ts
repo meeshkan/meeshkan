@@ -158,7 +158,7 @@ const uploadAvatar = async (idToken: string, avatar: string) => {
 
 export const confirmOrCreateUser = async (user: IUser) => {
 	const client = eightBaseClient(user.idToken);
-	await client.request(CURRENT_USER).catch(async () => {
+	const currentUser = await client.request(CURRENT_USER).catch(async () => {
 		const { userSignUpWithToken } = await client.request(SIGN_UP_USER, {
 			user: {
 				email: user.email,
@@ -167,7 +167,7 @@ export const confirmOrCreateUser = async (user: IUser) => {
 		});
 		const { firstName, lastName } = splitName(user.name);
 		const { fileId, filename } = await uploadAvatar(user.idToken, user.avatar);
-		await client.request(UPDATE_USER, {
+		const updatedUser = await client.request(UPDATE_USER, {
 			id: userSignUpWithToken.id,
 			user: {
 				firstName,
@@ -180,7 +180,11 @@ export const confirmOrCreateUser = async (user: IUser) => {
 				},
 			},
 		});
+
+		return updatedUser.userUpdate;
 	});
+
+	return currentUser.user || currentUser;
 };
 
 export const updateProfile = async (
