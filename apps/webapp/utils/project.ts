@@ -1,6 +1,6 @@
-import moment from 'moment';
 import { CREATE_PROJECT, UPDATE_PROJECT } from '../graphql/project';
 import { CURRENT_USER } from '../graphql/user';
+import { getDateInEightBaseFormat } from './date';
 import { eightBaseClient } from './graphql';
 
 export const createProject = async (
@@ -24,7 +24,7 @@ export const createProject = async (
 			projectName: name,
 			inviteLink: Math.random().toString(36).substring(7),
 			avatar: fileId && id ? avatar : undefined,
-			today: moment().format('YYYY-MM-DD'),
+			today: getDateInEightBaseFormat(new Date()),
 		});
 
 		return response;
