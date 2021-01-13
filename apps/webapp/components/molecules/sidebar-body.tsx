@@ -172,7 +172,7 @@ const SideBarBody = () => {
 								</NavButton>
 								<NavButton
 									fontSize="14px"
-									href={`/${slugifiedProjectName}/settings#script-tag`}
+									href={`/${slugifiedProjectName}/settings#details`}
 									isActive={
 										router.asPath ===
 										`/${slugifiedProjectName}/settings#details`
