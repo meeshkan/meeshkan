@@ -17,7 +17,11 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
-import { ArrowForwardIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
+import {
+	ArrowForwardIcon,
+	ArrowUpDownIcon,
+	ChevronDownIcon,
+} from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
@@ -230,7 +234,10 @@ const Grid = (props) => {
 
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
-	const barDataLabels = getLastNDaysInFormat(selectedTimePeriodInDays, 'MMM DD');
+	const barDataLabels = getLastNDaysInFormat(
+		selectedTimePeriodInDays,
+		'MMM DD'
+	);
 	barData.labels = barDataLabels;
 
 	const totalRecordings = sumOfObjectValues(recordingsByDay);
@@ -245,28 +252,27 @@ const Grid = (props) => {
 						fontSize="md"
 						display="inline"
 						lineHeight="short"
-						mr={3}
+						mr={2}
 					>
 						Last
 					</Heading>
 					<Menu>
 						<MenuButton
 							as={Button}
-							size="sm"
-							variant="outline"
+							fontSize="md"
+							fontWeight={700}
+							py={0}
+							px={2}
+							variant="ghost"
 							colorScheme="gray"
-							rightIcon={<ArrowUpDownIcon />}
-							w="100%"
+							rightIcon={<ChevronDownIcon ml={-3} />}
 							textAlign="left"
 						>
 							{timePeriod}
 						</MenuButton>
 						<MenuList>
-							<MenuOptionGroup
-								defaultValue={timePeriod}
-								type="radio"
-							>
-								{Object.keys(timePeriodsInDays).map(period => (
+							<MenuOptionGroup defaultValue={timePeriod} type="radio">
+								{Object.keys(timePeriodsInDays).map((period) => (
 									<MenuItemOption
 										key={timePeriodsInDays[period]}
 										value={period}
