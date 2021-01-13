@@ -171,6 +171,16 @@ const SideBarBody = () => {
 									Team members
 								</NavButton>
 								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#script-tag`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#details`
+									}
+								>
+									Script tag
+								</NavButton>
+								<NavButton
 									disabled={true}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
