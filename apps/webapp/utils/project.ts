@@ -28,17 +28,15 @@ export const createProject = async (
 				today: getDateInEightBaseFormat(new Date()),
 			})
 			.then((res) => {
-				fetch(
-					'https://hooks.slack.com/services/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',
-					{
-						method: 'POST',
-						mode: 'no-cors',
-						body: JSON.stringify({
-							text: `*A new project has been created! 🎉* \n\n Created by: ${user.email} \n Project ID: \`${res.userUpdate.projects.items[0].id} \` \n Project name: _${name}_`,
-						}),
-						headers: { 'Content-type': 'application/json' },
-					}
-				);
+				fetch('/api/new-project', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						text: `*A new project has been created! 🎉* \n\n Created by: ${user.email} \n Project ID: \`${res.userUpdate.projects.items[0].id} \` \n Project name: _${name}_`,
+					}),
+				});
 				return res;
 			});
 
