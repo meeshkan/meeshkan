@@ -23,10 +23,10 @@ import NotFoundError from '../../404';
 
 const doughnutDataValues = [80, 8, 12];
 const doughnutData = {
-	labels: ['Passing', 'Didn\'t run', 'Failure'],
+	labels: ['Passing', "Didn't run", 'Failure'],
 	datasets: [
 		{
-			data: doughnutDataValues, 
+			data: doughnutDataValues,
 			backgroundColor: [
 				theme.colors.blue[500],
 				theme.colors.blue[700],
@@ -46,14 +46,18 @@ type TestRunCardProps = {
 		failing: number;
 		notRan: number;
 	};
-}
+};
 
 const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 	const { passing, failing, notRan } = stats;
 	const statusColor =
-		status === 'queued' ? 'gray' :
-			status === 'running' ? 'yellow' :
-				status === 'completed' ? 'green' : 'red';
+		status === 'queued'
+			? 'gray'
+			: status === 'running'
+			? 'yellow'
+			: status === 'completed'
+			? 'cyan'
+			: 'red';
 
 	return (
 		<Card>
@@ -62,28 +66,39 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 					<Box flex="1">
 						<Badge
 							colorScheme={statusColor}
+							borderRadius="md"
 							textTransform="lowercase"
-							p={1}
+							p={2}
 							fontSize="sm"
 						>
 							{status}
 						</Badge>
 					</Box>
-					<Text fontSize="sm" fontWeight={700} flex="1">Run #{runNumber}</Text>
-					<Text fontSize="sm" fontWeight={300} flex="1">{date.toDateString()}</Text>
+					<Text fontSize="sm" fontWeight={700} flex="1">
+						Run #{runNumber}
+					</Text>
+					<Text fontSize="sm" fontWeight={300} flex="1" whiteSpace="nowrap">
+						{date.toDateString()}
+					</Text>
 				</Flex>
 				<Flex align="center" flex="1" justify="space-between" maxW="2xs">
 					<Center>
 						<CheckmarkIcon width={2} height={2} color="green.500" />
-						<Text fontSize="sm" ml={2}>{passing}</Text>
+						<Text fontSize="sm" ml={2}>
+							{passing}
+						</Text>
 					</Center>
 					<Center>
 						<XmarkIcon width={2} height={2} color="red.500" />
-						<Text fontSize="sm" ml={2}>{failing}</Text>
+						<Text fontSize="sm" ml={2}>
+							{failing}
+						</Text>
 					</Center>
 					<Center>
-						<MinusIcon width={2} height={2} color="gray.500" /> 
-						<Text fontSize="sm" ml={2}>{notRan}</Text>
+						<MinusIcon width={2} height={2} color="gray.500" />
+						<Text fontSize="sm" ml={2}>
+							{notRan}
+						</Text>
 					</Center>
 					<Button size="sm" variant="ghost" colorScheme="gray">
 						Details <ChevronRightIcon ml={1} />
@@ -123,15 +138,9 @@ const TestRunsPage = () => {
 		<Flex direction="column" w="100%">
 			<GridCard title="Latest case status" flex="1" mb={6}>
 				{doughnutDataValues.length > 0 ? (
-					<Doughnut
-						data={doughnutData}
-						options={doughnutOptions}
-						height={30}
-					/>
+					<Doughnut data={doughnutData} options={doughnutOptions} height={30} />
 				) : (
-					<Text fontStyle="italic">
-						No tests have been run yet.
-					</Text>
+					<Text fontStyle="italic">No tests have been run yet.</Text>
 				)}
 			</GridCard>
 			<Stack p={[6, 0, 0, 0]} w="100%" spacing={6}>
