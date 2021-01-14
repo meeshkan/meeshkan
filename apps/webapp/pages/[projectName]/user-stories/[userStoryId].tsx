@@ -243,7 +243,7 @@ const UserStory = (props: UserStoryProps) => {
 						variant="subtle"
 						leftIcon={<XmarkIcon />}
 						onClick={() => {
-							deleteRejectedRecording;
+							deleteRejectedRecording();
 							toast({
 								position: 'bottom-right',
 								render: () => (
