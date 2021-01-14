@@ -61,7 +61,7 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 
 	return (
 		<Card>
-			<Flex align="center" justify="space-between" w="100%">
+			<Flex align="center" justify="space-between">
 				<Flex align="center" flex="1" justify="space-between" maxW="2xs">
 					<Box flex="1">
 						<Badge
@@ -135,15 +135,15 @@ const TestRunsPage = () => {
 	}
 
 	return (
-		<Flex direction="column" w="100%">
-			<GridCard title="Latest case status" flex="1" mb={6}>
+		<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
+			<GridCard title="Latest case status" mb={6} flex="0 0 auto">
 				{doughnutDataValues.length > 0 ? (
 					<Doughnut data={doughnutData} options={doughnutOptions} height={30} />
 				) : (
 					<Text fontStyle="italic">No tests have been run yet.</Text>
 				)}
 			</GridCard>
-			<Stack p={[6, 0, 0, 0]} w="100%" spacing={6}>
+			<Stack spacing={6} overflowY="scroll">
 				<TestRunCard
 					status="queued"
 					runNumber={4}
