@@ -347,6 +347,20 @@ export const HamburgerIcon = createIcon({
 	),
 });
 
+export const MinusIcon = createIcon({
+	displayName: 'MinusIcon',
+	viewBox: '0 0 16 16',
+	path: (
+		<path
+			d="M 3 8 L 13 8"
+			strokeWidth="2"
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		/>
+	)
+});
+
 export const CheckmarkIcon = createIcon({
 	displayName: 'CheckmarkIcon',
 	viewBox: '0 0 18 16',
