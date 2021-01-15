@@ -15,7 +15,7 @@ const ScriptTagInput = () => {
 
 	let scriptTag = '';
 	if (project) {
-		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?clientId=${project.id}"></script>`;
+		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?client_id=${project.id}"></script>`;
 	}
 
 	const { onCopy } = useClipboard(
