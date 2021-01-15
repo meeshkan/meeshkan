@@ -27,8 +27,11 @@ interface Configuration {
 }
 
 interface TestRun {
+	// status: 'queued' | 'running' | 'runError' | 'completed';
 	status: string;
-	dateTime: string;
+	createdAt: string;
+	testLength: string;
+	ciRun: string;
 	userStories: {
 		items: Array<{ id: string }>;
 	};
@@ -39,17 +42,18 @@ interface TestRuns {
 	items: Array<TestRun>;
 }
 
-interface UserStoryFailing {
+interface TestOutcome {
 	count: number;
 	items: Array<{
-		firstIntroduction: string;
+		status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
 		isResolved: boolean;
+		error: string;
 	}>;
 }
 
 export interface UserStory {
 	id: string;
-	failing: UserStoryFailing;
+	testOutcome: TestOutcome;
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;

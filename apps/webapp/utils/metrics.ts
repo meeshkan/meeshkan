@@ -36,14 +36,19 @@ export const getDaysUntilRelease = (project: Project) => {
 };
 
 export const getBugs = (userStories: UserStories['items']) => {
-	const introduced = _.sumBy(userStories, 'failing.count');
-	const fixed = _.sumBy(userStories, (story) => {
-		const failingItems = story?.failing.items;
-		return _.sumBy(failingItems, (item) => Number(item.isResolved));
+	const introduced = _.sumBy(userStories, (story) => {
+		const testOutcomes = story?.testOutcome?.items;
+		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
 	});
+
+	// const fixed = _.sumBy(userStories, (story) => {
+	// 	const failingItems = story?.failing.items;
+	// 	return _.sumBy(failingItems, (item) => Number(item.isResolved));
+	// });
+
 	return {
 		introduced,
-		fixed,
+		// fixed,
 	};
 };
 
@@ -53,7 +58,7 @@ export const getLatestTestStates = (userStories: UserStories['items']) => {
 		const [latestTestRun] = story.testRuns.items
 			.sort(
 				(a, b) =>
-					new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime()
+					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 			)
 			.slice(-1);
 
@@ -143,9 +148,9 @@ export const getConfidenceScore = (
 			.map((story) => {
 				const significance = storySignificance(story);
 				const testRunScoreComponents = story.testRuns.items
-					.filter((run) => new Date(run.dateTime).getTime() < howLongAgo)
+					.filter((run) => new Date(run.createdAt).getTime() < howLongAgo)
 					.map((run) => {
-						const runTime = new Date(run.dateTime).getTime();
+						const runTime = new Date(run.createdAt).getTime();
 						return {
 							maxPossible:
 								runTime < howLongAgo - MS_IN_14_DAYS

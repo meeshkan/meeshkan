@@ -521,7 +521,7 @@ const Grid = (props) => {
 												introduced
 											</Text>
 										</Box>
-										<Box w="100px">
+										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
 													{bugs.fixed}
@@ -541,7 +541,7 @@ const Grid = (props) => {
 											>
 												fixed
 											</Text>
-										</Box>
+										</Box> */}
 									</Stack>
 								</GridCard>
 							</SimpleGrid>

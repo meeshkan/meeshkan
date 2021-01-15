@@ -86,11 +86,12 @@ export const USER = gql`
 						count
 						items {
 							id
-							failing {
+							testOutcome {
 								count
 								items {
-									firstIntroduction
+									status
 									isResolved
+									error
 								}
 							}
 							title
@@ -101,7 +102,8 @@ export const USER = gql`
 								count
 								items {
 									status
-									dateTime
+									ciRun
+									testLength
 									userStories {
 										items {
 											id
