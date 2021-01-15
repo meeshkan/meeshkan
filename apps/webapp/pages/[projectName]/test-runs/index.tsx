@@ -62,7 +62,13 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 	return (
 		<Card>
 			<Flex align="center" justify="space-between">
-				<Flex align="center" flex="1" justify="space-between" maxW="2xs">
+				<Flex
+					align={['flex-start', 'flex-start', 'center', 'center']}
+					flex="1"
+					justify="space-between"
+					maxW="2xs"
+					direction={['column', 'column', 'row', 'row']}
+				>
 					<Box flex="1">
 						<Badge
 							colorScheme={statusColor}
@@ -81,7 +87,13 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 						{date.toDateString()}
 					</Text>
 				</Flex>
-				<Flex align="center" flex="1" justify="space-between" maxW="2xs">
+				<Flex
+					align="center"
+					flex={['2', '2', '1', '1']}
+					justify="space-between"
+					maxW="2xs"
+					ml={[3, 3, 0, 0]}
+				>
 					<Center>
 						<CheckmarkIcon width={2} height={2} color="green.500" />
 						<Text fontSize="sm" ml={2}>
