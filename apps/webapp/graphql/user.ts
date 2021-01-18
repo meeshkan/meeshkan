@@ -94,29 +94,43 @@ export const USER = gql`
 									error
 								}
 							}
-							title
-							testCreatedDate
-							isTestCase
-							createdAt
 							testRuns {
 								count
 								items {
 									status
-									ciRun
-									testLength
-									userStories {
-										items {
-											id
-										}
-									}
 								}
 							}
+							title
+							testCreatedDate
+							isTestCase
+							createdAt
 						}
 					}
 					release {
 						count
 						items {
 							releaseDate
+							testRuns {
+								items {
+									status
+									ciRun
+									createdAt
+									testLength
+									userStories {
+										count
+										items {
+											testOutcome {
+												count
+												items {
+													status
+													isResolved
+													error
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}

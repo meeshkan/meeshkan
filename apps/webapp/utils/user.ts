@@ -26,6 +26,12 @@ interface Configuration {
 	inviteLink: string;
 }
 
+interface TestOutcome {
+	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
+	isResolved: boolean;
+	error: string;
+}
+
 interface TestRun {
 	// status: 'queued' | 'running' | 'runError' | 'completed';
 	status: string;
@@ -33,7 +39,7 @@ interface TestRun {
 	testLength: string;
 	ciRun: string;
 	userStories: {
-		items: Array<{ id: string }>;
+		items: Array<UserStory>;
 	};
 }
 
@@ -42,18 +48,14 @@ interface TestRuns {
 	items: Array<TestRun>;
 }
 
-interface TestOutcome {
+interface TestOutcomes {
 	count: number;
-	items: Array<{
-		status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
-		isResolved: boolean;
-		error: string;
-	}>;
+	items: Array<TestOutcome>;
 }
 
 export interface UserStory {
 	id: string;
-	testOutcome: TestOutcome;
+	testOutcome: TestOutcomes;
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
@@ -68,8 +70,13 @@ export interface UserStories {
 }
 
 interface Release {
+	releaseDate: string;
+	testRuns: TestRuns;
+}
+
+interface Releases {
 	count: number;
-	items: Array<{ releaseDate: string }>;
+	items: Array<Release>;
 }
 
 export interface Member {
@@ -92,7 +99,7 @@ export interface Project {
 	hasReceivedEvents: boolean;
 	members: Members;
 	userStories: UserStories;
-	release?: Release;
+	release: Releases;
 }
 
 export interface IUser {
