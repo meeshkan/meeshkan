@@ -1,29 +1,20 @@
-import { useState, useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import {
 	Flex,
-	Center,
-	Box,
 	Stack,
 	Text,
-	Button,
-	Badge,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { ChevronRightIcon } from '@chakra-ui/icons';
-import { Bar, Doughnut } from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
-import theme, {
-	CheckmarkIcon,
-	XmarkIcon,
-	MinusIcon,
-} from '@frontend/chakra-theme';
+import theme from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
+import TestRunCard from '../../../components/molecules/test-run-card'
 import Card from '../../../components/atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
-import { createSlug } from '../../../utils/createSlug';
 
 const doughnutDataValues = [80, 8, 12];
 const doughnutData = {
@@ -39,91 +30,6 @@ const doughnutData = {
 			borderColor: theme.colors.transparent,
 		},
 	],
-};
-
-type TestRunCardProps = {
-	// status: 'queued' | 'running' | 'completed' | 'run error';
-	status: string;
-	runNumber: number;
-	date: Date;
-	stats: {
-		passing?: number;
-		failing?: number;
-		notRan?: number;
-	};
-};
-
-const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
-	const { passing, failing, notRan } = stats;
-	const statusColor =
-		status === 'queued'
-			? 'gray'
-			: status === 'running'
-			? 'yellow'
-			: status === 'completed'
-			? 'cyan'
-			: 'red';
-
-	return (
-		<Card cursor="pointer">
-			<Flex align="center" justify="space-between">
-				<Flex
-					align={['flex-start', 'flex-start', 'center', 'center']}
-					flex="1"
-					justify="space-between"
-					maxW="2xs"
-					direction={['column', 'column', 'row', 'row']}
-				>
-					<Box flex="1">
-						<Badge
-							colorScheme={statusColor}
-							borderRadius="md"
-							textTransform="lowercase"
-							p={2}
-							fontSize="sm"
-						>
-							{status}
-						</Badge>
-					</Box>
-					<Text fontSize="sm" fontWeight={700} flex="1">
-						Run #{runNumber}
-					</Text>
-					<Text fontSize="sm" fontWeight={300} flex="1" whiteSpace="nowrap">
-						{date.toDateString()}
-					</Text>
-				</Flex>
-				<Flex
-					align="center"
-					flex={['2', '2', '1', '1']}
-					justify="space-between"
-					maxW="2xs"
-					ml={[3, 3, 0, 0]}
-				>
-					<Center>
-						<CheckmarkIcon width={2} height={2} color="green.500" />
-						<Text fontSize="sm" ml={2}>
-							{passing || 0}
-						</Text>
-					</Center>
-					<Center>
-						<XmarkIcon width={2} height={2} color="red.500" />
-						<Text fontSize="sm" ml={2}>
-							{failing || 0}
-						</Text>
-					</Center>
-					<Center>
-						<MinusIcon width={2} height={2} color="gray.500" />
-						<Text fontSize="sm" ml={2}>
-							{notRan || 0}
-						</Text>
-					</Center>
-					<Button size="sm" variant="ghost" colorScheme="gray">
-						Details <ChevronRightIcon ml={1} />
-					</Button>
-				</Flex>
-			</Flex>
-		</Card>
-	);
 };
 
 const TestRunsPage = () => {
