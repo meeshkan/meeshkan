@@ -1,3 +1,4 @@
+import { useState, useContext, useMemo } from 'react';
 import {
 	Flex,
 	Center,
@@ -10,6 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
+import _ from 'lodash';
 import theme, {
 	CheckmarkIcon,
 	XmarkIcon,
@@ -20,6 +22,8 @@ import Card from '../../../components/atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
+import { UserContext } from '../../../utils/user';
+import { createSlug } from '../../../utils/createSlug';
 
 const doughnutDataValues = [80, 8, 12];
 const doughnutData = {
@@ -38,13 +42,14 @@ const doughnutData = {
 };
 
 type TestRunCardProps = {
-	status: 'queued' | 'running' | 'completed' | 'run error';
+	// status: 'queued' | 'running' | 'completed' | 'run error';
+	status: string;
 	runNumber: number;
 	date: Date;
 	stats: {
-		passing: number;
-		failing: number;
-		notRan: number;
+		passing?: number;
+		failing?: number;
+		notRan?: number;
 	};
 };
 
@@ -60,7 +65,7 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 			: 'red';
 
 	return (
-		<Card>
+		<Card cursor="pointer">
 			<Flex align="center" justify="space-between">
 				<Flex
 					align={['flex-start', 'flex-start', 'center', 'center']}
@@ -97,19 +102,19 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 					<Center>
 						<CheckmarkIcon width={2} height={2} color="green.500" />
 						<Text fontSize="sm" ml={2}>
-							{passing}
+							{passing || 0}
 						</Text>
 					</Center>
 					<Center>
 						<XmarkIcon width={2} height={2} color="red.500" />
 						<Text fontSize="sm" ml={2}>
-							{failing}
+							{failing || 0}
 						</Text>
 					</Center>
 					<Center>
 						<MinusIcon width={2} height={2} color="gray.500" />
 						<Text fontSize="sm" ml={2}>
-							{notRan}
+							{notRan || 0}
 						</Text>
 					</Center>
 					<Button size="sm" variant="ghost" colorScheme="gray">
@@ -123,6 +128,7 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 
 const TestRunsPage = () => {
 	const { found, loading } = useValidateSelectedProject();
+	const { project } = useContext(UserContext);
 
 	const doughnutOptions = {
 		legend: {
@@ -135,6 +141,18 @@ const TestRunsPage = () => {
 			},
 			position: 'right',
 			align: 'center',
+		},
+		tooltips: {
+			callbacks: {
+				label: (tooltipItem, data) => {
+					const dataset = data.datasets[tooltipItem.datasetIndex];
+					const currentValue = dataset.data[tooltipItem.index];
+					return `${currentValue}%`;
+				},
+				title: (tooltipItem, data) => {
+					return data.labels[tooltipItem[0].index];
+				},
+			},
 		},
 	};
 
@@ -156,46 +174,23 @@ const TestRunsPage = () => {
 				)}
 			</GridCard>
 			<Stack spacing={6} overflowY="scroll">
-				<TestRunCard
-					status="queued"
-					runNumber={4}
-					date={new Date()}
-					stats={{
-						passing: 0,
-						failing: 0,
-						notRan: 0,
-					}}
-				/>
-				<TestRunCard
-					status="running"
-					runNumber={3}
-					date={new Date()}
-					stats={{
-						passing: 0,
-						failing: 0,
-						notRan: 0,
-					}}
-				/>
-				<TestRunCard
-					status="completed"
-					runNumber={2}
-					date={new Date()}
-					stats={{
-						passing: 60,
-						failing: 9,
-						notRan: 6,
-					}}
-				/>
-				<TestRunCard
-					status="run error"
-					runNumber={1}
-					date={new Date()}
-					stats={{
-						passing: 0,
-						failing: 0,
-						notRan: 0,
-					}}
-				/>
+				{project.release.items[0]?.testRuns?.items
+					.map((testRun, index) => {
+						const { status, createdAt } = testRun;
+						return (
+							<TestRunCard
+								status={status}
+								runNumber={index + 1}
+								date={new Date(createdAt)}
+								stats={_.countBy(
+									testRun.userStories.items
+										.map(story => story.testOutcome.items.map(outcome => outcome.status))
+										.reduce((pre, cur) => pre.concat(cur))
+								)}
+							/>
+						);
+					})
+				}
 			</Stack>
 		</Flex>
 	);
