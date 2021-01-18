@@ -120,9 +120,10 @@ const TestRunsPage = () => {
 				<Stack spacing={6} overflowY="scroll">
 					{testRuns
 						.map((testRun, index) => {
-							const { status, createdAt } = testRun;
+							const { id, status, createdAt } = testRun;
 							return (
 								<TestRunCard
+									id={id}
 									status={status}
 									runNumber={index + 1}
 									date={new Date(createdAt)}

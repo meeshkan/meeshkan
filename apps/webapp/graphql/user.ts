@@ -105,6 +105,7 @@ export const USER = gql`
 							releaseDate
 							testRuns {
 								items {
+									id
 									status
 									ciRun
 									createdAt

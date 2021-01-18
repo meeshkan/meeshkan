@@ -12,6 +12,7 @@ import {
 	XmarkIcon,
 	MinusIcon,
 } from '@frontend/chakra-theme'
+import { useRouter } from 'next/router';
 import Card from '../atoms/card';
 import { TestRun } from '../../utils/user';
 
@@ -26,7 +27,10 @@ type TestRunCardProps = {
 	};
 };
 
-const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
+const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) => {
+	const router = useRouter();
+	const isIndividualTestRunPage = router.pathname.endsWith('[testId]');
+
 	const { passing, failing, notRan } = stats;
 	const statusColor =
 		status === 'queued'
@@ -37,8 +41,15 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 			? 'cyan'
 			: 'red';
 
+	const cardProps = {
+		cursor: isIndividualTestRunPage ? undefined : 'pointer',
+		onClick: isIndividualTestRunPage ?
+			undefined :
+			() => router.push(`${router.asPath}/${id}`)
+	};
+
 	return (
-		<Card cursor="pointer">
+		<Card {...cardProps}>
 			<Flex align="center" justify="space-between">
 				<Flex
 					align={['flex-start', 'flex-start', 'center', 'center']}
@@ -69,7 +80,7 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 					align="center"
 					flex={['2', '2', '1', '1']}
 					justify="space-between"
-					maxW="2xs"
+					maxW={isIndividualTestRunPage ? '3xs' : '2xs'}
 					ml={[3, 3, 0, 0]}
 				>
 					<Center>
@@ -90,9 +101,11 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 							{notRan || 0}
 						</Text>
 					</Center>
-					<Button size="sm" variant="ghost" colorScheme="gray">
-						Details <ChevronRightIcon ml={1} />
-					</Button>
+					{!isIndividualTestRunPage && (
+						<Button size="sm" variant="ghost" colorScheme="gray">
+							Details <ChevronRightIcon ml={1} />
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 		</Card>
