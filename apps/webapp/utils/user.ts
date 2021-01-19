@@ -32,36 +32,32 @@ interface TestOutcome {
 	error: string;
 }
 
-interface TestRun {
-	// status: 'queued' | 'running' | 'runError' | 'completed';
-	status: string;
+interface TestOutcomes {
+	count: number;
+	items: Array<TestOutcome>;	
+}
+
+export interface TestRun {
+	status: 'queued' | 'running' | 'runError' | 'completed';
 	createdAt: string;
 	testLength: string;
 	ciRun: string;
-	userStories: {
-		items: Array<UserStory>;
-	};
+	testOutcome: TestOutcomes;
 }
 
-interface TestRuns {
+export interface TestRuns {
 	count: number;
 	items: Array<TestRun>;
 }
 
-interface TestOutcomes {
-	count: number;
-	items: Array<TestOutcome>;
-}
-
 export interface UserStory {
 	id: string;
-	testOutcome: TestOutcomes;
+	testOutcome: TestOutcome;
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
 	significance: 'low' | 'medium' | 'high';
 	testCreatedDate: string;
-	testRuns: TestRuns;
 }
 
 export interface UserStories {

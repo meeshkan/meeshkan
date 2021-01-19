@@ -87,17 +87,10 @@ export const USER = gql`
 						items {
 							id
 							testOutcome {
-								count
 								items {
 									status
 									isResolved
 									error
-								}
-							}
-							testRuns {
-								count
-								items {
-									status
 								}
 							}
 							title
@@ -116,17 +109,12 @@ export const USER = gql`
 									ciRun
 									createdAt
 									testLength
-									userStories {
+									testOutcome {
 										count
 										items {
-											testOutcome {
-												count
-												items {
-													status
-													isResolved
-													error
-												}
-											}
+											status
+											isResolved
+											error
 										}
 									}
 								}

@@ -13,10 +13,10 @@ import {
 	MinusIcon,
 } from '@frontend/chakra-theme'
 import Card from '../atoms/card';
+import { TestRun } from '../../utils/user';
 
 type TestRunCardProps = {
-	// status: 'queued' | 'running' | 'completed' | 'run error';
-	status: string;
+	status: TestRun['status'];
 	runNumber: number;
 	date: Date;
 	stats: {

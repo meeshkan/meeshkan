@@ -33,11 +33,11 @@ import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
 import {
-	getTestRuns,
+	// getTestRuns,
 	getDaysUntilRelease,
-	getBugs,
-	getConfidenceScore,
-	getLatestTestStates,
+	// getBugs,
+	// getConfidenceScore,
+	// getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
 	getLastNDaysInFormat,
@@ -100,6 +100,7 @@ const calcPctChange = (key, confidenceScoreNDaysAgo, dataPoint) =>
 
 const deltaChange = (oldv, newv) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
+
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
@@ -172,60 +173,60 @@ const Grid = (props) => {
 
 	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
-	const testRuns = getTestRuns(userStories);
+	// const testRuns = getTestRuns(userStories);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	const bugs = getBugs(userStories);
+	// const bugs = getBugs(userStories);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
-	const confidenceDataPoints = getConfidenceScore(
-		new Date().getTime(),
-		releaseStart,
-		userStories
-	);
+	// const confidenceDataPoints = getConfidenceScore(
+	// 	new Date().getTime(),
+	// 	releaseStart,
+	// 	userStories
+	// );
 
-	const confidenceScore = Object.values(confidenceDataPoints)
-		.map((a) => a.score)
-		.reduce((a, b) => a + b, 0.0);
+	// const confidenceScore = Object.values(confidenceDataPoints)
+	// 	.map((a) => a.score)
+	// 	.reduce((a, b) => a + b, 0.0);
 
-	const testCoverageScore =
-		(Object.values(confidenceDataPoints)
-			.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
-			.map((a) => a.score)
-			.reduce((a, b) => a + b, 0.0) *
-			100) /
-		30;
+	// const testCoverageScore =
+	// 	(Object.values(confidenceDataPoints)
+	// 		.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
+	// 		.map((a) => a.score)
+	// 		.reduce((a, b) => a + b, 0.0) *
+	// 		100) /
+	// 	30;
 
 	// TODO: allow users to change this value
 	const selectedTimePeriodInDays = timePeriodsInDays[timePeriod];
 
-	const confidenceDataPointsNDaysAgo = getConfidenceScore(
-		new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
-		releaseStart,
-		userStories
-	);
+	// const confidenceDataPointsNDaysAgo = getConfidenceScore(
+	// 	new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
+	// 	releaseStart,
+	// 	userStories
+	// );
 
-	const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
-		.map((a) => a.score)
-		.reduce((a, b) => a + b, 0.0);
+	// const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
+	// 	.map((a) => a.score)
+	// 	.reduce((a, b) => a + b, 0.0);
 
-	const testCoverageScoreNDaysAgo =
-		(Object.values(confidenceDataPointsNDaysAgo)
-			.filter((a) => a.tag === DataPointTag.TEST_RUN)
-			.map((a) => a.score)
-			.reduce((a, b) => a + b, 0.0) *
-			100) /
-		30;
+	// const testCoverageScoreNDaysAgo =
+	// 	(Object.values(confidenceDataPointsNDaysAgo)
+	// 		.filter((a) => a.tag === DataPointTag.TEST_RUN)
+	// 		.map((a) => a.score)
+	// 		.reduce((a, b) => a + b, 0.0) *
+	// 		100) /
+	// 	30;
 
-	const confidenceChange = Object.entries(confidenceDataPoints).filter(
-		([key, dataPoint]) =>
-			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
-	);
+	// const confidenceChange = Object.entries(confidenceDataPoints).filter(
+	// 	([key, dataPoint]) =>
+	// 		0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
+	// );
 
-	const latestTestStates = getLatestTestStates(userStories);
-	const doughnutDataValues = Object.values(latestTestStates);
-	const doughnutDataLabels = Object.keys(latestTestStates);
-	doughnutData.datasets[0].data = doughnutDataValues;
-	doughnutData.labels = doughnutDataLabels;
+	// const latestTestStates = getLatestTestStates(userStories);
+	// const doughnutDataValues = Object.values(latestTestStates);
+	// const doughnutDataLabels = Object.keys(latestTestStates);
+	// doughnutData.datasets[0].data = doughnutDataValues;
+	// doughnutData.labels = doughnutDataLabels;
 
 	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
 		selectedTimePeriodInDays,
@@ -341,7 +342,7 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							<StatCard
+							{/* <StatCard
 								title="Confidence score"
 								value={Number(confidenceScore.toFixed(2))}
 								percentageChange={deltaChange(
@@ -371,7 +372,7 @@ const Grid = (props) => {
 								value={testRuns.value}
 								percentageChange={testRuns.percentageChange}
 								dataPoints={testRuns.dataPoints}
-							/>
+							/> */}
 						</Flex>
 						{showScript && (
 							<ScriptTag handleClose={() => setShowScript(false)} />
@@ -384,7 +385,7 @@ const Grid = (props) => {
 								w="100%"
 							>
 								<GridCard title="Confidence change">
-									<List
+									{/* <List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
@@ -408,7 +409,7 @@ const Grid = (props) => {
 													description={dataPoint.title}
 												/>
 											))}
-									</List>
+									</List> */}
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
@@ -448,7 +449,7 @@ const Grid = (props) => {
 									</Button>
 								</GridCard>
 								<GridCard title="Test suite state">
-									<Box w="275px">
+									{/* <Box w="275px">
 										{doughnutDataValues.length > 0 ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
@@ -456,7 +457,7 @@ const Grid = (props) => {
 												No tests have been run yet.
 											</Text>
 										)}
-									</Box>
+									</Box> */}
 								</GridCard>
 								<GridCard title="Overview">
 									<Stack direction="row" justify="space-around" mb={6}>
@@ -482,12 +483,15 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 										<Box w="100px">
-											<Text fontWeight={900}>
+											{/* <Text fontWeight={900}>
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
 													? `Caution`
 													: `Not ready`}
+											</Text> */}
+											<Text fontWeight={900}>
+												Not ready
 											</Text>
 
 											<Text
@@ -500,7 +504,7 @@ const Grid = (props) => {
 										</Box>
 									</Stack>
 									<Stack direction="row" justify="space-around">
-										<Box w="100px">
+										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
 													{bugs.introduced}
@@ -520,7 +524,7 @@ const Grid = (props) => {
 											>
 												introduced
 											</Text>
-										</Box>
+										</Box> */}
 										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>

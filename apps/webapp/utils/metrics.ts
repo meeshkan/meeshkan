@@ -35,40 +35,40 @@ export const getDaysUntilRelease = (project: Project) => {
 	return releaseDate ? daysUntilDate(moment(releaseDate)) : null;
 };
 
-export const getBugs = (userStories: UserStories['items']) => {
-	const introduced = _.sumBy(userStories, (story) => {
-		const testOutcomes = story?.testOutcome?.items;
-		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
-	});
+// export const getBugs = (userStories: UserStories['items']) => {
+// 	const introduced = _.sumBy(userStories, (story) => {
+// 		const testOutcomes = story?.testOutcome?.items;
+// 		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
+// 	});
 
-	// const fixed = _.sumBy(userStories, (story) => {
-	// 	const failingItems = story?.failing.items;
-	// 	return _.sumBy(failingItems, (item) => Number(item.isResolved));
-	// });
+// 	// const fixed = _.sumBy(userStories, (story) => {
+// 	// 	const failingItems = story?.failing.items;
+// 	// 	return _.sumBy(failingItems, (item) => Number(item.isResolved));
+// 	// });
 
-	return {
-		introduced,
-		// fixed,
-	};
-};
+// 	return {
+// 		introduced,
+// 		// fixed,
+// 	};
+// };
 
-export const getLatestTestStates = (userStories: UserStories['items']) => {
-	const latestTestStates: { [key: string]: number } = {};
-	userStories?.forEach((story) => {
-		const [latestTestRun] = story.testRuns.items
-			.sort(
-				(a, b) =>
-					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-			)
-			.slice(-1);
+// export const getLatestTestStates = (userStories: UserStories['items']) => {
+// 	const latestTestStates: { [key: string]: number } = {};
+// 	userStories?.forEach((story) => {
+// 		const [latestTestRun] = story.testRuns.items
+// 			.sort(
+// 				(a, b) =>
+// 					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+// 			)
+// 			.slice(-1);
 
-		const status = latestTestRun?.status;
-		if (status) {
-			latestTestStates[status]++;
-		}
-	});
-	return latestTestStates;
-};
+// 		const status = latestTestRun?.status;
+// 		if (status) {
+// 			latestTestStates[status]++;
+// 		}
+// 	});
+// 	return latestTestStates;
+// };
 
 const lastNDays = n => [...Array(n).keys()]
 	.map((i) => moment().subtract(i, 'days'))
@@ -113,86 +113,86 @@ export const MAX_POSSIBLE_TEST_RUN_SCORE = 70;
 const MS_IN_14_DAYS = 1209600000;
 const storySignificance = (story: UserStory): number => 10.0;
 
-export const getConfidenceScore = (
-	howLongAgo: number,
-	releaseStarted: number,
-	userStories_: UserStories['items']
-): Record<string, DataPoint> => {
-	const userStories = userStories_.filter(
-		(story) => new Date(story.createdAt).getTime() < howLongAgo
-	);
-	const totalSignificance = userStories
-		.map((story) => storySignificance(story))
-		.reduce((a, b) => a + b, 0);
-	const dataPoints: Record<string, DataPoint> = {
-		...userStories
-			.map((story) => ({
-				[story.id + COVERAGE_DATA_POINT]: {
-					score:
-						((story.isTestCase &&
-						typeof story.testCreatedDate === 'string' &&
-						new Date(story.testCreatedDate).getTime() <= howLongAgo
-							? 1
-							: 0) *
-							MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
-						userStories.length,
-					tag: DataPointTag.TEST_COVERAGE,
-					title: 'Test coverage for ' + story.title,
-					timestamp: new Date(story.createdAt).getTime(),
-					maxPossible: MAX_POSSIBLE_TEST_COVERAGE_SCORE / userStories.length,
-				},
-			}))
-			.reduce((a, b) => ({ ...a, ...b }), {}),
+// export const getConfidenceScore = (
+// 	howLongAgo: number,
+// 	releaseStarted: number,
+// 	userStories_: UserStories['items']
+// ): Record<string, DataPoint> => {
+// 	const userStories = userStories_.filter(
+// 		(story) => new Date(story.createdAt).getTime() < howLongAgo
+// 	);
+// 	const totalSignificance = userStories
+// 		.map((story) => storySignificance(story))
+// 		.reduce((a, b) => a + b, 0);
+// 	const dataPoints: Record<string, DataPoint> = {
+// 		...userStories
+// 			.map((story) => ({
+// 				[story.id + COVERAGE_DATA_POINT]: {
+// 					score:
+// 						((story.isTestCase &&
+// 						typeof story.testCreatedDate === 'string' &&
+// 						new Date(story.testCreatedDate).getTime() <= howLongAgo
+// 							? 1
+// 							: 0) *
+// 							MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
+// 						userStories.length,
+// 					tag: DataPointTag.TEST_COVERAGE,
+// 					title: 'Test coverage for ' + story.title,
+// 					timestamp: new Date(story.createdAt).getTime(),
+// 					maxPossible: MAX_POSSIBLE_TEST_COVERAGE_SCORE / userStories.length,
+// 				},
+// 			}))
+// 			.reduce((a, b) => ({ ...a, ...b }), {}),
 
-		...userStories
-			.map((story) => {
-				const significance = storySignificance(story);
-				const testRunScoreComponents = story.testRuns.items
-					.filter((run) => new Date(run.createdAt).getTime() < howLongAgo)
-					.map((run) => {
-						const runTime = new Date(run.createdAt).getTime();
-						return {
-							maxPossible:
-								runTime < howLongAgo - MS_IN_14_DAYS
-									? 0
-									: ((MS_IN_14_DAYS - (howLongAgo - runTime)) / MS_IN_14_DAYS) *
-									  (runTime >= releaseStarted ? 1.0 : 0.5),
-							status: run.status,
-						};
-					});
-				const maxPossibleTestRunScore = testRunScoreComponents
-					.map((a) => a.maxPossible)
-					.reduce((a, b) => a + b, 0);
-				const actualTestRunScore = testRunScoreComponents
-					.map(
-						(a) =>
-							a.maxPossible *
-							(a.status === 'failing'
-								? 0.0
-								: a.status === 'passing'
-								? 1.0
-								: 0.5)
-					)
-					.reduce((a, b) => a + b, 0);
-				const maxPossible =
-					totalSignificance === 0
-						? 0
-						: (significance * MAX_POSSIBLE_TEST_RUN_SCORE) / totalSignificance;
-				return {
-					[story.id]: {
-						title: story.title,
-						timestamp: new Date(story.createdAt).getTime(),
-						tag: DataPointTag.TEST_RUN,
-						score:
-							maxPossibleTestRunScore === 0
-								? 0
-								: (maxPossible * actualTestRunScore) / maxPossibleTestRunScore,
-						maxPossible,
-					},
-				};
-			})
-			.reduce((a, b) => ({ ...a, ...b }), {}),
-	};
+// 		...userStories
+// 			.map((story) => {
+// 				const significance = storySignificance(story);
+// 				const testRunScoreComponents = story.testRuns.items
+// 					.filter((run) => new Date(run.createdAt).getTime() < howLongAgo)
+// 					.map((run) => {
+// 						const runTime = new Date(run.createdAt).getTime();
+// 						return {
+// 							maxPossible:
+// 								runTime < howLongAgo - MS_IN_14_DAYS
+// 									? 0
+// 									: ((MS_IN_14_DAYS - (howLongAgo - runTime)) / MS_IN_14_DAYS) *
+// 									  (runTime >= releaseStarted ? 1.0 : 0.5),
+// 							status: run.status,
+// 						};
+// 					});
+// 				const maxPossibleTestRunScore = testRunScoreComponents
+// 					.map((a) => a.maxPossible)
+// 					.reduce((a, b) => a + b, 0);
+// 				const actualTestRunScore = testRunScoreComponents
+// 					.map(
+// 						(a) =>
+// 							a.maxPossible *
+// 							(a.status === 'failing'
+// 								? 0.0
+// 								: a.status === 'passing'
+// 								? 1.0
+// 								: 0.5)
+// 					)
+// 					.reduce((a, b) => a + b, 0);
+// 				const maxPossible =
+// 					totalSignificance === 0
+// 						? 0
+// 						: (significance * MAX_POSSIBLE_TEST_RUN_SCORE) / totalSignificance;
+// 				return {
+// 					[story.id]: {
+// 						title: story.title,
+// 						timestamp: new Date(story.createdAt).getTime(),
+// 						tag: DataPointTag.TEST_RUN,
+// 						score:
+// 							maxPossibleTestRunScore === 0
+// 								? 0
+// 								: (maxPossible * actualTestRunScore) / maxPossibleTestRunScore,
+// 						maxPossible,
+// 					},
+// 				};
+// 			})
+// 			.reduce((a, b) => ({ ...a, ...b }), {}),
+// 	};
 
-	return dataPoints;
-};
+// 	return dataPoints;
+// };

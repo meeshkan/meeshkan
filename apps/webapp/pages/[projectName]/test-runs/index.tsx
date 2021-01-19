@@ -16,12 +16,12 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 
-const doughnutDataValues = [80, 8, 12];
+const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutData = {
 	labels: ['Passing', "Didn't run", 'Failure'],
 	datasets: [
 		{
-			data: doughnutDataValues,
+			data: doughnutDefaultDataValues,
 			backgroundColor: [
 				theme.colors.blue[500],
 				theme.colors.blue[700],
@@ -36,6 +36,19 @@ const TestRunsPage = () => {
 	const { found, loading } = useValidateSelectedProject();
 	const { project } = useContext(UserContext);
 
+	const testRuns = project?.release.items[0]?.testRuns?.items;
+	const testRunsData = testRuns && _.countBy(testRuns
+		.map(testRun => testRun.testOutcome.items.map(outcome => outcome.status))
+		.reduce((pre, cur) => pre.concat(cur), []) || []);
+
+	if (testRunsData?.queued) {
+		delete testRunsData.queued;
+	}
+
+	const doughnutDataValues = Object.values(testRunsData || {});
+	doughnutData.datasets[0].data = doughnutDataValues;
+	doughnutData.labels = Object.keys(testRunsData || {});
+
 	const doughnutOptions = {
 		legend: {
 			labels: {
@@ -47,18 +60,6 @@ const TestRunsPage = () => {
 			},
 			position: 'right',
 			align: 'center',
-		},
-		tooltips: {
-			callbacks: {
-				label: (tooltipItem, data) => {
-					const dataset = data.datasets[tooltipItem.datasetIndex];
-					const currentValue = dataset.data[tooltipItem.index];
-					return `${currentValue}%`;
-				},
-				title: (tooltipItem, data) => {
-					return data.labels[tooltipItem[0].index];
-				},
-			},
 		},
 	};
 
@@ -76,11 +77,11 @@ const TestRunsPage = () => {
 				{doughnutDataValues.length > 0 ? (
 					<Doughnut data={doughnutData} options={doughnutOptions} height={30} />
 				) : (
-					<Text fontStyle="italic">No tests have been run yet.</Text>
+					<Text fontStyle="italic">We don't have enough test runs just yet.</Text>
 				)}
 			</GridCard>
 			<Stack spacing={6} overflowY="scroll">
-				{project.release.items[0]?.testRuns?.items
+				{testRuns
 					.map((testRun, index) => {
 						const { status, createdAt } = testRun;
 						return (
@@ -89,9 +90,8 @@ const TestRunsPage = () => {
 								runNumber={index + 1}
 								date={new Date(createdAt)}
 								stats={_.countBy(
-									testRun.userStories.items
-										.map(story => story.testOutcome.items.map(outcome => outcome.status))
-										.reduce((pre, cur) => pre.concat(cur))
+									testRun.testOutcome.items
+										.map(outcome => outcome.status)
 								)}
 							/>
 						);
