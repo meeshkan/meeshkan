@@ -17,6 +17,7 @@ import Card from '../atoms/card';
 import { TestRun } from '../../utils/user';
 
 type TestRunCardProps = {
+	id?: string;
 	status: TestRun['status'];
 	runNumber: number;
 	date: Date;

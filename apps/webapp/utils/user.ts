@@ -38,6 +38,7 @@ interface TestOutcomes {
 }
 
 export interface TestRun {
+	id: string;
 	status: 'queued' | 'running' | 'runError' | 'completed';
 	createdAt: string;
 	testLength: string;
