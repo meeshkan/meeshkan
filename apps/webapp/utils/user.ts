@@ -30,6 +30,7 @@ interface TestOutcome {
 	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
 	isResolved: boolean;
 	error: string;
+	userStory: UserStory;
 }
 
 interface TestOutcomes {

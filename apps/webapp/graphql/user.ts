@@ -116,6 +116,10 @@ export const USER = gql`
 											status
 											isResolved
 											error
+											userStory {
+												id
+												title
+											}
 										}
 									}
 								}
