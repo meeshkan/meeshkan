@@ -37,17 +37,23 @@ const TestRunsPage = () => {
 	const { project } = useContext(UserContext);
 
 	const testRuns = project?.release.items[0]?.testRuns?.items;
-	const testRunsData = testRuns && _.countBy(testRuns
-		.map(testRun => testRun.testOutcome.items.map(outcome => outcome.status))
-		.reduce((pre, cur) => pre.concat(cur), []) || []);
+	const latestTestRun = testRuns?.sort(
+		(a, b) => new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
+	)[0];
 
-	if (testRunsData?.queued) {
-		delete testRunsData.queued;
-	}
+	const latestTestRunStats = latestTestRun && _.countBy(
+		latestTestRun.testOutcome.items.map(outcome => outcome.status)
+			.reduce((pre, cur) => pre.concat(cur), []) || []
+	);
 
-	const doughnutDataValues = Object.values(testRunsData || {});
+	const validTestRunStatus = ['passing', 'failing', 'did not run'];
+	Object.keys(latestTestRunStats || {}).forEach(
+		(key) => validTestRunStatus.includes(key) || delete latestTestRunStats[key]
+	);
+
+	const doughnutDataValues = Object.values(latestTestRunStats || {});
 	doughnutData.datasets[0].data = doughnutDataValues;
-	doughnutData.labels = Object.keys(testRunsData || {});
+	doughnutData.labels = Object.keys(latestTestRunStats || {});
 
 	const doughnutOptions = {
 		legend: {
