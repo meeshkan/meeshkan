@@ -80,7 +80,6 @@ const TestRun = () => {
 				<TestRunCard
 					id={testId as string}
 					status={testRun?.status}
-					runNumber={1}
 					date={new Date(testRun?.createdAt)}
 					stats={_.countBy(
 						testRun?.testOutcome.items

@@ -19,7 +19,7 @@ import { TestRun } from '../../utils/user';
 type TestRunCardProps = {
 	id?: string;
 	status: TestRun['status'];
-	runNumber: number;
+	runNumber?: number;
 	date: Date;
 	stats: {
 		passing?: number;
@@ -70,9 +70,11 @@ const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) =
 							{status}
 						</Badge>
 					</Box>
-					<Text fontSize="sm" fontWeight={700} flex="1">
-						Run #{runNumber}
-					</Text>
+					{!isIndividualTestRunPage && (
+						<Text fontSize="sm" fontWeight={700} flex="1">
+							Run #{runNumber}
+						</Text>
+					)}
 					<Text fontSize="sm" fontWeight={300} flex="1" whiteSpace="nowrap">
 						{date.toDateString()}
 					</Text>
