@@ -385,7 +385,7 @@ const Grid = (props) => {
 								w="100%"
 							>
 								<GridCard title="Confidence change">
-									{/* <List
+									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
@@ -409,7 +409,7 @@ const Grid = (props) => {
 													description={dataPoint.title}
 												/>
 											))}
-									</List> */}
+									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
