@@ -33,10 +33,10 @@ import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
 import {
-	// getTestRuns,
+	getTestRuns,
 	getDaysUntilRelease,
 	// getBugs,
-	// getConfidenceScore,
+	getConfidenceScore,
 	// getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
@@ -173,54 +173,54 @@ const Grid = (props) => {
 
 	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
-	// const testRuns = getTestRuns(userStories);
+	const testRuns = getTestRuns(userStories);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
 	// const bugs = getBugs(userStories);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
-	// const confidenceDataPoints = getConfidenceScore(
-	// 	new Date().getTime(),
-	// 	releaseStart,
-	// 	userStories
-	// );
+	const confidenceDataPoints = getConfidenceScore(
+		new Date().getTime(),
+		releaseStart,
+		userStories
+	);
 
-	// const confidenceScore = Object.values(confidenceDataPoints)
-	// 	.map((a) => a.score)
-	// 	.reduce((a, b) => a + b, 0.0);
+	const confidenceScore = Object.values(confidenceDataPoints)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
 
-	// const testCoverageScore =
-	// 	(Object.values(confidenceDataPoints)
-	// 		.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
-	// 		.map((a) => a.score)
-	// 		.reduce((a, b) => a + b, 0.0) *
-	// 		100) /
-	// 	30;
+	const testCoverageScore =
+		(Object.values(confidenceDataPoints)
+			.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
 
 	// TODO: allow users to change this value
 	const selectedTimePeriodInDays = timePeriodsInDays[timePeriod];
 
-	// const confidenceDataPointsNDaysAgo = getConfidenceScore(
-	// 	new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
-	// 	releaseStart,
-	// 	userStories
-	// );
+	const confidenceDataPointsNDaysAgo = getConfidenceScore(
+		new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
+		releaseStart,
+		userStories
+	);
 
-	// const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
-	// 	.map((a) => a.score)
-	// 	.reduce((a, b) => a + b, 0.0);
+	const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
 
-	// const testCoverageScoreNDaysAgo =
-	// 	(Object.values(confidenceDataPointsNDaysAgo)
-	// 		.filter((a) => a.tag === DataPointTag.TEST_RUN)
-	// 		.map((a) => a.score)
-	// 		.reduce((a, b) => a + b, 0.0) *
-	// 		100) /
-	// 	30;
+	const testCoverageScoreNDaysAgo =
+		(Object.values(confidenceDataPointsNDaysAgo)
+			.filter((a) => a.tag === DataPointTag.TEST_RUN)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
 
-	// const confidenceChange = Object.entries(confidenceDataPoints).filter(
-	// 	([key, dataPoint]) =>
-	// 		0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
-	// );
+	const confidenceChange = Object.entries(confidenceDataPoints).filter(
+		([key, dataPoint]) =>
+			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
+	);
 
 	// const latestTestStates = getLatestTestStates(userStories);
 	// const doughnutDataValues = Object.values(latestTestStates);
@@ -342,7 +342,7 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							{/* <StatCard
+							<StatCard
 								title="Confidence score"
 								value={Number(confidenceScore.toFixed(2))}
 								percentageChange={deltaChange(
@@ -372,7 +372,7 @@ const Grid = (props) => {
 								value={testRuns.value}
 								percentageChange={testRuns.percentageChange}
 								dataPoints={testRuns.dataPoints}
-							/> */}
+							/>
 						</Flex>
 						{showScript && (
 							<ScriptTag handleClose={() => setShowScript(false)} />
@@ -490,9 +490,7 @@ const Grid = (props) => {
 													? `Caution`
 													: `Not ready`}
 											</Text> */}
-											<Text fontWeight={900}>
-												Not ready
-											</Text>
+											<Text fontWeight={900}>Not ready</Text>
 
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}

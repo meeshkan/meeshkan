@@ -91,6 +91,7 @@ export const USER = gql`
 									status
 									isResolved
 									error
+									createdAt
 								}
 							}
 							title
@@ -116,6 +117,7 @@ export const USER = gql`
 											status
 											isResolved
 											error
+											createdAt
 											userStory {
 												id
 												title

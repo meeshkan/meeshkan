@@ -30,12 +30,13 @@ interface TestOutcome {
 	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
 	isResolved: boolean;
 	error: string;
+	createdAt: string;
 	userStory: UserStory;
 }
 
 interface TestOutcomes {
 	count: number;
-	items: Array<TestOutcome>;	
+	items: Array<TestOutcome>;
 }
 
 export interface TestRun {
@@ -54,7 +55,7 @@ export interface TestRuns {
 
 export interface UserStory {
 	id: string;
-	testOutcome: TestOutcome;
+	testOutcome: TestOutcomes;
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
@@ -204,7 +205,7 @@ export const updateProfile = async (
 		avatar: {
 			id: string;
 			fileId: string;
-		}
+		};
 	}
 ) => {
 	const client = eightBaseClient(idToken);
