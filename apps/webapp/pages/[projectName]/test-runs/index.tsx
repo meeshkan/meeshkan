@@ -124,6 +124,7 @@ const TestRunsPage = () => {
 							return (
 								<TestRunCard
 									id={id}
+									key={id}
 									status={status}
 									runNumber={index + 1}
 									date={new Date(createdAt)}

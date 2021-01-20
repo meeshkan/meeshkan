@@ -53,11 +53,9 @@ const TestRun = () => {
 	}
 
 	const testCasesRan = testRun.testOutcome.count;
-	const outcomeOrder = ['failing', 'passing', 'did not run'];
-	const sortedTestOutcomes = _.sortBy(
-		testRun.testOutcome.items,
-		outcome => _.indexOf(outcomeOrder, outcome.status)
-	);
+	const outcomeOrder = ['failing', 'passing', 'queued', 'did not run'];
+	const sortedTestOutcomes = testRun.testOutcome.items
+		.sort((a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status));
 
 	return (
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
@@ -121,41 +119,41 @@ const TestRun = () => {
 							</Button>
 						</Box>
 					</Flex>
-					<Stack spacing={4}>
-					{sortedTestOutcomes
-						.map(outcome => {
-							const testCase = outcome?.userStory;
-							const status = outcome?.status;
-							const isFailing = status === 'failing';
-							const icon = status === 'passing' ?
-								<CheckmarkIcon w={3} h={3} color="green.500" /> :
-								status === 'failing' ?
-									<XmarkIcon w={3} h={3} color="red.500" /> :
-									<MinusIcon w={3} h={3} color="gray.500" />;
+					<Stack spacing={4} overflowY="scroll">
+						{sortedTestOutcomes
+							.map(outcome => {
+								const testCase = outcome?.userStory;
+								const status = outcome?.status;
+								const isFailing = status === 'failing';
+								const icon = status === 'passing' ?
+									<CheckmarkIcon w={3} h={3} color="green.500" /> :
+									status === 'failing' ?
+										<XmarkIcon w={3} h={3} color="red.500" /> :
+										<MinusIcon w={3} h={3} color="gray.500" />;
 
-							let cardOverrideProps: { bg?: string } = {};
-							if (!isFailing) {
-								cardOverrideProps.bg = 'transparent';
-							}
+								let cardOverrideProps: { bg?: string } = {};
+								if (!isFailing) {
+									cardOverrideProps.bg = 'transparent';
+								}
 
-							return (
-								<Card
-									as={Flex}
-									align="center"
-									justify="space-between"
-									{...cardOverrideProps}
-								>
-									<Flex align="center">
-										{icon}
-										<Text fontSize="15px" ml={4}>{testCase?.title}</Text>
-									</Flex>
-									{isFailing && (
-										<ChevronDownIcon w={5} h={5} color="gray.500" />
-									)}
-								</Card>
-							)
-						})
-					}
+								return (
+									<Card
+										as={Flex}
+										align="center"
+										justify="space-between"
+										{...cardOverrideProps}
+									>
+										<Flex align="center">
+											{icon}
+											<Text fontSize="15px" ml={4}>{testCase?.title}</Text>
+										</Flex>
+										{isFailing && (
+											<ChevronDownIcon w={5} h={5} color="gray.500" />
+										)}
+									</Card>
+								)
+							})
+						}
 					</Stack>
 				</Stack>
 				<GridCard title="Technical information">
