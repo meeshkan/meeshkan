@@ -35,22 +35,22 @@ export const getDaysUntilRelease = (project: Project) => {
 	return releaseDate ? daysUntilDate(moment(releaseDate)) : null;
 };
 
-// export const getBugs = (userStories: UserStories['items']) => {
-// 	const introduced = _.sumBy(userStories, (story) => {
-// 		const testOutcomes = story?.testOutcome?.items;
-// 		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
-// 	});
+export const getBugs = (userStories: UserStories['items']) => {
+	const introduced = _.sumBy(userStories, (story) => {
+		const testOutcomes = story?.testOutcome?.items;
+		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
+	});
 
-// 	// const fixed = _.sumBy(userStories, (story) => {
-// 	// 	const failingItems = story?.failing.items;
-// 	// 	return _.sumBy(failingItems, (item) => Number(item.isResolved));
-// 	// });
+	// const fixed = _.sumBy(userStories, (story) => {
+	// 	const failingItems = story?.failing.items;
+	// 	return _.sumBy(failingItems, (item) => Number(item.isResolved));
+	// });
 
-// 	return {
-// 		introduced,
-// 		// fixed,
-// 	};
-// };
+	return {
+		introduced,
+		// fixed,
+	};
+};
 
 // export const getLatestTestStates = (userStories: UserStories['items']) => {
 // 	const latestTestStates: { [key: string]: number } = {};

@@ -35,7 +35,7 @@ import { UserContext, UserStories } from '../../utils/user';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
-	// getBugs,
+	getBugs,
 	getConfidenceScore,
 	// getLatestTestStates,
 	getRecordingsAndTestsByDay,
@@ -175,7 +175,7 @@ const Grid = (props) => {
 
 	const testRuns = getTestRuns(userStories);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	// const bugs = getBugs(userStories);
+	const bugs = getBugs(userStories);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
 	const confidenceDataPoints = getConfidenceScore(
@@ -500,7 +500,7 @@ const Grid = (props) => {
 										</Box>
 									</Stack>
 									<Stack direction="row" justify="space-around">
-										{/* <Box w="100px">
+										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
 													{bugs.introduced}
@@ -520,7 +520,7 @@ const Grid = (props) => {
 											>
 												introduced
 											</Text>
-										</Box> */}
+										</Box>
 										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
