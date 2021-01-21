@@ -30,14 +30,17 @@ interface TestOutcome {
 	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
 	isResolved: boolean;
 	error: string;
+	createdAt: string;
+	userStory: UserStory;
 }
 
 interface TestOutcomes {
 	count: number;
-	items: Array<TestOutcome>;	
+	items: Array<TestOutcome>;
 }
 
 export interface TestRun {
+	id: string;
 	status: 'queued' | 'running' | 'runError' | 'completed';
 	createdAt: string;
 	testLength: string;
@@ -52,7 +55,7 @@ export interface TestRuns {
 
 export interface UserStory {
 	id: string;
-	testOutcome: TestOutcome;
+	testOutcome: TestOutcomes;
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
@@ -67,10 +70,12 @@ export interface UserStories {
 
 interface Release {
 	releaseDate: string;
+	id: string;
+	name: string;
 	testRuns: TestRuns;
 }
 
-interface Releases {
+export interface Releases {
 	count: number;
 	items: Array<Release>;
 }
@@ -202,7 +207,7 @@ export const updateProfile = async (
 		avatar: {
 			id: string;
 			fileId: string;
-		}
+		};
 	}
 ) => {
 	const client = eightBaseClient(idToken);

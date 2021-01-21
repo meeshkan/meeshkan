@@ -11,23 +11,27 @@ import {
 	CheckmarkIcon,
 	XmarkIcon,
 	MinusIcon,
-} from '@frontend/chakra-theme'
+} from '@frontend/chakra-theme';
+import { useRouter } from 'next/router';
 import Card from '../atoms/card';
 import { TestRun } from '../../utils/user';
 
 type TestRunCardProps = {
+	id?: string;
 	status: TestRun['status'];
-	runNumber: number;
+	runNumber?: number;
 	date: Date;
 	stats: {
 		passing?: number;
 		failing?: number;
-		notRan?: number;
+		'did not run'?: number;
 	};
 };
 
-const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
-	const { passing, failing, notRan } = stats;
+const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) => {
+	const router = useRouter();
+	const isIndividualTestRunPage = router.pathname.endsWith('[testId]');
+
 	const statusColor =
 		status === 'queued'
 			? 'gray'
@@ -37,8 +41,15 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 			? 'cyan'
 			: 'red';
 
+	const cardProps = {
+		cursor: isIndividualTestRunPage ? undefined : 'pointer',
+		onClick: isIndividualTestRunPage ?
+			undefined :
+			() => router.push(`${router.asPath}/${id}`)
+	};
+
 	return (
-		<Card cursor="pointer">
+		<Card {...cardProps}>
 			<Flex align="center" justify="space-between">
 				<Flex
 					align={['flex-start', 'flex-start', 'center', 'center']}
@@ -58,9 +69,11 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 							{status}
 						</Badge>
 					</Box>
-					<Text fontSize="sm" fontWeight={700} flex="1">
-						Run #{runNumber}
-					</Text>
+					{!isIndividualTestRunPage && (
+						<Text fontSize="sm" fontWeight={700} flex="1">
+							Run #{runNumber}
+						</Text>
+					)}
 					<Text fontSize="sm" fontWeight={300} flex="1" whiteSpace="nowrap">
 						{date.toDateString()}
 					</Text>
@@ -69,30 +82,32 @@ const TestRunCard = ({ status, runNumber, date, stats }: TestRunCardProps) => {
 					align="center"
 					flex={['2', '2', '1', '1']}
 					justify="space-between"
-					maxW="2xs"
+					maxW={isIndividualTestRunPage ? '3xs' : '2xs'}
 					ml={[3, 3, 0, 0]}
 				>
 					<Center>
 						<CheckmarkIcon width={2} height={2} color="green.500" />
 						<Text fontSize="sm" ml={2}>
-							{passing || 0}
+							{stats.passing || 0}
 						</Text>
 					</Center>
 					<Center>
 						<XmarkIcon width={2} height={2} color="red.500" />
 						<Text fontSize="sm" ml={2}>
-							{failing || 0}
+							{stats.failing || 0}
 						</Text>
 					</Center>
 					<Center>
 						<MinusIcon width={2} height={2} color="gray.500" />
 						<Text fontSize="sm" ml={2}>
-							{notRan || 0}
+							{stats['did not run'] || 0}
 						</Text>
 					</Center>
-					<Button size="sm" variant="ghost" colorScheme="gray">
-						Details <ChevronRightIcon ml={1} />
-					</Button>
+					{!isIndividualTestRunPage && (
+						<Button size="sm" variant="ghost" colorScheme="gray">
+							Details <ChevronRightIcon ml={1} />
+						</Button>
+					)}
 				</Flex>
 			</Flex>
 		</Card>

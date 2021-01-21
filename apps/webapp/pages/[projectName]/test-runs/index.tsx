@@ -19,8 +19,7 @@ import { useValidateSelectedProject } from '../../../hooks/use-validate-selected
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
-
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+import { capitalize } from '../../../utils/capitalize';
 
 const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutBackgroundColors = [
@@ -138,19 +137,24 @@ const TestRunsPage = () => {
 			)}
 			{testRuns.length > 0 ? (
 				<Stack spacing={6} overflowY="scroll">
-					{testRuns.map((testRun, index) => {
-						const { status, createdAt } = testRun;
-						return (
-							<TestRunCard
-								status={status}
-								runNumber={index + 1}
-								date={new Date(createdAt)}
-								stats={_.countBy(
-									testRun.testOutcome.items.map((outcome) => outcome.status)
-								)}
-							/>
-						);
-					})}
+					{testRuns
+						.map((testRun, index) => {
+							const { id, status, createdAt } = testRun;
+							return (
+								<TestRunCard
+									id={id}
+									key={id}
+									status={status}
+									runNumber={index + 1}
+									date={new Date(createdAt)}
+									stats={_.countBy(
+										testRun.testOutcome.items
+											.map(outcome => outcome.status)
+									)}
+								/>
+							);
+						})
+					}
 				</Stack>
 			) : (
 				<Center h="100%" as={Card}>

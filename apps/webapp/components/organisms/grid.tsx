@@ -1,4 +1,9 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, {
+	useState,
+	useEffect,
+	useContext,
+	useMemo,
+} from 'react';
 import {
 	Box,
 	Stack,
@@ -16,7 +21,6 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { createSlug } from '../../utils/createSlug';
 import {
 	ArrowForwardIcon,
 	ArrowUpDownIcon,
@@ -32,12 +36,14 @@ import GridCard from '../molecules/grid-card';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
+import { createSlug } from '../../utils/createSlug';
+import { capitalize } from '../../utils/capitalize';
 import {
-	// getTestRuns,
+	getTestRuns,
 	getDaysUntilRelease,
-	// getBugs,
-	// getConfidenceScore,
-	// getLatestTestStates,
+	getBugs,
+	getConfidenceScore,
+	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
 	getLastNDaysInFormat,
@@ -78,8 +84,6 @@ const doughnutData = {
 		},
 	],
 };
-
-const versions = ['v0.0.2', 'v0.0.1'];
 
 const timePeriodsInDays = {
 	'24 hours': 1,
@@ -168,65 +172,69 @@ const Grid = (props) => {
 		},
 	};
 
+	const versions = selectedProject.release.items;
+
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
 
+	useEffect(() => setVersion(versions[0]), [versions]);
+
 	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
-	// const testRuns = getTestRuns(userStories);
+	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	// const bugs = getBugs(userStories);
+	const bugs = getBugs(version.testRuns.items);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
-	// const confidenceDataPoints = getConfidenceScore(
-	// 	new Date().getTime(),
-	// 	releaseStart,
-	// 	userStories
-	// );
+	const confidenceDataPoints = getConfidenceScore(
+		new Date().getTime(),
+		releaseStart,
+		userStories
+	);
 
-	// const confidenceScore = Object.values(confidenceDataPoints)
-	// 	.map((a) => a.score)
-	// 	.reduce((a, b) => a + b, 0.0);
+	const confidenceScore = Object.values(confidenceDataPoints)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
 
-	// const testCoverageScore =
-	// 	(Object.values(confidenceDataPoints)
-	// 		.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
-	// 		.map((a) => a.score)
-	// 		.reduce((a, b) => a + b, 0.0) *
-	// 		100) /
-	// 	30;
+	const testCoverageScore =
+		(Object.values(confidenceDataPoints)
+			.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
 
 	// TODO: allow users to change this value
 	const selectedTimePeriodInDays = timePeriodsInDays[timePeriod];
 
-	// const confidenceDataPointsNDaysAgo = getConfidenceScore(
-	// 	new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
-	// 	releaseStart,
-	// 	userStories
-	// );
+	const confidenceDataPointsNDaysAgo = getConfidenceScore(
+		new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
+		releaseStart,
+		userStories
+	);
 
-	// const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
-	// 	.map((a) => a.score)
-	// 	.reduce((a, b) => a + b, 0.0);
+	const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
+		.map((a) => a.score)
+		.reduce((a, b) => a + b, 0.0);
 
-	// const testCoverageScoreNDaysAgo =
-	// 	(Object.values(confidenceDataPointsNDaysAgo)
-	// 		.filter((a) => a.tag === DataPointTag.TEST_RUN)
-	// 		.map((a) => a.score)
-	// 		.reduce((a, b) => a + b, 0.0) *
-	// 		100) /
-	// 	30;
+	const testCoverageScoreNDaysAgo =
+		(Object.values(confidenceDataPointsNDaysAgo)
+			.filter((a) => a.tag === DataPointTag.TEST_RUN)
+			.map((a) => a.score)
+			.reduce((a, b) => a + b, 0.0) *
+			100) /
+		30;
 
-	// const confidenceChange = Object.entries(confidenceDataPoints).filter(
-	// 	([key, dataPoint]) =>
-	// 		0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
-	// );
+	const confidenceChange = Object.entries(confidenceDataPoints).filter(
+		([key, dataPoint]) =>
+			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
+	);
 
-	// const latestTestStates = getLatestTestStates(userStories);
-	// const doughnutDataValues = Object.values(latestTestStates);
-	// const doughnutDataLabels = Object.keys(latestTestStates);
-	// doughnutData.datasets[0].data = doughnutDataValues;
-	// doughnutData.labels = doughnutDataLabels;
+	const latestTestStates = getLatestTestStates(version.testRuns.items);
+	const doughnutDataValues = Object.values(latestTestStates);
+	const doughnutDataLabels = Object.keys(latestTestStates).map(capitalize);
+	doughnutData.datasets[0].data = doughnutDataValues;
+	doughnutData.labels = doughnutDataLabels;
 
 	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
 		selectedTimePeriodInDays,
@@ -307,21 +315,21 @@ const Grid = (props) => {
 							w="100%"
 							textAlign="left"
 						>
-							{version}
+							{version.name}
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={version}
+								defaultValue={version.id}
 								title="Versions"
 								type="radio"
 							>
 								{versions.map((version, index) => (
 									<MenuItemOption
-										key={index}
-										value={version}
+										key={version.id}
+										value={version.id}
 										onClick={() => setVersion(version)}
 									>
-										{version}
+										{version.name}
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>
@@ -342,7 +350,7 @@ const Grid = (props) => {
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
 						>
-							{/* <StatCard
+							<StatCard
 								title="Confidence score"
 								value={Number(confidenceScore.toFixed(2))}
 								percentageChange={deltaChange(
@@ -372,7 +380,7 @@ const Grid = (props) => {
 								value={testRuns.value}
 								percentageChange={testRuns.percentageChange}
 								dataPoints={testRuns.dataPoints}
-							/> */}
+							/>
 						</Flex>
 						{showScript && (
 							<ScriptTag handleClose={() => setShowScript(false)} />
@@ -385,7 +393,7 @@ const Grid = (props) => {
 								w="100%"
 							>
 								<GridCard title="Confidence change">
-									{/* <List
+									<List
 										spacing={3}
 										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize="sm"
@@ -409,7 +417,7 @@ const Grid = (props) => {
 													description={dataPoint.title}
 												/>
 											))}
-									</List> */}
+									</List>
 								</GridCard>
 								<GridCard title="Recordings vs. Tests">
 									<Bar data={barData} options={barOptions} />
@@ -449,15 +457,15 @@ const Grid = (props) => {
 									</Button>
 								</GridCard>
 								<GridCard title="Test suite state">
-									{/* <Box w="275px">
-										{doughnutDataValues.length > 0 ? (
+									<Box w="275px">
+										{doughnutDataValues.some(value => value !== 0) ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
 											<Text fontStyle="italic">
 												No tests have been run yet.
 											</Text>
 										)}
-									</Box> */}
+									</Box>
 								</GridCard>
 								<GridCard title="Overview">
 									<Stack direction="row" justify="space-around" mb={6}>
@@ -483,17 +491,13 @@ const Grid = (props) => {
 											</Text>
 										</Box>
 										<Box w="100px">
-											{/* <Text fontWeight={900}>
+											<Text fontWeight={900}>
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
-													? `Caution`
-													: `Not ready`}
-											</Text> */}
-											<Text fontWeight={900}>
-												Not ready
+														? `Caution`
+														: `Not ready`}
 											</Text>
-
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
 												fontWeight={700}
@@ -504,7 +508,7 @@ const Grid = (props) => {
 										</Box>
 									</Stack>
 									<Stack direction="row" justify="space-around">
-										{/* <Box w="100px">
+										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
 													{bugs.introduced}
@@ -514,7 +518,7 @@ const Grid = (props) => {
 													color={useColorModeValue('gray.500', 'gray.300')}
 													fontWeight={500}
 												>
-													bugs
+													bug{bugs.introduced !== 1 && 's'}
 												</Text>
 											</Flex>
 											<Text
@@ -524,7 +528,7 @@ const Grid = (props) => {
 											>
 												introduced
 											</Text>
-										</Box> */}
+										</Box>
 										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>

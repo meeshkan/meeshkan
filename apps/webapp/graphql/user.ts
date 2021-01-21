@@ -91,6 +91,7 @@ export const USER = gql`
 									status
 									isResolved
 									error
+									createdAt
 								}
 							}
 							title
@@ -102,9 +103,13 @@ export const USER = gql`
 					release {
 						count
 						items {
+							id
+							name
 							releaseDate
 							testRuns {
+								count
 								items {
+									id
 									status
 									ciRun
 									createdAt
@@ -115,6 +120,11 @@ export const USER = gql`
 											status
 											isResolved
 											error
+											createdAt
+											userStory {
+												id
+												title
+											}
 										}
 									}
 								}
