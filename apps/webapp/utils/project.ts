@@ -5,12 +5,18 @@ import { eightBaseClient } from './graphql';
 
 export const createProject = async (
 	idToken: string,
-	data: { name: string; fileId: string; id: string }
+	data: {
+		name: string;
+		fileId: string;
+		id: string;
+		productionURL?: string;
+		stagingURL?: string;
+	}
 ) => {
 	const client = eightBaseClient(idToken);
 	const { user } = await client.request(CURRENT_USER);
 
-	const { name, fileId, id } = data;
+	const { name, fileId, id, productionURL, stagingURL } = data;
 	const avatar = {
 		connect: {
 			fileId,
@@ -24,6 +30,8 @@ export const createProject = async (
 				userId: user.id,
 				projectName: name,
 				inviteLink: Math.random().toString(36).substring(7),
+				productionURL,
+				stagingURL,
 				avatar: fileId && id ? avatar : undefined,
 				today: getDateInEightBaseFormat(new Date()),
 			})

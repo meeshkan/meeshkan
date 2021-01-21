@@ -5,6 +5,8 @@ export const CREATE_PROJECT = gql`
 		$userId: ID!
 		$projectName: String!
 		$inviteLink: String!
+		$productionURL: String
+		$stagingURL: String
 		$avatar: ProjectAvatarRelationInput
 		$today: Date!
 	) {
@@ -14,9 +16,15 @@ export const CREATE_PROJECT = gql`
 				projects: {
 					create: {
 						name: $projectName
-						configuration: { create: { inviteLink: $inviteLink } }
 						release: { create: { releaseDate: $today } }
 						avatar: $avatar
+						configuration: {
+							create: {
+								inviteLink: $inviteLink
+								productionURL: $productionURL
+								stagingURL: $stagingURL
+							}
+						}
 					}
 				}
 			}

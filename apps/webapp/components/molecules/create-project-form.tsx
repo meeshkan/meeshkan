@@ -15,6 +15,8 @@ import { createSlug } from '../../utils/createSlug';
 
 type ProjectFormInputs = {
 	name: string;
+	productionURL?: string;
+	stagingURL?: string;
 };
 
 type CreateProjectFormProps = {
@@ -33,7 +35,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 		setLoading(true);
 		setError('');
 		const data = await createProject(idToken, {
-			name: formData.name,
+			...formData,
 			...avatarFile,
 		});
 
@@ -54,12 +56,32 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="form">
 			<AvatarField onUpload={setAvatarFile} />
-			<FormControl id="name" isRequired isInvalid={!!error}>
+			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Name your project</FormLabel>
 				<Input
 					name="name"
 					type="text"
 					placeholder="Acme Industries"
+					ref={register}
+				/>
+			</FormControl>
+			<FormControl id="productionURL" isInvalid={!!error} mb={8}>
+				<FormLabel>Production URL</FormLabel>
+				<Input
+					name="productionURL"
+					type="url"
+					placeholder="https://acme-industries.com"
+					pattern="^http(s)?:\/\/.+$"
+					ref={register}
+				/>
+			</FormControl>
+			<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
+				<FormLabel>Staging URL</FormLabel>
+				<Input
+					name="stagingURL"
+					type="url"
+					placeholder="https://staging.acme-industries.com"
+					pattern="^http(s)?:\/\/.+$"
 					ref={register}
 				/>
 				<FormErrorMessage>Error: {error}</FormErrorMessage>
