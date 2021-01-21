@@ -70,6 +70,8 @@ export interface UserStories {
 
 interface Release {
 	releaseDate: string;
+	id: string;
+	name: string;
 	testRuns: TestRuns;
 }
 

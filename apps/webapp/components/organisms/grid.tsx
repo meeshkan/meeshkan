@@ -79,8 +79,6 @@ const doughnutData = {
 	],
 };
 
-const versions = ['v0.0.2', 'v0.0.1'];
-
 const timePeriodsInDays = {
 	'24 hours': 1,
 	'7 days': 7,
@@ -167,6 +165,8 @@ const Grid = (props) => {
 			],
 		},
 	};
+
+	const versions = selectedProject.release.items;
 
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
@@ -307,21 +307,21 @@ const Grid = (props) => {
 							w="100%"
 							textAlign="left"
 						>
-							{version}
+							{version.name}
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={version}
+								defaultValue={version.id}
 								title="Versions"
 								type="radio"
 							>
 								{versions.map((version, index) => (
 									<MenuItemOption
-										key={index}
-										value={version}
+										key={version.id}
+										value={version.id}
 										onClick={() => setVersion(version)}
 									>
-										{version}
+										{version.name}
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>

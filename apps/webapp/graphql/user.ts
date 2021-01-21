@@ -103,6 +103,8 @@ export const USER = gql`
 					release {
 						count
 						items {
+							id
+							name
 							releaseDate
 							testRuns {
 								items {
