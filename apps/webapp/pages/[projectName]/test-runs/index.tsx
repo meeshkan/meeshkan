@@ -13,7 +13,7 @@ import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
 import theme from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
-import TestRunCard from '../../../components/molecules/test-run-card'
+import TestRunCard from '../../../components/molecules/test-run-card';
 import Card from '../../../components/atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -25,11 +25,11 @@ const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutBackgroundColors = [
 	theme.colors.blue[500],
 	theme.colors.blue[700],
-	theme.colors.blue[900],
+	theme.colors.blue[300],
 ];
 
 const doughnutData = {
-	labels: ['Passing', 'Didn\'t run', 'Failure'],
+	labels: ['Passing', "Didn't run", 'Failing'],
 	datasets: [
 		{
 			data: doughnutDefaultDataValues,
@@ -48,11 +48,13 @@ const TestRunsPage = () => {
 		(a, b) => new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
 	)[0];
 
-	const latestTestRunStats = latestTestRun && _.countBy(
-		latestTestRun.testOutcome.items
-			.map(outcome => capitalize(outcome.status))
-			.reduce((pre, cur) => pre.concat(cur), []) || []
-	);
+	const latestTestRunStats =
+		latestTestRun &&
+		_.countBy(
+			latestTestRun.testOutcome.items
+				.map((outcome) => capitalize(outcome.status))
+				.reduce((pre, cur) => pre.concat(cur), []) || []
+		);
 
 	const validTestRunStatus = ['Passing', 'Failing', 'Did not run'];
 	Object.keys(latestTestRunStats || {}).forEach(
@@ -70,7 +72,7 @@ const TestRunsPage = () => {
 			display: false,
 		},
 		responsive: false,
-    	maintainAspectRatio: false,
+		maintainAspectRatio: false,
 	};
 
 	if (loading) {
@@ -84,25 +86,43 @@ const TestRunsPage = () => {
 	return (
 		<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
 			{doughnutDataValues.length > 0 && (
-				<GridCard title="Latest case status" mb={6} flex="0 0 auto">
-					<Flex justify="center" align="center" direction={['column', 'column', 'row', 'row']}>
+				<GridCard title="Latest test case status" mb={12} flex="0 0 auto">
+					<Flex
+						justify="center"
+						align="center"
+						direction={['column', 'column', 'row', 'row']}
+					>
 						<Doughnut
 							data={doughnutData}
 							options={doughnutOptions}
 							height={150}
 							width={125}
 						/>
-						<List d="flex" ml={2}>
+						<Stack
+							as={List}
+							direction={['column', 'row']}
+							spacing={[4, 8]}
+							ml={[0, 0, 16]}
+							mt={[8, 0]}
+						>
 							{doughnutDataLabels.map((label, index) => {
 								return (
-									<ListItem key={label} mx={5} d="flex" flexDirection="column" alignItems="center">
+									<ListItem
+										key={label}
+										d="flex"
+										flexDirection="column"
+										alignItems="center"
+									>
 										<Text fontSize="40px" fontWeight={700}>
-											{Math.round(latestTestRunStats[label] / totalTestRunOutcomes * 100)}%
+											{Math.round(
+												(latestTestRunStats[label] / totalTestRunOutcomes) * 100
+											)}
+											%
 										</Text>
 										<Flex align="center">
 											<Box
+												borderRadius="md"
 												bg={doughnutBackgroundColors[index]}
-												border="1px solid rgba(0, 0, 0, .2)"
 												w={4}
 												h={4}
 											/>
@@ -111,7 +131,7 @@ const TestRunsPage = () => {
 									</ListItem>
 								);
 							})}
-						</List>
+						</Stack>
 					</Flex>
 				</GridCard>
 			)}
