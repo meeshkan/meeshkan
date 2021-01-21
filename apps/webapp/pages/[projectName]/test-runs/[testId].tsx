@@ -189,7 +189,6 @@ const TestRun = () => {
 										{isFailing && (
 											<ChevronDownIcon
 												transition="all 0.2s"
-												// transform={isOpen === true ? 'rotate(180deg)' : null}
 												w={5}
 												h={5}
 												color="gray.500"
