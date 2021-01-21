@@ -7,6 +7,7 @@ import {
 	Stack,
 	Text,
 	useColorModeValue,
+	Tooltip,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import {
@@ -15,12 +16,12 @@ import {
 	MinusIcon,
 	SortIcon,
 	FilterIcon,
+	CircleArrowsIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
-import Link from 'next/link'
+import Link from 'next/link';
 import _ from 'lodash';
-import theme from '@frontend/chakra-theme';
-import TestRunCard from '../../../components/molecules/test-run-card'
+import TestRunCard from '../../../components/molecules/test-run-card';
 import Card from '../../../components/atoms/card';
 import GridCard from '../../../components/molecules/grid-card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
@@ -54,8 +55,9 @@ const TestRun = () => {
 
 	const testCasesRan = testRun.testOutcome.count;
 	const outcomeOrder = ['failing', 'passing', 'queued', 'did not run'];
-	const sortedTestOutcomes = testRun.testOutcome.items
-		.sort((a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status));
+	const sortedTestOutcomes = testRun.testOutcome.items.sort(
+		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
+	);
 
 	return (
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
@@ -120,6 +122,7 @@ const TestRun = () => {
 							</Button>
 						</Box>
 					</Flex>
+
 					<Stack spacing={4} overflowY="scroll">
 						{sortedTestOutcomes.map((outcome) => {
 							const testCase = outcome?.userStory;
@@ -127,16 +130,29 @@ const TestRun = () => {
 							const isFailing = status === 'failing';
 							const icon =
 								status === 'passing' ? (
-									<CheckmarkIcon w={3} h={3} color="green.500" />
+									<CheckmarkIcon
+										w={3}
+										h={3}
+										color="green.500"
+										aria-label="Passing"
+									/>
 								) : status === 'failing' ? (
-									<XmarkIcon w={3} h={3} color="red.500" />
-								) : (
-									<MinusIcon w={3} h={3} color="gray.500" />
-								);
+									<XmarkIcon w={3} h={3} color="red.500" title="Failing" />
+								) : status === 'did not run' ? (
+									<MinusIcon w={3} h={3} color="gray.500" title="Didn't run" />
+								) : status === 'queued' || 'in progress' ? (
+									<CircleArrowsIcon
+										w={3}
+										h={3}
+										color="amber.500"
+										title="Queued / In progress"
+									/>
+								) : null;
 
-							let cardOverrideProps: { bg?: string } = {};
+							let cardOverrideProps: { bg?: string; py?: number } = {};
 							if (!isFailing) {
 								cardOverrideProps.bg = 'transparent';
+								cardOverrideProps.py = 2;
 							}
 
 							return (
@@ -147,7 +163,14 @@ const TestRun = () => {
 									{...cardOverrideProps}
 								>
 									<Flex align="center">
-										{icon}
+										<Tooltip
+											label={status}
+											placement="bottom-start"
+											borderRadius="md"
+											textTransform="capitalize"
+										>
+											{icon}
+										</Tooltip>
 										<Text fontSize="15px" ml={4}>
 											{testCase?.title}
 										</Text>
@@ -182,7 +205,7 @@ const TestRun = () => {
 							>
 								Web browser
 							</Heading>
-							<Text fontSize="15px">Chrome 86.0.4240.198</Text>
+							<Text fontSize="15px">Chromium 86.0.4240.0</Text>
 						</Box>
 						<Box>
 							<Heading
@@ -193,7 +216,7 @@ const TestRun = () => {
 							>
 								Operating system
 							</Heading>
-							<Text fontSize="15px">Macintosh 10.15.7</Text>
+							<Text fontSize="15px">AWS Linux 2018.03</Text>
 						</Box>
 						<Box>
 							<Heading
