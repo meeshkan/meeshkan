@@ -194,7 +194,14 @@ const TestRun = () => {
 							>
 								Test length
 							</Heading>
-							<Text fontSize="15px">{testRun?.testLength || '-'}</Text>
+							<Text fontSize="15px">
+								{testRun?.testLength.substring(0, 2) +
+									` hrs, ` +
+									testRun?.testLength.substring(3, 5) +
+									` mins, ` +
+									testRun?.testLength.substring(6, 8) +
+									` sec ` || '-'}
+							</Text>
 						</Box>
 						<Box>
 							<Heading
