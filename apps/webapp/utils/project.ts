@@ -54,6 +54,8 @@ export const updateProject = async (
 	data: {
 		id: string;
 		name: string;
+		productionURL?: string;
+		stagingURL?: string;
 		avatar: {
 			fileId: string;
 			id: string;
@@ -62,12 +64,14 @@ export const updateProject = async (
 ) => {
 	const client = eightBaseClient(idToken);
 
-	const { id, name } = data;
+	const { id, name, productionURL, stagingURL } = data;
 	let result;
 	try {
 		result = await client.request(UPDATE_PROJECT, {
 			projectId: id,
 			projectName: name,
+			productionURL,
+			stagingURL,
 			avatar: {
 				connect: data.avatar,
 			},

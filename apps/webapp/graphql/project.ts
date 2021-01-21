@@ -34,14 +34,29 @@ export const UPDATE_PROJECT = gql`
 	mutation UPDATE_PROJECT(
 		$projectId: ID!
 		$projectName: String!
+		$productionURL: String
+		$stagingURL: String	
 		$avatar: ProjectAvatarUpdateRelationInput
 	) {
 		projectUpdate(
 			filter: { id: $projectId }
-			data: { name: $projectName, avatar: $avatar }
+			data: {
+				name: $projectName,
+				avatar: $avatar
+				configuration: {
+					update: {
+						productionURL: $productionURL,
+						stagingURL: $stagingURL,
+					}
+				}	
+			}
 		) {
 			id
 			name
+			configuration {
+				productionURL
+				stagingURL
+			}
 			avatar {
 				downloadUrl
 			}
