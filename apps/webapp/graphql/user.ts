@@ -86,35 +86,49 @@ export const USER = gql`
 						count
 						items {
 							id
-							failing {
-								count
+							testOutcome {
 								items {
-									firstIntroduction
+									status
 									isResolved
+									error
+									createdAt
 								}
 							}
 							title
 							testCreatedDate
 							isTestCase
 							createdAt
-							testRuns {
-								count
-								items {
-									status
-									dateTime
-									userStories {
-										items {
-											id
-										}
-									}
-								}
-							}
 						}
 					}
 					release {
 						count
 						items {
+							id
+							name
 							releaseDate
+							testRuns {
+								count
+								items {
+									id
+									status
+									ciRun
+									createdAt
+									testLength
+									testOutcome {
+										count
+										items {
+											status
+											isResolved
+											error
+											createdAt
+											userStory {
+												id
+												title
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}

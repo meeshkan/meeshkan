@@ -26,36 +26,41 @@ interface Configuration {
 	inviteLink: string;
 }
 
-interface TestRun {
-	status: string;
-	dateTime: string;
-	userStories: {
-		items: Array<{ id: string }>;
-	};
+interface TestOutcome {
+	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
+	isResolved: boolean;
+	error: string;
+	createdAt: string;
+	userStory: UserStory;
 }
 
-interface TestRuns {
+interface TestOutcomes {
+	count: number;
+	items: Array<TestOutcome>;
+}
+
+export interface TestRun {
+	id: string;
+	status: 'queued' | 'running' | 'runError' | 'completed';
+	createdAt: string;
+	testLength: string;
+	ciRun: string;
+	testOutcome: TestOutcomes;
+}
+
+export interface TestRuns {
 	count: number;
 	items: Array<TestRun>;
 }
 
-interface UserStoryFailing {
-	count: number;
-	items: Array<{
-		firstIntroduction: string;
-		isResolved: boolean;
-	}>;
-}
-
 export interface UserStory {
 	id: string;
-	failing: UserStoryFailing;
+	testOutcome: TestOutcomes;
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
 	significance: 'low' | 'medium' | 'high';
 	testCreatedDate: string;
-	testRuns: TestRuns;
 }
 
 export interface UserStories {
@@ -64,8 +69,15 @@ export interface UserStories {
 }
 
 interface Release {
+	releaseDate: string;
+	id: string;
+	name: string;
+	testRuns: TestRuns;
+}
+
+export interface Releases {
 	count: number;
-	items: Array<{ releaseDate: string }>;
+	items: Array<Release>;
 }
 
 export interface Member {
@@ -88,7 +100,7 @@ export interface Project {
 	hasReceivedEvents: boolean;
 	members: Members;
 	userStories: UserStories;
-	release?: Release;
+	release: Releases;
 }
 
 export interface IUser {
@@ -195,7 +207,7 @@ export const updateProfile = async (
 		avatar: {
 			id: string;
 			fileId: string;
-		}
+		};
 	}
 ) => {
 	const client = eightBaseClient(idToken);

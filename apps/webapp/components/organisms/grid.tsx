@@ -1,4 +1,9 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, {
+	useState,
+	useEffect,
+	useContext,
+	useMemo,
+} from 'react';
 import {
 	Box,
 	Stack,
@@ -16,7 +21,6 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { createSlug } from '../../utils/createSlug';
 import {
 	ArrowForwardIcon,
 	ArrowUpDownIcon,
@@ -32,6 +36,8 @@ import GridCard from '../molecules/grid-card';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
+import { createSlug } from '../../utils/createSlug';
+import { capitalize } from '../../utils/capitalize';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
@@ -79,8 +85,6 @@ const doughnutData = {
 	],
 };
 
-const versions = ['v0.0.2', 'v0.0.1'];
-
 const timePeriodsInDays = {
 	'24 hours': 1,
 	'7 days': 7,
@@ -100,6 +104,7 @@ const calcPctChange = (key, confidenceScoreNDaysAgo, dataPoint) =>
 
 const deltaChange = (oldv, newv) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
+
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
@@ -167,14 +172,18 @@ const Grid = (props) => {
 		},
 	};
 
+	const versions = selectedProject.release.items;
+
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
 
+	useEffect(() => setVersion(versions[0]), [versions]);
+
 	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
-	const testRuns = getTestRuns(userStories);
+	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	const bugs = getBugs(userStories);
+	const bugs = getBugs(version.testRuns.items);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
 	const confidenceDataPoints = getConfidenceScore(
@@ -221,9 +230,9 @@ const Grid = (props) => {
 			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
 	);
 
-	const latestTestStates = getLatestTestStates(userStories);
+	const latestTestStates = getLatestTestStates(version.testRuns.items);
 	const doughnutDataValues = Object.values(latestTestStates);
-	const doughnutDataLabels = Object.keys(latestTestStates);
+	const doughnutDataLabels = Object.keys(latestTestStates).map(capitalize);
 	doughnutData.datasets[0].data = doughnutDataValues;
 	doughnutData.labels = doughnutDataLabels;
 
@@ -306,21 +315,21 @@ const Grid = (props) => {
 							w="100%"
 							textAlign="left"
 						>
-							{version}
+							{version.name}
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={version}
+								defaultValue={version.id}
 								title="Versions"
 								type="radio"
 							>
 								{versions.map((version, index) => (
 									<MenuItemOption
-										key={index}
-										value={version}
+										key={version.id}
+										value={version.id}
 										onClick={() => setVersion(version)}
 									>
-										{version}
+										{version.name}
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>
@@ -449,7 +458,7 @@ const Grid = (props) => {
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
-										{doughnutDataValues.length > 0 ? (
+										{doughnutDataValues.some(value => value !== 0) ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
 											<Text fontStyle="italic">
@@ -486,10 +495,9 @@ const Grid = (props) => {
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
-													? `Caution`
-													: `Not ready`}
+														? `Caution`
+														: `Not ready`}
 											</Text>
-
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
 												fontWeight={700}
@@ -510,7 +518,7 @@ const Grid = (props) => {
 													color={useColorModeValue('gray.500', 'gray.300')}
 													fontWeight={500}
 												>
-													bugs
+													bug{bugs.introduced !== 1 && 's'}
 												</Text>
 											</Flex>
 											<Text
@@ -521,7 +529,7 @@ const Grid = (props) => {
 												introduced
 											</Text>
 										</Box>
-										<Box w="100px">
+										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
 													{bugs.fixed}
@@ -541,7 +549,7 @@ const Grid = (props) => {
 											>
 												fixed
 											</Text>
-										</Box>
+										</Box> */}
 									</Stack>
 								</GridCard>
 							</SimpleGrid>
