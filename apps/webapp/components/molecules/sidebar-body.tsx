@@ -178,7 +178,7 @@ const SideBarBody = () => {
 										`/${slugifiedProjectName}/settings#details`
 									}
 								>
-									Script tag
+									Details
 								</NavButton>
 								<NavButton
 									disabled={true}
