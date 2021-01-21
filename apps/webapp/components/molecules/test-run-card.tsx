@@ -24,7 +24,7 @@ type TestRunCardProps = {
 	stats: {
 		passing?: number;
 		failing?: number;
-		notRan?: number;
+		'did not run'?: number;
 	};
 };
 
@@ -32,7 +32,6 @@ const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) =
 	const router = useRouter();
 	const isIndividualTestRunPage = router.pathname.endsWith('[testId]');
 
-	const { passing, failing, notRan } = stats;
 	const statusColor =
 		status === 'queued'
 			? 'gray'
@@ -89,19 +88,19 @@ const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) =
 					<Center>
 						<CheckmarkIcon width={2} height={2} color="green.500" />
 						<Text fontSize="sm" ml={2}>
-							{passing || 0}
+							{stats.passing || 0}
 						</Text>
 					</Center>
 					<Center>
 						<XmarkIcon width={2} height={2} color="red.500" />
 						<Text fontSize="sm" ml={2}>
-							{failing || 0}
+							{stats.failing || 0}
 						</Text>
 					</Center>
 					<Center>
 						<MinusIcon width={2} height={2} color="gray.500" />
 						<Text fontSize="sm" ml={2}>
-							{notRan || 0}
+							{stats['did not run'] || 0}
 						</Text>
 					</Center>
 					{!isIndividualTestRunPage && (
