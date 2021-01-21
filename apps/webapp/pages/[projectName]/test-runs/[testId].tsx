@@ -95,7 +95,7 @@ const TestRun = () => {
 							color={useColorModeValue('gray.900', 'gray.200')}
 							lineHeight="short"
 						>
-							{testCasesRan} test case{testCasesRan > 1 && 's'} ran
+							{testCasesRan} test case{testCasesRan !== 1 && 's'} ran
 						</Heading>
 						<Box>
 							<Button

@@ -75,7 +75,7 @@ interface Release {
 	testRuns: TestRuns;
 }
 
-interface Releases {
+export interface Releases {
 	count: number;
 	items: Array<Release>;
 }

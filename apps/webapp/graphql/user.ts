@@ -107,6 +107,7 @@ export const USER = gql`
 							name
 							releaseDate
 							testRuns {
+								count
 								items {
 									id
 									status

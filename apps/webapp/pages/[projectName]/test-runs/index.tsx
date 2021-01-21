@@ -19,8 +19,7 @@ import { useValidateSelectedProject } from '../../../hooks/use-validate-selected
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
-
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+import { capitalize } from '../../../utils/capitalize';
 
 const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutBackgroundColors = [

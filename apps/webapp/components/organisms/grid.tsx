@@ -1,4 +1,9 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, {
+	useState,
+	useEffect,
+	useContext,
+	useMemo,
+} from 'react';
 import {
 	Box,
 	Stack,
@@ -16,7 +21,6 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { createSlug } from '../../utils/createSlug';
 import {
 	ArrowForwardIcon,
 	ArrowUpDownIcon,
@@ -32,12 +36,14 @@ import GridCard from '../molecules/grid-card';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
+import { createSlug } from '../../utils/createSlug';
+import { capitalize } from '../../utils/capitalize';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
 	getBugs,
 	getConfidenceScore,
-	// getLatestTestStates,
+	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
 	getLastNDaysInFormat,
@@ -171,11 +177,13 @@ const Grid = (props) => {
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
 
+	useEffect(() => setVersion(versions[0]), [versions]);
+
 	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
-	const testRuns = getTestRuns(userStories);
+	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	const bugs = getBugs(userStories);
+	const bugs = getBugs(version.testRuns.items);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
 	const confidenceDataPoints = getConfidenceScore(
@@ -222,11 +230,11 @@ const Grid = (props) => {
 			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
 	);
 
-	// const latestTestStates = getLatestTestStates(userStories);
-	// const doughnutDataValues = Object.values(latestTestStates);
-	// const doughnutDataLabels = Object.keys(latestTestStates);
-	// doughnutData.datasets[0].data = doughnutDataValues;
-	// doughnutData.labels = doughnutDataLabels;
+	const latestTestStates = getLatestTestStates(version.testRuns.items);
+	const doughnutDataValues = Object.values(latestTestStates);
+	const doughnutDataLabels = Object.keys(latestTestStates).map(capitalize);
+	doughnutData.datasets[0].data = doughnutDataValues;
+	doughnutData.labels = doughnutDataLabels;
 
 	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
 		selectedTimePeriodInDays,
@@ -449,15 +457,15 @@ const Grid = (props) => {
 									</Button>
 								</GridCard>
 								<GridCard title="Test suite state">
-									{/* <Box w="275px">
-										{doughnutDataValues.length > 0 ? (
+									<Box w="275px">
+										{doughnutDataValues.some(value => value !== 0) ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
 											<Text fontStyle="italic">
 												No tests have been run yet.
 											</Text>
 										)}
-									</Box> */}
+									</Box>
 								</GridCard>
 								<GridCard title="Overview">
 									<Stack direction="row" justify="space-around" mb={6}>
@@ -510,7 +518,7 @@ const Grid = (props) => {
 													color={useColorModeValue('gray.500', 'gray.300')}
 													fontWeight={500}
 												>
-													bugs
+													bug{bugs.introduced !== 1 && 's'}
 												</Text>
 											</Flex>
 											<Text

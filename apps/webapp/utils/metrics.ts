@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { UserStories, Project, UserStory } from './user';
+import {
+	UserStories,
+	Project,
+	UserStory,
+	TestRuns,
+	Releases,
+} from './user';
 
 export enum DataPointTag {
 	TEST_RUN = 0,
@@ -18,13 +24,19 @@ export interface DataPoint {
 const daysUntilDate = (date: moment.Moment): number =>
 	date.diff(moment(), 'days');
 
-export const getTestRuns = (userStories: UserStories['items']) => {
-	const testRunsTotal = _.sumBy(userStories, 'testRuns.count');
+export const getTestRuns = (releases: Releases['items']) => {
+	const testRunsTotal = releases
+		.reduce((a, b) => ({ testRuns: {
+			count: a.testRuns.count + b.testRuns.count
+		}}), {
+			testRuns: { count: 0 },
+		}).testRuns.count;
+
 	const pastTestRunsTotal = 0;
 	return {
 		value: testRunsTotal,
 		percentageChange:
-			testRunsTotal > 0 ? (pastTestRunsTotal / testRunsTotal) * 100 : 0,
+			testRunsTotal > 0 ? ((pastTestRunsTotal + testRunsTotal) / testRunsTotal) * 100 : 0,
 		dataPoints: pastTestRunsTotal,
 	};
 };
@@ -35,9 +47,9 @@ export const getDaysUntilRelease = (project: Project) => {
 	return releaseDate ? daysUntilDate(moment(releaseDate)) : null;
 };
 
-export const getBugs = (userStories: UserStories['items']) => {
-	const introduced = _.sumBy(userStories, (story) => {
-		const testOutcomes = story?.testOutcome?.items;
+export const getBugs = (testRuns: TestRuns['items']) => {
+	const introduced = _.sumBy(testRuns, (testRun) => {
+		const testOutcomes = testRun?.testOutcome?.items;
 		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
 	});
 
@@ -52,23 +64,29 @@ export const getBugs = (userStories: UserStories['items']) => {
 	};
 };
 
-// export const getLatestTestStates = (userStories: UserStories['items']) => {
-// 	const latestTestStates: { [key: string]: number } = {};
-// 	userStories?.forEach((story) => {
-// 		const [latestTestRun] = story.testRuns.items
-// 			.sort(
-// 				(a, b) =>
-// 					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-// 			)
-// 			.slice(-1);
+export const getLatestTestStates = (testRuns: TestRuns['items']) => {
+	const latestTestStates = {
+		failing: 0,
+		passing: 0,
+		'did not run': 0,
+	};
 
-// 		const status = latestTestRun?.status;
-// 		if (status) {
-// 			latestTestStates[status]++;
-// 		}
-// 	});
-// 	return latestTestStates;
-// };
+	testRuns?.forEach((testRun) => {
+		const [latestTestOutcome] = testRun.testOutcome.items
+			.sort(
+				(a, b) =>
+					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+			)
+			.slice(-1);
+
+		const status = latestTestOutcome?.status;
+		if (status) {
+			latestTestStates[status]++;
+		}
+	});
+
+	return latestTestStates;
+};
 
 const lastNDays = (n) =>
 	[...Array(n).keys()].map((i) => moment().subtract(i, 'days')).reverse();
