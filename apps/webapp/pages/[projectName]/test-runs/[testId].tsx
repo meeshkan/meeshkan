@@ -45,7 +45,7 @@ const TestRun = () => {
 	const { testId } = router.query;
 	const testRun = _.find(
 		project?.release.items[0]?.testRuns?.items,
-		(item) => item.id === testId 
+		(item) => item.id === testId
 	);
 
 	if (!found || !testRun) {
@@ -80,8 +80,7 @@ const TestRun = () => {
 					status={testRun?.status}
 					date={new Date(testRun?.createdAt)}
 					stats={_.countBy(
-						testRun?.testOutcome.items
-							.map(outcome => outcome.status)
+						testRun?.testOutcome.items.map((outcome) => outcome.status)
 					)}
 				/>
 			</Stack>
@@ -105,6 +104,7 @@ const TestRun = () => {
 								fontWeight={400}
 								mr={2}
 								leftIcon={<SortIcon />}
+								isDisabled
 							>
 								Sort
 							</Button>
@@ -114,76 +114,94 @@ const TestRun = () => {
 								colorScheme="gray"
 								fontWeight={400}
 								leftIcon={<FilterIcon />}
+								isDisabled
 							>
 								Filter
 							</Button>
 						</Box>
 					</Flex>
 					<Stack spacing={4} overflowY="scroll">
-						{sortedTestOutcomes
-							.map(outcome => {
-								const testCase = outcome?.userStory;
-								const status = outcome?.status;
-								const isFailing = status === 'failing';
-								const icon = status === 'passing' ?
-									<CheckmarkIcon w={3} h={3} color="green.500" /> :
-									status === 'failing' ?
-										<XmarkIcon w={3} h={3} color="red.500" /> :
-										<MinusIcon w={3} h={3} color="gray.500" />;
+						{sortedTestOutcomes.map((outcome) => {
+							const testCase = outcome?.userStory;
+							const status = outcome?.status;
+							const isFailing = status === 'failing';
+							const icon =
+								status === 'passing' ? (
+									<CheckmarkIcon w={3} h={3} color="green.500" />
+								) : status === 'failing' ? (
+									<XmarkIcon w={3} h={3} color="red.500" />
+								) : (
+									<MinusIcon w={3} h={3} color="gray.500" />
+								);
 
-								let cardOverrideProps: { bg?: string } = {};
-								if (!isFailing) {
-									cardOverrideProps.bg = 'transparent';
-								}
+							let cardOverrideProps: { bg?: string } = {};
+							if (!isFailing) {
+								cardOverrideProps.bg = 'transparent';
+							}
 
-								return (
-									<Card
-										as={Flex}
-										align="center"
-										justify="space-between"
-										{...cardOverrideProps}
-									>
-										<Flex align="center">
-											{icon}
-											<Text fontSize="15px" ml={4}>{testCase?.title}</Text>
-										</Flex>
-										{isFailing && (
-											<ChevronDownIcon w={5} h={5} color="gray.500" />
-										)}
-									</Card>
-								)
-							})
-						}
+							return (
+								<Card
+									as={Flex}
+									align="center"
+									justify="space-between"
+									{...cardOverrideProps}
+								>
+									<Flex align="center">
+										{icon}
+										<Text fontSize="15px" ml={4}>
+											{testCase?.title}
+										</Text>
+									</Flex>
+									{isFailing && (
+										<ChevronDownIcon w={5} h={5} color="gray.500" />
+									)}
+								</Card>
+							);
+						})}
 					</Stack>
 				</Stack>
 				<GridCard title="Technical information">
 					<Stack spacing={5}>
 						<Box>
-							<Heading as="h3" fontSize="15px" fontWeight={600} lineHeight="short">
+							<Heading
+								as="h3"
+								fontSize="15px"
+								fontWeight={600}
+								lineHeight="short"
+							>
 								Test length
 							</Heading>
-							<Text fontSize="15px">
-								{testRun?.testLength || '-'}
-							</Text>
+							<Text fontSize="15px">{testRun?.testLength || '-'}</Text>
 						</Box>
 						<Box>
-							<Heading as="h3" fontSize="15px" fontWeight={600} lineHeight="short">
+							<Heading
+								as="h3"
+								fontSize="15px"
+								fontWeight={600}
+								lineHeight="short"
+							>
 								Web browser
 							</Heading>
-							<Text fontSize="15px">
-								Chrome 86.0.4240.198
-							</Text>
+							<Text fontSize="15px">Chrome 86.0.4240.198</Text>
 						</Box>
 						<Box>
-							<Heading as="h3" fontSize="15px" fontWeight={600} lineHeight="short">
+							<Heading
+								as="h3"
+								fontSize="15px"
+								fontWeight={600}
+								lineHeight="short"
+							>
 								Operating system
 							</Heading>
-							<Text fontSize="15px">
-								Macintosh 10.15.7
-							</Text>
+							<Text fontSize="15px">Macintosh 10.15.7</Text>
 						</Box>
 						<Box>
-							<Heading as="h3" fontSize="15px" fontWeight={600} lineHeight="short">
+							<Heading
+								as="h3"
+								fontSize="15px"
+								fontWeight={600}
+								lineHeight="short"
+							>
 								Language
 							</Heading>
 							<Text fontSize="15px">English</Text>
