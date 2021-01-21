@@ -39,7 +39,7 @@ const GridCard = ({
 			{subtitle && (
 				<Heading
 					as="h3"
-					fontSize="12px"
+					fontSize="sm"
 					fontWeight={400}
 					lineHeight="short"
 					color="gray.500"
@@ -49,6 +49,7 @@ const GridCard = ({
 					{subtitle}
 				</Heading>
 			)}
+
 			<Divider mt={1} mb={4} />
 			{children}
 		</Card>

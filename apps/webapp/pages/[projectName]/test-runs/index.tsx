@@ -86,7 +86,12 @@ const TestRunsPage = () => {
 	return (
 		<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
 			{doughnutDataValues.length > 0 && (
-				<GridCard title="Latest test case status" mb={12} flex="0 0 auto">
+				<GridCard
+					title="Latest test case status"
+					subtitle="This is the breakdown of tests from the newest test run. Click on individual test runs below for further details."
+					mb={12}
+					flex="0 0 auto"
+				>
 					<Flex
 						justify="center"
 						align="center"
@@ -137,24 +142,21 @@ const TestRunsPage = () => {
 			)}
 			{testRuns.length > 0 ? (
 				<Stack spacing={6} overflowY="scroll">
-					{testRuns
-						.map((testRun, index) => {
-							const { id, status, createdAt } = testRun;
-							return (
-								<TestRunCard
-									id={id}
-									key={id}
-									status={status}
-									runNumber={index + 1}
-									date={new Date(createdAt)}
-									stats={_.countBy(
-										testRun.testOutcome.items
-											.map(outcome => outcome.status)
-									)}
-								/>
-							);
-						})
-					}
+					{testRuns.map((testRun, index) => {
+						const { id, status, createdAt } = testRun;
+						return (
+							<TestRunCard
+								id={id}
+								key={id}
+								status={status}
+								runNumber={index + 1}
+								date={new Date(createdAt)}
+								stats={_.countBy(
+									testRun.testOutcome.items.map((outcome) => outcome.status)
+								)}
+							/>
+						);
+					})}
 				</Stack>
 			) : (
 				<Center h="100%" as={Card}>

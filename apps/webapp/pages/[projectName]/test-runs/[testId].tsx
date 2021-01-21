@@ -9,7 +9,11 @@ import {
 	useColorModeValue,
 	Tooltip,
 } from '@chakra-ui/react';
-import { ChevronLeftIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import {
+	ChevronLeftIcon,
+	ChevronDownIcon,
+	InfoOutlineIcon,
+} from '@chakra-ui/icons';
 import {
 	CheckmarkIcon,
 	XmarkIcon,
@@ -96,7 +100,18 @@ const TestRun = () => {
 							color={useColorModeValue('gray.900', 'gray.200')}
 							lineHeight="short"
 						>
-							{testCasesRan} test case{testCasesRan !== 1 && 's'} ran
+							{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
+							<Tooltip
+								label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
+								p={2}
+								placement="right-start"
+								borderRadius="md"
+							>
+								<InfoOutlineIcon
+									ml={2}
+									color={useColorModeValue('gray.400', 'gray.500')}
+								/>
+							</Tooltip>
 						</Heading>
 						<Box>
 							<Button
