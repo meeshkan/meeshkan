@@ -171,28 +171,32 @@ const TestRun = () => {
 							}
 
 							return (
-								<Card
-									as={Flex}
-									align="center"
-									justify="space-between"
-									{...cardOverrideProps}
-								>
-									<Flex align="center">
-										<Tooltip
-											label={status}
-											placement="bottom-start"
-											borderRadius="md"
-											textTransform="capitalize"
-										>
-											{icon}
-										</Tooltip>
-										<Text fontSize="15px" ml={4}>
-											{testCase?.title}
-										</Text>
+								<Card {...cardOverrideProps}>
+									<Flex align="center" justify="space-between">
+										<Flex align="center">
+											<Tooltip
+												label={status}
+												placement="bottom-start"
+												borderRadius="md"
+												textTransform="capitalize"
+											>
+												{icon}
+											</Tooltip>
+											<Text fontSize="15px" ml={4}>
+												{testCase?.title}
+											</Text>
+										</Flex>
+										{isFailing && (
+											<ChevronDownIcon
+												transition="all 0.2s"
+												// transform={isOpen === true ? 'rotate(180deg)' : null}
+												w={5}
+												h={5}
+												color="gray.500"
+											/>
+										)}
 									</Flex>
-									{isFailing && (
-										<ChevronDownIcon w={5} h={5} color="gray.500" />
-									)}
+									{isFailing && <Text mt={4}>{outcome?.error}</Text>}
 								</Card>
 							);
 						})}
