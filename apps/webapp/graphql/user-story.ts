@@ -67,7 +67,7 @@ export const UPDATE_EXPECTED_TEST = gql`
 
 export const DELETE_REJECTED_RECORDING = gql`
 	mutation DELETE_REJECTED_RECORDING($userStoryId: ID!) {
-		userStoryDelete(filter: { id: $userStoryId }) {
+		userStoryDelete(filter: { id: $userStoryId }, force: true) {
 			success
 		}
 	}

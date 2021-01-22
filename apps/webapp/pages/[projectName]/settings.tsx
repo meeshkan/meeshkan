@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, ChangeEvent } from 'react';
+import React, { useState, useContext, ChangeEvent } from 'react';
 import {
 	Box,
 	FormControl,
@@ -7,17 +7,13 @@ import {
 	Button,
 	Text,
 	Switch,
-	InputGroup,
-	Input,
-	InputRightElement,
 	IconButton,
-	useClipboard,
 	useToast,
 	Avatar,
 	Flex,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { CopyIcon, TrashIcon } from '@frontend/chakra-theme';
+import { TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -26,6 +22,8 @@ import UpdateProfileForm from '../../components/molecules/update-profile-form';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
 import NotFoundError from '../404';
+import InviteLinkInput from '../../components/molecules/invite-link-input';
+import ScriptTagInput from '../../components/molecules/script-tag-input';
 import {
 	UserContext,
 	updateProductNotifications,
@@ -53,31 +51,6 @@ const Settings = () => {
 	);
 
 	const client = eightBaseClient(idToken);
-
-	const { hasCopied, onCopy } = useClipboard(
-		project?.configuration?.inviteLink
-	);
-
-	useEffect(() => {
-		if (hasCopied) {
-			toast({
-				position: 'bottom-right',
-				render: () => (
-					<Box
-						color="white"
-						p={4}
-						bg="blue.500"
-						borderRadius="md"
-						fontSize="md"
-					>
-						The project invite link was copied to your clipboard!
-					</Box>
-				),
-				duration: 2000,
-				isClosable: true,
-			});
-		}
-	}, [hasCopied, toast]);
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
@@ -122,7 +95,7 @@ const Settings = () => {
 
 	return (
 		<Box overflowY="scroll" w="100%">
-			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} mb={20}>
+			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
 				<Heading fontSize="20px" color="gray.500" lineHeight="short">
 					Personal
 				</Heading>
@@ -197,23 +170,7 @@ const Settings = () => {
 					<Heading fontSize="18px" fontWeight={500}>
 						Invite link
 					</Heading>
-					<InputGroup mb={4}>
-						<Input
-							value={project.configuration.inviteLink}
-							color="blue.400"
-							onClick={onCopy}
-							isReadOnly
-						/>
-						<InputRightElement>
-							<IconButton
-								icon={<CopyIcon color="gray.500" />}
-								aria-label="Copy invite link"
-								onClick={onCopy}
-								size="md"
-								variant="ghost"
-							/>
-						</InputRightElement>
-					</InputGroup>
+					<InviteLinkInput />
 					{members.map((member: Member) => {
 						const memberName = `${member.firstName || ''} ${
 							member.lastName || ''
@@ -278,6 +235,13 @@ const Settings = () => {
 							</Flex>
 						);
 					})}
+				</GridCard>
+				<GridCard
+					title="Details"
+					anchor
+					subtitle="Detailed information about your project."
+				>
+					<ScriptTagInput />
 				</GridCard>
 			</Stack>
 		</Box>

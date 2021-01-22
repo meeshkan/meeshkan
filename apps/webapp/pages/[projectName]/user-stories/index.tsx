@@ -201,7 +201,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 
 	return (
 		<Stack p={[6, 0, 0, 0]} w="100%" spacing={6}>
-			<GridCard title="Getting started">
+			<GridCard
+				title="Getting started"
+				subtitle="User stories are flows that your users take in your production application. They are called recordings when first made, and test cases once you approve the application behavior."
+			>
 				<Stack direction={['column', 'column', 'row']} spacing="32px">
 					<StartButton
 						icon={

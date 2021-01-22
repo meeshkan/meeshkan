@@ -1,4 +1,9 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, {
+	useState,
+	useEffect,
+	useContext,
+	useMemo,
+} from 'react';
 import {
 	Box,
 	Stack,
@@ -16,8 +21,11 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { createSlug } from '../../utils/createSlug';
-import { ArrowForwardIcon, ArrowUpDownIcon } from '@chakra-ui/icons';
+import {
+	ArrowForwardIcon,
+	ArrowUpDownIcon,
+	ChevronDownIcon,
+} from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
@@ -28,6 +36,8 @@ import GridCard from '../molecules/grid-card';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext, UserStories } from '../../utils/user';
+import { createSlug } from '../../utils/createSlug';
+import { capitalize } from '../../utils/capitalize';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
@@ -36,7 +46,7 @@ import {
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
-	getLastSevenDaysInFormat,
+	getLastNDaysInFormat,
 	DataPointTag,
 } from '../../utils/metrics';
 require('../molecules/rounded-chart');
@@ -75,7 +85,12 @@ const doughnutData = {
 	],
 };
 
-const versions = ['v0.0.2', 'v0.0.1'];
+const timePeriodsInDays = {
+	'24 hours': 1,
+	'7 days': 7,
+	'30 days': 30,
+	'6 months': 183,
+};
 
 // TODO: fill me in with correct info once we can determine
 // the release start date. For now, set arbitrarily to 30 days.
@@ -89,6 +104,7 @@ const calcPctChange = (key, confidenceScoreNDaysAgo, dataPoint) =>
 
 const deltaChange = (oldv, newv) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
+
 const Grid = (props) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
@@ -156,13 +172,18 @@ const Grid = (props) => {
 		},
 	};
 
+	const versions = selectedProject.release.items;
+
 	const [version, setVersion] = useState(versions[0]);
+	const [timePeriod, setTimePeriod] = useState('7 days');
+
+	useEffect(() => setVersion(versions[0]), [versions]);
 
 	const userStories: UserStories['items'] = selectedProject.userStories.items;
 
-	const testRuns = getTestRuns(userStories);
+	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	const bugs = getBugs(userStories);
+	const bugs = getBugs(version.testRuns.items);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
 	const confidenceDataPoints = getConfidenceScore(
@@ -184,13 +205,14 @@ const Grid = (props) => {
 		30;
 
 	// TODO: allow users to change this value
-	const CURRENT_TIME_PERIOD_IN_DAYS = 7;
+	const selectedTimePeriodInDays = timePeriodsInDays[timePeriod];
 
 	const confidenceDataPointsNDaysAgo = getConfidenceScore(
-		new Date().getTime() - 1000 * 60 * 60 * 24 * CURRENT_TIME_PERIOD_IN_DAYS,
+		new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
 		releaseStart,
 		userStories
 	);
+
 	const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
 		.map((a) => a.score)
 		.reduce((a, b) => a + b, 0.0);
@@ -208,18 +230,23 @@ const Grid = (props) => {
 			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
 	);
 
-	const latestTestStates = getLatestTestStates(userStories);
+	const latestTestStates = getLatestTestStates(version.testRuns.items);
 	const doughnutDataValues = Object.values(latestTestStates);
-	const doughnutDataLabels = Object.keys(latestTestStates);
+	const doughnutDataLabels = Object.keys(latestTestStates).map(capitalize);
 	doughnutData.datasets[0].data = doughnutDataValues;
 	doughnutData.labels = doughnutDataLabels;
 
 	const { recordingsByDay, testsByDay } = getRecordingsAndTestsByDay(
+		selectedTimePeriodInDays,
 		userStories
 	);
+
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
-	const barDataLabels = getLastSevenDaysInFormat('MMM DD');
+	const barDataLabels = getLastNDaysInFormat(
+		selectedTimePeriodInDays,
+		'MMM DD'
+	);
 	barData.labels = barDataLabels;
 
 	const totalRecordings = sumOfObjectValues(recordingsByDay);
@@ -228,9 +255,45 @@ const Grid = (props) => {
 	return (
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
-				<Heading as="h2" fontSize="md" lineHeight="short">
-					Last {CURRENT_TIME_PERIOD_IN_DAYS} Days
-				</Heading>
+				<Flex align="center">
+					<Heading
+						as="h2"
+						fontSize="md"
+						display="inline"
+						lineHeight="short"
+						mr={2}
+					>
+						Last
+					</Heading>
+					<Menu>
+						<MenuButton
+							as={Button}
+							fontSize="md"
+							fontWeight={700}
+							py={0}
+							px={2}
+							variant="ghost"
+							colorScheme="gray"
+							rightIcon={<ChevronDownIcon ml={-3} />}
+							textAlign="left"
+						>
+							{timePeriod}
+						</MenuButton>
+						<MenuList>
+							<MenuOptionGroup defaultValue={timePeriod} type="radio">
+								{Object.keys(timePeriodsInDays).map((period) => (
+									<MenuItemOption
+										key={timePeriodsInDays[period]}
+										value={period}
+										onClick={() => setTimePeriod(period)}
+									>
+										{period}
+									</MenuItemOption>
+								))}
+							</MenuOptionGroup>
+						</MenuList>
+					</Menu>
+				</Flex>
 				<Flex align="center">
 					<Heading
 						as="h2"
@@ -252,21 +315,21 @@ const Grid = (props) => {
 							w="100%"
 							textAlign="left"
 						>
-							{version}
+							{version.name}
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={version}
+								defaultValue={version.id}
 								title="Versions"
 								type="radio"
 							>
 								{versions.map((version, index) => (
 									<MenuItemOption
-										key={index}
-										value={version}
+										key={version.id}
+										value={version.id}
 										onClick={() => setVersion(version)}
 									>
-										{version}
+										{version.name}
 									</MenuItemOption>
 								))}
 							</MenuOptionGroup>
@@ -338,11 +401,11 @@ const Grid = (props) => {
 										{confidenceChange.length === 0 ? (
 											<Text>
 												There hasn't been any change to your confidence score in
-												the last {CURRENT_TIME_PERIOD_IN_DAYS} days.
+												the last {timePeriod}.
 											</Text>
 										) : null}
 										{confidenceChange
-											.slice(0, CURRENT_TIME_PERIOD_IN_DAYS + 1)
+											.slice(0, selectedTimePeriodInDays + 1)
 											.map(([key, dataPoint]) => (
 												<ConfidenceBreakdownItem
 													key={key}
@@ -395,7 +458,7 @@ const Grid = (props) => {
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
-										{doughnutDataValues.length > 0 ? (
+										{doughnutDataValues.some(value => value !== 0) ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
 											<Text fontStyle="italic">
@@ -432,10 +495,9 @@ const Grid = (props) => {
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
-													? `Caution`
-													: `Not ready`}
+														? `Caution`
+														: `Not ready`}
 											</Text>
-
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
 												fontWeight={700}
@@ -456,7 +518,7 @@ const Grid = (props) => {
 													color={useColorModeValue('gray.500', 'gray.300')}
 													fontWeight={500}
 												>
-													bugs
+													bug{bugs.introduced !== 1 && 's'}
 												</Text>
 											</Flex>
 											<Text
@@ -467,7 +529,7 @@ const Grid = (props) => {
 												introduced
 											</Text>
 										</Box>
-										<Box w="100px">
+										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
 													{bugs.fixed}
@@ -487,7 +549,7 @@ const Grid = (props) => {
 											>
 												fixed
 											</Text>
-										</Box>
+										</Box> */}
 									</Stack>
 								</GridCard>
 							</SimpleGrid>

@@ -24,38 +24,45 @@ export interface AvatarFile {
 
 interface Configuration {
 	inviteLink: string;
+	productionURL: string;
+	stagingURL: string;
 }
 
-interface TestRun {
-	status: string;
-	dateTime: string;
-	userStories: {
-		items: Array<{ id: string }>;
-	};
+interface TestOutcome {
+	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
+	isResolved: boolean;
+	error: string;
+	createdAt: string;
+	userStory: UserStory;
 }
 
-interface TestRuns {
+interface TestOutcomes {
+	count: number;
+	items: Array<TestOutcome>;
+}
+
+export interface TestRun {
+	id: string;
+	status: 'queued' | 'running' | 'runError' | 'completed';
+	createdAt: string;
+	testLength: string;
+	ciRun: string;
+	testOutcome: TestOutcomes;
+}
+
+export interface TestRuns {
 	count: number;
 	items: Array<TestRun>;
 }
 
-interface UserStoryFailing {
-	count: number;
-	items: Array<{
-		firstIntroduction: string;
-		isResolved: boolean;
-	}>;
-}
-
 export interface UserStory {
 	id: string;
-	failing: UserStoryFailing;
+	testOutcome: TestOutcomes;
 	title: string;
 	isTestCase: boolean;
 	createdAt: string;
 	significance: 'low' | 'medium' | 'high';
 	testCreatedDate: string;
-	testRuns: TestRuns;
 }
 
 export interface UserStories {
@@ -64,8 +71,15 @@ export interface UserStories {
 }
 
 interface Release {
+	releaseDate: string;
+	id: string;
+	name: string;
+	testRuns: TestRuns;
+}
+
+export interface Releases {
 	count: number;
-	items: Array<{ releaseDate: string }>;
+	items: Array<Release>;
 }
 
 export interface Member {
@@ -88,7 +102,7 @@ export interface Project {
 	hasReceivedEvents: boolean;
 	members: Members;
 	userStories: UserStories;
-	release?: Release;
+	release: Releases;
 }
 
 export interface IUser {
@@ -158,7 +172,7 @@ const uploadAvatar = async (idToken: string, avatar: string) => {
 
 export const confirmOrCreateUser = async (user: IUser) => {
 	const client = eightBaseClient(user.idToken);
-	await client.request(CURRENT_USER).catch(async () => {
+	const currentUser = await client.request(CURRENT_USER).catch(async () => {
 		const { userSignUpWithToken } = await client.request(SIGN_UP_USER, {
 			user: {
 				email: user.email,
@@ -167,7 +181,7 @@ export const confirmOrCreateUser = async (user: IUser) => {
 		});
 		const { firstName, lastName } = splitName(user.name);
 		const { fileId, filename } = await uploadAvatar(user.idToken, user.avatar);
-		await client.request(UPDATE_USER, {
+		const updatedUser = await client.request(UPDATE_USER, {
 			id: userSignUpWithToken.id,
 			user: {
 				firstName,
@@ -180,7 +194,11 @@ export const confirmOrCreateUser = async (user: IUser) => {
 				},
 			},
 		});
+
+		return updatedUser.userUpdate;
 	});
+
+	return currentUser.user || currentUser;
 };
 
 export const updateProfile = async (
@@ -191,7 +209,7 @@ export const updateProfile = async (
 		avatar: {
 			id: string;
 			fileId: string;
-		}
+		};
 	}
 ) => {
 	const client = eightBaseClient(idToken);

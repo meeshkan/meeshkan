@@ -56,6 +56,7 @@ const SideBarBody = () => {
 	);
 
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
+	const testRunsHref = `/${slugifiedProjectName}/test-runs`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
 	if (isSettingsPage) {
@@ -171,6 +172,16 @@ const SideBarBody = () => {
 									Team members
 								</NavButton>
 								<NavButton
+									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#details`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#details`
+									}
+								>
+									Details
+								</NavButton>
+								<NavButton
 									disabled={true}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
@@ -223,7 +234,14 @@ const SideBarBody = () => {
 					>
 						User stories
 					</NavButton>
-					<NavButton leftIcon={<CheckSquareIcon />} href="/test-runs" disabled>
+					<NavButton
+						leftIcon={<CheckSquareIcon />}
+						href={testRunsHref}
+						isActive={
+							router.pathname.split('/').slice(-1)[0] === 'test-runs' ||
+							router.asPath.includes('/test-runs')
+						}
+					>
 						Test runs
 					</NavButton>
 					<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>

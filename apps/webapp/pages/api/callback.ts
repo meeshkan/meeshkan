@@ -14,16 +14,7 @@ export default async function callback(
 			onUserLoaded: async (_, __, session, state) => {
 				const redirectParams = new URLSearchParams();
 				if (state.inviteId) {
-					const userId = await getUserId(session.idToken);
-					const response = await propagateInviteToDb(state.inviteId, userId);
-					if (response.error) {
-						redirectParams.append('invalidInvite', 'true');
-					} else {
-						const redirectTo = createSlug(
-							response.configurationUpdate?.project?.name
-						);
-						redirectParams.append('redirectTo', redirectTo);
-					}
+					redirectParams.append('inviteId', state.inviteId);
 				}
 
 				return {
