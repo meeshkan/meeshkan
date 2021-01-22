@@ -24,6 +24,8 @@ export interface AvatarFile {
 
 interface Configuration {
 	inviteLink: string;
+	productionURL: string;
+	stagingURL: string;
 }
 
 interface TestOutcome {

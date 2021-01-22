@@ -5,6 +5,8 @@ export const CREATE_PROJECT = gql`
 		$userId: ID!
 		$projectName: String!
 		$inviteLink: String!
+		$productionURL: String
+		$stagingURL: String
 		$avatar: ProjectAvatarRelationInput
 		$today: Date!
 	) {
@@ -14,9 +16,15 @@ export const CREATE_PROJECT = gql`
 				projects: {
 					create: {
 						name: $projectName
-						configuration: { create: { inviteLink: $inviteLink } }
 						release: { create: { releaseDate: $today } }
 						avatar: $avatar
+						configuration: {
+							create: {
+								inviteLink: $inviteLink
+								productionURL: $productionURL
+								stagingURL: $stagingURL
+							}
+						}
 					}
 				}
 			}
@@ -34,14 +42,29 @@ export const UPDATE_PROJECT = gql`
 	mutation UPDATE_PROJECT(
 		$projectId: ID!
 		$projectName: String!
+		$productionURL: String
+		$stagingURL: String	
 		$avatar: ProjectAvatarUpdateRelationInput
 	) {
 		projectUpdate(
 			filter: { id: $projectId }
-			data: { name: $projectName, avatar: $avatar }
+			data: {
+				name: $projectName,
+				avatar: $avatar
+				configuration: {
+					update: {
+						productionURL: $productionURL,
+						stagingURL: $stagingURL,
+					}
+				}	
+			}
 		) {
 			id
 			name
+			configuration {
+				productionURL
+				stagingURL
+			}
 			avatar {
 				downloadUrl
 			}

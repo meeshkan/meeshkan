@@ -4,7 +4,10 @@ import {
 	FormLabel,
 	FormErrorMessage,
 	Input,
+	Tooltip,
+	useColorModeValue,
 } from '@chakra-ui/react';
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import _ from 'lodash';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -16,6 +19,8 @@ import { createSlug } from '../../utils/createSlug';
 
 type ProjectFormInputs = {
 	name: string;
+	productionURL?: string;
+	stagingURL?: string;
 };
 
 type UpdateProjectFormProps = {
@@ -26,7 +31,10 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const [error, setError] = useState('');
 	const user = useContext(UserContext);
 	const { projects, project, idToken, mutate: mutateUser } = user;
-	const [name, setName] = useState<string>(project.name);
+	const [name, setName] = useState(project.name);
+	const { configuration } = project;
+	const [productionURL, setProductionURL] = useState(configuration.productionURL);
+	const [stagingURL, setStagingURL] = useState(configuration.stagingURL);
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 
@@ -34,8 +42,8 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 		setLoading(true);
 		setError('');
 		const data = await updateProject(idToken, {
+			...formData,
 			id: project.id,
-			name: formData.name,
 			avatar: avatarFile,
 		});
 
@@ -52,14 +60,23 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 
 		projects[selectedProjectIndex].name = formData.name;
 		projects[selectedProjectIndex].avatar = data.projectUpdate.avatar;
+		projects[selectedProjectIndex].configuration = data.projectUpdate.configuration;
 
 		await mutateUser({ ...user, projects }, false);
 		Router.push(`/${createSlug(formData.name)}/settings`);
 		setLoading(false);
 	};
 
-	const handleChange = (event) => {
+	const handleNameChange = (event) => {
 		setName(event.target.value);
+	};
+
+	const handleProductionURLChange = (event) => {
+		setProductionURL(event.target.value);
+	};
+
+	const handleStagingURLChange = (event) => {
+		setStagingURL(event.target.value);
 	};
 
 	return (
@@ -73,8 +90,44 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 				<Input
 					name="name"
 					value={name}
-					onChange={handleChange}
+					onChange={handleNameChange}
 					type="text"
+					ref={register}
+				/>
+			</FormControl>
+			<FormControl id="productionURL" isInvalid={!!error} mb={8}>
+				<FormLabel>Production URL</FormLabel>
+				<Input
+					name="productionURL"
+					value={productionURL}
+					onChange={handleProductionURLChange}
+					type="url"
+					pattern="^http(s)?:\/\/.+$"
+					ref={register}
+				/>
+			</FormControl>
+			<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
+				<FormLabel d="flex" alignItems="center">
+					Staging URL
+					<Tooltip
+						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
+						p={2}
+						placement="right-start"
+						borderRadius="md"
+					>
+						<InfoOutlineIcon
+							ml={2}
+							lineHeight="short"
+							color={useColorModeValue('gray.400', 'gray.500')}
+						/>
+					</Tooltip>
+				</FormLabel>
+				<Input
+					name="stagingURL"
+					value={stagingURL}
+					onChange={handleStagingURLChange}
+					type="url"
+					pattern="^http(s)?:\/\/.+$"
 					ref={register}
 				/>
 				<FormErrorMessage>Error: {error}</FormErrorMessage>

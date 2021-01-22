@@ -68,6 +68,8 @@ export const USER = gql`
 						shareUrl
 					}
 					configuration {
+						productionURL
+						stagingURL
 						inviteLink
 					}
 					hasReceivedEvents
