@@ -62,6 +62,7 @@ export const UPDATE_PROJECT = gql`
 			id
 			name
 			configuration {
+				inviteLink
 				productionURL
 				stagingURL
 			}
