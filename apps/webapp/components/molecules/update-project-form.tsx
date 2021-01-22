@@ -4,7 +4,10 @@ import {
 	FormLabel,
 	FormErrorMessage,
 	Input,
+	Tooltip,
+	useColorModeValue,
 } from '@chakra-ui/react';
+import { InfoOutlineIcon } from '@chakra-ui/icons'
 import _ from 'lodash';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -104,7 +107,21 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 				/>
 			</FormControl>
 			<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
-				<FormLabel>Staging URL</FormLabel>
+				<FormLabel d="flex" alignItems="center">
+					Staging URL
+					<Tooltip
+						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
+						p={2}
+						placement="right-start"
+						borderRadius="md"
+					>
+						<InfoOutlineIcon
+							ml={2}
+							lineHeight="short"
+							color={useColorModeValue('gray.400', 'gray.500')}
+						/>
+					</Tooltip>
+				</FormLabel>
 				<Input
 					name="stagingURL"
 					value={stagingURL}
