@@ -12,6 +12,10 @@ import {
 	Avatar,
 	Flex,
 	useColorModeValue,
+	Spacer,
+	FormLabel,
+	Input,
+	LightMode,
 } from '@chakra-ui/react';
 import { TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
@@ -95,7 +99,7 @@ const Settings = () => {
 
 	return (
 		<Box overflowY="scroll" w="100%">
-			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
+			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} mb={150}>
 				<Heading fontSize="20px" color="gray.500" lineHeight="short">
 					Personal
 				</Heading>
@@ -109,15 +113,17 @@ const Settings = () => {
 						formId="profileUpdateForm"
 					/>
 					<Flex justifyContent="right" mt={4}>
-						<Button
-							mt={4}
-							type="submit"
-							isLoading={profileLoading}
-							loadingText="Updating"
-							form="profileUpdateForm"
-						>
-							Update profile
-						</Button>
+						<LightMode>
+							<Button
+								mt={4}
+								type="submit"
+								isLoading={profileLoading}
+								loadingText="Updating"
+								form="profileUpdateForm"
+							>
+								Update profile
+							</Button>
+						</LightMode>
 					</Flex>
 				</GridCard>
 				<GridCard
@@ -152,14 +158,16 @@ const Settings = () => {
 				>
 					<UpdateProjectForm setLoading={setProjectLoading} />
 					<Flex justify="right" mt={4}>
-						<Button
-							type="submit"
-							isLoading={projectLoading}
-							loadingText="Updating"
-							form="projectUpdateForm"
-						>
-							Update project
-						</Button>
+						<LightMode>
+							<Button
+								type="submit"
+								isLoading={projectLoading}
+								loadingText="Updating"
+								form="projectUpdateForm"
+							>
+								Update project
+							</Button>
+						</LightMode>
 					</Flex>
 				</GridCard>
 				<GridCard
@@ -241,7 +249,77 @@ const Settings = () => {
 					anchor
 					subtitle="Detailed information about your project."
 				>
+					<Heading fontSize="18px" fontWeight={500}>
+						Script tag
+					</Heading>
 					<ScriptTagInput />
+
+					<Spacer h={8} />
+
+					<Heading fontSize="18px" fontWeight={500}>
+						Authentication
+					</Heading>
+					<Heading
+						as="h3"
+						fontSize="sm"
+						fontWeight={400}
+						lineHeight="short"
+						color="gray.500"
+						mb={4}
+					>
+						This is the user your tests will be tied to. Be sure that any of the
+						tokens, or log in details you're supplying are not your own, or a
+						customer's.
+					</Heading>
+					<Flex as="form" align="flex-end">
+						<FormControl
+							id="type"
+							isRequired
+							maxW="max-content"
+							mr={8}
+							// isInvalid={!!error}
+						>
+							<FormLabel mb="12px">Type</FormLabel>
+							<Switch
+								size="lg"
+								// value={type}
+								// onChange={handleTypeChange}
+							/>
+						</FormControl>
+						<FormControl
+							id="key"
+							isRequired
+							mr={8}
+							// isInvalid={!!error}
+						>
+							<FormLabel>Key</FormLabel>
+							<Input
+								name="key"
+								// value={key}
+								// onChange={handleKeyChange}
+								type="text"
+								// ref={register}
+							/>
+						</FormControl>
+						<FormControl
+							id="value"
+							mr={8}
+							isRequired
+							// isInvalid={!!error}
+						>
+							<FormLabel>Value</FormLabel>
+							<Input
+								name="value"
+								// value={value}
+								// onChange={handleProductionURLChange}
+								type="text"
+								// ref={register}
+							/>
+						</FormControl>
+						<LightMode>
+							<Button minW="min-content">Save cookie</Button>
+						</LightMode>
+					</Flex>
 				</GridCard>
 			</Stack>
 		</Box>
