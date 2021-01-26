@@ -13,9 +13,8 @@ import {
 	Flex,
 	useColorModeValue,
 	Spacer,
-	FormLabel,
-	Input,
 	LightMode,
+	Badge,
 } from '@chakra-ui/react';
 import { TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
@@ -35,6 +34,9 @@ import {
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { REMOVE_TEAM_MEMBER } from '../../graphql/project';
+import AuthorizationTokenForm, {
+	AuthenticationTokens,
+} from 'apps/webapp/components/molecules/authentication-token-form';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -49,9 +51,13 @@ const Settings = () => {
 	} = user;
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
+	const [authorizationLoading, setauthorizationLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
 	const [members, setMembers] = useState<Array<Member>>(
 		project?.members?.items || []
+	);
+	const [tokens, setTokens] = useState<Array<AuthenticationTokens>>(
+		project?.configuration.authenticationTokens?.items || []
 	);
 
 	const client = eightBaseClient(idToken);
@@ -259,8 +265,7 @@ const Settings = () => {
 					<Heading fontSize="18px" fontWeight={500}>
 						Authentication
 					</Heading>
-					<Heading
-						as="h3"
+					<Text
 						fontSize="sm"
 						fontWeight={400}
 						lineHeight="short"
@@ -270,56 +275,81 @@ const Settings = () => {
 						This is the user your tests will be tied to. Be sure that any of the
 						tokens, or log in details you're supplying are not your own, or a
 						customer's.
+					</Text>
+					<AuthorizationTokenForm
+						setLoading={setauthorizationLoading}
+						tokens={tokens}
+						setTokens={setTokens}
+					/>
+					<Heading fontSize="14px" fontWeight={500} mt={4}>
+						Active tokens
 					</Heading>
-					<Flex as="form" align="flex-end">
-						<FormControl
-							id="type"
-							isRequired
-							maxW="max-content"
-							mr={8}
-							// isInvalid={!!error}
+					{tokens.map((token) => (
+						<Flex
+							key={token.key}
+							w="100%"
+							p={2}
+							borderRadius="md"
+							justify="space-between"
+							align="center"
+							_hover={{
+								backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+							}}
 						>
-							<FormLabel mb="12px">Type</FormLabel>
-							<Switch
-								size="lg"
-								// value={type}
-								// onChange={handleTypeChange}
+							<Flex align="center">
+								<Box w={['auto', 'auto', '200px']} mr={10}>
+									<Badge
+										borderRadius="md"
+										p={2}
+										fontSize="sm"
+										colorScheme="cyan"
+										textTransform="capitalize"
+									>
+										{token.type}
+									</Badge>
+								</Box>
+								<Text mr={[16, 20, 24, 32]} w={['auto', 'auto', '200px']}>
+									{token.key}
+								</Text>
+								<Text
+									w="128px"
+									whiteSpace="nowrap"
+									overflow="hidden"
+									textOverflow="ellipsis"
+								>
+									{token.value}
+								</Text>
+							</Flex>
+							<IconButton
+								isDisabled
+								aria-label={`Remove`}
+								icon={<TrashIcon w={4} h={4} />}
+								size="sm"
+								variant="ghost"
+								colorScheme="red"
+								// onClick={() => {
+								// 	removeTeamMember(member.email);
+								// 	toast({
+								// 		position: 'bottom-right',
+								// 		render: () => (
+								// 			<Box
+								// 				color="white"
+								// 				p={4}
+								// 				bg="blue.500"
+								// 				borderRadius="md"
+								// 				fontSize="md"
+								// 			>
+								// 				{member.email} has been successfully removed from{' '}
+								// 				{project.name}.
+								// 			</Box>
+								// 		),
+								// 		duration: 2000,
+								// 		isClosable: true,
+								// 	});
+								// }}
 							/>
-						</FormControl>
-						<FormControl
-							id="key"
-							isRequired
-							mr={8}
-							// isInvalid={!!error}
-						>
-							<FormLabel>Key</FormLabel>
-							<Input
-								name="key"
-								// value={key}
-								// onChange={handleKeyChange}
-								type="text"
-								// ref={register}
-							/>
-						</FormControl>
-						<FormControl
-							id="value"
-							mr={8}
-							isRequired
-							// isInvalid={!!error}
-						>
-							<FormLabel>Value</FormLabel>
-							<Input
-								name="value"
-								// value={value}
-								// onChange={handleProductionURLChange}
-								type="text"
-								// ref={register}
-							/>
-						</FormControl>
-						<LightMode>
-							<Button minW="min-content">Save cookie</Button>
-						</LightMode>
-					</Flex>
+						</Flex>
+					))}
 				</GridCard>
 			</Stack>
 		</Box>

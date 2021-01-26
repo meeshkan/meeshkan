@@ -4,7 +4,13 @@ import React, {
 	Dispatch,
 	SetStateAction,
 } from 'react';
-import { Stack, Box, Flex, useColorModeValue } from '@chakra-ui/react';
+import {
+	Stack,
+	Box,
+	Flex,
+	useColorModeValue,
+	BoxProps,
+} from '@chakra-ui/react';
 import { AnimateSharedLayout } from 'framer-motion';
 import MotionBox from '../atoms/motion-box';
 
@@ -53,6 +59,7 @@ type SegmentedControlProps = {
 	disabled?: boolean;
 	selectedIndex: number;
 	setSelectedIndex: Dispatch<SetStateAction<number>>;
+	props?: BoxProps;
 };
 
 const SegmentedControl = ({
@@ -60,6 +67,7 @@ const SegmentedControl = ({
 	disabled,
 	selectedIndex,
 	setSelectedIndex,
+	props,
 }: SegmentedControlProps) => {
 	return (
 		<AnimateSharedLayout>
@@ -68,9 +76,10 @@ const SegmentedControl = ({
 				align="center"
 				backgroundColor={useColorModeValue('gray.200', 'gray.700')}
 				p={2}
-				borderTopRadius="md"
+				borderRadius="lg"
 				w="max-content"
 				fontWeight={700}
+				{...props}
 			>
 				{values.map((value, index) => {
 					const selected = selectedIndex === index;

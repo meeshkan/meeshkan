@@ -71,6 +71,13 @@ export const USER = gql`
 						productionURL
 						stagingURL
 						inviteLink
+						authenticationTokens {
+							items {
+								type
+								key
+								value
+							}
+						}
 					}
 					hasReceivedEvents
 					members {

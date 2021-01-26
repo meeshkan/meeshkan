@@ -22,10 +22,19 @@ export interface AvatarFile {
 	filename: string;
 }
 
+interface Token {
+	type: 'local storage' | 'cookie';
+	key: string;
+	value: string;
+}
+
 interface Configuration {
 	inviteLink: string;
 	productionURL: string;
 	stagingURL: string;
+	authenticationTokens: {
+		items: Array<Token>;
+	};
 }
 
 interface TestOutcome {
