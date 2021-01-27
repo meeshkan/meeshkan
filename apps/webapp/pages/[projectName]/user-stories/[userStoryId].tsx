@@ -15,6 +15,7 @@ import {
 	useToast,
 	Heading,
 	Stack,
+	useColorMode,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -200,7 +201,16 @@ const UserStory = (props: UserStoryProps) => {
 
 					<Box>
 						{data.userStory.recording.items[0].video && (
-							<Box maxW="500px">
+							<Box
+								w="320px"
+								h="240px"
+								border={`1px solid ${useColorModeValue(
+									'gray.200',
+									'gray.700'
+								)}`}
+								borderRadius="md"
+								overflow="hidden"
+							>
 								<video width="320" height="240" controls>
 									<source
 										src={data.userStory.recording.items[0].video.downloadUrl}

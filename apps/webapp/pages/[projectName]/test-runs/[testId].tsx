@@ -199,7 +199,16 @@ const TestRun = () => {
 									{isFailing && (
 										<>
 											{outcome.video && (
-												<Box maxW="500px">
+												<Box
+													maxW="fit-content"
+													border={`1px solid`}
+													borderColor={`${useColorModeValue(
+														'gray.200',
+														'gray.700'
+													)}`}
+													borderRadius="md"
+													overflow="hidden"
+												>
 													<video width="320" height="240" controls>
 														<source
 															src={outcome.video.downloadUrl}
