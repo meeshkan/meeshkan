@@ -200,7 +200,7 @@ const TestRun = () => {
 										<>
 											{outcome.video && (
 												<Box
-													maxW="fit-content"
+													maxW="max-content"
 													border={`1px solid`}
 													borderColor={`${useColorModeValue(
 														'gray.200',
