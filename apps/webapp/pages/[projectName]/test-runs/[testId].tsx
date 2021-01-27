@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import {
 	Box,
 	Heading,
@@ -33,6 +33,7 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
+import Video from '../../../components/atoms/video';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -195,7 +196,26 @@ const TestRun = () => {
 											/>
 										)}
 									</Flex>
-									{isFailing && <Text mt={4}>{outcome?.error}</Text>}
+									{isFailing && (
+										<>
+											{outcome.video && (
+												<Box maxW="500px">
+													<video width="320" height="240" controls>
+														<source
+															src={outcome.video.downloadUrl}
+															type="video/mp4"
+														/>
+														<source
+															src={outcome.video.downloadUrl}
+															type="video/webm"
+														/>
+														Your browser does not support the video tag.
+													</video>
+												</Box>
+											)}
+											<Text mt={4}>{outcome?.error}</Text>
+										</>
+									)}
 								</Card>
 							);
 						})}

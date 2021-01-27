@@ -201,10 +201,17 @@ const UserStory = (props: UserStoryProps) => {
 					<Box>
 						{data.userStory.recording.items[0].video && (
 							<Box maxW="500px">
-								<Video
-									url={data.userStory.recording.items[0].video.downloadUrl}
-									title="User story replay recording"
-								/>
+								<video width="320" height="240" controls>
+									<source
+										src={data.userStory.recording.items[0].video.downloadUrl}
+										type="video/mp4"
+									/>
+									<source
+										src={data.userStory.recording.items[0].video.downloadUrl}
+										type="video/webm"
+									/>
+									Your browser does not support the video tag.
+								</video>
 							</Box>
 						)}
 

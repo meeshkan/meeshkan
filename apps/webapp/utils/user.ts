@@ -43,6 +43,10 @@ interface TestOutcome {
 	error: string;
 	createdAt: string;
 	userStory: UserStory;
+	video?: {
+		shareUrl: string;
+		downloadUrl: string;
+	};
 }
 
 interface TestOutcomes {
