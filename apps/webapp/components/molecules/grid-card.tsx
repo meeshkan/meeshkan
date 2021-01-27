@@ -20,7 +20,7 @@ const GridCard = ({
 	...props
 }: GridCardProps) => {
 	return (
-		<Card overflowY="auto" {...props}>
+		<Card overflowY="auto" maxH="80vh" {...props}>
 			<a id={anchor && useMemo(() => createSlug(title), [title])}>
 				<Heading
 					as="h2"
