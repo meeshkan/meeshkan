@@ -15,6 +15,7 @@ import {
 	Button,
 	Badge,
 	BoxProps,
+	useToast,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -36,6 +37,12 @@ import { UserContext } from '../../../utils/user';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
+import {
+	isChrome,
+	getVersion as getExtensionVersion,
+	latestVersion as latestExtensionVersion,
+	startRecording,
+} from '../../../utils/extension';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -80,6 +87,7 @@ interface Recordings {
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const router = useRouter();
+	const toast = useToast();
 	const { project, idToken } = useContext(UserContext);
 
 	const [toggleIndex, setToggleIndex] = useState(0);
@@ -157,7 +165,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
-	const projectId = project.id;
+	const projectId = project?.id;
 	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
@@ -181,12 +189,59 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
 
-	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
-		project.name,
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
 	]);
 
 	const handleEdit = (id: string) => {
 		router.push(`/${slugifiedProjectName}/user-stories/${id}`);
+	};
+
+	const errorToast = ({ title, description }) => {
+		toast({
+			position: 'bottom-right',
+			title,
+			description,
+			status: 'error',
+			duration: 5000,
+			isClosable: true,
+		});
+	};
+
+	const handleNewUserStory = async () => {
+		if (!isChrome()) {
+			errorToast({
+				title: 'Could not trigger the Meeshkan extension',
+				description: 'You need to be using a Chromium browser to create manual user stories, for the time being.',
+			});
+			return;
+		}
+
+		try {
+			const version = await getExtensionVersion();
+			if (version !== latestExtensionVersion) {
+				errorToast({
+					title: 'Outdated Meeshkan extension',
+					description: 'Please update to the latest version of the Meeshkan recorder extension.',
+				});
+				return;
+			}
+
+			if (!project?.configuration?.productionURL) {
+				errorToast({
+					title: 'No production URL specified',
+					description: 'To trigger the Meeshkan extension, you need to specify a production URL in your project\'s settings page.',
+				});
+				return;	
+			}
+
+			startRecording(project.configuration.productionURL);
+		} catch (error) {
+			errorToast({
+				title: 'Extension is missing',
+				description: 'To begin creating manual user stories, please download the Meeshkan recorder extension via the Chrome Web Store.'
+			})	
+		}
 	};
 
 	const { found, loading } = useValidateSelectedProject();
@@ -237,6 +292,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						p={4}
 						w="100%"
 						borderRadius="md"
+						cursor="pointer"
+						onClick={handleNewUserStory}
 					>
 						<PlusIcon
 							boxSize={8}

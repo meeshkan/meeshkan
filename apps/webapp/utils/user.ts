@@ -124,6 +124,7 @@ declare global {
 	interface Window {
 		__user?: IUser;
 		Intercom?: Intercom;
+		chrome?: any;
 	}
 }
 
