@@ -27,7 +27,7 @@ type CreateAuthenticationFormProps = {
 	setTokens: React.Dispatch<React.SetStateAction<AuthenticationTokens[]>>;
 };
 
-const AuthorizationTokenForm = ({
+const AuthenticationTokenForm = ({
 	setLoading,
 	tokens,
 	setTokens,
@@ -120,4 +120,4 @@ const AuthorizationTokenForm = ({
 	);
 };
 
-export default AuthorizationTokenForm;
+export default AuthenticationTokenForm;

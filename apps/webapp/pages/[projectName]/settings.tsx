@@ -34,7 +34,7 @@ import {
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { REMOVE_TEAM_MEMBER } from '../../graphql/project';
-import AuthorizationTokenForm, {
+import AuthenticationTokenForm, {
 	AuthenticationTokens,
 } from 'apps/webapp/components/molecules/authentication-token-form';
 
@@ -51,7 +51,7 @@ const Settings = () => {
 	} = user;
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
-	const [authorizationLoading, setauthorizationLoading] = useState(false);
+	const [authenticationLoading, setAuthenticationLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
 	const [members, setMembers] = useState<Array<Member>>(
 		project?.members?.items || []
@@ -276,8 +276,8 @@ const Settings = () => {
 						tokens, or log in details you're supplying are not your own, or a
 						customer's.
 					</Text>
-					<AuthorizationTokenForm
-						setLoading={setauthorizationLoading}
+					<AuthenticationTokenForm
+						setLoading={setAuthenticationLoading}
 						tokens={tokens}
 						setTokens={setTokens}
 					/>
