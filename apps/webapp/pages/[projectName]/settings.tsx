@@ -51,7 +51,6 @@ const Settings = () => {
 	} = user;
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
-	const [authenticationLoading, setAuthenticationLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
 	const [members, setMembers] = useState<Array<Member>>(
 		project?.members?.items || []
@@ -276,11 +275,7 @@ const Settings = () => {
 						tokens, or log in details you're supplying are not your own, or a
 						customer's.
 					</Text>
-					<AuthenticationTokenForm
-						setLoading={setAuthenticationLoading}
-						tokens={tokens}
-						setTokens={setTokens}
-					/>
+					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
 					<Heading fontSize="14px" fontWeight={500} mt={4}>
 						Active tokens
 					</Heading>

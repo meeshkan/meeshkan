@@ -22,46 +22,48 @@ export type AuthenticationTokens = {
 };
 
 type CreateAuthenticationFormProps = {
-	setLoading: (value: boolean) => void;
 	tokens: AuthenticationTokens[];
 	setTokens: React.Dispatch<React.SetStateAction<AuthenticationTokens[]>>;
 };
 
 const AuthenticationTokenForm = ({
-	setLoading,
 	tokens,
 	setTokens,
 }: CreateAuthenticationFormProps) => {
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
 	const { register, handleSubmit } = useForm<AuthenticationTokens>();
 	const user = useContext(UserContext);
 	const { projects, project, idToken, mutate: mutateUser } = user;
 
 	const client = eightBaseClient(idToken);
-	const fetcher = (query, variables?) => client.request(query, variables);
 
 	const onSubmit = async (formData: AuthenticationTokens): Promise<void> => {
-		setLoading(true);
+		console.log(loading);
 		setError('');
-		const { data, error: createTokenError, isValidating, mutate } = useSWR(
-			[
-				ADD_AUTH_TOKEN,
-				{
-					projectID: project.id,
-					type: 'local storage',
-					key: formData.key,
-					value: formData.value,
-				},
-			],
-			fetcher
-		);
-		setError(createTokenError);
-
-		setTokens([...tokens, ...data.configuration.authenticationTokens?.items]);
+		client
+			.request(ADD_AUTH_TOKEN, {
+				projectID: project.id,
+				type:
+					toggleIndex === 0
+						? 'cookie'
+						: toggleIndex === 1
+						? 'local storage'
+						: undefined,
+				key: formData.key,
+				value: formData.value,
+			})
+			.then((res) => {
+				setTokens(res.projectUpdate.configuration.authenticationTokens.items);
+				setLoading(false);
+			})
+			.catch((error) => {
+				error.status(error);
+			});
 
 		await mutateUser({ ...user, projects }, false);
-		setLoading(isValidating);
+		console.log(loading);
 	};
 
 	return (
@@ -89,6 +91,7 @@ const AuthenticationTokenForm = ({
 			<FormControl id="key" isRequired mr={8} isInvalid={!!error}>
 				<FormLabel>Key</FormLabel>
 				<Input
+					isDisabled={loading}
 					name="key"
 					// value={key}
 					// onChange={handleKeyChange}
@@ -104,6 +107,7 @@ const AuthenticationTokenForm = ({
 			>
 				<FormLabel>Value</FormLabel>
 				<Input
+					isDisabled={loading}
 					name="value"
 					// value={value}
 					// onChange={handleProductionURLChange}
@@ -112,7 +116,13 @@ const AuthenticationTokenForm = ({
 				/>
 			</FormControl>
 			<LightMode>
-				<Button minW="min-content" type="submit">
+				<Button
+					minW="min-content"
+					type="submit"
+					isLoading={loading}
+					loadingText="Saving token"
+					onClick={() => setLoading(true)}
+				>
 					Save token
 				</Button>
 			</LightMode>
