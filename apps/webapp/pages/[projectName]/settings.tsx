@@ -305,7 +305,10 @@ const Settings = () => {
 							}}
 						>
 							<Flex align="center">
-								<Box w={['auto', 'auto', '200px']} mr={10}>
+								<Box
+									w={['auto', 'auto', 'auto', 'auto', '200px']}
+									mr={[4, 16, 20, 32]}
+								>
 									<Badge
 										borderRadius="md"
 										p={2}
@@ -316,7 +319,10 @@ const Settings = () => {
 										{token.type}
 									</Badge>
 								</Box>
-								<Text mr={[16, 20, 24, 32]} w={['auto', 'auto', '200px']}>
+								<Text
+									mr={[4, 16, 20, 32]}
+									w={['auto', 'auto', 'auto', 'auto', '200px']}
+								>
 									{token.key}
 								</Text>
 								<Text

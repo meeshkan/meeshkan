@@ -59,9 +59,16 @@ const AuthenticationTokenForm = ({
 			as="form"
 			onSubmit={handleSubmit(onSubmit)}
 			id="authenticationCreateForm"
-			align="flex-end"
+			align={['flex-start', 'flex-start', 'flex-end']}
+			direction={['column', 'column', 'row']}
 		>
-			<FormControl id="type" isRequired maxW="max-content" mr={12}>
+			<FormControl
+				id="type"
+				isRequired
+				maxW="max-content"
+				mr={[0, 0, 6, 6, 12]}
+				mb={[4, 4, 0]}
+			>
 				<FormLabel>Type</FormLabel>
 				<SegmentedControl
 					values={['Cookie', 'Local storage']}
@@ -69,7 +76,7 @@ const AuthenticationTokenForm = ({
 					setSelectedIndex={setToggleIndex}
 				/>
 			</FormControl>
-			<FormControl id="key" isRequired mr={8}>
+			<FormControl id="key" isRequired mr={[0, 0, 4, 4, 8]} mb={[4, 4, 0]}>
 				<FormLabel>Key</FormLabel>
 				<Input
 					isDisabled={loading}
@@ -80,7 +87,7 @@ const AuthenticationTokenForm = ({
 					})}
 				/>
 			</FormControl>
-			<FormControl id="value" mr={16} isRequired>
+			<FormControl id="value" mr={[0, 0, 8, 8, 16]} mb={[8, 8, 0]} isRequired>
 				<FormLabel>Value</FormLabel>
 				<Input
 					isDisabled={loading}
