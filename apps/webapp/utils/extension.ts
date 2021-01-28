@@ -4,10 +4,10 @@ export const latestVersion = '0.3.0';
 
 export const isChrome = (): boolean => !!window.chrome;
 
-export const startRecording = (url) => {
+export const startRecording = ({ url, clientId }) => {
 	window.chrome.runtime.sendMessage(
 		extensionId,
-		{ message: 'startRecording', url },
+		{ message: 'startRecording', url, clientId },
 	);
 };
 

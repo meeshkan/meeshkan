@@ -235,7 +235,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				return;	
 			}
 
-			startRecording(project.configuration.productionURL);
+			startRecording({
+				url: project.configuration.productionURL,
+				clientId: project.id,
+			});
 		} catch (error) {
 			errorToast({
 				title: 'Extension is missing',
