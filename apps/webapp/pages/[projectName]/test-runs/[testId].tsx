@@ -33,7 +33,7 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
-import Video from '../../../components/atoms/video';
+import VideoPlayer from '../../../components/atoms/video-player';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -199,28 +199,12 @@ const TestRun = () => {
 									{isFailing && (
 										<>
 											{outcome.video && (
-												<Box
-													maxW="max-content"
-													border={`1px solid`}
-													borderColor={`${useColorModeValue(
-														'gray.200',
-														'gray.700'
-													)}`}
-													borderRadius="md"
-													overflow="hidden"
-												>
-													<video width="320" height="240" controls>
-														<source
-															src={outcome.video.downloadUrl}
-															type="video/mp4"
-														/>
-														<source
-															src={outcome.video.downloadUrl}
-															type="video/webm"
-														/>
-														Your browser does not support the video tag.
-													</video>
-												</Box>
+												<VideoPlayer>
+													<source
+														src={outcome.video.downloadUrl}
+														type="video/webm"
+													/>
+												</VideoPlayer>
 											)}
 											<Text mt={4}>{outcome?.error}</Text>
 										</>

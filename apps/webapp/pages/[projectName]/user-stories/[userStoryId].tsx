@@ -36,11 +36,11 @@ import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
 import { StepList } from '../../../components/molecules/side-step-list';
-import Video from '../../../components/atoms/video';
 import NotFoundError from '../../404';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
+import VideoPlayer from '../../../components/atoms/video-player';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -201,28 +201,12 @@ const UserStory = (props: UserStoryProps) => {
 
 					<Box>
 						{data.userStory.recording.items[0].video && (
-							<Box
-								w="320px"
-								h="240px"
-								border={`1px solid ${useColorModeValue(
-									'gray.200',
-									'gray.700'
-								)}`}
-								borderRadius="md"
-								overflow="hidden"
-							>
-								<video width="320" height="240" controls>
-									<source
-										src={data.userStory.recording.items[0].video.downloadUrl}
-										type="video/mp4"
-									/>
-									<source
-										src={data.userStory.recording.items[0].video.downloadUrl}
-										type="video/webm"
-									/>
-									Your browser does not support the video tag.
-								</video>
-							</Box>
+							<VideoPlayer>
+								<source
+									src={data.userStory.recording.items[0].video.downloadUrl}
+									type="video/webm"
+								/>
+							</VideoPlayer>
 						)}
 
 						<StepList
