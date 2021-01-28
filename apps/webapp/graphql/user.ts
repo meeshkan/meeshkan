@@ -73,6 +73,7 @@ export const USER = gql`
 						inviteLink
 						authenticationTokens {
 							items {
+								id
 								type
 								key
 								value

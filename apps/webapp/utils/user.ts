@@ -22,7 +22,8 @@ export interface AvatarFile {
 	filename: string;
 }
 
-interface Token {
+export interface AuthenticationToken {
+	id: string;
 	type: 'local storage' | 'cookie';
 	key: string;
 	value: string;
@@ -33,7 +34,7 @@ interface Configuration {
 	productionURL: string;
 	stagingURL: string;
 	authenticationTokens: {
-		items: Array<Token>;
+		items: Array<AuthenticationToken>;
 	};
 }
 

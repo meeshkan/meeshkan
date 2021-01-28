@@ -64,6 +64,7 @@ export const UPDATE_PROJECT = gql`
 				stagingURL
 				authenticationTokens {
 					items {
+						id
 						type
 						key
 						value
@@ -233,12 +234,28 @@ export const ADD_AUTH_TOKEN = gql`
 			configuration {
 				authenticationTokens {
 					items {
+						id
 						type
 						key
 						value
 					}
 				}
 			}
+		}
+	}
+`;
+
+export const REMOVE_AUTH_TOKEN = gql`
+	mutation REMOVE_AUTH_TOKEN($projectID: ID!, $tokenID: ID!) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: {
+				configuration: {
+					update: { authenticationTokens: { disconnect: { id: $tokenID } } }
+				}
+			}
+		) {
+			id
 		}
 	}
 `;

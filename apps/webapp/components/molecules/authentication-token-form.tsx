@@ -12,18 +12,12 @@ import _ from 'lodash';
 import SegmentedControl from './segmented-control';
 import { UserContext } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { ADD_AUTH_TOKEN } from '../../graphql/project';
-import useSWR from 'swr';
-
-export type AuthenticationTokens = {
-	type: 'local storage' | 'cookie';
-	key: string;
-	value: string;
-};
+import { ADD_AUTH_TOKEN, REMOVE_AUTH_TOKEN } from '../../graphql/project';
+import { AuthenticationToken } from '../../utils/user';
 
 type CreateAuthenticationFormProps = {
-	tokens: AuthenticationTokens[];
-	setTokens: React.Dispatch<React.SetStateAction<AuthenticationTokens[]>>;
+	tokens: AuthenticationToken[];
+	setTokens: React.Dispatch<React.SetStateAction<AuthenticationToken[]>>;
 };
 
 const AuthenticationTokenForm = ({
@@ -31,17 +25,15 @@ const AuthenticationTokenForm = ({
 	setTokens,
 }: CreateAuthenticationFormProps) => {
 	const [toggleIndex, setToggleIndex] = useState(0);
-	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const { register, handleSubmit } = useForm<AuthenticationTokens>();
+	const { register, handleSubmit } = useForm<AuthenticationToken>();
 	const user = useContext(UserContext);
 	const { projects, project, idToken, mutate: mutateUser } = user;
 
 	const client = eightBaseClient(idToken);
 
-	const onSubmit = async (formData: AuthenticationTokens): Promise<void> => {
-		console.log(loading);
-		setError('');
+	const onSubmit = async (formData: AuthenticationToken): Promise<void> => {
+		setLoading(true);
 		client
 			.request(ADD_AUTH_TOKEN, {
 				projectID: project.id,
@@ -57,13 +49,9 @@ const AuthenticationTokenForm = ({
 			.then((res) => {
 				setTokens(res.projectUpdate.configuration.authenticationTokens.items);
 				setLoading(false);
-			})
-			.catch((error) => {
-				error.status(error);
 			});
 
 		await mutateUser({ ...user, projects }, false);
-		console.log(loading);
 	};
 
 	return (
@@ -73,46 +61,34 @@ const AuthenticationTokenForm = ({
 			id="authenticationCreateForm"
 			align="flex-end"
 		>
-			<FormControl
-				id="type"
-				isRequired
-				maxW="max-content"
-				mr={12}
-				isInvalid={!!error}
-			>
+			<FormControl id="type" isRequired maxW="max-content" mr={12}>
 				<FormLabel>Type</FormLabel>
 				<SegmentedControl
 					values={['Cookie', 'Local storage']}
 					selectedIndex={toggleIndex}
 					setSelectedIndex={setToggleIndex}
-					// ref={register}
 				/>
 			</FormControl>
-			<FormControl id="key" isRequired mr={8} isInvalid={!!error}>
+			<FormControl id="key" isRequired mr={8}>
 				<FormLabel>Key</FormLabel>
 				<Input
 					isDisabled={loading}
 					name="key"
-					// value={key}
-					// onChange={handleKeyChange}
 					type="text"
-					ref={register}
+					ref={register({
+						required: true,
+					})}
 				/>
 			</FormControl>
-			<FormControl
-				id="value"
-				mr={16}
-				isRequired
-				// isInvalid={!!error}
-			>
+			<FormControl id="value" mr={16} isRequired>
 				<FormLabel>Value</FormLabel>
 				<Input
 					isDisabled={loading}
 					name="value"
-					// value={value}
-					// onChange={handleProductionURLChange}
 					type="text"
-					ref={register}
+					ref={register({
+						required: true,
+					})}
 				/>
 			</FormControl>
 			<LightMode>
@@ -121,7 +97,7 @@ const AuthenticationTokenForm = ({
 					type="submit"
 					isLoading={loading}
 					loadingText="Saving token"
-					onClick={() => setLoading(true)}
+					isDisabled={loading}
 				>
 					Save token
 				</Button>

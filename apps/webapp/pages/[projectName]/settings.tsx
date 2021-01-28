@@ -31,12 +31,11 @@ import {
 	UserContext,
 	updateProductNotifications,
 	Member,
+	AuthenticationToken,
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { REMOVE_TEAM_MEMBER } from '../../graphql/project';
-import AuthenticationTokenForm, {
-	AuthenticationTokens,
-} from 'apps/webapp/components/molecules/authentication-token-form';
+import { REMOVE_TEAM_MEMBER, REMOVE_AUTH_TOKEN } from '../../graphql/project';
+import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -55,7 +54,7 @@ const Settings = () => {
 	const [members, setMembers] = useState<Array<Member>>(
 		project?.members?.items || []
 	);
-	const [tokens, setTokens] = useState<Array<AuthenticationTokens>>(
+	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
 		project?.configuration.authenticationTokens?.items || []
 	);
 
@@ -97,6 +96,20 @@ const Settings = () => {
 		);
 
 		projects[selectedProjectIndex].members.items = members;
+		await mutateUser({ ...user, projects });
+
+		return request;
+	};
+
+	const deleteToken = async (tokenID: string) => {
+		const request = client.request(REMOVE_AUTH_TOKEN, {
+			projectID: project.id,
+			tokenID: tokenID,
+		});
+
+		const updatedTokens = tokens.filter((token) => token.id !== tokenID);
+		setTokens(updatedTokens);
+
 		await mutateUser({ ...user, projects });
 
 		return request;
@@ -316,32 +329,30 @@ const Settings = () => {
 								</Text>
 							</Flex>
 							<IconButton
-								isDisabled
 								aria-label={`Remove`}
 								icon={<TrashIcon w={4} h={4} />}
 								size="sm"
 								variant="ghost"
 								colorScheme="red"
-								// onClick={() => {
-								// 	removeTeamMember(member.email);
-								// 	toast({
-								// 		position: 'bottom-right',
-								// 		render: () => (
-								// 			<Box
-								// 				color="white"
-								// 				p={4}
-								// 				bg="blue.500"
-								// 				borderRadius="md"
-								// 				fontSize="md"
-								// 			>
-								// 				{member.email} has been successfully removed from{' '}
-								// 				{project.name}.
-								// 			</Box>
-								// 		),
-								// 		duration: 2000,
-								// 		isClosable: true,
-								// 	});
-								// }}
+								onClick={() => {
+									deleteToken(token.id);
+									toast({
+										position: 'bottom-right',
+										render: () => (
+											<Box
+												color="white"
+												p={4}
+												bg="blue.500"
+												borderRadius="md"
+												fontSize="md"
+											>
+												The token `{token.key}` has been successfully removed
+												from {project.name}.
+											</Box>
+										),
+										duration: 2000,
+									});
+								}}
 							/>
 						</Flex>
 					))}
