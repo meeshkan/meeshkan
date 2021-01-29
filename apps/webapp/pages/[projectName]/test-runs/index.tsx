@@ -44,9 +44,10 @@ const TestRunsPage = () => {
 	const { project } = useContext(UserContext);
 
 	const testRuns = project?.release.items[0]?.testRuns?.items;
-	const latestTestRun = testRuns?.sort(
-		(a, b) => new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
-	)[0];
+	const latestTestRun = testRuns?.filter(testRun => testRun.status === 'completed')
+		.sort(
+			(a, b) => new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
+		)[0];
 
 	const latestTestRunStats =
 		latestTestRun &&
@@ -85,13 +86,13 @@ const TestRunsPage = () => {
 
 	return (
 		<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
-			{doughnutDataValues.length > 0 && (
-				<GridCard
-					title="Latest test case status"
-					subtitle="This is the breakdown of tests from the newest test run. Click on individual test runs below for further details."
-					mb={12}
-					flex="0 0 auto"
-				>
+			<GridCard
+				title="Latest complete test case status"
+				subtitle="This is the breakdown of tests from the newest test run. Click on individual test runs below for further details."
+				mb={12}
+				flex="0 0 auto"
+			>
+				{doughnutDataValues.length > 0 ? (
 					<Flex
 						justify="center"
 						align="center"
@@ -138,8 +139,12 @@ const TestRunsPage = () => {
 							})}
 						</Stack>
 					</Flex>
-				</GridCard>
-			)}
+				) : (
+					<Text fontStyle="italic" fontSize="md">
+						There are no test cases with 'passing', 'failing', or 'did not run' status in the latest test run.
+					</Text>
+				)}
+			</GridCard>
 			{testRuns.length > 0 ? (
 				<Stack spacing={6} overflowY="scroll">
 					{testRuns.map((testRun, index) => {
