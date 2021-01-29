@@ -1,9 +1,4 @@
-import React, {
-	useState,
-	useEffect,
-	useContext,
-	useMemo,
-} from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
 	Box,
 	Stack,
@@ -27,7 +22,7 @@ import {
 	ChevronDownIcon,
 } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
-import theme from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
+import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
 import StatCard from '../molecules/stat-card';
 import GridCard from '../molecules/grid-card';
@@ -458,12 +453,20 @@ const Grid = (props) => {
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
-										{doughnutDataValues.some(value => value !== 0) ? (
+										{doughnutDataValues.some((value) => value !== 0) ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
-											<Text fontStyle="italic">
-												No tests have been run yet.
-											</Text>
+											<Flex w="100%" align="center">
+												<EmptyDoughnutIcon
+													h="128px"
+													w="128px"
+													color={useColorModeValue('gray.100', 'gray.800')}
+													mr={6}
+												/>
+												<Text fontStyle="italic">
+													No test data is available yet.
+												</Text>
+											</Flex>
 										)}
 									</Box>
 								</GridCard>
@@ -495,8 +498,8 @@ const Grid = (props) => {
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
-														? `Caution`
-														: `Not ready`}
+													? `Caution`
+													: `Not ready`}
 											</Text>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
@@ -529,10 +532,10 @@ const Grid = (props) => {
 												introduced
 											</Text>
 										</Box>
-										{/* <Box w="100px">
+										<Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													{bugs.fixed}
+													0
 												</Text>
 												<Text
 													fontSize="sm"
@@ -549,7 +552,7 @@ const Grid = (props) => {
 											>
 												fixed
 											</Text>
-										</Box> */}
+										</Box>
 									</Stack>
 								</GridCard>
 							</SimpleGrid>

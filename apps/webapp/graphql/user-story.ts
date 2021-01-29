@@ -14,6 +14,7 @@ export const USER_STORY = gql`
 				items {
 					video {
 						downloadUrl
+						shareUrl
 					}
 					environment {
 						items {
@@ -48,6 +49,7 @@ export const UPDATE_EXPECTED_TEST = gql`
 				items {
 					video {
 						downloadUrl
+						shareUrl
 					}
 					environment {
 						items {
@@ -87,6 +89,7 @@ export const UPDATE_STORY_TITLE = gql`
 				items {
 					video {
 						downloadUrl
+						shareUrl
 					}
 					environment {
 						items {

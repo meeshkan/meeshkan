@@ -43,6 +43,26 @@ export const LogoIcon = createIcon({
 	),
 });
 
+export const EmptyDoughnutIcon = createIcon({
+	displayName: 'EmptyDoughnutIcon',
+	viewBox: '0 0 300 300',
+	path: (
+		<g>
+			<mask id="path-1-inside-1" fill="white">
+				<path d="M300 150C300 232.843 232.843 300 150 300C67.1573 300 0 232.843 0 150C0 67.1573 67.1573 0 150 0C232.843 0 300 67.1573 300 150ZM82.5326 150C82.5326 187.261 112.739 217.467 150 217.467C187.261 217.467 217.467 187.261 217.467 150C217.467 112.739 187.261 82.5326 150 82.5326C112.739 82.5326 82.5326 112.739 82.5326 150Z" />
+			</mask>
+			<path
+				d="M300 150C300 232.843 232.843 300 150 300C67.1573 300 0 232.843 0 150C0 67.1573 67.1573 0 150 0C232.843 0 300 67.1573 300 150ZM82.5326 150C82.5326 187.261 112.739 217.467 150 217.467C187.261 217.467 217.467 187.261 217.467 150C217.467 112.739 187.261 82.5326 150 82.5326C112.739 82.5326 82.5326 112.739 82.5326 150Z"
+				fill="currentColor"
+				stroke="#616E7C"
+				strokeWidth="2"
+				strokeDasharray="5 10"
+				mask="url(#path-1-inside-1)"
+			/>
+		</g>
+	),
+});
+
 export const CircleArrowsIcon = createIcon({
 	displayName: 'CircleArrowsIcon',
 	viewBox: ' 0 0 15 15',
