@@ -15,6 +15,9 @@ import {
 	Spacer,
 	LightMode,
 	Badge,
+	List,
+	Checkbox,
+	Code,
 } from '@chakra-ui/react';
 import { TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
@@ -261,6 +264,32 @@ const Settings = () => {
 							</Flex>
 						);
 					})}
+				</GridCard>
+				<GridCard
+					title="Privacy"
+					anchor
+					subtitle="Meeshkan ignores specific inputs by default. Customization will be possible in the future. The following data is excluded from Meeshkan recordings."
+				>
+					<Stack>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan">
+								[autocomplete=cc-*]
+							</Code>{' '}
+							(Credit card fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan">
+								input[type=hidden]
+							</Code>{' '}
+							(Hidden fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan">
+								input[type=password]
+							</Code>{' '}
+							(Password fields)
+						</Checkbox>
+					</Stack>
 				</GridCard>
 				<GridCard
 					title="Details"
