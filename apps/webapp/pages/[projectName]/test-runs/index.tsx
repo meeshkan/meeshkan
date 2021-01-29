@@ -44,9 +44,11 @@ const TestRunsPage = () => {
 	const { project } = useContext(UserContext);
 
 	const testRuns = project?.release.items[0]?.testRuns?.items;
-	const latestTestRun = testRuns?.filter(testRun => testRun.status === 'completed')
+	const latestTestRun = testRuns
+		?.filter((testRun) => testRun.status === 'completed')
 		.sort(
-			(a, b) => new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
+			(a, b) =>
+				new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
 		)[0];
 
 	const latestTestRunStats =
@@ -141,34 +143,59 @@ const TestRunsPage = () => {
 					</Flex>
 				) : (
 					<Text fontStyle="italic" fontSize="md">
-						There are no test cases with 'passing', 'failing', or 'did not run' status in the latest test run.
+						There are no test cases with 'passing', 'failing', or 'did not run'
+						status in the latest test run.
 					</Text>
 				)}
 			</GridCard>
 			{testRuns.length > 0 ? (
 				<Stack spacing={6} overflowY="scroll">
-					{testRuns.slice(0).reverse().map((testRun, index) => {
-						const { id, status, createdAt } = testRun;
-						return (
-							<TestRunCard
-								id={id}
-								key={id}
-								status={status}
-								runNumber={testRuns.length - index}
-								date={new Date(createdAt)}
-								stats={_.countBy(
-									testRun.testOutcome.items.map((outcome) => outcome.status)
-								)}
-							/>
-						);
-					})}
+					{testRuns
+						.slice(0)
+						.reverse()
+						.map((testRun, index) => {
+							const { id, status, createdAt } = testRun;
+							return (
+								<TestRunCard
+									id={id}
+									key={id}
+									status={status}
+									runNumber={testRuns.length - index}
+									date={new Date(createdAt)}
+									stats={_.countBy(
+										testRun.testOutcome.items.map((outcome) => outcome.status)
+									)}
+								/>
+							);
+						})}
 				</Stack>
 			) : (
-				<Center h="100%" as={Card}>
-					<Text fontStyle="italic" fontSize="lg">
-						There are no test runs for this project just yet.
-					</Text>
-				</Center>
+				<Stack spacing={6}>
+					<Box
+						opacity="0.9"
+						border="1px dashed"
+						borderColor={useColorModeValue('gray.300', 'gray.600')}
+						borderRadius="lg"
+						h="64px"
+						backgroundColor={useColorModeValue('gray.200', 'gray.700')}
+					/>
+					<Box
+						opacity="0.6"
+						border="1px dashed"
+						borderColor={useColorModeValue('gray.300', 'gray.600')}
+						borderRadius="lg"
+						h="64px"
+						backgroundColor={useColorModeValue('gray.200', 'gray.700')}
+					/>
+					<Box
+						opacity="0.3"
+						border="1px dashed"
+						borderColor={useColorModeValue('gray.300', 'gray.600')}
+						borderRadius="lg"
+						h="64px"
+						backgroundColor={useColorModeValue('gray.200', 'gray.700')}
+					/>
+				</Stack>
 			)}
 		</Flex>
 	);
