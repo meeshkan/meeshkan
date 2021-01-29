@@ -147,14 +147,14 @@ const TestRunsPage = () => {
 			</GridCard>
 			{testRuns.length > 0 ? (
 				<Stack spacing={6} overflowY="scroll">
-					{testRuns.map((testRun, index) => {
+					{testRuns.slice(0).reverse().map((testRun, index) => {
 						const { id, status, createdAt } = testRun;
 						return (
 							<TestRunCard
 								id={id}
 								key={id}
 								status={status}
-								runNumber={index + 1}
+								runNumber={testRuns.length - index}
 								date={new Date(createdAt)}
 								stats={_.countBy(
 									testRun.testOutcome.items.map((outcome) => outcome.status)
