@@ -172,13 +172,20 @@ const TestRunsPage = () => {
 			) : (
 				<Stack spacing={6}>
 					<Box
+						display="flex"
+						justifyContent="center"
+						alignItems="center"
 						opacity="0.9"
 						border="1px dashed"
 						borderColor={useColorModeValue('gray.300', 'gray.600')}
 						borderRadius="lg"
 						h="64px"
 						backgroundColor={useColorModeValue('gray.200', 'gray.700')}
-					/>
+					>
+						<Text fontStyle="italic" fontSize="md">
+							Test runs will show up here.
+						</Text>
+					</Box>
 					<Box
 						opacity="0.6"
 						border="1px dashed"
