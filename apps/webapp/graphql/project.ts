@@ -43,20 +43,17 @@ export const UPDATE_PROJECT = gql`
 		$projectId: ID!
 		$projectName: String!
 		$productionURL: String
-		$stagingURL: String	
+		$stagingURL: String
 		$avatar: ProjectAvatarUpdateRelationInput
 	) {
 		projectUpdate(
 			filter: { id: $projectId }
 			data: {
-				name: $projectName,
+				name: $projectName
 				avatar: $avatar
 				configuration: {
-					update: {
-						productionURL: $productionURL,
-						stagingURL: $stagingURL,
-					}
-				}	
+					update: { productionURL: $productionURL, stagingURL: $stagingURL }
+				}
 			}
 		) {
 			id
@@ -65,6 +62,14 @@ export const UPDATE_PROJECT = gql`
 				inviteLink
 				productionURL
 				stagingURL
+				authenticationTokens {
+					items {
+						id
+						type
+						key
+						value
+					}
+				}
 			}
 			avatar {
 				downloadUrl
@@ -203,6 +208,54 @@ export const PROJECT_USER_STORIES = gql`
 				testCreatedDate
 				...stories
 			}
+		}
+	}
+`;
+
+export const ADD_AUTH_TOKEN = gql`
+	mutation ADD_AUTH_TOKEN(
+		$projectID: ID!
+		$type: String!
+		$key: String!
+		$value: String!
+	) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: {
+				configuration: {
+					update: {
+						authenticationTokens: {
+							create: { type: $type, key: $key, value: $value }
+						}
+					}
+				}
+			}
+		) {
+			configuration {
+				authenticationTokens {
+					items {
+						id
+						type
+						key
+						value
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const REMOVE_AUTH_TOKEN = gql`
+	mutation REMOVE_AUTH_TOKEN($projectID: ID!, $tokenID: ID!) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: {
+				configuration: {
+					update: { authenticationTokens: { disconnect: { id: $tokenID } } }
+				}
+			}
+		) {
+			id
 		}
 	}
 `;

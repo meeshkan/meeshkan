@@ -6,6 +6,7 @@ const globalStyles = {
 			color: props.colorMode === 'dark' ? 'gray.100' : 'gray.700',
 			webkitFontSmoothing: 'antialiased',
 			fontSmoothing: 'always',
+			fontFeatureSettings: 'tnum',
 		},
 		_selection: {
 			color: 'rgba(220, 24, 83, 1)',
