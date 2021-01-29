@@ -22,10 +22,20 @@ export interface AvatarFile {
 	filename: string;
 }
 
+export interface AuthenticationToken {
+	id: string;
+	type: 'local storage' | 'cookie';
+	key: string;
+	value: string;
+}
+
 interface Configuration {
 	inviteLink: string;
 	productionURL: string;
 	stagingURL: string;
+	authenticationTokens: {
+		items: Array<AuthenticationToken>;
+	};
 }
 
 interface TestOutcome {
@@ -34,6 +44,10 @@ interface TestOutcome {
 	error: string;
 	createdAt: string;
 	userStory: UserStory;
+	video?: {
+		shareUrl: string;
+		downloadUrl: string;
+	};
 }
 
 interface TestOutcomes {
