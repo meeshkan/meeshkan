@@ -13,9 +13,6 @@ import {
 	Button,
 	Select,
 	useToast,
-	Heading,
-	Stack,
-	useColorMode,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -36,11 +33,9 @@ import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
 import { StepList } from '../../../components/molecules/side-step-list';
+import Video from '../../../components/atoms/video';
 import NotFoundError from '../../404';
 import { createSlug } from '../../../utils/createSlug';
-import Link from 'next/link';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
-import VideoPlayer from '../../../components/atoms/video-player';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -114,186 +109,165 @@ const UserStory = (props: UserStoryProps) => {
 	}
 
 	return (
-		<Stack w="100%">
-			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
-				<a>
-					<Heading
-						d="flex"
-						alignItems="center"
-						fontSize="16px"
-						fontWeight={400}
-						color={useColorModeValue('gray.900', 'gray.200')}
-						lineHeight="short"
-						mb={3}
-					>
-						<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
-						User stories
-					</Heading>
-				</a>
-			</Link>
-			<Flex
-				as={Card}
-				justify="space-between"
-				direction="column"
-				h="100%"
-				w="100%"
-				p={8}
-			>
-				<Box flex="1" overflow="auto">
-					<Flex align="baseline" justify="space-between" mb={8}>
-						<Flex align="baseline">
-							<Editable
-								defaultValue={data.userStory.title}
-								// Callback invoked when user confirms value with `enter` key or by blurring input.
-								onSubmit={(e) => updateTitle(e)}
-								fontSize="xl"
-								fontWeight={900}
-								mr={4}
-							>
-								<EditablePreview />
-								<EditableInput />
-							</Editable>
-							<Badge
-								fontWeight={700}
-								fontSize="md"
-								mr={2}
-								textTransform="capitalize"
-							>
-								{data.userStory.created[0] === 'user' ? (
-									<VideoIcon mr={2} />
-								) : (
-									<CrosshairIcon mr={2} />
-								)}
-								{data.userStory.created[0]}
-							</Badge>
-							{data.userStory.isTestCase === true ? null : data.userStory
-									.isExpected ? (
-								<Badge
-									colorScheme="cyan"
-									fontWeight={700}
-									fontSize="md"
-									textTransform="capitalize"
-								>
-									Expected behavior
-								</Badge>
-							) : (
-								<Badge
-									colorScheme="red"
-									fontWeight={700}
-									fontSize="md"
-									textTransform="capitalize"
-								>
-									Buggy behavior
-								</Badge>
-							)}
-						</Flex>
-						<Select
-							defaultValue={data.userStory.significance}
-							size="sm"
-							borderRadius="md"
-							w="fit-content"
-						>
-							<option value="low">Low significance</option>
-							<option value="medium">Medium significance</option>
-							<option value="high">High significance</option>
-						</Select>
-					</Flex>
-
-					<Box>
-						{data.userStory.recording.items[0].video && (
-							<VideoPlayer>
-								<source
-									src={data.userStory.recording.items[0].video.downloadUrl}
-									type="video/webm"
-								/>
-							</VideoPlayer>
-						)}
-
-						<StepList
-							steps={
-								JSON.parse(data.userStory.recording.items[0].sideScript)
-									.tests[0].commands
-							}
-						/>
-						<Flex
-							justify="center"
-							align="center"
-							borderRadius="full"
-							h={6}
-							w={6}
-							border="1px solid"
-							borderColor={useColorModeValue('cyan.500', 'cyan.300')}
-							backgroundColor="transparentCyan.200"
-							ml={8}
-						>
-							<CheckmarkIcon
-								color={useColorModeValue('cyan.500', 'cyan.300')}
-							/>
-						</Flex>
-					</Box>
-				</Box>
-
-				{data.userStory.isTestCase === true ? null : (
-					<Flex justify="center" align="center" w="100%">
-						<Button
-							colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
-							variant="subtle"
-							leftIcon={<CheckmarkIcon />}
-							onClick={() => {
-								updateExpectedTest(date);
-								toast({
-									position: 'bottom-right',
-									render: () => (
-										<Box
-											color="white"
-											p={4}
-											bg="blue.500"
-											borderRadius="md"
-											fontSize="md"
-										>
-											Success. The User story has been marked as a test case!
-										</Box>
-									),
-									duration: 5000,
-									isClosable: true,
-								});
-								router.push(`/${slugifiedProjectName}/user-stories`);
-							}}
+		<Flex
+			as={Card}
+			justify="space-between"
+			direction="column"
+			h="100%"
+			w="100%"
+			p={8}
+		>
+			<Box flex="1" overflow="auto">
+				<Flex align="baseline" justify="space-between" mb={8}>
+					<Flex align="baseline">
+						<Editable
+							defaultValue={data.userStory.title}
+							// Callback invoked when user confirms value with `enter` key or by blurring input.
+							onSubmit={(e) => updateTitle(e)}
+							fontSize="xl"
+							fontWeight={900}
 							mr={4}
 						>
-							Expected
-						</Button>
-						<Button
-							colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
-							variant="subtle"
-							leftIcon={<XmarkIcon />}
-							onClick={() => {
-								deleteRejectedRecording();
-								toast({
-									position: 'bottom-right',
-									render: () => (
-										<Box
-											color="white"
-											p={4}
-											bg="blue.500"
-											borderRadius="md"
-											fontSize="md"
-										>
-											Rejected. The User story has been deleted!
-										</Box>
-									),
-									duration: 5000,
-									isClosable: true,
-								});
-								router.push(`/${slugifiedProjectName}/user-stories`);
-							}}
+							<EditablePreview />
+							<EditableInput />
+						</Editable>
+						<Badge
+							fontWeight={700}
+							fontSize="md"
+							mr={2}
+							textTransform="capitalize"
 						>
-							Reject
-						</Button>
+							{data.userStory.created[0] === 'user' ? (
+								<VideoIcon mr={2} />
+							) : (
+								<CrosshairIcon mr={2} />
+							)}
+							{data.userStory.created[0]}
+						</Badge>
+						{data.userStory.isExpected ? (
+							<Badge
+								colorScheme="cyan"
+								fontWeight={700}
+								fontSize="md"
+								textTransform="capitalize"
+							>
+								Expected behavior
+							</Badge>
+						) : (
+							<Badge
+								colorScheme="red"
+								fontWeight={700}
+								fontSize="md"
+								textTransform="capitalize"
+							>
+								Buggy behavior
+							</Badge>
+						)}
 					</Flex>
-				)}
-			</Flex>
-		</Stack>
+					<Select
+						defaultValue={data.userStory.significance}
+						size="sm"
+						borderRadius="md"
+						w="fit-content"
+					>
+						<option value="low">Low significance</option>
+						<option value="medium">Medium significance</option>
+						<option value="high">High significance</option>
+					</Select>
+				</Flex>
+
+				<Box>
+					{data.userStory.recording.items[0].video && (
+						<Box maxW="500px">
+							<Video
+								url={data.userStory.recording.items[0].video.downloadUrl}
+								title="User story replay recording"
+							/>
+						</Box>
+					)}
+
+					<StepList
+						steps={
+							JSON.parse(data.userStory.recording.items[0].sideScript).tests[0]
+								.commands
+						}
+					/>
+					<Flex
+						justify="center"
+						align="center"
+						borderRadius="full"
+						h={6}
+						w={6}
+						border="1px solid"
+						borderColor={useColorModeValue('cyan.500', 'cyan.300')}
+						backgroundColor="transparentCyan.200"
+						ml={8}
+					>
+						<CheckmarkIcon color={useColorModeValue('cyan.500', 'cyan.300')} />
+					</Flex>
+				</Box>
+			</Box>
+
+			{data.userStory.isTestCase === true ? null : (
+				<Flex justify="center" align="center" w="100%">
+					<Button
+						colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
+						variant="subtle"
+						leftIcon={<CheckmarkIcon />}
+						onClick={() => {
+							updateExpectedTest(date);
+							toast({
+								position: 'bottom-right',
+								render: () => (
+									<Box
+										color="white"
+										p={4}
+										bg="blue.500"
+										borderRadius="md"
+										fontSize="md"
+									>
+										Success. The User story has been marked as a test case!
+									</Box>
+								),
+								duration: 5000,
+								isClosable: true,
+							});
+							router.push(`/${slugifiedProjectName}/user-stories`);
+						}}
+						mr={4}
+					>
+						Expected
+					</Button>
+					<Button
+						colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
+						variant="subtle"
+						leftIcon={<XmarkIcon />}
+						onClick={() => {
+							deleteRejectedRecording();
+							toast({
+								position: 'bottom-right',
+								render: () => (
+									<Box
+										color="white"
+										p={4}
+										bg="blue.500"
+										borderRadius="md"
+										fontSize="md"
+									>
+										Rejected. The User story has been deleted!
+									</Box>
+								),
+								duration: 5000,
+								isClosable: true,
+							});
+							router.push(`/${slugifiedProjectName}/user-stories`);
+						}}
+					>
+						Reject
+					</Button>
+				</Flex>
+			)}
+		</Flex>
 	);
 };
 

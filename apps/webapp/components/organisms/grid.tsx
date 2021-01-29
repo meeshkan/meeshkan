@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, {
+	useState,
+	useEffect,
+	useContext,
+	useMemo,
+} from 'react';
 import {
 	Box,
 	Stack,
@@ -453,7 +458,7 @@ const Grid = (props) => {
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
-										{doughnutDataValues.some((value) => value !== 0) ? (
+										{doughnutDataValues.some(value => value !== 0) ? (
 											<Doughnut data={doughnutData} options={doughnutOptions} />
 										) : (
 											<Text fontStyle="italic">
@@ -490,8 +495,8 @@ const Grid = (props) => {
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
-													? `Caution`
-													: `Not ready`}
+														? `Caution`
+														: `Not ready`}
 											</Text>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
@@ -524,10 +529,10 @@ const Grid = (props) => {
 												introduced
 											</Text>
 										</Box>
-										<Box w="100px">
+										{/* <Box w="100px">
 											<Flex align="baseline">
 												<Text fontWeight={900} mr={2}>
-													0
+													{bugs.fixed}
 												</Text>
 												<Text
 													fontSize="sm"
@@ -544,7 +549,7 @@ const Grid = (props) => {
 											>
 												fixed
 											</Text>
-										</Box>
+										</Box> */}
 									</Stack>
 								</GridCard>
 							</SimpleGrid>

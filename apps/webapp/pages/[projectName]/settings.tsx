@@ -12,12 +12,6 @@ import {
 	Avatar,
 	Flex,
 	useColorModeValue,
-	Spacer,
-	LightMode,
-	Badge,
-	List,
-	Checkbox,
-	Code,
 } from '@chakra-ui/react';
 import { TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
@@ -34,11 +28,9 @@ import {
 	UserContext,
 	updateProductNotifications,
 	Member,
-	AuthenticationToken,
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { REMOVE_TEAM_MEMBER, REMOVE_AUTH_TOKEN } from '../../graphql/project';
-import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
+import { REMOVE_TEAM_MEMBER } from '../../graphql/project';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -56,9 +48,6 @@ const Settings = () => {
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
 	const [members, setMembers] = useState<Array<Member>>(
 		project?.members?.items || []
-	);
-	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
-		project?.configuration.authenticationTokens?.items || []
 	);
 
 	const client = eightBaseClient(idToken);
@@ -104,23 +93,9 @@ const Settings = () => {
 		return request;
 	};
 
-	const deleteToken = async (tokenID: string) => {
-		const request = client.request(REMOVE_AUTH_TOKEN, {
-			projectID: project.id,
-			tokenID: tokenID,
-		});
-
-		const updatedTokens = tokens.filter((token) => token.id !== tokenID);
-		setTokens(updatedTokens);
-
-		await mutateUser({ ...user, projects });
-
-		return request;
-	};
-
 	return (
 		<Box overflowY="scroll" w="100%">
-			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} mb={150}>
+			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
 				<Heading fontSize="20px" color="gray.500" lineHeight="short">
 					Personal
 				</Heading>
@@ -134,17 +109,15 @@ const Settings = () => {
 						formId="profileUpdateForm"
 					/>
 					<Flex justifyContent="right" mt={4}>
-						<LightMode>
-							<Button
-								mt={4}
-								type="submit"
-								isLoading={profileLoading}
-								loadingText="Updating"
-								form="profileUpdateForm"
-							>
-								Update profile
-							</Button>
-						</LightMode>
+						<Button
+							mt={4}
+							type="submit"
+							isLoading={profileLoading}
+							loadingText="Updating"
+							form="profileUpdateForm"
+						>
+							Update profile
+						</Button>
 					</Flex>
 				</GridCard>
 				<GridCard
@@ -179,16 +152,14 @@ const Settings = () => {
 				>
 					<UpdateProjectForm setLoading={setProjectLoading} />
 					<Flex justify="right" mt={4}>
-						<LightMode>
-							<Button
-								type="submit"
-								isLoading={projectLoading}
-								loadingText="Updating"
-								form="projectUpdateForm"
-							>
-								Update project
-							</Button>
-						</LightMode>
+						<Button
+							type="submit"
+							isLoading={projectLoading}
+							loadingText="Updating"
+							form="projectUpdateForm"
+						>
+							Update project
+						</Button>
 					</Flex>
 				</GridCard>
 				<GridCard
@@ -266,131 +237,11 @@ const Settings = () => {
 					})}
 				</GridCard>
 				<GridCard
-					title="Privacy"
-					anchor
-					subtitle="Meeshkan ignores specific inputs by default. Customization will be possible in the future. The following data is excluded from Meeshkan recordings."
-				>
-					<Stack>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								[autocomplete=cc-*]
-							</Code>{' '}
-							(Credit card fields)
-						</Checkbox>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								input[type=hidden]
-							</Code>{' '}
-							(Hidden fields)
-						</Checkbox>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								input[type=password]
-							</Code>{' '}
-							(Password fields)
-						</Checkbox>
-					</Stack>
-				</GridCard>
-				<GridCard
 					title="Details"
 					anchor
 					subtitle="Detailed information about your project."
 				>
-					<Heading fontSize="18px" fontWeight={500}>
-						Script tag
-					</Heading>
 					<ScriptTagInput />
-
-					<Spacer h={8} />
-
-					<Heading fontSize="18px" fontWeight={500}>
-						Authentication
-					</Heading>
-					<Text
-						fontSize="sm"
-						fontWeight={400}
-						lineHeight="short"
-						color="gray.500"
-						mb={4}
-					>
-						This is the user your tests will be tied to. Be sure that any of the
-						tokens, or log in details you're supplying are not your own, or a
-						customer's.
-					</Text>
-					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
-					<Heading fontSize="14px" fontWeight={500} mt={4}>
-						Active tokens
-					</Heading>
-					{tokens.map((token) => (
-						<Flex
-							key={token.key}
-							w="100%"
-							p={2}
-							borderRadius="md"
-							justify="space-between"
-							align="center"
-							_hover={{
-								backgroundColor: useColorModeValue('gray.50', 'gray.800'),
-							}}
-						>
-							<Flex align="center">
-								<Box w={['96px', '96px', '128px', '200px']}>
-									<Badge
-										borderRadius="md"
-										p={2}
-										fontSize="sm"
-										colorScheme="cyan"
-										textTransform="capitalize"
-									>
-										{token.type}
-									</Badge>
-								</Box>
-								<Text
-									mr={[4, 16, 24]}
-									w={['64px', '80px', '128px']}
-									whiteSpace="nowrap"
-									overflow="hidden"
-									textOverflow="ellipsis"
-								>
-									{token.key}
-								</Text>
-								<Text
-									w={['64px', '80px', '128px']}
-									whiteSpace="nowrap"
-									overflow="hidden"
-									textOverflow="ellipsis"
-								>
-									{token.value}
-								</Text>
-							</Flex>
-							<IconButton
-								aria-label={`Remove`}
-								icon={<TrashIcon w={4} h={4} />}
-								size="sm"
-								variant="ghost"
-								colorScheme="red"
-								onClick={() => {
-									deleteToken(token.id);
-									toast({
-										position: 'bottom-right',
-										render: () => (
-											<Box
-												color="white"
-												p={4}
-												bg="blue.500"
-												borderRadius="md"
-												fontSize="md"
-											>
-												The token `{token.key}` has been successfully removed
-												from {project.name}.
-											</Box>
-										),
-										duration: 2000,
-									});
-								}}
-							/>
-						</Flex>
-					))}
 				</GridCard>
 			</Stack>
 		</Box>

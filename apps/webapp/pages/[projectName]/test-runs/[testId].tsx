@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import {
 	Box,
 	Heading,
@@ -33,7 +33,6 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
-import VideoPlayer from '../../../components/atoms/video-player';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -196,19 +195,7 @@ const TestRun = () => {
 											/>
 										)}
 									</Flex>
-									{isFailing && (
-										<>
-											{outcome.video && (
-												<VideoPlayer>
-													<source
-														src={outcome.video.downloadUrl}
-														type="video/webm"
-													/>
-												</VideoPlayer>
-											)}
-											<Text mt={4}>{outcome?.error}</Text>
-										</>
-									)}
+									{isFailing && <Text mt={4}>{outcome?.error}</Text>}
 								</Card>
 							);
 						})}
