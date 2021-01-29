@@ -71,14 +71,6 @@ export const USER = gql`
 						productionURL
 						stagingURL
 						inviteLink
-						authenticationTokens {
-							items {
-								id
-								type
-								key
-								value
-							}
-						}
 					}
 					hasReceivedEvents
 					members {
@@ -102,10 +94,6 @@ export const USER = gql`
 									isResolved
 									error
 									createdAt
-									video {
-										downloadUrl
-										shareUrl
-									}
 								}
 							}
 							title
@@ -135,10 +123,6 @@ export const USER = gql`
 											isResolved
 											error
 											createdAt
-											video {
-												downloadUrl
-												shareUrl
-											}
 											userStory {
 												id
 												title
