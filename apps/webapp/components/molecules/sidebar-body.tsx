@@ -49,11 +49,11 @@ const SideBarBody = () => {
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
 	const avatarUrl = project?.avatar?.downloadUrl;
-	const projectName = project?.name || router.query.projectName as string || ''
-	const slugifiedProjectName = useMemo(
-		() => createSlug(projectName),
-		[projectName]
-	);
+	const projectName =
+		project?.name || (router.query.projectName as string) || '';
+	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
+		projectName,
+	]);
 
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const testRunsHref = `/${slugifiedProjectName}/test-runs`;
@@ -280,6 +280,9 @@ const SideBarBody = () => {
 								align="center"
 								color={useColorModeValue('gray.500', 'gray.300')}
 								fontWeight={600}
+								maxW="20ch"
+								whiteSpace="nowrap"
+								overflow="hidden"
 							>
 								<Avatar
 									src={avatarUrl}
