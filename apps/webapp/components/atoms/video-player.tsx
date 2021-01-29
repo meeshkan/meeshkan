@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, useColorModeValue } from '@chakra-ui/react';
 
-const VideoPlayer = (children) => (
+const VideoPlayer = ({ children }) => (
 	<Box
 		maxW="max-content"
 		border="1px solid"
