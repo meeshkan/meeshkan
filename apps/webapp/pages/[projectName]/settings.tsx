@@ -19,7 +19,7 @@ import {
 	Checkbox,
 	Code,
 } from '@chakra-ui/react';
-import { TrashIcon } from '@frontend/chakra-theme';
+import { RecordIcon, TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -303,20 +303,32 @@ const Settings = () => {
 
 					<Spacer h={8} />
 
-					<Heading fontSize="18px" fontWeight="500">
-						Authentication
-					</Heading>
-					<Text
-						fontSize="sm"
-						fontWeight="400"
-						lineHeight="short"
-						color="gray.500"
-						mb={4}
-					>
-						This is the user your tests will be tied to. Be sure that any of the
-						tokens, or log in details you're supplying are not your own, or a
-						customer's.
-					</Text>
+					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
+						<Box>
+							<Heading fontSize="18px" fontWeight={500}>
+								Authentication
+							</Heading>
+							<Text
+								fontSize="sm"
+								fontWeight={400}
+								lineHeight="short"
+								color="gray.500"
+							>
+								This is the user your tests will be tied to. Be sure that any of
+								the tokens, or log in details you're supplying are not your own,
+								or a customer's.
+							</Text>
+						</Box>
+						<Button
+							size="sm"
+							colorScheme="red"
+							variant="subtle"
+							leftIcon={<RecordIcon />}
+						>
+							Record log in flow
+						</Button>
+					</Flex>
+
 					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
 					<Heading fontSize="14px" fontWeight="500" mt={4}>
 						Active tokens
