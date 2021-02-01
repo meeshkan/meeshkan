@@ -24,9 +24,20 @@ const withAuth = (PageComponent) => {
 
 		useEffect(() => {
 			if (slugifiedProjectName) {
-				router.push(router.pathname.includes('[projectName]')
-					? router.pathname.replace('[projectName]', slugifiedProjectName)
-					: `/${slugifiedProjectName}`);
+				let url = router.pathname;
+				const query = router.query;
+				query.projectName = slugifiedProjectName;
+				Object.keys(query).forEach(
+					param => {
+						url = url.replace(`[${param as string}]`, query[param] as string);
+					}
+				);
+
+				if (url === '/') {
+					url = `/${slugifiedProjectName}`;
+				}
+
+				router.push(url);
 			}
 		}, [slugifiedProjectName]);
 
