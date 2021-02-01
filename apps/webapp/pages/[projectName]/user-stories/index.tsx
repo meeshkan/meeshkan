@@ -95,9 +95,8 @@ interface Recordings {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
-
 	const [toggleIndex, setToggleIndex] = useState(0);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<Recordings>({
