@@ -39,6 +39,12 @@ import {
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { REMOVE_TEAM_MEMBER, REMOVE_AUTH_TOKEN } from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
+import {
+	isChrome,
+	getVersion as getExtensionVersion,
+	latestVersion as latestExtensionVersion,
+	startRecording,
+} from '../../utils/extension';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -116,6 +122,60 @@ const Settings = () => {
 		await mutateUser({ ...user, projects });
 
 		return request;
+	};
+
+	const errorToast = ({ title, description }) => {
+		toast({
+			position: 'bottom-right',
+			title,
+			description,
+			status: 'error',
+			duration: 5000,
+			isClosable: true,
+		});
+	};
+
+	const handleNewUserStory = async () => {
+		if (!isChrome()) {
+			errorToast({
+				title: 'Could not trigger the Meeshkan extension',
+				description:
+					'You need to be using a Chromium browser to create manual user stories, for the time being.',
+			});
+			return;
+		}
+
+		try {
+			const version = await getExtensionVersion();
+			if (version !== latestExtensionVersion) {
+				errorToast({
+					title: 'Outdated Meeshkan extension',
+					description:
+						'Please update to the latest version of the Meeshkan recorder extension.',
+				});
+				return;
+			}
+
+			if (!project?.configuration?.productionURL) {
+				errorToast({
+					title: 'No production URL specified',
+					description:
+						"To trigger the Meeshkan extension, you need to specify a production URL in your project's settings page.",
+				});
+				return;
+			}
+
+			startRecording({
+				url: project.configuration.productionURL,
+				clientId: project.id,
+			});
+		} catch (error) {
+			errorToast({
+				title: 'Extension is missing',
+				description:
+					'To begin creating manual user stories, please download the Meeshkan recorder extension via the Chrome Web Store.',
+			});
+		}
 	};
 
 	return (
@@ -324,6 +384,7 @@ const Settings = () => {
 							colorScheme="red"
 							variant="subtle"
 							leftIcon={<RecordIcon />}
+							onClick={handleNewUserStory}
 						>
 							Record log in flow
 						</Button>
