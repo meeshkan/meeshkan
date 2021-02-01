@@ -110,7 +110,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				Header: 'Origin',
 				accessor: (originalRow, rowIndex) => {
 					return (
-						<Badge fontSize="sm" textTransform="capitalize">
+						<Badge
+							fontSize="sm"
+							textTransform="capitalize"
+							borderRadius="md"
+							p={2}
+						>
 							{originalRow.created === 'user' ? (
 								<VideoIcon mr={2} />
 							) : (
@@ -129,6 +134,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						<Badge
 							fontSize="sm"
 							textTransform="capitalize"
+							borderRadius="md"
+							p={2}
 							colorScheme={
 								significance === 'low'
 									? 'gray'
