@@ -130,7 +130,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							borderRadius="md"
 							p={2}
 						>
-							{console.log(originalRow.created[0])}
 							{originalRow.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
 							) : originalRow.created[0] === 'manual' ? (
