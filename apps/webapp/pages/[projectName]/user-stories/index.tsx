@@ -130,11 +130,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							borderRadius="md"
 							p={2}
 						>
-							{originalRow.created === 'user' ? (
+							{console.log(originalRow.created[0])}
+							{originalRow.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
-							) : (
+							) : originalRow.created[0] === 'manual' ? (
 								<CrosshairIcon mr={2} />
-							)}
+							) : null}
 							{originalRow.created}
 						</Badge>
 					);

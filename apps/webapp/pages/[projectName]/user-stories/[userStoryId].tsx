@@ -180,9 +180,9 @@ const UserStory = (props: UserStoryProps) => {
 							>
 								{data.userStory.created[0] === 'user' ? (
 									<VideoIcon mr={3} />
-								) : (
+								) : data.userStory.created[0] === 'manual' ? (
 									<CrosshairIcon mr={3} />
-								)}
+								) : null}
 								{data.userStory.created[0]}
 							</Badge>
 							{data.userStory.isTestCase === true ? null : data.userStory
