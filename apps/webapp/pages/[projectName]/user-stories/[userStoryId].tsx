@@ -15,6 +15,8 @@ import {
 	useToast,
 	Heading,
 	Stack,
+	SimpleGrid,
+	Grid,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -147,7 +149,7 @@ const UserStory = (props: UserStoryProps) => {
 				w="100%"
 				p={8}
 			>
-				<Box flex="1" overflow="auto">
+				<Box flex="1">
 					<Flex align="baseline" justify="space-between" mb={8}>
 						<Flex align="baseline">
 							<Editable
@@ -208,38 +210,61 @@ const UserStory = (props: UserStoryProps) => {
 						</Select>
 					</Flex>
 
-					<Box>
-						{data.userStory.recording.items[0].video && (
-							<VideoPlayer>
-								<source
-									src={data.userStory.recording.items[0].video.downloadUrl}
-									type="video/webm"
-								/>
-							</VideoPlayer>
-						)}
-
-						<StepList
-							steps={
-								JSON.parse(data.userStory.recording.items[0].sideScript)
-									.tests[0].commands
-							}
-						/>
-						<Flex
-							justify="center"
-							align="center"
-							borderRadius="full"
-							h={6}
-							w={6}
-							border="1px solid"
-							borderColor={useColorModeValue('cyan.500', 'cyan.300')}
-							backgroundColor="transparentCyan.200"
-							ml={8}
+					<Grid
+						w="100%"
+						templateColumns={[
+							'repeat(auto-fill, 1fr)',
+							'reapeat(auto-fill, 1fr)',
+							'repeat(3, 1fr)',
+						]}
+						gridAutoFlow="dense"
+						gap={8}
+					>
+						<Box
+							gridColumnStart={3}
+							gridColumnEnd={3}
+							position="sticky"
+							top="80px"
 						>
-							<CheckmarkIcon
-								color={useColorModeValue('cyan.500', 'cyan.300')}
+							{data.userStory.recording.items[0].video && (
+								<VideoPlayer>
+									<source
+										src={data.userStory.recording.items[0].video.downloadUrl}
+										type="video/webm"
+									/>
+								</VideoPlayer>
+							)}
+						</Box>
+
+						<Box
+							gridColumnStart={1}
+							gridColumnEnd={3}
+							maxH="65vh"
+							overflow="auto"
+						>
+							<StepList
+								steps={
+									JSON.parse(data.userStory.recording.items[0].sideScript)
+										.tests[0].commands
+								}
 							/>
-						</Flex>
-					</Box>
+							<Flex
+								justify="center"
+								align="center"
+								borderRadius="full"
+								h={6}
+								w={6}
+								border="1px solid"
+								borderColor={useColorModeValue('cyan.500', 'cyan.300')}
+								backgroundColor="transparentCyan.200"
+								ml={8}
+							>
+								<CheckmarkIcon
+									color={useColorModeValue('cyan.500', 'cyan.300')}
+								/>
+							</Flex>
+						</Box>
+					</Grid>
 				</Box>
 
 				{data.userStory.isTestCase === true ? null : (
