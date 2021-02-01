@@ -6,6 +6,9 @@ export const StepList = ({ steps }) =>
 		const steps = [];
 		typeof step.target == 'string' ? steps.push(step.target) : null;
 		typeof step.target == 'object' ? steps.push(step.target.selector) : null;
+		step.target.hasOwnProperty('inner_text')
+			? steps.push(step.target.inner_text)
+			: null;
 
 		return (
 			<StoryStep
