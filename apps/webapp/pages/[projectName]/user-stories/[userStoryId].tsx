@@ -15,7 +15,6 @@ import {
 	useToast,
 	Heading,
 	Stack,
-	SimpleGrid,
 	Grid,
 	Tooltip,
 } from '@chakra-ui/react';
