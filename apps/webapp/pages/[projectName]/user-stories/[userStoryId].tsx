@@ -15,7 +15,6 @@ import {
 	useToast,
 	Heading,
 	Stack,
-	useColorMode,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -114,7 +113,7 @@ const UserStory = (props: UserStoryProps) => {
 	}
 
 	return (
-		<Stack w="100%">
+		<Stack w="100%" mb={8}>
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
 				<a>
 					<Heading
