@@ -34,7 +34,7 @@ import {
 	VideoIcon,
 	CheckmarkIcon,
 	XmarkIcon,
-	KeyIcon,
+	SheildIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -211,22 +211,24 @@ const UserStory = (props: UserStoryProps) => {
 									Buggy behavior
 								</Badge>
 							)}
-							<Tooltip
-								label="Authenticated flow"
-								p={2}
-								placement="right"
-								borderRadius="md"
-							>
-								<Badge
-									colorScheme="amber"
-									fontWeight={700}
-									fontSize="md"
-									borderRadius="md"
+							{data.userStory.isAuthenticated ? (
+								<Tooltip
+									label="Authenticated"
 									p={2}
+									placement="right"
+									borderRadius="md"
 								>
-									<KeyIcon />
-								</Badge>
-							</Tooltip>
+									<Badge
+										colorScheme="amber"
+										fontWeight={700}
+										fontSize="md"
+										borderRadius="md"
+										p={2}
+									>
+										<SheildIcon />
+									</Badge>
+								</Tooltip>
+							) : null}
 						</Flex>
 						<Select
 							defaultValue={data.userStory.significance}

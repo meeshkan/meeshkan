@@ -9,6 +9,7 @@ export const USER_STORY = gql`
 			flowIDs
 			created
 			isExpected
+			isAuthenticated
 			significance
 			recording {
 				items {
