@@ -15,6 +15,8 @@ import {
 	useToast,
 	Heading,
 	Stack,
+	SimpleGrid,
+	Grid,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -147,9 +149,14 @@ const UserStory = (props: UserStoryProps) => {
 				w="100%"
 				p={8}
 			>
-				<Box flex="1" overflow="auto">
-					<Flex align="baseline" justify="space-between" mb={8}>
-						<Flex align="baseline">
+				<Box flex="1">
+					<Flex
+						direction={['column', 'column', 'row']}
+						align="baseline"
+						justify="space-between"
+						mb={8}
+					>
+						<Flex align="baseline" direction={['column', 'row']} mb={[4, 4, 0]}>
 							<Editable
 								defaultValue={data.userStory.title}
 								// Callback invoked when user confirms value with `enter` key or by blurring input.
@@ -208,38 +215,56 @@ const UserStory = (props: UserStoryProps) => {
 						</Select>
 					</Flex>
 
-					<Box>
-						{data.userStory.recording.items[0].video && (
-							<VideoPlayer>
-								<source
-									src={data.userStory.recording.items[0].video.downloadUrl}
-									type="video/webm"
-								/>
-							</VideoPlayer>
-						)}
+					<Grid
+						w="100%"
+						templateColumns={[
+							'repeat(auto-fill, 1fr)',
+							'reapeat(auto-fill, 1fr)',
+							'repeat(3, 1fr)',
+						]}
+						gridAutoFlow="dense"
+						gap={8}
+					>
+						<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
+							{data.userStory.recording.items[0].video && (
+								<VideoPlayer>
+									<source
+										src={data.userStory.recording.items[0].video.downloadUrl}
+										type="video/webm"
+									/>
+								</VideoPlayer>
+							)}
+						</Box>
 
-						<StepList
-							steps={
-								JSON.parse(data.userStory.recording.items[0].sideScript)
-									.tests[0].commands
-							}
-						/>
-						<Flex
-							justify="center"
-							align="center"
-							borderRadius="full"
-							h={6}
-							w={6}
-							border="1px solid"
-							borderColor={useColorModeValue('cyan.500', 'cyan.300')}
-							backgroundColor="transparentCyan.200"
-							ml={8}
+						<Box
+							gridColumnStart={[1, 1, 1]}
+							gridColumnEnd={[2, 2, 3]}
+							maxH="65vh"
+							overflow="auto"
 						>
-							<CheckmarkIcon
-								color={useColorModeValue('cyan.500', 'cyan.300')}
+							<StepList
+								steps={
+									JSON.parse(data.userStory.recording.items[0].sideScript)
+										.tests[0].commands
+								}
 							/>
-						</Flex>
-					</Box>
+							<Flex
+								justify="center"
+								align="center"
+								borderRadius="full"
+								h={6}
+								w={6}
+								border="1px solid"
+								borderColor={useColorModeValue('cyan.500', 'cyan.300')}
+								backgroundColor="transparentCyan.200"
+								ml={8}
+							>
+								<CheckmarkIcon
+									color={useColorModeValue('cyan.500', 'cyan.300')}
+								/>
+							</Flex>
+						</Box>
+					</Grid>
 				</Box>
 
 				{data.userStory.isTestCase === true ? null : (
