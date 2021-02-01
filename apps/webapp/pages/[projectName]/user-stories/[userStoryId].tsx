@@ -179,9 +179,9 @@ const UserStory = (props: UserStoryProps) => {
 								p={2}
 							>
 								{data.userStory.created[0] === 'user' ? (
-									<VideoIcon mr={2} />
+									<VideoIcon mr={3} />
 								) : (
-									<CrosshairIcon mr={2} />
+									<CrosshairIcon mr={3} />
 								)}
 								{data.userStory.created[0]}
 							</Badge>

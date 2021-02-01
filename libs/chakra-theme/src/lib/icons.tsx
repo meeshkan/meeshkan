@@ -169,20 +169,18 @@ export const VideoIcon = createIcon({
 	displayName: 'VideoIcon',
 	viewBox: '0 0 16 16',
 	path: (
-		<g>
+		<g fill="none">
 			<path
-				d="M 15.333 4.667 L 10.667 8 L 15.333 11.333 Z"
-				fill="transparent"
-				strokeWidth="0.99"
+				d="M15.333 4L10.667 7.333L15.333 10.666V4Z"
 				stroke="currentColor"
+				strokeWidth="1"
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			/>
 			<path
-				d="M 2 12.667 C 1.264 12.667 0.667 12.07 0.667 11.333 L 0.667 4.667 C 0.667 3.93 1.264 3.333 2 3.333 L 9.333 3.333 C 10.07 3.333 10.667 3.93 10.667 4.667 L 10.667 11.333 C 10.667 12.07 10.07 12.667 9.333 12.667 Z"
-				fill="transparent"
-				strokeWidth="0.99"
+				d="M2 12.334C1.264 12.334 0.667 11.737 0.667 11V4.334C0.667 3.597 1.264 3 2 3H9.333C10.07 3 10.667 3.597 10.667 4.334V11C10.667 11.737 10.07 12.334 9.333 12.334H2Z"
 				stroke="currentColor"
+				strokeWidth="1"
 				strokeLinecap="round"
 				strokeLinejoin="round"
 			/>
