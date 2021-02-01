@@ -3,7 +3,6 @@ import { StoryStep } from '../atoms/side-step';
 
 export const StepList = ({ steps }) =>
 	steps.map((step, index) => {
-		console.log(step.target);
 		const steps = [];
 		typeof step.target == 'string' ? steps.push(step.target) : null;
 		typeof step.target == 'object' ? steps.push(step.target.selector) : null;

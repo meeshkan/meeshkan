@@ -105,7 +105,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	});
 	const [pagination, setPagination] = useState({
 		page: 0,
-		rowsPerPage: 10,
+		rowsPerPage: 20,
 	});
 
 	const columns: Column[] = useMemo(
