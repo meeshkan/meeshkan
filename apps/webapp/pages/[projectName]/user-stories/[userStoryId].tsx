@@ -220,12 +220,7 @@ const UserStory = (props: UserStoryProps) => {
 						gridAutoFlow="dense"
 						gap={8}
 					>
-						<Box
-							gridColumnStart={3}
-							gridColumnEnd={3}
-							position="sticky"
-							top="80px"
-						>
+						<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
 							{data.userStory.recording.items[0].video && (
 								<VideoPlayer>
 									<source
@@ -237,8 +232,8 @@ const UserStory = (props: UserStoryProps) => {
 						</Box>
 
 						<Box
-							gridColumnStart={1}
-							gridColumnEnd={3}
+							gridColumnStart={[1, 1, 1]}
+							gridColumnEnd={[2, 2, 3]}
 							maxH="65vh"
 							overflow="auto"
 						>
