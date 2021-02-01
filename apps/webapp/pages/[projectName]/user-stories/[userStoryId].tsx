@@ -55,8 +55,8 @@ const UserStory = (props: UserStoryProps) => {
 	const router = useRouter();
 	const toast = useToast();
 
-	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
-		project.name,
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
 	]);
 
 	const { userStoryId } = router.query;
@@ -67,7 +67,7 @@ const UserStory = (props: UserStoryProps) => {
 	// Initial data fetch
 	const fetcher = (query) =>
 		client.request(query, {
-			projectId: project.id,
+			projectId: project?.id,
 			userStoryId: userStoryId,
 		});
 
@@ -113,7 +113,7 @@ const UserStory = (props: UserStoryProps) => {
 		return <LoadingScreen as={Card} />;
 	}
 
-	if (!foundProject) {
+	if (!foundProject || data?.userStory === null) {
 		return <NotFoundError />;
 	}
 

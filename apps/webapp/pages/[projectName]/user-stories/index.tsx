@@ -157,7 +157,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
-	const projectId = project.id;
+	const projectId = project?.id;
 	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
@@ -181,8 +181,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
 
-	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
-		project.name,
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
 	]);
 
 	const handleEdit = (id: string) => {
