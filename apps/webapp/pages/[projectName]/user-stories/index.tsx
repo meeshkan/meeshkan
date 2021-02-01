@@ -125,7 +125,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							px={2}
+							p={2}
 						>
 							{originalRow.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
@@ -146,7 +146,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							px={2}
+							p={2}
 							colorScheme={
 								significance === 'low'
 									? 'gray'
@@ -207,10 +207,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		},
 		[idToken, projectId, toggleIndex]
 	);
-
-	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
-		setPagination({ page: pageIndex, rowsPerPage: pageSize });
-	}, []);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
