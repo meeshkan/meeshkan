@@ -106,3 +106,41 @@ export const UPDATE_STORY_TITLE = gql`
 		}
 	}
 `;
+
+export const UPDATE_STORY_SIGNIFICANCE = gql`
+	mutation UPDATE_STORY_SIGNIFICANCE(
+		$userStoryId: ID!
+		$newSignificance: String!
+	) {
+		userStoryUpdate(
+			filter: { id: $userStoryId }
+			data: { significance: $newSignificance }
+		) {
+			id
+			title
+			isTestCase
+			flowIDs
+			created
+			isExpected
+			significance
+			recording {
+				items {
+					video {
+						downloadUrl
+						shareUrl
+					}
+					environment {
+						items {
+							ipAddress
+							browser
+							browserVersion
+							operatingSystem
+							language
+						}
+					}
+					sideScript
+				}
+			}
+		}
+	}
+`;

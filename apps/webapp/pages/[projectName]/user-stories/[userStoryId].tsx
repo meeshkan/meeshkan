@@ -23,6 +23,7 @@ import {
 	UPDATE_EXPECTED_TEST,
 	DELETE_REJECTED_RECORDING,
 	UPDATE_STORY_TITLE,
+	UPDATE_STORY_SIGNIFICANCE,
 } from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
@@ -80,6 +81,14 @@ const UserStory = (props: UserStoryProps) => {
 		const request = client.request(UPDATE_STORY_TITLE, {
 			userStoryId: userStoryId,
 			newTitle: newTitle,
+		});
+		return request;
+	};
+
+	const updateSignificance = (newSignificance: string) => {
+		const request = client.request(UPDATE_STORY_SIGNIFICANCE, {
+			userStoryId: userStoryId,
+			newSignificance: newSignificance,
 		});
 		return request;
 	};
@@ -191,6 +200,7 @@ const UserStory = (props: UserStoryProps) => {
 							size="sm"
 							borderRadius="md"
 							w="fit-content"
+							onChange={(e) => updateSignificance(e.target.value)}
 						>
 							<option value="low">Low significance</option>
 							<option value="medium">Medium significance</option>
