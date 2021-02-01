@@ -17,6 +17,7 @@ import {
 	Stack,
 	SimpleGrid,
 	Grid,
+	Tooltip,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -33,6 +34,7 @@ import {
 	VideoIcon,
 	CheckmarkIcon,
 	XmarkIcon,
+	KeyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -152,11 +154,11 @@ const UserStory = (props: UserStoryProps) => {
 				<Box flex="1">
 					<Flex
 						direction={['column', 'column', 'row']}
-						align="baseline"
+						align="flex-end"
 						justify="space-between"
 						mb={8}
 					>
-						<Flex align="baseline" direction={['column', 'row']} mb={[4, 4, 0]}>
+						<Flex align="flex-end" direction={['column', 'row']} mb={[4, 4, 0]}>
 							<Editable
 								defaultValue={data.userStory.title}
 								// Callback invoked when user confirms value with `enter` key or by blurring input.
@@ -173,6 +175,8 @@ const UserStory = (props: UserStoryProps) => {
 								fontSize="md"
 								mr={2}
 								textTransform="capitalize"
+								borderRadius="md"
+								p={2}
 							>
 								{data.userStory.created[0] === 'user' ? (
 									<VideoIcon mr={2} />
@@ -188,6 +192,9 @@ const UserStory = (props: UserStoryProps) => {
 									fontWeight={700}
 									fontSize="md"
 									textTransform="capitalize"
+									borderRadius="md"
+									p={2}
+									mr={2}
 								>
 									Expected behavior
 								</Badge>
@@ -197,10 +204,29 @@ const UserStory = (props: UserStoryProps) => {
 									fontWeight={700}
 									fontSize="md"
 									textTransform="capitalize"
+									borderRadius="md"
+									p={2}
+									mr={2}
 								>
 									Buggy behavior
 								</Badge>
 							)}
+							<Tooltip
+								label="Authenticated flow"
+								p={2}
+								placement="right"
+								borderRadius="md"
+							>
+								<Badge
+									colorScheme="amber"
+									fontWeight={700}
+									fontSize="md"
+									borderRadius="md"
+									p={2}
+								>
+									<KeyIcon />
+								</Badge>
+							</Tooltip>
 						</Flex>
 						<Select
 							defaultValue={data.userStory.significance}
