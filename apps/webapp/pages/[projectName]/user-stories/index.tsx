@@ -208,6 +208,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[idToken, projectId, toggleIndex]
 	);
 
+	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
+		setPagination({ page: pageIndex, rowsPerPage: pageSize });
+	}, []);
+
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
