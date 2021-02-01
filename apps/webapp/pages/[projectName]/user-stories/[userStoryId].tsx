@@ -150,8 +150,13 @@ const UserStory = (props: UserStoryProps) => {
 				p={8}
 			>
 				<Box flex="1">
-					<Flex align="baseline" justify="space-between" mb={8}>
-						<Flex align="baseline">
+					<Flex
+						direction={['column', 'column', 'row']}
+						align="baseline"
+						justify="space-between"
+						mb={8}
+					>
+						<Flex align="baseline" direction={['column', 'row']} mb={[4, 4, 0]}>
 							<Editable
 								defaultValue={data.userStory.title}
 								// Callback invoked when user confirms value with `enter` key or by blurring input.
