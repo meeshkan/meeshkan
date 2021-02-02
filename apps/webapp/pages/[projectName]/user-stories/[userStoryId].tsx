@@ -34,7 +34,7 @@ import {
 	VideoIcon,
 	CheckmarkIcon,
 	XmarkIcon,
-	SheildIcon,
+	ShieldIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -225,7 +225,7 @@ const UserStory = (props: UserStoryProps) => {
 										borderRadius="md"
 										p={2}
 									>
-										<SheildIcon />
+										<ShieldIcon />
 									</Badge>
 								</Tooltip>
 							) : null}

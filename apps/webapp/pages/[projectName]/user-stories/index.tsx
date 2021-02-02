@@ -277,6 +277,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				isCentered
 				motionPreset="scale"
 				size="xl"
+				scrollBehavior="inside"
 			>
 				<ModalOverlay />
 				<ModalContent>
@@ -327,14 +328,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 										in your frontend's production environment.
 									</ListItem>
 									<ListItem lineHeight="1.6">
-										Once an hour after installed, new user stories will be
-										generated.
+										Once an hour has passed since installation, new user stories
+										will be generated.
 									</ListItem>
 								</List>
 							</ListItem>
 							<ListItem lineHeight="1.6">
-								<strong>Manually using the chrome extension.</strong> This is
-								great if you are a developer or product manager testing a new
+								<strong>Manually, using the chrome extension.</strong> This is
+								is great if you are a developer or product manager testing a new
 								feature where user behavior is still unknown but you'd like to
 								test it as further development continues.
 								<List
@@ -349,11 +350,15 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 											isExternal
 											color={useColorModeValue('blue.500', 'blue.300')}
 										>
-											Install the chrome extension.
+											Install the chrome extension. This will provide
+											instructions and the ability to manually create user
+											stories with a 'record' button.
 										</ChakraLink>
 									</ListItem>
 									<ListItem lineHeight="1.6">
 										User stories get generated automatically in this process.
+										You will be redirected back to the webapp, to the new user
+										story after you click the extension again.
 									</ListItem>
 								</List>
 							</ListItem>
