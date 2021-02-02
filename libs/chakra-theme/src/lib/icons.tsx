@@ -63,7 +63,7 @@ export const EmptyDoughnutIcon = createIcon({
 	),
 });
 
-export const Shield = createIcon({
+export const ShieldIcon = createIcon({
 	displayName: 'ShieldIcon',
 	viewBox: '0 0 24 24',
 	path: (
