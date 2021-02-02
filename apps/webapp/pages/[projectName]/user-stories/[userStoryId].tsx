@@ -15,7 +15,9 @@ import {
 	useToast,
 	Heading,
 	Stack,
-	useColorMode,
+	SimpleGrid,
+	Grid,
+	Tooltip,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -24,6 +26,7 @@ import {
 	UPDATE_EXPECTED_TEST,
 	DELETE_REJECTED_RECORDING,
 	UPDATE_STORY_TITLE,
+	UPDATE_STORY_SIGNIFICANCE,
 } from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
@@ -31,6 +34,7 @@ import {
 	VideoIcon,
 	CheckmarkIcon,
 	XmarkIcon,
+	ShieldIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -55,8 +59,8 @@ const UserStory = (props: UserStoryProps) => {
 	const router = useRouter();
 	const toast = useToast();
 
-	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
-		project.name,
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
 	]);
 
 	const { userStoryId } = router.query;
@@ -67,7 +71,7 @@ const UserStory = (props: UserStoryProps) => {
 	// Initial data fetch
 	const fetcher = (query) =>
 		client.request(query, {
-			projectId: project.id,
+			projectId: project?.id,
 			userStoryId: userStoryId,
 		});
 
@@ -81,6 +85,14 @@ const UserStory = (props: UserStoryProps) => {
 		const request = client.request(UPDATE_STORY_TITLE, {
 			userStoryId: userStoryId,
 			newTitle: newTitle,
+		});
+		return request;
+	};
+
+	const updateSignificance = (newSignificance: string) => {
+		const request = client.request(UPDATE_STORY_SIGNIFICANCE, {
+			userStoryId: userStoryId,
+			newSignificance: newSignificance,
 		});
 		return request;
 	};
@@ -105,7 +117,7 @@ const UserStory = (props: UserStoryProps) => {
 		return <LoadingScreen as={Card} />;
 	}
 
-	if (!foundProject) {
+	if (!foundProject || data?.userStory === null) {
 		return <NotFoundError />;
 	}
 
@@ -114,7 +126,7 @@ const UserStory = (props: UserStoryProps) => {
 	}
 
 	return (
-		<Stack w="100%">
+		<Stack w="100%" mb={8}>
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
 				<a>
 					<Heading
@@ -139,9 +151,14 @@ const UserStory = (props: UserStoryProps) => {
 				w="100%"
 				p={8}
 			>
-				<Box flex="1" overflow="auto">
-					<Flex align="baseline" justify="space-between" mb={8}>
-						<Flex align="baseline">
+				<Box flex="1">
+					<Flex
+						direction={['column', 'column', 'row']}
+						align="flex-end"
+						justify="space-between"
+						mb={8}
+					>
+						<Flex align="flex-end" direction={['column', 'row']} mb={[4, 4, 0]}>
 							<Editable
 								defaultValue={data.userStory.title}
 								// Callback invoked when user confirms value with `enter` key or by blurring input.
@@ -158,12 +175,14 @@ const UserStory = (props: UserStoryProps) => {
 								fontSize="md"
 								mr={2}
 								textTransform="capitalize"
+								borderRadius="md"
+								p={2}
 							>
 								{data.userStory.created[0] === 'user' ? (
-									<VideoIcon mr={2} />
-								) : (
-									<CrosshairIcon mr={2} />
-								)}
+									<VideoIcon mr={3} />
+								) : data.userStory.created[0] === 'manual' ? (
+									<CrosshairIcon mr={3} />
+								) : null}
 								{data.userStory.created[0]}
 							</Badge>
 							{data.userStory.isTestCase === true ? null : data.userStory
@@ -173,6 +192,9 @@ const UserStory = (props: UserStoryProps) => {
 									fontWeight={700}
 									fontSize="md"
 									textTransform="capitalize"
+									borderRadius="md"
+									p={2}
+									mr={2}
 								>
 									Expected behavior
 								</Badge>
@@ -182,16 +204,38 @@ const UserStory = (props: UserStoryProps) => {
 									fontWeight={700}
 									fontSize="md"
 									textTransform="capitalize"
+									borderRadius="md"
+									p={2}
+									mr={2}
 								>
 									Buggy behavior
 								</Badge>
 							)}
+							{data.userStory.isAuthenticated ? (
+								<Tooltip
+									label="Authenticated"
+									p={2}
+									placement="right"
+									borderRadius="md"
+								>
+									<Badge
+										colorScheme="amber"
+										fontWeight={700}
+										fontSize="md"
+										borderRadius="md"
+										p={2}
+									>
+										<ShieldIcon />
+									</Badge>
+								</Tooltip>
+							) : null}
 						</Flex>
 						<Select
 							defaultValue={data.userStory.significance}
 							size="sm"
 							borderRadius="md"
 							w="fit-content"
+							onChange={(e) => updateSignificance(e.target.value)}
 						>
 							<option value="low">Low significance</option>
 							<option value="medium">Medium significance</option>
@@ -199,38 +243,56 @@ const UserStory = (props: UserStoryProps) => {
 						</Select>
 					</Flex>
 
-					<Box>
-						{data.userStory.recording.items[0].video && (
-							<VideoPlayer>
-								<source
-									src={data.userStory.recording.items[0].video.downloadUrl}
-									type="video/webm"
-								/>
-							</VideoPlayer>
-						)}
+					<Grid
+						w="100%"
+						templateColumns={[
+							'repeat(auto-fill, 1fr)',
+							'reapeat(auto-fill, 1fr)',
+							'repeat(3, 1fr)',
+						]}
+						gridAutoFlow="dense"
+						gap={8}
+					>
+						<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
+							{data.userStory.recording.items[0].video && (
+								<VideoPlayer>
+									<source
+										src={data.userStory.recording.items[0].video.downloadUrl}
+										type="video/webm"
+									/>
+								</VideoPlayer>
+							)}
+						</Box>
 
-						<StepList
-							steps={
-								JSON.parse(data.userStory.recording.items[0].sideScript)
-									.tests[0].commands
-							}
-						/>
-						<Flex
-							justify="center"
-							align="center"
-							borderRadius="full"
-							h={6}
-							w={6}
-							border="1px solid"
-							borderColor={useColorModeValue('cyan.500', 'cyan.300')}
-							backgroundColor="transparentCyan.200"
-							ml={8}
+						<Box
+							gridColumnStart={[1, 1, 1]}
+							gridColumnEnd={[2, 2, 3]}
+							maxH="65vh"
+							overflow="auto"
 						>
-							<CheckmarkIcon
-								color={useColorModeValue('cyan.500', 'cyan.300')}
+							<StepList
+								steps={
+									JSON.parse(data.userStory.recording.items[0].sideScript)
+										.tests[0].commands
+								}
 							/>
-						</Flex>
-					</Box>
+							<Flex
+								justify="center"
+								align="center"
+								borderRadius="full"
+								h={6}
+								w={6}
+								border="1px solid"
+								borderColor={useColorModeValue('cyan.500', 'cyan.300')}
+								backgroundColor="transparentCyan.200"
+								ml={8}
+							>
+								<CheckmarkIcon
+									color={useColorModeValue('cyan.500', 'cyan.300')}
+								/>
+							</Flex>
+						</Box>
+					</Grid>
 				</Box>
 
 				{data.userStory.isTestCase === true ? null : (

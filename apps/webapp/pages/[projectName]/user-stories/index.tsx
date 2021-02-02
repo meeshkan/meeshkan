@@ -15,6 +15,19 @@ import {
 	Button,
 	Badge,
 	BoxProps,
+	useDisclosure,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	ListItem,
+	List,
+	Heading,
+	Link as ChakraLink,
+	Divider,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -36,6 +49,7 @@ import { UserContext } from '../../../utils/user';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
+import Link from 'next/link';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -83,7 +97,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 
 	const [toggleIndex, setToggleIndex] = useState(0);
-
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [tableLoading, setTableLoading] = useState(false);
 	const [tableData, setTableData] = useState<Recordings>({
 		recordings: { count: 0, items: [] },
@@ -91,7 +105,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	});
 	const [pagination, setPagination] = useState({
 		page: 0,
-		rowsPerPage: 10,
+		rowsPerPage: 20,
 	});
 
 	const columns: Column[] = useMemo(
@@ -110,12 +124,17 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				Header: 'Origin',
 				accessor: (originalRow, rowIndex) => {
 					return (
-						<Badge fontSize="sm" textTransform="capitalize">
-							{originalRow.created === 'user' ? (
+						<Badge
+							fontSize="sm"
+							textTransform="capitalize"
+							borderRadius="md"
+							p={2}
+						>
+							{originalRow.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
-							) : (
+							) : originalRow.created[0] === 'manual' ? (
 								<CrosshairIcon mr={2} />
-							)}
+							) : null}
 							{originalRow.created}
 						</Badge>
 					);
@@ -129,6 +148,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						<Badge
 							fontSize="sm"
 							textTransform="capitalize"
+							borderRadius="md"
+							p={2}
 							colorScheme={
 								significance === 'low'
 									? 'gray'
@@ -157,7 +178,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		[]
 	);
 
-	const projectId = project.id;
+	const projectId = project?.id;
 	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
@@ -181,8 +202,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		setPagination({ page: pageIndex, rowsPerPage: pageSize });
 	}, []);
 
-	const slugifiedProjectName = useMemo(() => createSlug(project.name), [
-		project.name,
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
 	]);
 
 	const handleEdit = (id: string) => {
@@ -237,6 +258,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						p={4}
 						w="100%"
 						borderRadius="md"
+						onClick={onOpen}
+						_hover={{ cursor: 'pointer' }}
 					>
 						<PlusIcon
 							boxSize={8}
@@ -247,6 +270,106 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					</Box>
 				</Stack>
 			</GridCard>
+
+			<Modal
+				onClose={onClose}
+				isOpen={isOpen}
+				isCentered
+				motionPreset="scale"
+				size="xl"
+				scrollBehavior="inside"
+			>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader px={6} pt={4}>
+						<Heading
+							fontSize="xl"
+							as="h3"
+							lineHeight="tall"
+							mb={2}
+							color={useColorModeValue('gray.900', 'white')}
+						>
+							How to create a new User Story
+						</Heading>
+						<Text fontWeight={400} fontSize="md">
+							There are two ways to create user stories for your project.
+						</Text>
+					</ModalHeader>
+					<Divider />
+					<ModalCloseButton />
+					<ModalBody px={6} pb={4} pt={8}>
+						<List
+							spacing={6}
+							listStyleType="ordered"
+							listStylePosition="inside"
+						>
+							<ListItem lineHeight="1.6">
+								<strong>Recording production user behavior.</strong> This is the
+								preferred method of recording as it's the best indication of
+								meaningful test coverage.
+								<List
+									listStyleType="disc"
+									listStylePosition="inside"
+									mt={2}
+									ml={4}
+								>
+									<ListItem lineHeight="1.6">
+										Make sure your team has installed the{' '}
+										<Link
+											href={`/${slugifiedProjectName}/settings#details`}
+											passHref
+										>
+											<ChakraLink
+												color={useColorModeValue('blue.500', 'blue.300')}
+											>
+												script tag
+											</ChakraLink>
+										</Link>{' '}
+										in your frontend's production environment.
+									</ListItem>
+									<ListItem lineHeight="1.6">
+										Once an hour has passed since installation, new user stories
+										will be generated.
+									</ListItem>
+								</List>
+							</ListItem>
+							<ListItem lineHeight="1.6">
+								<strong>Manually, using the chrome extension.</strong> This is
+								is great if you are a developer or product manager testing a new
+								feature where user behavior is still unknown but you'd like to
+								test it as further development continues.
+								<List
+									listStyleType="disc"
+									listStylePosition="inside"
+									mt={2}
+									ml={4}
+								>
+									<ListItem lineHeight="1.6">
+										<ChakraLink
+											href="https://chrome.google.com/webstore/detail/meeshkan-recorder/cfjdddhjecoeahjkmegbkakfpppflmgo?hl=en"
+											isExternal
+											color={useColorModeValue('blue.500', 'blue.300')}
+										>
+											Install the chrome extension. This will provide
+											instructions and the ability to manually create user
+											stories with a 'record' button.
+										</ChakraLink>
+									</ListItem>
+									<ListItem lineHeight="1.6">
+										User stories get generated automatically in this process.
+										You will be redirected back to the webapp, to the new user
+										story after you click the extension again.
+									</ListItem>
+								</List>
+							</ListItem>
+						</List>
+					</ModalBody>
+					<ModalFooter p={6}>
+						<Button onClick={onClose}>Okay, great!</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
+
 			<Box overflow="auto" flex="1">
 				<Flex justify="space-between" align="center">
 					<SegmentedControl

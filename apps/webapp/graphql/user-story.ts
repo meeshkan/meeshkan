@@ -9,6 +9,7 @@ export const USER_STORY = gql`
 			flowIDs
 			created
 			isExpected
+			isAuthenticated
 			significance
 			recording {
 				items {
@@ -78,6 +79,44 @@ export const DELETE_REJECTED_RECORDING = gql`
 export const UPDATE_STORY_TITLE = gql`
 	mutation UPDATE_STORY_TITLE($userStoryId: ID!, $newTitle: String) {
 		userStoryUpdate(filter: { id: $userStoryId }, data: { title: $newTitle }) {
+			id
+			title
+			isTestCase
+			flowIDs
+			created
+			isExpected
+			significance
+			recording {
+				items {
+					video {
+						downloadUrl
+						shareUrl
+					}
+					environment {
+						items {
+							ipAddress
+							browser
+							browserVersion
+							operatingSystem
+							language
+						}
+					}
+					sideScript
+				}
+			}
+		}
+	}
+`;
+
+export const UPDATE_STORY_SIGNIFICANCE = gql`
+	mutation UPDATE_STORY_SIGNIFICANCE(
+		$userStoryId: ID!
+		$newSignificance: String!
+	) {
+		userStoryUpdate(
+			filter: { id: $userStoryId }
+			data: { significance: $newSignificance }
+		) {
 			id
 			title
 			isTestCase

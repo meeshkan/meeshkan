@@ -45,7 +45,7 @@ export const StoryStep = ({
 				>
 					{stepNumber}
 				</Flex>
-				<Text fontWeight={700} lineHeight="1">
+				<Text fontWeight={700} lineHeight="1" textTransform="capitalize">
 					{stepName}
 				</Text>
 			</Flex>

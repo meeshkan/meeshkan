@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
-import theme from '@frontend/chakra-theme';
+import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import TestRunCard from '../../../components/molecules/test-run-card';
 import Card from '../../../components/atoms/card';
@@ -142,10 +142,18 @@ const TestRunsPage = () => {
 						</Stack>
 					</Flex>
 				) : (
-					<Text fontStyle="italic" fontSize="md">
-						There are no test cases with 'passing', 'failing', or 'did not run'
-						status in the latest test run.
-					</Text>
+					<Flex w="100%" align="center">
+						<EmptyDoughnutIcon
+							h="128px"
+							w="128px"
+							color={useColorModeValue('gray.100', 'gray.800')}
+							mr={6}
+						/>
+						<Text fontStyle="italic">
+							There are no test cases with 'passing', 'failing', or 'did not
+							run' status in the latest test run.
+						</Text>
+					</Flex>
 				)}
 			</GridCard>
 			{testRuns.length > 0 ? (
