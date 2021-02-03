@@ -1,15 +1,15 @@
-import React from "react"
-import { Box, Heading, Link, Grid, Text, Code, Flex } from "@chakra-ui/react"
+import React from 'react';
+import { Box, Heading, Link, Grid, Text, Code, Flex } from '@chakra-ui/react';
 
 type DoubleSectionProps = {
-	children: Object
-	heading?: string
-	anchor?: string
-	text?: string
-	reverse?: boolean
-	badge?: string
-	em?: string
-}
+	children: Object;
+	heading?: string;
+	anchor?: string;
+	text?: string;
+	reverse?: boolean;
+	badge?: string;
+	em?: string;
+};
 
 export const DoubleSection = ({
 	children,
@@ -24,17 +24,17 @@ export const DoubleSection = ({
 	<Box as="section" maxW="1000px" mx="auto" py={16} {...props}>
 		<Grid
 			templateColumns={[
-				"repeat(auto-fill, 1fr)",
-				"reapeat(auto-fill, 1fr)",
-				"reapeat(auto-fill, 1fr)",
-				"repeat(2, 1fr)",
+				'repeat(auto-fill, 1fr)',
+				'reapeat(auto-fill, 1fr)',
+				'reapeat(auto-fill, 1fr)',
+				'repeat(2, 1fr)',
 			]}
 			gap={14}
 			gridAutoFlow="dense"
 		>
 			{reverse ? (
-				<Flex justifyContent="center" gridColumn={["1", "1", "2"]}>
-					{" "}
+				<Flex justifyContent="center" gridColumn={['1', '1', '2']}>
+					{' '}
 					{children}
 				</Flex>
 			) : (
@@ -45,7 +45,7 @@ export const DoubleSection = ({
 					<Code
 						colorScheme="cyan"
 						fontSize="14px"
-						fontWeight={600}
+						fontWeight="600"
 						rounded="sm"
 						padding="0px 4px"
 						minH="auto"
@@ -59,9 +59,9 @@ export const DoubleSection = ({
 						{anchor ? (
 							<Link
 								id={anchor}
-								_hover={{ textDecoration: "none", cursor: "auto" }}
+								_hover={{ textDecoration: 'none', cursor: 'auto' }}
 							>
-								{heading}{" "}
+								{heading}{' '}
 								{em && (
 									<Flex d="inline" color="red.500" fontStyle="italic">
 										{em}
@@ -74,11 +74,11 @@ export const DoubleSection = ({
 					</Heading>
 				) : null}
 				{text ? (
-					<Text textAlign="left" fontSize={["md", "lg", "xl"]} lineHeight="1.4">
+					<Text textAlign="left" fontSize={['md', 'lg', 'xl']} lineHeight="1.4">
 						{text}
 					</Text>
 				) : null}
 			</Box>
 		</Grid>
 	</Box>
-)
+);

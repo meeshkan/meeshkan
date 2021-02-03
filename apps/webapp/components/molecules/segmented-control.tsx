@@ -78,7 +78,7 @@ const SegmentedControl = ({
 				p={2}
 				borderRadius="lg"
 				w="max-content"
-				fontWeight={700}
+				fontWeight="700"
 				{...props}
 			>
 				{values.map((value, index) => {

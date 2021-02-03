@@ -1,13 +1,13 @@
-import React from "react"
-import { Box, Flex, Text } from "@chakra-ui/react"
-import { CheckmarkIcon, XmarkIcon } from "../../../theme/icons"
+import React from 'react';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import { CheckmarkIcon, XmarkIcon } from '../../../theme/icons';
 
 type TestProps = {
-	success: boolean
-	colorMode: "light" | "dark"
-	testCase: String
-	priority?: Number
-}
+	success: boolean;
+	colorMode: 'light' | 'dark';
+	testCase: String;
+	priority?: Number;
+};
 
 const TestComponent = ({
 	success,
@@ -17,16 +17,16 @@ const TestComponent = ({
 }: TestProps) => {
 	const mark = {
 		light: {
-			success: { stroke: "cyan.500", background: "cyan.50" },
-			failure: { stroke: "red.500", background: "red.50" },
-			text: { cyan: "cyan.500", yellow: "yellow.500", red: "red.500" },
+			success: { stroke: 'cyan.500', background: 'cyan.50' },
+			failure: { stroke: 'red.500', background: 'red.50' },
+			text: { cyan: 'cyan.500', yellow: 'yellow.500', red: 'red.500' },
 		},
 		dark: {
-			success: { stroke: "cyan.100", background: "rgba(51, 204, 174, 0.25)" },
-			failure: { stroke: "red.100", background: "rgba(220, 24, 83, 0.25)" },
-			text: { cyan: "cyan.200", yellow: "yellow.200", red: "red.200" },
+			success: { stroke: 'cyan.100', background: 'rgba(51, 204, 174, 0.25)' },
+			failure: { stroke: 'red.100', background: 'rgba(220, 24, 83, 0.25)' },
+			text: { cyan: 'cyan.200', yellow: 'yellow.200', red: 'red.200' },
 		},
-	}
+	};
 	return (
 		<>
 			<Box
@@ -34,7 +34,7 @@ const TestComponent = ({
 				p={3}
 				mx="auto"
 				borderRadius="md"
-				backgroundColor={colorMode === "light" ? "white" : "gray.900"}
+				backgroundColor={colorMode === 'light' ? 'white' : 'gray.900'}
 				d="flex"
 				alignItems="center"
 				justifyContent="space-between"
@@ -61,9 +61,9 @@ const TestComponent = ({
 						)}
 					</Box>
 					<Text
-						color={colorMode === "light" ? "gray.700" : "gray.200"}
-						fontSize={["8px", "8px", "sm"]}
-						fontWeight={600}
+						color={colorMode === 'light' ? 'gray.700' : 'gray.200'}
+						fontSize={['8px', '8px', 'sm']}
+						fontWeight="600"
 					>
 						{testCase}
 					</Text>
@@ -77,17 +77,17 @@ const TestComponent = ({
 								? mark[colorMode].text.yellow
 								: priority >= 0
 								? mark[colorMode].text.red
-								: "gray.500"
+								: 'gray.500'
 						}
 						fontSize="sm"
-						fontWeight={900}
+						fontWeight="900"
 					>
 						{`P` + priority}
 					</Text>
 				)}
 			</Box>
 		</>
-	)
-}
+	);
+};
 
-export default TestComponent
+export default TestComponent;

@@ -121,7 +121,7 @@ const TestRunsPage = () => {
 										flexDirection="column"
 										alignItems="center"
 									>
-										<Text fontSize="40px" fontWeight={700}>
+										<Text fontSize="40px" fontWeight="700">
 											{Math.round(
 												(latestTestRunStats[label] / totalTestRunOutcomes) * 100
 											)}

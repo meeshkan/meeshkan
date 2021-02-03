@@ -1,5 +1,5 @@
-import React from "react"
-import SEO from "../components/molecules/seo"
+import React from 'react';
+import SEO from '../components/molecules/seo';
 import {
 	Heading,
 	Button,
@@ -17,18 +17,18 @@ import {
 	Stack,
 	DarkMode,
 	useColorModeValue,
-} from "@chakra-ui/react"
-import { ArrowForwardIcon } from "@chakra-ui/icons"
-import { graphql, useStaticQuery, Link } from "gatsby"
-import { SingleSection } from "../components/organisms/singleSection"
-import { useMixpanel } from "gatsby-plugin-mixpanel"
-import { DoubleSection } from "../components/organisms/doubleSection"
-import Img from "gatsby-image"
-import Layout from "../components/templates/layout"
-import GenerateTests from "../components/organisms/home/generateTests"
-import PrioritizeTests from "../components/organisms/home/prioritizeTests"
-import HowDoesMeeshkanWork from "../components/organisms/home/meeshkanWorks"
-import Callout from "../components/organisms/callout"
+} from '@chakra-ui/react';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { graphql, useStaticQuery, Link } from 'gatsby';
+import { SingleSection } from '../components/organisms/singleSection';
+import { useMixpanel } from 'gatsby-plugin-mixpanel';
+import { DoubleSection } from '../components/organisms/doubleSection';
+import Img from 'gatsby-image';
+import Layout from '../components/templates/layout';
+import GenerateTests from '../components/organisms/home/generateTests';
+import PrioritizeTests from '../components/organisms/home/prioritizeTests';
+import HowDoesMeeshkanWork from '../components/organisms/home/meeshkanWorks';
+import Callout from '../components/organisms/callout';
 
 const IndexPage = () => {
 	const data = useStaticQuery(
@@ -85,12 +85,12 @@ const IndexPage = () => {
 				}
 			}
 		`
-	)
+	);
 
 	const [showImage, setShowImage] = React.useState(
 		data.stack.childImageSharp.fluid
-	)
-	const mixpanel = useMixpanel()
+	);
+	const mixpanel = useMixpanel();
 
 	return (
 		<Layout>
@@ -120,7 +120,7 @@ const IndexPage = () => {
 							mr={4}
 							d="flex"
 							alignItems="center"
-							fontWeight={700}
+							fontWeight="700"
 						>
 							Read our report <ArrowForwardIcon ml={2} />
 						</Code>
@@ -133,13 +133,13 @@ const IndexPage = () => {
 					as="h1"
 					textStyle="h1"
 					mb={6}
-					textAlign={["left", "left", "center"]}
+					textAlign={['left', 'left', 'center']}
 				>
 					Dynamically generated QA for your product's GraphQL and REST APIs
 				</Heading>
 				<Text
-					textAlign={["left", "left", "center"]}
-					fontSize={["md", "lg", "xl"]}
+					textAlign={['left', 'left', 'center']}
+					fontSize={['md', 'lg', 'xl']}
 					lineHeight="short"
 					mb={6}
 				>
@@ -162,13 +162,13 @@ const IndexPage = () => {
 						aria-label="Create a free Meeshkan account."
 						mb={[4, 4, 0]}
 						onClick={() => {
-							mixpanel.track("Clicked a button", {
-								to: "https://app.meeshkan.com",
-								from: "https://meeshkan.com",
-								c2a: "Create a free account - top",
-							})
+							mixpanel.track('Clicked a button', {
+								to: 'https://app.meeshkan.com',
+								from: 'https://meeshkan.com',
+								c2a: 'Create a free account - top',
+							});
 						}}
-						w={["100%", "100%", "auto"]}
+						w={['100%', '100%', 'auto']}
 					>
 						Create a free account
 					</Button>
@@ -178,13 +178,13 @@ const IndexPage = () => {
 						to="/test-graphql/"
 						aria-label="Link to the test graphql page"
 						onClick={() => {
-							mixpanel.track("Clicked a button", {
-								to: "https://meeshkan.com/test-graphql",
-								from: "https://meeshkan.com",
-								c2a: "Mini GraphQL tester",
-							})
+							mixpanel.track('Clicked a button', {
+								to: 'https://meeshkan.com/test-graphql',
+								from: 'https://meeshkan.com',
+								c2a: 'Mini GraphQL tester',
+							});
 						}}
-						w={["100%", "100%", "auto"]}
+						w={['100%', '100%', 'auto']}
 						colorScheme="gray"
 					>
 						Try the demo
@@ -201,14 +201,14 @@ const IndexPage = () => {
                 <Heading
                   as="h3"
                   fontSize="2xl"
-                  fontWeight={900}
+                  fontWeight="900"
                   letterSpacing="wide"
                   mb={4}
                 >
                   Watch this demo
                 </Heading>
                 <Text
-                  fontWeight={500}
+                  fontWeight="500"
                   lineHeight="tall"
                   color="gray.700"
                   fontSize="lg"
@@ -268,13 +268,13 @@ const IndexPage = () => {
 						href="https://app.meeshkan.com"
 						aria-label="Create a free Meeshkan account."
 						onClick={() => {
-							mixpanel.track("Clicked a button", {
-								to: "https://app.meeshkan.com",
-								from: "https://meeshkan.com",
-								c2a: "Create a free account - bottom",
-							})
+							mixpanel.track('Clicked a button', {
+								to: 'https://app.meeshkan.com',
+								from: 'https://meeshkan.com',
+								c2a: 'Create a free account - bottom',
+							});
 						}}
-						w={["100%", "100%", "auto"]}
+						w={['100%', '100%', 'auto']}
 					>
 						Test your project
 					</Button>
@@ -284,9 +284,9 @@ const IndexPage = () => {
 			<SingleSection>
 				<Grid
 					templateColumns={[
-						"reapeat(auto-fill, 1fr)",
-						"reapeat(auto-fill, 1fr)",
-						"33% 66%",
+						'reapeat(auto-fill, 1fr)',
+						'reapeat(auto-fill, 1fr)',
+						'33% 66%',
 					]}
 					gap={8}
 				>
@@ -303,15 +303,15 @@ const IndexPage = () => {
 									p={4}
 									rounded="md"
 									fontSize="md"
-									fontWeight={600}
+									fontWeight="600"
 									_expanded={{
-										color: useColorModeValue("gray.900", "white"),
-										bg: useColorModeValue("gray.50", "gray.800"),
+										color: useColorModeValue('gray.900', 'white'),
+										bg: useColorModeValue('gray.50', 'gray.800'),
 										fontWeight: 900,
 										roundedBottom: 0,
 									}}
 									_hover={{
-										bg: useColorModeValue("gray.100", "gray.700"),
+										bg: useColorModeValue('gray.100', 'gray.700'),
 									}}
 								>
 									<Box flex="1" textAlign="left">
@@ -321,7 +321,7 @@ const IndexPage = () => {
 								</AccordionButton>
 								<AccordionPanel
 									pb={4}
-									bg={useColorModeValue("gray.50", "gray.800")}
+									bg={useColorModeValue('gray.50', 'gray.800')}
 									roundedBottom="md"
 									lineHeight="1.4"
 								>
@@ -342,15 +342,15 @@ const IndexPage = () => {
 									p={4}
 									rounded="md"
 									fontSize="md"
-									fontWeight={600}
+									fontWeight="600"
 									_expanded={{
-										color: useColorModeValue("gray.900", "white"),
-										bg: useColorModeValue("gray.50", "gray.800"),
+										color: useColorModeValue('gray.900', 'white'),
+										bg: useColorModeValue('gray.50', 'gray.800'),
 										fontWeight: 900,
 										roundedBottom: 0,
 									}}
 									_hover={{
-										bg: useColorModeValue("gray.100", "gray.700"),
+										bg: useColorModeValue('gray.100', 'gray.700'),
 									}}
 								>
 									<Box flex="1" textAlign="left">
@@ -360,7 +360,7 @@ const IndexPage = () => {
 								</AccordionButton>
 								<AccordionPanel
 									pb={4}
-									bg={useColorModeValue("gray.50", "gray.800")}
+									bg={useColorModeValue('gray.50', 'gray.800')}
 									roundedBottom="md"
 									lineHeight="1.4"
 								>
@@ -379,15 +379,15 @@ const IndexPage = () => {
 									p={4}
 									rounded="md"
 									fontSize="md"
-									fontWeight={600}
+									fontWeight="600"
 									_expanded={{
-										color: useColorModeValue("gray.900", "white"),
-										bg: useColorModeValue("gray.50", "gray.800"),
+										color: useColorModeValue('gray.900', 'white'),
+										bg: useColorModeValue('gray.50', 'gray.800'),
 										fontWeight: 900,
 										roundedBottom: 0,
 									}}
 									_hover={{
-										bg: useColorModeValue("gray.100", "gray.700"),
+										bg: useColorModeValue('gray.100', 'gray.700'),
 									}}
 								>
 									<Box flex="1" textAlign="left">
@@ -397,7 +397,7 @@ const IndexPage = () => {
 								</AccordionButton>
 								<AccordionPanel
 									pb={4}
-									bg={useColorModeValue("gray.50", "gray.800")}
+									bg={useColorModeValue('gray.50', 'gray.800')}
 									roundedBottom="md"
 									lineHeight="1.4"
 								>
@@ -418,15 +418,15 @@ const IndexPage = () => {
 									p={4}
 									rounded="md"
 									fontSize="md"
-									fontWeight={600}
+									fontWeight="600"
 									_expanded={{
-										color: useColorModeValue("gray.900", "white"),
-										bg: useColorModeValue("gray.50", "gray.800"),
+										color: useColorModeValue('gray.900', 'white'),
+										bg: useColorModeValue('gray.50', 'gray.800'),
 										fontWeight: 900,
 										roundedBottom: 0,
 									}}
 									_hover={{
-										bg: useColorModeValue("gray.100", "gray.700"),
+										bg: useColorModeValue('gray.100', 'gray.700'),
 									}}
 								>
 									<Box flex="1" textAlign="left">
@@ -436,7 +436,7 @@ const IndexPage = () => {
 								</AccordionButton>
 								<AccordionPanel
 									pb={4}
-									bg={useColorModeValue("gray.50", "gray.800")}
+									bg={useColorModeValue('gray.50', 'gray.800')}
 									roundedBottom="md"
 									lineHeight="1.4"
 								>
@@ -461,7 +461,7 @@ const IndexPage = () => {
 
 			<Callout heading="How can Meeshkan's automated GraphQL testing save your organization hours of bug fixing?" />
 		</Layout>
-	)
-}
+	);
+};
 
-export default IndexPage
+export default IndexPage;

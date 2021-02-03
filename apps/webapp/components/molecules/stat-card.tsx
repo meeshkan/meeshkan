@@ -45,7 +45,7 @@ const StatCard = ({
 					<Heading
 						color={valueColor}
 						fontSize="5xl"
-						fontWeight={800}
+						fontWeight="800"
 						d="inline"
 					>
 						{isNA
@@ -55,7 +55,7 @@ const StatCard = ({
 							: commaNumber(value)}
 					</Heading>
 					{isPercentage && !isNA && (
-						<Text fontSize="md" fontWeight={300} d="inline">
+						<Text fontSize="md" fontWeight="300" d="inline">
 							/100
 						</Text>
 					)}
@@ -81,7 +81,7 @@ const StatCard = ({
 							<Badge
 								variant="subtle"
 								colorScheme="gray"
-								fontWeight={400}
+								fontWeight="400"
 								rounded="lg"
 								textTransform="none"
 								p={2}

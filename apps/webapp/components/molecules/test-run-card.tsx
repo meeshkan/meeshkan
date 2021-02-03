@@ -1,17 +1,6 @@
-import {
-	Flex,
-	Center,
-	Box,
-	Text,
-	Button,
-	Badge,
-} from '@chakra-ui/react';
+import { Flex, Center, Box, Text, Button, Badge } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import {
-	CheckmarkIcon,
-	XmarkIcon,
-	MinusIcon,
-} from '@frontend/chakra-theme';
+import { CheckmarkIcon, XmarkIcon, MinusIcon } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Card from '../atoms/card';
 import { TestRun } from '../../utils/user';
@@ -28,7 +17,13 @@ type TestRunCardProps = {
 	};
 };
 
-const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) => {
+const TestRunCard = ({
+	id,
+	status,
+	runNumber,
+	date,
+	stats,
+}: TestRunCardProps) => {
 	const router = useRouter();
 	const isIndividualTestRunPage = router.pathname.endsWith('[testId]');
 
@@ -43,9 +38,9 @@ const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) =
 
 	const cardProps = {
 		cursor: isIndividualTestRunPage ? undefined : 'pointer',
-		onClick: isIndividualTestRunPage ?
-			undefined :
-			() => router.push(`${router.asPath}/${id}`)
+		onClick: isIndividualTestRunPage
+			? undefined
+			: () => router.push(`${router.asPath}/${id}`),
 	};
 
 	return (
@@ -70,11 +65,11 @@ const TestRunCard = ({ id, status, runNumber, date, stats }: TestRunCardProps) =
 						</Badge>
 					</Box>
 					{!isIndividualTestRunPage && (
-						<Text fontSize="sm" fontWeight={700} flex="1">
+						<Text fontSize="sm" fontWeight="700" flex="1">
 							Run #{runNumber}
 						</Text>
 					)}
-					<Text fontSize="sm" fontWeight={300} flex="1" whiteSpace="nowrap">
+					<Text fontSize="sm" fontWeight="300" flex="1" whiteSpace="nowrap">
 						{date.toDateString()}
 					</Text>
 				</Flex>

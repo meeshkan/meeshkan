@@ -27,7 +27,7 @@ const GridCard = ({
 					d="flex"
 					alignItems="center"
 					fontSize="lg"
-					fontWeight={800}
+					fontWeight="800"
 					lineHeight="short"
 				>
 					{leftIconSrc && (
@@ -40,7 +40,7 @@ const GridCard = ({
 				<Heading
 					as="h3"
 					fontSize="sm"
-					fontWeight={400}
+					fontWeight="400"
 					lineHeight="short"
 					color="gray.500"
 					mb={3}

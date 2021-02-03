@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
 	SimpleGrid,
 	Text,
@@ -8,25 +8,25 @@ import {
 	Button,
 	Code,
 	Box,
-} from "@chakra-ui/react"
-import { XmarkIcon, CheckmarkIcon } from "../../theme/icons"
-import { Card } from "../components/atoms/card"
-import { useMixpanel } from "gatsby-plugin-mixpanel"
-import { UniversalLink } from "../components/atoms/UniversalLink"
-import { SingleSection } from "../components/organisms/singleSection"
-import Layout from "../components/templates/layout"
-import SEO from "../components/molecules/seo"
+} from '@chakra-ui/react';
+import { XmarkIcon, CheckmarkIcon } from '../../theme/icons';
+import { Card } from '../components/atoms/card';
+import { useMixpanel } from 'gatsby-plugin-mixpanel';
+import { UniversalLink } from '../components/atoms/UniversalLink';
+import { SingleSection } from '../components/organisms/singleSection';
+import Layout from '../components/templates/layout';
+import SEO from '../components/molecules/seo';
 
 type PricingProps = {
-	title: string
-	subtitle?: string
-	price: string
-	yesFeatures?: Array<string>
-	noFeatures?: Array<string>
-	hasCTA: boolean
-	mixpanel: any
-	CTA?: string
-}
+	title: string;
+	subtitle?: string;
+	price: string;
+	yesFeatures?: Array<string>;
+	noFeatures?: Array<string>;
+	hasCTA: boolean;
+	mixpanel: any;
+	CTA?: string;
+};
 
 const PricingCard = ({
 	title,
@@ -42,7 +42,7 @@ const PricingCard = ({
 		<Heading
 			as="h3"
 			fontSize="2xl"
-			fontWeight={900}
+			fontWeight="900"
 			mb={4}
 			d="flex"
 			justifyContent="center"
@@ -53,8 +53,8 @@ const PricingCard = ({
 				{subtitle}
 			</Code>
 		</Heading>
-		<Text textAlign="center" fontSize="xl" fontWeight={600}>
-			{price} <span style={{ color: "#616E7C", fontWeight: 400 }}>/month</span>
+		<Text textAlign="center" fontSize="xl" fontWeight="600">
+			{price} <span style={{ color: '#616E7C', fontWeight: 400 }}>/month</span>
 		</Text>
 
 		<Stack spacing={2} mt={4}>
@@ -83,14 +83,14 @@ const PricingCard = ({
 						// @ts-expect-error
 						href="https://app.meeshkan.com"
 						aria-label="Create a free account on Meeshkan."
-						variant={CTA === `Sign up for Pro` ? "solid" : "outline"}
+						variant={CTA === `Sign up for Pro` ? 'solid' : 'outline'}
 						w="full"
 						onClick={() => {
 							mixpanel.track(`Create an account - ${title}`, {
-								to: "https://app.meeshkan.com",
-								from: "https://meeshkan.com/pricing",
+								to: 'https://app.meeshkan.com',
+								from: 'https://meeshkan.com/pricing',
 								c2a: `Create an account - ${title}`,
-							})
+							});
 						}}
 					>
 						{CTA}
@@ -99,10 +99,10 @@ const PricingCard = ({
 			</Box>
 		)}
 	</Card>
-)
+);
 
 const PricingPage = () => {
-	const mixpanel = useMixpanel()
+	const mixpanel = useMixpanel();
 	return (
 		<Layout>
 			<SEO
@@ -127,10 +127,10 @@ const PricingPage = () => {
 						price="$0 Forever"
 						mixpanel={mixpanel}
 						yesFeatures={[
-							"Endpoint testing for REST and GraphQL services",
-							"Basic reports",
-							"100 testing hours",
-							"GitHub integration",
+							'Endpoint testing for REST and GraphQL services',
+							'Basic reports',
+							'100 testing hours',
+							'GitHub integration',
 						]}
 						hasCTA={true}
 					/>
@@ -140,12 +140,12 @@ const PricingPage = () => {
 						price="Free in Beta"
 						mixpanel={mixpanel}
 						yesFeatures={[
-							"All free features",
-							"Unlimited projects",
-							"1000 testing hours",
-							"3 concurrent tests",
-							"Premium reports",
-							"30 day history retention",
+							'All free features',
+							'Unlimited projects',
+							'1000 testing hours',
+							'3 concurrent tests',
+							'Premium reports',
+							'30 day history retention',
 						]}
 						hasCTA={true}
 						CTA="Sign up for Pro"
@@ -158,21 +158,21 @@ const PricingPage = () => {
 						mixpanel={mixpanel}
 						price="Chat with us"
 						yesFeatures={[
-							"All Pro features",
-							"Unlimited projects",
-							"Unlimited testing hours",
-							"Unlimited history",
-							"GitLab & Bitbucket import",
-							"Custom build pipelines",
-							"In-cluster testing for k8s",
-							"Role based permissions",
-							"Jira/Linear integration",
+							'All Pro features',
+							'Unlimited projects',
+							'Unlimited testing hours',
+							'Unlimited history',
+							'GitLab & Bitbucket import',
+							'Custom build pipelines',
+							'In-cluster testing for k8s',
+							'Role based permissions',
+							'Jira/Linear integration',
 						]}
 					/>
 				</SimpleGrid>
 			</SingleSection>
 		</Layout>
-	)
-}
+	);
+};
 
-export default PricingPage
+export default PricingPage;

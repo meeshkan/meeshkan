@@ -1,29 +1,29 @@
-import React, { useState } from "react"
-import { Flex, FormControl, FormLabel, Input, Button } from "@chakra-ui/react"
-import { useForm } from "react-hook-form"
+import React, { useState } from 'react';
+import { Flex, FormControl, FormLabel, Input, Button } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
 
 const RequestAccessForm = () => {
-	const { handleSubmit, register, formState } = useForm()
-	const [formSubmit, setFormSubmit] = useState(false)
+	const { handleSubmit, register, formState } = useForm();
+	const [formSubmit, setFormSubmit] = useState(false);
 
 	function onSubmit(values) {
 		let sendgridData = JSON.stringify({
-			list_ids: ["065bb90b-9652-4905-85df-a6c49fb825cd"],
+			list_ids: ['065bb90b-9652-4905-85df-a6c49fb825cd'],
 			contacts: [
 				{
 					email: values.email,
 				},
 			],
-		})
+		});
 
-		fetch("https://api.sendgrid.com/v3/marketing/contacts", {
-			method: "PUT",
+		fetch('https://api.sendgrid.com/v3/marketing/contacts', {
+			method: 'PUT',
 			body: sendgridData,
 			headers: {
 				authorization: `Bearer ${process.env.GATSBY_SENDGRID_API_KEY}`,
-				"content-type": "application/json",
+				'content-type': 'application/json',
 			},
-		}).then(() => setFormSubmit(true))
+		}).then(() => setFormSubmit(true));
 	}
 
 	return (
@@ -31,7 +31,7 @@ const RequestAccessForm = () => {
 			<Flex
 				as="form"
 				onSubmit={handleSubmit(onSubmit)}
-				direction={["column", "column", "row"]}
+				direction={['column', 'column', 'row']}
 				justify="center"
 				alignItems="flex-end"
 				my={12}
@@ -47,9 +47,9 @@ const RequestAccessForm = () => {
 					mr={[0, 0, 4]}
 					mb={[4, 4, 0]}
 					w="100%"
-					maxW={["full", "full", "400px"]}
+					maxW={['full', 'full', '400px']}
 				>
-					<FormLabel htmlFor="email" fontWeight={700}>
+					<FormLabel htmlFor="email" fontWeight="700">
 						Email
 					</FormLabel>
 					<Input
@@ -60,20 +60,20 @@ const RequestAccessForm = () => {
 						borderRadius="sm"
 						placeholder="Your email"
 						isDisabled={formSubmit}
-						fontWeight={500}
+						fontWeight="500"
 					/>
 				</FormControl>
 				<Button
 					type="submit"
 					isLoading={formState.isSubmitting}
 					isDisabled={formSubmit}
-					w={["100%", "100%", "auto"]}
+					w={['100%', '100%', 'auto']}
 				>
-					{formSubmit ? "Submitted" : "Request access"}
+					{formSubmit ? 'Submitted' : 'Request access'}
 				</Button>
 			</Flex>
 		</>
-	)
-}
+	);
+};
 
-export default RequestAccessForm
+export default RequestAccessForm;

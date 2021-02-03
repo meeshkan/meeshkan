@@ -133,7 +133,7 @@ const UserStory = (props: UserStoryProps) => {
 						d="flex"
 						alignItems="center"
 						fontSize="16px"
-						fontWeight={400}
+						fontWeight="400"
 						color={useColorModeValue('gray.900', 'gray.200')}
 						lineHeight="short"
 						mb={3}
@@ -164,14 +164,14 @@ const UserStory = (props: UserStoryProps) => {
 								// Callback invoked when user confirms value with `enter` key or by blurring input.
 								onSubmit={(e) => updateTitle(e)}
 								fontSize="xl"
-								fontWeight={900}
+								fontWeight="900"
 								mr={4}
 							>
 								<EditablePreview />
 								<EditableInput />
 							</Editable>
 							<Badge
-								fontWeight={700}
+								fontWeight="700"
 								fontSize="md"
 								mr={2}
 								textTransform="capitalize"
@@ -189,7 +189,7 @@ const UserStory = (props: UserStoryProps) => {
 									.isExpected ? (
 								<Badge
 									colorScheme="cyan"
-									fontWeight={700}
+									fontWeight="700"
 									fontSize="md"
 									textTransform="capitalize"
 									borderRadius="md"
@@ -201,7 +201,7 @@ const UserStory = (props: UserStoryProps) => {
 							) : (
 								<Badge
 									colorScheme="red"
-									fontWeight={700}
+									fontWeight="700"
 									fontSize="md"
 									textTransform="capitalize"
 									borderRadius="md"
@@ -220,7 +220,7 @@ const UserStory = (props: UserStoryProps) => {
 								>
 									<Badge
 										colorScheme="amber"
-										fontWeight={700}
+										fontWeight="700"
 										fontSize="md"
 										borderRadius="md"
 										p={2}

@@ -9,6 +9,7 @@ import {
 	useColorModeValue,
 	Flex,
 } from '@chakra-ui/react';
+import { Table as ChakraTable } from '@chakra-ui/table';
 import {
 	usePagination,
 	useSortBy,
@@ -161,8 +162,7 @@ const Table = ({
 				overflowY="auto"
 				maxH="64vh"
 			>
-				<Box
-					as="table"
+				<ChakraTable
 					// Make sure the inner table is always as wide as needed
 					w="full"
 					{...(getTableProps() as any)}
@@ -266,7 +266,7 @@ const Table = ({
 							</TableRow>
 						) : null}
 					</TableBody>
-				</Box>
+				</ChakraTable>
 			</Box>
 			{onPaginate && (
 				<TablePagination

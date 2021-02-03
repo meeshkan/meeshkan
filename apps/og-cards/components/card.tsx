@@ -1,17 +1,17 @@
-import { Flex, Image, Text, Box, Code, DarkMode } from '@chakra-ui/react'
+import { Flex, Image, Text, Box, Code, DarkMode } from '@chakra-ui/react';
 
 type CardProps = {
-	title: string,
-	tag?: string,
-	width?: string,
-	height?: string,
-}
+	title: string;
+	tag?: string;
+	width?: string;
+	height?: string;
+};
 
 const colorSchemePerTag = {
 	blog: 'cyan',
 	docs: 'blue',
 	'use-cases': 'yellow',
-}
+};
 
 const Card = ({ title, tag, width, height }: CardProps) => {
 	return (
@@ -21,12 +21,7 @@ const Card = ({ title, tag, width, height }: CardProps) => {
 			h="100vh"
 			userSelect="none"
 		>
-			<Box
-				w={`${width}px`}
-				h={`${height}px`}
-				bg="gray.800"
-				overflow="hidden"
-			>
+			<Box w={`${width}px`} h={`${height}px`} bg="gray.800" overflow="hidden">
 				<Flex
 					justifyContent="center"
 					flexDirection="column"
@@ -34,16 +29,8 @@ const Card = ({ title, tag, width, height }: CardProps) => {
 					h="100%"
 					w="100%"
 				>
-					<Image
-						src="/static/images/logo.svg"
-						mb={4}
-					/>
-					<Text
-						as="span"
-						color="gray.500"
-						mb={6}
-						fontWeight={500}
-					>
+					<Image src="/static/images/logo.svg" mb={4} />
+					<Text as="span" color="gray.500" mb={6} fontWeight="500">
 						Pre-release workflow for confidence in your merge to production
 					</Text>
 					<Flex
@@ -55,10 +42,7 @@ const Card = ({ title, tag, width, height }: CardProps) => {
 						borderRadius="4px"
 						w="75%"
 					>
-						<Image
-							src="/static/images/window-controls.svg"
-							w="100%"
-						/>
+						<Image src="/static/images/window-controls.svg" w="100%" />
 						<Flex
 							justify="center"
 							align="center"
@@ -72,12 +56,13 @@ const Card = ({ title, tag, width, height }: CardProps) => {
 									<DarkMode>
 										<Code
 											textTransform="uppercase"
-											colorScheme={Object.keys(colorSchemePerTag).includes(tag)
-												? colorSchemePerTag[tag]
-												: 'red'
+											colorScheme={
+												Object.keys(colorSchemePerTag).includes(tag)
+													? colorSchemePerTag[tag]
+													: 'red'
 											}
 											fontStyle="italic"
-											fontWeight={600}
+											fontWeight="600"
 											py={2}
 											mb={3}
 										>
@@ -86,7 +71,7 @@ const Card = ({ title, tag, width, height }: CardProps) => {
 									</DarkMode>
 								)}
 								<Text
-									fontWeight={900}
+									fontWeight="900"
 									fontSize="3xl"
 									letterSpacing={1}
 									color="gray.50"
@@ -100,7 +85,7 @@ const Card = ({ title, tag, width, height }: CardProps) => {
 				</Flex>
 			</Box>
 		</Flex>
-	)
-}
+	);
+};
 
-export default Card
+export default Card;

@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
 	Heading,
 	FormLabel,
@@ -9,10 +9,10 @@ import {
 	Button,
 	FormControl,
 	Box,
-} from "@chakra-ui/react"
-import { SingleSection } from "../components/organisms/singleSection"
-import SEO from "../components/molecules/seo"
-import Layout from "../components/templates/layout"
+} from '@chakra-ui/react';
+import { SingleSection } from '../components/organisms/singleSection';
+import SEO from '../components/molecules/seo';
+import Layout from '../components/templates/layout';
 
 const ContactPage = () => (
 	<Layout>
@@ -40,21 +40,21 @@ const ContactPage = () => (
 				<input type="hidden" name="form-name" value="contact" />
 
 				<FormControl isRequired>
-					<FormLabel htmlFor="name" fontWeight={700}>
+					<FormLabel htmlFor="name" fontWeight="700">
 						Name
 					</FormLabel>
 					<Input type="text" name="name" id="name" mb={4} />
 				</FormControl>
 
 				<FormControl isRequired w="100%">
-					<FormLabel htmlFor="email" fontWeight={700}>
+					<FormLabel htmlFor="email" fontWeight="700">
 						Email
 					</FormLabel>
 					<Input type="email" name="email" id="email" mb={4} />
 				</FormControl>
 
 				<FormControl w="100%">
-					<FormLabel htmlFor="website" fontWeight={700}>
+					<FormLabel htmlFor="website" fontWeight="700">
 						Which company are you from?
 					</FormLabel>
 					<InputGroup mb={4}>
@@ -68,7 +68,7 @@ const ContactPage = () => (
 					</InputGroup>
 				</FormControl>
 				<FormControl isRequired>
-					<FormLabel htmlFor="message" fontWeight={700}>
+					<FormLabel htmlFor="message" fontWeight="700">
 						Message
 					</FormLabel>
 					<Textarea id="message" name="message" resize="none" mb={4} />
@@ -80,6 +80,6 @@ const ContactPage = () => (
 			</Box>
 		</SingleSection>
 	</Layout>
-)
+);
 
-export default ContactPage
+export default ContactPage;

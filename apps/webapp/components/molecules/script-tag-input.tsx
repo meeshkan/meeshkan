@@ -20,7 +20,7 @@ const ScriptTagInput = () => {
 
 	const { onCopy } = useClipboard(
 		scriptTag,
-		'The project\'s script tag was copied to your clipboard!'
+		"The project's script tag was copied to your clipboard!"
 	);
 
 	return (
@@ -31,7 +31,7 @@ const ScriptTagInput = () => {
 				fontFamily="mono"
 				fontStyle="normal"
 				fontSize="sm"
-				fontWeight={700}
+				fontWeight="700"
 				overflow="hidden"
 				onClick={onCopy}
 				isReadOnly

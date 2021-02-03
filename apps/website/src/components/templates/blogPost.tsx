@@ -1,5 +1,5 @@
-import React from "react"
-import { SingleSection } from "../organisms/singleSection"
+import React from 'react';
+import { SingleSection } from '../organisms/singleSection';
 import {
 	Divider,
 	Flex,
@@ -15,24 +15,24 @@ import {
 	Link as ChakraLink,
 	Box,
 	DarkMode,
-} from "@chakra-ui/react"
-import { MDXProvider } from "@mdx-js/react"
-import { MDXRenderer } from "gatsby-plugin-mdx"
-import { graphql } from "gatsby"
-import mdxComponents from "../molecules/mdxComponents"
-import { Link } from "gatsby"
-import SEO from "../molecules/seo"
-import Layout from "./layout"
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons"
+} from '@chakra-ui/react';
+import { MDXProvider } from '@mdx-js/react';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
+import { graphql } from 'gatsby';
+import mdxComponents from '../molecules/mdxComponents';
+import { Link } from 'gatsby';
+import SEO from '../molecules/seo';
+import Layout from './layout';
+import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 
 type BlogPostProps = {
-	data: any // type of object errors 🤔
-	pageContext: any // type of object errors 🤔
-}
+	data: any; // type of object errors 🤔
+	pageContext: any; // type of object errors 🤔
+};
 
 const BlogPost = ({ data, pageContext }: BlogPostProps) => {
-	const { frontmatter, body } = data.mdx
-	const { previous, next } = pageContext
+	const { frontmatter, body } = data.mdx;
+	const { previous, next } = pageContext;
 	return (
 		<Layout>
 			<MDXProvider components={mdxComponents}>
@@ -51,7 +51,7 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 						{frontmatter.title}
 					</Heading>
 					<Grid
-						display={["grid", "grid", "flex", "flex"]}
+						display={['grid', 'grid', 'flex', 'flex']}
 						justifyContent="center"
 						gap={6}
 						maxW={600}
@@ -72,7 +72,7 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 											href={author.authorLink}
 											target="_blank"
 											rel="noopener noreferrer"
-											fontWeight={700}
+											fontWeight="700"
 										>
 											{author.name}
 										</Text>
@@ -94,7 +94,7 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 										href={frontmatter.authors[0].authorLink}
 										target="_blank"
 										rel="noopener noreferrer"
-										fontWeight={700}
+										fontWeight="700"
 									>
 										{frontmatter.authors[0].name}
 									</Text>
@@ -103,8 +103,8 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 							</Stack>
 						)}
 					</Grid>
-					<Text textAlign="center" color="red.500" fontWeight={700} mb={6}>
-						{frontmatter.date}{" "}
+					<Text textAlign="center" color="red.500" fontWeight="700" mb={6}>
+						{frontmatter.date}{' '}
 						{frontmatter.updated ? (
 							<Text ml={2} color="gray.500" fontWeight="400">
 								Updated on {frontmatter.updated}
@@ -180,7 +180,7 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 							as="form"
 							// @ts-ignore
 							action="/success/"
-							direction={["column", "column", "row"]}
+							direction={['column', 'column', 'row']}
 							justify="center"
 							alignItems="flex-end"
 							name="newsletter"
@@ -197,9 +197,9 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 									mr={[0, 0, 4]}
 									mb={[4, 4, 0]}
 									w="100%"
-									maxW={["full", "full", "400px"]}
+									maxW={['full', 'full', '400px']}
 								>
-									<FormLabel htmlFor="email" fontWeight={700} color="gray.50">
+									<FormLabel htmlFor="email" fontWeight="700" color="gray.50">
 										Email
 									</FormLabel>
 									<Input
@@ -212,7 +212,7 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 									/>
 								</FormControl>
 							</DarkMode>
-							<Button type="submit" w={["100%", "100%", "auto"]}>
+							<Button type="submit" w={['100%', '100%', 'auto']}>
 								Join our mailing list
 							</Button>
 						</Flex>
@@ -223,8 +223,8 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 				</SingleSection>
 			</MDXProvider>
 		</Layout>
-	)
-}
+	);
+};
 
 export const query = graphql`
 	query PostsBySlug($slug: String!) {
@@ -254,6 +254,6 @@ export const query = graphql`
 			}
 		}
 	}
-`
+`;
 
-export default BlogPost
+export default BlogPost;

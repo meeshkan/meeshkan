@@ -64,7 +64,7 @@ const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
 			alignItems="center"
 			backgroundColor={useColorModeValue('cyan.50', 'transparentCyan.200')}
 			color={useColorModeValue('cyan.700', 'cyan.50')}
-			fontWeight={600}
+			fontWeight="600"
 			p={4}
 			w="100%"
 			borderRadius="md"
@@ -254,7 +254,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						alignItems="center"
 						border="1px dashed"
 						borderColor={useColorModeValue('gray.500', 'gray.400')}
-						fontWeight={600}
+						fontWeight="600"
 						p={4}
 						w="100%"
 						borderRadius="md"
@@ -291,7 +291,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						>
 							How to create a new User Story
 						</Heading>
-						<Text fontWeight={400} fontSize="md">
+						<Text fontWeight="400" fontSize="md">
 							There are two ways to create user stories for your project.
 						</Text>
 					</ModalHeader>
