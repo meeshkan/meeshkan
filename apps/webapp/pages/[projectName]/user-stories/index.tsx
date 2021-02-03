@@ -96,16 +96,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const router = useRouter();
 	const { project, idToken } = useContext(UserContext);
 
-	const [toggleIndex, setToggleIndex] = useState(0);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
+	const [pageCount, setPageCount] = React.useState(0);
 	const [tableData, setTableData] = useState<Recordings>({
 		recordings: { count: 0, items: [] },
 		testCases: { count: 0, items: [] },
-	});
-	const [pagination, setPagination] = useState({
-		page: 0,
-		rowsPerPage: 20,
 	});
 
 	const columns: Column[] = useMemo(
@@ -179,6 +177,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 
 	const projectId = project?.id;
+
 	const fetchData = useCallback(
 		({ pageSize, pageIndex, ...rest }) => {
 			const client = eightBaseClient(idToken);
@@ -186,29 +185,28 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			const request = client
 				.request(PROJECT_USER_STORIES, {
 					projectId,
-					first: pagination.rowsPerPage,
-					skip: pagination.rowsPerPage * pagination.page,
+					first: pageSize,
+					skip: pageSize * pageIndex,
 				})
 				.then((res) => {
 					setTableData(res);
+					setPageCount(
+						Math.ceil(
+							(toggleIndex === 0
+								? tableData.recordings.count
+								: tableData.testCases.count) / pageSize
+						)
+					);
 					setTableLoading(false);
 				});
 			return request;
 		},
-		[pagination.page, pagination.rowsPerPage, idToken, projectId]
+		[idToken, projectId]
 	);
-
-	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
-		setPagination({ page: pageIndex, rowsPerPage: pageSize });
-	}, []);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
-
-	const handleEdit = (id: string) => {
-		router.push(`/${slugifiedProjectName}/user-stories/${id}`);
-	};
 
 	const { found, loading } = useValidateSelectedProject();
 
@@ -393,15 +391,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					}
 					fetchData={fetchData}
 					loading={tableLoading}
-					totalCount={
-						toggleIndex === 0
-							? tableData.recordings.count
-							: tableData.testCases.count
-					} // this should be the total amount of data, not only the returned data length
-					onPaginate={handlePagination}
-					initialPageIndex={pagination.page}
-					initialPageSize={pagination.rowsPerPage}
-					onEdit={handleEdit}
+					pageCount={pageCount}
 				/>
 			</Box>
 		</Stack>
