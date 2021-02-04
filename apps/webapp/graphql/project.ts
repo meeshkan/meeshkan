@@ -187,6 +187,7 @@ export const PROJECT_USER_STORIES = gql`
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: false }
 			}
+			orderBy: createdAt_DESC
 			first: $first
 			skip: $skip
 		) {
