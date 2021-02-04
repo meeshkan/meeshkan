@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-import ActionButton from '../atoms/action-button';
 import {
 	Table as ChakraTable,
 	Tbody,
@@ -9,15 +8,6 @@ import {
 	Tr,
 } from '@chakra-ui/table';
 import { useTable, usePagination, useSortBy, Column } from 'react-table';
-import { AnimatePresence } from 'framer-motion';
-import {
-	ArrowLeftIcon,
-	ArrowRightIcon,
-	ChevronDownIcon,
-	ChevronLeftIcon,
-	ChevronRightIcon,
-	ChevronUpIcon,
-} from '@chakra-ui/icons';
 import {
 	Flex,
 	Text,
@@ -36,6 +26,13 @@ import {
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext } from '../../utils/user';
+import {
+	DoubleArrowLeftIcon,
+	ArrowLeftIcon,
+	DoubleArrowRightIcon,
+	ArrowRightIcon,
+} from '@frontend/chakra-theme';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
 type TableProps = {
 	columns: Column[];
@@ -203,8 +200,7 @@ const Table = ({
 								onClick={() => gotoPage(0)}
 								isDisabled={!canPreviousPage}
 								aria-label=""
-								icon={<ArrowLeftIcon h={3} w={3} />}
-								mr={4}
+								icon={<DoubleArrowLeftIcon h={4} w={4} />}
 							/>
 						</Tooltip>
 						<Tooltip label="Previous Page">
@@ -213,7 +209,7 @@ const Table = ({
 								onClick={previousPage}
 								isDisabled={!canPreviousPage}
 								aria-label=""
-								icon={<ChevronLeftIcon h={6} w={6} />}
+								icon={<ArrowLeftIcon h={4} w={4} />}
 							/>
 						</Tooltip>
 					</ButtonGroup>
@@ -273,7 +269,7 @@ const Table = ({
 								onClick={nextPage}
 								isDisabled={!canNextPage}
 								aria-label=""
-								icon={<ChevronRightIcon h={6} w={6} />}
+								icon={<ArrowRightIcon h={4} w={4} />}
 							/>
 						</Tooltip>
 						<Tooltip label="Last Page">
@@ -282,8 +278,7 @@ const Table = ({
 								onClick={() => gotoPage(pageCount - 1)}
 								isDisabled={!canNextPage}
 								aria-label=""
-								icon={<ArrowRightIcon h={3} w={3} />}
-								ml={4}
+								icon={<DoubleArrowRightIcon h={4} w={4} />}
 							/>
 						</Tooltip>
 					</ButtonGroup>

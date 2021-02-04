@@ -112,7 +112,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: 'title',
 			},
 			{
-				Header: 'Flows included',
+				Header: '# repeated',
 				accessor: (originalRow, rowIndex) => {
 					return originalRow.flowIDs.length;
 				},
@@ -125,7 +125,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							px={2}
 						>
 							{originalRow.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
@@ -146,7 +146,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							px={2}
 							colorScheme={
 								significance === 'low'
 									? 'gray'
@@ -178,7 +178,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const projectId = project?.id;
 
 	const fetchData = useCallback(
-		({ pageSize, pageIndex, ...rest }) => {
+		({ pageSize, pageIndex }) => {
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
 			const request = client
@@ -200,7 +200,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[idToken, projectId]
+		[idToken, projectId, toggleIndex]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
