@@ -59,6 +59,7 @@ type SegmentedControlProps = {
 	disabled?: boolean;
 	selectedIndex: number;
 	setSelectedIndex: Dispatch<SetStateAction<number>>;
+	attached?: boolean;
 	props?: BoxProps;
 };
 
@@ -67,6 +68,7 @@ const SegmentedControl = ({
 	disabled,
 	selectedIndex,
 	setSelectedIndex,
+	attached = false,
 	props,
 }: SegmentedControlProps) => {
 	return (
@@ -76,7 +78,8 @@ const SegmentedControl = ({
 				align="center"
 				backgroundColor={useColorModeValue('gray.200', 'gray.700')}
 				p={2}
-				borderRadius="lg"
+				borderTopRadius="lg"
+				borderBottomRadius={attached === true ? 0 : 'lg'}
 				w="max-content"
 				fontWeight="700"
 				{...props}

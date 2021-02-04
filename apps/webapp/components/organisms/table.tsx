@@ -31,6 +31,7 @@ import {
 	Tooltip,
 	useColorModeValue,
 	NumberDecrementStepper,
+	Skeleton,
 } from '@chakra-ui/react';
 
 const Table = ({
@@ -68,7 +69,7 @@ const Table = ({
 
 	useEffect(() => {
 		fetchData({ pageIndex, pageSize });
-	}, [fetchData, pageIndex, pageSize]);
+	}, [fetchData, pageIndex, pageSize, pageCount]);
 
 	return (
 		<>
@@ -76,7 +77,8 @@ const Table = ({
 				{...getTableProps()}
 				variant="simple"
 				backgroundColor={useColorModeValue('white', 'gray.900')}
-				borderRadius="lg"
+				borderTopRightRadius="lg"
+				borderBottomRadius="lg"
 			>
 				<Thead>
 					{headerGroups.map((headerGroup) => (
@@ -114,10 +116,37 @@ const Table = ({
 							</Tr>
 						);
 					})}
+
+					{loading && page.length === 0 ? (
+						[...Array(pageSize)].map((_, i) => {
+							return (
+								<Tr key={i} _hover={undefined}>
+									{columns.map((col, j) => {
+										return (
+											<Td key={col.id || j}>
+												<Skeleton h={5} />
+											</Td>
+										);
+									})}
+								</Tr>
+							);
+						})
+					) : page.length === 0 ? (
+						<Tr _hover={undefined}>
+							<Td
+								textAlign="center"
+								p={4}
+								rowSpan={pageSize}
+								colSpan={columns.length}
+							>
+								<Text fontSize="md">No Data</Text>
+							</Td>
+						</Tr>
+					) : null}
 				</Tbody>
 			</ChakraTable>
 
-			<Flex justifyContent="space-between" m={2} alignItems="center" w="100%">
+			<Flex justifyContent="space-between" m={2} alignItems="center" mx="auto">
 				<Flex>
 					<Tooltip label="First Page">
 						<IconButton
@@ -155,7 +184,7 @@ const Table = ({
 					<NumberInput
 						ml={2}
 						mr={8}
-						w={28}
+						w={20}
 						min={1}
 						max={pageOptions.length}
 						onChange={(value) => {
@@ -172,6 +201,7 @@ const Table = ({
 					</NumberInput>
 					<Select
 						w={32}
+						defaultValue={10}
 						value={pageSize}
 						onChange={(e) => {
 							setPageSize(Number(e.target.value));

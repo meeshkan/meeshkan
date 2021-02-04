@@ -368,9 +368,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				</ModalContent>
 			</Modal>
 
-			<Box overflow="auto" flex="1">
+			<Box overflowX="auto" flex="1">
 				<Flex justify="space-between" align="center">
 					<SegmentedControl
+						attached={true}
 						values={['Recordings', 'Test cases']}
 						selectedIndex={toggleIndex}
 						setSelectedIndex={setToggleIndex}
