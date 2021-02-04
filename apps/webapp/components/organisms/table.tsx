@@ -31,7 +31,7 @@ import {
 	useColorModeValue,
 	NumberDecrementStepper,
 	Skeleton,
-	Box,
+	ButtonGroup,
 } from '@chakra-ui/react';
 
 type TableProps = {
@@ -198,25 +198,27 @@ const Table = ({
 
 			<Flex justifyContent="space-between" m={2} alignItems="center" mx="auto">
 				<Flex>
-					<Tooltip label="First Page">
-						<IconButton
-							colorScheme="gray"
-							onClick={() => gotoPage(0)}
-							isDisabled={!canPreviousPage}
-							aria-label=""
-							icon={<ArrowLeftIcon h={3} w={3} />}
-							mr={4}
-						/>
-					</Tooltip>
-					<Tooltip label="Previous Page">
-						<IconButton
-							colorScheme="gray"
-							onClick={previousPage}
-							isDisabled={!canPreviousPage}
-							aria-label=""
-							icon={<ChevronLeftIcon h={6} w={6} />}
-						/>
-					</Tooltip>
+					<ButtonGroup isAttached>
+						<Tooltip label="First Page">
+							<IconButton
+								colorScheme="gray"
+								onClick={() => gotoPage(0)}
+								isDisabled={!canPreviousPage}
+								aria-label=""
+								icon={<ArrowLeftIcon h={3} w={3} />}
+								mr={4}
+							/>
+						</Tooltip>
+						<Tooltip label="Previous Page">
+							<IconButton
+								colorScheme="gray"
+								onClick={previousPage}
+								isDisabled={!canPreviousPage}
+								aria-label=""
+								icon={<ChevronLeftIcon h={6} w={6} />}
+							/>
+						</Tooltip>
+					</ButtonGroup>
 				</Flex>
 
 				<Flex alignItems="center">
@@ -265,51 +267,28 @@ const Table = ({
 					</Select>
 				</Flex>
 
-				{/* <Flex mx={8} alignItems="center">
-					<Text>Page:</Text>{' '}
-					<NumberInput
-						size="sm"
-						mx={2}
-						w={20}
-						min={1}
-						max={controlledPageCount}
-						onChange={(value) => {
-							const page = parseInt(value) >= 1 ? parseInt(value) - 1 : 1;
-							gotoPage(page);
-						}}
-						defaultValue={pageIndex + 1}
-					>
-						<NumberInputField />
-						<NumberInputStepper>
-							<NumberIncrementStepper />
-							<NumberDecrementStepper />
-						</NumberInputStepper>
-					</NumberInput>
-					<Text fontWeight="bold" as="span">
-						of {controlledPageCount}
-					</Text>
-				</Flex> */}
-
 				<Flex>
-					<Tooltip label="Next Page">
-						<IconButton
-							colorScheme="gray"
-							onClick={nextPage}
-							isDisabled={!canNextPage}
-							aria-label=""
-							icon={<ChevronRightIcon h={6} w={6} />}
-						/>
-					</Tooltip>
-					<Tooltip label="Last Page">
-						<IconButton
-							colorScheme="gray"
-							onClick={() => gotoPage(pageCount - 1)}
-							isDisabled={!canNextPage}
-							aria-label=""
-							icon={<ArrowRightIcon h={3} w={3} />}
-							ml={4}
-						/>
-					</Tooltip>
+					<ButtonGroup isAttached>
+						<Tooltip label="Next Page">
+							<IconButton
+								colorScheme="gray"
+								onClick={nextPage}
+								isDisabled={!canNextPage}
+								aria-label=""
+								icon={<ChevronRightIcon h={6} w={6} />}
+							/>
+						</Tooltip>
+						<Tooltip label="Last Page">
+							<IconButton
+								colorScheme="gray"
+								onClick={() => gotoPage(pageCount - 1)}
+								isDisabled={!canNextPage}
+								aria-label=""
+								icon={<ArrowRightIcon h={3} w={3} />}
+								ml={4}
+							/>
+						</Tooltip>
+					</ButtonGroup>
 				</Flex>
 			</Flex>
 		</>
