@@ -100,7 +100,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
-	const [pageCount, setPageCount] = React.useState(0);
+	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<Recordings>({
 		recordings: { count: 0, items: [] },
 		testCases: { count: 0, items: [] },

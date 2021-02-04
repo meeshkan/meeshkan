@@ -4,12 +4,11 @@ import {
 	Table as ChakraTable,
 	Tbody,
 	Td,
-	Tfoot,
 	Th,
 	Thead,
 	Tr,
 } from '@chakra-ui/table';
-import { useTable, usePagination } from 'react-table';
+import { useTable, usePagination, useSortBy, Column } from 'react-table';
 import { AnimatePresence } from 'framer-motion';
 import {
 	ArrowLeftIcon,
@@ -32,7 +31,16 @@ import {
 	useColorModeValue,
 	NumberDecrementStepper,
 	Skeleton,
+	Box,
 } from '@chakra-ui/react';
+
+type TableProps = {
+	columns: Column[];
+	data: JSON[];
+	fetchData: ({ pageSize, pageIndex, ...rest }: any) => Promise<void>;
+	loading?: boolean;
+	pageCount: number;
+};
 
 const Table = ({
 	columns,
@@ -40,7 +48,7 @@ const Table = ({
 	fetchData,
 	loading,
 	pageCount: controlledPageCount,
-}) => {
+}: TableProps) => {
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -64,15 +72,32 @@ const Table = ({
 			manualPagination: true,
 			pageCount: controlledPageCount,
 		},
+		useSortBy,
 		usePagination
 	);
 
 	useEffect(() => {
 		fetchData({ pageIndex, pageSize });
-	}, [fetchData, pageIndex, pageSize, pageCount]);
+	}, [fetchData, pageIndex, pageSize]);
 
 	return (
 		<>
+			<pre>
+				<code>
+					{JSON.stringify(
+						{
+							pageIndex,
+							pageSize,
+							pageCount,
+							canNextPage,
+							canPreviousPage,
+						},
+						null,
+						2
+					)}
+				</code>
+			</pre>
+
 			<ChakraTable
 				{...getTableProps()}
 				variant="simple"
@@ -84,28 +109,53 @@ const Table = ({
 					{headerGroups.map((headerGroup) => (
 						<Tr {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
-								<Th {...column.getHeaderProps()}>
+								<Th
+									{...column.getHeaderProps(column.getSortByToggleProps())}
+									fontSize="10px"
+								>
 									{column.render('Header')}
 									{/* Add a sort direction indicator */}
 									{column.isSorted ? (
 										column.isSortedDesc ? (
-											<ChevronDownIcon ml={1} w={4} h={4} />
+											<ChevronDownIcon
+												aria-label="Decending"
+												ml={1}
+												w={4}
+												h={4}
+											/>
 										) : (
-											<ChevronUpIcon ml={1} w={4} h={4} />
+											<ChevronUpIcon
+												aria-label="Ascending"
+												ml={1}
+												w={4}
+												h={4}
+											/>
 										)
 									) : (
-										' '
+										<ChevronDownIcon
+											aria-label="placeholder"
+											ml={1}
+											w={4}
+											h={4}
+											color="transparent"
+										/>
 									)}
 								</Th>
 							))}
 						</Tr>
 					))}
 				</Thead>
-				<Tbody {...getTableBodyProps()}>
+				<Tbody {...getTableBodyProps()} fontSize="sm">
 					{page.map((row) => {
 						prepareRow(row);
 						return (
-							<Tr {...row.getRowProps()}>
+							<Tr
+								{...row.getRowProps()}
+								_hover={{
+									cursor: 'pointer',
+									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+								}}
+							>
 								{row.cells.map((cell) => {
 									return (
 										<Td {...cell.getCellProps()} py={3}>
