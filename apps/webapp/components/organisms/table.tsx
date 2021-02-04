@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import ActionButton from '../atoms/action-button';
 import {
 	Table as ChakraTable,
@@ -33,6 +33,9 @@ import {
 	Skeleton,
 	ButtonGroup,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { createSlug } from '../../utils/createSlug';
+import { UserContext } from '../../utils/user';
 
 type TableProps = {
 	columns: Column[];
@@ -80,24 +83,14 @@ const Table = ({
 		fetchData({ pageIndex, pageSize });
 	}, [fetchData, pageIndex, pageSize]);
 
+	const { project } = useContext(UserContext);
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
+	]);
+	const router = useRouter();
+
 	return (
 		<>
-			<pre>
-				<code>
-					{JSON.stringify(
-						{
-							pageIndex,
-							pageSize,
-							pageCount,
-							canNextPage,
-							canPreviousPage,
-						},
-						null,
-						2
-					)}
-				</code>
-			</pre>
-
 			<ChakraTable
 				{...getTableProps()}
 				variant="simple"
@@ -154,6 +147,11 @@ const Table = ({
 								_hover={{
 									cursor: 'pointer',
 									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+								}}
+								onClick={() => {
+									router.push(
+										`/${slugifiedProjectName}/user-stories/${row.original.id}`
+									);
 								}}
 							>
 								{row.cells.map((cell) => {

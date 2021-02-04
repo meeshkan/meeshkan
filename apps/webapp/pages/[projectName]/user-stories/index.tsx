@@ -93,7 +93,6 @@ interface Recordings {
 }
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
-	const router = useRouter();
 	const { project, idToken } = useContext(UserContext);
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
