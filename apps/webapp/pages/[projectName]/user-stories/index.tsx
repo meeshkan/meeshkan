@@ -208,11 +208,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	]);
 
 	const { found, loading } = useValidateSelectedProject();
-
 	if (loading) {
 		return <LoadingScreen as={Card} />;
 	}
-
 	if (!found) {
 		return <NotFoundError />;
 	}

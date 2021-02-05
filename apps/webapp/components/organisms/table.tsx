@@ -141,9 +141,14 @@ const Table = ({
 						return (
 							<Tr
 								{...row.getRowProps()}
+								borderBottom="1px solid"
+								borderBottomColor={useColorModeValue('gray.100', 'gray.700')}
+								_last={{ border: 0 }}
 								_hover={{
 									cursor: 'pointer',
 									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+									borderBottom: '1px solid',
+									borderBottomColor: useColorModeValue('gray.100', 'gray.700'),
 								}}
 								onClick={() => {
 									router.push(
@@ -153,7 +158,7 @@ const Table = ({
 							>
 								{row.cells.map((cell) => {
 									return (
-										<Td {...cell.getCellProps()} py={3}>
+										<Td border={0} {...cell.getCellProps()} py={3}>
 											{cell.render('Cell')}
 										</Td>
 									);
@@ -191,24 +196,22 @@ const Table = ({
 				</Tbody>
 			</ChakraTable>
 
-			<Flex justifyContent="space-between" m={2} alignItems="center" mx="auto">
+			<Flex justifyContent="space-between" mt={4} alignItems="center" mx="auto">
 				<Flex>
-					<ButtonGroup isAttached>
+					<ButtonGroup isAttached colorScheme="gray" variant="link">
 						<Tooltip label="First Page">
 							<IconButton
-								colorScheme="gray"
 								onClick={() => gotoPage(0)}
 								isDisabled={!canPreviousPage}
-								aria-label=""
+								aria-label="First page"
 								icon={<DoubleArrowLeftIcon h={4} w={4} />}
 							/>
 						</Tooltip>
 						<Tooltip label="Previous Page">
 							<IconButton
-								colorScheme="gray"
 								onClick={previousPage}
 								isDisabled={!canPreviousPage}
-								aria-label=""
+								aria-label="Previous page"
 								icon={<ArrowLeftIcon h={4} w={4} />}
 							/>
 						</Tooltip>
@@ -226,7 +229,7 @@ const Table = ({
 							{controlledPageCount}
 						</Text>
 					</Text>
-					<Text>Go to page:</Text>{' '}
+					{/* <Text>Go to page:</Text>{' '}
 					<NumberInput
 						ml={2}
 						mr={8}
@@ -244,9 +247,11 @@ const Table = ({
 							<NumberIncrementStepper />
 							<NumberDecrementStepper />
 						</NumberInputStepper>
-					</NumberInput>
+					</NumberInput> */}
 					<Select
-						w={32}
+						size="sm"
+						borderRadius="md"
+						w={24}
 						defaultValue={10}
 						value={pageSize}
 						onChange={(e) => {
@@ -262,22 +267,20 @@ const Table = ({
 				</Flex>
 
 				<Flex>
-					<ButtonGroup isAttached>
+					<ButtonGroup isAttached colorScheme="gray" variant="link">
 						<Tooltip label="Next Page">
 							<IconButton
-								colorScheme="gray"
 								onClick={nextPage}
 								isDisabled={!canNextPage}
-								aria-label=""
+								aria-label="Next page"
 								icon={<ArrowRightIcon h={4} w={4} />}
 							/>
 						</Tooltip>
 						<Tooltip label="Last Page">
 							<IconButton
-								colorScheme="gray"
 								onClick={() => gotoPage(pageCount - 1)}
 								isDisabled={!canNextPage}
-								aria-label=""
+								aria-label="Last page"
 								icon={<DoubleArrowRightIcon h={4} w={4} />}
 							/>
 						</Tooltip>
