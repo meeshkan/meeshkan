@@ -37,7 +37,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 type TableProps = {
 	columns: Column[];
 	data: JSON[];
-	fetchData: ({ pageSize, pageIndex, ...rest }: any) => Promise<void>;
+	fetchData: ({ pageSize, pageIndex }: any) => Promise<void>;
 	loading?: boolean;
 	pageCount: number;
 };
@@ -45,9 +45,9 @@ type TableProps = {
 const Table = ({
 	columns,
 	data,
-	fetchData,
 	loading,
 	pageCount: controlledPageCount,
+	fetchData,
 }: TableProps) => {
 	const {
 		getTableProps,
@@ -72,7 +72,7 @@ const Table = ({
 			manualPagination: true,
 			pageCount: controlledPageCount,
 		},
-		useSortBy,
+		// useSortBy,
 		usePagination
 	);
 
@@ -100,7 +100,9 @@ const Table = ({
 						<Tr {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
 								<Th
-									{...column.getHeaderProps(column.getSortByToggleProps())}
+									{
+										...column.getHeaderProps(/*column.getSortByToggleProps()*/)
+									}
 									fontSize="10px"
 								>
 									{column.render('Header')}
@@ -170,10 +172,16 @@ const Table = ({
 					{loading && page.length === 0 ? (
 						[...Array(pageSize)].map((_, i) => {
 							return (
-								<Tr key={i} _hover={undefined}>
+								<Tr
+									key={i}
+									_hover={undefined}
+									borderBottom="1px solid"
+									borderBottomColor={useColorModeValue('gray.100', 'gray.700')}
+									_last={{ border: 0 }}
+								>
 									{columns.map((col, j) => {
 										return (
-											<Td key={col.id || j}>
+											<Td key={col.id || j} py={3} border={0}>
 												<Skeleton h={5} />
 											</Td>
 										);
@@ -185,11 +193,11 @@ const Table = ({
 						<Tr _hover={undefined}>
 							<Td
 								textAlign="center"
-								p={4}
+								py={3}
 								rowSpan={pageSize}
 								colSpan={columns.length}
 							>
-								<Text fontSize="md">No Data</Text>
+								<Text fontSize="md">No User Stories</Text>
 							</Td>
 						</Tr>
 					) : null}
