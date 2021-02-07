@@ -345,10 +345,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 											isExternal
 											color={useColorModeValue('blue.500', 'blue.300')}
 										>
-											Install the chrome extension. This will provide
-											instructions and the ability to manually create user
-											stories with a 'record' button.
-										</ChakraLink>
+											Install the chrome extension.
+										</ChakraLink>{' '}
+										This will provide instructions and the ability to manually
+										create user stories with a 'record' button.
 									</ListItem>
 									<ListItem lineHeight="1.6">
 										User stories get generated automatically in this process.
