@@ -47,7 +47,7 @@ export const UPDATE_AVATAR = gql`
 `;
 
 export const USER = gql`
-	query USER {
+	query USER($cutOffDate: DateTime!) {
 		user {
 			id
 			email
@@ -92,7 +92,7 @@ export const USER = gql`
 							}
 						}
 					}
-					userStories {
+					userStories(filter: { createdAt: { gte: $cutOffDate } }) {
 						count
 						items {
 							id

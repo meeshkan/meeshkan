@@ -68,7 +68,7 @@ const SideBarBody = () => {
 							as={Flex}
 							align="center"
 							fontSize="20px"
-							fontWeight={500}
+							fontWeight="500"
 							color={useColorModeValue('gray.900', 'gray.200')}
 							lineHeight="1"
 							mt={6}
@@ -96,7 +96,7 @@ const SideBarBody = () => {
 							<Stack spacing={2} w="full">
 								<Heading
 									fontSize="16px"
-									fontWeight={500}
+									fontWeight="500"
 									color={useColorModeValue('gray.400', 'gray.500')}
 									lineHeight="short"
 									mt={1}
@@ -143,7 +143,7 @@ const SideBarBody = () => {
 							<Stack spacing={2} w="full">
 								<Heading
 									fontSize="16px"
-									fontWeight={500}
+									fontWeight="500"
 									color={useColorModeValue('gray.400', 'gray.500')}
 									lineHeight="short"
 									mt={1}
@@ -279,7 +279,7 @@ const SideBarBody = () => {
 							<Flex
 								align="center"
 								color={useColorModeValue('gray.500', 'gray.300')}
-								fontWeight={600}
+								fontWeight="600"
 								maxW="20ch"
 								whiteSpace="nowrap"
 								overflow="hidden"
@@ -330,7 +330,7 @@ const SideBarBody = () => {
 												borderRadius="md"
 												mr={3}
 											/>
-											<Text fontSize="sm" fontWeight={600}>
+											<Text fontSize="sm" fontWeight="600">
 												{project.name}
 											</Text>
 										</Flex>

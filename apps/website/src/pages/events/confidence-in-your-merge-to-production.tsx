@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
 	Text,
 	Code,
@@ -12,14 +12,14 @@ import {
 	Divider,
 	Avatar,
 	useColorModeValue,
-} from "@chakra-ui/react"
-import { SingleSection } from "../../components/organisms/singleSection"
-import SEO from "../../components/molecules/seo"
-import Layout from "../../components/templates/layout"
-import { useStaticQuery, graphql } from "gatsby"
-import Img from "gatsby-image"
+} from '@chakra-ui/react';
+import { SingleSection } from '../../components/organisms/singleSection';
+import SEO from '../../components/molecules/seo';
+import Layout from '../../components/templates/layout';
+import { useStaticQuery, graphql } from 'gatsby';
+import Img from 'gatsby-image';
 // @ts-expect-error
-import makenna from "../../../data/avatars/kenna.png"
+import makenna from '../../../data/avatars/kenna.png';
 
 const ConfidenceWebinarPage = () => {
 	const data = useStaticQuery(graphql`
@@ -32,7 +32,7 @@ const ConfidenceWebinarPage = () => {
 				}
 			}
 		}
-	`)
+	`);
 	return (
 		<Layout>
 			<SEO
@@ -48,7 +48,7 @@ const ConfidenceWebinarPage = () => {
 						colorScheme="cyan"
 						letterSpacing="widest"
 						fontSize="16px"
-						fontWeight={600}
+						fontWeight="600"
 						rounded="sm"
 						padding="0px 4px"
 						minH="auto"
@@ -77,7 +77,7 @@ const ConfidenceWebinarPage = () => {
 					<Flex align="center">
 						<Avatar size="md" src={makenna} mr={4} />
 						<Box>
-							<Text fontWeight={600} lineHeight="1" mb={2}>
+							<Text fontWeight="600" lineHeight="1" mb={2}>
 								Makenna Smutz
 							</Text>
 							<Text lineHeight="1">COO @ Meeshkan</Text>
@@ -86,8 +86,8 @@ const ConfidenceWebinarPage = () => {
 					<Box textAlign="right">
 						<Text>5:00pm CET</Text>
 						<Text
-							fontWeight={600}
-							color={useColorModeValue("red.500", "red.300")}
+							fontWeight="600"
+							color={useColorModeValue('red.500', 'red.300')}
 						>
 							November 25th
 						</Text>
@@ -98,10 +98,10 @@ const ConfidenceWebinarPage = () => {
 			<Box as="section" maxW="1000px" mx="auto" pt={12} pb={16}>
 				<Grid
 					templateColumns={[
-						"repeat(auto-fill, 1fr)",
-						"reapeat(auto-fill, 1fr)",
-						"reapeat(auto-fill, 1fr)",
-						"repeat(2, 1fr)",
+						'repeat(auto-fill, 1fr)',
+						'reapeat(auto-fill, 1fr)',
+						'reapeat(auto-fill, 1fr)',
+						'repeat(2, 1fr)',
 					]}
 					gap={12}
 					gridAutoFlow="dense"
@@ -118,7 +118,7 @@ const ConfidenceWebinarPage = () => {
 						<Text
 							textAlign="justify"
 							fontSize="md"
-							fontWeight={700}
+							fontWeight="700"
 							lineHeight="1.4"
 						>
 							You'll learn:
@@ -145,7 +145,7 @@ const ConfidenceWebinarPage = () => {
 							fontSize="md"
 							lineHeight="1.4"
 							fontStyle="italic"
-							fontWeight={700}
+							fontWeight="700"
 						>
 							Is this for me?
 						</Text>
@@ -172,7 +172,7 @@ const ConfidenceWebinarPage = () => {
 				</Grid>
 			</Box>
 		</Layout>
-	)
-}
+	);
+};
 
-export default ConfidenceWebinarPage
+export default ConfidenceWebinarPage;

@@ -20,7 +20,7 @@ const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
 			as={Link}
 			variant="ghost"
 			size="sm"
-			fontWeight={500}
+			fontWeight="500"
 			colorScheme="gray"
 			_active={{
 				backgroundColor: useColorModeValue('gray.100', 'gray.800'),

@@ -79,7 +79,11 @@ export const UPDATE_PROJECT = gql`
 `;
 
 export const JOIN_PROJECT = gql`
-	mutation JOIN_PROJECT($userId: ID!, $inviteLink: String!) {
+	mutation JOIN_PROJECT(
+		$userId: ID!
+		$inviteLink: String!
+		$cutOffDate: DateTime!
+	) {
 		configurationUpdate(
 			filter: { inviteLink: $inviteLink }
 			data: { project: { update: { members: { connect: { id: $userId } } } } }
@@ -116,7 +120,7 @@ export const JOIN_PROJECT = gql`
 						}
 					}
 				}
-				userStories {
+				userStories(filter: { createdAt: { gte: $cutOffDate } }) {
 					count
 					items {
 						id
@@ -213,12 +217,19 @@ export const PROJECT_USER_STORIES = gql`
 		}
 	}
 
-	query PROJECT_USER_STORIES($projectId: ID!, $first: Int!, $skip: Int!) {
+	query PROJECT_USER_STORIES(
+		$projectId: ID!
+		$first: Int!
+		$skip: Int!
+		$cutOffDate: DateTime!
+	) {
 		recordings: userStoriesList(
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: false }
+				createdAt: { gte: $cutOffDate }
 			}
+			orderBy: createdAt_DESC
 			first: $first
 			skip: $skip
 		) {

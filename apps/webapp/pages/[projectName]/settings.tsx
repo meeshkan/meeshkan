@@ -154,7 +154,7 @@ const Settings = () => {
 				>
 					<FormControl display="flex" alignItems="center">
 						<Box>
-							<Heading fontSize="18px" fontWeight={500}>
+							<Heading fontSize="18px" fontWeight="500">
 								Product updates
 							</Heading>
 							<Text fontSize="14px" color="gray.500">
@@ -196,7 +196,7 @@ const Settings = () => {
 					anchor
 					subtitle="Manage your Project settings"
 				>
-					<Heading fontSize="18px" fontWeight={500}>
+					<Heading fontSize="18px" fontWeight="500">
 						Invite link
 					</Heading>
 					<InviteLinkInput />
@@ -227,7 +227,7 @@ const Settings = () => {
 										color={useColorModeValue('gray.700', 'gray.200')}
 										bg={useColorModeValue('gray.200', 'gray.600')}
 									/>
-									<Text fontWeight={600} fontSize="14px" textAlign="left">
+									<Text fontWeight="600" fontSize="14px" textAlign="left">
 										{memberName}
 									</Text>
 								</Flex>
@@ -296,19 +296,19 @@ const Settings = () => {
 					anchor
 					subtitle="Detailed information about your project."
 				>
-					<Heading fontSize="18px" fontWeight={500}>
+					<Heading fontSize="18px" fontWeight="500">
 						Script tag
 					</Heading>
 					<ScriptTagInput />
 
 					<Spacer h={8} />
 
-					<Heading fontSize="18px" fontWeight={500}>
+					<Heading fontSize="18px" fontWeight="500">
 						Authentication
 					</Heading>
 					<Text
 						fontSize="sm"
-						fontWeight={400}
+						fontWeight="400"
 						lineHeight="short"
 						color="gray.500"
 						mb={4}
@@ -318,7 +318,7 @@ const Settings = () => {
 						customer's.
 					</Text>
 					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
-					<Heading fontSize="14px" fontWeight={500} mt={4}>
+					<Heading fontSize="14px" fontWeight="500" mt={4}>
 						Active tokens
 					</Heading>
 					{tokens.map((token) => (

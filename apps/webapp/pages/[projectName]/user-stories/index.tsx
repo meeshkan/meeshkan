@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import {
 	Box,
 	Stack,
@@ -64,7 +64,7 @@ const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
 			alignItems="center"
 			backgroundColor={useColorModeValue('cyan.50', 'transparentCyan.200')}
 			color={useColorModeValue('cyan.700', 'cyan.50')}
-			fontWeight={600}
+			fontWeight="600"
 			p={4}
 			w="100%"
 			borderRadius="md"
@@ -93,19 +93,16 @@ interface Recordings {
 }
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
-	const router = useRouter();
 	const { project, idToken } = useContext(UserContext);
 
-	const [toggleIndex, setToggleIndex] = useState(0);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
+	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<Recordings>({
 		recordings: { count: 0, items: [] },
 		testCases: { count: 0, items: [] },
-	});
-	const [pagination, setPagination] = useState({
-		page: 0,
-		rowsPerPage: 20,
 	});
 
 	const columns: Column[] = useMemo(
@@ -115,7 +112,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: 'title',
 			},
 			{
-				Header: 'Flows included',
+				Header: '# repeated',
 				accessor: (originalRow, rowIndex) => {
 					return originalRow.flowIDs.length;
 				},
@@ -128,7 +125,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							px={2}
 						>
 							{originalRow.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
@@ -149,12 +146,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							px={2}
 							colorScheme={
 								significance === 'low'
 									? 'gray'
 									: significance === 'medium'
-									? 'orange'
+									? 'amber'
 									: significance === 'high'
 									? 'cyan'
 									: null
@@ -179,43 +176,46 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 
 	const projectId = project?.id;
+
 	const fetchData = useCallback(
-		({ pageSize, pageIndex, ...rest }) => {
+		({ pageSize, pageIndex }) => {
+			const twentyFourHoursAgo =
+				new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+					.toISOString()
+					.replace('Z', '') + '+00:00';
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
 			const request = client
 				.request(PROJECT_USER_STORIES, {
 					projectId,
-					first: pagination.rowsPerPage,
-					skip: pagination.rowsPerPage * pagination.page,
+					first: pageSize,
+					skip: pageSize * pageIndex,
+					cutOffDate: twentyFourHoursAgo,
 				})
 				.then((res) => {
 					setTableData(res);
+					const recordCount = toggleIndex === 0 ? res.recordings.count : res.testCases.count;
+					setPageCount(
+						Math.ceil(
+							(recordCount === 0 ? 1 : recordCount) /
+								pageSize
+						)
+					);
 					setTableLoading(false);
 				});
 			return request;
 		},
-		[pagination.page, pagination.rowsPerPage, idToken, projectId]
+		[idToken, projectId, toggleIndex]
 	);
-
-	const handlePagination = useCallback(({ pageSize, pageIndex }) => {
-		setPagination({ page: pageIndex, rowsPerPage: pageSize });
-	}, []);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
 
-	const handleEdit = (id: string) => {
-		router.push(`/${slugifiedProjectName}/user-stories/${id}`);
-	};
-
 	const { found, loading } = useValidateSelectedProject();
-
 	if (loading) {
 		return <LoadingScreen as={Card} />;
 	}
-
 	if (!found) {
 		return <NotFoundError />;
 	}
@@ -254,7 +254,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						alignItems="center"
 						border="1px dashed"
 						borderColor={useColorModeValue('gray.500', 'gray.400')}
-						fontWeight={600}
+						fontWeight="600"
 						p={4}
 						w="100%"
 						borderRadius="md"
@@ -291,7 +291,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						>
 							How to create a new User Story
 						</Heading>
-						<Text fontWeight={400} fontSize="md">
+						<Text fontWeight="400" fontSize="md">
 							There are two ways to create user stories for your project.
 						</Text>
 					</ModalHeader>
@@ -350,10 +350,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 											isExternal
 											color={useColorModeValue('blue.500', 'blue.300')}
 										>
-											Install the chrome extension. This will provide
-											instructions and the ability to manually create user
-											stories with a 'record' button.
-										</ChakraLink>
+											Install the chrome extension.
+										</ChakraLink>{' '}
+										This will provide instructions and the ability to manually
+										create user stories with a 'record' button.
 									</ListItem>
 									<ListItem lineHeight="1.6">
 										User stories get generated automatically in this process.
@@ -370,9 +370,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				</ModalContent>
 			</Modal>
 
-			<Box overflow="auto" flex="1">
+			<Box overflowX="auto" flex="1">
 				<Flex justify="space-between" align="center">
 					<SegmentedControl
+						attached={true}
 						values={['Recordings', 'Test cases']}
 						selectedIndex={toggleIndex}
 						setSelectedIndex={setToggleIndex}
@@ -393,15 +394,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					}
 					fetchData={fetchData}
 					loading={tableLoading}
-					totalCount={
-						toggleIndex === 0
-							? tableData.recordings.count
-							: tableData.testCases.count
-					} // this should be the total amount of data, not only the returned data length
-					onPaginate={handlePagination}
-					initialPageIndex={pagination.page}
-					initialPageSize={pagination.rowsPerPage}
-					onEdit={handleEdit}
+					pageCount={pageCount}
 				/>
 			</Box>
 		</Stack>

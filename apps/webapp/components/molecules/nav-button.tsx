@@ -50,7 +50,7 @@ const NavButton = (props: NavButtonProps) => {
 					width="100%"
 					justifyContent="flex-start"
 					alignItems="center"
-					fontWeight={500}
+					fontWeight="500"
 					fontSize="16px"
 					color={useColorModeValue('gray.500', 'gray.400')}
 					_active={{
@@ -85,7 +85,7 @@ const NavButton = (props: NavButtonProps) => {
 				width="100%"
 				justifyContent="flex-start"
 				alignItems="center"
-				fontWeight={500}
+				fontWeight="500"
 				fontSize="16px"
 				color={useColorModeValue('gray.500', 'gray.400')}
 				_active={{

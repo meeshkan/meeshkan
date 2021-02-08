@@ -1,37 +1,37 @@
-import { Box, Heading } from "@chakra-ui/react"
-import { Link as GatsbyLink } from "gatsby"
-import React, { forwardRef } from "react"
-import { useLocation } from "@reach/router"
+import { Box, Heading } from '@chakra-ui/react';
+import { Link as GatsbyLink } from 'gatsby';
+import React, { forwardRef } from 'react';
+import { useLocation } from '@reach/router';
 
 type NavLinkProps = {
-	children: any
-	href: string
-}
+	children: any;
+	href: string;
+};
 
 const NavLink = ({ children, href, ...props }: NavLinkProps) => {
-	let isActive = false
-	let location = useLocation()
+	let isActive = false;
+	let location = useLocation();
 
 	if (location.pathname === href) {
-		isActive = true
+		isActive = true;
 	} else {
-		isActive = false
+		isActive = false;
 	}
 
 	return (
 		<GatsbyLink to={href} {...props}>
-			{typeof children === "function" ? children(isActive) : children}
+			{typeof children === 'function' ? children(isActive) : children}
 		</GatsbyLink>
-	)
-}
+	);
+};
 
-export const stringToUrl = (str, path = "/docs/") => {
-	return `${path}${str.toLowerCase().split(" ").join("-")}/`
-}
+export const stringToUrl = (str, path = '/docs/') => {
+	return `${path}${str.toLowerCase().split(' ').join('-')}/`;
+};
 
 type SideNavLinkProps = {
-	children?: string
-}
+	children?: string;
+};
 
 export const SideNavLink = forwardRef(
 	({ children, ...props }: SideNavLinkProps, ref) => {
@@ -47,43 +47,43 @@ export const SideNavLink = forwardRef(
 				px={4}
 				py={3}
 				transition="all 0.2s"
-				fontWeight={700}
+				fontWeight="700"
 				outline="none"
-				_focus={{ shadow: "outline" }}
+				_focus={{ shadow: 'outline' }}
 				_notFirst={{ mt: 1 }}
 				{...props}
 			>
 				<Box>{children}</Box>
 			</Box>
-		)
+		);
 	}
-)
+);
 
 type TopNavLinkProps = {
-	href: string
-}
+	href: string;
+};
 
 export const TopNavLink = forwardRef(
 	({ href, ...props }: TopNavLinkProps, ref) => {
-		const hoverColor = { light: "gray.900", dark: "gray.50" }
-		const activeColor = { light: "cyan.500", dark: "cyan.200" }
-		const activeBg = { light: "cyan.50", dark: "cyan.800" }
+		const hoverColor = { light: 'gray.900', dark: 'gray.50' };
+		const activeColor = { light: 'cyan.500', dark: 'cyan.200' };
+		const activeBg = { light: 'cyan.50', dark: 'cyan.800' };
 		return (
 			<NavLink href={href}>
 				{(isActive) => (
 					<SideNavLink
 						ref={ref}
-						aria-current={isActive ? "page" : undefined}
+						aria-current={isActive ? 'page' : undefined}
 						_hover={{
 							color: hoverColor,
-							transform: "translateX(2px)",
+							transform: 'translateX(2px)',
 						}}
 						{...(isActive && {
 							bg: activeBg.dark,
-							rounded: "sm",
+							rounded: 'sm',
 							color: activeColor.dark,
 							_hover: {
-								transform: "translateX(2px)",
+								transform: 'translateX(2px)',
 							},
 							fontWeight: 700,
 						})}
@@ -91,9 +91,9 @@ export const TopNavLink = forwardRef(
 					/>
 				)}
 			</NavLink>
-		)
+		);
 	}
-)
+);
 
 export const NavGroupHeading = (props) => (
 	<Heading
@@ -104,36 +104,36 @@ export const NavGroupHeading = (props) => (
 		textTransform="uppercase"
 		{...props}
 	/>
-)
+);
 
 type ItemLinkProps = {
-	href: string
-	children: string
-}
+	href: string;
+	children: string;
+};
 
 export const ItemLink = forwardRef(
 	({ href, children, ...props }: ItemLinkProps, ref) => {
-		const hoverColor = { light: "gray.900", dark: "gray.50" }
-		const activeColor = { light: "cyan.500", dark: "cyan.500" }
-		const activeBg = { light: "cyan.50", dark: "gray.800" }
+		const hoverColor = { light: 'gray.900', dark: 'gray.50' };
+		const activeColor = { light: 'cyan.500', dark: 'cyan.500' };
+		const activeBg = { light: 'cyan.50', dark: 'gray.800' };
 
 		return (
 			<NavLink href={href}>
 				{(isActive) => (
 					<SideNavLink
 						ref={ref}
-						aria-current={isActive ? "page" : undefined}
+						aria-current={isActive ? 'page' : undefined}
 						color="gray.300"
 						_hover={{
 							color: hoverColor.dark,
-							transform: "translateX(2px)",
+							transform: 'translateX(2px)',
 						}}
 						{...(isActive && {
 							bg: activeBg.dark,
-							rounded: "md",
+							rounded: 'md',
 							color: activeColor.dark,
 							_hover: {
-								transform: "translateX(2px)",
+								transform: 'translateX(2px)',
 							},
 							fontWeight: 700,
 						})}
@@ -143,6 +143,6 @@ export const ItemLink = forwardRef(
 					</SideNavLink>
 				)}
 			</NavLink>
-		)
+		);
 	}
-)
+);

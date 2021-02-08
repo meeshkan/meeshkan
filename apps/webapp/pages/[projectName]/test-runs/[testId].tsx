@@ -73,7 +73,7 @@ const TestRun = () => {
 							d="flex"
 							alignItems="center"
 							fontSize="16px"
-							fontWeight={400}
+							fontWeight="400"
 							color={useColorModeValue('gray.900', 'gray.200')}
 							lineHeight="short"
 						>
@@ -97,7 +97,7 @@ const TestRun = () => {
 						<Heading
 							as="h2"
 							fontSize="14px"
-							fontWeight={600}
+							fontWeight="600"
 							color={useColorModeValue('gray.900', 'gray.200')}
 							lineHeight="short"
 						>
@@ -119,7 +119,7 @@ const TestRun = () => {
 								size="sm"
 								variant="ghost"
 								colorScheme="gray"
-								fontWeight={400}
+								fontWeight="400"
 								mr={2}
 								leftIcon={<SortIcon />}
 								isDisabled
@@ -130,7 +130,7 @@ const TestRun = () => {
 								size="sm"
 								variant="ghost"
 								colorScheme="gray"
-								fontWeight={400}
+								fontWeight="400"
 								leftIcon={<FilterIcon />}
 								isDisabled
 							>
@@ -220,7 +220,7 @@ const TestRun = () => {
 							<Heading
 								as="h3"
 								fontSize="15px"
-								fontWeight={600}
+								fontWeight="600"
 								lineHeight="short"
 							>
 								Test length
@@ -238,7 +238,7 @@ const TestRun = () => {
 							<Heading
 								as="h3"
 								fontSize="15px"
-								fontWeight={600}
+								fontWeight="600"
 								lineHeight="short"
 							>
 								Web browser
@@ -249,7 +249,7 @@ const TestRun = () => {
 							<Heading
 								as="h3"
 								fontSize="15px"
-								fontWeight={600}
+								fontWeight="600"
 								lineHeight="short"
 							>
 								Operating system
@@ -260,7 +260,7 @@ const TestRun = () => {
 							<Heading
 								as="h3"
 								fontSize="15px"
-								fontWeight={600}
+								fontWeight="600"
 								lineHeight="short"
 							>
 								Language

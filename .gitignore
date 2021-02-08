@@ -54,3 +54,4 @@ apps/webapp/.env
 .vercel
 .env
 .workspace.json
+yarn.lock

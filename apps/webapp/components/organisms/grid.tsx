@@ -263,8 +263,9 @@ const Grid = (props) => {
 					<Menu>
 						<MenuButton
 							as={Button}
+							isDisabled
 							fontSize="md"
-							fontWeight={700}
+							fontWeight="700"
 							py={0}
 							px={2}
 							variant="ghost"
@@ -422,7 +423,7 @@ const Grid = (props) => {
 										mt={4}
 									>
 										<Flex>
-											<Text fontWeight={900} mr={2}>
+											<Text fontWeight="900" mr={2}>
 												{totalRecordings}
 											</Text>
 											<Text color={useColorModeValue('gray.500', 'gray.400')}>
@@ -430,7 +431,7 @@ const Grid = (props) => {
 											</Text>
 										</Flex>
 										<Flex>
-											<Text fontWeight={900} mr={2}>
+											<Text fontWeight="900" mr={2}>
 												{totalTests}
 											</Text>
 											<Text color={useColorModeValue('gray.500', 'gray.400')}>
@@ -474,27 +475,27 @@ const Grid = (props) => {
 									<Stack direction="row" justify="space-around" mb={6}>
 										<Box w="100px">
 											<Flex align="baseline">
-												<Text fontWeight={900} mr={2}>
+												<Text fontWeight="900" mr={2}>
 													{daysUntilRelease || 'N/A'}
 												</Text>
 												<Text
 													fontSize="sm"
 													color={useColorModeValue('gray.500', 'gray.300')}
-													fontWeight={500}
+													fontWeight="500"
 												>
 													days
 												</Text>
 											</Flex>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
-												fontWeight={700}
+												fontWeight="700"
 												fontSize="sm"
 											>
 												until release
 											</Text>
 										</Box>
 										<Box w="100px">
-											<Text fontWeight={900}>
+											<Text fontWeight="900">
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
@@ -503,7 +504,7 @@ const Grid = (props) => {
 											</Text>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
-												fontWeight={700}
+												fontWeight="700"
 												fontSize="sm"
 											>
 												merge status
@@ -513,20 +514,20 @@ const Grid = (props) => {
 									<Stack direction="row" justify="space-around">
 										<Box w="100px">
 											<Flex align="baseline">
-												<Text fontWeight={900} mr={2}>
+												<Text fontWeight="900" mr={2}>
 													{bugs.introduced}
 												</Text>
 												<Text
 													fontSize="sm"
 													color={useColorModeValue('gray.500', 'gray.300')}
-													fontWeight={500}
+													fontWeight="500"
 												>
 													bug{bugs.introduced !== 1 && 's'}
 												</Text>
 											</Flex>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
-												fontWeight={700}
+												fontWeight="700"
 												fontSize="sm"
 											>
 												introduced
@@ -534,20 +535,20 @@ const Grid = (props) => {
 										</Box>
 										<Box w="100px">
 											<Flex align="baseline">
-												<Text fontWeight={900} mr={2}>
+												<Text fontWeight="900" mr={2}>
 													0
 												</Text>
 												<Text
 													fontSize="sm"
 													color={useColorModeValue('gray.500', 'gray.300')}
-													fontWeight={500}
+													fontWeight="500"
 												>
 													bugs
 												</Text>
 											</Flex>
 											<Text
 												color={useColorModeValue('gray.700', 'gray.100')}
-												fontWeight={700}
+												fontWeight="700"
 												fontSize="sm"
 											>
 												fixed

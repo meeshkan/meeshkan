@@ -1,5 +1,5 @@
-import React, { useRef } from "react"
-import { Link } from "gatsby"
+import React, { useRef } from 'react';
+import { Link } from 'gatsby';
 import {
 	Stack,
 	IconButton,
@@ -15,19 +15,19 @@ import {
 	Divider,
 	useColorModeValue,
 	useColorMode,
-} from "@chakra-ui/react"
-import NavLink from "../atoms/navLink"
-import { UniversalLink } from "../atoms/UniversalLink"
-import { motion } from "framer-motion"
+} from '@chakra-ui/react';
+import NavLink from '../atoms/navLink';
+import { UniversalLink } from '../atoms/UniversalLink';
+import { motion } from 'framer-motion';
 import {
 	LogoIcon,
 	HamburgerIcon,
 	TwitterIcon,
 	GitHubIcon,
 	LinkedInIcon,
-} from "../../../theme/icons"
-import { ArrowForwardIcon } from "@chakra-ui/icons"
-import { AnimatedLogo } from "../molecules/animatedLogo"
+} from '../../../theme/icons';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
+import { AnimatedLogo } from '../molecules/animatedLogo';
 
 function SignUpLink() {
 	return (
@@ -42,7 +42,7 @@ function SignUpLink() {
 		>
 			Sign up
 		</Button>
-	)
+	);
 }
 function LogInLink() {
 	return (
@@ -52,18 +52,18 @@ function LogInLink() {
 			href="https://app.meeshkan.com"
 			aria-label="Log in to the Meeshkan webapp"
 			variant="ghost"
-			fontWeight={600}
+			fontWeight="600"
 			lineHeight="normal"
 			colorScheme="gray"
 		>
 			Log in <ArrowForwardIcon ml={2} />
 		</Button>
-	)
+	);
 }
 
 export function Navigation() {
-	const { isOpen, onOpen, onClose } = useDisclosure()
-	const btnRef = useRef()
+	const { isOpen, onOpen, onClose } = useDisclosure();
+	const btnRef = useRef();
 
 	return (
 		<Stack
@@ -77,17 +77,17 @@ export function Navigation() {
 			top={0}
 			right={0}
 			left={0}
-			backgroundColor={useColorModeValue("whiteAlpha.800", "blackAlpha.800")}
-			style={{ backdropFilter: "blur(4px)", WebkitBackdropFilter: "blur(4px)" }}
+			backgroundColor={useColorModeValue('whiteAlpha.800', 'blackAlpha.800')}
+			style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}
 			borderBottom="1px solid"
-			borderBottomColor={useColorModeValue("gray.50", "gray.900")}
+			borderBottomColor={useColorModeValue('gray.50', 'gray.900')}
 		>
 			<Link to="/" aria-label="Meeshkan home">
 				<AnimatedLogo />
 			</Link>
 
 			{/* Desktop & Tablet */}
-			<Stack isInline display={["none", "none", "flex"]}>
+			<Stack isInline display={['none', 'none', 'flex']}>
 				<NavLink text="Pricing" path="/pricing/" />
 				<NavLink text="Blog" path="/blog/" />
 				<NavLink text="Roadmap" path="/roadmap/" />
@@ -96,7 +96,7 @@ export function Navigation() {
 					<SignUpLink />
 					<Divider
 						orientation="vertical"
-						borderColor={useColorModeValue("gray.100", "gray.700")}
+						borderColor={useColorModeValue('gray.100', 'gray.700')}
 					/>
 					<LogInLink />
 				</Flex>
@@ -109,7 +109,7 @@ export function Navigation() {
 				ref={btnRef}
 				onClick={onOpen}
 				icon={<HamburgerIcon />}
-				display={["block", "block", "none"]}
+				display={['block', 'block', 'none']}
 			/>
 			<Drawer
 				placement="right"
@@ -133,8 +133,8 @@ export function Navigation() {
 						py={6}
 						backgroundColor="whiteAlpha.300"
 						style={{
-							backdropFilter: "blur(4px)",
-							WebkitBackdropFilter: "blur(4px)",
+							backdropFilter: 'blur(4px)',
+							WebkitBackdropFilter: 'blur(4px)',
 						}}
 					>
 						<Stack align="center">
@@ -183,5 +183,5 @@ export function Navigation() {
 				</DrawerContent>
 			</Drawer>
 		</Stack>
-	)
+	);
 }

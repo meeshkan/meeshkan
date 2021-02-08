@@ -40,12 +40,12 @@ export const StoryStep = ({
 					w={6}
 					border="1px solid"
 					borderColor="gray.500"
-					fontWeight={500}
+					fontWeight="500"
 					mr={4}
 				>
 					{stepNumber}
 				</Flex>
-				<Text fontWeight={700} lineHeight="1" textTransform="capitalize">
+				<Text fontWeight="700" lineHeight="1" textTransform="capitalize">
 					{stepName}
 				</Text>
 			</Flex>
@@ -62,7 +62,7 @@ export const StoryStep = ({
 			>
 				{subSteps &&
 					subSteps.map((step, index) => (
-						<ListItem key={index} lineHeight="1.6">
+						<ListItem key={index} lineHeight="1.6" textTransform="lowercase">
 							{step}
 						</ListItem>
 					))}

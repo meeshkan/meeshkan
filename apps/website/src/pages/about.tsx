@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
 	Heading,
 	Grid,
@@ -7,22 +7,22 @@ import {
 	Box,
 	Link,
 	useColorModeValue,
-} from "@chakra-ui/react"
-import { SingleSection } from "../components/organisms/singleSection"
-import SEO from "../components/molecules/seo"
-import { graphql, useStaticQuery } from "gatsby"
-import Img from "gatsby-image"
-import { Card } from "../components/atoms/card"
-import Layout from "../components/templates/layout"
+} from '@chakra-ui/react';
+import { SingleSection } from '../components/organisms/singleSection';
+import SEO from '../components/molecules/seo';
+import { graphql, useStaticQuery } from 'gatsby';
+import Img from 'gatsby-image';
+import { Card } from '../components/atoms/card';
+import Layout from '../components/templates/layout';
 
-import Mike from "../../data/avatars/mike.png"
-import Kenna from "../../data/avatars/kenna.png"
-import Kolya from "../../data/avatars/nikolay.png"
-import Fredi from "../../data/avatars/fredrik.png"
-import Maria from "../../data/avatars/maria.png"
-import Nick from "../../data/avatars/nikolaos.png"
+import Mike from '../../data/avatars/mike.png';
+import Kenna from '../../data/avatars/kenna.png';
+import Kolya from '../../data/avatars/nikolay.png';
+import Fredi from '../../data/avatars/fredrik.png';
+import Maria from '../../data/avatars/maria.png';
+import Nick from '../../data/avatars/nikolaos.png';
 
-import systemOne from "../static/System.One_Moderat_Wordmark.svg"
+import systemOne from '../static/System.One_Moderat_Wordmark.svg';
 
 const AboutUsPage = () => {
 	const data = useStaticQuery(
@@ -58,7 +58,7 @@ const AboutUsPage = () => {
 				}
 			}
 		`
-	)
+	);
 	return (
 		<Layout>
 			<SEO
@@ -89,9 +89,9 @@ const AboutUsPage = () => {
 			<SingleSection heading="Our team">
 				<Grid
 					templateColumns={[
-						"repeat(auto-fill, 1fr)",
-						"reapeat(2, 1fr)",
-						"repeat(3, 1fr)",
+						'repeat(auto-fill, 1fr)',
+						'reapeat(2, 1fr)',
+						'repeat(3, 1fr)',
 					]}
 					gap={6}
 				>
@@ -107,14 +107,14 @@ const AboutUsPage = () => {
 						/>
 						<Text
 							fontSize="xl"
-							fontWeight={900}
+							fontWeight="900"
 							letterSpacing="wide"
 							textAlign="center"
 							mb={2}
 						>
 							Mike Solomon
 						</Text>
-						<Text fontWeight={500} textAlign="center">
+						<Text fontWeight="500" textAlign="center">
 							Founder / CEO
 						</Text>
 					</Card>
@@ -130,14 +130,14 @@ const AboutUsPage = () => {
 						/>
 						<Text
 							fontSize="xl"
-							fontWeight={900}
+							fontWeight="900"
 							letterSpacing="wide"
 							textAlign="center"
 							mb={2}
 						>
 							Makenna Smutz
 						</Text>
-						<Text fontWeight={500} textAlign="center">
+						<Text fontWeight="500" textAlign="center">
 							Cofounder / COO
 						</Text>
 					</Card>
@@ -153,14 +153,14 @@ const AboutUsPage = () => {
 						/>
 						<Text
 							fontSize="xl"
-							fontWeight={900}
+							fontWeight="900"
 							letterSpacing="wide"
 							textAlign="center"
 							mb={2}
 						>
 							Nikolay Zenovkin
 						</Text>
-						<Text fontWeight={500} textAlign="center">
+						<Text fontWeight="500" textAlign="center">
 							Head of Data Science
 						</Text>
 					</Card>
@@ -176,14 +176,14 @@ const AboutUsPage = () => {
 						/>
 						<Text
 							fontSize="xl"
-							fontWeight={900}
+							fontWeight="900"
 							letterSpacing="wide"
 							textAlign="center"
 							mb={2}
 						>
 							Fredrik Fornwall
 						</Text>
-						<Text fontWeight={500} textAlign="center">
+						<Text fontWeight="500" textAlign="center">
 							Software Engineer
 						</Text>
 					</Card>
@@ -199,14 +199,14 @@ const AboutUsPage = () => {
 						/>
 						<Text
 							fontSize="xl"
-							fontWeight={900}
+							fontWeight="900"
 							letterSpacing="wide"
 							textAlign="center"
 							mb={2}
 						>
 							Maria Malitckaya
 						</Text>
-						<Text fontWeight={500} textAlign="center">
+						<Text fontWeight="500" textAlign="center">
 							Data Scientist
 						</Text>
 					</Card>
@@ -222,14 +222,14 @@ const AboutUsPage = () => {
 						/>
 						<Text
 							fontSize="xl"
-							fontWeight={900}
+							fontWeight="900"
 							letterSpacing="wide"
 							textAlign="center"
 							mb={2}
 						>
 							Nikolaos Kamarinakis
 						</Text>
-						<Text fontWeight={500} textAlign="center">
+						<Text fontWeight="500" textAlign="center">
 							Software Engineer
 						</Text>
 					</Card>
@@ -239,9 +239,9 @@ const AboutUsPage = () => {
 			<SingleSection heading="Values">
 				<Grid
 					templateColumns={[
-						"repeat(auto-fill, 1fr)",
-						"reapeat(2, 1fr)",
-						"repeat(3, 1fr)",
+						'repeat(auto-fill, 1fr)',
+						'reapeat(2, 1fr)',
+						'repeat(3, 1fr)',
 					]}
 					gap={6}
 				>
@@ -275,9 +275,9 @@ const AboutUsPage = () => {
 			<SingleSection heading="Our investors">
 				<Grid
 					templateColumns={[
-						"repeat(auto-fill, 1fr)",
-						"reapeat(2, 1fr)",
-						"repeat(3, 1fr)",
+						'repeat(auto-fill, 1fr)',
+						'reapeat(2, 1fr)',
+						'repeat(3, 1fr)',
 					]}
 					gap={6}
 				>
@@ -285,7 +285,7 @@ const AboutUsPage = () => {
 						as={Link}
 						href="https://connectventures.co/"
 						aria-label="connect ventures website"
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -298,7 +298,7 @@ const AboutUsPage = () => {
 						as={Link}
 						href="http://www.systemone.vc/"
 						aria-label="System One VC website"
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -308,7 +308,7 @@ const AboutUsPage = () => {
 						as={Link}
 						aria-label="Nordic web website"
 						href="https://thenordicweb.com/"
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -321,7 +321,7 @@ const AboutUsPage = () => {
 						as={Link}
 						href="https://tiny.vc/"
 						aria-label="Tiny VC website"
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -335,8 +335,8 @@ const AboutUsPage = () => {
 						href="https://www.nordicmakers.vc/"
 						aria-label="Nordic makers website"
 						fontSize="xl"
-						fontWeight={900}
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						fontWeight="900"
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -347,8 +347,8 @@ const AboutUsPage = () => {
 						href="http://www.firstfellow.com/"
 						aria-label="First fellow partners website"
 						fontSize="xl"
-						fontWeight={900}
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						fontWeight="900"
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -359,8 +359,8 @@ const AboutUsPage = () => {
 						href="https://www.linkedin.com/in/aliomar/?originalSubdomain=fi"
 						aria-label="Angel Ali Omar's linkedin"
 						fontSize="xl"
-						fontWeight={900}
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						fontWeight="900"
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -371,8 +371,8 @@ const AboutUsPage = () => {
 						href="https://futuristic.vc/"
 						aria-label="Futuristic VC website"
 						fontSize="xl"
-						fontWeight={900}
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						fontWeight="900"
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -383,8 +383,8 @@ const AboutUsPage = () => {
 						href="https://www.linkedin.com/in/aribackholm"
 						aria-label="Angel Ari Backholm's linkedin"
 						fontSize="xl"
-						fontWeight={900}
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						fontWeight="900"
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -395,8 +395,8 @@ const AboutUsPage = () => {
 						href="https://www.linkedin.com/in/okitag"
 						aria-label="Angel Oki Tåg's linkedin"
 						fontSize="xl"
-						fontWeight={900}
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						fontWeight="900"
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -407,8 +407,8 @@ const AboutUsPage = () => {
 						href="https://www.linkedin.com/in/jermyap/"
 						aria-label="Angel Jeremy Yap's linkedin"
 						fontSize="xl"
-						fontWeight={900}
-						backgroundColor={useColorModeValue("gray.50", "gray.800")}
+						fontWeight="900"
+						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
 						borderRadius="md"
 						p={4}
 					>
@@ -439,7 +439,7 @@ const AboutUsPage = () => {
 				</Text>
 			</SingleSection>
 		</Layout>
-	)
-}
+	);
+};
 
-export default AboutUsPage
+export default AboutUsPage;
