@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import {
 	Box,
 	Stack,
@@ -151,7 +151,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								significance === 'low'
 									? 'gray'
 									: significance === 'medium'
-									? 'orange'
+									? 'amber'
 									: significance === 'high'
 									? 'cyan'
 									: null

@@ -7,19 +7,14 @@ import {
 	Thead,
 	Tr,
 } from '@chakra-ui/table';
-import { useTable, usePagination, useSortBy, Column } from 'react-table';
+import { useTable, usePagination, /*useSortBy,*/ Column } from 'react-table';
 import {
 	Flex,
 	Text,
 	IconButton,
-	NumberIncrementStepper,
-	NumberInput,
-	NumberInputField,
-	NumberInputStepper,
 	Select,
 	Tooltip,
 	useColorModeValue,
-	NumberDecrementStepper,
 	Skeleton,
 	ButtonGroup,
 } from '@chakra-ui/react';
@@ -57,7 +52,6 @@ const Table = ({
 		page,
 		canPreviousPage,
 		canNextPage,
-		pageOptions,
 		pageCount,
 		gotoPage,
 		nextPage,
@@ -237,25 +231,6 @@ const Table = ({
 							{controlledPageCount}
 						</Text>
 					</Text>
-					{/* <Text>Go to page:</Text>{' '}
-					<NumberInput
-						ml={2}
-						mr={8}
-						w={20}
-						min={1}
-						max={pageOptions.length}
-						onChange={(value) => {
-							const page = parseInt(value) >= 1 ? parseInt(value) - 1 : 0;
-							gotoPage(page);
-						}}
-						defaultValue={pageIndex + 1}
-					>
-						<NumberInputField />
-						<NumberInputStepper>
-							<NumberIncrementStepper />
-							<NumberDecrementStepper />
-						</NumberInputStepper>
-					</NumberInput> */}
 					<Select
 						size="sm"
 						borderRadius="md"
