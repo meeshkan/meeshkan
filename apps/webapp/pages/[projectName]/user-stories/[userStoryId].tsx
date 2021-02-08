@@ -106,10 +106,11 @@ const UserStory = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const deleteRejectedRecording = () => {
+	const deleteRejectedRecording = async () => {
 		const request = client.request(DELETE_REJECTED_RECORDING, {
 			userStoryId: userStoryId,
 		});
+		await mutate('/api/session');
 		return request;
 	};
 

@@ -276,9 +276,13 @@ export const updateAvatar = async (
 };
 
 export const getUser = async (idToken: string) => {
+	const twentyFourHoursAgo =
+		new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+			.toISOString()
+			.replace('Z', '') + '+00:00';
 	const client = eightBaseClient(idToken);
 	try {
-		const data = await client.request(USER);
+		const data = await client.request(USER, { cutOffDate: twentyFourHoursAgo });
 		return data.user;
 	} catch (error) {
 		console.error(error);
