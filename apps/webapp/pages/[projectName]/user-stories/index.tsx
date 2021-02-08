@@ -191,9 +191,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					setTableData(res);
 					setPageCount(
 						Math.ceil(
-							(toggleIndex === 0
-								? tableData.recordings.count
-								: tableData.testCases.count) / pageSize
+							(toggleIndex === 0 ? res.recordings.count : res.testCases.count) /
+								pageSize
 						)
 					);
 					setTableLoading(false);
