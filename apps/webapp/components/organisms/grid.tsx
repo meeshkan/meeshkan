@@ -263,6 +263,7 @@ const Grid = (props) => {
 					<Menu>
 						<MenuButton
 							as={Button}
+							isDisabled
 							fontSize="md"
 							fontWeight="700"
 							py={0}
