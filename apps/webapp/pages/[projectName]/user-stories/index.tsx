@@ -165,10 +165,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					const stepCount = JSON.parse(
-						originalRow.recording.items[0].sideScript
-					).tests[0].commands.length;
-					return stepCount;
+					return originalRow.recording.seleniumScript.groups.aliasedCount;
 				},
 			},
 		],
