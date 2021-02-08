@@ -96,7 +96,17 @@ export const JOIN_PROJECT = gql`
 					shareUrl
 				}
 				configuration {
+					productionURL
+					stagingURL
 					inviteLink
+					authenticationTokens {
+						items {
+							id
+							type
+							key
+							value
+						}
+					}
 				}
 				hasReceivedEvents
 				members {
@@ -114,35 +124,57 @@ export const JOIN_PROJECT = gql`
 					count
 					items {
 						id
-						failing {
-							count
+						testOutcome {
 							items {
-								firstIntroduction
+								status
 								isResolved
+								error
+								createdAt
+								video {
+									downloadUrl
+									shareUrl
+								}
 							}
 						}
 						title
 						testCreatedDate
 						isTestCase
 						createdAt
-						testRuns {
-							count
-							items {
-								status
-								dateTime
-								userStories(filter: { createdAt: { gte: $cutOffDate } }) {
-									items {
-										id
-									}
-								}
-							}
-						}
 					}
 				}
 				release {
 					count
 					items {
+						id
+						name
 						releaseDate
+						testRuns {
+							count
+							items {
+								id
+								status
+								ciRun
+								createdAt
+								testLength
+								testOutcome {
+									count
+									items {
+										status
+										isResolved
+										error
+										createdAt
+										video {
+											downloadUrl
+											shareUrl
+										}
+										userStory {
+											id
+											title
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
