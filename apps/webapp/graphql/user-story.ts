@@ -12,21 +12,62 @@ export const USER_STORY = gql`
 			isAuthenticated
 			significance
 			recording {
-				items {
-					video {
-						downloadUrl
-						shareUrl
+				video {
+					downloadUrl
+				}
+				environment {
+					items {
+						ipAddress
+						browser
+						browserVersion
+						operatingSystem
+						language
 					}
-					environment {
-						items {
-							ipAddress
-							browser
-							browserVersion
-							operatingSystem
-							language
+				}
+				seleniumScript {
+					version
+					groups {
+						groupsCount: count
+						groupItems: items {
+							gIndex
+							name
+							commands {
+								count
+								items {
+									open {
+										value
+									}
+									setViewportSize {
+										value {
+											xCoord
+											yCoord
+										}
+									}
+									click {
+										id
+									}
+									type {
+										value
+									}
+									dragndrop {
+										sourceTarget {
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+										destinationTarget {
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+									}
+									sIndex
+								}
+							}
 						}
 					}
-					sideScript
 				}
 			}
 		}
