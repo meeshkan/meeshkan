@@ -62,7 +62,7 @@ export const StoryStep = ({
 			>
 				{subSteps &&
 					subSteps.map((step, index) => (
-						<ListItem key={index} lineHeight="1.6">
+						<ListItem key={index} lineHeight="1.6" textTransform="lowercase">
 							{step}
 						</ListItem>
 					))}
