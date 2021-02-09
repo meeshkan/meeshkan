@@ -26,12 +26,12 @@ export const USER_STORY = gql`
 				}
 				seleniumScript {
 					version
-					groups {
+					groups(orderBy: gIndex_ASC) {
 						groupsCount: count
 						groupItems: items {
 							gIndex
 							name
-							commands {
+							commands(orderBy: sIndex_ASC) {
 								count
 								items {
 									open {

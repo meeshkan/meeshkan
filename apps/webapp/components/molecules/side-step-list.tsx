@@ -66,9 +66,9 @@ export const StepList = ({ steps }) =>
 			<StoryStep
 				key={index}
 				stepName={
-					step.name !== null ? step.name : `Group of steps #${index + 1}`
+					step.name !== null ? step.name : `Group of steps #${step.gIndex + 1}`
 				}
-				stepNumber={index + 1}
+				stepNumber={step.gIndex + 1}
 				subSteps={[...steps]}
 			/>
 		);
