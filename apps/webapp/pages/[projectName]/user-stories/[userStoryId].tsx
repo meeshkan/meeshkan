@@ -125,6 +125,11 @@ const UserStory = (props: UserStoryProps) => {
 		return <Text color="red.500">{error}</Text>;
 	}
 
+	let steps = [];
+	data.userStory.recording.seleniumScript.groups.groupItems.forEach((item) => {
+		steps.push(item);
+	});
+
 	return (
 		<Stack w="100%" mb={8}>
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
@@ -254,10 +259,10 @@ const UserStory = (props: UserStoryProps) => {
 						gap={8}
 					>
 						<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
-							{data.userStory.recording.items[0].video && (
+							{data.userStory.recording.video && (
 								<VideoPlayer>
 									<source
-										src={data.userStory.recording.items[0].video.downloadUrl}
+										src={data.userStory.recording.video.downloadUrl}
 										type="video/webm"
 									/>
 								</VideoPlayer>
@@ -270,12 +275,7 @@ const UserStory = (props: UserStoryProps) => {
 							maxH="65vh"
 							overflow="auto"
 						>
-							<StepList
-								steps={
-									JSON.parse(data.userStory.recording.items[0].sideScript)
-										.tests[0].commands
-								}
-							/>
+							<StepList steps={steps} />
 							<Flex
 								justify="center"
 								align="center"

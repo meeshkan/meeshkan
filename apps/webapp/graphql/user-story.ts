@@ -44,19 +44,38 @@ export const USER_STORY = gql`
 										}
 									}
 									click {
-										id
+										target {
+											selector {
+												selector
+												tagName
+												innerText
+											}
+										}
 									}
 									type {
 										value
+										target {
+											selector {
+												tagName
+											}
+										}
 									}
 									dragndrop {
 										sourceTarget {
+											selector {
+												tagName
+												innerText
+											}
 											coordinates {
 												xCoord
 												yCoord
 											}
 										}
 										destinationTarget {
+											selector {
+												tagName
+												innerText
+											}
 											coordinates {
 												xCoord
 												yCoord
