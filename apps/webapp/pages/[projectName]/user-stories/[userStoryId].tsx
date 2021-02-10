@@ -19,7 +19,7 @@ import {
 	Grid,
 	Tooltip,
 } from '@chakra-ui/react';
-import { UserContext } from '../../../utils/user';
+import { SeleniumScript, UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
@@ -126,7 +126,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return <Text color="red.500">{error}</Text>;
 	}
 
-	let steps = [];
+	let steps: SeleniumScript['groups']['groupItems'] = [];
 	data.userStory.recording.seleniumScript.groups.groupItems.forEach((item) => {
 		steps.push(item);
 	});
