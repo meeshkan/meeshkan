@@ -1,6 +1,6 @@
 import React from 'react';
 import { StoryStep } from '../atoms/side-step';
-import { Groups } from '../../utils/user';
+// import { Groups } from '../../utils/user';
 
 const HumanTag = (tag: string) => {
 	return tag === 'A' || 'a'
@@ -26,7 +26,8 @@ const NotNullText = (text: string) => {
 	return text !== null || undefined ? ` with the inner text of "${text}"` : '';
 };
 
-export const StepList = (steps: Groups[]) =>
+// TODO: add `Groups[]` type to steps. Currently breaks the setup for an unidentifiable reason.
+export const StepList = ({ steps }) =>
 	steps.map((step, index) => {
 		const steps = [];
 		step.commands.items.forEach((command) => {
