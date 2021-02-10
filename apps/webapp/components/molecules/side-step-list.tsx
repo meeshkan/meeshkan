@@ -26,7 +26,11 @@ const NotNullText = (text: string) => {
 	return text !== null || undefined ? ` with the inner text of "${text}"` : '';
 };
 
-export const StepList = (steps: SeleniumScript['groups']['groupItems']) =>
+type StepListProps = {
+	steps: SeleniumScript['groups']['groupItems'];
+};
+
+export const StepList = ({ steps }: StepListProps) =>
 	steps.map((step, index) => {
 		const steps = [];
 		step.commands.items.forEach((command) => {
