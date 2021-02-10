@@ -45,7 +45,15 @@ export const StoryStep = ({
 				>
 					{stepNumber}
 				</Flex>
-				<Text fontWeight="700" lineHeight="1" textTransform="capitalize">
+				<Text
+					fontWeight="700"
+					lineHeight="1"
+					color={
+						stepName.startsWith('Untitled')
+							? useColorModeValue('gray.400', 'gray.500')
+							: 'inherit'
+					}
+				>
 					{stepName}
 				</Text>
 			</Flex>
@@ -62,7 +70,7 @@ export const StoryStep = ({
 			>
 				{subSteps &&
 					subSteps.map((step, index) => (
-						<ListItem key={index} lineHeight="1.6" textTransform="lowercase">
+						<ListItem key={index} lineHeight="1.6">
 							{step}
 						</ListItem>
 					))}

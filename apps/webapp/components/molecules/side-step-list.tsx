@@ -19,6 +19,8 @@ const HumanTag = (tag: string) => {
 		? 'Button'
 		: tag === 'P'
 		? 'Text'
+		: tag === 'DIV'
+		? 'Div'
 		: tag;
 };
 
@@ -72,7 +74,9 @@ export const StepList = ({ steps }) =>
 			<StoryStep
 				key={index}
 				stepName={
-					step.name !== null ? step.name : `Group of steps #${step.gIndex + 1}`
+					step.name !== null
+						? step.name
+						: `Untitled group of steps — ${step.gIndex + 1}`
 				}
 				stepNumber={step.gIndex + 1}
 				subSteps={[...steps]}

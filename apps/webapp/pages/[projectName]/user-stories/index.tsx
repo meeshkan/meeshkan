@@ -165,7 +165,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					return originalRow.recording.seleniumScript.groups.aliasedCount;
+					let count = 0;
+					originalRow.recording.seleniumScript.groups.aliasedItems.forEach(
+						(step) => (count = count + step.commands.count)
+					);
+					return count;
 				},
 			},
 		],
