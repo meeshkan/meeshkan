@@ -1,10 +1,11 @@
+import { SeleniumScript } from 'apps/webapp/utils/user';
 import React from 'react';
 import { StoryStep } from '../atoms/side-step';
 
 const HumanTag = (tag: string) => {
-	return tag === 'A'
+	return tag === 'A' || 'a'
 		? 'Link'
-		: tag === 'TD'
+		: tag === 'TD' || 'TR'
 		? 'Table item'
 		: tag === 'LI'
 		? 'List item'
@@ -14,6 +15,10 @@ const HumanTag = (tag: string) => {
 		? 'Span'
 		: tag === 'TEXTAREA'
 		? 'Text input'
+		: tag === 'BUTTON'
+		? 'Button'
+		: tag === 'P'
+		? 'Text'
 		: tag;
 };
 
@@ -21,7 +26,7 @@ const NotNullText = (text: string) => {
 	return text !== null || undefined ? ` with the inner text of "${text}"` : '';
 };
 
-export const StepList = ({ steps }) =>
+export const StepList = (steps: SeleniumScript['groups']['groupItems']) =>
 	steps.map((step, index) => {
 		const steps = [];
 		step.commands.items.forEach((command) => {

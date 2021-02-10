@@ -50,7 +50,7 @@ type UserStoryProps = {
 	cookies: string | undefined;
 };
 
-const UserStory = (props: UserStoryProps) => {
+const UserStoryPage = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const {
 		found: foundProject,
@@ -359,6 +359,6 @@ const UserStory = (props: UserStoryProps) => {
 	);
 };
 
-export default UserStory;
+export default UserStoryPage;
 
 export { getServerSideProps } from '../../../components/molecules/chakra';

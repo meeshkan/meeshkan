@@ -36,6 +36,7 @@ interface Configuration {
 	authenticationTokens: {
 		items: Array<AuthenticationToken>;
 	};
+	logInFlow?: UserStory;
 }
 
 interface TestOutcome {
@@ -45,8 +46,8 @@ interface TestOutcome {
 	createdAt: string;
 	userStory: UserStory;
 	video?: {
-		shareUrl: string;
 		downloadUrl: string;
+		shareUrl?: string;
 	};
 }
 
@@ -69,14 +70,104 @@ export interface TestRuns {
 	items: Array<TestRun>;
 }
 
+export interface Commands {
+	open?: {
+		value: string;
+	};
+	setViewportSize?: {
+		value: {
+			xCoord: number;
+			yCoord: number;
+		};
+	};
+	click?: {
+		target: {
+			selector: {
+				selector: string;
+				tagName: string;
+				innerText: string;
+			};
+		};
+	};
+	type?: {
+		value: string;
+		target: {
+			selector: {
+				tagName: string;
+			};
+		};
+	};
+	dragndrop?: {
+		sourceTarget: {
+			selector: {
+				tagName: string;
+				innerText: string;
+			};
+			coordinates: {
+				xCoord: number;
+				yCoord: number;
+			};
+		};
+		destinationTarget: {
+			selector: {
+				tagName: string;
+				innerText: string;
+			};
+			coordinates: {
+				xCoord: number;
+				yCoord: number;
+			};
+		};
+	};
+	sIndex?: number;
+}
+export interface Groups {
+	gIndex: number;
+	name: string;
+	commands: {
+		count?: number;
+		items: Array<Commands>;
+	};
+}
+export interface SeleniumScript {
+	version?: string;
+	groups: {
+		groupsCount?: number;
+		groupItems: Array<Groups>;
+	};
+}
+
+export interface Recording {
+	video?: {
+		downloadUrl: string;
+	};
+	environment: {
+		items: [
+			{
+				ipAddress: string;
+				browser: string;
+				browserVersion: string;
+				operatingSystem: string;
+				language: string;
+			}
+		];
+	};
+	seleniumScript: SeleniumScript;
+}
+
 export interface UserStory {
+	createdAt: string;
 	id: string;
-	testOutcome: TestOutcomes;
 	title: string;
 	isTestCase: boolean;
-	createdAt: string;
-	significance: 'low' | 'medium' | 'high';
 	testCreatedDate: string;
+	flowIDs: [number];
+	created: 'user' | 'manual';
+	isExpected: boolean;
+	significance: 'low' | 'medium' | 'high';
+	recording: Recording;
+	testOutcome?: TestOutcomes;
+	isAuthenticated: boolean;
 }
 
 export interface UserStories {
