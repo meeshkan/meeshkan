@@ -176,6 +176,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 
 	const fetchData = useCallback(
 		({ pageSize, pageIndex }) => {
+			const twentyFourHoursAgo =
+				new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+					.toISOString()
+					.replace('Z', '') + '+00:00';
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
 			const request = client
@@ -183,14 +187,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					projectId,
 					first: pageSize,
 					skip: pageSize * pageIndex,
+					cutOffDate: twentyFourHoursAgo,
 				})
 				.then((res) => {
 					setTableData(res);
+					const recordCount =
+						toggleIndex === 0 ? res.recordings.count : res.testCases.count;
 					setPageCount(
-						Math.ceil(
-							(toggleIndex === 0 ? res.recordings.count : res.testCases.count) /
-								pageSize
-						)
+						Math.ceil((recordCount === 0 ? 1 : recordCount) / pageSize)
 					);
 					setTableLoading(false);
 				});

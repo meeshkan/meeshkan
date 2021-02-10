@@ -1,19 +1,19 @@
 import React from 'react';
-import { Box, useColorModeValue } from '@chakra-ui/react';
+import { AspectRatio, useColorModeValue } from '@chakra-ui/react';
 
 const VideoPlayer = ({ children }) => (
-	<Box
-		maxW="max-content"
-		border="1px solid"
-		borderColor={useColorModeValue('gray.200', 'gray.700')}
+	<AspectRatio
+		ratio={16 / 9}
 		borderRadius="md"
 		overflow="hidden"
+		border="1px solid"
+		borderColor={useColorModeValue('gray.200', 'gray.700')}
 	>
-		<video width="320" height="240" controls>
+		<video controls>
 			{children}
 			Your browser does not support the video tag.
 		</video>
-	</Box>
+	</AspectRatio>
 );
 
 export default VideoPlayer;

@@ -79,7 +79,11 @@ export const UPDATE_PROJECT = gql`
 `;
 
 export const JOIN_PROJECT = gql`
-	mutation JOIN_PROJECT($userId: ID!, $inviteLink: String!) {
+	mutation JOIN_PROJECT(
+		$userId: ID!
+		$inviteLink: String!
+		$cutOffDate: DateTime!
+	) {
 		configurationUpdate(
 			filter: { inviteLink: $inviteLink }
 			data: { project: { update: { members: { connect: { id: $userId } } } } }
@@ -92,7 +96,17 @@ export const JOIN_PROJECT = gql`
 					shareUrl
 				}
 				configuration {
+					productionURL
+					stagingURL
 					inviteLink
+					authenticationTokens {
+						items {
+							id
+							type
+							key
+							value
+						}
+					}
 				}
 				hasReceivedEvents
 				members {
@@ -106,39 +120,61 @@ export const JOIN_PROJECT = gql`
 						}
 					}
 				}
-				userStories {
+				userStories(filter: { createdAt: { gte: $cutOffDate } }) {
 					count
 					items {
 						id
-						failing {
-							count
+						testOutcome {
 							items {
-								firstIntroduction
+								status
 								isResolved
+								error
+								createdAt
+								video {
+									downloadUrl
+									shareUrl
+								}
 							}
 						}
 						title
 						testCreatedDate
 						isTestCase
 						createdAt
-						testRuns {
-							count
-							items {
-								status
-								dateTime
-								userStories {
-									items {
-										id
-									}
-								}
-							}
-						}
 					}
 				}
 				release {
 					count
 					items {
+						id
+						name
 						releaseDate
+						testRuns {
+							count
+							items {
+								id
+								status
+								ciRun
+								createdAt
+								testLength
+								testOutcome {
+									count
+									items {
+										status
+										isResolved
+										error
+										createdAt
+										video {
+											downloadUrl
+											shareUrl
+										}
+										userStory {
+											id
+											title
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -180,11 +216,17 @@ export const PROJECT_USER_STORIES = gql`
 		}
 	}
 
-	query PROJECT_USER_STORIES($projectId: ID!, $first: Int!, $skip: Int!) {
+	query PROJECT_USER_STORIES(
+		$projectId: ID!
+		$first: Int!
+		$skip: Int!
+		$cutOffDate: DateTime!
+	) {
 		recordings: userStoriesList(
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: false }
+				createdAt: { gte: $cutOffDate }
 			}
 			orderBy: createdAt_DESC
 			first: $first
