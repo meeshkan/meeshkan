@@ -365,12 +365,12 @@ const Settings = () => {
 
 					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
 						<Box>
-							<Heading fontSize="18px" fontWeight={500}>
+							<Heading fontSize="18px" fontWeight="500">
 								Authentication
 							</Heading>
 							<Text
 								fontSize="sm"
-								fontWeight={400}
+								fontWeight="400"
 								lineHeight="short"
 								color="gray.500"
 							>
