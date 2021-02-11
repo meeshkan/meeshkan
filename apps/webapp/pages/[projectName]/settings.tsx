@@ -149,7 +149,7 @@ const Settings = () => {
 			const version = await getExtensionVersion();
 			if (version !== latestExtensionVersion) {
 				errorToast({
-					title: 'Outdated Meeshkan extension',
+					title: 'Meeshkan extension is outdated',
 					description:
 						'Please update to the latest version of the Meeshkan recorder extension.',
 				});
