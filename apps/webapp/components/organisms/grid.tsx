@@ -55,7 +55,7 @@ const barData = {
 			backgroundColor: theme.colors.blue[200],
 		},
 		{
-			label: '# of tests',
+			label: '# of test cases',
 			data: [2000, 3584, 2485, 4300, 1000, 4000, 5000, 1294],
 			backgroundColor: theme.colors.blue[500],
 		},
@@ -188,7 +188,7 @@ const Grid = (props) => {
 	);
 
 	const confidenceScore = Object.values(confidenceDataPoints)
-		.map((a) => a.score)
+		.map((dataPoint) => dataPoint.score)
 		.reduce((a, b) => a + b, 0.0);
 
 	const testCoverageScore =
@@ -199,7 +199,6 @@ const Grid = (props) => {
 			100) /
 		30;
 
-	// TODO: allow users to change this value
 	const selectedTimePeriodInDays = timePeriodsInDays[timePeriod];
 
 	const confidenceDataPointsNDaysAgo = getConfidenceScore(
@@ -415,7 +414,7 @@ const Grid = (props) => {
 											))}
 									</List>
 								</GridCard>
-								<GridCard title="Recordings vs. Tests">
+								<GridCard title="Recordings &amp; Test cases">
 									<Bar data={barData} options={barOptions} />
 									<Stack
 										direction={['column', 'row']}
@@ -435,7 +434,7 @@ const Grid = (props) => {
 												{totalTests}
 											</Text>
 											<Text color={useColorModeValue('gray.500', 'gray.400')}>
-												Tests
+												Test cases
 											</Text>
 										</Flex>
 									</Stack>

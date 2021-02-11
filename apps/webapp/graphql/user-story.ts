@@ -107,21 +107,81 @@ export const UPDATE_EXPECTED_TEST = gql`
 			isExpected
 			significance
 			recording {
-				items {
-					video {
-						downloadUrl
-						shareUrl
+				video {
+					downloadUrl
+				}
+				environment {
+					items {
+						ipAddress
+						browser
+						browserVersion
+						operatingSystem
+						language
 					}
-					environment {
-						items {
-							ipAddress
-							browser
-							browserVersion
-							operatingSystem
-							language
+				}
+				seleniumScript {
+					version
+					groups(orderBy: gIndex_ASC) {
+						groupsCount: count
+						groupItems: items {
+							gIndex
+							name
+							commands(orderBy: sIndex_ASC) {
+								count
+								items {
+									open {
+										value
+									}
+									setViewportSize {
+										value {
+											xCoord
+											yCoord
+										}
+									}
+									click {
+										target {
+											selector {
+												selector
+												tagName
+												innerText
+											}
+										}
+									}
+									type {
+										value
+										target {
+											selector {
+												tagName
+											}
+										}
+									}
+									dragndrop {
+										sourceTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+										destinationTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+									}
+									sIndex
+								}
+							}
 						}
 					}
-					sideScript
 				}
 			}
 		}
@@ -147,21 +207,82 @@ export const UPDATE_STORY_TITLE = gql`
 			isExpected
 			significance
 			recording {
-				items {
-					video {
-						downloadUrl
-						shareUrl
+				video {
+					downloadUrl
+					shareUrl
+				}
+				environment {
+					items {
+						ipAddress
+						browser
+						browserVersion
+						operatingSystem
+						language
 					}
-					environment {
-						items {
-							ipAddress
-							browser
-							browserVersion
-							operatingSystem
-							language
+				}
+				seleniumScript {
+					version
+					groups(orderBy: gIndex_ASC) {
+						groupsCount: count
+						groupItems: items {
+							gIndex
+							name
+							commands(orderBy: sIndex_ASC) {
+								count
+								items {
+									open {
+										value
+									}
+									setViewportSize {
+										value {
+											xCoord
+											yCoord
+										}
+									}
+									click {
+										target {
+											selector {
+												selector
+												tagName
+												innerText
+											}
+										}
+									}
+									type {
+										value
+										target {
+											selector {
+												tagName
+											}
+										}
+									}
+									dragndrop {
+										sourceTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+										destinationTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+									}
+									sIndex
+								}
+							}
 						}
 					}
-					sideScript
 				}
 			}
 		}
@@ -185,21 +306,82 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 			isExpected
 			significance
 			recording {
-				items {
-					video {
-						downloadUrl
-						shareUrl
+				video {
+					downloadUrl
+					shareUrl
+				}
+				environment {
+					items {
+						ipAddress
+						browser
+						browserVersion
+						operatingSystem
+						language
 					}
-					environment {
-						items {
-							ipAddress
-							browser
-							browserVersion
-							operatingSystem
-							language
+				}
+				seleniumScript {
+					version
+					groups(orderBy: gIndex_ASC) {
+						groupsCount: count
+						groupItems: items {
+							gIndex
+							name
+							commands(orderBy: sIndex_ASC) {
+								count
+								items {
+									open {
+										value
+									}
+									setViewportSize {
+										value {
+											xCoord
+											yCoord
+										}
+									}
+									click {
+										target {
+											selector {
+												selector
+												tagName
+												innerText
+											}
+										}
+									}
+									type {
+										value
+										target {
+											selector {
+												tagName
+											}
+										}
+									}
+									dragndrop {
+										sourceTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+										destinationTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+									}
+									sIndex
+								}
+							}
 						}
 					}
-					sideScript
 				}
 			}
 		}
