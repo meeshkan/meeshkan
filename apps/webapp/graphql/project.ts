@@ -128,7 +128,10 @@ export const JOIN_PROJECT = gql`
 							items {
 								status
 								isResolved
-								error
+								errorDetails {
+									stepIndex
+									exception
+								}
 								createdAt
 								video {
 									downloadUrl
@@ -161,7 +164,10 @@ export const JOIN_PROJECT = gql`
 									items {
 										status
 										isResolved
-										error
+										errorDetails {
+											stepIndex
+											exception
+										}
 										createdAt
 										video {
 											downloadUrl
@@ -200,19 +206,18 @@ export const PROJECT_USER_STORIES = gql`
 		flowIDs
 		created
 		significance
-		isExpected
 		recording {
-			items {
-				environment {
-					items {
-						ipAddress
-						browser
-						browserVersion
-						operatingSystem
-						language
+			seleniumScript {
+				groups {
+					aliasedCount: count
+					aliasedItems: items {
+						name
+						gIndex
+						commands {
+							count
+						}
 					}
 				}
-				sideScript
 			}
 		}
 	}

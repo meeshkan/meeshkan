@@ -45,7 +45,7 @@ import Table from '../../../components/organisms/table';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
-import { UserContext } from '../../../utils/user';
+import { UserContext, UserStories } from '../../../utils/user';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
@@ -81,14 +81,14 @@ type UserStoryProps = {
 	cookies: string | undefined;
 };
 
-interface Recordings {
+interface UserStoriesAliased {
 	recordings: {
-		count: number;
-		items: Array<JSON>;
+		count: UserStories['count'];
+		items: UserStories['items'];
 	};
 	testCases: {
-		count: number;
-		items: Array<JSON>;
+		count: UserStories['count'];
+		items: UserStories['items'];
 	};
 }
 
@@ -100,7 +100,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageCount, setPageCount] = React.useState(1);
-	const [tableData, setTableData] = useState<Recordings>({
+	const [tableData, setTableData] = useState<UserStoriesAliased>({
 		recordings: { count: 0, items: [] },
 		testCases: { count: 0, items: [] },
 	});
@@ -165,10 +165,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					const stepCount = JSON.parse(
-						originalRow.recording.items[0].sideScript
-					).tests[0].commands.length;
-					return stepCount;
+					let count = 0;
+					originalRow.recording.seleniumScript.groups.aliasedItems.forEach(
+						(step) => (count = count + step.commands.count)
+					);
+					return count;
 				},
 			},
 		],
@@ -194,12 +195,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				})
 				.then((res) => {
 					setTableData(res);
-					const recordCount = toggleIndex === 0 ? res.recordings.count : res.testCases.count;
+					const recordCount =
+						toggleIndex === 0 ? res.recordings.count : res.testCases.count;
 					setPageCount(
-						Math.ceil(
-							(recordCount === 0 ? 1 : recordCount) /
-								pageSize
-						)
+						Math.ceil((recordCount === 0 ? 1 : recordCount) / pageSize)
 					);
 					setTableLoading(false);
 				});

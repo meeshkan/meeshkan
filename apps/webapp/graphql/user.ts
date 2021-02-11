@@ -100,7 +100,10 @@ export const USER = gql`
 								items {
 									status
 									isResolved
-									error
+									errorDetails {
+										stepIndex
+										exception
+									}
 									createdAt
 									video {
 										downloadUrl
@@ -133,7 +136,10 @@ export const USER = gql`
 										items {
 											status
 											isResolved
-											error
+											errorDetails {
+												stepIndex
+												exception
+											}
 											createdAt
 											video {
 												downloadUrl

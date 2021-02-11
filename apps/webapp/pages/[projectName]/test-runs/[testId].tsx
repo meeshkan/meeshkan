@@ -206,7 +206,7 @@ const TestRun = () => {
 													/>
 												</VideoPlayer>
 											)}
-											<Text mt={4}>{outcome?.error}</Text>
+											<Text mt={4}>{outcome?.errorDetails?.exception}</Text>
 										</>
 									)}
 								</Card>
