@@ -1,12 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import {
-	UserStories,
-	Project,
-	UserStory,
-	TestRuns,
-	Releases,
-} from './user';
+import { UserStories, Project, UserStory, TestRuns, Releases } from './user';
 
 export enum DataPointTag {
 	TEST_RUN = 0,
@@ -25,18 +19,24 @@ const daysUntilDate = (date: moment.Moment): number =>
 	date.diff(moment(), 'days');
 
 export const getTestRuns = (releases: Releases['items']) => {
-	const testRunsTotal = releases
-		.reduce((a, b) => ({ testRuns: {
-			count: a.testRuns.count + b.testRuns.count
-		}}), {
+	const testRunsTotal = releases.reduce(
+		(a, b) => ({
+			testRuns: {
+				count: a.testRuns.count + b.testRuns.count,
+			},
+		}),
+		{
 			testRuns: { count: 0 },
-		}).testRuns.count;
+		}
+	).testRuns.count;
 
 	const pastTestRunsTotal = 0;
 	return {
 		value: testRunsTotal,
 		percentageChange:
-			testRunsTotal > 0 ? ((pastTestRunsTotal + testRunsTotal) / testRunsTotal) * 100 : 0,
+			testRunsTotal > 0
+				? ((pastTestRunsTotal + testRunsTotal) / testRunsTotal) * 100
+				: 0,
 		dataPoints: pastTestRunsTotal,
 	};
 };

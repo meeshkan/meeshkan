@@ -13,12 +13,5 @@ export default async (req, res) =>
 			return;
 		}
 
-		return response
-			.json()
-			.then((data) => {
-				res.json(data);
-			})
-			.catch((error) => {
-				res.status(error).send('Not JSON');
-			});
+		return response;
 	});

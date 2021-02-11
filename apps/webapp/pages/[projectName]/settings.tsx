@@ -356,7 +356,7 @@ const Settings = () => {
 					anchor
 					subtitle="Detailed information about your project."
 				>
-					<Heading fontSize="18px" fontWeight="500">
+					<Heading fontSize="18px" fontWeight="500" mb={2}>
 						Script tag
 					</Heading>
 					<ScriptTagInput />

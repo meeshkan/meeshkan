@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
-import { UserContext } from '../../utils/user';
+import { UserContext, UserStories } from '../../utils/user';
 import {
 	DoubleArrowLeftIcon,
 	ArrowLeftIcon,
@@ -31,7 +31,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
 type TableProps = {
 	columns: Column[];
-	data: JSON[];
+	data: UserStories['items'];
 	fetchData: ({ pageSize, pageIndex }: any) => Promise<void>;
 	loading?: boolean;
 	pageCount: number;
