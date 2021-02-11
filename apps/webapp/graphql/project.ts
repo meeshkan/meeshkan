@@ -128,7 +128,10 @@ export const JOIN_PROJECT = gql`
 							items {
 								status
 								isResolved
-								error
+								errorDetails {
+									stepIndex
+									exception
+								}
 								createdAt
 								video {
 									downloadUrl
@@ -161,7 +164,10 @@ export const JOIN_PROJECT = gql`
 									items {
 										status
 										isResolved
-										error
+										errorDetails {
+											stepIndex
+											exception
+										}
 										createdAt
 										video {
 											downloadUrl

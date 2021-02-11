@@ -42,7 +42,10 @@ interface Configuration {
 interface TestOutcome {
 	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
 	isResolved: boolean;
-	error: string;
+	errorDetails?: {
+		stepIndex: number;
+		exception: string;
+	};
 	createdAt: string;
 	userStory: UserStory;
 	video?: {
