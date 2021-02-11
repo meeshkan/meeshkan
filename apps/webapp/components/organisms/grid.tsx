@@ -345,6 +345,7 @@ const Grid = (props) => {
 							justify="space-between"
 							align={['center', 'stretch', 'stretch', 'stretch']}
 							direction={['column', 'row', 'row', 'row']}
+							px={8}
 						>
 							<StatCard
 								title="Confidence score"
@@ -375,7 +376,6 @@ const Grid = (props) => {
 								title="Tests ran"
 								value={testRuns.value}
 								percentageChange={testRuns.percentageChange}
-								dataPoints={testRuns.dataPoints}
 							/>
 						</Flex>
 						{showScript && (
