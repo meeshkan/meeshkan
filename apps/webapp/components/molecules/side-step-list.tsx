@@ -1,5 +1,5 @@
 import React from 'react';
-import { StoryStep } from '../atoms/side-step';
+import { SideStep } from '../atoms/side-step';
 import { Groups } from '../../utils/user';
 
 const HumanTag = (tag: string) => {
@@ -25,7 +25,7 @@ const HumanTag = (tag: string) => {
 };
 
 const NotNullText = (text: string) => {
-	return text !== null || undefined ? ` with the inner text of "${text}"` : '';
+	return text ? ` with the inner text of ${text}` : '';
 };
 
 type StepListProps = {
@@ -38,29 +38,29 @@ export const StepList = ({ steps }: StepListProps) => {
 			{steps.map((step, index) => {
 				const steps = [];
 				step.commands.items.forEach((command) => {
-					if (command.open !== null) {
+					if (command.open) {
 						steps.push(`Open ${command.open.value}.`);
 					}
-					if (command.setViewportSize !== null) {
+					if (command.setViewportSize) {
 						steps.push(
 							`Set viewport size to ${command.setViewportSize.value.xCoord}px by ${command.setViewportSize.value.yCoord}px.`
 						);
 					}
-					if (command.click !== null) {
+					if (command.click) {
 						steps.push(
 							`Click ${HumanTag(
 								command.click.target.selector.tagName
 							)}${NotNullText(command.click.target.selector.innerText)}.`
 						);
 					}
-					if (command.type !== null) {
+					if (command.type) {
 						steps.push(
 							`Type "${command.type.value}" in ${HumanTag(
 								command.type.target.selector.tagName
 							)}.`
 						);
 					}
-					if (command.dragndrop !== null) {
+					if (command.dragndrop) {
 						steps.push(
 							`Drag ${HumanTag(
 								command.dragndrop.sourceTarget.selector.tagName
@@ -76,7 +76,7 @@ export const StepList = ({ steps }: StepListProps) => {
 				});
 
 				return (
-					<StoryStep
+					<SideStep
 						key={index}
 						stepName={
 							step.name !== null

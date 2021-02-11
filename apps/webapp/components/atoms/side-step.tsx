@@ -14,7 +14,7 @@ type StoryStepProps = {
 	subSteps?: Array<string>;
 };
 
-export const StoryStep = ({
+export const SideStep = ({
 	stepNumber,
 	stepName,
 	subSteps,
