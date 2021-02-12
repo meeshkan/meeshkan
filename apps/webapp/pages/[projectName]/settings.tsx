@@ -168,6 +168,7 @@ const Settings = () => {
 			startRecording({
 				url: project.configuration.productionURL,
 				clientId: project.id,
+				isAuthFlow: true,
 			});
 		} catch (error) {
 			errorToast({
