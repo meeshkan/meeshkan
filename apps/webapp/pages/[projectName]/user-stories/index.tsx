@@ -36,6 +36,8 @@ import {
 	PlusIcon,
 	VideoIcon,
 	CrosshairIcon,
+	SortIcon,
+	FilterIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
@@ -377,11 +379,35 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						selectedIndex={toggleIndex}
 						setSelectedIndex={setToggleIndex}
 					/>
-					{toggleIndex === 0 ? (
-						<Button size="sm" disabled={true}>
-							Review recordings
+					<Flex align="center">
+						<Button
+							size="sm"
+							variant="ghost"
+							colorScheme="gray"
+							fontWeight="400"
+							mr={2}
+							leftIcon={<SortIcon />}
+							isDisabled
+						>
+							Sort
 						</Button>
-					) : null}
+						<Button
+							size="sm"
+							variant="ghost"
+							colorScheme="gray"
+							fontWeight="400"
+							mr={toggleIndex === 0 ? 4 : 0}
+							leftIcon={<FilterIcon />}
+							isDisabled
+						>
+							Filter
+						</Button>
+						{toggleIndex === 0 ? (
+							<Button size="sm" disabled={true}>
+								Review recordings
+							</Button>
+						) : null}
+					</Flex>
 				</Flex>
 
 				<Table
