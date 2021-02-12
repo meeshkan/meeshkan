@@ -51,7 +51,7 @@ const StatCard = ({
 						{isNA
 							? 'N/A'
 							: isPercentage
-							? value.toPrecision(1)
+							? value.toPrecision(3)
 							: commaNumber(value)}
 					</Heading>
 					{isPercentage && !isNA && (
