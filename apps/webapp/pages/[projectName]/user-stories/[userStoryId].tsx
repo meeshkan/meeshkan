@@ -15,11 +15,10 @@ import {
 	useToast,
 	Heading,
 	Stack,
-	SimpleGrid,
 	Grid,
 	Tooltip,
 } from '@chakra-ui/react';
-import { UserContext } from '../../../utils/user';
+import { SeleniumScript, UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
@@ -50,7 +49,7 @@ type UserStoryProps = {
 	cookies: string | undefined;
 };
 
-const UserStory = (props: UserStoryProps) => {
+const UserStoryPage = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const {
 		found: foundProject,
@@ -125,6 +124,11 @@ const UserStory = (props: UserStoryProps) => {
 	if (error) {
 		return <Text color="red.500">{error}</Text>;
 	}
+
+	let steps: SeleniumScript['groups']['groupItems'] = [];
+	data.userStory.recording.seleniumScript.groups.groupItems.forEach((item) => {
+		steps.push(item);
+	});
 
 	return (
 		<Stack w="100%" mb={8}>
@@ -255,10 +259,10 @@ const UserStory = (props: UserStoryProps) => {
 						gap={8}
 					>
 						<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
-							{data.userStory.recording.items[0].video && (
+							{data.userStory.recording.video && (
 								<VideoPlayer>
 									<source
-										src={data.userStory.recording.items[0].video.downloadUrl}
+										src={data.userStory.recording.video.downloadUrl}
 										type="video/webm"
 									/>
 								</VideoPlayer>
@@ -271,12 +275,7 @@ const UserStory = (props: UserStoryProps) => {
 							maxH="65vh"
 							overflow="auto"
 						>
-							<StepList
-								steps={
-									JSON.parse(data.userStory.recording.items[0].sideScript)
-										.tests[0].commands
-								}
-							/>
+							<StepList steps={steps} />
 							<Flex
 								justify="center"
 								align="center"
@@ -360,6 +359,6 @@ const UserStory = (props: UserStoryProps) => {
 	);
 };
 
-export default UserStory;
+export default UserStoryPage;
 
 export { getServerSideProps } from '../../../components/molecules/chakra';

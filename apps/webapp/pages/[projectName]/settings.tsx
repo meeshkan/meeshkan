@@ -19,7 +19,7 @@ import {
 	Checkbox,
 	Code,
 } from '@chakra-ui/react';
-import { TrashIcon } from '@frontend/chakra-theme';
+import { RecordIcon, TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -39,6 +39,12 @@ import {
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { REMOVE_TEAM_MEMBER, REMOVE_AUTH_TOKEN } from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
+import {
+	isChrome,
+	getVersion as getExtensionVersion,
+	latestVersion as latestExtensionVersion,
+	startRecording,
+} from '../../utils/extension';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -116,6 +122,61 @@ const Settings = () => {
 		await mutateUser({ ...user, projects });
 
 		return request;
+	};
+
+	const errorToast = ({ title, description }) => {
+		toast({
+			position: 'bottom-right',
+			title,
+			description,
+			status: 'error',
+			duration: 5000,
+			isClosable: true,
+		});
+	};
+
+	const handleNewUserStory = async () => {
+		if (!isChrome()) {
+			errorToast({
+				title: 'Could not trigger the Meeshkan extension',
+				description:
+					'You need to be using a Chromium browser to create manual user stories, for the time being.',
+			});
+			return;
+		}
+
+		try {
+			const version = await getExtensionVersion();
+			if (version !== latestExtensionVersion) {
+				errorToast({
+					title: 'Meeshkan extension is outdated',
+					description:
+						'Please update to the latest version of the Meeshkan recorder extension.',
+				});
+				return;
+			}
+
+			if (!project?.configuration?.productionURL) {
+				errorToast({
+					title: 'No production URL specified',
+					description:
+						"To trigger the Meeshkan extension, you need to specify a production URL in your project's settings page.",
+				});
+				return;
+			}
+
+			startRecording({
+				url: project.configuration.productionURL,
+				clientId: project.id,
+				isAuthFlow: true,
+			});
+		} catch (error) {
+			errorToast({
+				title: 'Extension is missing',
+				description:
+					'To begin creating manual user stories, please download the Meeshkan recorder extension via the Chrome Web Store.',
+			});
+		}
 	};
 
 	return (
@@ -296,27 +357,40 @@ const Settings = () => {
 					anchor
 					subtitle="Detailed information about your project."
 				>
-					<Heading fontSize="18px" fontWeight="500">
+					<Heading fontSize="18px" fontWeight="500" mb={2}>
 						Script tag
 					</Heading>
 					<ScriptTagInput />
 
 					<Spacer h={8} />
 
-					<Heading fontSize="18px" fontWeight="500">
-						Authentication
-					</Heading>
-					<Text
-						fontSize="sm"
-						fontWeight="400"
-						lineHeight="short"
-						color="gray.500"
-						mb={4}
-					>
-						This is the user your tests will be tied to. Be sure that any of the
-						tokens, or log in details you're supplying are not your own, or a
-						customer's.
-					</Text>
+					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
+						<Box>
+							<Heading fontSize="18px" fontWeight="500">
+								Authentication
+							</Heading>
+							<Text
+								fontSize="sm"
+								fontWeight="400"
+								lineHeight="short"
+								color="gray.500"
+							>
+								This is the user your tests will be tied to. Be sure that any of
+								the tokens, or log in details you're supplying are not your own,
+								or a customer's.
+							</Text>
+						</Box>
+						<Button
+							size="sm"
+							colorScheme="red"
+							variant="subtle"
+							leftIcon={<RecordIcon />}
+							onClick={handleNewUserStory}
+						>
+							Record log in flow
+						</Button>
+					</Flex>
+
 					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
 					<Heading fontSize="14px" fontWeight="500" mt={4}>
 						Active tokens

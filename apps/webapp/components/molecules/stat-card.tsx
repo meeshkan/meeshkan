@@ -78,17 +78,19 @@ const StatCard = ({
 								{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
 								{Math.abs(percentageChange).toFixed(2)}%
 							</Badge>
-							<Badge
-								variant="subtle"
-								colorScheme="gray"
-								fontWeight="400"
-								rounded="lg"
-								textTransform="none"
-								p={2}
-								fontSize="sm"
-							>
-								from {commaNumber(dataPoints)} data points
-							</Badge>
+							{dataPoints !== null && dataPoints !== undefined ? (
+								<Badge
+									variant="subtle"
+									colorScheme="gray"
+									fontWeight="400"
+									rounded="lg"
+									textTransform="none"
+									p={2}
+									fontSize="sm"
+								>
+									from {commaNumber(dataPoints)} data points
+								</Badge>
+							) : null}
 						</>
 					)}
 				</StatHelpText>
