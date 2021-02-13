@@ -226,13 +226,13 @@ export const PROJECT_USER_STORIES = gql`
 		$projectId: ID!
 		$first: Int!
 		$skip: Int!
-		$cutOffDate: DateTime!
+		$significanceFilters: [UserStoryFilter!]
 	) {
 		recordings: userStoriesList(
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: false }
-				createdAt: { gte: $cutOffDate }
+				OR: $significanceFilters
 			}
 			orderBy: createdAt_DESC
 			first: $first
@@ -247,6 +247,7 @@ export const PROJECT_USER_STORIES = gql`
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: true }
+				OR: $significanceFilters
 			}
 			first: $first
 			skip: $skip

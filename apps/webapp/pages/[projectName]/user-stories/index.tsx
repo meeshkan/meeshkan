@@ -28,6 +28,13 @@ import {
 	Heading,
 	Link as ChakraLink,
 	Divider,
+	MenuButton,
+	Menu,
+	MenuList,
+	MenuItem,
+	Checkbox,
+	MenuGroup,
+	MenuDivider,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -179,13 +186,24 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 
 	const projectId = project?.id;
+	const [low, setLow] = useState(true);
+	const [medium, setMedium] = useState(true);
+	const [high, setHigh] = useState(true);
+
+	let significanceFilters = [];
+
+	if (low) {
+		significanceFilters.push({ significance: { equals: 'low' } });
+	}
+	if (medium) {
+		significanceFilters.push({ significance: { equals: 'medium' } });
+	}
+	if (high) {
+		significanceFilters.push({ significance: { equals: 'high' } });
+	}
 
 	const fetchData = useCallback(
 		({ pageSize, pageIndex }) => {
-			const twentyFourHoursAgo =
-				new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-					.toISOString()
-					.replace('Z', '') + '+00:00';
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
 			const request = client
@@ -193,7 +211,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					projectId,
 					first: pageSize,
 					skip: pageSize * pageIndex,
-					cutOffDate: twentyFourHoursAgo,
+					significanceFilters,
 				})
 				.then((res) => {
 					setTableData(res);
@@ -206,7 +224,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[idToken, projectId, toggleIndex]
+		[idToken, projectId, toggleIndex, low, medium, high]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
@@ -391,19 +409,43 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						>
 							Sort
 						</Button>
-						<Button
-							size="sm"
-							variant="ghost"
-							colorScheme="gray"
-							fontWeight="400"
-							mr={toggleIndex === 0 ? 4 : 0}
-							leftIcon={<FilterIcon />}
-							isDisabled
-						>
-							Filter
-						</Button>
+						<Menu closeOnSelect={false}>
+							<MenuButton
+								as={Button}
+								size="sm"
+								variant="ghost"
+								colorScheme="gray"
+								fontWeight="400"
+								mr={toggleIndex === 0 ? 4 : 0}
+								leftIcon={<FilterIcon />}
+							>
+								Filter
+							</MenuButton>
+							<MenuList>
+								<MenuGroup title="Significance">
+									<MenuItem>
+										<Checkbox isChecked={high} onChange={() => setHigh(!high)}>
+											High significance
+										</Checkbox>
+									</MenuItem>
+									<MenuItem>
+										<Checkbox
+											isChecked={medium}
+											onChange={() => setMedium(!medium)}
+										>
+											Medium significance
+										</Checkbox>
+									</MenuItem>
+									<MenuItem>
+										<Checkbox isChecked={low} onChange={() => setLow(!low)}>
+											Low significance
+										</Checkbox>
+									</MenuItem>
+								</MenuGroup>
+							</MenuList>
+						</Menu>
 						{toggleIndex === 0 ? (
-							<Button size="sm" disabled={true}>
+							<Button size="sm" isDisabled>
 								Review recordings
 							</Button>
 						) : null}
