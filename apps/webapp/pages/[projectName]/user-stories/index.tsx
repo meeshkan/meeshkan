@@ -186,9 +186,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 
 	const projectId = project?.id;
-	const [low, setLow] = useState(true);
-	const [medium, setMedium] = useState(true);
-	const [high, setHigh] = useState(true);
+	const [low, setLow] = useState(false);
+	const [medium, setMedium] = useState(false);
+	const [high, setHigh] = useState(false);
 
 	let significanceFilters = [];
 
