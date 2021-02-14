@@ -35,6 +35,8 @@ import {
 	Checkbox,
 	MenuGroup,
 	MenuDivider,
+	MenuItemOption,
+	MenuOptionGroup,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -186,12 +188,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 
 	const projectId = project?.id;
+
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
-
 	let significanceFilters = [];
-
 	if (low) {
 		significanceFilters.push({ significance: { equals: 'low' } });
 	}
@@ -201,6 +202,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	if (high) {
 		significanceFilters.push({ significance: { equals: 'high' } });
 	}
+
+	const [sort, setSort] = useState('createdAt_DESC' || 'createdAt_ASC');
 
 	const fetchData = useCallback(
 		({ pageSize, pageIndex }) => {
@@ -212,6 +215,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					first: pageSize,
 					skip: pageSize * pageIndex,
 					significanceFilters,
+					sort,
 				})
 				.then((res) => {
 					setTableData(res);
@@ -224,7 +228,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[idToken, projectId, toggleIndex, low, medium, high]
+		[idToken, projectId, toggleIndex, low, medium, high, sort]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
@@ -398,17 +402,34 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						setSelectedIndex={setToggleIndex}
 					/>
 					<Flex align="center">
-						<Button
-							size="sm"
-							variant="ghost"
-							colorScheme="gray"
-							fontWeight="400"
-							mr={2}
-							leftIcon={<SortIcon />}
-							isDisabled
-						>
-							Sort
-						</Button>
+						<Menu>
+							<MenuButton
+								as={Button}
+								size="sm"
+								variant="ghost"
+								colorScheme="gray"
+								fontWeight="400"
+								mr={2}
+								leftIcon={<SortIcon />}
+							>
+								Sort
+							</MenuButton>
+							<MenuList>
+								<MenuOptionGroup
+									defaultValue={sort}
+									title="Order"
+									type="radio"
+									onChange={(event) => setSort(event)}
+								>
+									<MenuItemOption value="createdAt_DESC">
+										Newest first
+									</MenuItemOption>
+									<MenuItemOption value="createdAt_ASC">
+										Oldest first
+									</MenuItemOption>
+								</MenuOptionGroup>
+							</MenuList>
+						</Menu>
 						<Menu closeOnSelect={false}>
 							<MenuButton
 								as={Button}
