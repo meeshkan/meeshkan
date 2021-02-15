@@ -43,6 +43,7 @@ import {
 import NavButton from '../molecules/nav-button';
 import { UserContext } from '../../utils/user';
 import { show as showIntercom } from '../../utils/intercom';
+import SideBarFooter from './sidebar-footer';
 
 const SideBarBody = () => {
 	const { projects, project, setProject } = useContext(UserContext);
@@ -209,104 +210,7 @@ const SideBarBody = () => {
 
 					<Spacer />
 
-					<Box>
-						<NavButton onClick={showIntercom} leftIcon={<ChatIcon />} mt={2}>
-							Help and Feedback
-						</NavButton>
-						<Divider my={4} />
-						<Flex align="center">
-							<Menu>
-								<MenuButton
-									as={Button}
-									p={0}
-									m={0}
-									size="sm"
-									colorScheme="gray"
-									// @ts-expect-error
-									backgroundColor={useColorModeValue(
-										'gray.50',
-										transparentize('gray.800', 0.75)
-									)}
-									rightIcon={<ArrowUpDownIcon mr={3} />}
-									w="100%"
-									textAlign="left"
-								>
-									<Flex
-										align="center"
-										color={useColorModeValue('gray.500', 'gray.300')}
-										fontWeight="600"
-										maxW="20ch"
-										whiteSpace="nowrap"
-										overflow="hidden"
-									>
-										<Avatar
-											src={avatarUrl}
-											name={project?.name}
-											icon={
-												<QuestionIcon
-													color={useColorModeValue('gray.400', 'white')}
-													fontSize="1rem"
-												/>
-											}
-											color={useColorModeValue('gray.700', 'gray.200')}
-											bg={useColorModeValue('gray.200', 'gray.600')}
-											size="sm"
-											borderRadius="md"
-											mr={3}
-										/>
-										{project?.name}
-									</Flex>
-								</MenuButton>
-								<MenuList>
-									<MenuOptionGroup
-										defaultValue={project?.name}
-										title="Projects"
-										type="radio"
-									>
-										{projects.map((project) => (
-											<MenuItemOption
-												key={project.id}
-												value={project.name}
-												onClick={() => setProject(project)}
-											>
-												<Flex display="flex" alignItems="center">
-													<Avatar
-														src={project.avatar?.downloadUrl}
-														name={project.name}
-														icon={
-															<QuestionIcon
-																color={useColorModeValue('gray.400', 'white')}
-																fontSize="1rem"
-															/>
-														}
-														color={useColorModeValue('gray.700', 'gray.200')}
-														bg={useColorModeValue('gray.200', 'gray.600')}
-														size="xs"
-														borderRadius="md"
-														mr={3}
-													/>
-													<Text fontSize="sm" fontWeight="600">
-														{project.name}
-													</Text>
-												</Flex>
-											</MenuItemOption>
-										))}
-									</MenuOptionGroup>
-								</MenuList>
-							</Menu>
-							<IconButton
-								isDisabled
-								aria-label="Settings"
-								colorScheme="gray"
-								color={useColorModeValue('gray.500', 'gray.400')}
-								icon={<SettingsIcon />}
-								onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
-								variant="ghost"
-								size="sm"
-								ml={2}
-							/>
-						</Flex>
-					</Box>
+					<SideBarFooter isSettings={true} />
 				</Stack>
 			</>
 		);
@@ -355,110 +259,7 @@ const SideBarBody = () => {
 				</Text>
 			)}
 			<Spacer />
-			<Box>
-				<NavButton onClick={showIntercom} leftIcon={<ChatIcon />} mt={2}>
-					Help and Feedback
-				</NavButton>
-				<Divider my={4} />
-				<Flex align="center">
-					<Menu>
-						<MenuButton
-							as={Button}
-							p={0}
-							m={0}
-							size="sm"
-							colorScheme="gray"
-							// @ts-expect-error
-							backgroundColor={useColorModeValue(
-								'gray.50',
-								transparentize('gray.800', 0.75)
-							)}
-							rightIcon={<ArrowUpDownIcon mr={3} />}
-							w="100%"
-							textAlign="left"
-						>
-							<Flex
-								align="center"
-								color={useColorModeValue('gray.500', 'gray.300')}
-								fontWeight="600"
-								maxW="20ch"
-								whiteSpace="nowrap"
-								overflow="hidden"
-							>
-								<Avatar
-									src={avatarUrl}
-									name={project?.name}
-									icon={
-										<QuestionIcon
-											color={useColorModeValue('gray.400', 'white')}
-											fontSize="1rem"
-										/>
-									}
-									color={useColorModeValue('gray.700', 'gray.200')}
-									bg={useColorModeValue('gray.200', 'gray.600')}
-									size="sm"
-									borderRadius="md"
-									mr={3}
-								/>
-								{project?.name}
-							</Flex>
-						</MenuButton>
-						<MenuList>
-							<MenuOptionGroup
-								defaultValue={project?.name}
-								title="Projects"
-								type="radio"
-							>
-								{projects.map((project) => (
-									<MenuItemOption
-										key={project.id}
-										value={project.name}
-										onClick={() => setProject(project)}
-									>
-										<Flex display="flex" alignItems="center">
-											<Avatar
-												src={project.avatar?.downloadUrl}
-												name={project.name}
-												icon={
-													<QuestionIcon
-														color={useColorModeValue('gray.400', 'white')}
-														fontSize="1rem"
-													/>
-												}
-												color={useColorModeValue('gray.700', 'gray.200')}
-												bg={useColorModeValue('gray.200', 'gray.600')}
-												size="xs"
-												borderRadius="md"
-												mr={3}
-											/>
-											<Text fontSize="sm" fontWeight="600">
-												{project.name}
-											</Text>
-										</Flex>
-									</MenuItemOption>
-								))}
-							</MenuOptionGroup>
-							<MenuDivider />
-							<MenuItem onClick={() => router.push('/new-project')}>
-								<PlusIcon mr={3} />
-								Create project
-							</MenuItem>
-						</MenuList>
-					</Menu>
-					<Tooltip hasArrow label="Settings" borderRadius="md" p={2}>
-						<IconButton
-							aria-label="Settings"
-							colorScheme="gray"
-							color={useColorModeValue('gray.500', 'gray.400')}
-							icon={<SettingsIcon />}
-							onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
-							variant="ghost"
-							size="sm"
-							ml={2}
-						/>
-					</Tooltip>
-				</Flex>
-			</Box>
+			<SideBarFooter />
 		</>
 	);
 };
