@@ -27,7 +27,7 @@ import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
 
 type SideBarFooterProps = {
-	isSettings?: Boolean;
+	isSettings?: boolean;
 };
 
 const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
