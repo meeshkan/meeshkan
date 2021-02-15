@@ -112,8 +112,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<UserStoriesAliased>({
-		recordings: { count: 0, items: [] },
-		testCases: { count: 0, items: [] },
+		recordings: {
+			count: 0,
+			items: [],
+		},
+		testCases: {
+			count: 0,
+			items: [],
+		},
 	});
 
 	const columns: Column[] = useMemo(
@@ -208,16 +214,33 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [high, setHigh] = useState(false);
 	let significanceFilters = [];
 	if (low) {
-		significanceFilters.push({ significance: { equals: 'low' } });
+		significanceFilters.push({
+			significance: {
+				equals: 'low',
+			},
+		});
 	}
 	if (medium) {
-		significanceFilters.push({ significance: { equals: 'medium' } });
+		significanceFilters.push({
+			significance: {
+				equals: 'medium',
+			},
+		});
 	}
 	if (high) {
-		significanceFilters.push({ significance: { equals: 'high' } });
+		significanceFilters.push({
+			significance: {
+				equals: 'high',
+			},
+		});
 	}
 
-	const [sort, setSort] = useState('createdAt_DESC' || 'createdAt_ASC');
+	enum SortDirections {
+		Newest = 'createdAt_DESC',
+		Oldest = 'createdAt_ASC',
+	}
+
+	const [sort, setSort] = useState<SortDirections>(SortDirections.Newest);
 
 	const fetchData = useCallback(
 		({ pageSize, pageIndex }) => {
@@ -296,7 +319,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						w="100%"
 						borderRadius="md"
 						onClick={onOpen}
-						_hover={{ cursor: 'pointer' }}
+						_hover={{
+							cursor: 'pointer',
+						}}
 					>
 						<PlusIcon
 							boxSize={8}
@@ -429,16 +454,23 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								Sort
 							</MenuButton>
 							<MenuList>
+								{console.log(sort)}
 								<MenuOptionGroup
 									defaultValue={sort}
 									title="Order"
 									type="radio"
-									onChange={(event) => setSort(event)}
+									onChange={(event) =>
+										setSort(
+											event === 'createdAt_DESC'
+												? SortDirections.Newest
+												: SortDirections.Oldest
+										)
+									}
 								>
-									<MenuItemOption value="createdAt_DESC">
+									<MenuItemOption value={SortDirections.Newest}>
 										Newest first
 									</MenuItemOption>
-									<MenuItemOption value="createdAt_ASC">
+									<MenuItemOption value={SortDirections.Oldest}>
 										Oldest first
 									</MenuItemOption>
 								</MenuOptionGroup>

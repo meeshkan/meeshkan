@@ -228,7 +228,7 @@ export const PROJECT_USER_STORIES = gql`
 		$first: Int!
 		$skip: Int!
 		$significanceFilters: [UserStoryFilter!]
-		$sort: [UserStoryOrderBy]
+		$sort: UserStoryOrderBy
 	) {
 		recordings: userStoriesList(
 			filter: {
@@ -236,7 +236,7 @@ export const PROJECT_USER_STORIES = gql`
 				isTestCase: { equals: false }
 				OR: $significanceFilters
 			}
-			orderBy: $sort
+			orderBy: [$sort]
 			first: $first
 			skip: $skip
 		) {
@@ -251,7 +251,7 @@ export const PROJECT_USER_STORIES = gql`
 				isTestCase: { equals: true }
 				OR: $significanceFilters
 			}
-			orderBy: $sort
+			orderBy: [$sort]
 			first: $first
 			skip: $skip
 		) {
