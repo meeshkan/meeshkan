@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import useSWR from 'swr';
 import {
@@ -27,12 +27,16 @@ type AvatarFieldProps = {
 
 const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
 	const [error, setError] = useState('');
-	const { idToken } = useContext(UserContext);
+	const { project, idToken } = useContext(UserContext);
 	const [loading, setLoading] = useState(false);
 	const [image, setImage] = useState(existingImageUrl || '');
 	const client = eightBaseClient(idToken);
 	const fetcher = (query) => client.request(query);
 	const { data, error: uploadInfoError } = useSWR(FILE_UPLOAD_INFO, fetcher);
+
+	useEffect(() => {
+		setImage(existingImageUrl);
+	}, [project, idToken]);
 
 	if (!data && !uploadInfoError) {
 		return (

@@ -1,4 +1,4 @@
-import React, { useState, useContext, ChangeEvent } from 'react';
+import React, { useState, useContext, ChangeEvent, useEffect } from 'react';
 import {
 	Box,
 	FormControl,
@@ -66,6 +66,12 @@ const Settings = () => {
 	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
 		project?.configuration.authenticationTokens?.items || []
 	);
+
+	useEffect(() => {
+		setProductUpdates(productNotifications);
+		setMembers(project?.members?.items);
+		setTokens(project?.configuration.authenticationTokens?.items);
+	}, [project, idToken, mutateUser]);
 
 	const client = eightBaseClient(idToken);
 
