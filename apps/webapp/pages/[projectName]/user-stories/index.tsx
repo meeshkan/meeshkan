@@ -28,6 +28,15 @@ import {
 	Heading,
 	Link as ChakraLink,
 	Divider,
+	MenuButton,
+	Menu,
+	MenuList,
+	MenuItem,
+	Checkbox,
+	MenuGroup,
+	MenuDivider,
+	MenuItemOption,
+	MenuOptionGroup,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -36,6 +45,8 @@ import {
 	PlusIcon,
 	VideoIcon,
 	CrosshairIcon,
+	SortIcon,
+	FilterIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
@@ -100,8 +111,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<UserStoriesAliased>({
-		recordings: { count: 0, items: [] },
-		testCases: { count: 0, items: [] },
+		recordings: {
+			count: 0,
+			items: [],
+		},
+		testCases: {
+			count: 0,
+			items: [],
+		},
 	});
 
 	const columns: Column[] = useMemo(
@@ -109,6 +126,20 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Title',
 				accessor: 'title',
+			},
+			{
+				Header: 'Created at',
+				accessor: (originalRow, rowIndex) => {
+					const humanDate = new Date(originalRow.createdAt);
+					return humanDate.toLocaleDateString('en-US', {
+						hour: 'numeric',
+						minute: 'numeric',
+						second: 'numeric',
+						hour12: false,
+						day: 'numeric',
+						month: 'short',
+					});
+				},
 			},
 			{
 				Header: '# repeated',
@@ -177,12 +208,41 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 
 	const projectId = project?.id;
 
+	const [low, setLow] = useState(false);
+	const [medium, setMedium] = useState(false);
+	const [high, setHigh] = useState(false);
+	let significanceFilters = [];
+	if (low) {
+		significanceFilters.push({
+			significance: {
+				equals: 'low',
+			},
+		});
+	}
+	if (medium) {
+		significanceFilters.push({
+			significance: {
+				equals: 'medium',
+			},
+		});
+	}
+	if (high) {
+		significanceFilters.push({
+			significance: {
+				equals: 'high',
+			},
+		});
+	}
+
+	enum SortDirections {
+		Newest = 'createdAt_DESC',
+		Oldest = 'createdAt_ASC',
+	}
+
+	const [sort, setSort] = useState<SortDirections>(SortDirections.Newest);
+
 	const fetchData = useCallback(
 		({ pageSize, pageIndex }) => {
-			const twentyFourHoursAgo =
-				new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-					.toISOString()
-					.replace('Z', '') + '+00:00';
 			const client = eightBaseClient(idToken);
 			setTableLoading(true);
 			const request = client
@@ -190,7 +250,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					projectId,
 					first: pageSize,
 					skip: pageSize * pageIndex,
-					cutOffDate: twentyFourHoursAgo,
+					significanceFilters,
+					sort,
 				})
 				.then((res) => {
 					setTableData(res);
@@ -203,7 +264,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[idToken, projectId, toggleIndex]
+		[idToken, projectId, toggleIndex, low, medium, high, sort]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
@@ -257,7 +318,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						w="100%"
 						borderRadius="md"
 						onClick={onOpen}
-						_hover={{ cursor: 'pointer' }}
+						_hover={{
+							cursor: 'pointer',
+						}}
 					>
 						<PlusIcon
 							boxSize={8}
@@ -376,11 +439,82 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						selectedIndex={toggleIndex}
 						setSelectedIndex={setToggleIndex}
 					/>
-					{toggleIndex === 0 ? (
-						<Button size="sm" disabled={true}>
-							Review recordings
-						</Button>
-					) : null}
+					<Flex align="center">
+						<Menu>
+							<MenuButton
+								as={Button}
+								size="sm"
+								variant="ghost"
+								colorScheme="gray"
+								fontWeight="400"
+								mr={2}
+								leftIcon={<SortIcon />}
+							>
+								Sort
+							</MenuButton>
+							<MenuList>
+								<MenuOptionGroup
+									defaultValue={sort}
+									title="Order"
+									type="radio"
+									onChange={(event) =>
+										setSort(
+											event === 'createdAt_DESC'
+												? SortDirections.Newest
+												: SortDirections.Oldest
+										)
+									}
+								>
+									<MenuItemOption value={SortDirections.Newest}>
+										Newest first
+									</MenuItemOption>
+									<MenuItemOption value={SortDirections.Oldest}>
+										Oldest first
+									</MenuItemOption>
+								</MenuOptionGroup>
+							</MenuList>
+						</Menu>
+						<Menu closeOnSelect={false}>
+							<MenuButton
+								as={Button}
+								size="sm"
+								variant="ghost"
+								colorScheme="gray"
+								fontWeight="400"
+								mr={toggleIndex === 0 ? 4 : 0}
+								leftIcon={<FilterIcon />}
+							>
+								Filter
+							</MenuButton>
+							<MenuList>
+								<MenuGroup title="Significance">
+									<MenuItem>
+										<Checkbox isChecked={high} onChange={() => setHigh(!high)}>
+											High significance
+										</Checkbox>
+									</MenuItem>
+									<MenuItem>
+										<Checkbox
+											isChecked={medium}
+											onChange={() => setMedium(!medium)}
+										>
+											Medium significance
+										</Checkbox>
+									</MenuItem>
+									<MenuItem>
+										<Checkbox isChecked={low} onChange={() => setLow(!low)}>
+											Low significance
+										</Checkbox>
+									</MenuItem>
+								</MenuGroup>
+							</MenuList>
+						</Menu>
+						{toggleIndex === 0 ? (
+							<Button size="sm" isDisabled>
+								Review recordings
+							</Button>
+						) : null}
+					</Flex>
 				</Flex>
 
 				<Table

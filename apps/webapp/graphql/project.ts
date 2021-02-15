@@ -202,6 +202,7 @@ export const REMOVE_TEAM_MEMBER = gql`
 export const PROJECT_USER_STORIES = gql`
 	fragment stories on UserStory {
 		id
+		createdAt
 		title
 		flowIDs
 		created
@@ -226,15 +227,16 @@ export const PROJECT_USER_STORIES = gql`
 		$projectId: ID!
 		$first: Int!
 		$skip: Int!
-		$cutOffDate: DateTime!
+		$significanceFilters: [UserStoryFilter!]
+		$sort: UserStoryOrderBy
 	) {
 		recordings: userStoriesList(
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: false }
-				createdAt: { gte: $cutOffDate }
+				OR: $significanceFilters
 			}
-			orderBy: createdAt_DESC
+			orderBy: [$sort]
 			first: $first
 			skip: $skip
 		) {
@@ -247,7 +249,9 @@ export const PROJECT_USER_STORIES = gql`
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: true }
+				OR: $significanceFilters
 			}
+			orderBy: [$sort]
 			first: $first
 			skip: $skip
 		) {
