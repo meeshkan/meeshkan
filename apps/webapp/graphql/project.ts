@@ -202,6 +202,7 @@ export const REMOVE_TEAM_MEMBER = gql`
 export const PROJECT_USER_STORIES = gql`
 	fragment stories on UserStory {
 		id
+		createdAt
 		title
 		flowIDs
 		created
@@ -227,6 +228,7 @@ export const PROJECT_USER_STORIES = gql`
 		$first: Int!
 		$skip: Int!
 		$significanceFilters: [UserStoryFilter!]
+		$sort: [UserStoryOrderBy]
 	) {
 		recordings: userStoriesList(
 			filter: {
@@ -234,7 +236,7 @@ export const PROJECT_USER_STORIES = gql`
 				isTestCase: { equals: false }
 				OR: $significanceFilters
 			}
-			orderBy: createdAt_DESC
+			orderBy: $sort
 			first: $first
 			skip: $skip
 		) {
@@ -249,6 +251,7 @@ export const PROJECT_USER_STORIES = gql`
 				isTestCase: { equals: true }
 				OR: $significanceFilters
 			}
+			orderBy: $sort
 			first: $first
 			skip: $skip
 		) {

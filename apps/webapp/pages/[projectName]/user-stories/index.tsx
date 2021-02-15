@@ -123,6 +123,20 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: 'title',
 			},
 			{
+				Header: 'Created at',
+				accessor: (originalRow, rowIndex) => {
+					const humanDate = new Date(originalRow.createdAt);
+					return humanDate.toLocaleDateString('en-US', {
+						hour: 'numeric',
+						minute: 'numeric',
+						second: 'numeric',
+						hour12: false,
+						day: 'numeric',
+						month: 'short',
+					});
+				},
+			},
+			{
 				Header: '# repeated',
 				accessor: (originalRow, rowIndex) => {
 					return originalRow.flowIDs.length;
