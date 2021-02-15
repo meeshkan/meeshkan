@@ -15,7 +15,6 @@ import {
 	Spacer,
 	LightMode,
 	Badge,
-	List,
 	Checkbox,
 	Code,
 } from '@chakra-ui/react';

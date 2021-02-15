@@ -7,49 +7,27 @@ import {
 	Box,
 	Flex,
 	Spacer,
-	IconButton,
 	useColorModeValue,
-	Divider,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuOptionGroup,
-	MenuItemOption,
-	MenuItem,
-	MenuDivider,
-	Button,
 	Text,
 	Heading,
-	Avatar,
-	Tooltip,
 } from '@chakra-ui/react';
-import {
-	ChatIcon,
-	ArrowUpDownIcon,
-	QuestionIcon,
-	ChevronLeftIcon,
-} from '@chakra-ui/icons';
-import { transparentize } from '@chakra-ui/theme-tools';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 import {
 	ActivityIcon,
 	VideoIcon,
 	CheckSquareIcon,
 	PackageIcon,
-	SettingsIcon,
-	PlusIcon,
 	SuitcaseIcon,
 	ProfileIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
 import { UserContext } from '../../utils/user';
-import { show as showIntercom } from '../../utils/intercom';
 import SideBarFooter from './sidebar-footer';
 
 const SideBarBody = () => {
-	const { projects, project, setProject } = useContext(UserContext);
+	const { projects, project } = useContext(UserContext);
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
-	const avatarUrl = project?.avatar?.downloadUrl;
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
 	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
