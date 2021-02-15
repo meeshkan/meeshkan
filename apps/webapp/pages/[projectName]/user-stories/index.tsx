@@ -37,6 +37,7 @@ import {
 	MenuDivider,
 	MenuItemOption,
 	MenuOptionGroup,
+	OrderedList,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -359,11 +360,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					<Divider />
 					<ModalCloseButton />
 					<ModalBody px={6} pb={4} pt={8}>
-						<List
-							spacing={6}
-							listStyleType="ordered"
-							listStylePosition="inside"
-						>
+						<OrderedList spacing={6}>
 							<ListItem lineHeight="1.6">
 								<strong>Recording production user behavior.</strong> This is the
 								preferred method of recording as it's the best indication of
@@ -423,7 +420,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 									</ListItem>
 								</List>
 							</ListItem>
-						</List>
+						</OrderedList>
 					</ModalBody>
 					<ModalFooter p={6}>
 						<Button onClick={onClose}>Okay, great!</Button>
