@@ -11,7 +11,7 @@ import {
 type StoryStepProps = {
 	stepNumber: number;
 	stepName: string;
-	subSteps?: Array<string>;
+	subSteps?: [{ text: string; sIndex: number }];
 };
 
 export const SideStep = ({
@@ -47,7 +47,7 @@ export const SideStep = ({
 				</Flex>
 				<Text
 					fontWeight="700"
-					lineHeight="1"
+					lineHeight="1.4"
 					color={
 						stepName.startsWith('Untitled')
 							? useColorModeValue('gray.400', 'gray.500')
@@ -69,9 +69,9 @@ export const SideStep = ({
 				borderColor="gray.300"
 			>
 				{subSteps &&
-					subSteps.map((step, index) => (
-						<ListItem key={index} lineHeight="1.6">
-							{step}
+					subSteps.map((step) => (
+						<ListItem key={step.sIndex} lineHeight="1.6">
+							{step.text}
 						</ListItem>
 					))}
 			</List>
