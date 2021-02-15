@@ -179,6 +179,10 @@ const Settings = () => {
 		}
 	};
 
+	const isSupportAllowed = members.some(function (val) {
+		return val.email === 'contact@meeshkan.com';
+	});
+
 	return (
 		<Box overflowY="scroll" w="100%">
 			<Stack p={[6, 0, 0, 0]} w="100%" rounded="lg" spacing={6} mb={150}>
@@ -325,6 +329,17 @@ const Settings = () => {
 							</Flex>
 						);
 					})}
+					{isSupportAllowed ? null : (
+						<Button
+							w="100%"
+							size="sm"
+							colorScheme="gray"
+							variant="subtle"
+							mt={4}
+						>
+							Allow Meeshkan support access
+						</Button>
+					)}
 				</GridCard>
 				<GridCard
 					title="Privacy"
