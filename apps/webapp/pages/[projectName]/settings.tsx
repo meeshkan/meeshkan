@@ -183,8 +183,8 @@ const Settings = () => {
 		}
 	};
 
-	const isSupportAllowed = members.some(function (val) {
-		return val.email === 'contact@meeshkan.com';
+	const isSupportAllowed = members.some((member) => {
+		return member.email === 'contact@meeshkan.com';
 	});
 
 	const inviteSupport = async () => {
