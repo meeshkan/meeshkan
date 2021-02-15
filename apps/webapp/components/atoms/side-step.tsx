@@ -25,7 +25,7 @@ export const SideStep = ({
 			pt={stepNumber === 1 ? 4 : 0}
 			borderRadius="md"
 			_hover={{
-				backgroundColor: useColorModeValue('gray.100', 'gray.800'),
+				backgroundColor: useColorModeValue('white', 'gray.900'),
 			}}
 		>
 			{stepNumber === 1 ? null : (
