@@ -454,7 +454,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								Sort
 							</MenuButton>
 							<MenuList>
-								{console.log(sort)}
 								<MenuOptionGroup
 									defaultValue={sort}
 									title="Order"
