@@ -37,7 +37,11 @@ import {
 	AuthenticationToken,
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { REMOVE_TEAM_MEMBER, REMOVE_AUTH_TOKEN } from '../../graphql/project';
+import {
+	REMOVE_TEAM_MEMBER,
+	REMOVE_AUTH_TOKEN,
+	ADD_SUPPORT,
+} from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 import {
 	isChrome,
@@ -182,6 +186,16 @@ const Settings = () => {
 	const isSupportAllowed = members.some(function (val) {
 		return val.email === 'contact@meeshkan.com';
 	});
+
+	const inviteSupport = async () => {
+		const request = client
+			.request(ADD_SUPPORT, {
+				projectID: project.id,
+			})
+			.then((res) => setMembers(res.projectUpdate.members.items));
+
+		await mutateUser({ ...user, projects });
+	};
 
 	return (
 		<Box overflowY="scroll" w="100%">
@@ -336,6 +350,26 @@ const Settings = () => {
 							colorScheme="gray"
 							variant="subtle"
 							mt={4}
+							onClick={() => {
+								inviteSupport();
+								toast({
+									position: 'bottom-right',
+									render: () => (
+										<Box
+											color="white"
+											p={4}
+											bg="blue.500"
+											borderRadius="md"
+											fontSize="md"
+										>
+											contact@meeshkan.com has been successfully added to{' '}
+											{project.name}.
+										</Box>
+									),
+									duration: 2000,
+									isClosable: true,
+								});
+							}}
 						>
 							Allow Meeshkan support access
 						</Button>
