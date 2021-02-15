@@ -95,9 +95,8 @@ interface UserStoriesAliased {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
-
 	const [toggleIndex, setToggleIndex] = useState(0);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<UserStoriesAliased>({
@@ -125,7 +124,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							px={2}
+							p={2}
 						>
 							{originalRow.created[0] === 'user' ? (
 								<VideoIcon mr={2} />
@@ -146,7 +145,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							px={2}
+							p={2}
 							colorScheme={
 								significance === 'low'
 									? 'gray'

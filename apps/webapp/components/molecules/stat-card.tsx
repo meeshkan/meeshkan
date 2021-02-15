@@ -51,7 +51,7 @@ const StatCard = ({
 						{isNA
 							? 'N/A'
 							: isPercentage
-							? value.toPrecision(1)
+							? value.toPrecision(3)
 							: commaNumber(value)}
 					</Heading>
 					{isPercentage && !isNA && (
@@ -78,7 +78,7 @@ const StatCard = ({
 								{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
 								{Math.abs(percentageChange).toFixed(2)}%
 							</Badge>
-							{dataPoints && (
+							{dataPoints !== null && dataPoints !== undefined ? (
 								<Badge
 									variant="subtle"
 									colorScheme="gray"
@@ -90,7 +90,7 @@ const StatCard = ({
 								>
 									from {commaNumber(dataPoints)} data points
 								</Badge>
-							)}
+							) : null}
 						</>
 					)}
 				</StatHelpText>
