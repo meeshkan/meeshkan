@@ -194,6 +194,12 @@ const Settings = () => {
 			})
 			.then((res) => setMembers(res.projectUpdate.members.items));
 
+    const selectedProjectIndex = _.findIndex(
+			projects,
+			(currentProject) => currentProject.id === project.id
+		);
+
+		projects[selectedProjectIndex].members = res.projectUpdate.members;
 		await mutateUser({ ...user, projects });
 	};
 
