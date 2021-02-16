@@ -17,6 +17,9 @@ import {
 	Stack,
 	Grid,
 	Tooltip,
+	Textarea,
+	FormControl,
+	FormLabel,
 } from '@chakra-ui/react';
 import { SeleniumScript, UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -25,6 +28,7 @@ import {
 	UPDATE_EXPECTED_TEST,
 	DELETE_REJECTED_RECORDING,
 	UPDATE_STORY_TITLE,
+	UPDATE_STORY_DESCRIPTION,
 	UPDATE_STORY_SIGNIFICANCE,
 } from '../../../graphql/user-story';
 import useSWR from 'swr';
@@ -86,6 +90,13 @@ const UserStoryPage = (props: UserStoryProps) => {
 			newTitle: newTitle,
 		});
 		return request;
+	};
+
+	const updateDescription = (newDescription: string) => {
+		client.request(UPDATE_STORY_DESCRIPTION, {
+			userStoryId: userStoryId,
+			newDescription: newDescription,
+		});
 	};
 
 	const updateSignificance = (newSignificance: string) => {
@@ -261,6 +272,27 @@ const UserStoryPage = (props: UserStoryProps) => {
 								/>
 							</VideoPlayer>
 						)}
+
+						<FormControl mt={8}>
+							<FormLabel
+								mb={2}
+								color={useColorModeValue('gray.500', 'gray.400')}
+							>
+								What should you expect?
+							</FormLabel>
+							<Textarea
+								defaultValue={data.userStory.description}
+								name="description"
+								type="text"
+								placeholder="Use this field to communicate what this test should do."
+								resize="vertical"
+								size="sm"
+								borderRadius="md"
+								onBlur={(e) => {
+									updateDescription(e.target.value);
+								}}
+							/>
+						</FormControl>
 					</Box>
 
 					<Box
