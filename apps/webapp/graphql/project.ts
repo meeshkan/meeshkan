@@ -199,6 +199,27 @@ export const REMOVE_TEAM_MEMBER = gql`
 	}
 `;
 
+export const ADD_SUPPORT = gql`
+mutation ADD_SUPPORT($projectID: ID!) {
+  projectUpdate(
+    filter: { id: $projectID }
+    data: { members: { connect: { email: "contact@meeshkan.com" } } }
+  ) {
+    id
+    members {
+      items {
+        avatar {
+          downloadUrl
+        }
+        firstName
+        lastName
+        email
+      }
+    }
+  }
+}
+`;
+
 export const PROJECT_USER_STORIES = gql`
 	fragment stories on UserStory {
 		id

@@ -36,7 +36,11 @@ import {
 	AuthenticationToken,
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { REMOVE_TEAM_MEMBER, REMOVE_AUTH_TOKEN } from '../../graphql/project';
+import {
+	REMOVE_TEAM_MEMBER,
+	REMOVE_AUTH_TOKEN,
+	ADD_SUPPORT,
+} from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 import {
 	isChrome,
@@ -182,6 +186,26 @@ const Settings = () => {
 					'To begin creating manual user stories, please download the Meeshkan recorder extension via the Chrome Web Store.',
 			});
 		}
+	};
+
+	const isSupportAllowed = members.some((member) => {
+		return member.email === 'contact@meeshkan.com';
+	});
+
+	const inviteSupport = async () => {
+		const res = await client
+			.request(ADD_SUPPORT, {
+				projectID: project.id,
+			});
+		setMembers(res.projectUpdate.members.items);
+
+    const selectedProjectIndex = _.findIndex(
+			projects,
+			(currentProject) => currentProject.id === project.id
+		);
+
+		projects[selectedProjectIndex].members = res.projectUpdate.members;
+		await mutateUser({ ...user, projects });
 	};
 
 	return (
@@ -330,6 +354,37 @@ const Settings = () => {
 							</Flex>
 						);
 					})}
+					{isSupportAllowed ? null : (
+						<Button
+							w="100%"
+							size="sm"
+							colorScheme="gray"
+							variant="subtle"
+							mt={4}
+							onClick={() => {
+								inviteSupport();
+								toast({
+									position: 'bottom-right',
+									render: () => (
+										<Box
+											color="white"
+											p={4}
+											bg="blue.500"
+											borderRadius="md"
+											fontSize="md"
+										>
+											contact@meeshkan.com has been successfully added to{' '}
+											{project.name}.
+										</Box>
+									),
+									duration: 2000,
+									isClosable: true,
+								});
+							}}
+						>
+							Allow Meeshkan support access
+						</Button>
+					)}
 				</GridCard>
 				<GridCard
 					title="Privacy"
