@@ -70,7 +70,7 @@ const Settings = () => {
 		setProductUpdates(productNotifications);
 		setMembers(project?.members?.items);
 		setTokens(project?.configuration.authenticationTokens?.items);
-	}, [project, idToken, mutateUser]);
+	}, [project]);
 
 	const client = eightBaseClient(idToken);
 

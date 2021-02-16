@@ -36,7 +36,7 @@ const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
 
 	useEffect(() => {
 		setImage(existingImageUrl);
-	}, [project, idToken]);
+	}, [project]);
 
 	if (!data && !uploadInfoError) {
 		return (
