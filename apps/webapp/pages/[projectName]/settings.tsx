@@ -188,11 +188,11 @@ const Settings = () => {
 	});
 
 	const inviteSupport = async () => {
-		const request = client
+		const res = await client
 			.request(ADD_SUPPORT, {
 				projectID: project.id,
-			})
-			.then((res) => setMembers(res.projectUpdate.members.items));
+			});
+		setMembers(res.projectUpdate.members.items);
 
     const selectedProjectIndex = _.findIndex(
 			projects,
