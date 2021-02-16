@@ -1,4 +1,4 @@
-import React, { useState, useContext, ChangeEvent } from 'react';
+import React, { useState, useContext, ChangeEvent, useEffect } from 'react';
 import {
 	Box,
 	FormControl,
@@ -15,7 +15,6 @@ import {
 	Spacer,
 	LightMode,
 	Badge,
-	List,
 	Checkbox,
 	Code,
 } from '@chakra-ui/react';
@@ -66,6 +65,12 @@ const Settings = () => {
 	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
 		project?.configuration.authenticationTokens?.items || []
 	);
+
+	useEffect(() => {
+		setProductUpdates(productNotifications);
+		setMembers(project?.members?.items);
+		setTokens(project?.configuration.authenticationTokens?.items);
+	}, [project]);
 
 	const client = eightBaseClient(idToken);
 

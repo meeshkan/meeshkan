@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -7,7 +7,7 @@ import {
 	Tooltip,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { InfoOutlineIcon } from '@chakra-ui/icons';
 import _ from 'lodash';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -33,10 +33,18 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const { projects, project, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState(project.name);
 	const { configuration } = project;
-	const [productionURL, setProductionURL] = useState(configuration.productionURL);
+	const [productionURL, setProductionURL] = useState(
+		configuration.productionURL
+	);
 	const [stagingURL, setStagingURL] = useState(configuration.stagingURL);
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
+
+	useEffect(() => {
+		setName(project.name);
+		setProductionURL(configuration.productionURL);
+		setStagingURL(configuration.stagingURL);
+	}, [project]);
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
@@ -60,7 +68,8 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 
 		projects[selectedProjectIndex].name = formData.name;
 		projects[selectedProjectIndex].avatar = data.projectUpdate.avatar;
-		projects[selectedProjectIndex].configuration = data.projectUpdate.configuration;
+		projects[selectedProjectIndex].configuration =
+			data.projectUpdate.configuration;
 
 		await mutateUser({ ...user, projects }, false);
 		Router.push(`/${createSlug(formData.name)}/settings`);
