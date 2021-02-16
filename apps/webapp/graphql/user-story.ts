@@ -5,6 +5,7 @@ export const USER_STORY = gql`
 		userStory(id: $userStoryId) {
 			id
 			title
+			description
 			isTestCase
 			flowIDs
 			created
@@ -101,6 +102,7 @@ export const UPDATE_EXPECTED_TEST = gql`
 		) {
 			id
 			title
+			description
 			isTestCase
 			flowIDs
 			created
@@ -201,6 +203,107 @@ export const UPDATE_STORY_TITLE = gql`
 		userStoryUpdate(filter: { id: $userStoryId }, data: { title: $newTitle }) {
 			id
 			title
+			description
+			isTestCase
+			flowIDs
+			created
+			isExpected
+			significance
+			recording {
+				video {
+					downloadUrl
+					shareUrl
+				}
+				environment {
+					items {
+						ipAddress
+						browser
+						browserVersion
+						operatingSystem
+						language
+					}
+				}
+				seleniumScript {
+					version
+					groups(orderBy: gIndex_ASC) {
+						groupsCount: count
+						groupItems: items {
+							gIndex
+							name
+							commands(orderBy: sIndex_ASC) {
+								count
+								items {
+									open {
+										value
+									}
+									setViewportSize {
+										value {
+											xCoord
+											yCoord
+										}
+									}
+									click {
+										target {
+											selector {
+												selector
+												tagName
+												innerText
+											}
+										}
+									}
+									type {
+										value
+										target {
+											selector {
+												tagName
+											}
+										}
+									}
+									dragndrop {
+										sourceTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+										destinationTarget {
+											selector {
+												tagName
+												innerText
+											}
+											coordinates {
+												xCoord
+												yCoord
+											}
+										}
+									}
+									sIndex
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`;
+
+export const UPDATE_STORY_DESCRIPTION = gql`
+	mutation UPDATE_STORY_DESCRIPTION(
+		$userStoryId: ID!
+		$newDescription: String
+	) {
+		userStoryUpdate(
+			filter: { id: $userStoryId }
+			data: { description: $newDescription }
+		) {
+			id
+			title
+			description
 			isTestCase
 			flowIDs
 			created
@@ -300,6 +403,7 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 		) {
 			id
 			title
+			description
 			isTestCase
 			flowIDs
 			created
