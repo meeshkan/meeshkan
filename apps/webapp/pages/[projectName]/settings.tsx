@@ -103,7 +103,7 @@ const Settings = () => {
 			memberEmail: memberEmail,
 		});
 
-		const updatedMembers = members.filter(
+		const updatedMembers = members?.filter(
 			(member) => member.email !== memberEmail
 		);
 		setMembers(updatedMembers);
@@ -125,7 +125,7 @@ const Settings = () => {
 			tokenID: tokenID,
 		});
 
-		const updatedTokens = tokens.filter((token) => token.id !== tokenID);
+		const updatedTokens = tokens?.filter((token) => token.id !== tokenID);
 		setTokens(updatedTokens);
 
 		await mutateUser({ ...user, projects });
@@ -188,7 +188,7 @@ const Settings = () => {
 		}
 	};
 
-	const isSupportAllowed = members.some((member) => {
+	const isSupportAllowed = members?.some((member) => {
 		return member.email === 'contact@meeshkan.com';
 	});
 
@@ -290,7 +290,7 @@ const Settings = () => {
 						Invite link
 					</Heading>
 					<InviteLinkInput />
-					{members.map((member: Member) => {
+					{members?.map((member: Member) => {
 						const memberName = `${member.firstName || ''} ${
 							member.lastName || ''
 						}`;
@@ -455,7 +455,7 @@ const Settings = () => {
 					<Heading fontSize="14px" fontWeight="500" mt={4}>
 						Active tokens
 					</Heading>
-					{tokens.map((token) => (
+					{tokens?.map((token) => (
 						<Flex
 							key={token.key}
 							w="100%"
