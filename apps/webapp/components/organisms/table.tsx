@@ -19,6 +19,7 @@ import {
 	ButtonGroup,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext, UserStories } from '../../utils/user';
 import {
@@ -146,19 +147,20 @@ const Table = ({
 									borderBottom: '1px solid',
 									borderBottomColor: useColorModeValue('gray.100', 'gray.700'),
 								}}
-								onClick={() => {
-									router.push(
-										`/${slugifiedProjectName}/user-stories/${row.original.id}`
-									);
-								}}
 							>
-								{row.cells.map((cell) => {
-									return (
-										<Td border={0} {...cell.getCellProps()} py={3}>
-											{cell.render('Cell')}
-										</Td>
-									);
-								})}
+								<Link
+									href={`/${slugifiedProjectName}/user-stories/${row.original.id}`}
+								>
+									<a>
+										{row.cells.map((cell) => {
+											return (
+												<Td border={0} {...cell.getCellProps()} py={3}>
+													{cell.render('Cell')}
+												</Td>
+											);
+										})}
+									</a>
+								</Link>
 							</Tr>
 						);
 					})}
