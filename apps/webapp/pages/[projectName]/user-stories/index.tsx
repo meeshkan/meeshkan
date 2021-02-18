@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import {
 	Box,
 	Stack,
@@ -38,6 +38,7 @@ import {
 	MenuItemOption,
 	MenuOptionGroup,
 	OrderedList,
+	IconButton,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -48,6 +49,7 @@ import {
 	CrosshairIcon,
 	SortIcon,
 	FilterIcon,
+	ExternalLinkIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
@@ -107,8 +109,10 @@ interface UserStoriesAliased {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 
-	const [toggleIndex, setToggleIndex] = useState(0);
+	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<UserStoriesAliased>({
@@ -196,11 +200,30 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
+					console.log(originalRow);
 					let count = 0;
 					originalRow.recording.seleniumScript.groups.aliasedItems.forEach(
 						(step) => (count = count + step.commands.count)
 					);
 					return count;
+				},
+			},
+			{
+				Header: 'hello',
+				accessor: (originalRow, rowIndex) => {
+					return (
+						<IconButton
+							size="xs"
+							colorScheme="gray"
+							aria-label="External link"
+							icon={<ExternalLinkIcon />}
+							onClick={() => {
+								window.open(
+									`/${slugifiedProjectName}/user-stories/${originalRow.id}`
+								);
+							}}
+						/>
+					);
 				},
 			},
 		],
