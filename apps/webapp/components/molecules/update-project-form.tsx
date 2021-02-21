@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -6,6 +6,8 @@ import {
 	Input,
 	Tooltip,
 	useColorModeValue,
+	Text,
+	Flex,
 } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import _ from 'lodash';
@@ -94,6 +96,10 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 				onUpload={setAvatarFile}
 				existingImageUrl={project?.avatar?.downloadUrl}
 			/>
+			<Flex mb={8}>
+				<FormLabel lineHeight="tall">Project ID:</FormLabel>{' '}
+				<Text lineHeight="tall">{project.id}</Text>
+			</Flex>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Project name</FormLabel>
 				<Input
