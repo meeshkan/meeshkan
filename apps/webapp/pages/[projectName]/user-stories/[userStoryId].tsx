@@ -204,11 +204,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 								fontSize="md"
 								textTransform="capitalize"
 								borderRadius="md"
+								p={2}
 								mr={2}
-								d="flex"
-								alignItems="center"
-								px={2}
-								h="24px"
 							>
 								Expected behavior
 							</Badge>
@@ -219,11 +216,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 								fontSize="md"
 								textTransform="capitalize"
 								borderRadius="md"
+								p={2}
 								mr={2}
-								d="flex"
-								alignItems="center"
-								px={2}
-								h="24px"
 							>
 								Buggy behavior
 							</Badge>
@@ -240,10 +234,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 									fontWeight="700"
 									fontSize="md"
 									borderRadius="md"
-									d="flex"
-									alignItems="center"
-									px={2}
-									h="24px"
+									p={2}
 								>
 									<ShieldIcon />
 								</Badge>
