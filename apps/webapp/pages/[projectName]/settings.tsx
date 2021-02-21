@@ -193,13 +193,12 @@ const Settings = () => {
 	});
 
 	const inviteSupport = async () => {
-		const res = await client
-			.request(ADD_SUPPORT, {
-				projectID: project.id,
-			});
+		const res = await client.request(ADD_SUPPORT, {
+			projectID: project.id,
+		});
 		setMembers(res.projectUpdate.members.items);
 
-    const selectedProjectIndex = _.findIndex(
+		const selectedProjectIndex = _.findIndex(
 			projects,
 			(currentProject) => currentProject.id === project.id
 		);
