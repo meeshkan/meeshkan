@@ -12,6 +12,11 @@ export const USER_STORY = gql`
 			isExpected
 			isAuthenticated
 			significance
+			configuration {
+				logInFlow {
+					id
+				}
+			}
 			recording {
 				video {
 					downloadUrl
