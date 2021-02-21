@@ -4,7 +4,9 @@ const customComponents = {
 	Alert: {
 		baseStyle: {
 			container: {
-				p: 4,
+				py: 4,
+				pl: 4,
+				pr: 6,
 				rounded: 'lg',
 				fontSize: '14px',
 			},
