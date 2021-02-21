@@ -14,7 +14,7 @@ const customComponents = {
 				mb: 3,
 			},
 			description: {
-				lineHeight: 'base',
+				lineHeight: 'tall',
 				fontStyle: 'italic',
 			},
 			icon: {
