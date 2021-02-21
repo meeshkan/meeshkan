@@ -163,10 +163,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 			<Card mb={4}>
 				<Flex
 					direction={['column', 'column', 'row']}
-					align="flex-end"
+					align="center"
 					justify="space-between"
 				>
-					<Flex align="flex-end" direction={['column', 'row']} mb={[4, 4, 0]}>
+					<Flex align="center" direction={['column', 'row']} mb={[4, 4, 0]}>
 						<Editable
 							defaultValue={data.userStory.title}
 							// Callback invoked when user confirms value with `enter` key or by blurring input.
@@ -184,7 +184,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 							mr={2}
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							d="flex"
+							alignItems="center"
+							px={2}
+							h="24px"
 						>
 							{data.userStory.created[0] === 'user' ? (
 								<VideoIcon mr={3} />
@@ -201,8 +204,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 								fontSize="md"
 								textTransform="capitalize"
 								borderRadius="md"
-								p={2}
 								mr={2}
+								d="flex"
+								alignItems="center"
+								px={2}
+								h="24px"
 							>
 								Expected behavior
 							</Badge>
@@ -213,8 +219,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 								fontSize="md"
 								textTransform="capitalize"
 								borderRadius="md"
-								p={2}
 								mr={2}
+								d="flex"
+								alignItems="center"
+								px={2}
+								h="24px"
 							>
 								Buggy behavior
 							</Badge>
@@ -231,7 +240,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 									fontWeight="700"
 									fontSize="md"
 									borderRadius="md"
-									p={2}
+									d="flex"
+									alignItems="center"
+									px={2}
+									h="24px"
 								>
 									<ShieldIcon />
 								</Badge>
