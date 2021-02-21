@@ -200,30 +200,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					console.log(originalRow);
 					let count = 0;
 					originalRow.recording.seleniumScript.groups.aliasedItems.forEach(
 						(step) => (count = count + step.commands.count)
 					);
 					return count;
-				},
-			},
-			{
-				Header: 'hello',
-				accessor: (originalRow, rowIndex) => {
-					return (
-						<IconButton
-							size="xs"
-							colorScheme="gray"
-							aria-label="External link"
-							icon={<ExternalLinkIcon />}
-							onClick={() => {
-								window.open(
-									`/${slugifiedProjectName}/user-stories/${originalRow.id}`
-								);
-							}}
-						/>
-					);
 				},
 			},
 		],

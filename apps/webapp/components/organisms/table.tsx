@@ -17,6 +17,7 @@ import {
 	useColorModeValue,
 	Skeleton,
 	ButtonGroup,
+	Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -26,6 +27,7 @@ import {
 	ArrowLeftIcon,
 	DoubleArrowRightIcon,
 	ArrowRightIcon,
+	ExternalLinkIcon,
 } from '@frontend/chakra-theme';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
@@ -128,6 +130,9 @@ const Table = ({
 									)}
 								</Th>
 							))}
+							<Th fontSize="10px" px={1}>
+								{' '}
+							</Th>
 						</Tr>
 					))}
 				</Thead>
@@ -146,19 +151,37 @@ const Table = ({
 									borderBottom: '1px solid',
 									borderBottomColor: useColorModeValue('gray.100', 'gray.700'),
 								}}
-								onClick={() =>
-									router.push(
-										`/${slugifiedProjectName}/user-stories/${row.original.id}`
-									)
-								}
 							>
 								{row.cells.map((cell) => {
 									return (
-										<Td border={0} {...cell.getCellProps()} py={3}>
+										<Td
+											onClick={() =>
+												router.push(
+													`/${slugifiedProjectName}/user-stories/${row.original.id}`
+												)
+											}
+											border={0}
+											{...cell.getCellProps()}
+											py={3}
+										>
 											{cell.render('Cell')}
 										</Td>
 									);
 								})}
+								<Td px={1} border={0}>
+									<IconButton
+										size="xs"
+										colorScheme="gray"
+										variant="subtle"
+										aria-label="Open in a new tab"
+										icon={<ExternalLinkIcon />}
+										onClick={() => {
+											window.open(
+												`/${slugifiedProjectName}/user-stories/${row.original.id}`
+											);
+										}}
+									/>
+								</Td>
 							</Tr>
 						);
 					})}
