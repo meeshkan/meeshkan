@@ -4,24 +4,35 @@ const customComponents = {
 	Alert: {
 		baseStyle: {
 			container: {
-				px: 4,
-				py: 3,
-				rounded: 'md',
-				fontStyle: 'italic',
+				p: 4,
+				rounded: 'lg',
+				fontSize: '14px',
 			},
 			title: {
 				fontWeight: 'bold',
-				lineHeight: 6,
-				mr: 2,
+				lineHeight: 'base',
+				mb: 3,
 			},
 			description: {
-				lineHeight: 6,
+				lineHeight: 'base',
+				fontStyle: 'italic',
 			},
 			icon: {
-				mr: 3,
-				w: 5,
-				h: 6,
+				mr: 4,
+				w: 4,
+				h: 4,
 			},
+		},
+		variants: {
+			clean: (props) => ({
+				container: { backgroundColor: mode(`white`, `gray.900`)(props) },
+				icon: {
+					color: mode(
+						`${props.colorScheme}.500`,
+						`${props.colorScheme}.300`
+					)(props),
+				},
+			}),
 		},
 	},
 	Button: {
