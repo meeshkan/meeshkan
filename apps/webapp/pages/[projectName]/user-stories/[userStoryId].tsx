@@ -349,7 +349,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						}}
 						mr={4}
 					>
-						Expected
+						Create test case
 					</Button>
 					<Button
 						colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
@@ -376,7 +376,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							router.push(`/${slugifiedProjectName}/user-stories`);
 						}}
 					>
-						Reject
+						Delete recording
 					</Button>
 				</Flex>
 			)}
