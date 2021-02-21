@@ -34,11 +34,9 @@ import {
 	MenuItem,
 	Checkbox,
 	MenuGroup,
-	MenuDivider,
 	MenuItemOption,
 	MenuOptionGroup,
 	OrderedList,
-	IconButton,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -49,7 +47,6 @@ import {
 	CrosshairIcon,
 	SortIcon,
 	FilterIcon,
-	ExternalLinkIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
