@@ -168,7 +168,7 @@ const Table = ({
 										</Td>
 									);
 								})}
-								<Td px={1} border={0}>
+								<Td px={1} py={3} border={0}>
 									<IconButton
 										size="xs"
 										colorScheme="gray"
