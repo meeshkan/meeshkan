@@ -11,10 +11,12 @@ import { useClipboard } from '../../hooks/use-clipboard';
 
 const InviteLinkInput = () => {
 	const { project } = useContext(UserContext);
-	const { onCopy } = useClipboard(
-		project?.configuration?.inviteLink,
-		'The project\'s invite link was copied to your clipboard!'
-	);
+	const { onCopy } = useClipboard({
+		toastTitle: `This project's script is copied to clipboard.`,
+		toastMessage: 'Paste it within the `head` of your app.',
+		text: project?.configuration?.inviteLink,
+		status: 'info',
+	});
 
 	return (
 		<InputGroup mb={4}>

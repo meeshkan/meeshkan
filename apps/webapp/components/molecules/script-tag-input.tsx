@@ -18,10 +18,12 @@ const ScriptTagInput = () => {
 		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?client_id=${project.id}"></script>`;
 	}
 
-	const { onCopy } = useClipboard(
-		scriptTag,
-		"The project's script tag was copied to your clipboard!"
-	);
+	const { onCopy } = useClipboard({
+		toastTitle: `This project's script is copied to clipboard.`,
+		toastMessage: 'Paste it within the `head` of your app.',
+		text: scriptTag,
+		status: 'info',
+	});
 
 	return (
 		<InputGroup>
