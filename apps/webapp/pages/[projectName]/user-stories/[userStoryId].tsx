@@ -296,6 +296,73 @@ const UserStoryPage = (props: UserStoryProps) => {
 								}}
 							/>
 						</FormControl>
+						{data.userStory.isTestCase === true ? null : (
+							<Flex
+								mt={8}
+								justify="space-between"
+								align="center"
+								p={2}
+								borderRadius="md"
+								backgroundColor={useColorModeValue('white', 'gray.900')}
+							>
+								<Button
+									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
+									variant="subtle"
+									leftIcon={<CheckmarkIcon />}
+									onClick={() => {
+										updateExpectedTest(date);
+										toast({
+											position: 'bottom-right',
+											render: () => (
+												<Box
+													color="white"
+													p={4}
+													bg="blue.500"
+													borderRadius="md"
+													fontSize="md"
+												>
+													Success. The User story has been marked as a test
+													case!
+												</Box>
+											),
+											duration: 5000,
+											isClosable: true,
+										});
+										router.push(`/${slugifiedProjectName}/user-stories`);
+									}}
+									mr={4}
+								>
+									Create test case
+								</Button>
+								<Button
+									colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
+									variant="subtle"
+									leftIcon={<XmarkIcon />}
+									onClick={() => {
+										deleteRejectedRecording();
+										toast({
+											position: 'bottom-right',
+											render: () => (
+												<Box
+													color="white"
+													p={4}
+													bg="blue.500"
+													borderRadius="md"
+													fontSize="md"
+												>
+													Rejected. The User story has been deleted!
+												</Box>
+											),
+											duration: 5000,
+											isClosable: true,
+										});
+										router.push(`/${slugifiedProjectName}/user-stories`);
+									}}
+								>
+									Delete recording
+								</Button>
+							</Flex>
+						)}
 					</Box>
 
 					<Box
@@ -323,66 +390,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 					</Box>
 				</Grid>
 			</Box>
-
-			{data.userStory.isTestCase === true ? null : (
-				<Flex justify="center" align="center" w="100%">
-					<Button
-						colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
-						variant="subtle"
-						leftIcon={<CheckmarkIcon />}
-						onClick={() => {
-							updateExpectedTest(date);
-							toast({
-								position: 'bottom-right',
-								render: () => (
-									<Box
-										color="white"
-										p={4}
-										bg="blue.500"
-										borderRadius="md"
-										fontSize="md"
-									>
-										Success. The User story has been marked as a test case!
-									</Box>
-								),
-								duration: 5000,
-								isClosable: true,
-							});
-							router.push(`/${slugifiedProjectName}/user-stories`);
-						}}
-						mr={4}
-					>
-						Create test case
-					</Button>
-					<Button
-						colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
-						variant="subtle"
-						leftIcon={<XmarkIcon />}
-						onClick={() => {
-							deleteRejectedRecording();
-							toast({
-								position: 'bottom-right',
-								render: () => (
-									<Box
-										color="white"
-										p={4}
-										bg="blue.500"
-										borderRadius="md"
-										fontSize="md"
-									>
-										Rejected. The User story has been deleted!
-									</Box>
-								),
-								duration: 5000,
-								isClosable: true,
-							});
-							router.push(`/${slugifiedProjectName}/user-stories`);
-						}}
-					>
-						Delete recording
-					</Button>
-				</Flex>
-			)}
 		</Stack>
 	);
 };
