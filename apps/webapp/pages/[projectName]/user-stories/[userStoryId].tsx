@@ -181,13 +181,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 						<Badge
 							fontWeight="700"
 							fontSize="md"
+							lineHeight="normal"
 							mr={2}
 							textTransform="capitalize"
 							borderRadius="md"
-							d="flex"
-							alignItems="center"
+							py={1}
 							px={2}
-							h="24px"
 						>
 							{data.userStory.created[0] === 'user' ? (
 								<VideoIcon mr={3} />
