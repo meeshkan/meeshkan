@@ -138,9 +138,9 @@ const Settings = () => {
 			position: 'bottom-right',
 			title,
 			description,
-			status: 'error',
-			duration: 5000,
 			isClosable: true,
+			status: 'error',
+			variant: 'clean',
 		});
 	};
 
@@ -193,13 +193,12 @@ const Settings = () => {
 	});
 
 	const inviteSupport = async () => {
-		const res = await client
-			.request(ADD_SUPPORT, {
-				projectID: project.id,
-			});
+		const res = await client.request(ADD_SUPPORT, {
+			projectID: project.id,
+		});
 		setMembers(res.projectUpdate.members.items);
 
-    const selectedProjectIndex = _.findIndex(
+		const selectedProjectIndex = _.findIndex(
 			projects,
 			(currentProject) => currentProject.id === project.id
 		);
@@ -334,20 +333,11 @@ const Settings = () => {
 										removeTeamMember(member.email);
 										toast({
 											position: 'bottom-right',
-											render: () => (
-												<Box
-													color="white"
-													p={4}
-													bg="blue.500"
-													borderRadius="md"
-													fontSize="md"
-												>
-													{member.email} has been successfully removed from{' '}
-													{project.name}.
-												</Box>
-											),
-											duration: 2000,
+											title: `${member.email} has been successfully removed.`,
+											description: `If you didn't mean to remove them from ${project.name}, resend the invite link.`,
 											isClosable: true,
+											status: 'success',
+											variant: 'clean',
 										});
 									}}
 								/>
@@ -365,20 +355,11 @@ const Settings = () => {
 								inviteSupport();
 								toast({
 									position: 'bottom-right',
-									render: () => (
-										<Box
-											color="white"
-											p={4}
-											bg="blue.500"
-											borderRadius="md"
-											fontSize="md"
-										>
-											contact@meeshkan.com has been successfully added to{' '}
-											{project.name}.
-										</Box>
-									),
-									duration: 2000,
+									title: 'Successfully authorized Meeshkan support.',
+									description: `contact@meeshkan.com has been successfully added to ${project.name}.`,
 									isClosable: true,
+									status: 'info',
+									variant: 'clean',
 								});
 							}}
 						>
@@ -507,19 +488,11 @@ const Settings = () => {
 									deleteToken(token.id);
 									toast({
 										position: 'bottom-right',
-										render: () => (
-											<Box
-												color="white"
-												p={4}
-												bg="blue.500"
-												borderRadius="md"
-												fontSize="md"
-											>
-												The token `{token.key}` has been successfully removed
-												from {project.name}.
-											</Box>
-										),
-										duration: 2000,
+										title: `Successfully removed token ${token.key}.`,
+										description: `The token will no longer be used to authenticate for test runs on ${project.name}.`,
+										isClosable: true,
+										status: 'success',
+										variant: 'clean',
 									});
 								}}
 							/>

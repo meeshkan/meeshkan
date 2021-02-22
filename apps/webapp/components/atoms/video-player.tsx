@@ -1,19 +1,32 @@
 import React from 'react';
-import { AspectRatio, useColorModeValue } from '@chakra-ui/react';
+import {
+	useBreakpointValue,
+	useColorModeValue,
+	useToken,
+} from '@chakra-ui/react';
 
-const VideoPlayer = ({ children }) => (
-	<AspectRatio
-		ratio={16 / 9}
-		borderRadius="md"
-		overflow="hidden"
-		border="1px solid"
-		borderColor={useColorModeValue('gray.200', 'gray.700')}
-	>
-		<video controls>
+const VideoPlayer = ({ children }) => {
+	const [gray200, gray700] = useToken('colors', ['gray.200', 'gray.700']);
+	const maxHeight = useBreakpointValue({
+		base: '75vw',
+		md: '15vw',
+	});
+	return (
+		<video
+			style={{
+				borderRadius: '6px',
+				height: '100%',
+				maxHeight: maxHeight,
+				border: '1px solid',
+				borderColor: useColorModeValue(gray200, gray700),
+				backgroundColor: 'black',
+			}}
+			controls
+		>
 			{children}
 			Your browser does not support the video tag.
 		</video>
-	</AspectRatio>
-);
+	);
+};
 
 export default VideoPlayer;
