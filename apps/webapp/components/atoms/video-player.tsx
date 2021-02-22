@@ -1,5 +1,5 @@
 import React from 'react';
-import { AspectRatio, useColorModeValue } from '@chakra-ui/react';
+// import { AspectRatio, useColorModeValue } from '@chakra-ui/react';
 
 const VideoPlayer = ({ children }) => (
 	// <AspectRatio
