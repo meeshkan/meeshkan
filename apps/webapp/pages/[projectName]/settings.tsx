@@ -355,7 +355,7 @@ const Settings = () => {
 								inviteSupport();
 								toast({
 									position: 'bottom-right',
-									title: `Successfully authorized Meeshkan support.`,
+									title: 'Successfully authorized Meeshkan support.',
 									description: `contact@meeshkan.com has been successfully added to ${project.name}.`,
 									isClosable: true,
 									status: 'info',

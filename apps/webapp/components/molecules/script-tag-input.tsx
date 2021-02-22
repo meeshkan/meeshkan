@@ -19,7 +19,7 @@ const ScriptTagInput = () => {
 	}
 
 	const { onCopy } = useClipboard({
-		toastTitle: `This project's script is copied to clipboard.`,
+		toastTitle: 'This project\'s script was copied to clipboard.',
 		toastMessage: 'Paste it within the `head` of your app.',
 		text: scriptTag,
 		status: 'info',

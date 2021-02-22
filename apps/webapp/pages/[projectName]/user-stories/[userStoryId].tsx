@@ -351,8 +351,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 							deleteRejectedRecording();
 							toast({
 								position: 'bottom-right',
-								title: `A recording has been rejected.`,
-								description: `Rejecting a recording will delete the series of steps as a user story.`,
+								title: 'A recording has been rejected.',
+								description: 'Rejecting a recording will delete the series of steps as a user story.',
 								isClosable: true,
 								status: 'success',
 								variant: 'clean',

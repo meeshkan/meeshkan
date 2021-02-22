@@ -21,8 +21,8 @@ const InviteLinkInput = () => {
 		project.configuration.inviteLink
 	);
 	const { onCopy } = useClipboard({
-		toastTitle: `This project's script is copied to clipboard.`,
-		toastMessage: 'Paste it within the `head` of your app.',
+		toastTitle: 'This project\'s invite link was copied to clipboard.',
+		toastMessage: 'Share it with your team members.',
 		text: project?.configuration?.inviteLink,
 		status: 'info',
 	});
@@ -30,8 +30,8 @@ const InviteLinkInput = () => {
 	const toast = useToast();
 	const client = eightBaseClient(idToken);
 
-	const refreshInviteLink = async () => {
-		const request = await client
+	const refreshInviteLink = () => {
+		const request = client
 			.request(REFRESH_INVITE_LINK, {
 				projectID: project.id,
 			})
@@ -74,9 +74,7 @@ const InviteLinkInput = () => {
 				ml={4}
 				border="1px solid"
 				borderColor={useColorModeValue('gray.200', 'gray.700')}
-				onClick={() => {
-					refreshInviteLink();
-				}}
+				onClick={refreshInviteLink}
 			>
 				Refresh link
 			</Button>
