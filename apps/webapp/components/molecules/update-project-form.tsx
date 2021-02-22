@@ -6,7 +6,7 @@ import {
 	Input,
 	Tooltip,
 	useColorModeValue,
-	Text,
+	Code,
 	Flex,
 } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
@@ -96,9 +96,11 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 				onUpload={setAvatarFile}
 				existingImageUrl={project?.avatar?.downloadUrl}
 			/>
-			<Flex mb={8}>
+			<Flex mb={8} align="baseline">
 				<FormLabel lineHeight="tall">Project ID:</FormLabel>{' '}
-				<Text lineHeight="tall">{project.id}</Text>
+				<Code p={2} borderRadius="md" fontWeight="700">
+					{project.id}
+				</Code>
 			</Flex>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Project name</FormLabel>
