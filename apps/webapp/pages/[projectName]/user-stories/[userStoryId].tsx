@@ -38,6 +38,7 @@ import {
 	CheckmarkIcon,
 	XmarkIcon,
 	ShieldIcon,
+	KeyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -219,6 +220,25 @@ const UserStoryPage = (props: UserStoryProps) => {
 								Buggy behavior
 							</Badge>
 						)}
+						{data.userStory.configuration !== null &&
+						data.userStory.configuration.logInFlow.id === userStoryId ? (
+							<Tooltip
+								label="This is the log in flow"
+								p={2}
+								placement="right"
+								borderRadius="md"
+							>
+								<Badge
+									colorScheme="amber"
+									fontWeight="700"
+									fontSize="md"
+									borderRadius="md"
+									p={2}
+								>
+									<KeyIcon />
+								</Badge>
+							</Tooltip>
+						) : null}
 						{data.userStory.isAuthenticated ? (
 							<Tooltip
 								label="Authenticated"
