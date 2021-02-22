@@ -20,8 +20,9 @@ const InviteLinkInput = () => {
 	const [inviteLink, setInviteLink] = useState(
 		project.configuration.inviteLink
 	);
+	const [loading, setLoading] = useState(false);
 	const { onCopy } = useClipboard({
-		toastTitle: 'This project\'s invite link was copied to clipboard.',
+		toastTitle: "This project's invite link was copied to clipboard.",
 		toastMessage: 'Share it with your team members.',
 		text: project?.configuration?.inviteLink,
 		status: 'info',
@@ -31,6 +32,7 @@ const InviteLinkInput = () => {
 	const client = eightBaseClient(idToken);
 
 	const refreshInviteLink = () => {
+		setLoading(true);
 		const request = client
 			.request(REFRESH_INVITE_LINK, {
 				projectID: project.id,
@@ -46,6 +48,7 @@ const InviteLinkInput = () => {
 					variant: 'clean',
 				});
 				setInviteLink(res.projectUpdate.configuration.inviteLink);
+				setLoading(false);
 			});
 	};
 
@@ -75,6 +78,8 @@ const InviteLinkInput = () => {
 				border="1px solid"
 				borderColor={useColorModeValue('gray.200', 'gray.700')}
 				onClick={refreshInviteLink}
+				isLoading={loading}
+				loadingText="Refreshing"
 			>
 				Refresh link
 			</Button>
