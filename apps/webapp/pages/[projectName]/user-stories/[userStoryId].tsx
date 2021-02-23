@@ -38,6 +38,7 @@ import {
 	CheckmarkIcon,
 	XmarkIcon,
 	ShieldIcon,
+	KeyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -163,10 +164,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 			<Card mb={4}>
 				<Flex
 					direction={['column', 'column', 'row']}
-					align="flex-end"
+					align="center"
 					justify="space-between"
 				>
-					<Flex align="flex-end" direction={['column', 'row']} mb={[4, 4, 0]}>
+					<Flex align="center" direction={['column', 'row']} mb={[4, 4, 0]}>
 						<Editable
 							defaultValue={data.userStory.title}
 							// Callback invoked when user confirms value with `enter` key or by blurring input.
@@ -181,10 +182,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 						<Badge
 							fontWeight="700"
 							fontSize="md"
+							lineHeight="normal"
 							mr={2}
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							py={1}
+							px={2}
 						>
 							{data.userStory.created[0] === 'user' ? (
 								<VideoIcon mr={3} />
@@ -219,6 +222,25 @@ const UserStoryPage = (props: UserStoryProps) => {
 								Buggy behavior
 							</Badge>
 						)}
+						{data.userStory.configuration !== null &&
+						data.userStory.configuration.logInFlow.id === userStoryId ? (
+							<Tooltip
+								label="This is the log in flow"
+								p={2}
+								placement="right"
+								borderRadius="md"
+							>
+								<Badge
+									colorScheme="amber"
+									fontWeight="700"
+									fontSize="md"
+									borderRadius="md"
+									p={2}
+								>
+									<KeyIcon />
+								</Badge>
+							</Tooltip>
+						) : null}
 						{data.userStory.isAuthenticated ? (
 							<Tooltip
 								label="Authenticated"
@@ -293,13 +315,81 @@ const UserStoryPage = (props: UserStoryProps) => {
 								}}
 							/>
 						</FormControl>
+						{data.userStory.isTestCase === true ? null : (
+							<Flex
+								mt={8}
+								justify="space-between"
+								align="center"
+								p={2}
+								borderRadius="md"
+								backgroundColor={useColorModeValue('white', 'gray.900')}
+							>
+								<Button
+									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
+									variant="subtle"
+									leftIcon={<CheckmarkIcon />}
+									onClick={() => {
+										updateExpectedTest(date);
+										toast({
+											position: 'bottom-right',
+											render: () => (
+												<Box
+													color="white"
+													p={4}
+													bg="blue.500"
+													borderRadius="md"
+													fontSize="md"
+												>
+													Success. The User story has been marked as a test
+													case!
+												</Box>
+											),
+											duration: 5000,
+											isClosable: true,
+										});
+										router.push(`/${slugifiedProjectName}/user-stories`);
+									}}
+									mr={4}
+								>
+									Create test case
+								</Button>
+								<Button
+									colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
+									variant="subtle"
+									leftIcon={<XmarkIcon />}
+									onClick={() => {
+										deleteRejectedRecording();
+										toast({
+											position: 'bottom-right',
+											render: () => (
+												<Box
+													color="white"
+													p={4}
+													bg="blue.500"
+													borderRadius="md"
+													fontSize="md"
+												>
+													Rejected. The User story has been deleted!
+												</Box>
+											),
+											duration: 5000,
+											isClosable: true,
+										});
+										router.push(`/${slugifiedProjectName}/user-stories`);
+									}}
+								>
+									Delete recording
+								</Button>
+							</Flex>
+						)}
 					</Box>
 
 					<Box
 						gridColumnStart={[1, 1, 1]}
 						gridColumnEnd={[2, 2, 3]}
-						maxH="65vh"
+						maxH="75vh"
 						overflow="auto"
+						borderRadius="lg"
 					>
 						<StepList steps={steps} />
 						<Flex
@@ -320,66 +410,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 					</Box>
 				</Grid>
 			</Box>
-
-			{data.userStory.isTestCase === true ? null : (
-				<Flex justify="center" align="center" w="100%">
-					<Button
-						colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
-						variant="subtle"
-						leftIcon={<CheckmarkIcon />}
-						onClick={() => {
-							updateExpectedTest(date);
-							toast({
-								position: 'bottom-right',
-								render: () => (
-									<Box
-										color="white"
-										p={4}
-										bg="blue.500"
-										borderRadius="md"
-										fontSize="md"
-									>
-										Success. The User story has been marked as a test case!
-									</Box>
-								),
-								duration: 5000,
-								isClosable: true,
-							});
-							router.push(`/${slugifiedProjectName}/user-stories`);
-						}}
-						mr={4}
-					>
-						Expected
-					</Button>
-					<Button
-						colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
-						variant="subtle"
-						leftIcon={<XmarkIcon />}
-						onClick={() => {
-							deleteRejectedRecording();
-							toast({
-								position: 'bottom-right',
-								render: () => (
-									<Box
-										color="white"
-										p={4}
-										bg="blue.500"
-										borderRadius="md"
-										fontSize="md"
-									>
-										Rejected. The User story has been deleted!
-									</Box>
-								),
-								duration: 5000,
-								isClosable: true,
-							});
-							router.push(`/${slugifiedProjectName}/user-stories`);
-						}}
-					>
-						Reject
-					</Button>
-				</Flex>
-			)}
 		</Stack>
 	);
 };
