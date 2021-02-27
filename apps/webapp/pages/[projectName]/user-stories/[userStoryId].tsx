@@ -224,12 +224,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						)}
 						{data.userStory.configuration !== null &&
 						data.userStory.configuration.logInFlow.id === userStoryId ? (
-							<Tooltip
-								label="This is the log in flow"
-								p={2}
-								placement="right"
-								borderRadius="md"
-							>
+							<Tooltip label="This is the 'Log in flow'" placement="right">
 								<Badge
 									colorScheme="amber"
 									fontWeight="700"
@@ -242,12 +237,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Tooltip>
 						) : null}
 						{data.userStory.isAuthenticated ? (
-							<Tooltip
-								label="Authenticated"
-								p={2}
-								placement="right"
-								borderRadius="md"
-							>
+							<Tooltip label="Authenticated" placement="right">
 								<Badge
 									colorScheme="amber"
 									fontWeight="700"

@@ -93,6 +93,20 @@ const customComponents = {
 			fontFamily: 'body',
 		},
 	},
+	Tooltip: {
+		baseStyle: (props) => ({
+			p: 3,
+			lineHeight: '1.4',
+			bg: mode('gray.700', 'gray.300')(props),
+			color: mode('white', 'gray.900')(props),
+			borderRadius: 'md',
+			fontWeight: 'medium',
+			fontSize: 'sm',
+			boxShadow: 'md',
+			maxW: '320px',
+			zIndex: 'tooltip',
+		}),
+	},
 };
 
 export default customComponents;
