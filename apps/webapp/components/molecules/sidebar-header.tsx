@@ -37,10 +37,9 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
 
-	const slugifiedProjectName = useMemo(
-		() => createSlug(project?.name || ''),
-		[project?.name]
-	);
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
+	]);
 
 	const handleLogoutClick = () => {
 		Router.push('/api/logout');
@@ -89,8 +88,8 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 					</MenuButton>
 					<MenuList>
 						<MenuItem>
-							<Link href={`/${slugifiedProjectName}/settings#profile`} passHref>
-								<a>View profile</a>
+							<Link href={`/${slugifiedProjectName}/settings`} passHref>
+								<a>View settings</a>
 							</Link>
 						</MenuItem>
 						<MenuDivider />
