@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import {
 	Flex,
 	Stack,
@@ -6,8 +6,10 @@ import {
 	Box,
 	List,
 	ListItem,
-	Center,
 	useColorModeValue,
+	Alert,
+	AlertIcon,
+	AlertDescription,
 } from '@chakra-ui/react';
 import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
@@ -88,6 +90,12 @@ const TestRunsPage = () => {
 
 	return (
 		<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
+			<Alert status="warning" mb={4} p={3}>
+				<AlertIcon />
+				<AlertDescription>
+					Test runs are experimental at this time.
+				</AlertDescription>
+			</Alert>
 			<GridCard
 				title="Latest complete test case status"
 				subtitle="This is the breakdown of tests from the newest test run. Click on individual test runs below for further details."
