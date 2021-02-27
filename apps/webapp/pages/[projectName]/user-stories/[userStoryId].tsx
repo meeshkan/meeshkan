@@ -20,6 +20,7 @@ import {
 	Textarea,
 	FormControl,
 	FormLabel,
+	AspectRatio,
 } from '@chakra-ui/react';
 import { SeleniumScript, UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -276,13 +277,32 @@ const UserStoryPage = (props: UserStoryProps) => {
 					gap={8}
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
-						{data.userStory.recording.video && (
+						{data.userStory.recording.video ? (
 							<VideoPlayer>
 								<source
 									src={data.userStory.recording.video.downloadUrl}
 									type="video/webm"
 								/>
 							</VideoPlayer>
+						) : (
+							<AspectRatio
+								ratio={16 / 9}
+								display="flex"
+								justifyContent="center"
+								alignItems="center"
+								border="1px solid"
+								borderRadius="lg"
+								borderColor={useColorModeValue('gray.400', 'gray.700')}
+							>
+								<Button
+									colorScheme="gray"
+									variant="ghost"
+									isLoading={true}
+									loadingText="Generating video"
+								>
+									Generate Video
+								</Button>
+							</AspectRatio>
 						)}
 
 						<FormControl mt={8}>
