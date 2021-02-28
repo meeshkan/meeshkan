@@ -21,6 +21,12 @@ const HumanTag = (tag: string) => {
 		? 'Text'
 		: tag === 'DIV'
 		? 'Div'
+		: tag === 'SELECT'
+		? 'Dropdown'
+		: tag === 'NAV'
+		? 'Navigation bar'
+		: tag === 'LABEL'
+		? 'Form label'
 		: tag;
 };
 
