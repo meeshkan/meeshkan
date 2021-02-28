@@ -134,17 +134,21 @@ const UserStoryPage = (props: UserStoryProps) => {
 	) => {
 		setLoading(true);
 
-		fetch('/api/generate-video', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				startEventID,
-				endEventID,
-				recordingID,
-			}),
-		});
+		fetch(
+			'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
+			{
+				method: 'POST',
+				mode: 'no-cors',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					startEventID,
+					endEventID,
+					recordingID,
+				}),
+			}
+		);
 
 		setLoading(false);
 	};
