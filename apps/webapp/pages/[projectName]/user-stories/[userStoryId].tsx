@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import Card from '../../../components/atoms/card';
 import { mutate } from 'swr';
 import {
@@ -63,6 +63,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	} = useValidateSelectedProject();
 	const router = useRouter();
 	const toast = useToast();
+	const [loading, setLoading] = useState(false);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
@@ -124,6 +125,32 @@ const UserStoryPage = (props: UserStoryProps) => {
 		});
 		await mutate('/api/session');
 		return request;
+	};
+
+	const generateVideo = (
+		startEventID: string,
+		endEventID: string,
+		recordingID: string
+	) => {
+		setLoading(true);
+
+		fetch(
+			'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
+			{
+				method: 'POST',
+				mode: 'no-cors',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					startEventID: '9819d103-dd15-410c-8619-b334146471ad',
+					endEventID: '539635df-c1e1-4fcd-bd94-122b211fe87e',
+					recordingID: 'cklpfrmwu02fn07la3m7f5z9g',
+				}),
+			}
+		).then((res) => console.log(res));
+
+		setLoading(false);
 	};
 
 	if (validatingQuery || validatingProject || !data) {
@@ -297,8 +324,15 @@ const UserStoryPage = (props: UserStoryProps) => {
 								<Button
 									colorScheme="gray"
 									variant="ghost"
-									isLoading={true}
+									isLoading={loading}
 									loadingText="Generating video"
+									onClick={() => {
+										generateVideo(
+											data.userStory.recording.startEventID,
+											data.userStory.recording.endEventID,
+											data.userStory.recording.id
+										);
+									}}
 								>
 									Generate Video
 								</Button>

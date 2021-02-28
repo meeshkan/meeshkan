@@ -141,9 +141,12 @@ export interface SeleniumScript {
 }
 
 export interface Recording {
+	id: string;
 	video?: {
 		downloadUrl: string;
 	};
+	startEventId: string;
+	endEventId: string;
 	environment: {
 		items: [
 			{

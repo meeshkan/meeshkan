@@ -21,6 +21,9 @@ export const USER_STORY = gql`
 				video {
 					downloadUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -117,6 +120,9 @@ export const UPDATE_EXPECTED_TEST = gql`
 				video {
 					downloadUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -219,6 +225,9 @@ export const UPDATE_STORY_TITLE = gql`
 					downloadUrl
 					shareUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -319,6 +328,9 @@ export const UPDATE_STORY_DESCRIPTION = gql`
 					downloadUrl
 					shareUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -419,6 +431,9 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 					downloadUrl
 					shareUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
