@@ -3,9 +3,9 @@ import { SideStep } from '../atoms/side-step';
 import { Groups } from '../../utils/user';
 
 const HumanTag = (tag: string) => {
-	return tag === 'A' || 'a'
+	return tag === ('A' || 'a')
 		? 'Link'
-		: tag === 'TD' || 'TR'
+		: tag === ('TD' || 'TR')
 		? 'Table item'
 		: tag === 'LI'
 		? 'List item'
