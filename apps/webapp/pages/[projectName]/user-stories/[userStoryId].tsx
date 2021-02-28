@@ -322,20 +322,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 										updateExpectedTest(date);
 										toast({
 											position: 'bottom-right',
-											render: () => (
-												<Box
-													color="white"
-													p={4}
-													bg="blue.500"
-													borderRadius="md"
-													fontSize="md"
-												>
-													Success. The User story has been marked as a test
-													case!
-												</Box>
-											),
-											duration: 5000,
+											title: 'A test case was created!',
+											description:
+												'The User story has been marked as a test case. It can now be found in the test cases tab.',
 											isClosable: true,
+											status: 'success',
+											variant: 'clean',
 										});
 										router.push(`/${slugifiedProjectName}/user-stories`);
 									}}
@@ -351,19 +343,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 										deleteRejectedRecording();
 										toast({
 											position: 'bottom-right',
-											render: () => (
-												<Box
-													color="white"
-													p={4}
-													bg="blue.500"
-													borderRadius="md"
-													fontSize="md"
-												>
-													Rejected. The User story has been deleted!
-												</Box>
-											),
-											duration: 5000,
+											title: 'A recording has been rejected.',
+											description:
+												'Rejecting a recording will delete the series of steps as a user story.',
 											isClosable: true,
+											status: 'success',
+											variant: 'clean',
 										});
 										router.push(`/${slugifiedProjectName}/user-stories`);
 									}}
