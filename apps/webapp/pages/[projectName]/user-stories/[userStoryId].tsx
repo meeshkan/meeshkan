@@ -134,21 +134,17 @@ const UserStoryPage = (props: UserStoryProps) => {
 	) => {
 		setLoading(true);
 
-		fetch(
-			'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
-			{
-				method: 'POST',
-				mode: 'no-cors',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					startEventID: '9819d103-dd15-410c-8619-b334146471ad',
-					endEventID: '539635df-c1e1-4fcd-bd94-122b211fe87e',
-					recordingID: 'cklpfrmwu02fn07la3m7f5z9g',
-				}),
-			}
-		).then((res) => console.log(res));
+		fetch('/api/generate-video', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				startEventID,
+				endEventID,
+				recordingID,
+			}),
+		});
 
 		setLoading(false);
 	};
@@ -328,8 +324,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 									loadingText="Generating video"
 									onClick={() => {
 										generateVideo(
-											data.userStory.recording.startEventID,
-											data.userStory.recording.endEventID,
+											data.userStory.recording.startEventId,
+											data.userStory.recording.endEventId,
 											data.userStory.recording.id
 										);
 									}}
@@ -365,7 +361,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								justify="space-between"
 								align="center"
 								p={2}
-								borderRadius="md"
+								borderRadius="lg"
 								backgroundColor={useColorModeValue('white', 'gray.900')}
 							>
 								<Button
