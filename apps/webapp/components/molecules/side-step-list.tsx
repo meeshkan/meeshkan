@@ -60,7 +60,17 @@ export const StepList = ({ steps }: StepListProps) => {
 							)}.`
 						);
 					}
-					if (command.dragndrop) {
+
+					// Is the source target and destination target the same? return a boolean
+					const isXSame =
+						command.dragndrop?.sourceTarget.coordinates.xCoord ===
+						command.dragndrop?.destinationTarget.coordinates.xCoord;
+
+					const isYSame =
+						command.dragndrop?.sourceTarget.coordinates.yCoord ===
+						command.dragndrop?.destinationTarget.coordinates.yCoord;
+
+					if (command.dragndrop && !isYSame && !isXSame) {
 						steps.push(
 							`Drag ${HumanTag(
 								command.dragndrop.sourceTarget.selector.tagName
@@ -71,6 +81,14 @@ export const StepList = ({ steps }: StepListProps) => {
 							}. Then drop at ${
 								command.dragndrop.destinationTarget.coordinates.xCoord
 							}, ${command.dragndrop.destinationTarget.coordinates.yCoord}.`
+						);
+					} else if (command.dragndrop && isYSame && isXSame) {
+						steps.push(
+							`Click ${HumanTag(
+								command.dragndrop.sourceTarget.selector.tagName
+							)}${NotNullText(
+								command.dragndrop.sourceTarget.selector.innerText
+							)}.`
 						);
 					}
 				});
