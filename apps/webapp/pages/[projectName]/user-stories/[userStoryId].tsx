@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Card from '../../../components/atoms/card';
 import { mutate } from 'swr';
 import {
@@ -86,9 +86,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 		USER_STORY,
 		fetcher
 	);
-	const [video, setVideo] = useState(
-		data.userStory.recording.video?.downloadUrl
-	);
+	const [video, setVideo] = useState(null);
+
+	useEffect(() => {
+		setVideo(data.userStory?.recording?.video?.downloadUrl);
+	}, []);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
