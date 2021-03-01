@@ -31,6 +31,7 @@ import {
 	UPDATE_STORY_TITLE,
 	UPDATE_STORY_DESCRIPTION,
 	UPDATE_STORY_SIGNIFICANCE,
+	WATCH_RECORDING_CHANGES,
 } from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
@@ -127,7 +128,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const generateVideo = (
+	const generateVideo = async (
 		startEventID: string,
 		endEventID: string,
 		recordingID: string
@@ -135,7 +136,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		setLoading(true);
 
 		fetch(
-			'https://ecvelkirah.execute-api.eu-west-1.amazonaws.com/main/make-story',
+			'https://ecvelkirah.execute-api.eu-west-1.amazonaws.com/main/make-video',
 			{
 				method: 'POST',
 				mode: 'no-cors',
@@ -148,7 +149,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 					recordingID,
 				}),
 			}
-		);
+		).then(() => {
+			client.request(WATCH_RECORDING_CHANGES, { recordingID });
+		});
+
+		await mutate('/api/session');
 
 		setLoading(false);
 	};
