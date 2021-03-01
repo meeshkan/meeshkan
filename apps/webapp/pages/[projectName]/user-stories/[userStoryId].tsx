@@ -89,7 +89,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const [video, setVideo] = useState(null);
 
 	useEffect(() => {
-		setVideo(data.userStory?.recording?.video?.downloadUrl);
+		setVideo(data?.userStory?.recording?.video?.downloadUrl);
 	}, []);
 
 	// Functions that call mutations for updating the user stories
@@ -162,7 +162,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 				console.log(res);
 				setLoading(false);
 				// @ts-ignore
-				setVideo(res.Recording.node.video.downloadUrl);
+				// setVideo(res.Recording.node.video.downloadUrl);
 			});
 	};
 
