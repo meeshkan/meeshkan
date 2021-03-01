@@ -135,7 +135,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		setLoading(true);
 
 		fetch(
-			'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
+			'https://ecvelkirah.execute-api.eu-west-1.amazonaws.com/main/make-story',
 			{
 				method: 'POST',
 				mode: 'no-cors',
