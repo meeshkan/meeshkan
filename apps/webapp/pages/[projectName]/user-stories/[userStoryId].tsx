@@ -86,6 +86,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 		USER_STORY,
 		fetcher
 	);
+	const [video, setVideo] = useState(
+		data.userStory.recording.video?.downloadUrl
+	);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -149,13 +152,16 @@ const UserStoryPage = (props: UserStoryProps) => {
 					recordingID,
 				}),
 			}
-		).then(() => {
-			client.request(WATCH_RECORDING_CHANGES, { recordingID });
-		});
-
-		await mutate('/api/session');
-
-		setLoading(false);
+		)
+			.then(() => {
+				client.request(WATCH_RECORDING_CHANGES, { recordingID });
+			})
+			.then((res) => {
+				console.log(res);
+				setLoading(false);
+				// @ts-ignore
+				setVideo(res.Recording.node.video.downloadUrl);
+			});
 	};
 
 	if (validatingQuery || validatingProject || !data) {
@@ -309,12 +315,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 					gap={8}
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
-						{data.userStory.recording.video ? (
+						{video ? (
 							<VideoPlayer>
-								<source
-									src={data.userStory.recording.video.downloadUrl}
-									type="video/webm"
-								/>
+								<source src={video} type="video/webm" />
 							</VideoPlayer>
 						) : (
 							<AspectRatio
