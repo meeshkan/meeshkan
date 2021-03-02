@@ -30,7 +30,7 @@ import NotFoundError from '../404';
 import InviteLinkInput from '../../components/molecules/invite-link-input';
 import ScriptTagInput from '../../components/molecules/script-tag-input';
 import { UserContext, updateProductNotifications } from '../../utils/user';
-import { Member, AuthenticationToken } from '@frontend/meeshkan-types';
+import { User, AuthenticationToken } from '@frontend/meeshkan-types';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import {
 	REMOVE_TEAM_MEMBER,
@@ -59,7 +59,7 @@ const Settings = () => {
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
-	const [members, setMembers] = useState<Array<Member>>(
+	const [members, setMembers] = useState<Array<User>>(
 		project?.members?.items || []
 	);
 	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
@@ -285,7 +285,7 @@ const Settings = () => {
 						Invite link
 					</Heading>
 					<InviteLinkInput />
-					{members?.map((member: Member) => {
+					{members?.map((member: User) => {
 						const memberName = `${member.firstName || ''} ${
 							member.lastName || ''
 						}`;

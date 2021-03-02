@@ -22,7 +22,7 @@ import {
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext } from '../../utils/user';
-import { UserStories } from '@frontend/meeshkan-types';
+import { UserStoryListResponse } from '@frontend/meeshkan-types';
 import {
 	DoubleArrowLeftIcon,
 	ArrowLeftIcon,
@@ -34,7 +34,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
 type TableProps = {
 	columns: Column[];
-	data: UserStories['items'];
+	data: UserStoryListResponse['items'];
 	fetchData: ({ pageSize, pageIndex }: any) => Promise<void>;
 	loading?: boolean;
 	pageCount: number;

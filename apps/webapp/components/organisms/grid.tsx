@@ -31,7 +31,7 @@ import GridCard from '../molecules/grid-card';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
 import { UserContext } from '../../utils/user';
-import { UserStories, DataPointTag } from '@frontend/meeshkan-types';
+import { UserStoryListResponse, DataPointTag } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { capitalize } from '../../utils/capitalize';
 import {
@@ -174,7 +174,8 @@ const Grid = (props) => {
 
 	useEffect(() => setVersion(versions[0]), [versions]);
 
-	const userStories: UserStories['items'] = selectedProject.userStories.items;
+	const userStories: UserStoryListResponse['items'] =
+		selectedProject.userStories.items;
 
 	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);

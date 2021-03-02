@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import moment from 'moment';
 import {
-	UserStories,
+	UserStoryListResponse,
 	Project,
 	UserStory,
-	TestRuns,
-	Releases,
+	TestRunListResponse,
+	ReleaseListResponse,
 	DataPoint,
 	DataPointTag,
 } from '@frontend/meeshkan-types';
@@ -13,7 +13,7 @@ import {
 const daysUntilDate = (date: moment.Moment): number =>
 	date.diff(moment(), 'days');
 
-export const getTestRuns = (releases: Releases['items']) => {
+export const getTestRuns = (releases: ReleaseListResponse['items']) => {
 	const testRunsTotal = releases.reduce(
 		(a, b) => ({
 			testRuns: {
@@ -38,11 +38,11 @@ export const getTestRuns = (releases: Releases['items']) => {
 
 export const getDaysUntilRelease = (project: Project) => {
 	const [release] = project.release.items;
-	const releaseDate = release?.releaseDate;
+	const releaseDate = release.releaseDate;
 	return releaseDate ? daysUntilDate(moment(releaseDate)) : null;
 };
 
-export const getBugs = (testRuns: TestRuns['items']) => {
+export const getBugs = (testRuns: TestRunListResponse['items']) => {
 	const introduced = _.sumBy(testRuns, (testRun) => {
 		const testOutcomes = testRun?.testOutcome?.items;
 		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
@@ -59,7 +59,7 @@ export const getBugs = (testRuns: TestRuns['items']) => {
 	};
 };
 
-export const getLatestTestStates = (testRuns: TestRuns['items']) => {
+export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
 	const latestTestStates = {
 		failing: 0,
 		passing: 0,
@@ -88,7 +88,7 @@ const lastNDays = (n) =>
 
 export const getRecordingsAndTestsByDay = (
 	days: number,
-	userStories: UserStories['items']
+	userStories: UserStoryListResponse['items']
 ) => {
 	const recordingsByDay = {};
 	const testsByDay = {};
@@ -128,7 +128,7 @@ const storySignificance = (story: UserStory): number => 10.0;
 export const getConfidenceScore = (
 	howLongAgo: number,
 	releaseStarted: number,
-	userStories_: UserStories['items']
+	userStories_: UserStoryListResponse['items']
 ): Record<string, DataPoint> => {
 	const userStories = userStories_.filter(
 		(story) => new Date(story.createdAt).getTime() < howLongAgo
