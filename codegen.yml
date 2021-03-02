@@ -1,0 +1,30 @@
+overwrite: true
+schema: 'https://api.8base.com/ckhqdz5mu01r307mn6szcbdke'
+generates:
+  # Get schemas from server
+  libs/meeshkan-types/src/lib/8base-schema.ts:
+    documents: 'apps/webapp/graphql/**.ts'
+    plugins:
+      - 'typescript'
+  # Create operations based on queries
+  # libs/meeshkan-types/src/autogenerate/operations.tsx:
+  #   documents: 'apps/webapp/graphql/**.gql'
+  #   preset: import-types
+  #   presetConfig:
+  #     typesPath: ./schemas
+  #   plugins:
+  #     - typescript-operations
+  # # 1. Export GraphQL documents
+  # # 2. React interface
+  # libs/meeshkan-types/src/autogenerate/hooks.tsx:
+  #   documents: 'apps/webapp/graphql/**.gql'
+  #   preset: import-types
+  #   presetConfig:
+  #     typesPath: ./operations
+  #   plugins:
+  #     - typescript-react-apollo
+  #   config:
+  #     # Optionals
+  #     withHOC: false
+  #     withComponent: false
+  #     withHooks: true
