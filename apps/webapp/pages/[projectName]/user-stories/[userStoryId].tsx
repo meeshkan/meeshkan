@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import Card from '../../../components/atoms/card';
 import { mutate } from 'swr';
 import {
@@ -23,7 +23,10 @@ import {
 	AspectRatio,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
-import { SeleniumScript } from '@frontend/meeshkan-types';
+import {
+	SeleniumGroupListResponse,
+	SeleniumScript,
+} from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
@@ -165,7 +168,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return <Text color="red.500">{error}</Text>;
 	}
 
-	let steps: SeleniumScript['groups']['groupItems'] = [];
+	let steps: SeleniumGroupListResponse['items'] = [];
 	data.userStory.recording.seleniumScript.groups.groupItems.forEach((item) => {
 		steps.push(item);
 	});
