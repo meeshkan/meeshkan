@@ -1,9 +1,4 @@
-export interface AuthenticationToken {
-	id: string;
-	type: 'local storage' | 'cookie';
-	key: string;
-	value: string;
-}
+import { Project, TestRunListResponse, UserStory } from './8base-schema';
 
 export type Avatar = {
 	downloadUrl: string;
@@ -67,16 +62,6 @@ export interface Commands {
 	sIndex?: number;
 }
 
-export interface Configuration {
-	inviteLink: string;
-	productionURL: string;
-	stagingURL: string;
-	authenticationTokens: {
-		items: Array<AuthenticationToken>;
-	};
-	logInFlow?: UserStory;
-}
-
 export interface DataPoint {
 	title: string;
 	score: number;
@@ -131,43 +116,11 @@ interface Members {
 	items: Array<Member>;
 }
 
-export interface Project {
-	id: string;
-	name: string;
-	avatar: Avatar;
-	configuration: Configuration;
-	hasReceivedEvents: boolean;
-	members: Members;
-	userStories: UserStories;
-	release: Releases;
-}
-
-export interface Recording {
-	id: string;
-	video?: {
-		downloadUrl: string;
-	};
-	startEventId: string;
-	endEventId: string;
-	environment: {
-		items: [
-			{
-				ipAddress: string;
-				browser: string;
-				browserVersion: string;
-				operatingSystem: string;
-				language: string;
-			}
-		];
-	};
-	seleniumScript: SeleniumScript;
-}
-
 interface Release {
 	releaseDate: string;
 	id: string;
 	name: string;
-	testRuns: TestRuns;
+	testRuns: TestRunListResponse;
 }
 
 export interface Releases {
@@ -175,63 +128,7 @@ export interface Releases {
 	items: Array<Release>;
 }
 
-export interface SeleniumScript {
-	version?: string;
-	groups: {
-		groupsCount?: number;
-		groupItems: Array<Groups>;
-	};
-}
-
-export interface TestOutcome {
-	status: 'queued' | 'in progress' | 'did not run' | 'failing' | 'passing';
-	isResolved: boolean;
-	errorDetails?: {
-		stepIndex: number;
-		exception: string;
-	};
-	createdAt: string;
-	userStory: UserStory;
-	video?: {
-		downloadUrl: string;
-		shareUrl?: string;
-	};
-}
-
-interface TestOutcomes {
-	count: number;
-	items: Array<TestOutcome>;
-}
-
-export interface TestRun {
-	id: string;
-	status: 'queued' | 'running' | 'runError' | 'completed';
-	createdAt: string;
-	testLength: string;
-	ciRun: string;
-	testOutcome: TestOutcomes;
-}
-
-export interface TestRuns {
-	count: number;
-	items: Array<TestRun>;
-}
-
 export interface UserStories {
 	count: number;
 	items: Array<UserStory>;
-}
-export interface UserStory {
-	createdAt: string;
-	id: string;
-	title: string;
-	isTestCase: boolean;
-	testCreatedDate: string;
-	flowIDs: [number];
-	created: 'user' | 'manual';
-	isExpected: boolean;
-	significance: 'low' | 'medium' | 'high';
-	recording: Recording;
-	testOutcome?: TestOutcomes;
-	isAuthenticated: boolean;
 }

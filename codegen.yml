@@ -1,5 +1,11 @@
 overwrite: true
 schema: 'https://api.8base.com/ckhqdz5mu01r307mn6szcbdke'
+
+# Format files
+hooks:
+  afterAllFileWrite:
+    - prettier --write
+
 generates:
   # Get schemas from server
   libs/meeshkan-types/src/lib/8base-schema.ts:
