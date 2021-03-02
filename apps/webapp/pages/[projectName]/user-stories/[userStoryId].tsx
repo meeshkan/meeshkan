@@ -149,7 +149,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					recordingID,
 				}),
 			}
-		);
+		).then(() => setTimeout(() => setLoading(false), 30000));
 	};
 
 	if (validatingQuery || validatingProject || !data) {
@@ -318,12 +318,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 								alignItems="center"
 								border="1px solid"
 								borderRadius="lg"
-								borderColor={useColorModeValue('gray.400', 'gray.700')}
+								borderColor={useColorModeValue('gray.300', 'gray.700')}
 							>
 								<>
 									<Button
 										colorScheme="gray"
-										variant="ghost"
 										isLoading={loading}
 										loadingText="Generating video"
 										onClick={() => {
