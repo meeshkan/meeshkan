@@ -105,9 +105,7 @@ const TestRun = () => {
 								{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
 								<Tooltip
 									label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
-									p={2}
 									placement="right-start"
-									borderRadius="md"
 								>
 									<InfoOutlineIcon
 										ml={2}
@@ -155,7 +153,12 @@ const TestRun = () => {
 									) : status === 'failing' ? (
 										<XmarkIcon w={3} h={3} color="red.500" title="Failing" />
 									) : status === 'did not run' ? (
-										<MinusIcon w={3} h={3} color="gray.500" title="Didn't run" />
+										<MinusIcon
+											w={3}
+											h={3}
+											color="gray.500"
+											title="Didn't run"
+										/>
 									) : status === 'queued' || 'in progress' ? (
 										<CircleArrowsIcon
 											w={3}
@@ -178,7 +181,6 @@ const TestRun = () => {
 												<Tooltip
 													label={status}
 													placement="bottom-start"
-													borderRadius="md"
 													textTransform="capitalize"
 												>
 													{icon}

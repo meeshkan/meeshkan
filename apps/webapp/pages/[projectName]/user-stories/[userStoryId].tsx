@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Card from '../../../components/atoms/card';
 import { mutate } from 'swr';
 import {
@@ -13,13 +13,14 @@ import {
 	Button,
 	Select,
 	useToast,
-	Heading,
+	Link as ChakraLink,
 	Stack,
 	Grid,
 	Tooltip,
 	Textarea,
 	FormControl,
 	FormLabel,
+	AspectRatio,
 } from '@chakra-ui/react';
 import { SeleniumScript, UserContext } from '../../../utils/user';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -30,6 +31,7 @@ import {
 	UPDATE_STORY_TITLE,
 	UPDATE_STORY_DESCRIPTION,
 	UPDATE_STORY_SIGNIFICANCE,
+	WATCH_RECORDING_CHANGES,
 } from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
@@ -62,6 +64,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	} = useValidateSelectedProject();
 	const router = useRouter();
 	const toast = useToast();
+	const [loading, setLoading] = useState(false);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
@@ -125,6 +128,30 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return request;
 	};
 
+	const generateVideo = (
+		startEventID: string,
+		endEventID: string,
+		recordingID: string
+	) => {
+		setLoading(true);
+
+		fetch(
+			'https://ouiozc4d8a.execute-api.eu-west-1.amazonaws.com/main/make-video',
+			{
+				method: 'POST',
+				mode: 'no-cors',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					startEventID,
+					endEventID,
+					recordingID,
+				}),
+			}
+		).then(() => setTimeout(() => setLoading(false), 30000));
+	};
+
 	if (validatingQuery || validatingProject || !data) {
 		return <LoadingScreen as={Card} />;
 	}
@@ -145,20 +172,18 @@ const UserStoryPage = (props: UserStoryProps) => {
 	return (
 		<Stack w="100%" mb={8}>
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
-				<a>
-					<Heading
-						d="flex"
-						alignItems="center"
-						fontSize="16px"
-						fontWeight="400"
-						color={useColorModeValue('gray.900', 'gray.200')}
-						lineHeight="short"
-						mb={3}
-					>
-						<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
-						User stories
-					</Heading>
-				</a>
+				<ChakraLink
+					d="flex"
+					alignItems="center"
+					fontSize="16px"
+					fontWeight="400"
+					color={useColorModeValue('gray.900', 'gray.200')}
+					lineHeight="short"
+					mb={3}
+				>
+					<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
+					User stories
+				</ChakraLink>
 			</Link>
 
 			<Card mb={4}>
@@ -224,12 +249,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						)}
 						{data.userStory.configuration !== null &&
 						data.userStory.configuration.logInFlow.id === userStoryId ? (
-							<Tooltip
-								label="This is the log in flow"
-								p={2}
-								placement="right"
-								borderRadius="md"
-							>
+							<Tooltip label="This is the 'Log in flow'" placement="right">
 								<Badge
 									colorScheme="amber"
 									fontWeight="700"
@@ -242,12 +262,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Tooltip>
 						) : null}
 						{data.userStory.isAuthenticated ? (
-							<Tooltip
-								label="Authenticated"
-								p={2}
-								placement="right"
-								borderRadius="md"
-							>
+							<Tooltip label="Authenticated" placement="right">
 								<Badge
 									colorScheme="amber"
 									fontWeight="700"
@@ -286,13 +301,45 @@ const UserStoryPage = (props: UserStoryProps) => {
 					gap={8}
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
-						{data.userStory.recording.video && (
+						{data.userStory?.recording?.video ? (
 							<VideoPlayer>
 								<source
 									src={data.userStory.recording.video.downloadUrl}
 									type="video/webm"
 								/>
 							</VideoPlayer>
+						) : (
+							<AspectRatio
+								ratio={16 / 9}
+								display="flex"
+								justifyContent="center"
+								alignItems="center"
+								border="1px solid"
+								borderRadius="lg"
+								borderColor={useColorModeValue('gray.300', 'gray.700')}
+							>
+								<>
+									<Button
+										colorScheme="gray"
+										isLoading={loading}
+										loadingText="Generating video"
+										onClick={() => {
+											generateVideo(
+												data.userStory.recording.startEventId,
+												data.userStory.recording.endEventId,
+												data.userStory.recording.id
+											);
+										}}
+									>
+										Generate Video
+									</Button>
+									{loading ? (
+										<Text textAlign="center" mt={8}>
+											A video should be generated in 15-30 seconds.
+										</Text>
+									) : null}
+								</>
+							</AspectRatio>
 						)}
 
 						<FormControl mt={8}>
@@ -321,7 +368,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								justify="space-between"
 								align="center"
 								p={2}
-								borderRadius="md"
+								borderRadius="lg"
 								backgroundColor={useColorModeValue('white', 'gray.900')}
 							>
 								<Button

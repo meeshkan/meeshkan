@@ -21,6 +21,9 @@ export const USER_STORY = gql`
 				video {
 					downloadUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -117,6 +120,9 @@ export const UPDATE_EXPECTED_TEST = gql`
 				video {
 					downloadUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -203,6 +209,24 @@ export const DELETE_REJECTED_RECORDING = gql`
 	}
 `;
 
+export const WATCH_RECORDING_CHANGES = gql`
+	subscription WATCH_RECORDING_CHANGES($recordingID: ID!) {
+		Recording(
+			filter: {
+				mutation_in: [create, update]
+				node: { id: { equals: $recordingID } }
+			}
+		) {
+			node {
+				id
+				video {
+					downloadUrl
+				}
+			}
+		}
+	}
+`;
+
 export const UPDATE_STORY_TITLE = gql`
 	mutation UPDATE_STORY_TITLE($userStoryId: ID!, $newTitle: String) {
 		userStoryUpdate(filter: { id: $userStoryId }, data: { title: $newTitle }) {
@@ -219,6 +243,9 @@ export const UPDATE_STORY_TITLE = gql`
 					downloadUrl
 					shareUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -319,6 +346,9 @@ export const UPDATE_STORY_DESCRIPTION = gql`
 					downloadUrl
 					shareUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress
@@ -419,6 +449,9 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 					downloadUrl
 					shareUrl
 				}
+				id
+				startEventId
+				endEventId
 				environment {
 					items {
 						ipAddress

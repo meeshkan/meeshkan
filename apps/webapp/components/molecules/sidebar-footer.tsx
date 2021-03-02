@@ -136,7 +136,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 							)}
 						</MenuList>
 					</Menu>
-					<Tooltip hasArrow label="Settings" borderRadius="md" p={2}>
+					<Tooltip hasArrow label="Settings">
 						<IconButton
 							aria-label="Settings"
 							colorScheme="gray"

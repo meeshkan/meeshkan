@@ -128,9 +128,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 					Staging URL
 					<Tooltip
 						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
-						p={2}
 						placement="right-start"
-						borderRadius="md"
 					>
 						<InfoOutlineIcon
 							ml={2}
