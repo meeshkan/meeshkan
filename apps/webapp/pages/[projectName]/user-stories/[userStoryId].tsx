@@ -86,11 +86,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 		USER_STORY,
 		fetcher
 	);
-	const [video, setVideo] = useState(null);
-
-	useEffect(() => {
-		setVideo(data?.userStory?.recording?.video?.downloadUrl);
-	}, []);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -133,7 +128,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return request;
 	};
 
-	const generateVideo = async (
+	const generateVideo = (
 		startEventID: string,
 		endEventID: string,
 		recordingID: string
@@ -141,7 +136,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		setLoading(true);
 
 		fetch(
-			'https://ecvelkirah.execute-api.eu-west-1.amazonaws.com/main/make-video',
+			'https://ouiozc4d8a.execute-api.eu-west-1.amazonaws.com/main/make-video',
 			{
 				method: 'POST',
 				mode: 'no-cors',
@@ -154,16 +149,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					recordingID,
 				}),
 			}
-		)
-			.then(() => {
-				client.request(WATCH_RECORDING_CHANGES, { recordingID });
-			})
-			.then((res) => {
-				console.log(res);
-				setLoading(false);
-				// @ts-ignore
-				// setVideo(res.Recording.node.video.downloadUrl);
-			});
+		);
 	};
 
 	if (validatingQuery || validatingProject || !data) {
@@ -317,9 +303,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 					gap={8}
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
-						{video ? (
+						{data.userStory?.recording?.video ? (
 							<VideoPlayer>
-								<source src={video} type="video/webm" />
+								<source
+									src={data.userStory.recording.video.downloadUrl}
+									type="video/webm"
+								/>
 							</VideoPlayer>
 						) : (
 							<AspectRatio
@@ -331,21 +320,28 @@ const UserStoryPage = (props: UserStoryProps) => {
 								borderRadius="lg"
 								borderColor={useColorModeValue('gray.400', 'gray.700')}
 							>
-								<Button
-									colorScheme="gray"
-									variant="ghost"
-									isLoading={loading}
-									loadingText="Generating video"
-									onClick={() => {
-										generateVideo(
-											data.userStory.recording.startEventId,
-											data.userStory.recording.endEventId,
-											data.userStory.recording.id
-										);
-									}}
-								>
-									Generate Video
-								</Button>
+								<>
+									<Button
+										colorScheme="gray"
+										variant="ghost"
+										isLoading={loading}
+										loadingText="Generating video"
+										onClick={() => {
+											generateVideo(
+												data.userStory.recording.startEventId,
+												data.userStory.recording.endEventId,
+												data.userStory.recording.id
+											);
+										}}
+									>
+										Generate Video
+									</Button>
+									{loading ? (
+										<Text textAlign="center" mt={8}>
+											A video should be generated in 15-30 seconds.
+										</Text>
+									) : null}
+								</>
 							</AspectRatio>
 						)}
 
