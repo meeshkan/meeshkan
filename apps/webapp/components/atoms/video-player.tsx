@@ -16,6 +16,7 @@ const VideoPlayer = ({ children }) => {
 			style={{
 				borderRadius: '6px',
 				height: '100%',
+				width: '100%',
 				maxHeight: maxHeight,
 				border: '1px solid',
 				borderColor: useColorModeValue(gray200, gray700),

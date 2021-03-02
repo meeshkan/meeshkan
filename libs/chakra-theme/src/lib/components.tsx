@@ -62,16 +62,16 @@ const customComponents = {
 			subtle: (props) => ({
 				bg: mode(
 					`${props.colorScheme}.50`,
-					transparentize(`${props.colorScheme}.500`, 0.2)
+					transparentize(`${props.colorScheme}.200`, 0.16)
 				)(props),
 				color: mode(
-					`${props.colorScheme}.700`,
+					`${props.colorScheme}.800`,
 					`${props.colorScheme}.200`
 				)(props),
 				_hover: {
 					bg: mode(
 						`${props.colorScheme}.100`,
-						transparentize(`${props.colorScheme}.500`, 0.1)
+						transparentize(`${props.colorScheme}.200`, 0.1)
 					)(props),
 				},
 				_active: {
