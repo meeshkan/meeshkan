@@ -3,12 +3,16 @@ import { SideStep } from '../atoms/side-step';
 import { Groups } from '../../utils/user';
 
 const HumanTag = (tag: string) => {
-	return tag === 'A' || 'a'
+	return tag === ('A' || 'a')
 		? 'Link'
-		: tag === 'TD' || 'TR'
+		: tag === ('TD' || 'TR')
 		? 'Table item'
 		: tag === 'LI'
 		? 'List item'
+		: tag === 'UL'
+		? 'Unordered list'
+		: tag === 'OL'
+		? 'Ordered list'
 		: tag === 'INPUT'
 		? 'Input'
 		: tag === 'SPAN'
@@ -21,11 +25,19 @@ const HumanTag = (tag: string) => {
 		? 'Text'
 		: tag === 'DIV'
 		? 'Div'
+		: tag === 'SELECT'
+		? 'Dropdown'
+		: tag === 'NAV'
+		? 'Navigation bar'
+		: tag === 'LABEL'
+		? 'Form label'
+		: tag === 'CODE'
+		? 'Code block'
 		: tag;
 };
 
 const NotNullText = (text: string) => {
-	return text ? ` with the inner text of ${text}` : '';
+	return text ? ` with the inner content of "${text}"` : '';
 };
 
 type StepListProps = {
@@ -60,7 +72,17 @@ export const StepList = ({ steps }: StepListProps) => {
 							)}.`
 						);
 					}
-					if (command.dragndrop) {
+
+					// Is the source target and destination target the same? return a boolean
+					const isXSame =
+						command.dragndrop?.sourceTarget?.coordinates?.xCoord ===
+						command.dragndrop?.destinationTarget?.coordinates?.xCoord;
+
+					const isYSame =
+						command.dragndrop?.sourceTarget?.coordinates?.yCoord ===
+						command.dragndrop?.destinationTarget?.coordinates?.yCoord;
+
+					if (command.dragndrop && !isYSame && !isXSame) {
 						steps.push(
 							`Drag ${HumanTag(
 								command.dragndrop.sourceTarget.selector.tagName
@@ -71,6 +93,14 @@ export const StepList = ({ steps }: StepListProps) => {
 							}. Then drop at ${
 								command.dragndrop.destinationTarget.coordinates.xCoord
 							}, ${command.dragndrop.destinationTarget.coordinates.yCoord}.`
+						);
+					} else if (command.dragndrop && isYSame && isXSame) {
+						steps.push(
+							`Click ${HumanTag(
+								command.dragndrop.sourceTarget.selector.tagName
+							)}${NotNullText(
+								command.dragndrop.sourceTarget.selector.innerText
+							)}.`
 						);
 					}
 				});

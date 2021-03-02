@@ -13,7 +13,7 @@ import {
 	Button,
 	Select,
 	useToast,
-	Heading,
+	Link as ChakraLink,
 	Stack,
 	Grid,
 	Tooltip,
@@ -145,20 +145,18 @@ const UserStoryPage = (props: UserStoryProps) => {
 	return (
 		<Stack w="100%" mb={8}>
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
-				<a>
-					<Heading
-						d="flex"
-						alignItems="center"
-						fontSize="16px"
-						fontWeight="400"
-						color={useColorModeValue('gray.900', 'gray.200')}
-						lineHeight="short"
-						mb={3}
-					>
-						<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
-						User stories
-					</Heading>
-				</a>
+				<ChakraLink
+					d="flex"
+					alignItems="center"
+					fontSize="16px"
+					fontWeight="400"
+					color={useColorModeValue('gray.900', 'gray.200')}
+					lineHeight="short"
+					mb={3}
+				>
+					<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
+					User stories
+				</ChakraLink>
 			</Link>
 
 			<Card mb={4}>
