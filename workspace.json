@@ -241,6 +241,27 @@
 					}
 				}
 			}
+		},
+		"meeshkan-types": {
+			"root": "libs/meeshkan-types",
+			"sourceRoot": "libs/meeshkan-types/src",
+			"projectType": "library",
+			"schematics": {},
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["libs/meeshkan-types/**/*.{ts,tsx,js,jsx}"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "libs/meeshkan-types/jest.config.js",
+						"passWithNoTests": true
+					}
+				}
+			}
 		}
 	},
 	"cli": {

@@ -29,12 +29,8 @@ import Card from '../../components/atoms/card';
 import NotFoundError from '../404';
 import InviteLinkInput from '../../components/molecules/invite-link-input';
 import ScriptTagInput from '../../components/molecules/script-tag-input';
-import {
-	UserContext,
-	updateProductNotifications,
-	Member,
-	AuthenticationToken,
-} from '../../utils/user';
+import { UserContext, updateProductNotifications } from '../../utils/user';
+import { Member, AuthenticationToken } from '@frontend/meeshkan-types';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import {
 	REMOVE_TEAM_MEMBER,

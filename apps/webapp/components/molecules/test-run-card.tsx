@@ -3,7 +3,7 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import { CheckmarkIcon, XmarkIcon, MinusIcon } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Card from '../atoms/card';
-import { TestRun } from '../../utils/user';
+import { TestRun } from '@frontend/meeshkan-types';
 
 type TestRunCardProps = {
 	id?: string;

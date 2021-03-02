@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { Flex, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import _ from 'lodash';
 import { LogoIcon } from '@frontend/chakra-theme';
 import LoadingScreen from '../../components/organisms/loading-screen';
 import { useInviteLink } from '../../hooks/use-invite-link';
-import { UserContext, Project } from '../../utils/user';
+import { UserContext } from '../../utils/user';
+import { Project } from '@frontend/meeshkan-types';
 
 type InviteProps = {
 	cookies: string | undefined;
@@ -23,7 +23,8 @@ const Invite = (props: InviteProps) => {
 			const { projects, mutate: mutateUser } = user;
 			const joinedProject = data?.project as Project;
 			const projectIndex = _.findIndex(
-				projects, project => project.id === joinedProject?.id
+				projects,
+				(project) => project.id === joinedProject?.id
 			);
 
 			if (projectIndex != -1) {
@@ -36,7 +37,7 @@ const Invite = (props: InviteProps) => {
 		}
 
 		router.push(data.redirectTo);
-	}
+	};
 
 	if (inviteId === 'invalid' || data?.invalidInvite || error) {
 		return (

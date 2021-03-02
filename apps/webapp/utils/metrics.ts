@@ -1,19 +1,14 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { UserStories, Project, UserStory, TestRuns, Releases } from './user';
-
-export enum DataPointTag {
-	TEST_RUN = 0,
-	TEST_COVERAGE = 1,
-}
-
-export interface DataPoint {
-	title: string;
-	score: number;
-	maxPossible: number;
-	timestamp: number;
-	tag: DataPointTag;
-}
+import {
+	UserStories,
+	Project,
+	UserStory,
+	TestRuns,
+	Releases,
+	DataPoint,
+	DataPointTag,
+} from '@frontend/meeshkan-types';
 
 const daysUntilDate = (date: moment.Moment): number =>
 	date.diff(moment(), 'days');

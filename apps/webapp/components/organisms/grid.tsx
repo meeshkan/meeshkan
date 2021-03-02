@@ -30,7 +30,8 @@ import GridCard from '../molecules/grid-card';
 // import LinearListItem from '../molecules/linear-list-item';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
-import { UserContext, UserStories } from '../../utils/user';
+import { UserContext } from '../../utils/user';
+import { UserStories, DataPointTag } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { capitalize } from '../../utils/capitalize';
 import {
@@ -42,7 +43,6 @@ import {
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
 	getLastNDaysInFormat,
-	DataPointTag,
 } from '../../utils/metrics';
 require('../molecules/rounded-chart');
 

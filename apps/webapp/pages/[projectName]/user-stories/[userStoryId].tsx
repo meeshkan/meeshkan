@@ -22,7 +22,8 @@ import {
 	FormLabel,
 	AspectRatio,
 } from '@chakra-ui/react';
-import { SeleniumScript, UserContext } from '../../../utils/user';
+import { UserContext } from '../../../utils/user';
+import { SeleniumScript } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,

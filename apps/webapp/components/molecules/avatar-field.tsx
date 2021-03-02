@@ -15,7 +15,8 @@ import _ from 'lodash';
 import { FilePlusIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
 import { FILE_UPLOAD_INFO } from '../../graphql/file';
-import { uploadFile, UploadedFile } from '../../utils/file';
+import { uploadFile } from '../../utils/file';
+import { UploadedFile } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../utils/graphql';
 
 const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });

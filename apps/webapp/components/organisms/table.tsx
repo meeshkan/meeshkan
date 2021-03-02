@@ -21,7 +21,8 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
-import { UserContext, UserStories } from '../../utils/user';
+import { UserContext } from '../../utils/user';
+import { UserStories } from '@frontend/meeshkan-types';
 import {
 	DoubleArrowLeftIcon,
 	ArrowLeftIcon,

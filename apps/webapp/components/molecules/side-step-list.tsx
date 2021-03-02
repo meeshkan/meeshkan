@@ -1,6 +1,6 @@
 import React from 'react';
 import { SideStep } from '../atoms/side-step';
-import { Groups } from '../../utils/user';
+import { Groups } from '@frontend/meeshkan-types';
 
 const HumanTag = (tag: string) => {
 	return tag === ('A' || 'a')
