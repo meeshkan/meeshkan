@@ -2,7 +2,7 @@ import { initAuth0 } from '@auth0/nextjs-auth0';
 import { ISignInWithAuth0 } from '@auth0/nextjs-auth0/dist/instance';
 import { IncomingMessage } from 'http';
 import ms from 'ms';
-import { IUser } from './user';
+import { IUser } from '@frontend/meeshkan-types';
 
 const cookieLifetime = ms('30 days') / 1000;
 const httpTimeout = ms('10s');
