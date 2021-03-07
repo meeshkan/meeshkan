@@ -49,7 +49,7 @@ export const SideStep = ({
 					fontWeight="700"
 					lineHeight="1"
 					color={
-						stepName.startsWith('Untitled')
+						stepName && stepName.startsWith('Untitled')
 							? useColorModeValue('gray.400', 'gray.500')
 							: 'inherit'
 					}
