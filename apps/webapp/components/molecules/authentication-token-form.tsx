@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Dispatch, SetStateAction } from 'react';
 import {
 	Flex,
 	FormControl,
@@ -17,7 +17,7 @@ import { AuthenticationToken } from '@frontend/meeshkan-types';
 
 type CreateAuthenticationFormProps = {
 	tokens: AuthenticationToken[];
-	setTokens: React.Dispatch<React.SetStateAction<AuthenticationToken[]>>;
+	setTokens: Dispatch<SetStateAction<AuthenticationToken[]>>;
 };
 
 const AuthenticationTokenForm = ({

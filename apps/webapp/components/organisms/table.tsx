@@ -17,7 +17,6 @@ import {
 	useColorModeValue,
 	Skeleton,
 	ButtonGroup,
-	Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
