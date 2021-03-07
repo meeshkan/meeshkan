@@ -23,10 +23,7 @@ import {
 	AspectRatio,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
-import {
-	SeleniumGroupListResponse,
-	SeleniumScript,
-} from '@frontend/meeshkan-types';
+import { SeleniumGroupListResponse, UserStory } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
@@ -86,10 +83,13 @@ const UserStoryPage = (props: UserStoryProps) => {
 			userStoryId: userStoryId,
 		});
 
-	const { data, error, isValidating: validatingQuery } = useSWR(
-		USER_STORY,
-		fetcher
-	);
+	type UserStoryResponse = {
+		userStory: UserStory;
+	};
+
+	const { data, error, isValidating: validatingQuery } = useSWR<
+		UserStoryResponse
+	>(USER_STORY, fetcher);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -169,6 +169,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	}
 
 	let steps: SeleniumGroupListResponse['items'] = [];
+	// @ts-ignore **a graphql alias prevents this from appearing correct
 	data.userStory.recording.seleniumScript.groups.groupItems.forEach((item) => {
 		steps.push(item);
 	});

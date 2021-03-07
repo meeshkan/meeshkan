@@ -34,6 +34,7 @@ import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import VideoPlayer from '../../../components/atoms/video-player';
+import { TestOutcomeListResponse } from '@frontend/meeshkan-types';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -58,9 +59,9 @@ const TestRun = () => {
 		return <NotFoundError />;
 	}
 
-	const testCasesRan = testRun.testOutcome.count;
+	const testCasesRan: number = testRun.testOutcome.count;
 	const outcomeOrder = ['failing', 'passing', 'queued', 'did not run'];
-	const sortedTestOutcomes = testRun.testOutcome.items.sort(
+	const sortedTestOutcomes: TestOutcomeListResponse['items'] = testRun.testOutcome.items.sort(
 		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
 	);
 
