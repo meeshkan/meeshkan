@@ -82,6 +82,8 @@ export const StepList = ({ steps }: StepListProps) => {
 						command.dragndrop?.sourceTarget?.coordinates?.yCoord ===
 						command.dragndrop?.destinationTarget?.coordinates?.yCoord;
 
+					console.log({ isXSame }, { isYSame });
+
 					if (command.dragndrop && !isYSame && !isXSame) {
 						steps.push(
 							`Drag ${HumanTag(
@@ -91,8 +93,8 @@ export const StepList = ({ steps }: StepListProps) => {
 							)} from ${command.dragndrop.sourceTarget.coordinates.xCoord}, ${
 								command.dragndrop.sourceTarget.coordinates.yCoord
 							}. Then drop at ${
-								command.dragndrop.destinationTarget.coordinates.xCoord
-							}, ${command.dragndrop.destinationTarget.coordinates.yCoord}.`
+								command.dragndrop.destinationTarget?.coordinates?.xCoord
+							}, ${command.dragndrop.destinationTarget?.coordinates?.yCoord}.`
 						);
 					} else if (command.dragndrop && isYSame && isXSame) {
 						steps.push(
