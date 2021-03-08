@@ -4,24 +4,37 @@ const customComponents = {
 	Alert: {
 		baseStyle: {
 			container: {
-				px: 4,
-				py: 3,
-				rounded: 'md',
-				fontStyle: 'italic',
+				py: 4,
+				pl: 4,
+				pr: 6,
+				rounded: 'lg',
+				fontSize: '14px',
 			},
 			title: {
 				fontWeight: 'bold',
-				lineHeight: 6,
-				mr: 2,
+				lineHeight: 'base',
+				mb: 3,
 			},
 			description: {
-				lineHeight: 6,
+				lineHeight: 'tall',
+				fontStyle: 'italic',
 			},
 			icon: {
-				mr: 3,
-				w: 5,
-				h: 6,
+				mr: 4,
+				w: 4,
+				h: 4,
 			},
+		},
+		variants: {
+			clean: (props) => ({
+				container: { backgroundColor: mode(`white`, `gray.900`)(props) },
+				icon: {
+					color: mode(
+						`${props.colorScheme}.500`,
+						`${props.colorScheme}.300`
+					)(props),
+				},
+			}),
 		},
 	},
 	Button: {
@@ -49,16 +62,16 @@ const customComponents = {
 			subtle: (props) => ({
 				bg: mode(
 					`${props.colorScheme}.50`,
-					transparentize(`${props.colorScheme}.500`, 0.2)
+					transparentize(`${props.colorScheme}.200`, 0.16)
 				)(props),
 				color: mode(
-					`${props.colorScheme}.700`,
+					`${props.colorScheme}.800`,
 					`${props.colorScheme}.200`
 				)(props),
 				_hover: {
 					bg: mode(
 						`${props.colorScheme}.100`,
-						transparentize(`${props.colorScheme}.500`, 0.1)
+						transparentize(`${props.colorScheme}.200`, 0.1)
 					)(props),
 				},
 				_active: {
@@ -79,6 +92,20 @@ const customComponents = {
 			lineHeight: '1.6',
 			fontFamily: 'body',
 		},
+	},
+	Tooltip: {
+		baseStyle: (props) => ({
+			p: 3,
+			lineHeight: '1.4',
+			bg: mode('gray.700', 'gray.300')(props),
+			color: mode('white', 'gray.900')(props),
+			borderRadius: 'md',
+			fontWeight: 'medium',
+			fontSize: 'sm',
+			boxShadow: 'md',
+			maxW: '320px',
+			zIndex: 'tooltip',
+		}),
 	},
 };
 

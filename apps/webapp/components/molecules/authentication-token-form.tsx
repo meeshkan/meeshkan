@@ -12,7 +12,7 @@ import _ from 'lodash';
 import SegmentedControl from './segmented-control';
 import { UserContext } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { ADD_AUTH_TOKEN, REMOVE_AUTH_TOKEN } from '../../graphql/project';
+import { ADD_AUTH_TOKEN } from '../../graphql/project';
 import { AuthenticationToken } from '../../utils/user';
 
 type CreateAuthenticationFormProps = {
@@ -21,7 +21,6 @@ type CreateAuthenticationFormProps = {
 };
 
 const AuthenticationTokenForm = ({
-	tokens,
 	setTokens,
 }: CreateAuthenticationFormProps) => {
 	const [toggleIndex, setToggleIndex] = useState(0);

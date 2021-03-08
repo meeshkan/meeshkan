@@ -3,12 +3,16 @@ import { SideStep } from '../atoms/side-step';
 import { Groups } from '../../utils/user';
 
 const HumanTag = (tag: string) => {
-	return tag === 'A' || 'a'
+	return tag === ('A' || 'a')
 		? 'Link'
-		: tag === 'TD' || 'TR'
+		: tag === ('TD' || 'TR')
 		? 'Table item'
 		: tag === 'LI'
 		? 'List item'
+		: tag === 'UL'
+		? 'Unordered list'
+		: tag === 'OL'
+		? 'Ordered list'
 		: tag === 'INPUT'
 		? 'Input'
 		: tag === 'SPAN'
@@ -21,11 +25,19 @@ const HumanTag = (tag: string) => {
 		? 'Text'
 		: tag === 'DIV'
 		? 'Div'
+		: tag === 'SELECT'
+		? 'Dropdown'
+		: tag === 'NAV'
+		? 'Navigation bar'
+		: tag === 'LABEL'
+		? 'Form label'
+		: tag === 'CODE'
+		? 'Code block'
 		: tag;
 };
 
 const NotNullText = (text: string) => {
-	return text ? ` with the inner text of ${text}` : '';
+	return text ? ` with the inner content of "${text}"` : '';
 };
 
 type StepListProps = {
@@ -38,7 +50,8 @@ export const StepList = ({ steps }: StepListProps) => {
 	return (
 		<>
 			{steps.map((step, index) => {
-				const subSteps = [];
+				// @ts-ignore ** want to type this, but not set a default value
+				let subSteps: [{ text: string; sIndex: number }] = [];
 				step.commands.items.forEach((command) => {
 					if (command.open) {
 						subSteps.push({
@@ -53,6 +66,7 @@ export const StepList = ({ steps }: StepListProps) => {
 						});
 					}
 					if (command.click) {
+						console.log(command.sIndex);
 						subSteps.push({
 							text: `Click ${HumanTag(
 								command.click.target.selector.tagName
@@ -68,7 +82,17 @@ export const StepList = ({ steps }: StepListProps) => {
 							sIndex: command.sIndex,
 						});
 					}
-					if (command.dragndrop) {
+
+					// Is the source target and destination target the same? return a boolean
+					const isXSame =
+						command.dragndrop?.sourceTarget?.coordinates?.xCoord ===
+						command.dragndrop?.destinationTarget?.coordinates?.xCoord;
+
+					const isYSame =
+						command.dragndrop?.sourceTarget?.coordinates?.yCoord ===
+						command.dragndrop?.destinationTarget?.coordinates?.yCoord;
+
+					if (command.dragndrop && !isYSame && !isXSame) {
 						subSteps.push({
 							text: `Drag ${HumanTag(
 								command.dragndrop.sourceTarget.selector.tagName
@@ -79,6 +103,15 @@ export const StepList = ({ steps }: StepListProps) => {
 							}. Then drop at ${
 								command.dragndrop.destinationTarget.coordinates.xCoord
 							}, ${command.dragndrop.destinationTarget.coordinates.yCoord}.`,
+							sIndex: command.sIndex,
+						});
+					} else if (command.dragndrop && isYSame && isXSame) {
+						subSteps.push({
+							text: `Click ${HumanTag(
+								command.dragndrop.sourceTarget.selector.tagName
+							)}${NotNullText(
+								command.dragndrop.sourceTarget.selector.innerText
+							)}.`,
 							sIndex: command.sIndex,
 						});
 					}
@@ -108,7 +141,6 @@ export const StepList = ({ steps }: StepListProps) => {
 									key={index + 'a'}
 									stepName={sub.text}
 									stepNumber={sub.sIndex + 1}
-									subSteps={[]}
 								/>
 							);
 						})}

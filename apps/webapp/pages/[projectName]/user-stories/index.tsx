@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import {
 	Box,
 	Stack,
@@ -34,7 +34,6 @@ import {
 	MenuItem,
 	Checkbox,
 	MenuGroup,
-	MenuDivider,
 	MenuItemOption,
 	MenuOptionGroup,
 	OrderedList,
@@ -107,8 +106,10 @@ interface UserStoriesAliased {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 
-	const [toggleIndex, setToggleIndex] = useState(0);
+	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageCount, setPageCount] = React.useState(1);
 	const [tableData, setTableData] = useState<UserStoriesAliased>({

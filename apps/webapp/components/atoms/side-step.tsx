@@ -23,7 +23,7 @@ export const SideStep = ({
 		<Box
 			px={8}
 			pt={stepNumber === 1 ? 4 : 0}
-			borderRadius="md"
+			borderRadius="lg"
 			_hover={{
 				backgroundColor: useColorModeValue('white', 'gray.900'),
 			}}

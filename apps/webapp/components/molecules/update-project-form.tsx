@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -6,8 +6,10 @@ import {
 	Input,
 	Tooltip,
 	useColorModeValue,
+	Code,
+	Flex,
 } from '@chakra-ui/react';
-import { InfoOutlineIcon } from '@chakra-ui/icons'
+import { InfoOutlineIcon } from '@chakra-ui/icons';
 import _ from 'lodash';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -33,10 +35,18 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const { projects, project, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState(project.name);
 	const { configuration } = project;
-	const [productionURL, setProductionURL] = useState(configuration.productionURL);
+	const [productionURL, setProductionURL] = useState(
+		configuration.productionURL
+	);
 	const [stagingURL, setStagingURL] = useState(configuration.stagingURL);
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
+
+	useEffect(() => {
+		setName(project.name);
+		setProductionURL(configuration.productionURL);
+		setStagingURL(configuration.stagingURL);
+	}, [project]);
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
@@ -60,7 +70,8 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 
 		projects[selectedProjectIndex].name = formData.name;
 		projects[selectedProjectIndex].avatar = data.projectUpdate.avatar;
-		projects[selectedProjectIndex].configuration = data.projectUpdate.configuration;
+		projects[selectedProjectIndex].configuration =
+			data.projectUpdate.configuration;
 
 		await mutateUser({ ...user, projects }, false);
 		Router.push(`/${createSlug(formData.name)}/settings`);
@@ -85,6 +96,12 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 				onUpload={setAvatarFile}
 				existingImageUrl={project?.avatar?.downloadUrl}
 			/>
+			<Flex mb={8} align="baseline">
+				<FormLabel lineHeight="tall">Project ID:</FormLabel>{' '}
+				<Code p={2} borderRadius="md" fontWeight="700">
+					{project.id}
+				</Code>
+			</Flex>
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Project name</FormLabel>
 				<Input
@@ -111,9 +128,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 					Staging URL
 					<Tooltip
 						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
-						p={2}
 						placement="right-start"
-						borderRadius="md"
 					>
 						<InfoOutlineIcon
 							ml={2}

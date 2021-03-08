@@ -1,4 +1,4 @@
-import React, { useState, useContext, ChangeEvent } from 'react';
+import React, { useState, useContext, ChangeEvent, useEffect } from 'react';
 import {
 	Box,
 	FormControl,
@@ -15,7 +15,6 @@ import {
 	Spacer,
 	LightMode,
 	Badge,
-	List,
 	Checkbox,
 	Code,
 } from '@chakra-ui/react';
@@ -37,7 +36,11 @@ import {
 	AuthenticationToken,
 } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
-import { REMOVE_TEAM_MEMBER, REMOVE_AUTH_TOKEN } from '../../graphql/project';
+import {
+	REMOVE_TEAM_MEMBER,
+	REMOVE_AUTH_TOKEN,
+	ADD_SUPPORT,
+} from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 import {
 	isChrome,
@@ -67,6 +70,12 @@ const Settings = () => {
 		project?.configuration.authenticationTokens?.items || []
 	);
 
+	useEffect(() => {
+		setProductUpdates(productNotifications);
+		setMembers(project?.members?.items);
+		setTokens(project?.configuration.authenticationTokens?.items);
+	}, [project]);
+
 	const client = eightBaseClient(idToken);
 
 	if (loading) {
@@ -94,7 +103,7 @@ const Settings = () => {
 			memberEmail: memberEmail,
 		});
 
-		const updatedMembers = members.filter(
+		const updatedMembers = members?.filter(
 			(member) => member.email !== memberEmail
 		);
 		setMembers(updatedMembers);
@@ -116,7 +125,7 @@ const Settings = () => {
 			tokenID: tokenID,
 		});
 
-		const updatedTokens = tokens.filter((token) => token.id !== tokenID);
+		const updatedTokens = tokens?.filter((token) => token.id !== tokenID);
 		setTokens(updatedTokens);
 
 		await mutateUser({ ...user, projects });
@@ -129,9 +138,9 @@ const Settings = () => {
 			position: 'bottom-right',
 			title,
 			description,
-			status: 'error',
-			duration: 5000,
 			isClosable: true,
+			status: 'error',
+			variant: 'clean',
 		});
 	};
 
@@ -177,6 +186,25 @@ const Settings = () => {
 					'To begin creating manual user stories, please download the Meeshkan recorder extension via the Chrome Web Store.',
 			});
 		}
+	};
+
+	const isSupportAllowed = members?.some((member) => {
+		return member.email === 'contact@meeshkan.com';
+	});
+
+	const inviteSupport = async () => {
+		const res = await client.request(ADD_SUPPORT, {
+			projectID: project.id,
+		});
+		setMembers(res.projectUpdate.members.items);
+
+		const selectedProjectIndex = _.findIndex(
+			projects,
+			(currentProject) => currentProject.id === project.id
+		);
+
+		projects[selectedProjectIndex].members = res.projectUpdate.members;
+		await mutateUser({ ...user, projects });
 	};
 
 	return (
@@ -261,7 +289,7 @@ const Settings = () => {
 						Invite link
 					</Heading>
 					<InviteLinkInput />
-					{members.map((member: Member) => {
+					{members?.map((member: Member) => {
 						const memberName = `${member.firstName || ''} ${
 							member.lastName || ''
 						}`;
@@ -305,26 +333,39 @@ const Settings = () => {
 										removeTeamMember(member.email);
 										toast({
 											position: 'bottom-right',
-											render: () => (
-												<Box
-													color="white"
-													p={4}
-													bg="blue.500"
-													borderRadius="md"
-													fontSize="md"
-												>
-													{member.email} has been successfully removed from{' '}
-													{project.name}.
-												</Box>
-											),
-											duration: 2000,
+											title: `${member.email} has been successfully removed.`,
+											description: `If you didn't mean to remove them from ${project.name}, resend the invite link.`,
 											isClosable: true,
+											status: 'success',
+											variant: 'clean',
 										});
 									}}
 								/>
 							</Flex>
 						);
 					})}
+					{isSupportAllowed ? null : (
+						<Button
+							w="100%"
+							size="sm"
+							colorScheme="gray"
+							variant="subtle"
+							mt={4}
+							onClick={() => {
+								inviteSupport();
+								toast({
+									position: 'bottom-right',
+									title: 'Successfully authorized Meeshkan support.',
+									description: `contact@meeshkan.com has been successfully added to ${project.name}.`,
+									isClosable: true,
+									status: 'info',
+									variant: 'clean',
+								});
+							}}
+						>
+							Allow Meeshkan support access
+						</Button>
+					)}
 				</GridCard>
 				<GridCard
 					title="Privacy"
@@ -395,7 +436,7 @@ const Settings = () => {
 					<Heading fontSize="14px" fontWeight="500" mt={4}>
 						Active tokens
 					</Heading>
-					{tokens.map((token) => (
+					{tokens?.map((token) => (
 						<Flex
 							key={token.key}
 							w="100%"
@@ -447,19 +488,11 @@ const Settings = () => {
 									deleteToken(token.id);
 									toast({
 										position: 'bottom-right',
-										render: () => (
-											<Box
-												color="white"
-												p={4}
-												bg="blue.500"
-												borderRadius="md"
-												fontSize="md"
-											>
-												The token `{token.key}` has been successfully removed
-												from {project.name}.
-											</Box>
-										),
-										duration: 2000,
+										title: `Successfully removed token ${token.key}.`,
+										description: `The token will no longer be used to authenticate for test runs on ${project.name}.`,
+										isClosable: true,
+										status: 'success',
+										variant: 'clean',
 									});
 								}}
 							/>
