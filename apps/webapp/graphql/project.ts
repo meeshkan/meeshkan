@@ -238,18 +238,7 @@ export const PROJECT_USER_STORIES = gql`
 		created
 		significance
 		recording {
-			seleniumScript {
-				groups {
-					aliasedCount: count
-					aliasedItems: items {
-						name
-						gIndex
-						commands {
-							count
-						}
-					}
-				}
-			}
+			seleniumScriptJson
 		}
 	}
 

@@ -65,7 +65,7 @@ export const SideStep = ({
 					fontWeight="500"
 					lineHeight="1.4"
 					fontSize="md"
-					p={stepNumber === 1 ? null : 4}
+					py={stepNumber === 1 ? null : 4}
 					pb={stepNumber === 1 ? 4 : null}
 				>
 					{stepName}
