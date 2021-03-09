@@ -79,11 +79,7 @@ export const UPDATE_PROJECT = gql`
 `;
 
 export const JOIN_PROJECT = gql`
-	mutation JOIN_PROJECT(
-		$userId: ID!
-		$inviteLink: String!
-		$cutOffDate: DateTime!
-	) {
+	mutation JOIN_PROJECT($userId: ID!, $inviteLink: String!) {
 		configurationUpdate(
 			filter: { inviteLink: $inviteLink }
 			data: { project: { update: { members: { connect: { id: $userId } } } } }
@@ -120,7 +116,7 @@ export const JOIN_PROJECT = gql`
 						}
 					}
 				}
-				userStories(filter: { createdAt: { gte: $cutOffDate } }) {
+				userStories {
 					count
 					items {
 						id
@@ -242,18 +238,7 @@ export const PROJECT_USER_STORIES = gql`
 		created
 		significance
 		recording {
-			seleniumScript {
-				groups {
-					aliasedCount: count
-					aliasedItems: items {
-						name
-						gIndex
-						commands {
-							count
-						}
-					}
-				}
-			}
+			seleniumScriptJson
 		}
 	}
 

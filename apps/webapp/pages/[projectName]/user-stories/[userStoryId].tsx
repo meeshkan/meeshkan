@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import Card from '../../../components/atoms/card';
 import { mutate } from 'swr';
 import {
@@ -165,7 +165,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 	}
 
 	let steps: SeleniumScript['groups']['groupItems'] = [];
-	data.userStory.recording.seleniumScript.groups.groupItems.forEach((item) => {
+	JSON.parse(
+		data.userStory.recording.seleniumScriptJson
+	)?.groups?.groupItems.forEach((item) => {
 		steps.push(item);
 	});
 
