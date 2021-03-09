@@ -45,32 +45,42 @@ type StepListProps = {
 };
 
 export const StepList = ({ steps }: StepListProps) => {
+	const hasMultipleGroups = steps.length > 1;
+
 	return (
 		<>
 			{steps.map((step, index) => {
-				const steps = [];
+				// @ts-ignore ** want to type this, but not set a default value
+				let subSteps: [{ text: string; sIndex: number }] = [];
 				step.commands.items.forEach((command) => {
 					if (command.open) {
-						steps.push(`Open ${command.open.value}.`);
+						subSteps.push({
+							text: `Open ${command.open.value}.`,
+							sIndex: command.sIndex,
+						});
 					}
 					if (command.setViewportSize) {
-						steps.push(
-							`Set viewport size to ${command.setViewportSize.value.xCoord}px by ${command.setViewportSize.value.yCoord}px.`
-						);
+						subSteps.push({
+							text: `Set viewport size to ${command.setViewportSize.value.xCoord}px by ${command.setViewportSize.value.yCoord}px.`,
+							sIndex: command.sIndex,
+						});
 					}
 					if (command.click) {
-						steps.push(
-							`Click ${HumanTag(
+						console.log(command.sIndex);
+						subSteps.push({
+							text: `Click ${HumanTag(
 								command.click.target.selector.tagName
-							)}${NotNullText(command.click.target.selector.innerText)}.`
-						);
+							)}${NotNullText(command.click.target.selector.innerText)}.`,
+							sIndex: command.sIndex,
+						});
 					}
 					if (command.type) {
-						steps.push(
-							`Type "${command.type.value}" in ${HumanTag(
+						subSteps.push({
+							text: `Type "${command.type.value}" in ${HumanTag(
 								command.type.target.selector.tagName
-							)}.`
-						);
+							)}.`,
+							sIndex: command.sIndex,
+						});
 					}
 
 					// Is the source target and destination target the same? return a boolean
@@ -83,8 +93,8 @@ export const StepList = ({ steps }: StepListProps) => {
 						command.dragndrop?.destinationTarget?.coordinates?.yCoord;
 
 					if (command.dragndrop && !isYSame && !isXSame) {
-						steps.push(
-							`Drag ${HumanTag(
+						subSteps.push({
+							text: `Drag ${HumanTag(
 								command.dragndrop.sourceTarget.selector.tagName
 							)}${NotNullText(
 								command.dragndrop.sourceTarget.selector.innerText
@@ -92,30 +102,49 @@ export const StepList = ({ steps }: StepListProps) => {
 								command.dragndrop.sourceTarget.coordinates.yCoord
 							}. Then drop at ${
 								command.dragndrop.destinationTarget.coordinates.xCoord
-							}, ${command.dragndrop.destinationTarget.coordinates.yCoord}.`
-						);
+							}, ${command.dragndrop.destinationTarget.coordinates.yCoord}.`,
+							sIndex: command.sIndex,
+						});
 					} else if (command.dragndrop && isYSame && isXSame) {
-						steps.push(
-							`Click ${HumanTag(
+						subSteps.push({
+							text: `Click ${HumanTag(
 								command.dragndrop.sourceTarget.selector.tagName
 							)}${NotNullText(
 								command.dragndrop.sourceTarget.selector.innerText
-							)}.`
-						);
+							)}.`,
+							sIndex: command.sIndex,
+						});
 					}
 				});
 
+				if (hasMultipleGroups) {
+					return (
+						<SideStep
+							key={index}
+							stepName={
+								step.name !== null
+									? step.name
+									: `Untitled group of steps — ${step.gIndex + 1}`
+							}
+							stepNumber={step.gIndex + 1}
+							subSteps={[...subSteps]}
+						/>
+					);
+				}
+
 				return (
-					<SideStep
-						key={index}
-						stepName={
-							step.name !== null
-								? step.name
-								: `Untitled group of steps — ${step.gIndex + 1}`
-						}
-						stepNumber={step.gIndex + 1}
-						subSteps={[...steps]}
-					/>
+					<>
+						{subSteps.map((sub, index) => {
+							console.log(sub);
+							return (
+								<SideStep
+									key={index + 'a'}
+									stepName={sub.text}
+									stepNumber={sub.sIndex + 1}
+								/>
+							);
+						})}
+					</>
 				);
 			})}
 		</>
