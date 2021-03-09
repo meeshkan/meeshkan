@@ -101,8 +101,8 @@ export const StepList = ({ steps }: StepListProps) => {
 							)} from ${command.dragndrop.sourceTarget.coordinates.xCoord}, ${
 								command.dragndrop.sourceTarget.coordinates.yCoord
 							}. Then drop at ${
-								command.dragndrop.destinationTarget.coordinates.xCoord
-							}, ${command.dragndrop.destinationTarget.coordinates.yCoord}.`,
+								command.dragndrop.destinationTarget?.coordinates?.xCoord
+							}, ${command.dragndrop.destinationTarget?.coordinates?.yCoord}.`,
 							sIndex: command.sIndex,
 						});
 					} else if (command.dragndrop && isYSame && isXSame) {
