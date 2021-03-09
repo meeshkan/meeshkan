@@ -30,6 +30,15 @@ export const SideStep = ({
 		>
 			<Flex>
 				<Box>
+					{stepNumber === 1 ? null : (
+						<Box
+							borderLeft="1px solid"
+							borderColor="gray.300"
+							h={4}
+							ml="11.5px"
+						/>
+					)}
+
 					<Flex
 						justify="center"
 						align="center"
@@ -51,7 +60,14 @@ export const SideStep = ({
 						ml="11.5px"
 					/>
 				</Box>
-				<Text flex="1" fontWeight="500" lineHeight="1.4" fontSize="md" pb={4}>
+				<Text
+					flex="1"
+					fontWeight="500"
+					lineHeight="1.4"
+					fontSize="md"
+					p={stepNumber === 1 ? null : 4}
+					pb={stepNumber === 1 ? 4 : null}
+				>
 					{stepName}
 				</Text>
 			</Flex>
