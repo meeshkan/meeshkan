@@ -1,6 +1,6 @@
-const extensionId = 'nbabhjopfigpbmakflnbcacahegdmbfa';
+const extensionId = 'cfjdddhjecoeahjkmegbkakfpppflmgo';
 
-export const latestVersion = '0.4.1';
+export const latestVersion = '0.4.4';
 
 export const isChrome = (): boolean => !!window.chrome;
 
