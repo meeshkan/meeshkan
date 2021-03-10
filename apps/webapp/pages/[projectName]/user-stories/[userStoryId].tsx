@@ -170,7 +170,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 
 	let steps: SeleniumGroupListResponse['items'] = [];
 	// @ts-ignore **a graphql alias prevents this from appearing correct
-	data.userStory.recording.seleniumScript.groups.groupItems.forEach((item) => {
+	JSON.parse(
+		data.userStory.recording.seleniumScriptJson
+	)?.groups?.groupItems.forEach((item) => {
 		steps.push(item);
 	});
 

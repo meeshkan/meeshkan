@@ -1,6 +1,6 @@
 {
 	"name": "meeshkan",
-	"version": "0.5.3",
+	"version": "0.5.4",
 	"license": "MIT",
 	"scripts": {
 		"nx": "nx",
@@ -84,7 +84,7 @@
 		"mixpanel-browser": "2.38.0",
 		"ms": "^2.1.2",
 		"next": "^10.0.1",
-		"prismjs": "1.21.0",
+		"prismjs": "1.23.0",
 		"prop-types": "15.7.2",
 		"puppeteer-core": "5.4.1",
 		"react": "16.13.1",

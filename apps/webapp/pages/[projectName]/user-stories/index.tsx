@@ -199,7 +199,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
 					let count = 0;
-					originalRow.recording.seleniumScript.groups.aliasedItems.forEach(
+					JSON.parse(
+						originalRow.recording.seleniumScriptJson
+					).groups.groupItems.forEach(
 						(step) => (count = count + step.commands.count)
 					);
 					return count;

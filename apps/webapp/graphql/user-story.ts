@@ -33,70 +33,7 @@ export const USER_STORY = gql`
 						language
 					}
 				}
-				seleniumScript {
-					version
-					groups(orderBy: gIndex_ASC) {
-						groupsCount: count
-						groupItems: items {
-							gIndex
-							name
-							commands(orderBy: sIndex_ASC) {
-								count
-								items {
-									open {
-										value
-									}
-									setViewportSize {
-										value {
-											xCoord
-											yCoord
-										}
-									}
-									click {
-										target {
-											selector {
-												selector
-												tagName
-												innerText
-											}
-										}
-									}
-									type {
-										value
-										target {
-											selector {
-												tagName
-											}
-										}
-									}
-									dragndrop {
-										sourceTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-										destinationTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-									}
-									sIndex
-								}
-							}
-						}
-					}
-				}
+				seleniumScriptJson
 			}
 		}
 	}
@@ -132,70 +69,7 @@ export const UPDATE_EXPECTED_TEST = gql`
 						language
 					}
 				}
-				seleniumScript {
-					version
-					groups(orderBy: gIndex_ASC) {
-						groupsCount: count
-						groupItems: items {
-							gIndex
-							name
-							commands(orderBy: sIndex_ASC) {
-								count
-								items {
-									open {
-										value
-									}
-									setViewportSize {
-										value {
-											xCoord
-											yCoord
-										}
-									}
-									click {
-										target {
-											selector {
-												selector
-												tagName
-												innerText
-											}
-										}
-									}
-									type {
-										value
-										target {
-											selector {
-												tagName
-											}
-										}
-									}
-									dragndrop {
-										sourceTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-										destinationTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-									}
-									sIndex
-								}
-							}
-						}
-					}
-				}
+				seleniumScriptJson
 			}
 		}
 	}
@@ -255,70 +129,7 @@ export const UPDATE_STORY_TITLE = gql`
 						language
 					}
 				}
-				seleniumScript {
-					version
-					groups(orderBy: gIndex_ASC) {
-						groupsCount: count
-						groupItems: items {
-							gIndex
-							name
-							commands(orderBy: sIndex_ASC) {
-								count
-								items {
-									open {
-										value
-									}
-									setViewportSize {
-										value {
-											xCoord
-											yCoord
-										}
-									}
-									click {
-										target {
-											selector {
-												selector
-												tagName
-												innerText
-											}
-										}
-									}
-									type {
-										value
-										target {
-											selector {
-												tagName
-											}
-										}
-									}
-									dragndrop {
-										sourceTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-										destinationTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-									}
-									sIndex
-								}
-							}
-						}
-					}
-				}
+				seleniumScriptJson
 			}
 		}
 	}
@@ -358,70 +169,7 @@ export const UPDATE_STORY_DESCRIPTION = gql`
 						language
 					}
 				}
-				seleniumScript {
-					version
-					groups(orderBy: gIndex_ASC) {
-						groupsCount: count
-						groupItems: items {
-							gIndex
-							name
-							commands(orderBy: sIndex_ASC) {
-								count
-								items {
-									open {
-										value
-									}
-									setViewportSize {
-										value {
-											xCoord
-											yCoord
-										}
-									}
-									click {
-										target {
-											selector {
-												selector
-												tagName
-												innerText
-											}
-										}
-									}
-									type {
-										value
-										target {
-											selector {
-												tagName
-											}
-										}
-									}
-									dragndrop {
-										sourceTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-										destinationTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-									}
-									sIndex
-								}
-							}
-						}
-					}
-				}
+				seleniumScriptJson
 			}
 		}
 	}
@@ -461,70 +209,7 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 						language
 					}
 				}
-				seleniumScript {
-					version
-					groups(orderBy: gIndex_ASC) {
-						groupsCount: count
-						groupItems: items {
-							gIndex
-							name
-							commands(orderBy: sIndex_ASC) {
-								count
-								items {
-									open {
-										value
-									}
-									setViewportSize {
-										value {
-											xCoord
-											yCoord
-										}
-									}
-									click {
-										target {
-											selector {
-												selector
-												tagName
-												innerText
-											}
-										}
-									}
-									type {
-										value
-										target {
-											selector {
-												tagName
-											}
-										}
-									}
-									dragndrop {
-										sourceTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-										destinationTarget {
-											selector {
-												tagName
-												innerText
-											}
-											coordinates {
-												xCoord
-												yCoord
-											}
-										}
-									}
-									sIndex
-								}
-							}
-						}
-					}
-				}
+				seleniumScriptJson
 			}
 		}
 	}
