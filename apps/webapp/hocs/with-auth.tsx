@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { createSlug } from '../utils/createSlug';
 import LoadingScreen from '../components/organisms/loading-screen';
 import AuthScreen from '../components/organisms/auth-screen';
-import { UserContext, IUser, Project } from '../utils/user';
+import { UserContext } from '../utils/user';
+import { Project } from '@frontend/meeshkan-types';
 import { useFetchUser } from '../hooks/use-fetch-user';
 
 export interface IWithAuthProps {
@@ -27,11 +28,9 @@ const withAuth = (PageComponent) => {
 				let url = router.pathname;
 				const query = router.query;
 				query.projectName = slugifiedProjectName;
-				Object.keys(query).forEach(
-					param => {
-						url = url.replace(`[${param as string}]`, query[param] as string);
-					}
-				);
+				Object.keys(query).forEach((param) => {
+					url = url.replace(`[${param as string}]`, query[param] as string);
+				});
 
 				if (url === '/') {
 					url = `/${slugifiedProjectName}`;

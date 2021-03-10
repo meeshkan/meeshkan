@@ -16,7 +16,8 @@
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
 		"paths": {
-			"@frontend/chakra-theme": ["libs/chakra-theme/src/index.ts"]
+			"@frontend/chakra-theme": ["libs/chakra-theme/src/index.ts"],
+			"@frontend/meeshkan-types": ["libs/meeshkan-types/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

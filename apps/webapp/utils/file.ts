@@ -1,11 +1,6 @@
 import { eightBaseClient } from './graphql';
 import { UPLOAD_FILE } from '../graphql/file';
 
-export type UploadedFile = {
-	id: string;
-	fileId: string;
-}
-
 export const uploadFile = async (
 	idToken: string,
 	data: { fileId: string; filename: string }
@@ -22,6 +17,6 @@ export const uploadFile = async (
 		console.error(error);
 		return {
 			error: error.response.errors[0],
-		}
+		};
 	}
 };

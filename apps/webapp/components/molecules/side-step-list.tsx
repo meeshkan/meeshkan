@@ -1,6 +1,6 @@
 import React from 'react';
 import { SideStep } from '../atoms/side-step';
-import { Groups } from '../../utils/user';
+import { SeleniumGroupListResponse } from '@frontend/meeshkan-types';
 
 const HumanTag = (tag: string) => {
 	return tag === ('A' || 'a')
@@ -41,7 +41,7 @@ const NotNullText = (text: string) => {
 };
 
 type StepListProps = {
-	steps: Groups[];
+	steps: SeleniumGroupListResponse['items'];
 };
 
 export const StepList = ({ steps }: StepListProps) => {

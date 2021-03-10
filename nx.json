@@ -49,6 +49,9 @@
 		"og-cards-e2e": {
 			"tags": [],
 			"implicitDependencies": ["og-cards"]
+		},
+		"meeshkan-types": {
+			"tags": []
 		}
 	}
 }

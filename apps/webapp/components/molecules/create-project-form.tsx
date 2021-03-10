@@ -5,7 +5,6 @@ import {
 	FormLabel,
 	FormErrorMessage,
 	Input,
-	Flex,
 	Tooltip,
 	useColorModeValue,
 } from '@chakra-ui/react';
@@ -14,7 +13,7 @@ import { useForm } from 'react-hook-form';
 import AvatarField from './avatar-field';
 import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';
-import { UploadedFile } from '../../utils/file';
+import { UploadedFile } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 
 type ProjectFormInputs = {

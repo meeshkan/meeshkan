@@ -56,7 +56,8 @@ import Table from '../../../components/organisms/table';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
-import { UserContext, UserStories } from '../../../utils/user';
+import { UserContext } from '../../../utils/user';
+import { UserStoryListResponse } from '@frontend/meeshkan-types';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
@@ -94,12 +95,12 @@ type UserStoryProps = {
 
 interface UserStoriesAliased {
 	recordings: {
-		count: UserStories['count'];
-		items: UserStories['items'];
+		count: UserStoryListResponse['count'];
+		items: UserStoryListResponse['items'];
 	};
 	testCases: {
-		count: UserStories['count'];
-		items: UserStories['items'];
+		count: UserStoryListResponse['count'];
+		items: UserStoryListResponse['items'];
 	};
 }
 

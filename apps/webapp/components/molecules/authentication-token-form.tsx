@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Dispatch, SetStateAction } from 'react';
 import {
 	Flex,
 	FormControl,
@@ -13,11 +13,11 @@ import SegmentedControl from './segmented-control';
 import { UserContext } from '../../utils/user';
 import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { ADD_AUTH_TOKEN } from '../../graphql/project';
-import { AuthenticationToken } from '../../utils/user';
+import { AuthenticationToken } from '@frontend/meeshkan-types';
 
 type CreateAuthenticationFormProps = {
 	tokens: AuthenticationToken[];
-	setTokens: React.Dispatch<React.SetStateAction<AuthenticationToken[]>>;
+	setTokens: Dispatch<SetStateAction<AuthenticationToken[]>>;
 };
 
 const AuthenticationTokenForm = ({
