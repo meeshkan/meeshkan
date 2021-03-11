@@ -1,3 +1,4 @@
+// @ts-ignore
 import { initAuth0 } from '@auth0/nextjs-auth0';
 import { ISignInWithAuth0 } from '@auth0/nextjs-auth0/dist/instance';
 import { IncomingMessage } from 'http';

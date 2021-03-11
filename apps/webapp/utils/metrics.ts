@@ -104,7 +104,9 @@ export const getRecordingsAndTestsByDay = (
 				: false;
 		});
 		const dayValue = day.valueOf();
+		// @ts-ignore
 		recordingsByDay[dayValue] = recordingsOnThisDay.length;
+		// @ts-ignore
 		testsByDay[dayValue] = testsOnThisDay.length;
 	});
 	return {
