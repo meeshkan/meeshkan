@@ -16,10 +16,17 @@ class MyDocument extends Document {
 		return (
 			<Html lang="en">
 				<Head>
-					<link
-						rel="icon"
-						href="https://media.graphcms.com/ZUjeEBiaT9iGYxhI5kzq"
-					/>
+					{process.env.NODE_ENV === 'production' ? (
+						<link
+							rel="icon"
+							href="https://media.graphcms.com/ZUjeEBiaT9iGYxhI5kzq"
+						/>
+					) : (
+						<link
+							rel="icon"
+							href="https://media.graphcms.com/g4qtcj8ZSQiJoeVVxSG3"
+						/>
+					)}
 					{/* Meeshkan Recorder */}
 					{process.env.NODE_ENV === 'production' ? (
 						<script

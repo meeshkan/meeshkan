@@ -12,7 +12,11 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 	return (
 		<>
 			<Head>
-				<title>Meeshkan Webapp</title>
+				<title>
+					{process.env.NODE_ENV === 'production'
+						? `Meeshkan Webapp`
+						: `Dev — Meeshkan Webapp`}{' '}
+				</title>
 			</Head>
 			<Layout>
 				{!isInvitePage && <SideBar />}
