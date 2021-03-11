@@ -26,6 +26,7 @@ import {
 	useDisclosure,
 	ModalCloseButton,
 	DarkMode,
+	Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -174,21 +175,25 @@ const Table = ({
 								{/* <Td p={3} border={0}>
 									<Checkbox borderRadius="md" icon={<CheckmarkIcon />} />
 								</Td> */}
-								<Td p={3} border={0}>
-									<Button
-										size="xs"
-										variant="subtle"
-										colorScheme="gray"
-										aria-label="Play the video associated with this user story"
-										leftIcon={<PlayIcon strokeWidth="2px" />}
-										onClick={() => {
-											setVideo(data[row.id].recording.video.downloadUrl);
-											onOpen();
-										}}
-									>
-										PLAY
-									</Button>
-								</Td>
+								{data[row.id].recording.video ? (
+									<Td p={3} border={0}>
+										<Button
+											size="xs"
+											variant="subtle"
+											colorScheme="gray"
+											aria-label="Play the video associated with this user story"
+											leftIcon={<PlayIcon strokeWidth="2px" />}
+											onClick={() => {
+												setVideo(data[row.id].recording.video.downloadUrl);
+												onOpen();
+											}}
+										>
+											PLAY
+										</Button>
+									</Td>
+								) : (
+									<Box w="46px" />
+								)}
 
 								{row.cells.map((cell) => {
 									return (
