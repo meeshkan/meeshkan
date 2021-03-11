@@ -193,11 +193,11 @@ const Table = ({
 								{row.cells.map((cell) => {
 									return (
 										<Td
-											// onClick={() =>
-											// 	router.push(
-											// 		`/${slugifiedProjectName}/user-stories/${row.original.id}`
-											// 	)
-											// }
+											onClick={() =>
+												router.push(
+													`/${slugifiedProjectName}/user-stories/${row.original.id}`
+												)
+											}
 											border={0}
 											{...cell.getCellProps()}
 											py={3}
