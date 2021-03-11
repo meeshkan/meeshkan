@@ -19,12 +19,12 @@ class MyDocument extends Document {
 					{process.env.NODE_ENV === 'production' ? (
 						<link
 							rel="icon"
-							href="https://media.graphcms.com/ZUjeEBiaT9iGYxhI5kzq"
+							href="https://media.graphcms.com/Sf3Hxc3gQP6ylXt8d3EX"
 						/>
 					) : (
 						<link
 							rel="icon"
-							href="https://media.graphcms.com/g4qtcj8ZSQiJoeVVxSG3"
+							href="https://media.graphcms.com/3rGTPSeRQSGrTSByY6M6"
 						/>
 					)}
 					{/* Meeshkan Recorder */}
