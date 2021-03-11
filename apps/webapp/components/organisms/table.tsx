@@ -177,22 +177,28 @@ const Table = ({
 								</Td> */}
 								{data[row.id].recording.video ? (
 									<Td p={3} border={0}>
-										<Button
-											size="xs"
-											variant="subtle"
-											colorScheme="gray"
-											aria-label="Play the video associated with this user story"
-											leftIcon={<PlayIcon strokeWidth="2px" />}
-											onClick={() => {
-												setVideo(data[row.id].recording.video.downloadUrl);
-												onOpen();
-											}}
-										>
-											PLAY
-										</Button>
+										<Skeleton isLoaded={!loading} borderRadius="md">
+											<Button
+												size="xs"
+												variant="subtle"
+												colorScheme="gray"
+												aria-label="Play the video associated with this user story"
+												leftIcon={<PlayIcon strokeWidth="2px" />}
+												onClick={() => {
+													setVideo(data[row.id].recording.video.downloadUrl);
+													onOpen();
+												}}
+											>
+												PLAY
+											</Button>
+										</Skeleton>
 									</Td>
 								) : (
-									<Box w="46px" />
+									<Td p={3} border={0}>
+										<Skeleton isLoaded={!loading} borderRadius="md">
+											<Box h={6} w="46px" />
+										</Skeleton>
+									</Td>
 								)}
 
 								{row.cells.map((cell) => {
@@ -207,55 +213,33 @@ const Table = ({
 											{...cell.getCellProps()}
 											py={3}
 										>
-											{cell.render('Cell')}
+											<Skeleton isLoaded={!loading} borderRadius="md">
+												{cell.render('Cell')}
+											</Skeleton>
 										</Td>
 									);
 								})}
 								<Td px={1} py={3} border={0}>
-									<IconButton
-										size="xs"
-										colorScheme="gray"
-										variant="subtle"
-										aria-label="Open in a new tab"
-										icon={<ExternalLinkIcon />}
-										onClick={() => {
-											window.open(
-												`/${slugifiedProjectName}/user-stories/${row.original.id}`
-											);
-										}}
-									/>
+									<Skeleton isLoaded={!loading} borderRadius="md">
+										<IconButton
+											size="xs"
+											colorScheme="gray"
+											variant="subtle"
+											aria-label="Open in a new tab"
+											icon={<ExternalLinkIcon />}
+											onClick={() => {
+												window.open(
+													`/${slugifiedProjectName}/user-stories/${row.original.id}`
+												);
+											}}
+										/>
+									</Skeleton>
 								</Td>
 							</Tr>
 						);
 					})}
 
-					{loading && page.length === 0 ? (
-						[...Array(pageSize)].map((_, i) => {
-							return (
-								<Tr
-									key={i}
-									_hover={undefined}
-									borderBottom="1px solid"
-									borderBottomColor={useColorModeValue('gray.100', 'gray.700')}
-									_last={{ border: 0 }}
-								>
-									<Td p={3} border={0}>
-										<Skeleton h={4} w={10} borderRadius="md" />
-									</Td>
-									{columns.map((col, j) => {
-										return (
-											<Td key={col.id || j} py={3} border={0}>
-												<Skeleton h={4} borderRadius="md" />
-											</Td>
-										);
-									})}
-									<Td px={1} py={3} border={0}>
-										<Skeleton h={6} w={6} borderRadius="md" />
-									</Td>
-								</Tr>
-							);
-						})
-					) : page.length === 0 ? (
+					{page.length === 0 ? (
 						<Tr _hover={undefined}>
 							<Td
 								textAlign="center"
