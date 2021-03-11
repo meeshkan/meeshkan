@@ -196,7 +196,7 @@ const Table = ({
 								) : (
 									<Td p={3} border={0}>
 										<Skeleton isLoaded={!loading} borderRadius="md">
-											<Box h={6} w="46px" />
+											<Box h={6} w="45px" />
 										</Skeleton>
 									</Td>
 								)}
