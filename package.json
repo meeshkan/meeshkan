@@ -52,6 +52,7 @@
 		"emotion-theming": "^11.0.0",
 		"filestack-react": "^3.2.1",
 		"formik": "2.1.4",
+		"fp-ts": "^2.9.5",
 		"framer-motion": "^2.9.4",
 		"gatsby": "2.25.0",
 		"gatsby-image": "2.3.2",
