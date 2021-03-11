@@ -1,4 +1,4 @@
-import { transparentize, mode } from '@chakra-ui/theme-tools';
+import { transparentize, mode, GlobalStyleProps } from '@chakra-ui/theme-tools';
 
 const customComponents = {
 	Alert: {
@@ -26,7 +26,7 @@ const customComponents = {
 			},
 		},
 		variants: {
-			clean: (props) => ({
+			clean: (props: GlobalStyleProps) => ({
 				container: { backgroundColor: mode(`white`, `gray.900`)(props) },
 				icon: {
 					color: mode(
@@ -59,7 +59,7 @@ const customComponents = {
 			},
 		},
 		variants: {
-			subtle: (props) => ({
+			subtle: (props: GlobalStyleProps) => ({
 				bg: mode(
 					`${props.colorScheme}.50`,
 					transparentize(`${props.colorScheme}.200`, 0.16)
@@ -94,7 +94,7 @@ const customComponents = {
 		},
 	},
 	Tooltip: {
-		baseStyle: (props) => ({
+		baseStyle: (props: GlobalStyleProps) => ({
 			p: 3,
 			lineHeight: '1.4',
 			bg: mode('gray.700', 'gray.300')(props),

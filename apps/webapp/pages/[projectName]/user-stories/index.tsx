@@ -57,7 +57,12 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
-import { UserStoryListResponse } from '@frontend/meeshkan-types';
+import {
+	SeleniumGroup,
+	UserStoryFilter,
+	UserStoryListResponse,
+	UserStory_PermissionFilter,
+} from '@frontend/meeshkan-types';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
@@ -133,6 +138,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Created at',
 				accessor: (originalRow, rowIndex) => {
+					// @ts-ignore
 					const humanDate = new Date(originalRow.createdAt);
 					return humanDate.toLocaleDateString('en-US', {
 						hour: 'numeric',
@@ -147,12 +153,15 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: '# repeated',
 				accessor: (originalRow, rowIndex) => {
+					// @ts-ignore
 					return originalRow.flowIDs.length;
 				},
 			},
 			{
 				Header: 'Origin',
 				accessor: (originalRow, rowIndex) => {
+					// @ts-ignore
+					const { created } = originalRow;
 					return (
 						<Badge
 							fontSize="sm"
@@ -160,12 +169,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							borderRadius="md"
 							p={2}
 						>
-							{originalRow.created[0] === 'user' ? (
+							{created[0] === 'user' ? (
 								<VideoIcon mr={2} />
-							) : originalRow.created[0] === 'manual' ? (
+							) : created[0] === 'manual' ? (
 								<CrosshairIcon mr={2} />
 							) : null}
-							{originalRow.created}
+							{created}
 						</Badge>
 					);
 				},
@@ -173,6 +182,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Significance',
 				accessor: (originalRow, rowIndex) => {
+					// @ts-ignore
 					const { significance } = originalRow;
 					return (
 						<Badge
@@ -200,9 +210,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: (originalRow, rowIndex) => {
 					let count = 0;
 					JSON.parse(
+						// @ts-ignore
 						originalRow.recording.seleniumScriptJson
 					).groups.groupItems.forEach(
-						(step) => (count = count + step.commands.count)
+						(step: SeleniumGroup) => (count = count + step.commands.count)
 					);
 					return count;
 				},
@@ -216,7 +227,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
-	let significanceFilters = [];
+	let significanceFilters: UserStoryFilter['OR'] = [];
 	if (low) {
 		significanceFilters.push({
 			significance: {

@@ -13,7 +13,7 @@ export default async function login(
 			authParams: {
 				login_hint: get(session, 'user.name'),
 			},
-			getState: (req) =>
+			getState: (req: NextApiRequest) =>
 				req.query.inviteId ? { inviteId: req.query.inviteId } : {},
 		});
 	} catch (error) {

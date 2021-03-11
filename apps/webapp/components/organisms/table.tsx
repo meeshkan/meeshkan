@@ -139,6 +139,8 @@ const Table = ({
 				<Tbody {...getTableBodyProps()} fontSize="sm">
 					{page.map((row) => {
 						prepareRow(row);
+						const rowId: number =
+							typeof row.id === 'string' ? parseInt(row.id) : row.id;
 						return (
 							<Tr
 								{...row.getRowProps()}
@@ -157,6 +159,7 @@ const Table = ({
 										<Td
 											onClick={() =>
 												router.push(
+													// @ts-ignore
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												)
 											}
@@ -177,6 +180,7 @@ const Table = ({
 										icon={<ExternalLinkIcon />}
 										onClick={() => {
 											window.open(
+												// @ts-ignore
 												`/${slugifiedProjectName}/user-stories/${row.original.id}`
 											);
 										}}

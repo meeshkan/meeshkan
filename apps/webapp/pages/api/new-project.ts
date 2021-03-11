@@ -1,4 +1,9 @@
-export default async (req, res) =>
+import {
+	NextApiRequest,
+	NextApiResponse,
+} from 'next/dist/next-server/lib/utils';
+
+export default async (req: NextApiRequest, res: NextApiResponse) =>
 	fetch(
 		'https://hooks.slack.com/services/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',
 		{

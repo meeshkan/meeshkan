@@ -60,7 +60,8 @@ export const getBugs = (testRuns: TestRunListResponse['items']) => {
 };
 
 export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
-	const latestTestStates = {
+	// This is an any type because setting the value doesn't understand finding a key on an object
+	const latestTestStates: any = {
 		failing: 0,
 		passing: 0,
 		'did not run': 0,
@@ -74,7 +75,7 @@ export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
 			)
 			.slice(-1);
 
-		const status = latestTestOutcome?.status;
+		const status: string = latestTestOutcome?.status;
 		if (status) {
 			latestTestStates[status]++;
 		}
@@ -83,7 +84,7 @@ export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
 	return latestTestStates;
 };
 
-const lastNDays = (n) =>
+const lastNDays = (n: number) =>
 	[...Array(n).keys()].map((i) => moment().subtract(i, 'days')).reverse();
 
 export const getRecordingsAndTestsByDay = (
@@ -104,7 +105,9 @@ export const getRecordingsAndTestsByDay = (
 				: false;
 		});
 		const dayValue = day.valueOf();
+		// @ts-ignore
 		recordingsByDay[dayValue] = recordingsOnThisDay.length;
+		// @ts-ignore
 		testsByDay[dayValue] = testsOnThisDay.length;
 	});
 	return {

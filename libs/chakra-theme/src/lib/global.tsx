@@ -1,5 +1,7 @@
+import { GlobalStyleProps } from '@chakra-ui/theme-tools';
+
 const globalStyles = {
-	global: (props) => ({
+	global: (props: GlobalStyleProps) => ({
 		'html, body': {
 			scrollBehavior: 'smooth',
 			backgroundColor: props.colorMode === 'dark' ? 'gray.900' : 'white',

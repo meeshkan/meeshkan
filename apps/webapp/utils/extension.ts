@@ -4,7 +4,15 @@ export const latestVersion = '0.4.4';
 
 export const isChrome = (): boolean => !!window.chrome;
 
-export const startRecording = ({ url, clientId, isAuthFlow = false }) => {
+export const startRecording = ({
+	url,
+	clientId,
+	isAuthFlow = false,
+}: {
+	url: string;
+	clientId: string;
+	isAuthFlow: boolean;
+}) => {
 	window.chrome.runtime.sendMessage(extensionId, {
 		message: 'startRecording',
 		url,
@@ -18,7 +26,7 @@ export const getVersion = () => {
 		window.chrome.runtime.sendMessage(
 			extensionId,
 			{ message: 'version' },
-			(reply) => {
+			(reply: any) => {
 				if (reply?.version) {
 					resolve(reply.version);
 				} else {

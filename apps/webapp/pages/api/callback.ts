@@ -11,7 +11,7 @@ export default async function callback(
 	try {
 		const auth0 = initAuth0(req);
 		await auth0.handleCallback(req, res, {
-			onUserLoaded: async (_, __, session, state) => {
+			onUserLoaded: async (_: any, __: any, session: any, state: any) => {
 				const redirectParams = new URLSearchParams();
 				if (state.inviteId) {
 					redirectParams.append('inviteId', state.inviteId);

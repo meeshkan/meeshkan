@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, ChangeEvent } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -78,15 +78,15 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 		setLoading(false);
 	};
 
-	const handleNameChange = (event) => {
+	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
 	};
 
-	const handleProductionURLChange = (event) => {
+	const handleProductionURLChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setProductionURL(event.target.value);
 	};
 
-	const handleStagingURLChange = (event) => {
+	const handleStagingURLChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setStagingURL(event.target.value);
 	};
 
