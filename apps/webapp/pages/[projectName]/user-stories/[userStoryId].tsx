@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import Card from '../../../components/atoms/card';
 import { mutate } from 'swr';
 import {
@@ -26,6 +26,7 @@ import {
 	MenuItem,
 	MenuList,
 	IconButton,
+	useClipboard,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
@@ -51,6 +52,7 @@ import {
 	DownloadIcon,
 	TrashIcon,
 	MoreIcon,
+	CopyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -75,7 +77,22 @@ const UserStoryPage = (props: UserStoryProps) => {
 	} = useValidateSelectedProject();
 	const router = useRouter();
 	const toast = useToast();
+	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		if (hasCopied) {
+			toast({
+				position: 'bottom-right',
+				title: 'User story link copied!',
+				description:
+					'The URL of this user story has been copied to your clipboard.',
+				isClosable: true,
+				status: 'success',
+				variant: 'clean',
+			});
+		}
+	}, [hasCopied]);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
@@ -342,7 +359,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 							<MenuList>
 								<MenuItem onClick={() => handleDownload()}>
 									<DownloadIcon mr={3} />
-									Download test
+									Download Puppeteer script
+								</MenuItem>
+								<MenuItem onClick={() => handleCopy()}>
+									<CopyIcon mr={3} />
+									Copy link
 								</MenuItem>
 								<MenuItem
 									colorScheme="red"
