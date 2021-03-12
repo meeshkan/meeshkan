@@ -66,7 +66,6 @@ export const StepList = ({ steps }: StepListProps) => {
 						});
 					}
 					if (command.click) {
-						console.log(command.sIndex);
 						subSteps.push({
 							text: `Click ${HumanTag(
 								command.click.target.selector.tagName
@@ -135,7 +134,6 @@ export const StepList = ({ steps }: StepListProps) => {
 				return (
 					<>
 						{subSteps.map((sub, index) => {
-							console.log(sub);
 							return (
 								<SideStep
 									key={index + 'a'}

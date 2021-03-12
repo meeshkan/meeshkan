@@ -563,6 +563,20 @@ export const CrosshairIcon = createIcon({
 	),
 });
 
+export const PlayIcon = createIcon({
+	displayName: 'PlayIcon',
+	viewBox: '0 0 16 16',
+	path: (
+		<path
+			d="M4 3.83166C4 3.0405 4.87525 2.56266 5.54076 2.99049L12.0248 7.15882C12.6372 7.55246 12.6372 8.44754 12.0248 8.84118L5.54076 13.0095C4.87525 13.4373 4 12.9595 4 12.1683V3.83166Z"
+			fill="none"
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		/>
+	),
+});
+
 export const ProfileIcon = createIcon({
 	displayName: 'ProfileIcon',
 	viewBox: '0 0 12 12',
