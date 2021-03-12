@@ -37,6 +37,7 @@ import {
 	MenuItemOption,
 	MenuOptionGroup,
 	OrderedList,
+	Code,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -47,6 +48,7 @@ import {
 	CrosshairIcon,
 	SortIcon,
 	FilterIcon,
+	PlayIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
@@ -62,6 +64,7 @@ import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
+import VideoPlayer from 'apps/webapp/components/atoms/video-player';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -154,19 +157,31 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				Header: 'Origin',
 				accessor: (originalRow, rowIndex) => {
 					return (
-						<Badge
+						<Code
+							display="flex"
+							alignItems="center"
+							maxW="fit-content"
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							fontWeight="700"
+							px={2}
+							py={1}
+							colorScheme={
+								originalRow.created[0] === 'user'
+									? 'cyan'
+									: originalRow.created[0] === 'manual'
+									? 'blue'
+									: 'gray'
+							}
 						>
 							{originalRow.created[0] === 'user' ? (
-								<VideoIcon mr={2} />
+								<VideoIcon mr={3} />
 							) : originalRow.created[0] === 'manual' ? (
-								<CrosshairIcon mr={2} />
+								<CrosshairIcon mr={3} />
 							) : null}
 							{originalRow.created}
-						</Badge>
+						</Code>
 					);
 				},
 			},
@@ -175,11 +190,13 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: (originalRow, rowIndex) => {
 					const { significance } = originalRow;
 					return (
-						<Badge
+						<Code
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							fontWeight="700"
+							px={2}
+							py={1}
 							colorScheme={
 								significance === 'low'
 									? 'gray'
@@ -191,7 +208,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							}
 						>
 							{significance}
-						</Badge>
+						</Code>
 					);
 				},
 			},

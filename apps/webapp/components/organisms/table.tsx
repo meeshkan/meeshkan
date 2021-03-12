@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import {
 	Table as ChakraTable,
 	Tbody,
@@ -17,19 +17,32 @@ import {
 	useColorModeValue,
 	Skeleton,
 	ButtonGroup,
+	Checkbox,
+	Button,
+	Modal,
+	ModalOverlay,
+	ModalBody,
+	ModalContent,
+	useDisclosure,
+	ModalCloseButton,
+	DarkMode,
+	Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext } from '../../utils/user';
-import { UserStoryListResponse } from '@frontend/meeshkan-types';
+import { File, UserStoryListResponse } from '@frontend/meeshkan-types';
 import {
 	DoubleArrowLeftIcon,
 	ArrowLeftIcon,
 	DoubleArrowRightIcon,
 	ArrowRightIcon,
 	ExternalLinkIcon,
+	CheckmarkIcon,
+	PlayIcon,
 } from '@frontend/chakra-theme';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
+import VideoPlayer from '../atoms/video-player';
 
 type TableProps = {
 	columns: Column[];
@@ -81,7 +94,8 @@ const Table = ({
 		project?.name,
 	]);
 	const router = useRouter();
-
+	const [video, setVideo] = useState<File['downloadUrl']>();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	return (
 		<>
 			<ChakraTable
@@ -94,6 +108,12 @@ const Table = ({
 				<Thead>
 					{headerGroups.map((headerGroup) => (
 						<Tr {...headerGroup.getHeaderGroupProps()}>
+							{/* <Th fontSize="10px" p={3}>
+								<Checkbox isDisabled />
+							</Th> */}
+							<Th fontSize="10px" p={3}>
+								Video
+							</Th>
 							{headerGroup.headers.map((column) => (
 								<Th
 									{
@@ -152,6 +172,44 @@ const Table = ({
 									borderBottomColor: useColorModeValue('gray.100', 'gray.700'),
 								}}
 							>
+								{/* <Td p={3} border={0}>
+									<Checkbox borderRadius="md" icon={<CheckmarkIcon />} />
+								</Td> */}
+								{data[row.id].recording.video ? (
+									<Td p={3} border={0}>
+										<Skeleton isLoaded={!loading} borderRadius="md">
+											<Button
+												size="xs"
+												variant="subtle"
+												colorScheme="gray"
+												aria-label="Play the video associated with this user story"
+												leftIcon={<PlayIcon strokeWidth="2px" />}
+												onClick={() => {
+													setVideo(data[row.id].recording.video.downloadUrl);
+													onOpen();
+												}}
+											>
+												PLAY
+											</Button>
+										</Skeleton>
+									</Td>
+								) : (
+									<Td p={3} border={0}>
+										<Skeleton isLoaded={!loading} borderRadius="md">
+											<Button
+												size="xs"
+												variant="subtle"
+												colorScheme="gray"
+												aria-label="Play the video associated with this user story"
+												leftIcon={<PlayIcon strokeWidth="2px" />}
+												isDisabled
+											>
+												PLAY
+											</Button>
+										</Skeleton>
+									</Td>
+								)}
+
 								{row.cells.map((cell) => {
 									return (
 										<Td
@@ -164,49 +222,33 @@ const Table = ({
 											{...cell.getCellProps()}
 											py={3}
 										>
-											{cell.render('Cell')}
+											<Skeleton isLoaded={!loading} borderRadius="md">
+												{cell.render('Cell')}
+											</Skeleton>
 										</Td>
 									);
 								})}
 								<Td px={1} py={3} border={0}>
-									<IconButton
-										size="xs"
-										colorScheme="gray"
-										variant="subtle"
-										aria-label="Open in a new tab"
-										icon={<ExternalLinkIcon />}
-										onClick={() => {
-											window.open(
-												`/${slugifiedProjectName}/user-stories/${row.original.id}`
-											);
-										}}
-									/>
+									<Skeleton isLoaded={!loading} borderRadius="md">
+										<IconButton
+											size="xs"
+											colorScheme="gray"
+											variant="subtle"
+											aria-label="Open in a new tab"
+											icon={<ExternalLinkIcon />}
+											onClick={() => {
+												window.open(
+													`/${slugifiedProjectName}/user-stories/${row.original.id}`
+												);
+											}}
+										/>
+									</Skeleton>
 								</Td>
 							</Tr>
 						);
 					})}
 
-					{loading && page.length === 0 ? (
-						[...Array(pageSize)].map((_, i) => {
-							return (
-								<Tr
-									key={i}
-									_hover={undefined}
-									borderBottom="1px solid"
-									borderBottomColor={useColorModeValue('gray.100', 'gray.700')}
-									_last={{ border: 0 }}
-								>
-									{columns.map((col, j) => {
-										return (
-											<Td key={col.id || j} py={3} border={0}>
-												<Skeleton h={5} />
-											</Td>
-										);
-									})}
-								</Tr>
-							);
-						})
-					) : page.length === 0 ? (
+					{page.length === 0 ? (
 						<Tr _hover={undefined}>
 							<Td
 								textAlign="center"
@@ -220,6 +262,30 @@ const Table = ({
 					) : null}
 				</Tbody>
 			</ChakraTable>
+
+			<Modal isOpen={isOpen} onClose={onClose} isCentered size="2xl">
+				<ModalOverlay />
+				<ModalContent backgroundColor="transparent" boxShadow="none">
+					<DarkMode>
+						<Button
+							alignSelf="flex-end"
+							size="sm"
+							leftIcon={<CloseIcon />}
+							colorScheme="gray"
+							variant="ghost"
+							maxW="fit-content"
+							onClick={onClose}
+						>
+							Close
+						</Button>
+					</DarkMode>
+					<ModalBody backgroundColor="transparent" p={0}>
+						<VideoPlayer>
+							<source src={video} type="video/webm" />
+						</VideoPlayer>
+					</ModalBody>
+				</ModalContent>
+			</Modal>
 
 			<Flex justifyContent="space-between" mt={4} alignItems="center" mx="auto">
 				<Flex>
