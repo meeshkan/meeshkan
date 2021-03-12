@@ -66,15 +66,15 @@ const dragndropToPptrString = ({
 }: Dragndrop) => `  ddSource = (await page.$x(${JSON.stringify(
 	sourceTarget.selector.xpath
 )}))[0];
-ddDestination = (await page.$x(${JSON.stringify(
-	destinationTarget.selector.xpath
-)}))[0];
-ddSourceBB = await ddSource.boundingBox();			
-ddDestinationBB = await ddDestination.boundingBox();
-await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y + ddSourceBB.height / 2);
-await page.mouse.down();
-await page.mouse.move(ddDestinationBB.x + ddDestinationBB.width / 2, ddDestinationBB.y + ddDestinationBB.height / 2);
-await page.mouse.up();`;
+  ddDestination = (await page.$x(${JSON.stringify(
+		destinationTarget.selector.xpath
+	)}))[0];
+  ddSourceBB = await ddSource.boundingBox();			
+  ddDestinationBB = await ddDestination.boundingBox();
+  await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y +   ddSourceBB.height / 2);
+  await page.mouse.down();
+  await page.mouse.move(ddDestinationBB.x + ddDestinationBB.width / 2, ddDestinationBB.y + ddDestinationBB.height / 2);
+  await page.mouse.up();`;
 interface Open {
 	value: string;
 }
@@ -113,6 +113,7 @@ const eightBaseToX = (formatter: {
 	if (!script?.groups?.items) {
 		return undefined;
 	}
+	const wait = '\n    await new Promise(r => setTimeout(r, 5000));\n';
 	const commands = script?.groups?.items
 		?.map((group) =>
 			group?.commands?.items?.map((command) =>
@@ -242,11 +243,13 @@ const eightBaseToX = (formatter: {
 		?.filter(isInhabited)
 		?.reduce((a, b) => [...a, ...b], [])
 		?.filter(isInhabited)
-		?.reduce((a, b) => a + '\n' + b, '');
+		?.reduce((a, b) => a + wait + b, '');
 	if (!commands) {
 		return undefined;
 	}
-	return topMatterPptr(options.headless) + commands + bottomMatterPptr;
+	return (
+		topMatterPptr(options.headless) + wait + commands + wait + bottomMatterPptr
+	);
 };
 
 export const eightBaseToPptr = eightBaseToX({
