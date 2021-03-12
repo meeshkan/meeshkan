@@ -21,6 +21,7 @@ import {
 	FormControl,
 	FormLabel,
 	AspectRatio,
+	ButtonGroup,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { SeleniumGroupListResponse, UserStory } from '@frontend/meeshkan-types';
@@ -308,6 +309,16 @@ const UserStoryPage = (props: UserStoryProps) => {
 					gap={8}
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
+						<ButtonGroup
+							isAttached
+							variant="outline"
+							colorScheme="gray"
+							w="full"
+							mb={4}
+						>
+							<Button w="full">Download</Button>
+							<Button w="full">Copy Link</Button>
+						</ButtonGroup>
 						{data.userStory?.recording?.video ? (
 							<VideoPlayer>
 								<source
