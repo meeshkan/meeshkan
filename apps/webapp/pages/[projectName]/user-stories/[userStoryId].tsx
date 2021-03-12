@@ -55,6 +55,7 @@ import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../../../components/atoms/video-player';
+import { eightBaseToPptr } from '@frontend/downloadable-script';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -318,7 +319,15 @@ const UserStoryPage = (props: UserStoryProps) => {
 							w="full"
 							mb={4}
 						>
-							<Button w="full" leftIcon={<DownloadIcon />}>
+							<Button
+								w="full"
+								leftIcon={<DownloadIcon />}
+								onClick={() =>
+									eightBaseToPptr(data.userStory.recording.seleniumScriptJson, {
+										headless: false,
+									})
+								}
+							>
 								Download
 							</Button>
 							<Button w="full" leftIcon={<CopyIcon />}>
