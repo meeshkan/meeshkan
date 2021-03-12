@@ -23,6 +23,7 @@ import {
 	AspectRatio,
 	ButtonGroup,
 } from '@chakra-ui/react';
+import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
 import { SeleniumGroupListResponse, UserStory } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -322,11 +323,14 @@ const UserStoryPage = (props: UserStoryProps) => {
 							<Button
 								w="full"
 								leftIcon={<DownloadIcon />}
-								onClick={() =>
-									eightBaseToPptr(data.userStory.recording.seleniumScriptJson, {
+								onClick={() => {
+									const pptrScript = eightBaseToPptr(JSON.parse(data?.userStory?.recording?.seleniumScriptJson), {
 										headless: false,
-									})
-								}
+									});
+
+									const blob = new Blob([pptrScript], { type: 'text/javascript;charset=utf-8' });
+									saveAs(blob, `${createSlug(data?.userStory?.title)}.js`);
+								}}
 							>
 								Download
 							</Button>

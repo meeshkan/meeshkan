@@ -110,10 +110,10 @@ const eightBaseToX = (formatter: {
 	script: SeleniumScript,
 	options: ScriptToPptrOptions
 ): string | undefined => {
-	if (!script?.groups?.items) {
+	if (!script?.groups?.groupItems) {
 		return undefined;
 	}
-	const commands = script?.groups?.items
+	const commands = script?.groups?.groupItems
 		?.map((group) =>
 			group?.commands?.items?.map((command) =>
 				command?.open?.value
