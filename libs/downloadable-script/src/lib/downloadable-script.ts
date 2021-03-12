@@ -1,4 +1,4 @@
-import { SeleniumScript } from '@frontend/meeshkan-types';
+import { SeleniumScript, SeleniumGroup } from '@frontend/meeshkan-types';
 
 interface ScriptTargetSelector {
 	xpath: string;
@@ -69,7 +69,7 @@ const dragndropToPptrString = ({
 ddDestination = (await page.$x(${JSON.stringify(
 	destinationTarget.selector.xpath
 )}))[0];
-ddSourceBB = await ddSource.boundingBox();			
+ddSourceBB = await ddSource.boundingBox();
 ddDestinationBB = await ddDestination.boundingBox();
 await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y + ddSourceBB.height / 2);
 await page.mouse.down();
@@ -110,11 +110,13 @@ const eightBaseToX = (formatter: {
 	script: SeleniumScript,
 	options: ScriptToPptrOptions
 ): string | undefined => {
+	// @ts-ignore
 	if (!script?.groups?.groupItems) {
 		return undefined;
 	}
+	// @ts-ignore
 	const commands = script?.groups?.groupItems
-		?.map((group) =>
+		?.map((group: SeleniumGroup) =>
 			group?.commands?.items?.map((command) =>
 				command?.open?.value
 					? formatter.open({
@@ -240,9 +242,9 @@ const eightBaseToX = (formatter: {
 			)
 		)
 		?.filter(isInhabited)
-		?.reduce((a, b) => [...a, ...b], [])
+		?.reduce((a: SeleniumGroup[], b: SeleniumGroup[]) => [...a, ...b], [])
 		?.filter(isInhabited)
-		?.reduce((a, b) => a + '\n' + b, '');
+		?.reduce((a: string, b: string) => a + '\n' + b, '');
 	if (!commands) {
 		return undefined;
 	}
