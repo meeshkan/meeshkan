@@ -21,7 +21,11 @@ import {
 	FormControl,
 	FormLabel,
 	AspectRatio,
-	ButtonGroup,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	IconButton,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
@@ -45,7 +49,8 @@ import {
 	ShieldIcon,
 	KeyIcon,
 	DownloadIcon,
-	CopyIcon,
+	TrashIcon,
+	MoreIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -312,17 +317,55 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Tooltip>
 						) : null}
 					</Flex>
-					<Select
-						defaultValue={data.userStory.significance}
-						size="sm"
-						borderRadius="md"
-						w="fit-content"
-						onChange={(e) => updateSignificance(e.target.value)}
-					>
-						<option value="low">Low significance</option>
-						<option value="medium">Medium significance</option>
-						<option value="high">High significance</option>
-					</Select>
+					<Flex>
+						<Select
+							mr={4}
+							defaultValue={data.userStory.significance}
+							size="sm"
+							borderRadius="md"
+							w="fit-content"
+							onChange={(e) => updateSignificance(e.target.value)}
+						>
+							<option value="low">Low significance</option>
+							<option value="medium">Medium significance</option>
+							<option value="high">High significance</option>
+						</Select>
+						<Menu>
+							<Tooltip label="More" placement="bottom" hasArrow>
+								<MenuButton
+									as={IconButton}
+									icon={<MoreIcon />}
+									size="sm"
+									colorScheme="gray"
+								/>
+							</Tooltip>
+							<MenuList>
+								<MenuItem onClick={() => handleDownload()}>
+									<DownloadIcon mr={3} />
+									Download test
+								</MenuItem>
+								<MenuItem
+									colorScheme="red"
+									onClick={() => {
+										deleteRejectedRecording();
+										toast({
+											position: 'bottom-right',
+											title: 'The user story has been deleted.',
+											description:
+												'Rejecting a recording will delete the series of steps as a user story.',
+											isClosable: true,
+											status: 'success',
+											variant: 'clean',
+										});
+										router.push(`/${slugifiedProjectName}/user-stories`);
+									}}
+								>
+									<TrashIcon mr={3} />
+									Delete
+								</MenuItem>
+							</MenuList>
+						</Menu>
+					</Flex>
 				</Flex>
 			</Card>
 
@@ -338,26 +381,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 					gap={8}
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
-						<ButtonGroup
-							isAttached
-							variant="outline"
-							colorScheme="gray"
-							w="full"
-							mb={4}
-						>
-							<Button
-								w="full"
-								leftIcon={<DownloadIcon />}
-								onClick={() => {
-									handleDownload();
-								}}
-							>
-								Download
-							</Button>
-							<Button w="full" leftIcon={<CopyIcon />}>
-								Copy Link
-							</Button>
-						</ButtonGroup>
 						{data.userStory?.recording?.video ? (
 							<VideoPlayer>
 								<source
