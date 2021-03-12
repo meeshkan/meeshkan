@@ -181,6 +181,31 @@ const UserStoryPage = (props: UserStoryProps) => {
 		steps.push(item);
 	});
 
+	const handleDownload = () => {
+		try {
+			const pptrScript = eightBaseToPptr(
+				JSON.parse(data?.userStory?.recording?.seleniumScriptJson),
+				{
+					headless: false,
+				}
+			);
+
+			const blob = new Blob([pptrScript], {
+				type: 'text/javascript;charset=utf-8',
+			});
+			saveAs(blob, `${createSlug(data?.userStory?.title)}.js`);
+		} catch (err) {
+			toast({
+				position: 'bottom-right',
+				title: 'Your test case could not be generated.',
+				description: 'Please try again in a few seconds.',
+				isClosable: true,
+				status: 'error',
+				variant: 'clean',
+			});
+		}
+	};
+
 	return (
 		<Stack w="100%" mb={8}>
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
@@ -324,12 +349,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								w="full"
 								leftIcon={<DownloadIcon />}
 								onClick={() => {
-									const pptrScript = eightBaseToPptr(JSON.parse(data?.userStory?.recording?.seleniumScriptJson), {
-										headless: false,
-									});
-
-									const blob = new Blob([pptrScript], { type: 'text/javascript;charset=utf-8' });
-									saveAs(blob, `${createSlug(data?.userStory?.title)}.js`);
+									handleDownload();
 								}}
 							>
 								Download
