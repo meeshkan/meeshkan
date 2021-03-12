@@ -52,6 +52,9 @@
 		},
 		"meeshkan-types": {
 			"tags": []
+		},
+		"downloadable-script": {
+			"tags": []
 		}
 	}
 }

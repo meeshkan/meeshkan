@@ -5,5 +5,6 @@ module.exports = {
 		'<rootDir>/libs/chakra-theme',
 		'<rootDir>/apps/og-cards',
 		'<rootDir>/libs/meeshkan-types',
+		'<rootDir>/libs/downloadable-script',
 	],
 };
