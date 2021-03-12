@@ -3,9 +3,8 @@ import { eightBaseToPptr } from './downloadable-script';
 const script = {
 	version: '1.0.0',
 	groups: {
-		count: 1,
-		groups: [], // needed for type to check
-		items: [
+		groupsCount: 1,
+		groupItems: [
 			{
 				name: null,
 				gIndex: 0,

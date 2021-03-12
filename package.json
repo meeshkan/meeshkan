@@ -50,6 +50,7 @@
 		"core-js": "3.7.0",
 		"document-register-element": "1.13.1",
 		"emotion-theming": "^11.0.0",
+		"file-saver": "^2.0.5",
 		"filestack-react": "^3.2.1",
 		"formik": "2.1.4",
 		"framer-motion": "^2.9.4",

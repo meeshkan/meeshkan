@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import Card from '../../../components/atoms/card';
 import { mutate } from 'swr';
 import {
@@ -21,7 +21,14 @@ import {
 	FormControl,
 	FormLabel,
 	AspectRatio,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	IconButton,
+	useClipboard,
 } from '@chakra-ui/react';
+import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
 import { SeleniumGroupListResponse, UserStory } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -42,6 +49,10 @@ import {
 	XmarkIcon,
 	ShieldIcon,
 	KeyIcon,
+	DownloadIcon,
+	TrashIcon,
+	MoreIcon,
+	CopyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -52,6 +63,7 @@ import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../../../components/atoms/video-player';
+import { eightBaseToPptr } from '@frontend/downloadable-script';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -65,7 +77,22 @@ const UserStoryPage = (props: UserStoryProps) => {
 	} = useValidateSelectedProject();
 	const router = useRouter();
 	const toast = useToast();
+	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		if (hasCopied) {
+			toast({
+				position: 'bottom-right',
+				title: 'User story link copied!',
+				description:
+					'The URL of this user story has been copied to your clipboard.',
+				isClosable: true,
+				status: 'success',
+				variant: 'clean',
+			});
+		}
+	}, [hasCopied]);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
@@ -176,6 +203,31 @@ const UserStoryPage = (props: UserStoryProps) => {
 		steps.push(item);
 	});
 
+	const handleDownload = () => {
+		try {
+			const pptrScript = eightBaseToPptr(
+				JSON.parse(data?.userStory?.recording?.seleniumScriptJson),
+				{
+					headless: false,
+				}
+			);
+
+			const blob = new Blob([pptrScript], {
+				type: 'text/javascript;charset=utf-8',
+			});
+			saveAs(blob, `${createSlug(data?.userStory?.title)}.js`);
+		} catch (err) {
+			toast({
+				position: 'bottom-right',
+				title: 'Your test case could not be generated.',
+				description: 'Please try again in a few seconds.',
+				isClosable: true,
+				status: 'error',
+				variant: 'clean',
+			});
+		}
+	};
+
 	return (
 		<Stack w="100%" mb={8}>
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
@@ -282,17 +334,59 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Tooltip>
 						) : null}
 					</Flex>
-					<Select
-						defaultValue={data.userStory.significance}
-						size="sm"
-						borderRadius="md"
-						w="fit-content"
-						onChange={(e) => updateSignificance(e.target.value)}
-					>
-						<option value="low">Low significance</option>
-						<option value="medium">Medium significance</option>
-						<option value="high">High significance</option>
-					</Select>
+					<Flex>
+						<Select
+							mr={4}
+							defaultValue={data.userStory.significance}
+							size="sm"
+							borderRadius="md"
+							w="fit-content"
+							onChange={(e) => updateSignificance(e.target.value)}
+						>
+							<option value="low">Low significance</option>
+							<option value="medium">Medium significance</option>
+							<option value="high">High significance</option>
+						</Select>
+						<Menu>
+							<Tooltip label="More" placement="bottom" hasArrow>
+								<MenuButton
+									as={IconButton}
+									icon={<MoreIcon />}
+									size="sm"
+									colorScheme="gray"
+								/>
+							</Tooltip>
+							<MenuList>
+								<MenuItem onClick={() => handleDownload()}>
+									<DownloadIcon mr={3} />
+									Download Puppeteer script
+								</MenuItem>
+								<MenuItem onClick={() => handleCopy()}>
+									<CopyIcon mr={3} />
+									Copy link
+								</MenuItem>
+								<MenuItem
+									colorScheme="red"
+									onClick={() => {
+										deleteRejectedRecording();
+										toast({
+											position: 'bottom-right',
+											title: 'The user story has been deleted.',
+											description:
+												'Rejecting a recording will delete the series of steps as a user story.',
+											isClosable: true,
+											status: 'success',
+											variant: 'clean',
+										});
+										router.push(`/${slugifiedProjectName}/user-stories`);
+									}}
+								>
+									<TrashIcon mr={3} />
+									Delete
+								</MenuItem>
+							</MenuList>
+						</Menu>
+					</Flex>
 				</Flex>
 			</Card>
 

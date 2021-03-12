@@ -1,4 +1,4 @@
-import { SeleniumScript } from '@frontend/meeshkan-types';
+import { SeleniumScript, SeleniumGroup } from '@frontend/meeshkan-types';
 
 interface ScriptTargetSelector {
 	xpath: string;
@@ -110,12 +110,14 @@ const eightBaseToX = (formatter: {
 	script: SeleniumScript,
 	options: ScriptToPptrOptions
 ): string | undefined => {
-	if (!script?.groups?.items) {
+	// @ts-ignore
+	if (!script?.groups?.groupItems) {
 		return undefined;
 	}
 	const wait = '\n    await new Promise(r => setTimeout(r, 5000));\n';
-	const commands = script?.groups?.items
-		?.map((group) =>
+	// @ts-ignore
+	const commands = script?.groups?.groupItems
+		?.map((group: SeleniumGroup) =>
 			group?.commands?.items?.map((command) =>
 				command?.open?.value
 					? formatter.open({
@@ -241,9 +243,9 @@ const eightBaseToX = (formatter: {
 			)
 		)
 		?.filter(isInhabited)
-		?.reduce((a, b) => [...a, ...b], [])
+		?.reduce((a: SeleniumGroup[], b: SeleniumGroup[]) => [...a, ...b], [])
 		?.filter(isInhabited)
-		?.reduce((a, b) => a + wait + b, '');
+		?.reduce((a: string, b: string) => a + wait + b, '');
 	if (!commands) {
 		return undefined;
 	}
