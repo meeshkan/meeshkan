@@ -22,12 +22,12 @@ interface ScriptTarget {
 }
 
 type ScriptCommand = Either<
-	ScriptOpen,
-	Either<ScriptSetViewportSize, Either<Click, Either<Type, Dragndrop>>>
+	Open,
+	Either<SetViewportSize, Either<Click, Either<Type, Dragndrop>>>
 >;
 
-const open: (o: ScriptOpen) => ScriptCommand = left;
-const setViewportSize: (o: ScriptSetViewportSize) => ScriptCommand = flow(
+const open: (o: Open) => ScriptCommand = left;
+const setViewportSize: (o: SetViewportSize) => ScriptCommand = flow(
 	left,
 	right
 );
@@ -41,8 +41,8 @@ const dragndrop: (o: Dragndrop) => ScriptCommand = flow(
 );
 
 const transformCommand = <T>(c: {
-	open: (o: ScriptOpen) => T;
-	setViewportSize: (s: ScriptSetViewportSize) => T;
+	open: (o: Open) => T;
+	setViewportSize: (s: SetViewportSize) => T;
 	click: (c: Click) => T;
 	type: (t: Type) => T;
 	dragndrop: (d: Dragndrop) => T;
@@ -52,11 +52,11 @@ const transformCommand = <T>(c: {
 		fold(c.setViewportSize, fold(c.click, fold(c.type, c.dragndrop)))
 	)(command);
 
-interface ScriptOpen {
+interface Open {
 	value: string;
 }
 
-interface ScriptSetViewportSize {
+interface SetViewportSize {
 	value: Point;
 }
 interface Click {
@@ -225,6 +225,47 @@ const bottomMatterPptr = `
 interface ScriptToPptrOptions {
 	headless: boolean;
 }
+
+const openToPptrString = ({ value }: Open) =>
+	`  page.goto(${JSON.stringify(value)});`;
+
+const setViewportSizeToPptrString = ({
+	value: { xCoord, yCoord },
+}: SetViewportSize) =>
+	`  await page.setViewport({ width: ${xCoord}, height: ${yCoord}, deviceScaleFactor: 1 });`;
+
+const clickToPptrString = ({
+	target: {
+		selector: { xpath },
+	},
+}: Click) => `  await (await page.$x(${JSON.stringify(xpath)}))[0].click();`;
+
+const typeToPptrString = ({
+	target: {
+		selector: { xpath },
+	},
+	value,
+}: Type) =>
+	`  await (await page.$x(${JSON.stringify(xpath)}))[0].type(${JSON.stringify(
+		value
+	)}, {delay: 100});`;
+
+const dragndropToPptrString = ({
+	sourceTarget,
+	destinationTarget,
+}: Dragndrop) => `  ddSource = (await page.$x(${JSON.stringify(
+	sourceTarget.selector.xpath
+)}))[0];
+ddDestination = (await page.$x(${JSON.stringify(
+	destinationTarget.selector.xpath
+)}))[0];
+ddSourceBB = await ddSource.boundingBox();			
+ddDestinationBB = await ddDestination.boundingBox();
+await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y + ddSourceBB.height / 2);
+await page.mouse.down();
+await page.mouse.move(ddDestinationBB.x + ddDestinationBB.width / 2, ddDestinationBB.y + ddDestinationBB.height / 2);
+await page.mouse.up();`;
+
 export const scriptToPptr = (
 	script: Array<ScriptCommand>,
 	options: ScriptToPptrOptions
@@ -233,38 +274,11 @@ export const scriptToPptr = (
 		[topMatterPptr(options.headless)],
 		script.map(
 			transformCommand({
-				open: ({ value }) => `  page.goto(${JSON.stringify(value)});`,
-				setViewportSize: ({ value: { xCoord, yCoord } }) =>
-					`  await page.setViewport({ width: ${xCoord}, height: ${yCoord}, deviceScaleFactor: 1 });`,
-				click: ({
-					target: {
-						selector: { xpath },
-					},
-				}) => `  await (await page.$x(${JSON.stringify(xpath)}))[0].click();`,
-				type: ({
-					target: {
-						selector: { xpath },
-					},
-					value,
-				}) =>
-					`  await (await page.$x(${JSON.stringify(
-						xpath
-					)}))[0].type(${JSON.stringify(value)}, {delay: 100});`,
-				dragndrop: ({
-					sourceTarget,
-					destinationTarget,
-				}) => `  ddSource = (await page.$x(${JSON.stringify(
-					sourceTarget.selector.xpath
-				)}))[0];
-	ddDestination = (await page.$x(${JSON.stringify(
-		destinationTarget.selector.xpath
-	)}))[0];
-  ddSourceBB = await ddSource.boundingBox();			
-  ddDestinationBB = await ddDestination.boundingBox();
-	await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y + ddSourceBB.height / 2);
-	await page.mouse.down();
-	await page.mouse.move(ddDestinationBB.x + ddDestinationBB.width / 2, ddDestinationBB.y + ddDestinationBB.height / 2);
-	await page.mouse.up();`,
+				open: openToPptrString,
+				setViewportSize: setViewportSizeToPptrString,
+				click: clickToPptrString,
+				type: typeToPptrString,
+				dragndrop: dragndropToPptrString,
 			})
 		),
 		[bottomMatterPptr],
