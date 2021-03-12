@@ -21,6 +21,7 @@ import {
 	FormControl,
 	FormLabel,
 	AspectRatio,
+	Code,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import {
@@ -215,48 +216,55 @@ const UserStoryPage = (props: UserStoryProps) => {
 							<EditablePreview />
 							<EditableInput />
 						</Editable>
-						<Badge
-							fontWeight="700"
+						<Code
+							display="flex"
+							alignItems="center"
+							maxW="fit-content"
 							fontSize="md"
-							lineHeight="normal"
 							mr={2}
 							textTransform="capitalize"
+							lineHeight="normal"
 							borderRadius="md"
-							py={1}
+							fontWeight="700"
 							px={2}
+							py={1}
+							colorScheme="gray"
 						>
 							{data.userStory.created[0] === 'user' ? (
 								<VideoIcon mr={3} />
 							) : data.userStory.created[0] === 'manual' ? (
 								<CrosshairIcon mr={3} />
 							) : null}
-							{data.userStory.created[0]}
-						</Badge>
+							{data.userStory.created}
+						</Code>
 						{data.userStory.isTestCase === true ? null : data.userStory
 								.isExpected ? (
-							<Badge
+							<Code
 								colorScheme="cyan"
 								fontWeight="700"
 								fontSize="md"
+								lineHeight="normal"
 								textTransform="capitalize"
 								borderRadius="md"
-								p={2}
+								px={2}
+								py={1}
 								mr={2}
 							>
 								Expected behavior
-							</Badge>
+							</Code>
 						) : (
-							<Badge
+							<Code
 								colorScheme="red"
 								fontWeight="700"
 								fontSize="md"
 								textTransform="capitalize"
 								borderRadius="md"
-								p={2}
+								px={2}
+								py={1}
 								mr={2}
 							>
 								Buggy behavior
-							</Badge>
+							</Code>
 						)}
 						{data.userStory.configuration !== null &&
 						data.userStory.configuration.logInFlow.id === userStoryId ? (
@@ -287,8 +295,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 						) : null}
 					</Flex>
 					<Select
+						variant="filled"
 						defaultValue={data.userStory.significance}
 						size="sm"
+						fontFamily="mono"
 						borderRadius="md"
 						w="fit-content"
 						onChange={(e) => updateSignificance(e.target.value)}
