@@ -43,6 +43,8 @@ import {
 	XmarkIcon,
 	ShieldIcon,
 	KeyIcon,
+	DownloadIcon,
+	CopyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -316,8 +318,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 							w="full"
 							mb={4}
 						>
-							<Button w="full">Download</Button>
-							<Button w="full">Copy Link</Button>
+							<Button w="full" leftIcon={<DownloadIcon />}>
+								Download
+							</Button>
+							<Button w="full" leftIcon={<CopyIcon />}>
+								Copy Link
+							</Button>
 						</ButtonGroup>
 						{data.userStory?.recording?.video ? (
 							<VideoPlayer>
