@@ -196,7 +196,16 @@ const Table = ({
 								) : (
 									<Td p={3} border={0}>
 										<Skeleton isLoaded={!loading} borderRadius="md">
-											<Box h={6} w="45px" />
+											<Button
+												size="xs"
+												variant="subtle"
+												colorScheme="gray"
+												aria-label="Play the video associated with this user story"
+												leftIcon={<PlayIcon strokeWidth="2px" />}
+												isDisabled
+											>
+												PLAY
+											</Button>
 										</Skeleton>
 									</Td>
 								)}
@@ -270,7 +279,7 @@ const Table = ({
 							Close
 						</Button>
 					</DarkMode>
-					<ModalBody backgroundColor="transparent" px={8}>
+					<ModalBody backgroundColor="transparent" p={0}>
 						<VideoPlayer>
 							<source src={video} type="video/webm" />
 						</VideoPlayer>
