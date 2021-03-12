@@ -1,6 +1,4 @@
 import { SeleniumScript } from '@frontend/meeshkan-types';
-import { Either, fold, left, right } from 'fp-ts/Either';
-import { flow } from 'fp-ts/lib/function';
 
 interface ScriptTargetSelector {
 	xpath: string;
@@ -21,37 +19,62 @@ interface ScriptTarget {
 	coordinates?: Point;
 }
 
-type ScriptCommand = Either<
-	Open,
-	Either<SetViewportSize, Either<Click, Either<Type, Dragndrop>>>
->;
+const topMatterPptr = (
+	headless: boolean
+): string => `const puppeteer = require('puppeteer');
+(async () => {
+  const browser = await puppeteer.launch({headless: ${headless}});
+	const page = await browser.newPage();
+	let ddSource;
+	let ddDestination;
+	let ddSourceBB;
+	let ddDestinationBB;`;
+const bottomMatterPptr = `
+  await browser.close();
+})();`;
+interface ScriptToPptrOptions {
+	headless: boolean;
+}
 
-const open: (o: Open) => ScriptCommand = left;
-const setViewportSize: (o: SetViewportSize) => ScriptCommand = flow(
-	left,
-	right
-);
-const click: (o: Click) => ScriptCommand = flow(left, right, right);
-const type: (o: Type) => ScriptCommand = flow(left, right, right, right);
-const dragndrop: (o: Dragndrop) => ScriptCommand = flow(
-	right,
-	right,
-	right,
-	right
-);
+const openToPptrString = ({ value }: Open) =>
+	`  page.goto(${JSON.stringify(value)});`;
 
-const transformCommand = <T>(c: {
-	open: (o: Open) => T;
-	setViewportSize: (s: SetViewportSize) => T;
-	click: (c: Click) => T;
-	type: (t: Type) => T;
-	dragndrop: (d: Dragndrop) => T;
-}) => (command: ScriptCommand): T =>
-	fold(
-		c.open,
-		fold(c.setViewportSize, fold(c.click, fold(c.type, c.dragndrop)))
-	)(command);
+const setViewportSizeToPptrString = ({
+	value: { xCoord, yCoord },
+}: SetViewportSize) =>
+	`  await page.setViewport({ width: ${xCoord}, height: ${yCoord}, deviceScaleFactor: 1 });`;
 
+const clickToPptrString = ({
+	target: {
+		selector: { xpath },
+	},
+}: Click) => `  await (await page.$x(${JSON.stringify(xpath)}))[0].click();`;
+
+const typeToPptrString = ({
+	target: {
+		selector: { xpath },
+	},
+	value,
+}: Type) =>
+	`  await (await page.$x(${JSON.stringify(xpath)}))[0].type(${JSON.stringify(
+		value
+	)}, {delay: 100});`;
+
+const dragndropToPptrString = ({
+	sourceTarget,
+	destinationTarget,
+}: Dragndrop) => `  ddSource = (await page.$x(${JSON.stringify(
+	sourceTarget.selector.xpath
+)}))[0];
+ddDestination = (await page.$x(${JSON.stringify(
+	destinationTarget.selector.xpath
+)}))[0];
+ddSourceBB = await ddSource.boundingBox();			
+ddDestinationBB = await ddDestination.boundingBox();
+await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y + ddSourceBB.height / 2);
+await page.mouse.down();
+await page.mouse.move(ddDestinationBB.x + ddDestinationBB.width / 2, ddDestinationBB.y + ddDestinationBB.height / 2);
+await page.mouse.up();`;
 interface Open {
 	value: string;
 }
@@ -76,19 +99,30 @@ const n2u = <T>(i: T | null | undefined): T | undefined =>
 function isInhabited<T>(value: T | null | undefined): value is T {
 	return value !== null && value !== undefined;
 }
-export const eightBaseToScript = (
-	script: SeleniumScript
-): Array<ScriptCommand> | undefined =>
-	script?.groups?.items
+
+const eightBaseToX = (formatter: {
+	open: (o: Open) => string;
+	setViewportSize: (o: SetViewportSize) => string;
+	click: (o: Click) => string;
+	type: (o: Type) => string;
+	dragndrop: (o: Dragndrop) => string;
+}) => (
+	script: SeleniumScript,
+	options: ScriptToPptrOptions
+): string | undefined => {
+	if (!script?.groups?.items) {
+		return undefined;
+	}
+	const commands = script?.groups?.items
 		?.map((group) =>
 			group?.commands?.items?.map((command) =>
 				command?.open?.value
-					? open({
+					? formatter.open({
 							value: command.open.value,
 					  })
 					: command?.setViewportSize?.value?.xCoord &&
 					  command.setViewportSize.value.yCoord
-					? setViewportSize({
+					? formatter.setViewportSize({
 							value: {
 								xCoord: command.setViewportSize.value.xCoord,
 								yCoord: command.setViewportSize.value.yCoord,
@@ -96,7 +130,7 @@ export const eightBaseToScript = (
 					  })
 					: command?.click?.target?.selector?.xpath &&
 					  command.click.target.selector.tagName
-					? click({
+					? formatter.click({
 							target: {
 								selector: {
 									xpath: command.click.target.selector.xpath,
@@ -119,7 +153,7 @@ export const eightBaseToScript = (
 					: command?.type?.target?.selector?.xpath &&
 					  command?.type?.target?.selector?.tagName &&
 					  command?.type?.value
-					? type({
+					? formatter.type({
 							value: command.type.value,
 							target: {
 								selector: {
@@ -144,7 +178,7 @@ export const eightBaseToScript = (
 					  command?.dragndrop?.sourceTarget?.selector?.tagName &&
 					  command?.dragndrop?.destinationTarget?.selector?.xpath &&
 					  command?.dragndrop?.destinationTarget?.selector?.tagName
-					? dragndrop({
+					? formatter.dragndrop({
 							sourceTarget: {
 								selector: {
 									xpath: command.dragndrop.sourceTarget.selector.xpath,
@@ -207,81 +241,18 @@ export const eightBaseToScript = (
 		)
 		?.filter(isInhabited)
 		?.reduce((a, b) => [...a, ...b], [])
-		?.filter(isInhabited);
+		?.filter(isInhabited)
+		?.reduce((a, b) => a + '\n' + b, '');
+	if (!commands) {
+		return undefined;
+	}
+	return topMatterPptr(options.headless) + commands + bottomMatterPptr;
+};
 
-const topMatterPptr = (
-	headless: boolean
-): string => `const puppeteer = require('puppeteer');
-(async () => {
-  const browser = await puppeteer.launch({headless: ${headless}});
-	const page = await browser.newPage();
-	let ddSource;
-	let ddDestination;
-	let ddSourceBB;
-	let ddDestinationBB;`;
-const bottomMatterPptr = `
-  await browser.close();
-})();`;
-interface ScriptToPptrOptions {
-	headless: boolean;
-}
-
-const openToPptrString = ({ value }: Open) =>
-	`  page.goto(${JSON.stringify(value)});`;
-
-const setViewportSizeToPptrString = ({
-	value: { xCoord, yCoord },
-}: SetViewportSize) =>
-	`  await page.setViewport({ width: ${xCoord}, height: ${yCoord}, deviceScaleFactor: 1 });`;
-
-const clickToPptrString = ({
-	target: {
-		selector: { xpath },
-	},
-}: Click) => `  await (await page.$x(${JSON.stringify(xpath)}))[0].click();`;
-
-const typeToPptrString = ({
-	target: {
-		selector: { xpath },
-	},
-	value,
-}: Type) =>
-	`  await (await page.$x(${JSON.stringify(xpath)}))[0].type(${JSON.stringify(
-		value
-	)}, {delay: 100});`;
-
-const dragndropToPptrString = ({
-	sourceTarget,
-	destinationTarget,
-}: Dragndrop) => `  ddSource = (await page.$x(${JSON.stringify(
-	sourceTarget.selector.xpath
-)}))[0];
-ddDestination = (await page.$x(${JSON.stringify(
-	destinationTarget.selector.xpath
-)}))[0];
-ddSourceBB = await ddSource.boundingBox();			
-ddDestinationBB = await ddDestination.boundingBox();
-await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y + ddSourceBB.height / 2);
-await page.mouse.down();
-await page.mouse.move(ddDestinationBB.x + ddDestinationBB.width / 2, ddDestinationBB.y + ddDestinationBB.height / 2);
-await page.mouse.up();`;
-
-export const scriptToPptr = (
-	script: Array<ScriptCommand>,
-	options: ScriptToPptrOptions
-): string =>
-	[
-		[topMatterPptr(options.headless)],
-		script.map(
-			transformCommand({
-				open: openToPptrString,
-				setViewportSize: setViewportSizeToPptrString,
-				click: clickToPptrString,
-				type: typeToPptrString,
-				dragndrop: dragndropToPptrString,
-			})
-		),
-		[bottomMatterPptr],
-	]
-		.reduce((a, b) => [...a, ...b], [])
-		.reduce((a, b) => a + '\n' + b, '');
+export const eightBaseToPptr = eightBaseToX({
+	open: openToPptrString,
+	setViewportSize: setViewportSizeToPptrString,
+	click: clickToPptrString,
+	type: typeToPptrString,
+	dragndrop: dragndropToPptrString,
+});

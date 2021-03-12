@@ -1,4 +1,4 @@
-import { eightBaseToScript, scriptToPptr } from './downloadable-script';
+import { eightBaseToPptr } from './downloadable-script';
 
 const script = {
 	version: '1.0.0',
@@ -93,8 +93,7 @@ const script = {
 
 describe('downloadableScript', () => {
 	it('should work', () => {
-		const asScript = eightBaseToScript(script);
-		expect(asScript && scriptToPptr(asScript, { headless: false })).toEqual(
+		expect(eightBaseToPptr(script, { headless: false })).toEqual(
 			'downloadable-script'
 		);
 	});
