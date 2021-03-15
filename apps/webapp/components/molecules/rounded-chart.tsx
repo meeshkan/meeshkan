@@ -1,5 +1,6 @@
 import * as ChartJS from 'chart.js';
 
+// @ts-ignore
 ChartJS.elements.Rectangle.prototype.draw = function () {
 	const ctx = this._chart.ctx;
 	const vm = this._view;
@@ -75,7 +76,7 @@ ChartJS.elements.Rectangle.prototype.draw = function () {
 		startCorner = 0;
 	}
 
-	function cornerAt(index) {
+	function cornerAt(index: number) {
 		return corners[(startCorner + index) % 4];
 	}
 

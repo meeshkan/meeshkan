@@ -15,7 +15,8 @@ import _ from 'lodash';
 import { FilePlusIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
 import { FILE_UPLOAD_INFO } from '../../graphql/file';
-import { uploadFile, UploadedFile } from '../../utils/file';
+import { uploadFile } from '../../utils/file';
+import { UploadedFile } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../utils/graphql';
 
 const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });
@@ -31,7 +32,7 @@ const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
 	const [loading, setLoading] = useState(false);
 	const [image, setImage] = useState(existingImageUrl || '');
 	const client = eightBaseClient(idToken);
-	const fetcher = (query) => client.request(query);
+	const fetcher = (query: string) => client.request(query);
 	const { data, error: uploadInfoError } = useSWR(FILE_UPLOAD_INFO, fetcher);
 
 	useEffect(() => {

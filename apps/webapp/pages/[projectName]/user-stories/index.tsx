@@ -37,6 +37,7 @@ import {
 	MenuItemOption,
 	MenuOptionGroup,
 	OrderedList,
+	Code,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -47,6 +48,7 @@ import {
 	CrosshairIcon,
 	SortIcon,
 	FilterIcon,
+	PlayIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
@@ -56,11 +58,19 @@ import Table from '../../../components/organisms/table';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
-import { UserContext, UserStories } from '../../../utils/user';
+import { UserContext } from '../../../utils/user';
+import {
+	SeleniumGroup,
+	UserStory,
+	UserStoryFilter,
+	UserStoryListResponse,
+	UserStory_PermissionFilter,
+} from '@frontend/meeshkan-types';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
+import VideoPlayer from 'apps/webapp/components/atoms/video-player';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -94,12 +104,12 @@ type UserStoryProps = {
 
 interface UserStoriesAliased {
 	recordings: {
-		count: UserStories['count'];
-		items: UserStories['items'];
+		count: UserStoryListResponse['count'];
+		items: UserStoryListResponse['items'];
 	};
 	testCases: {
-		count: UserStories['count'];
-		items: UserStories['items'];
+		count: UserStoryListResponse['count'];
+		items: UserStoryListResponse['items'];
 	};
 }
 
@@ -123,7 +133,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		},
 	});
 
-	const columns: Column[] = useMemo(
+	const columns: Column<UserStory>[] = useMemo(
 		() => [
 			{
 				Header: 'Title',
@@ -152,20 +162,33 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Origin',
 				accessor: (originalRow, rowIndex) => {
+					const { created } = originalRow;
 					return (
-						<Badge
+						<Code
+							display="flex"
+							alignItems="center"
+							maxW="fit-content"
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							fontWeight="700"
+							px={2}
+							py={1}
+							colorScheme={
+								created[0] === 'user'
+									? 'cyan'
+									: created[0] === 'manual'
+									? 'blue'
+									: 'gray'
+							}
 						>
-							{originalRow.created[0] === 'user' ? (
-								<VideoIcon mr={2} />
-							) : originalRow.created[0] === 'manual' ? (
-								<CrosshairIcon mr={2} />
+							{created[0] === 'user' ? (
+								<VideoIcon mr={3} />
+							) : created[0] === 'manual' ? (
+								<CrosshairIcon mr={3} />
 							) : null}
-							{originalRow.created}
-						</Badge>
+							{created}
+						</Code>
 					);
 				},
 			},
@@ -174,11 +197,13 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: (originalRow, rowIndex) => {
 					const { significance } = originalRow;
 					return (
-						<Badge
+						<Code
 							fontSize="sm"
 							textTransform="capitalize"
 							borderRadius="md"
-							p={2}
+							fontWeight="700"
+							px={2}
+							py={1}
 							colorScheme={
 								significance === 'low'
 									? 'gray'
@@ -190,7 +215,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							}
 						>
 							{significance}
-						</Badge>
+						</Code>
 					);
 				},
 			},
@@ -201,7 +226,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					JSON.parse(
 						originalRow.recording.seleniumScriptJson
 					).groups.groupItems.forEach(
-						(step) => (count = count + step.commands.count)
+						(step: SeleniumGroup) => (count = count + step.commands.count)
 					);
 					return count;
 				},
@@ -215,7 +240,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
-	let significanceFilters = [];
+	let significanceFilters: UserStoryFilter['OR'] = [];
 	if (low) {
 		significanceFilters.push({
 			significance: {

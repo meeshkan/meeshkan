@@ -5,7 +5,7 @@ export const useColorFromNumber = (type = 'percentage') => {
 	const yellow = useColorModeValue('yellow.500', 'yellow.400');
 	const red = useColorModeValue('red.500', 'red.400');
 
-	return (value) => {
+	return (value: number) => {
 		let color;
 
 		switch (type) {

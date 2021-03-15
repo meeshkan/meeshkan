@@ -3,14 +3,16 @@ import { useRouter } from 'next/router';
 import { createSlug } from '../utils/createSlug';
 import LoadingScreen from '../components/organisms/loading-screen';
 import AuthScreen from '../components/organisms/auth-screen';
-import { UserContext, IUser, Project } from '../utils/user';
+import { UserContext } from '../utils/user';
+import { Project } from '@frontend/meeshkan-types';
 import { useFetchUser } from '../hooks/use-fetch-user';
+import { NextComponentType, NextPageContext } from 'next';
 
 export interface IWithAuthProps {
 	cookies: string | undefined;
 }
 
-const withAuth = (PageComponent) => {
+const withAuth = (PageComponent: any) => {
 	return (props: IWithAuthProps): JSX.Element => {
 		const router = useRouter();
 		const { user, loading, mutate } = useFetchUser();
@@ -27,11 +29,9 @@ const withAuth = (PageComponent) => {
 				let url = router.pathname;
 				const query = router.query;
 				query.projectName = slugifiedProjectName;
-				Object.keys(query).forEach(
-					param => {
-						url = url.replace(`[${param as string}]`, query[param] as string);
-					}
-				);
+				Object.keys(query).forEach((param) => {
+					url = url.replace(`[${param as string}]`, query[param] as string);
+				});
 
 				if (url === '/') {
 					url = `/${slugifiedProjectName}`;

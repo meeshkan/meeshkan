@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import useSWR, { responseInterface } from 'swr';
-import { IUser } from '../utils/user';
+import { IUser } from '@frontend/meeshkan-types';
 import { boot as bootIntercom } from '../utils/intercom';
 
 type IUseFetchUser = {
 	user: void | IUser;
 	loading: boolean;
 	mutate: responseInterface<void | IUser, any>['mutate'];
-}
+};
 
 export const useFetchUser = (): IUseFetchUser => {
 	const { data: user, error, isValidating, mutate } = useSWR('/api/session');

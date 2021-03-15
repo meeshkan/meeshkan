@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { SourceHTMLAttributes } from 'react';
 import {
 	useBreakpointValue,
 	useColorModeValue,
 	useToken,
 } from '@chakra-ui/react';
 
-const VideoPlayer = ({ children }) => {
+type VideoPlayerProps = {
+	children: SourceHTMLAttributes<HTMLSourceElement>;
+};
+
+const VideoPlayer = ({ children }: VideoPlayerProps) => {
 	const [gray200, gray700] = useToken('colors', ['gray.200', 'gray.700']);
 	const maxHeight = useBreakpointValue({
 		base: '75vw',

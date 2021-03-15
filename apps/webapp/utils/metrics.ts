@@ -1,24 +1,19 @@
 import _ from 'lodash';
 import moment from 'moment';
-import { UserStories, Project, UserStory, TestRuns, Releases } from './user';
-
-export enum DataPointTag {
-	TEST_RUN = 0,
-	TEST_COVERAGE = 1,
-}
-
-export interface DataPoint {
-	title: string;
-	score: number;
-	maxPossible: number;
-	timestamp: number;
-	tag: DataPointTag;
-}
+import {
+	UserStoryListResponse,
+	Project,
+	UserStory,
+	TestRunListResponse,
+	ReleaseListResponse,
+	DataPoint,
+	DataPointTag,
+} from '@frontend/meeshkan-types';
 
 const daysUntilDate = (date: moment.Moment): number =>
 	date.diff(moment(), 'days');
 
-export const getTestRuns = (releases: Releases['items']) => {
+export const getTestRuns = (releases: ReleaseListResponse['items']) => {
 	const testRunsTotal = releases.reduce(
 		(a, b) => ({
 			testRuns: {
@@ -43,11 +38,11 @@ export const getTestRuns = (releases: Releases['items']) => {
 
 export const getDaysUntilRelease = (project: Project) => {
 	const [release] = project.release.items;
-	const releaseDate = release?.releaseDate;
+	const releaseDate = release.releaseDate;
 	return releaseDate ? daysUntilDate(moment(releaseDate)) : null;
 };
 
-export const getBugs = (testRuns: TestRuns['items']) => {
+export const getBugs = (testRuns: TestRunListResponse['items']) => {
 	const introduced = _.sumBy(testRuns, (testRun) => {
 		const testOutcomes = testRun?.testOutcome?.items;
 		return _.sumBy(testOutcomes, (item) => Number(item.status === 'failing'));
@@ -64,8 +59,8 @@ export const getBugs = (testRuns: TestRuns['items']) => {
 	};
 };
 
-export const getLatestTestStates = (testRuns: TestRuns['items']) => {
-	const latestTestStates = {
+export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
+	const latestTestStates: Record<string, number> = {
 		failing: 0,
 		passing: 0,
 		'did not run': 0,
@@ -79,7 +74,7 @@ export const getLatestTestStates = (testRuns: TestRuns['items']) => {
 			)
 			.slice(-1);
 
-		const status = latestTestOutcome?.status;
+		const status: string = latestTestOutcome?.status;
 		if (status) {
 			latestTestStates[status]++;
 		}
@@ -88,15 +83,15 @@ export const getLatestTestStates = (testRuns: TestRuns['items']) => {
 	return latestTestStates;
 };
 
-const lastNDays = (n) =>
+const lastNDays = (n: number) =>
 	[...Array(n).keys()].map((i) => moment().subtract(i, 'days')).reverse();
 
 export const getRecordingsAndTestsByDay = (
 	days: number,
-	userStories: UserStories['items']
+	userStories: UserStoryListResponse['items']
 ) => {
-	const recordingsByDay = {};
-	const testsByDay = {};
+	const recordingsByDay: Record<string, number> = {};
+	const testsByDay: Record<string, number> = {};
 	lastNDays(days).forEach((day) => {
 		const recordingsOnThisDay = userStories.filter((story) => {
 			const { createdAt, isTestCase } = story;
@@ -133,7 +128,7 @@ const storySignificance = (story: UserStory): number => 10.0;
 export const getConfidenceScore = (
 	howLongAgo: number,
 	releaseStarted: number,
-	userStories_: UserStories['items']
+	userStories_: UserStoryListResponse['items']
 ): Record<string, DataPoint> => {
 	const userStories = userStories_.filter(
 		(story) => new Date(story.createdAt).getTime() < howLongAgo

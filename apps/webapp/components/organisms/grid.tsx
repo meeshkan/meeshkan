@@ -14,6 +14,7 @@ import {
 	Heading,
 	useColorModeValue,
 	Text,
+	StackProps,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import {
@@ -30,7 +31,13 @@ import GridCard from '../molecules/grid-card';
 // import LinearListItem from '../molecules/linear-list-item';
 import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
 import ScriptTag from '../../components/molecules/script-tag';
-import { UserContext, UserStories } from '../../utils/user';
+import { UserContext } from '../../utils/user';
+import {
+	UserStoryListResponse,
+	DataPointTag,
+	DataPoint,
+	Project,
+} from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { capitalize } from '../../utils/capitalize';
 import {
@@ -42,11 +49,11 @@ import {
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
 	getLastNDaysInFormat,
-	DataPointTag,
 } from '../../utils/metrics';
+import { ChartOptions, ChartData } from 'chart.js';
 require('../molecules/rounded-chart');
 
-const barData = {
+const barData: ChartData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
 	datasets: [
 		{
@@ -62,7 +69,7 @@ const barData = {
 	],
 };
 
-const doughnutData = {
+const doughnutData: ChartData = {
 	labels: ['Queued', 'Running', 'Passing', 'Run error', 'Failing'],
 	datasets: [
 		{
@@ -80,7 +87,7 @@ const doughnutData = {
 	],
 };
 
-const timePeriodsInDays = {
+const timePeriodsInDays: any = {
 	'24 hours': 1,
 	'7 days': 7,
 	'30 days': 30,
@@ -89,18 +96,22 @@ const timePeriodsInDays = {
 
 // TODO: fill me in with correct info once we can determine
 // the release start date. For now, set arbitrarily to 30 days.
-const getReleaseStartFromProject = (a) =>
+const getReleaseStartFromProject = (project: Project) =>
 	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
 
-const calcPctChange = (key, confidenceScoreNDaysAgo, dataPoint) =>
+const calcPctChange = (
+	key: string,
+	confidenceScoreNDaysAgo: Record<string, DataPoint>,
+	dataPoint: DataPoint
+) =>
 	confidenceScoreNDaysAgo[key]
 		? dataPoint.score - confidenceScoreNDaysAgo[key].score
 		: dataPoint.score;
 
-const deltaChange = (oldv, newv) =>
+const deltaChange = (oldv: number, newv: number) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
 
-const Grid = (props) => {
+const Grid = (props: StackProps) => {
 	const { project: selectedProject } = useContext(UserContext);
 	const router = useRouter();
 	const slugifiedProjectName = useMemo(() => createSlug(selectedProject.name), [
@@ -111,8 +122,9 @@ const Grid = (props) => {
 		!selectedProject?.hasReceivedEvents
 	);
 
-	const doughnutOptions = {
+	const doughnutOptions: ChartOptions = {
 		legend: {
+			align: 'center',
 			labels: {
 				boxWidth: 12,
 				fontColor: useColorModeValue(
@@ -121,12 +133,12 @@ const Grid = (props) => {
 				),
 			},
 			position: 'right',
-			align: 'center',
 		},
 	};
 
-	const barOptions = {
+	const barOptions: ChartOptions = {
 		legend: {
+			align: 'center',
 			labels: {
 				boxWidth: 12,
 				fontColor: useColorModeValue(
@@ -135,8 +147,8 @@ const Grid = (props) => {
 				),
 			},
 			position: 'bottom',
-			align: 'center',
 		},
+		// @ts-ignore custom option
 		cornerRadius: 6,
 		scales: {
 			yAxes: [
@@ -174,7 +186,8 @@ const Grid = (props) => {
 
 	useEffect(() => setVersion(versions[0]), [versions]);
 
-	const userStories: UserStories['items'] = selectedProject.userStories.items;
+	const userStories: UserStoryListResponse['items'] =
+		selectedProject.userStories.items;
 
 	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
@@ -199,7 +212,7 @@ const Grid = (props) => {
 			100) /
 		30;
 
-	const selectedTimePeriodInDays = timePeriodsInDays[timePeriod];
+	const selectedTimePeriodInDays: number = timePeriodsInDays[timePeriod];
 
 	const confidenceDataPointsNDaysAgo = getConfidenceScore(
 		new Date().getTime() - 1000 * 60 * 60 * 24 * selectedTimePeriodInDays,
@@ -235,7 +248,9 @@ const Grid = (props) => {
 		userStories
 	);
 
+	// @ts-ignore
 	barData.datasets[0].data = Object.values(recordingsByDay);
+	// @ts-ignore
 	barData.datasets[1].data = Object.values(testsByDay);
 	const barDataLabels = getLastNDaysInFormat(
 		selectedTimePeriodInDays,
@@ -405,7 +420,7 @@ const Grid = (props) => {
 													key={key}
 													value={calcPctChange(
 														key,
-														confidenceScoreNDaysAgo,
+														confidenceDataPointsNDaysAgo,
 														dataPoint
 													)}
 													description={dataPoint.title}

@@ -239,6 +239,9 @@ export const PROJECT_USER_STORIES = gql`
 		significance
 		recording {
 			seleniumScriptJson
+			video {
+				downloadUrl
+			}
 		}
 	}
 

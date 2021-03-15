@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, ChangeEvent } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -15,7 +15,7 @@ import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
 import { UserContext } from '../../utils/user';
-import { UploadedFile } from '../../utils/file';
+import { UploadedFile } from '@frontend/meeshkan-types';
 import { updateProject } from '../../utils/project';
 import { createSlug } from '../../utils/createSlug';
 
@@ -78,15 +78,15 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 		setLoading(false);
 	};
 
-	const handleNameChange = (event) => {
+	const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
 	};
 
-	const handleProductionURLChange = (event) => {
+	const handleProductionURLChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setProductionURL(event.target.value);
 	};
 
-	const handleStagingURLChange = (event) => {
+	const handleStagingURLChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setStagingURL(event.target.value);
 	};
 

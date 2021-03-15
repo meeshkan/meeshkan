@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, ChangeEvent } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -14,11 +14,8 @@ import {
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
-import {
-	UserContext,
-	updateProfile,
-} from '../../utils/user';
-import { UploadedFile } from '../../utils/file';
+import { UserContext, updateProfile } from '../../utils/user';
+import { UploadedFile } from '@frontend/meeshkan-types';
 
 type ProfileFormInputs = {
 	name: string;
@@ -33,10 +30,20 @@ type UpdateProfileFormProps = {
 	formId?: string;
 };
 
-const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfileFormProps) => {
+const UpdateProfileForm = ({
+	setLoading,
+	setStep,
+	formId = 'form',
+}: UpdateProfileFormProps) => {
 	const [error, setError] = useState('');
 	const user = useContext(UserContext);
-	const { name: currentName, jobTitle, avatar, idToken, mutate: mutateUser } = user;
+	const {
+		name: currentName,
+		jobTitle,
+		avatar,
+		idToken,
+		mutate: mutateUser,
+	} = user;
 	const [name, setName] = useState<string>(currentName);
 	const [title, setTitle] = useState(jobTitle || jobTitles[0]);
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
@@ -62,23 +69,31 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 		}
 
 		const { firstName, lastName, avatar: newAvatar } = data.userUpdate;
-		await mutateUser({ ...user, firstName, lastName, avatar: newAvatar?.downloadUrl });
+		await mutateUser({
+			...user,
+			firstName,
+			lastName,
+			avatar: newAvatar?.downloadUrl,
+		});
 		setLoading(false);
 	};
 
-	const handleChange = (event) => {
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
-	}
+	};
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
-			<AvatarField
-				onUpload={setAvatarFile}
-				existingImageUrl={avatar}
-			/>
+			<AvatarField onUpload={setAvatarFile} existingImageUrl={avatar} />
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>What's your name?</FormLabel>
-				<Input name="name" value={name} onChange={handleChange} type="text" ref={register} />
+				<Input
+					name="name"
+					value={name}
+					onChange={handleChange}
+					type="text"
+					ref={register}
+				/>
 			</FormControl>
 			<FormControl id="title" isRequired isInvalid={!!error}>
 				<FormLabel>What's your job title?</FormLabel>
@@ -93,10 +108,7 @@ const UpdateProfileForm = ({ setLoading, setStep, formId = 'form' }: UpdateProfi
 						{title}
 					</MenuButton>
 					<MenuList>
-						<MenuOptionGroup
-							defaultValue={title}
-							type="radio"
-						>
+						<MenuOptionGroup defaultValue={title} type="radio">
 							{jobTitles.map((title) => (
 								<MenuItemOption
 									key={title}

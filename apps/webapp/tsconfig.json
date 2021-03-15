@@ -12,6 +12,11 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true
 	},
-	"include": ["**/*.ts", "**/*.tsx", "next-env.d.ts"],
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
+		"next-env.d.ts",
+		"react-table-config.d.ts"
+	],
 	"exclude": ["node_modules"]
 }
