@@ -60,8 +60,7 @@ export const getBugs = (testRuns: TestRunListResponse['items']) => {
 };
 
 export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
-	// This is an any type because setting the value doesn't understand finding a key on an object
-	const latestTestStates: any = {
+	const latestTestStates: Record<string, number> = {
 		failing: 0,
 		passing: 0,
 		'did not run': 0,
@@ -91,8 +90,8 @@ export const getRecordingsAndTestsByDay = (
 	days: number,
 	userStories: UserStoryListResponse['items']
 ) => {
-	const recordingsByDay = {};
-	const testsByDay = {};
+	const recordingsByDay: Record<string, number> = {};
+	const testsByDay: Record<string, number> = {};
 	lastNDays(days).forEach((day) => {
 		const recordingsOnThisDay = userStories.filter((story) => {
 			const { createdAt, isTestCase } = story;
@@ -105,9 +104,7 @@ export const getRecordingsAndTestsByDay = (
 				: false;
 		});
 		const dayValue = day.valueOf();
-		// @ts-ignore
 		recordingsByDay[dayValue] = recordingsOnThisDay.length;
-		// @ts-ignore
 		testsByDay[dayValue] = testsOnThisDay.length;
 	});
 	return {

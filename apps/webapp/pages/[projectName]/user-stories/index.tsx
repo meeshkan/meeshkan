@@ -61,6 +61,7 @@ import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
 import {
 	SeleniumGroup,
+	UserStory,
 	UserStoryFilter,
 	UserStoryListResponse,
 	UserStory_PermissionFilter,
@@ -132,7 +133,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		},
 	});
 
-	const columns: Column[] = useMemo(
+	const columns: Column<UserStory>[] = useMemo(
 		() => [
 			{
 				Header: 'Title',
@@ -141,7 +142,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Created at',
 				accessor: (originalRow, rowIndex) => {
-					// @ts-ignore
 					const humanDate = new Date(originalRow.createdAt);
 					return humanDate.toLocaleDateString('en-US', {
 						hour: 'numeric',
@@ -156,14 +156,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: '# repeated',
 				accessor: (originalRow, rowIndex) => {
-					// @ts-ignore
 					return originalRow.flowIDs.length;
 				},
 			},
 			{
 				Header: 'Origin',
 				accessor: (originalRow, rowIndex) => {
-					// @ts-ignore
 					const { created } = originalRow;
 					return (
 						<Code
@@ -197,7 +195,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Significance',
 				accessor: (originalRow, rowIndex) => {
-					// @ts-ignore
 					const { significance } = originalRow;
 					return (
 						<Code
@@ -227,7 +224,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: (originalRow, rowIndex) => {
 					let count = 0;
 					JSON.parse(
-						// @ts-ignore
 						originalRow.recording.seleniumScriptJson
 					).groups.groupItems.forEach(
 						(step: SeleniumGroup) => (count = count + step.commands.count)

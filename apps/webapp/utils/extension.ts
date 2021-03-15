@@ -26,7 +26,7 @@ export const getVersion = () => {
 		window.chrome.runtime.sendMessage(
 			extensionId,
 			{ message: 'version' },
-			(reply: any) => {
+			(reply: { version: number } | null) => {
 				if (reply?.version) {
 					resolve(reply.version);
 				} else {

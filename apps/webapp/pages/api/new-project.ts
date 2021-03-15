@@ -1,7 +1,7 @@
 import {
 	NextApiRequest,
 	NextApiResponse,
-} from 'next/dist/next-server/lib/utils';
+} from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) =>
 	fetch(
