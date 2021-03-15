@@ -159,6 +159,8 @@ const Table = ({
 				<Tbody {...getTableBodyProps()} fontSize="sm">
 					{page.map((row) => {
 						prepareRow(row);
+						const rowId: number =
+							typeof row.id === 'string' ? parseInt(row.id) : row.id;
 						return (
 							<Tr
 								{...row.getRowProps()}
@@ -175,7 +177,7 @@ const Table = ({
 								{/* <Td p={3} border={0}>
 									<Checkbox borderRadius="md" icon={<CheckmarkIcon />} />
 								</Td> */}
-								{data[row.id].recording.video ? (
+								{data[rowId].recording.video ? (
 									<Td p={3} border={0}>
 										<Skeleton isLoaded={!loading} borderRadius="md">
 											<Button
@@ -185,7 +187,7 @@ const Table = ({
 												aria-label="Play the video associated with this user story"
 												leftIcon={<PlayIcon strokeWidth="2px" />}
 												onClick={() => {
-													setVideo(data[row.id].recording.video.downloadUrl);
+													setVideo(data[rowId].recording.video.downloadUrl);
 													onOpen();
 												}}
 											>
@@ -215,6 +217,7 @@ const Table = ({
 										<Td
 											onClick={() =>
 												router.push(
+													// @ts-ignore
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												)
 											}
@@ -238,6 +241,7 @@ const Table = ({
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
 												window.open(
+													// @ts-ignore
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												);
 											}}

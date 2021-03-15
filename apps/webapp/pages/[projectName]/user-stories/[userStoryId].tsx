@@ -31,7 +31,11 @@ import {
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
-import { SeleniumGroupListResponse, UserStory } from '@frontend/meeshkan-types';
+import {
+	SeleniumGroup,
+	SeleniumGroupListResponse,
+	UserStory,
+} from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
@@ -105,7 +109,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const client = eightBaseClient(idToken);
 
 	// Initial data fetch
-	const fetcher = (query) =>
+	const fetcher = (query: string) =>
 		client.request(query, {
 			projectId: project?.id,
 			userStoryId: userStoryId,
@@ -200,7 +204,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	// @ts-ignore **a graphql alias prevents this from appearing correct
 	JSON.parse(
 		data.userStory.recording.seleniumScriptJson
-	)?.groups?.groupItems.forEach((item) => {
+	)?.groups?.groupItems.forEach((item: SeleniumGroup) => {
 		steps.push(item);
 	});
 

@@ -129,7 +129,13 @@ const Settings = () => {
 		return request;
 	};
 
-	const errorToast = ({ title, description }) => {
+	const errorToast = ({
+		title,
+		description,
+	}: {
+		title: string;
+		description: string;
+	}) => {
 		toast({
 			position: 'bottom-right',
 			title,

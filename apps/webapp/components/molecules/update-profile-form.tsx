@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, ChangeEvent } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -78,7 +78,7 @@ const UpdateProfileForm = ({
 		setLoading(false);
 	};
 
-	const handleChange = (event) => {
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setName(event.target.value);
 	};
 

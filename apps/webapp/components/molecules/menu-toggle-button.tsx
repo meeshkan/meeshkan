@@ -21,11 +21,10 @@ const MenuToggleButton = ({ toggle }: MenuToggleButtonProps) => (
 				}}
 			/>
 			<MenuIconPath
-				d="M 2 9.423 L 20 9.423"
 				transition={{ duration: 0.1 }}
 				variants={{
-					closed: { opacity: 1 },
-					open: { opacity: 0 },
+					closed: { d: 'M 2 9.423 L 20 9.423', opacity: 1 },
+					open: { d: 'M 2 9.423 L 20 9.423', opacity: 0 },
 				}}
 			/>
 			<MenuIconPath

@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion';
+import {
+	AnimationProps,
+	SVGPathProperties,
+} from 'framer-motion/types/motion/types';
 
-const MenuIconPath = (props) => (
+const MenuIconPath = (props: SVGPathProperties & AnimationProps) => (
 	<motion.path
 		fill="transparent"
 		strokeWidth="2"

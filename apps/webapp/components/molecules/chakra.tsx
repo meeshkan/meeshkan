@@ -5,6 +5,7 @@ import {
 	localStorageManager,
 } from '@chakra-ui/react';
 import customTheme from '@frontend/chakra-theme';
+import { NextApiRequest } from 'next';
 
 type ChakraProps = {
 	cookies: string | undefined;
@@ -26,10 +27,10 @@ const Chakra = ({ cookies, children }: ChakraProps) => {
 
 export default Chakra;
 
-export const getServerSideProps = ({ req: request }) => {
+export const getServerSideProps = (req: NextApiRequest) => {
 	return {
 		props: {
-			cookies: request.headers.cookie ?? '',
+			cookies: req?.headers?.cookie ?? '',
 		},
 	};
 };

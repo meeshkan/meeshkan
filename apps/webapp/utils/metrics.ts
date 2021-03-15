@@ -60,7 +60,7 @@ export const getBugs = (testRuns: TestRunListResponse['items']) => {
 };
 
 export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
-	const latestTestStates = {
+	const latestTestStates: Record<string, number> = {
 		failing: 0,
 		passing: 0,
 		'did not run': 0,
@@ -74,7 +74,7 @@ export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
 			)
 			.slice(-1);
 
-		const status = latestTestOutcome?.status;
+		const status: string = latestTestOutcome?.status;
 		if (status) {
 			latestTestStates[status]++;
 		}
@@ -83,15 +83,15 @@ export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
 	return latestTestStates;
 };
 
-const lastNDays = (n) =>
+const lastNDays = (n: number) =>
 	[...Array(n).keys()].map((i) => moment().subtract(i, 'days')).reverse();
 
 export const getRecordingsAndTestsByDay = (
 	days: number,
 	userStories: UserStoryListResponse['items']
 ) => {
-	const recordingsByDay = {};
-	const testsByDay = {};
+	const recordingsByDay: Record<string, number> = {};
+	const testsByDay: Record<string, number> = {};
 	lastNDays(days).forEach((day) => {
 		const recordingsOnThisDay = userStories.filter((story) => {
 			const { createdAt, isTestCase } = story;

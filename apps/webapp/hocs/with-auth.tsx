@@ -6,12 +6,13 @@ import AuthScreen from '../components/organisms/auth-screen';
 import { UserContext } from '../utils/user';
 import { Project } from '@frontend/meeshkan-types';
 import { useFetchUser } from '../hooks/use-fetch-user';
+import { NextComponentType, NextPageContext } from 'next';
 
 export interface IWithAuthProps {
 	cookies: string | undefined;
 }
 
-const withAuth = (PageComponent) => {
+const withAuth = (PageComponent: any) => {
 	return (props: IWithAuthProps): JSX.Element => {
 		const router = useRouter();
 		const { user, loading, mutate } = useFetchUser();

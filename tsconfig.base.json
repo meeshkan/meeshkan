@@ -1,5 +1,5 @@
 {
-	"compileOnSave": false,
+	"compileOnSave": true,
 	"compilerOptions": {
 		"rootDir": ".",
 		"sourceMap": true,
@@ -7,6 +7,8 @@
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
+		"removeComments": true,
+		"noImplicitAny": true,
 		"importHelpers": true,
 		"target": "es2015",
 		"module": "esnext",

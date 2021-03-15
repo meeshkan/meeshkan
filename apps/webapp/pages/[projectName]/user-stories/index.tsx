@@ -59,7 +59,13 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
-import { UserStoryListResponse } from '@frontend/meeshkan-types';
+import {
+	SeleniumGroup,
+	UserStory,
+	UserStoryFilter,
+	UserStoryListResponse,
+	UserStory_PermissionFilter,
+} from '@frontend/meeshkan-types';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
@@ -127,7 +133,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		},
 	});
 
-	const columns: Column[] = useMemo(
+	const columns: Column<UserStory>[] = useMemo(
 		() => [
 			{
 				Header: 'Title',
@@ -156,6 +162,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Origin',
 				accessor: (originalRow, rowIndex) => {
+					const { created } = originalRow;
 					return (
 						<Code
 							display="flex"
@@ -168,19 +175,19 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							px={2}
 							py={1}
 							colorScheme={
-								originalRow.created[0] === 'user'
+								created[0] === 'user'
 									? 'cyan'
-									: originalRow.created[0] === 'manual'
+									: created[0] === 'manual'
 									? 'blue'
 									: 'gray'
 							}
 						>
-							{originalRow.created[0] === 'user' ? (
+							{created[0] === 'user' ? (
 								<VideoIcon mr={3} />
-							) : originalRow.created[0] === 'manual' ? (
+							) : created[0] === 'manual' ? (
 								<CrosshairIcon mr={3} />
 							) : null}
-							{originalRow.created}
+							{created}
 						</Code>
 					);
 				},
@@ -219,7 +226,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					JSON.parse(
 						originalRow.recording.seleniumScriptJson
 					).groups.groupItems.forEach(
-						(step) => (count = count + step.commands.count)
+						(step: SeleniumGroup) => (count = count + step.commands.count)
 					);
 					return count;
 				},
@@ -233,7 +240,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
-	let significanceFilters = [];
+	let significanceFilters: UserStoryFilter['OR'] = [];
 	if (low) {
 		significanceFilters.push({
 			significance: {
