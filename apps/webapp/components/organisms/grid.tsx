@@ -420,8 +420,7 @@ const Grid = (props: StackProps) => {
 													key={key}
 													value={calcPctChange(
 														key,
-														// @ts-ignore TODO figure out why this variable has two types
-														confidenceScoreNDaysAgo,
+														confidenceDataPointsNDaysAgo,
 														dataPoint
 													)}
 													description={dataPoint.title}
