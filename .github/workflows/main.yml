@@ -10,12 +10,15 @@ jobs:
   wait-for-vercel-deployment:
     runs-on: ubuntu-18.04
     steps:
+      - name: Get url
+        id: variables
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
-          deployment-url: webapp-${{ git_hash=$(git rev-parse --short "$GITHUB_SHA") }}}.vercel.app
+          deployment-url: webapp-${{ steps.vars.outputs.sha_short }}.vercel.app
           timeout: 10 # Wait for 10 seconds before failing
 
       - name: Display deployment status
