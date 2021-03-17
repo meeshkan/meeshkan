@@ -452,18 +452,6 @@ const Grid = (props: StackProps) => {
 											</Text>
 										</Flex>
 									</Stack>
-									<Button
-										mt={4}
-										size="sm"
-										colorScheme="gray"
-										variant="subtle"
-										w="full"
-										onClick={() =>
-											router.push(`/${slugifiedProjectName}/user-stories`)
-										}
-									>
-										Review recordings <ArrowForwardIcon ml={2} />
-									</Button>
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
