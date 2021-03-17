@@ -1,4 +1,5 @@
 module.exports = {
+	preset: 'jest-puppeteer',
 	projects: [
 		'<rootDir>/apps/webapp',
 		'<rootDir>/apps/website',
