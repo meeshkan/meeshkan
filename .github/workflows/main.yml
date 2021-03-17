@@ -25,8 +25,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
-          - name: Clean install package dependencies
-            run: yarn
+      - name: Clean install package dependencies
+        run: yarn
       #     - name: Run linter
       #       run: yarn lint
       - name: Run tests
