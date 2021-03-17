@@ -17,7 +17,7 @@ jobs:
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
-          deployment-url: `webapp-${ SHORT_SHA }-meeshkanml.vercel.app`
+          deployment-url: "webapp-${{ SHORT_SHA }}-meeshkanml.vercel.app"
           timeout: 20 # Wait for 10 seconds before failing
       - name: Display deployment status
         run: 'echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}'
