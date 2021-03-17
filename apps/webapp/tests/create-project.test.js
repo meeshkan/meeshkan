@@ -88,7 +88,7 @@ describe('Save an authentication token', () => {
 	it('a new token should exist', async () => {
 		await expect(
 			page
-				.$x('/html/body/div[1]/div/div/div/div[6]/form/button')
+				.$x('/html/body/div[1]/div/div/div/div')
 				.resolves.toMatch('a0:session')
 		);
 	});
