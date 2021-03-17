@@ -10,14 +10,15 @@ jobs:
   wait-for-vercel-deployment:
     runs-on: ubuntu-18.04
     steps:
-      - name: Add SHORT_SHA env property with commit short sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      - name: Get deploy url
+        id: variables
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
-          deployment-url: "webapp-${{ SHORT_SHA }}-meeshkanml.vercel.app"
+          deployment-url: 'webapp-${{ steps.variables.outputs.sha_short }}-meeshkanml.vercel.app'
           timeout: 20 # Wait for 10 seconds before failing
       - name: Display deployment status
         run: 'echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}'
