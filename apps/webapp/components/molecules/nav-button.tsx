@@ -58,7 +58,6 @@ const NavButton = (props: NavButtonProps) => {
 						backgroundColor: useColorModeValue('gray.100', 'gray.800'),
 						color: useColorModeValue('gray.900', 'white'),
 					}}
-					// @ts-ignore
 					_hover={{
 						backgroundColor: useColorModeValue(
 							transparentize('gray.100', 0.75),
@@ -93,7 +92,6 @@ const NavButton = (props: NavButtonProps) => {
 					backgroundColor: useColorModeValue('gray.100', 'gray.800'),
 					color: useColorModeValue('gray.900', 'white'),
 				}}
-				// @ts-ignore
 				_hover={{
 					backgroundColor: useColorModeValue(
 						transparentize('gray.100', 0.75),

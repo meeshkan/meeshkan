@@ -21,7 +21,7 @@ const SideBar = (props: StackProps) => {
 		if (isOpen) {
 			toggleOpen();
 		}
-	}, [pathname]);
+	}, [pathname, isOpen, toggleOpen]);
 
 	return (
 		<MotionStack

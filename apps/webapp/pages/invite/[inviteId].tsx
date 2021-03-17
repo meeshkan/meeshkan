@@ -27,7 +27,7 @@ const Invite = (props: InviteProps) => {
 				(project) => project.id === joinedProject?.id
 			);
 
-			if (projectIndex != -1) {
+			if (projectIndex !== -1) {
 				projects[projectIndex] = joinedProject;
 			} else {
 				projects.push(joinedProject);

@@ -8,10 +8,9 @@ import {
 	LightMode,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import _ from 'lodash';
 import SegmentedControl from './segmented-control';
 import { UserContext } from '../../utils/user';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { eightBaseClient } from '../../utils/graphql';
 import { ADD_AUTH_TOKEN } from '../../graphql/project';
 import { AuthenticationToken } from '@frontend/meeshkan-types';
 

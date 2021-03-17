@@ -38,7 +38,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { colorMode, toggleColorMode } = useColorMode();
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
-		project?.name,
+		project,
 	]);
 
 	const handleLogoutClick = () => {

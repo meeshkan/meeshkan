@@ -28,7 +28,7 @@ export const useClipboard = ({
 				status: status,
 			});
 		}
-	}, [hasCopied, toast, toastMessage]);
+	}, [hasCopied, toast, toastMessage, status, toastTitle]);
 
 	return { hasCopied, onCopy };
 };

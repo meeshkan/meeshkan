@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import {
 	Box,
 	Stack,
@@ -13,7 +13,6 @@ import {
 	useColorModeValue,
 	Flex,
 	Button,
-	Badge,
 	BoxProps,
 	useDisclosure,
 	Modal,
@@ -48,7 +47,6 @@ import {
 	CrosshairIcon,
 	SortIcon,
 	FilterIcon,
-	PlayIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
@@ -64,13 +62,11 @@ import {
 	UserStory,
 	UserStoryFilter,
 	UserStoryListResponse,
-	UserStory_PermissionFilter,
 } from '@frontend/meeshkan-types';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
-import VideoPlayer from 'apps/webapp/components/atoms/video-player';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -115,8 +111,6 @@ interface UserStoriesAliased {
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
-
-	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [toggleIndex, setToggleIndex] = useState(0);
@@ -240,7 +234,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
-	let significanceFilters: UserStoryFilter['OR'] = [];
+	const significanceFilters: UserStoryFilter['OR'] = [];
 	if (low) {
 		significanceFilters.push({
 			significance: {

@@ -44,7 +44,6 @@ import {
 	UPDATE_STORY_TITLE,
 	UPDATE_STORY_DESCRIPTION,
 	UPDATE_STORY_SIGNIFICANCE,
-	WATCH_RECORDING_CHANGES,
 } from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
@@ -97,7 +96,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 				variant: 'clean',
 			});
 		}
-	}, [hasCopied]);
+	}, [hasCopied, toast]);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
@@ -200,8 +199,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return <Text color="red.500">{error}</Text>;
 	}
 
-	let steps: SeleniumGroupListResponse['items'] = [];
-	// @ts-ignore **a graphql alias prevents this from appearing correct
+	const steps: SeleniumGroupListResponse['items'] = [];
 	JSON.parse(
 		data.userStory.recording.seleniumScriptJson
 	)?.groups?.groupItems.forEach((item: SeleniumGroup) => {

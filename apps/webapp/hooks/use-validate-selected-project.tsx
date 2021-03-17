@@ -6,7 +6,7 @@ import { UserContext } from '../utils/user';
 export const useValidateSelectedProject = () => {
 	const [loading, setLoading] = useState(true);
 	const [found, setFound] = useState(true);
-	const { projects, project, setProject } = useContext(UserContext);
+	const { projects, setProject } = useContext(UserContext);
 	const router = useRouter();
 	const { projectName } = router.query;
 
