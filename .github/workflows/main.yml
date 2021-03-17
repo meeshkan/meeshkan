@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: '14'
       - name: Declare test url
-        run: echo "TEST_URL=webapp-git-dev-1729-set-up-puppeteer-test-meeshkanml.vercel.app" >> $GITHUB_ENV
+        run: echo "TEST_URL=https://webapp-git-dev-1729-set-up-puppeteer-test-meeshkanml.vercel.app" >> $GITHUB_ENV
       - name: Clean install package dependencies
         run: yarn
       - name: Run tests
