@@ -11,9 +11,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: Get deploy url
-        run: echo webapp-${GITHUB_SHA::8}-meeshkanml.vercel.app
-      - name: Get deploy url 2
-        run: $(echo ${GITHUB_SHA} | cut -c1-8)
+        run: echo ${{ GITHUB_REF#refs/heads/ }}
+        run: echo webapp-git-${GITHUB_REF#refs/heads/}-meeshkanml.vercel.app
 #       - uses: UnlyEd/github-action-await-vercel@v1.1.0
 #         id: await-vercel
 #         env:
