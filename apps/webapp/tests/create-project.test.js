@@ -11,7 +11,8 @@ describe('Save an authentication token', () => {
 		await new Promise((r) => setTimeout(r, 5000));
 
 		await new Promise((r) => setTimeout(r, 5000));
-		page.goto(`${process.env.TEST_URL}/meeshkan-webapp`);
+		page.goto(`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp`);
+		console.log(process.env.TEST_URL);
 		await new Promise((r) => setTimeout(r, 5000));
 		await page.setViewport({ width: 1813, height: 1057, deviceScaleFactor: 1 });
 		await new Promise((r) => setTimeout(r, 5000));
