@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: Get deploy url
-        run: echo ${GITHUB_REF##*/}
+        run: echo webapp-git-${GITHUB_REF##*/}-meeshkanml.vercel.app
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
-          deployment-url: 'webapp-git-${GITHUB_REF##*/}-meeshkanml.vercel.app'
+          deployment-url: webapp-git-${GITHUB_REF##*/}-meeshkanml.vercel.app
           timeout: 120 # Wait for 2 minutes before failing
       - name: Display deployment status
         run: 'echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}'
