@@ -2,7 +2,7 @@
 
 name: Node CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on: [push]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -10,30 +10,24 @@ jobs:
   wait-for-vercel-deployment:
     runs-on: ubuntu-18.04
     steps:
-      - name: Get url
-        id: variables
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
-          deployment-url: webapp-${{ steps.vars.outputs.sha_short }}.vercel.app
-          timeout: 10 # Wait for 10 seconds before failing
-
+          deployment-url: `webapp-${ SHORT_SHA }-meeshkanml.vercel.app`
+          timeout: 20 # Wait for 10 seconds before failing
       - name: Display deployment status
-        run: "echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}"
-  
-  jest-puppeteer-test:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '14'
-#     - name: Clean install package dependencies
-#       run: yarn
-#     - name: Run linter
-#       run: yarn lint
-    - name: Run tests
-      run: yarn test
+        run: 'echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}'
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      #     - name: Clean install package dependencies
+      #       run: yarn
+      #     - name: Run linter
+      #       run: yarn lint
+      - name: Run tests
+        run: yarn test
