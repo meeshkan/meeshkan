@@ -11,15 +11,14 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: Get deploy url
-        id: variables
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: echo ${{ GITHUB_REF#refs/heads/ }}
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
-          deployment-url: 'webapp-${{ steps.variables.outputs.sha_short }}-meeshkanml.vercel.app'
-          timeout: 20 # Wait for 10 seconds before failing
+          deployment-url: 'webapp-git-${{ GITHUB_REF#refs/heads/ }}-meeshkanml.vercel.app'
+          timeout: 120 # Wait for 2 minutes before failing
       - name: Display deployment status
         run: 'echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}'
       - uses: actions/checkout@v2
@@ -31,4 +30,4 @@ jobs:
       #     - name: Run linter
       #       run: yarn lint
       - name: Run tests
-        run: yarn test
+        run: yarn test webapp
