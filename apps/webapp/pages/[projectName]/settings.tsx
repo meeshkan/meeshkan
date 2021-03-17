@@ -8,7 +8,6 @@ import {
 	Text,
 	Switch,
 	IconButton,
-	useToast,
 	Avatar,
 	Flex,
 	useColorModeValue,
@@ -44,10 +43,11 @@ import {
 	latestVersion as latestExtensionVersion,
 	startRecording,
 } from '../../utils/extension';
+import { useToaster } from 'apps/webapp/components/atoms/toast';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
-	const toast = useToast();
+	const toaster = useToaster();
 	const user = useContext(UserContext);
 	const {
 		productNotifications,
@@ -129,26 +129,10 @@ const Settings = () => {
 		return request;
 	};
 
-	const errorToast = ({
-		title,
-		description,
-	}: {
-		title: string;
-		description: string;
-	}) => {
-		toast({
-			position: 'bottom-right',
-			title,
-			description,
-			isClosable: true,
-			status: 'error',
-			variant: 'clean',
-		});
-	};
-
 	const handleNewUserStory = async () => {
 		if (!isChrome()) {
-			errorToast({
+			toaster({
+				status: 'error',
 				title: 'Could not trigger the Meeshkan extension',
 				description:
 					'You need to be using a Chromium browser to create manual user stories, for the time being.',
@@ -159,7 +143,8 @@ const Settings = () => {
 		try {
 			const version = await getExtensionVersion();
 			if (version !== latestExtensionVersion) {
-				errorToast({
+				toaster({
+					status: 'error',
 					title: 'Meeshkan extension is outdated',
 					description:
 						'Please update to the latest version of the Meeshkan recorder extension.',
@@ -168,7 +153,8 @@ const Settings = () => {
 			}
 
 			if (!project?.configuration?.productionURL) {
-				errorToast({
+				toaster({
+					status: 'error',
 					title: 'No production URL specified',
 					description:
 						"To trigger the Meeshkan extension, you need to specify a production URL in your project's settings page.",
@@ -182,7 +168,8 @@ const Settings = () => {
 				isAuthFlow: true,
 			});
 		} catch (error) {
-			errorToast({
+			toaster({
+				status: 'error',
 				title: 'Extension is missing',
 				description:
 					'To begin creating manual user stories, please download the Meeshkan recorder extension via the Chrome Web Store.',
@@ -333,13 +320,10 @@ const Settings = () => {
 									colorScheme="red"
 									onClick={() => {
 										removeTeamMember(member.email);
-										toast({
-											position: 'bottom-right',
+										toaster({
 											title: `${member.email} has been successfully removed.`,
 											description: `If you didn't mean to remove them from ${project.name}, resend the invite link.`,
-											isClosable: true,
 											status: 'success',
-											variant: 'clean',
 										});
 									}}
 								/>
@@ -355,13 +339,10 @@ const Settings = () => {
 							mt={4}
 							onClick={() => {
 								inviteSupport();
-								toast({
-									position: 'bottom-right',
+								toaster({
 									title: 'Successfully authorized Meeshkan support.',
 									description: `contact@meeshkan.com has been successfully added to ${project.name}.`,
-									isClosable: true,
 									status: 'info',
-									variant: 'clean',
 								});
 							}}
 						>
@@ -488,13 +469,10 @@ const Settings = () => {
 								colorScheme="red"
 								onClick={() => {
 									deleteToken(token.id);
-									toast({
-										position: 'bottom-right',
+									toaster({
 										title: `Successfully removed token ${token.key}.`,
 										description: `The token will no longer be used to authenticate for test runs on ${project.name}.`,
-										isClosable: true,
 										status: 'success',
-										variant: 'clean',
 									});
 								}}
 							/>
