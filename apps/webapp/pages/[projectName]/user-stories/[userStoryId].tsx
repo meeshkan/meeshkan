@@ -12,7 +12,6 @@ import {
 	useColorModeValue,
 	Button,
 	Select,
-	useToast,
 	Link as ChakraLink,
 	Stack,
 	Grid,
@@ -69,6 +68,7 @@ import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../../../components/atoms/video-player';
 import { eightBaseToPptr } from '@frontend/downloadable-script';
+import { useToaster } from '../../../components/atoms/toast';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -76,25 +76,22 @@ type UserStoryProps = {
 
 const UserStoryPage = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
+	const toaster = useToaster();
 	const {
 		found: foundProject,
 		loading: validatingProject,
 	} = useValidateSelectedProject();
 	const router = useRouter();
-	const toast = useToast();
 	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		if (hasCopied) {
-			toast({
-				position: 'bottom-right',
+			toaster({
+				status: 'success',
 				title: 'User story link copied!',
 				description:
 					'The URL of this user story has been copied to your clipboard.',
-				isClosable: true,
-				status: 'success',
-				variant: 'clean',
 			});
 		}
 	}, [hasCopied]);
@@ -222,13 +219,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 			});
 			saveAs(blob, `${createSlug(data?.userStory?.title)}.js`);
 		} catch (err) {
-			toast({
-				position: 'bottom-right',
+			toaster({
+				status: 'error',
 				title: 'Your test case could not be generated.',
 				description: 'Please try again in a few seconds.',
-				isClosable: true,
-				status: 'error',
-				variant: 'clean',
 			});
 		}
 	};
@@ -383,14 +377,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 									colorScheme="red"
 									onClick={() => {
 										deleteRejectedRecording();
-										toast({
-											position: 'bottom-right',
+										toaster({
+											status: 'success',
 											title: 'The user story has been deleted.',
 											description:
 												'Rejecting a recording will delete the series of steps as a user story.',
-											isClosable: true,
-											status: 'success',
-											variant: 'clean',
 										});
 										router.push(`/${slugifiedProjectName}/user-stories`);
 									}}
@@ -492,14 +483,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 									leftIcon={<CheckmarkIcon />}
 									onClick={() => {
 										updateExpectedTest(date);
-										toast({
-											position: 'bottom-right',
+										toaster({
+											status: 'success',
 											title: 'A test case was created!',
 											description:
 												'The User story has been marked as a test case. It can now be found in the test cases tab.',
-											isClosable: true,
-											status: 'success',
-											variant: 'clean',
 										});
 										router.push(`/${slugifiedProjectName}/user-stories`);
 									}}
@@ -513,14 +501,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 									leftIcon={<XmarkIcon />}
 									onClick={() => {
 										deleteRejectedRecording();
-										toast({
-											position: 'bottom-right',
+										toaster({
+											status: 'success',
 											title: 'A recording has been rejected.',
 											description:
 												'Rejecting a recording will delete the series of steps as a user story.',
-											isClosable: true,
-											status: 'success',
-											variant: 'clean',
 										});
 										router.push(`/${slugifiedProjectName}/user-stories`);
 									}}

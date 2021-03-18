@@ -7,13 +7,13 @@ import {
 	Button,
 	Flex,
 	useColorModeValue,
-	useToast,
 } from '@chakra-ui/react';
 import { CopyIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
 import { useClipboard } from '../../hooks/use-clipboard';
 import { eightBaseClient } from '../../utils/graphql';
 import { REFRESH_INVITE_LINK } from '../../graphql/project';
+import { useToaster } from '../atoms/toast';
 
 const InviteLinkInput = () => {
 	const { project, idToken } = useContext(UserContext);
@@ -28,7 +28,7 @@ const InviteLinkInput = () => {
 		status: 'info',
 	});
 
-	const toast = useToast();
+	const toaster = useToaster();
 	const client = eightBaseClient(idToken);
 
 	const refreshInviteLink = () => {
@@ -38,14 +38,11 @@ const InviteLinkInput = () => {
 				projectID: project.id,
 			})
 			.then((res) => {
-				toast({
-					position: 'bottom-right',
+				toaster({
 					title: 'Successfully refreshed invite link.',
 					description:
 						"Copy the invite link and send to anyone you'd like to add to your project.",
-					isClosable: true,
 					status: 'success',
-					variant: 'clean',
 				});
 				setInviteLink(res.projectUpdate.configuration.inviteLink);
 				setLoading(false);
