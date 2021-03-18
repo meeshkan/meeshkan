@@ -10,9 +10,12 @@ jobs:
   wait-for-vercel-deployment:
     runs-on: ubuntu-18.04
     steps:
+      - name: Get branch name
+        id: branch
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       - name: Get deploy url
         id: url
-        run: echo "##[set-output name=BRANCH_URL;]$(echo webapp-git-${GITHUB_REF#refs/heads/}-meeshkanml.vercel.app)"
+        run: echo webapp-git-${{ steps.extract_branch.outputs.branch }}-meeshkanml.vercel.app
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
