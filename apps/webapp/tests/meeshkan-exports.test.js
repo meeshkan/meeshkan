@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 
 describe('Save an authentication token', () => {
 	async () => {
@@ -8,8 +8,9 @@ describe('Save an authentication token', () => {
 		let ddDestinationBB;
 
 		beforeAll(async () => {
-			// const browser = await puppeteer.launch({ headless: true });
-			// const page = await browser.newPage();
+			const browser = await puppeteer.launch({ headless: true });
+			const page = await browser.newPage();
+			await page.setCookie({ name: 'a0:session', value: '***' });
 			await page.goto(
 				`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp`
 			);
