@@ -32,9 +32,23 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
+
       - name: Declare test url
         run: echo "TEST_URL=https://webapp-git-dev-1729-set-up-puppeteer-test-meeshkanml.vercel.app" >> $GITHUB_ENV
-      - name: Clean install package dependencies
-        run: yarn
+
+      # Yarn cache instead of installing every time
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$('../../yarn.lock')"
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # - name: Clean install package dependencies
+      #   run: yarn
       - name: Run tests
         run: yarn test webapp

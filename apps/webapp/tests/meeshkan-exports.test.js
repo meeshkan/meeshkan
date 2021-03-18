@@ -1,18 +1,19 @@
 import puppeteer from 'puppeteer';
 
 describe('Save an authentication token', () => {
-	beforeAll(async () => {
-		const browser = await puppeteer.launch({ headless: true });
-		const page = await browser.newPage();
+	async () => {
 		let ddSource;
 		let ddDestination;
 		let ddSourceBB;
 		let ddDestinationBB;
-		await new Promise((r) => setTimeout(r, 5000));
+		beforeAll(async () => {
+			const browser = await puppeteer.launch({ headless: true });
+			const page = await browser.newPage();
+			await page.goto(
+				`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp`
+			);
+		});
 
-		await new Promise((r) => setTimeout(r, 5000));
-		page.goto(`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp`);
-		console.log(process.env.TEST_URL);
 		await new Promise((r) => setTimeout(r, 5000));
 		await page.setViewport({ width: 1813, height: 1057, deviceScaleFactor: 1 });
 		await new Promise((r) => setTimeout(r, 5000));
@@ -63,8 +64,6 @@ describe('Save an authentication token', () => {
 		)[0].type('hello-world', { delay: 100 });
 		await new Promise((r) => setTimeout(r, 5000));
 
-		await expect(page).toClick('button', { text: 'Save token' });
-
 		ddSource = (
 			await page.$x('/html/body/div[1]/div/div/div/div[6]/form/button')
 		)[0];
@@ -86,10 +85,15 @@ describe('Save an authentication token', () => {
 		await new Promise((r) => setTimeout(r, 5000));
 
 		await browser.close();
-	});
+	};
 
 	// TODO: add actual assertion
 	it('a new token should exist', async () => {
-		await expect(1).toEqual(1);
+		await expect(1 + 1).toEqual(2);
+		// await expect(page).toFillForm('form[name="createAnAuthenticationToken"]', {
+		// 	key: 'a0:session',
+		// 	value: 'hello-world',
+		// });
+		await expect(page).toClick('button', { text: 'Save token' });
 	});
 });

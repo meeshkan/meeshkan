@@ -55,6 +55,7 @@ const AuthenticationTokenForm = ({
 	return (
 		<Flex
 			as="form"
+			name="createAnAuthenticationToken"
 			onSubmit={handleSubmit(onSubmit)}
 			id="authenticationCreateForm"
 			align={['flex-start', 'flex-start', 'flex-end']}
