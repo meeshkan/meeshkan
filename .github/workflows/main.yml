@@ -15,7 +15,7 @@ jobs:
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       - name: Get deploy url
         id: url
-        run: echo webapp-git-${{ steps.extract_branch.outputs.branch }}-meeshkanml.vercel.app
+        run: echo webapp-git-${{ steps.branch.outputs.branch }}-meeshkanml.vercel.app
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
