@@ -12,15 +12,14 @@ jobs:
     steps:
       - name: Get deploy url
         id: url
-        run: echo "URL=webapp-git-${{GITHUB_REF#refs/heads/}}-meeshkanml.vercel.app" >> $GITHUB_ENV
-        # run: echo webapp-git-${GITHUB_REF#refs/heads/}-meeshkanml.vercel.app
+        run: echo "##[set-output name=BRANCH_URL;]$(echo webapp-git-${GITHUB_REF#refs/heads/}-meeshkanml.vercel.app)"
       - uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         with:
           # deployment-url: webapp-git-dev-1729-set-up-puppeteer-test-meeshkanml.vercel.app
-          deployment-url: ${ process.env.URL }
+          deployment-url: $BRANCH_URL
           timeout: 180 # Wait for 3 minutes before failing
       - name: Display deployment status
         run: 'echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}'
