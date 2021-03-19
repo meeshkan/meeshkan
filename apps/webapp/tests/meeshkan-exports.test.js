@@ -12,7 +12,7 @@ describe('Save an authentication token', () => {
 			const page = await browser.newPage();
 			await page.setCookie({ name: 'a0:session', value: '***' });
 			await page.goto(
-				`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp`
+				`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp/settings`
 			);
 		});
 
@@ -89,12 +89,19 @@ describe('Save an authentication token', () => {
 		await browser.close();
 	};
 
-	it('a new token should exist', async () => {
+	it('assertions work', async () => {
 		await expect(1 + 1).toEqual(2);
-		// await expect(page).toFillForm('form[name="createAnAuthenticationToken"]', {
-		// 	key: 'a0:session',
-		// 	value: 'hello-world',
-		// });
-		// await expect(page).toClick('button', { text: 'Save token' });
+	});
+	it('is on the right user story page', async () => {
+		await expect(page).toMatch('Save an authentication token');
+	});
+	it('fills out the form', async () => {
+		await expect(page).toFillForm('form[name="createAnAuthenticationToken"]', {
+			key: 'a0:session',
+			value: 'hello-world',
+		});
+	});
+	it('clicks submit on the form', async () => {
+		await expect(page).toClick('button', { text: 'Save token' });
 	});
 });
