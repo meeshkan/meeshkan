@@ -7,16 +7,15 @@ describe('Save an authentication token', () => {
 		let ddSourceBB;
 		let ddDestinationBB;
 
+		const browser = await puppeteer.launch({ headless: true });
+		const page = await browser.newPage();
+
 		beforeAll(async () => {
-			const browser = await puppeteer.launch({ headless: true });
-			const page = await browser.newPage();
 			await page.setCookie({
 				name: 'a0:session',
 				value: process.env.COOKIE,
 			});
-			await page.goto(
-				`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp/settings`
-			);
+			await page.goto(`${process.env.TEST_URL}/meeshkan-webapp`);
 		});
 
 		await new Promise((r) => setTimeout(r, 5000));
