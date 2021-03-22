@@ -72,6 +72,7 @@ describe('Save an authentication token', () => {
 		await page.click('button', { text: 'Save token' });
 
 		await expect(page).toClick('button', { text: 'Save token' });
+		await new Promise((r) => setTimeout(r, 3000));
 	});
 
 	it('deletes the token', async () => {
