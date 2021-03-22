@@ -12,7 +12,7 @@ describe('Save an authentication token', () => {
 					: process.env.TEST_URL,
 		});
 		await page.goto(
-			`${process.env.TEST_URL == 'localhost:3000' ? 'http://' : 'https://'}${
+			`${process.env.TEST_URL && process.env.TEST_URL.startsWith('localhost') ? 'http://' : 'https://'}${
 				process.env.TEST_URL
 			}/meeshkan-webapp`
 		);
