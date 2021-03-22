@@ -56,7 +56,7 @@ jobs:
 
       - name: Install packages
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn
+        run: yarn install
 
       - name: Run tests
         run: yarn test webapp
