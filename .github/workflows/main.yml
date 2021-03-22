@@ -62,4 +62,4 @@ jobs:
         run: yarn install --prefer-offline --frozen-lockfile
 
       - name: Run tests
-        run: yarn test webapp
+        run: yarn test webapp --skip-nx-cache
