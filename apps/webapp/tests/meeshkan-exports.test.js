@@ -5,7 +5,10 @@ describe('Save an authentication token', () => {
 		await page.setCookie({
 			name: 'a0:session',
 			value: process.env.COOKIE,
-			domain: 'localhost',
+			domain:
+				process.env.TEST_URL === 'http://localhost:3000'
+					? 'localhost'
+					: process.env.TEST_URL,
 		});
 		await page.goto(`${process.env.TEST_URL}/meeshkan-webapp`);
 		await page.setViewport({
