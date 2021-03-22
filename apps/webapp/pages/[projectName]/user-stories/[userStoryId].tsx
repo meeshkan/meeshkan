@@ -93,7 +93,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					'The URL of this user story has been copied to your clipboard.',
 			});
 		}
-	}, [hasCopied, toast]);
+	}, [hasCopied, toaster]);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,

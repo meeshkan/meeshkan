@@ -43,7 +43,7 @@ import {
 	latestVersion as latestExtensionVersion,
 	startRecording,
 } from '../../utils/extension';
-import { useToaster } from 'apps/webapp/components/atoms/toast';
+import { useToaster } from '../../components/atoms/toast';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
