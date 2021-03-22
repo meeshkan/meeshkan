@@ -54,6 +54,9 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
 
       # `--prefer-offline` gives cache priority
+      - name: Install nx globally
+        run: yarn global add nx
+
       - name: Install dependencies
         if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --prefer-offline --frozen-lockfile
