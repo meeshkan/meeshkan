@@ -6,12 +6,12 @@ describe('Save an authentication token', () => {
 			name: 'a0:session',
 			value: process.env.COOKIE,
 			domain:
-				process.env.TEST_URL === 'http://localhost:3000'
+				process.env.TEST_URL === 'localhost:3000'
 					? 'localhost'
 					: process.env.TEST_URL,
 		});
 		await page.goto(
-			`${process.env.TEST_URL == 'http://localhost:3000' ? null : 'https://'}${
+			`${process.env.TEST_URL == 'localhost:3000' ? 'http://' : 'https://'}${
 				process.env.TEST_URL
 			}/meeshkan-webapp`
 		);
@@ -79,6 +79,7 @@ describe('Save an authentication token', () => {
 		);
 		await button1[0].click();
 
+		await new Promise((r) => setTimeout(r, 3000));
 		await expect(page).not.toMatch('hello-world');
 	});
 });
