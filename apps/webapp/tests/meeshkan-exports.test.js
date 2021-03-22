@@ -10,7 +10,10 @@ describe('Save an authentication token', () => {
 		beforeAll(async () => {
 			const browser = await puppeteer.launch({ headless: true });
 			const page = await browser.newPage();
-			await page.setCookie({ name: 'a0:session', value: '***' });
+			await page.setCookie({
+				name: 'a0:session',
+				value: process.env.COOKIE,
+			});
 			await page.goto(
 				`${process.env.TEST_URL || 'localhost:3000'}/meeshkan-webapp/settings`
 			);
