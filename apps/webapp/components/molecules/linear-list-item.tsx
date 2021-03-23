@@ -6,7 +6,6 @@ import {
 	useColorModeValue,
 } from '@chakra-ui/react';
 import truncate from 'truncate';
-import { transparentize } from '@chakra-ui/theme-tools';
 
 type LinearListItemProps = {
 	title: string;
@@ -27,11 +26,7 @@ const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
 				color: useColorModeValue('gray.900', 'white'),
 			}}
 			_hover={{
-				// @ts-ignore
-				backgroundColor: useColorModeValue(
-					transparentize('gray.100', 0.75),
-					transparentize('gray.800', 0.75)
-				),
+				backgroundColor: useColorModeValue('gray.50', 'gray.800'),
 				textDecoration: 'none',
 			}}
 			w="full"

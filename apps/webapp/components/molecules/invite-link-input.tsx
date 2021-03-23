@@ -33,7 +33,7 @@ const InviteLinkInput = () => {
 
 	const refreshInviteLink = () => {
 		setLoading(true);
-		const request = client
+		client
 			.request(REFRESH_INVITE_LINK, {
 				projectID: project.id,
 			})

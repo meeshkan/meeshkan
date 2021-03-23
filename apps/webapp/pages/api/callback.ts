@@ -1,9 +1,6 @@
-import { createSlug } from './../../utils/createSlug';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ISession } from '@auth0/nextjs-auth0/dist/session/session';
 import initAuth0 from '../../utils/auth0';
-import { getUserId } from '../../utils/user';
-import { propagateInviteToDb } from '../../utils/invite';
 
 export default async function callback(
 	req: NextApiRequest,

@@ -169,7 +169,7 @@ const TestRun = () => {
 										/>
 									) : null;
 
-								let cardOverrideProps: { bg?: string; py?: number } = {};
+								const cardOverrideProps: { bg?: string; py?: number } = {};
 								if (!isFailing) {
 									cardOverrideProps.bg = 'transparent';
 									cardOverrideProps.py = 2;

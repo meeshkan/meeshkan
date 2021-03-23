@@ -21,21 +21,20 @@ const GridCard = ({
 }: GridCardProps) => {
 	return (
 		<Card overflowY="auto" maxH="80vh" {...props}>
-			<a id={anchor && useMemo(() => createSlug(title), [title])}>
-				<Heading
-					as="h2"
-					d="flex"
-					alignItems="center"
-					fontSize="lg"
-					fontWeight="800"
-					lineHeight="short"
-				>
-					{leftIconSrc && (
-						<Image src={leftIconSrc} boxSize="16px" alt={title} mr={3} />
-					)}
-					{title}
-				</Heading>
-			</a>
+			<Heading
+				id={anchor && useMemo(() => createSlug(title), [title])}
+				as="h2"
+				d="flex"
+				alignItems="center"
+				fontSize="lg"
+				fontWeight="800"
+				lineHeight="short"
+			>
+				{leftIconSrc && (
+					<Image src={leftIconSrc} boxSize="16px" alt={title} mr={3} />
+				)}
+				{title}
+			</Heading>
 			{subtitle && (
 				<Heading
 					as="h3"

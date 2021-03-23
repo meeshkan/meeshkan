@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
 	Box,
 	Stack,
@@ -16,12 +16,7 @@ import {
 	Text,
 	StackProps,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import {
-	ArrowForwardIcon,
-	ArrowUpDownIcon,
-	ChevronDownIcon,
-} from '@chakra-ui/icons';
+import { ArrowUpDownIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
@@ -38,7 +33,6 @@ import {
 	DataPoint,
 	Project,
 } from '@frontend/meeshkan-types';
-import { createSlug } from '../../utils/createSlug';
 import { capitalize } from '../../utils/capitalize';
 import {
 	getTestRuns,
@@ -113,10 +107,6 @@ const deltaChange = (oldv: number, newv: number) =>
 
 const Grid = (props: StackProps) => {
 	const { project: selectedProject } = useContext(UserContext);
-	const router = useRouter();
-	const slugifiedProjectName = useMemo(() => createSlug(selectedProject.name), [
-		selectedProject.name,
-	]);
 
 	const [showScript, setShowScript] = useState<boolean>(
 		!selectedProject?.hasReceivedEvents
@@ -148,7 +138,7 @@ const Grid = (props: StackProps) => {
 			},
 			position: 'bottom',
 		},
-		// @ts-ignore custom option
+		// @ts-expect-error this is a custom option implemented with the 'rounded-chart' import
 		cornerRadius: 6,
 		scales: {
 			yAxes: [
@@ -248,9 +238,7 @@ const Grid = (props: StackProps) => {
 		userStories
 	);
 
-	// @ts-ignore
 	barData.datasets[0].data = Object.values(recordingsByDay);
-	// @ts-ignore
 	barData.datasets[1].data = Object.values(testsByDay);
 	const barDataLabels = getLastNDaysInFormat(
 		selectedTimePeriodInDays,

@@ -46,7 +46,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 		setName(project.name);
 		setProductionURL(configuration.productionURL);
 		setStagingURL(configuration.stagingURL);
-	}, [project]);
+	}, [project, configuration.productionURL, configuration.stagingURL]);
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);

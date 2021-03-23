@@ -1,6 +1,6 @@
 import * as ChartJS from 'chart.js';
 
-// @ts-ignore
+// @ts-expect-error elements do exist but the type doesn't recognize it
 ChartJS.elements.Rectangle.prototype.draw = function () {
 	const ctx = this._chart.ctx;
 	const vm = this._view;

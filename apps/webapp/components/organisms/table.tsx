@@ -17,16 +17,13 @@ import {
 	useColorModeValue,
 	Skeleton,
 	ButtonGroup,
-	Checkbox,
 	Button,
 	Modal,
 	ModalOverlay,
 	ModalBody,
 	ModalContent,
 	useDisclosure,
-	ModalCloseButton,
 	DarkMode,
-	Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -38,7 +35,6 @@ import {
 	DoubleArrowRightIcon,
 	ArrowRightIcon,
 	ExternalLinkIcon,
-	CheckmarkIcon,
 	PlayIcon,
 } from '@frontend/chakra-theme';
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
@@ -217,7 +213,7 @@ const Table = ({
 										<Td
 											onClick={() =>
 												router.push(
-													// @ts-ignore
+													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												)
 											}
@@ -241,7 +237,7 @@ const Table = ({
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
 												window.open(
-													// @ts-ignore
+													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												);
 											}}

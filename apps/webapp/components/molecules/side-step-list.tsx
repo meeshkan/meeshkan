@@ -50,8 +50,8 @@ export const StepList = ({ steps }: StepListProps) => {
 	return (
 		<>
 			{steps.map((step, index) => {
-				// @ts-ignore ** want to type this, but not set a default value
-				let subSteps: [{ text: string; sIndex: number }] = [];
+				// @ts-expect-error want to type this, but not set a default value
+				const subSteps: [{ text: string; sIndex: number }] = [];
 				step.commands.items.forEach((command) => {
 					if (command.open) {
 						subSteps.push({
@@ -131,19 +131,15 @@ export const StepList = ({ steps }: StepListProps) => {
 					);
 				}
 
-				return (
-					<>
-						{subSteps.map((sub, index) => {
-							return (
-								<SideStep
-									key={index + 'a'}
-									stepName={sub.text}
-									stepNumber={sub.sIndex + 1}
-								/>
-							);
-						})}
-					</>
-				);
+				return subSteps.map((sub, index) => {
+					return (
+						<SideStep
+							key={sub.sIndex}
+							stepName={sub.text}
+							stepNumber={sub.sIndex + 1}
+						/>
+					);
+				});
 			})}
 		</>
 	);

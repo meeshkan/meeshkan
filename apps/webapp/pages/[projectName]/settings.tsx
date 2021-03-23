@@ -30,7 +30,7 @@ import InviteLinkInput from '../../components/molecules/invite-link-input';
 import ScriptTagInput from '../../components/molecules/script-tag-input';
 import { UserContext, updateProductNotifications } from '../../utils/user';
 import { User, AuthenticationToken } from '@frontend/meeshkan-types';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { eightBaseClient } from '../../utils/graphql';
 import {
 	REMOVE_TEAM_MEMBER,
 	REMOVE_AUTH_TOKEN,
@@ -43,7 +43,7 @@ import {
 	latestVersion as latestExtensionVersion,
 	startRecording,
 } from '../../utils/extension';
-import { useToaster } from 'apps/webapp/components/atoms/toast';
+import { useToaster } from '../../components/atoms/toast';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -70,7 +70,7 @@ const Settings = () => {
 		setProductUpdates(productNotifications);
 		setMembers(project?.members?.items);
 		setTokens(project?.configuration.authenticationTokens?.items);
-	}, [project]);
+	}, [project, productNotifications]);
 
 	const client = eightBaseClient(idToken);
 
