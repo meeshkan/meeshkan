@@ -26,14 +26,15 @@ describe('Save an authentication token', () => {
 
 	it('loads the dashboard', async () => {
 		await expect(page).toMatch('Confidence score');
-	}, 100000);
+	});
 
 	it('should navigate to the settings page', async () => {
 		const button = await page.$x(
 			'/html/body/div[1]/div/nav/div/div[4]/div/button[2]'
 		);
 		await button[0].click();
-		await new Promise((r) => setTimeout(r, 5000));
+		await page.waitForNavigation();
+		await new Promise((r) => setTimeout(r, 1000));
 	}, 100000);
 
 	it('fills out the form', async () => {
