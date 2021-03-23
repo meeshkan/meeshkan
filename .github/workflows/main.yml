@@ -32,8 +32,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-        env:
-          COOKIE: ${{ secrets.COOKIE }}
         with:
           node-version: '14'
 
@@ -52,3 +50,5 @@ jobs:
 
       - name: Run tests
         run: yarn test webapp --skip-nx-cache
+        env:
+          COOKIE: ${{ secrets.COOKIE }}
