@@ -7,16 +7,13 @@ describe('Save an authentication token', () => {
 		await page.setCookie({
 			name: 'a0:session',
 			value: process.env.COOKIE,
-			domain:
-				process.env.TEST_URL.startsWith('localhost')	
-					? 'localhost'
-					: process.env.TEST_URL,
+			domain: process.env.TEST_URL.startsWith('localhost')
+				? 'localhost'
+				: process.env.TEST_URL,
 		});
 		await page.goto(
 			`${
-				process.env.TEST_URL.startsWith('localhost')
-					? 'http://'
-					: 'https://'
+				process.env.TEST_URL.startsWith('localhost') ? 'http://' : 'https://'
 			}${process.env.TEST_URL}/meeshkan-webapp`
 		);
 		await page.setViewport({
