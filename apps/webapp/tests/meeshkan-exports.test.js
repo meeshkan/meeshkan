@@ -1,18 +1,20 @@
 import 'expect-puppeteer';
 
 describe('Save an authentication token', () => {
+	jest.setTimeout(10000);
+
 	beforeAll(async () => {
 		await page.setCookie({
 			name: 'a0:session',
 			value: process.env.COOKIE,
 			domain:
-				process.env.TEST_URL === 'localhost:3000'
+				process.env.TEST_URL.startsWith('localhost')	
 					? 'localhost'
 					: process.env.TEST_URL,
 		});
 		await page.goto(
 			`${
-				process.env.TEST_URL && process.env.TEST_URL.startsWith('localhost')
+				process.env.TEST_URL.startsWith('localhost')
 					? 'http://'
 					: 'https://'
 			}${process.env.TEST_URL}/meeshkan-webapp`
