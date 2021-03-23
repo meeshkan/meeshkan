@@ -108,10 +108,6 @@ const deltaChange = (oldv: number, newv: number) =>
 const Grid = (props: StackProps) => {
 	const { project: selectedProject } = useContext(UserContext);
 
-	const [showScript, setShowScript] = useState<boolean>(
-		!selectedProject?.hasReceivedEvents
-	);
-
 	const doughnutOptions: ChartOptions = {
 		legend: {
 			align: 'center',
@@ -173,8 +169,10 @@ const Grid = (props: StackProps) => {
 
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
+	const [showScript, setShowScript] = useState(false);
 
 	useEffect(() => setVersion(versions[0]), [versions]);
+	useEffect(() => setShowScript(!selectedProject.hasReceivedEvents), [selectedProject]);
 
 	const userStories: UserStoryListResponse['items'] =
 		selectedProject.userStories.items;
