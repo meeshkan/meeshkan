@@ -42,14 +42,12 @@ describe('Save an authentication token', () => {
 			'/html/body/div[1]/div/nav/div/div[2]/div[2]/div/div[2]/a[3]'
 		);
 		await link[0].click();
-		await new Promise((r) => setTimeout(r, 5000));
 
 		// Fill in the key input
 		const input1 = await page.$x(
 			'/html/body/div[1]/div/div/div/div[6]/form/div[2]/input'
 		);
 		await input1[0].click();
-		await new Promise((r) => setTimeout(r, 5000));
 		await (
 			await page.$x('/html/body/div[1]/div/div/div/div[6]/form/div[2]/input')
 		)[0].type('test', { delay: 100 });
@@ -59,7 +57,6 @@ describe('Save an authentication token', () => {
 			'/html/body/div[1]/div/div/div/div[6]/form/div[2]/input'
 		);
 		await input2[0].click();
-		await new Promise((r) => setTimeout(r, 5000));
 		await (
 			await page.$x('/html/body/div[1]/div/div/div/div[6]/form/div[3]/input')
 		)[0].type('hello-world', { delay: 100 });
