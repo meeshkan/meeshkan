@@ -6,6 +6,7 @@ export interface DataPoint {
 	maxPossible: number;
 	timestamp: number;
 	tag: DataPointTag;
+	percentageChange?: number;
 }
 
 export enum DataPointTag {

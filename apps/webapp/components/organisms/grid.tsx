@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
 	Box,
 	Stack,
@@ -42,6 +42,9 @@ import {
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
+	getReleaseStartFromProject,
+	calculatePercentageChange,
+	deltaChange,
 } from '../../utils/metrics';
 import { lastNDays } from '../../utils/date';
 import { ChartOptions, ChartData } from 'chart.js';
@@ -87,23 +90,6 @@ const timePeriodsInDays: any = {
 	'30 days': 30,
 	'6 months': 183,
 };
-
-// TODO: fill me in with correct info once we can determine
-// the release start date. For now, set arbitrarily to 30 days.
-const getReleaseStartFromProject = (project: Project) =>
-	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
-
-const calcPctChange = (
-	key: string,
-	confidenceScoreNDaysAgo: Record<string, DataPoint>,
-	dataPoint: DataPoint
-) =>
-	confidenceScoreNDaysAgo[key]
-		? dataPoint.score - confidenceScoreNDaysAgo[key].score
-		: dataPoint.score;
-
-const deltaChange = (oldv: number, newv: number) =>
-	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
 
 const Grid = (props: StackProps) => {
 	const { project: selectedProject } = useContext(UserContext);
@@ -194,17 +180,18 @@ const Grid = (props: StackProps) => {
 		userStories
 	);
 
-	const confidenceScore = Object.values(confidenceDataPoints)
+	const confidenceScore = Number(Object.values(confidenceDataPoints)
 		.map((dataPoint) => dataPoint.score)
-		.reduce((a, b) => a + b, 0.0);
+		.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0).toFixed(2));
 
-	const testCoverageScore =
-		(Object.values(confidenceDataPoints)
-			.filter((a) => a.tag === DataPointTag.TEST_COVERAGE)
-			.map((a) => a.score)
-			.reduce((a, b) => a + b, 0.0) *
+	const testCoverageScore = Number(
+		((Object.values(confidenceDataPoints)
+			.filter((dataPoint) => dataPoint.tag === DataPointTag.TEST_COVERAGE)
+			.map((dataPoint) => dataPoint.score)
+			.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0) *
 			100) /
-		30;
+		30).toFixed(2)
+	);
 
 	const selectedTimePeriodInDays: number = timePeriodsInDays[timePeriod];
 
@@ -215,20 +202,34 @@ const Grid = (props: StackProps) => {
 	);
 
 	const confidenceScoreNDaysAgo = Object.values(confidenceDataPointsNDaysAgo)
-		.map((a) => a.score)
-		.reduce((a, b) => a + b, 0.0);
+		.map((dataPoint) => dataPoint.score)
+		.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0);
 
 	const testCoverageScoreNDaysAgo =
 		(Object.values(confidenceDataPointsNDaysAgo)
-			.filter((a) => a.tag === DataPointTag.TEST_RUN)
-			.map((a) => a.score)
-			.reduce((a, b) => a + b, 0.0) *
+			.filter((dataPoint) => dataPoint.tag === DataPointTag.TEST_RUN)
+			.map((dataPoint) => dataPoint.score)
+			.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0) *
 			100) /
 		30;
 
-	const confidenceChange = Object.entries(confidenceDataPoints).filter(
-		([key, dataPoint]) =>
-			0 !== calcPctChange(key, confidenceDataPointsNDaysAgo, dataPoint)
+	const confidenceChange = Object.entries(confidenceDataPoints).map(
+		([key, dataPoint]: [string, DataPoint]) => {
+			dataPoint.percentageChange = calculatePercentageChange(key, confidenceDataPointsNDaysAgo, dataPoint);
+			return [key, dataPoint];
+		}
+	).filter(
+		([key, dataPoint]: [string, DataPoint]) => dataPoint.percentageChange !== 0
+	);
+
+	const confidenceScorePercentageChange = deltaChange(
+		confidenceScoreNDaysAgo,
+		confidenceScore
+	);
+
+	const testCoverageScorePercentageChange = deltaChange(
+		testCoverageScoreNDaysAgo,
+		testCoverageScore
 	);
 
 	const latestTestStates = getLatestTestStates(version.testRuns.items);
@@ -244,9 +245,9 @@ const Grid = (props: StackProps) => {
 
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
-	const barDataLabels = lastNDays(selectedTimePeriodInDays).map((date: Date) =>
+	const barDataLabels = useMemo(() => lastNDays(selectedTimePeriodInDays).map((date: Date) =>
 		date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
-	);
+	), [selectedTimePeriodInDays, new Date().toLocaleDateString()]);
 	barData.labels = barDataLabels;
 
 	const totalRecordings = sumOfObjectValues(recordingsByDay);
@@ -353,24 +354,18 @@ const Grid = (props: StackProps) => {
 						>
 							<StatCard
 								title="Confidence score"
-								value={Number(confidenceScore.toFixed(2))}
-								percentageChange={deltaChange(
-									confidenceScoreNDaysAgo,
-									confidenceScore
-								)}
+								value={confidenceScore}
+								percentageChange={confidenceScorePercentageChange}
 								dataPoints={Object.keys(confidenceDataPoints).length}
 								my={[8, 0, 0, 0]}
 							/>
 							<StatCard
 								title="Test coverage"
-								value={Number(testCoverageScore.toFixed(2))}
-								percentageChange={deltaChange(
-									testCoverageScoreNDaysAgo,
-									testCoverageScore
-								)}
+								value={testCoverageScore}
+								percentageChange={testCoverageScorePercentageChange}
 								dataPoints={
 									Object.values(confidenceDataPoints).filter(
-										(a) => a.tag === DataPointTag.TEST_COVERAGE
+										(dataPoint) => dataPoint.tag === DataPointTag.TEST_COVERAGE
 									).length
 								}
 								my={[8, 0, 0, 0]}
@@ -406,14 +401,10 @@ const Grid = (props: StackProps) => {
 										) : null}
 										{confidenceChange
 											.slice(0, selectedTimePeriodInDays + 1)
-											.map(([key, dataPoint]) => (
+											.map(([key, dataPoint]: [string, DataPoint]) => (
 												<ConfidenceBreakdownItem
 													key={key}
-													value={calcPctChange(
-														key,
-														confidenceDataPointsNDaysAgo,
-														dataPoint
-													)}
+													value={dataPoint.percentageChange}
 													description={dataPoint.title}
 												/>
 											))}
