@@ -42,8 +42,8 @@ import {
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
-	getLastNDaysInFormat,
 } from '../../utils/metrics';
+import { lastNDays } from '../../utils/date';
 import { ChartOptions, ChartData } from 'chart.js';
 require('../molecules/rounded-chart');
 
@@ -238,9 +238,8 @@ const Grid = (props: StackProps) => {
 
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
-	const barDataLabels = getLastNDaysInFormat(
-		selectedTimePeriodInDays,
-		'MMM DD'
+	const barDataLabels = lastNDays(selectedTimePeriodInDays).map((date: Date) =>
+		date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
 	);
 	barData.labels = barDataLabels;
 
