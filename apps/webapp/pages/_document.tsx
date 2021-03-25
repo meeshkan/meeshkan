@@ -5,9 +5,15 @@ import Document, {
 	NextScript,
 	DocumentContext,
 } from 'next/document';
+import { MixpanelScript } from '@lightspeed/react-mixpanel-script';
 
-class MyDocument extends Document {
+type DocumentProps = {
+	nonce: string;
+};
+
+class MyDocument extends Document<DocumentProps> {
 	static async getInitialProps(ctx: DocumentContext) {
+		const { nonce } = (ctx.res as any).locals;
 		const initialProps = await Document.getInitialProps(ctx);
 		return initialProps;
 	}
@@ -40,6 +46,10 @@ class MyDocument extends Document {
 							__html:
 								'(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic("reattach_activator");ic("update",w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement("script");s.type="text/javascript";s.async=true;s.src="https://widget.intercom.io/widget/nou4ik17";var x=d.getElementsByTagName("script")[0];x.parentNode.insertBefore(s,x);};if(w.attachEvent){w.attachEvent("onload",l);}else{w.addEventListener("load",l,false);}}})();',
 						}}
+					/>
+					<MixpanelScript
+						nonce={this.props.nonce}
+						mixpanelApiKey={process.env.MIXPANEL_TOKEN || ''}
 					/>
 				</Head>
 				<Main />

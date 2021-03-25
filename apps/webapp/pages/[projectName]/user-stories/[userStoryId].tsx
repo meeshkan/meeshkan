@@ -68,6 +68,7 @@ import { ChevronLeftIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../../../components/atoms/video-player';
 import { eightBaseToPptr } from '@frontend/downloadable-script';
 import { useToaster } from '../../../components/atoms/toast';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -76,6 +77,7 @@ type UserStoryProps = {
 const UserStoryPage = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const toaster = useToaster();
+	const mixpanel = useAnalytics();
 	const {
 		found: foundProject,
 		loading: validatingProject,
@@ -487,6 +489,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 											description:
 												'The User story has been marked as a test case. It can now be found in the test cases tab.',
 										});
+										mixpanel.track('Create a test case');
 										router.push(`/${slugifiedProjectName}/user-stories`);
 									}}
 									mr={4}

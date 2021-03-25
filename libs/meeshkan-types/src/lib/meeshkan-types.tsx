@@ -19,6 +19,7 @@ export type UploadedFile = {
 };
 
 export interface IUser {
+	createdAt?: string;
 	id?: string;
 	email: string;
 	firstName?: string;
