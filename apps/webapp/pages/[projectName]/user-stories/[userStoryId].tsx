@@ -158,6 +158,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		const request = client.request(DELETE_REJECTED_RECORDING, {
 			userStoryId: userStoryId,
 		});
+		mixpanel.track('Delete a user story');
 		await mutate('/api/session');
 		return request;
 	};
