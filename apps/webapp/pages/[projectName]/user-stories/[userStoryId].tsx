@@ -409,12 +409,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
 						{data.userStory?.recording?.video ? (
-							<VideoPlayer>
-								<source
-									src={data.userStory.recording.video.downloadUrl}
-									type="video/webm"
-								/>
-							</VideoPlayer>
+							<VideoPlayer
+								src={data.userStory.recording.video.downloadUrl}
+								onStart={() => mixpanel.track('User story video play started')}
+								onEnded={() => mixpanel.track('User story video play finished')}
+							/>
 						) : (
 							<AspectRatio
 								ratio={16 / 9}

@@ -202,12 +202,15 @@ const TestRun = () => {
 										{isFailing && (
 											<>
 												{outcome.video && (
-													<VideoPlayer>
-														<source
-															src={outcome.video.downloadUrl}
-															type="video/webm"
-														/>
-													</VideoPlayer>
+													<VideoPlayer
+														src={outcome.video.downloadUrl}
+														onStart={() =>
+															mixpanel.track('Test outcome video play started')
+														}
+														onEnded={() =>
+															mixpanel.track('Test outcome video play finished')
+														}
+													/>
 												)}
 												<Text mt={4}>{outcome?.errorDetails?.exception}</Text>
 											</>
