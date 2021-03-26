@@ -13,7 +13,6 @@ type DocumentProps = {
 
 class MyDocument extends Document<DocumentProps> {
 	static async getInitialProps(ctx: DocumentContext) {
-		const { nonce } = (ctx.res as any).locals;
 		const initialProps = await Document.getInitialProps(ctx);
 		return initialProps;
 	}
@@ -48,7 +47,8 @@ class MyDocument extends Document<DocumentProps> {
 						}}
 					/>
 					<MixpanelScript
-						nonce={this.props.nonce}
+						// random UUID generated
+						nonce={`456DE3C3-1598-4D76-BA71-DE9A6EDBFB3B`}
 						mixpanelApiKey={process.env.MIXPANEL_TOKEN || ''}
 					/>
 				</Head>
