@@ -6,8 +6,12 @@ import {
 	Flex,
 	Stack,
 	Text,
+	Link as ChakraLink,
 	useColorModeValue,
 	Tooltip,
+	Alert,
+	AlertDescription,
+	AlertIcon,
 } from '@chakra-ui/react';
 import {
 	ChevronLeftIcon,
@@ -34,7 +38,11 @@ import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import VideoPlayer from '../../../components/atoms/video-player';
-import { TestOutcomeListResponse } from '@frontend/meeshkan-types';
+import {
+	SeleniumCommand,
+	TestOutcomeListResponse,
+} from '@frontend/meeshkan-types';
+import { commandsToSteps } from 'apps/webapp/utils/transform-steps';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -50,6 +58,7 @@ const TestRun = () => {
 	}
 
 	const { testId } = router.query;
+
 	const testRun = _.find(
 		project?.release.items[0]?.testRuns?.items,
 		(item) => item.id === testId
@@ -142,6 +151,30 @@ const TestRun = () => {
 							{sortedTestOutcomes.map((outcome) => {
 								const testCase = outcome?.userStory;
 								const status = outcome?.status;
+
+								const outcomeCommands: SeleniumCommand[] = JSON.parse(
+									testCase?.recording?.seleniumScriptJson
+								)?.groups?.groupItems[0]?.commands?.items;
+
+								const outcomeDetails = commandsToSteps(outcomeCommands)[
+									outcome?.errorDetails?.stepIndex
+								];
+
+								const outcomeError = (
+									outcomeCommand: string,
+									outcomeTag?: string
+								) => {
+									let errorMessage;
+									if (outcomeCommand == 'open') {
+										errorMessage = `The page your test trys to open, doesn't exist.`;
+									} else if (outcomeCommand == 'setViewportSize') {
+										errorMessage = `This test case has an unsupported screen size.`;
+									} else {
+										errorMessage = `${outcomeTag} doesn't exist. Did your app's structure change since this test case was created?`;
+									}
+									return errorMessage;
+								};
+
 								const isFailing = status === 'failing';
 								const icon =
 									status === 'passing' ? (
@@ -176,43 +209,78 @@ const TestRun = () => {
 								}
 
 								return (
-									<Card {...cardOverrideProps}>
-										<Flex align="center" justify="space-between">
-											<Flex align="center">
-												<Tooltip
-													label={status}
-													placement="bottom-start"
-													textTransform="capitalize"
-												>
-													{icon}
-												</Tooltip>
-												<Text fontSize="15px" ml={4}>
-													{testCase?.title}
-												</Text>
+									<>
+										<Card {...cardOverrideProps}>
+											<Flex align="center" justify="space-between">
+												<Flex align="center" mb={4}>
+													<Tooltip
+														label={status}
+														placement="bottom-start"
+														textTransform="capitalize"
+													>
+														{icon}
+													</Tooltip>
+													<Link
+														href={`/${slugifiedProjectName}/user-stories/${testCase.id}`}
+														passHref
+													>
+														<ChakraLink fontSize="15px" ml={4}>
+															{testCase?.title}
+														</ChakraLink>
+													</Link>
+												</Flex>
+												{isFailing && (
+													<ChevronDownIcon
+														transition="all 0.2s"
+														w={5}
+														h={5}
+														color="gray.500"
+														mb={4}
+													/>
+												)}
 											</Flex>
 											{isFailing && (
-												<ChevronDownIcon
-													transition="all 0.2s"
-													w={5}
-													h={5}
-													color="gray.500"
-												/>
+												<>
+													{outcome.video && (
+														<VideoPlayer>
+															<source
+																src={outcome.video.downloadUrl}
+																type="video/webm"
+															/>
+														</VideoPlayer>
+													)}
+													<Flex mt={4}>
+														<Flex
+															justify="center"
+															align="center"
+															borderRadius="full"
+															h={6}
+															w={6}
+															border="1px solid"
+															borderColor="gray.500"
+															fontWeight="500"
+															fontSize="sm"
+															mr={4}
+														>
+															{outcome?.errorDetails?.stepIndex}
+														</Flex>
+														<Box w="full">
+															<Text>{outcomeDetails.text}</Text>
+															<Alert status="error" p={3} mt={3} flex="1">
+																<AlertIcon />
+																<AlertDescription>
+																	{outcomeError(
+																		outcomeDetails.command,
+																		outcomeDetails.tagName
+																	)}
+																</AlertDescription>
+															</Alert>
+														</Box>
+													</Flex>
+												</>
 											)}
-										</Flex>
-										{isFailing && (
-											<>
-												{outcome.video && (
-													<VideoPlayer>
-														<source
-															src={outcome.video.downloadUrl}
-															type="video/webm"
-														/>
-													</VideoPlayer>
-												)}
-												<Text mt={4}>{outcome?.errorDetails?.exception}</Text>
-											</>
-										)}
-									</Card>
+										</Card>
+									</>
 								);
 							})}
 						</Stack>

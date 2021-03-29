@@ -148,6 +148,9 @@ export const USER = gql`
 											userStory {
 												id
 												title
+												recording {
+													seleniumScriptJson
+												}
 											}
 										}
 									}
