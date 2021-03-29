@@ -13,7 +13,7 @@ import { UserContext } from '../../utils/user';
 import { useClipboard } from '../../hooks/use-clipboard';
 import { eightBaseClient } from '../../utils/graphql';
 import { REFRESH_INVITE_LINK } from '../../graphql/project';
-import { useToaster } from '../atoms/toast';
+import { useToaster } from '../../hooks/use-toaster';
 
 const InviteLinkInput = () => {
 	const { project, idToken } = useContext(UserContext);
