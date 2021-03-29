@@ -18,11 +18,16 @@ const SideBar = (props: StackProps) => {
 	const stackSmallHeight = isOpen ? '100%' : 'auto';
 	const backgroundColor = useColorModeValue('white', 'gray.900');
 
+	/**
+	 * The dependency array is purposefully missing `isOpen` & `toggleOpen`.
+	 * Otherwise, the hooks body would be triggered more often than desired,
+	 * which wouldn't allow the navigation dropdown to open on medium screens.
+	 */
 	useEffect(() => {
 		if (isOpen) {
 			toggleOpen();
 		}
-	}, [pathname, isOpen, toggleOpen]);
+	}, [pathname]);
 
 	return (
 		<MotionStack
