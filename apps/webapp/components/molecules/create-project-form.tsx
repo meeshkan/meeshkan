@@ -33,6 +33,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const [error, setError] = useState('');
+	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
@@ -88,7 +89,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 						<InfoOutlineIcon
 							ml={2}
 							lineHeight="short"
-							color={useColorModeValue('gray.400', 'gray.500')}
+							color={tooltipIconColor}
 						/>
 					</Tooltip>
 				</FormLabel>

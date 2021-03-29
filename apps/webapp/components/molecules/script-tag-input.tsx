@@ -12,6 +12,7 @@ import { useClipboard } from '../../hooks/use-clipboard';
 
 const ScriptTagInput = () => {
 	const { project } = useContext(UserContext);
+	const inputBackgroundColor = useColorModeValue('gray.100', 'gray.800');
 
 	let scriptTag = '';
 	if (project) {
@@ -29,7 +30,7 @@ const ScriptTagInput = () => {
 		<InputGroup>
 			<Input
 				value={scriptTag}
-				bg={useColorModeValue('gray.100', 'gray.800')}
+				bg={inputBackgroundColor}
 				fontFamily="mono"
 				fontStyle="normal"
 				fontSize="sm"

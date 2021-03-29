@@ -19,6 +19,8 @@ type ScriptCardProps = {
 const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	const { project } = useContext(UserContext);
 
+	const alertBackgroundColor = useColorModeValue('white', 'gray.900');
+
 	if (!project) {
 		return null;
 	}
@@ -26,7 +28,7 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	return (
 		<Alert
 			rounded="lg"
-			bg={useColorModeValue('white', 'gray.900')}
+			bg={alertBackgroundColor}
 			py={5}
 			p={4}
 		>

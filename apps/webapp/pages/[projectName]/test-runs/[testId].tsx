@@ -45,6 +45,9 @@ const TestRun = () => {
 		project?.name,
 	]);
 
+	const headingColor = useColorModeValue('gray.900', 'gray.200');
+	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
+
 	if (loading) {
 		return <LoadingScreen as={Card} />;
 	}
@@ -75,7 +78,7 @@ const TestRun = () => {
 							alignItems="center"
 							fontSize="16px"
 							fontWeight="400"
-							color={useColorModeValue('gray.900', 'gray.200')}
+							color={headingColor}
 							lineHeight="short"
 						>
 							<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
@@ -100,7 +103,7 @@ const TestRun = () => {
 								as="h2"
 								fontSize="14px"
 								fontWeight="600"
-								color={useColorModeValue('gray.900', 'gray.200')}
+								color={headingColor}
 								lineHeight="short"
 							>
 								{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
@@ -110,7 +113,7 @@ const TestRun = () => {
 								>
 									<InfoOutlineIcon
 										ml={2}
-										color={useColorModeValue('gray.400', 'gray.500')}
+										color={tooltipIconColor}
 									/>
 								</Tooltip>
 							</Heading>

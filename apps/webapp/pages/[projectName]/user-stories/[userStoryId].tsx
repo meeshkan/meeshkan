@@ -84,6 +84,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
 	const [loading, setLoading] = useState(false);
 
+	const stepNumberColor = useColorModeValue('cyan.500', 'cyan.300');
+	const backLinkColor = useColorModeValue('gray.900', 'gray.200');
+	const buttonsBackgroundColor = useColorModeValue('white', 'gray.900');
+	const formLabelColor = useColorModeValue('gray.500', 'gray.400');
+	const aspectRatioBorderColor = useColorModeValue('gray.300', 'gray.700');
+
 	useEffect(() => {
 		if (hasCopied) {
 			toaster({
@@ -233,7 +239,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					alignItems="center"
 					fontSize="16px"
 					fontWeight="400"
-					color={useColorModeValue('gray.900', 'gray.200')}
+					color={backLinkColor}
 					lineHeight="short"
 					mb={3}
 				>
@@ -420,7 +426,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								alignItems="center"
 								border="1px solid"
 								borderRadius="lg"
-								borderColor={useColorModeValue('gray.300', 'gray.700')}
+								borderColor={aspectRatioBorderColor}
 							>
 								<>
 									<Button
@@ -449,7 +455,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						<FormControl mt={8}>
 							<FormLabel
 								mb={2}
-								color={useColorModeValue('gray.500', 'gray.400')}
+								color={formLabelColor}
 							>
 								What should you expect?
 							</FormLabel>
@@ -473,7 +479,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								align="center"
 								p={2}
 								borderRadius="lg"
-								backgroundColor={useColorModeValue('white', 'gray.900')}
+								backgroundColor={buttonsBackgroundColor}
 							>
 								<Button
 									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
@@ -529,12 +535,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 							h={6}
 							w={6}
 							border="1px solid"
-							borderColor={useColorModeValue('cyan.500', 'cyan.300')}
+							borderColor={stepNumberColor}
 							backgroundColor="transparentCyan.200"
 							ml={8}
 						>
 							<CheckmarkIcon
-								color={useColorModeValue('cyan.500', 'cyan.300')}
+								color={stepNumberColor}
 							/>
 						</Flex>
 					</Box>

@@ -38,6 +38,10 @@ const SideBarBody = () => {
 	const testRunsHref = `/${slugifiedProjectName}/test-runs`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
+	const settingsHeadingColor = useColorModeValue('gray.900', 'gray.200');
+	const headerColor = useColorModeValue('gray.400', 'gray.500');
+	const headerBackgroundColor = useColorModeValue('gray.100', 'gray.800')
+
 	if (isSettingsPage) {
 		return (
 			<>
@@ -48,7 +52,7 @@ const SideBarBody = () => {
 							align="center"
 							fontSize="20px"
 							fontWeight="500"
-							color={useColorModeValue('gray.900', 'gray.200')}
+							color={settingsHeadingColor}
 							lineHeight="1"
 							mt={6}
 						>
@@ -62,12 +66,12 @@ const SideBarBody = () => {
 						<Flex align="flex-start">
 							<Box
 								rounded="xl"
-								bg={useColorModeValue('gray.100', 'gray.800')}
+								bg={headerBackgroundColor}
 								p={2}
 								mr={4}
 							>
 								<ProfileIcon
-									color={useColorModeValue('gray.400', 'gray.500')}
+									color={headerColor}
 									w={4}
 									h={4}
 								/>
@@ -76,7 +80,7 @@ const SideBarBody = () => {
 								<Heading
 									fontSize="16px"
 									fontWeight="500"
-									color={useColorModeValue('gray.400', 'gray.500')}
+									color={headerColor}
 									lineHeight="short"
 									mt={1}
 								>
@@ -109,12 +113,12 @@ const SideBarBody = () => {
 						<Flex align="flex-start">
 							<Box
 								rounded="xl"
-								bg={useColorModeValue('gray.100', 'gray.800')}
+								bg={headerBackgroundColor}
 								p={2}
 								mr={4}
 							>
 								<SuitcaseIcon
-									color={useColorModeValue('gray.400', 'gray.500')}
+									color={headerColor}
 									w={4}
 									h={4}
 								/>
@@ -123,7 +127,7 @@ const SideBarBody = () => {
 								<Heading
 									fontSize="16px"
 									fontWeight="500"
-									color={useColorModeValue('gray.400', 'gray.500')}
+									color={headerColor}
 									lineHeight="short"
 									mt={1}
 								>

@@ -41,6 +41,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const [stagingURL, setStagingURL] = useState(configuration.stagingURL);
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
+	const infoIconColor = useColorModeValue('gray.400', 'gray.500');
 
 	useEffect(() => {
 		setName(project.name);
@@ -133,7 +134,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 						<InfoOutlineIcon
 							ml={2}
 							lineHeight="short"
-							color={useColorModeValue('gray.400', 'gray.500')}
+							color={infoIconColor}
 						/>
 					</Tooltip>
 				</FormLabel>

@@ -33,8 +33,17 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 	const { projects, project, setProject } = useContext(UserContext);
 	const avatarUrl = project?.avatar?.downloadUrl;
 	const router = useRouter();
+
+	const menuButtonBackgroundColor = useColorModeValue('gray.50', 'gray.800');
+	const avatarColor = useColorModeValue('gray.700', 'gray.200');
+	const avatarBackgroundColor = useColorModeValue('gray.200', 'gray.600');
+	const questionIconColor = useColorModeValue('gray.400', 'white');
+	const tooltipColor = useColorModeValue('gray.500', 'gray.400');
+	const menuButtonFlexColor = useColorModeValue('gray.500', 'gray.300');
+
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
+
 	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
 		projectName,
 	]);
@@ -53,14 +62,14 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						m={0}
 						size="sm"
 						colorScheme="gray"
-						backgroundColor={useColorModeValue('gray.50', 'gray.800')}
+						backgroundColor={menuButtonBackgroundColor}
 						rightIcon={<ArrowUpDownIcon mr={3} />}
 						w="100%"
 						textAlign="left"
 					>
 						<Flex
 							align="center"
-							color={useColorModeValue('gray.500', 'gray.300')}
+							color={menuButtonFlexColor}
 							fontWeight="600"
 							maxW="20ch"
 							whiteSpace="nowrap"
@@ -71,12 +80,12 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								name={project?.name}
 								icon={
 									<QuestionIcon
-										color={useColorModeValue('gray.400', 'white')}
+										color={questionIconColor}
 										fontSize="1rem"
 									/>
 								}
-								color={useColorModeValue('gray.700', 'gray.200')}
-								bg={useColorModeValue('gray.200', 'gray.600')}
+								color={avatarColor}
+								bg={avatarBackgroundColor}
 								size="sm"
 								borderRadius="md"
 								mr={3}
@@ -102,12 +111,12 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 											name={project.name}
 											icon={
 												<QuestionIcon
-													color={useColorModeValue('gray.400', 'white')}
+													color={questionIconColor}
 													fontSize="1rem"
 												/>
 											}
-											color={useColorModeValue('gray.700', 'gray.200')}
-											bg={useColorModeValue('gray.200', 'gray.600')}
+											color={avatarColor}
+											bg={avatarBackgroundColor}
 											size="xs"
 											borderRadius="md"
 											mr={3}
@@ -134,7 +143,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 					<IconButton
 						aria-label="Settings"
 						colorScheme="gray"
-						color={useColorModeValue('gray.500', 'gray.400')}
+						color={tooltipColor}
 						icon={<SettingsIcon />}
 						onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
 						variant="ghost"
