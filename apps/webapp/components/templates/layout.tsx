@@ -14,7 +14,11 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		<Analytics
 			appName="Meeshkan-webapp"
 			identity={user.idToken}
-			eventData={{ project: user.project }}
+			// This is a 'super property' which attaches information to every event.
+			eventData={{
+				project: user.project,
+				// plan: '' 
+			}}
 			profileData={{
 				$avatar: user.avatar,
 				$email: user.email,
