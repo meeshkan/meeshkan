@@ -15,6 +15,7 @@ import { UserContext } from '../../utils/user';
 import { createProject } from '../../utils/project';
 import { UploadedFile } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type ProjectFormInputs = {
 	name: string;
@@ -33,6 +34,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const [error, setError] = useState('');
+	const mixpanel = useAnalytics();
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
@@ -41,6 +43,8 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 			...formData,
 			...avatarFile,
 		});
+
+		mixpanel.track('Create new project');
 
 		if (data.error) {
 			setError(data.error);
