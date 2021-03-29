@@ -95,14 +95,14 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 					</MenuButton>
 					<MenuList>
 						<MenuOptionGroup
-							defaultValue={project?.name}
+							value={project?.id}
 							title="Projects"
 							type="radio"
 						>
 							{projects.map((project) => (
 								<MenuItemOption
 									key={project.id}
-									value={project.name}
+									value={project.id}
 									onClick={() => setProject(project)}
 								>
 									<Flex display="flex" alignItems="center">
