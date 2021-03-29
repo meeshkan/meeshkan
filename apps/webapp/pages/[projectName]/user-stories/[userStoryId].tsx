@@ -184,7 +184,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		).then(() => setTimeout(() => setLoading(false), 30000));
 	};
 
-	if (validatingQuery || validatingProject || !data) {
+	if ((validatingQuery && !data) || validatingProject) {
 		return <LoadingScreen as={Card} />;
 	}
 
