@@ -266,7 +266,7 @@ const eightBaseToX = (formatter: {
 		return undefined;
 	}
 	return (
-		topMatterPptr((options.headless = false)) +
+		topMatterPptr((options.headless = true)) +
 		wait +
 		commands +
 		wait +
