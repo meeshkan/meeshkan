@@ -36,6 +36,8 @@ type SideBarHeaderProps = {
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
+	const inboxIconColor = useColorModeValue('gray.500', 'gray.400');
+	const chevronIconColor = useColorModeValue('gray.600', 'gray.500');
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project,
@@ -63,7 +65,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 					variant="ghost"
 					size="sm"
 					icon={<InboxIcon w={4} h={4} />}
-					color={useColorModeValue('gray.500', 'gray.400')}
+					color={inboxIconColor}
 					colorScheme="gray"
 					mr={2}
 				/>
@@ -83,7 +85,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							backgroundColor="transparent"
 						/>
 						<ChevronDownIcon
-							color={useColorModeValue('gray.600', 'gray.500')}
+							color={chevronIconColor}
 						/>
 					</MenuButton>
 					<MenuList>

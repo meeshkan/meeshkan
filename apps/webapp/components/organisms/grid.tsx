@@ -108,6 +108,12 @@ const deltaChange = (oldv: number, newv: number) =>
 const Grid = (props: StackProps) => {
 	const { project: selectedProject } = useContext(UserContext);
 
+	const listColor = useColorModeValue('gray.600', 'gray.400');
+	const overviewColor = useColorModeValue('gray.700', 'gray.100');
+	const overviewUnitColor = useColorModeValue('gray.500', 'gray.300');
+	const barFooterColor = useColorModeValue('gray.500', 'gray.400');
+	const emptyDoughnutColor = useColorModeValue('gray.100', 'gray.800');
+
 	const doughnutOptions: ChartOptions = {
 		legend: {
 			align: 'center',
@@ -294,7 +300,7 @@ const Grid = (props: StackProps) => {
 						fontSize="md"
 						display="inline"
 						lineHeight="short"
-						color={useColorModeValue('gray.600', 'gray.400')}
+						color={listColor}
 						mr={3}
 					>
 						Release
@@ -389,7 +395,7 @@ const Grid = (props: StackProps) => {
 								<GridCard title="Confidence change">
 									<List
 										spacing={3}
-										color={useColorModeValue('gray.600', 'gray.400')}
+										color={listColor}
 										fontSize="sm"
 									>
 										{confidenceChange.length === 0 ? (
@@ -424,7 +430,7 @@ const Grid = (props: StackProps) => {
 											<Text fontWeight="900" mr={2}>
 												{totalRecordings}
 											</Text>
-											<Text color={useColorModeValue('gray.500', 'gray.400')}>
+											<Text color={barFooterColor}>
 												Recordings
 											</Text>
 										</Flex>
@@ -432,7 +438,7 @@ const Grid = (props: StackProps) => {
 											<Text fontWeight="900" mr={2}>
 												{totalTests}
 											</Text>
-											<Text color={useColorModeValue('gray.500', 'gray.400')}>
+											<Text color={barFooterColor}>
 												Test cases
 											</Text>
 										</Flex>
@@ -447,7 +453,7 @@ const Grid = (props: StackProps) => {
 												<EmptyDoughnutIcon
 													h="128px"
 													w="128px"
-													color={useColorModeValue('gray.100', 'gray.800')}
+													color={emptyDoughnutColor}
 													mr={6}
 												/>
 												<Text fontStyle="italic">
@@ -466,14 +472,14 @@ const Grid = (props: StackProps) => {
 												</Text>
 												<Text
 													fontSize="sm"
-													color={useColorModeValue('gray.500', 'gray.300')}
+													color={overviewUnitColor}
 													fontWeight="500"
 												>
 													days
 												</Text>
 											</Flex>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -489,7 +495,7 @@ const Grid = (props: StackProps) => {
 													: `Not ready`}
 											</Text>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -505,14 +511,14 @@ const Grid = (props: StackProps) => {
 												</Text>
 												<Text
 													fontSize="sm"
-													color={useColorModeValue('gray.500', 'gray.300')}
+													color={overviewUnitColor}
 													fontWeight="500"
 												>
 													bug{bugs.introduced !== 1 && 's'}
 												</Text>
 											</Flex>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -526,14 +532,14 @@ const Grid = (props: StackProps) => {
 												</Text>
 												<Text
 													fontSize="sm"
-													color={useColorModeValue('gray.500', 'gray.300')}
+													color={overviewUnitColor}
 													fontWeight="500"
 												>
 													bugs
 												</Text>
 											</Flex>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -556,7 +562,7 @@ const Grid = (props: StackProps) => {
 								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 								{/* <List
 									spacing={3}
-									color={useColorModeValue('gray.600', 'gray.400')}
+									color={listColor}
 								>
 									<ActivityListItem
 										title="Release successfully merged"
@@ -597,7 +603,7 @@ const Grid = (props: StackProps) => {
 								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 								{/* <List
 									spacing={3}
-									color={useColorModeValue('gray.600', 'gray.400')}
+									color={listColor}
 								>
 									<LinearListItem
 										title="User can't schedule pickup"

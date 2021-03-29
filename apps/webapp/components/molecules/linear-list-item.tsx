@@ -14,6 +14,9 @@ type LinearListItemProps = {
 };
 
 const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
+	const activeBackgroundColor = useColorModeValue('gray.100', 'gray.800');
+	const activeColor = useColorModeValue('gray.900', 'white');
+	const hoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
 	return (
 		<Button
 			as={Link}
@@ -22,11 +25,11 @@ const LinearListItem = ({ title, author, avatar }: LinearListItemProps) => {
 			fontWeight="500"
 			colorScheme="gray"
 			_active={{
-				backgroundColor: useColorModeValue('gray.100', 'gray.800'),
-				color: useColorModeValue('gray.900', 'white'),
+				backgroundColor: activeBackgroundColor,
+				color: activeColor,
 			}}
 			_hover={{
-				backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+				backgroundColor: hoverBackgroundColor,
 				textDecoration: 'none',
 			}}
 			w="full"

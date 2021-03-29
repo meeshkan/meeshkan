@@ -16,6 +16,7 @@ const SideBar = (props: StackProps) => {
 	const [isOpen, toggleOpen] = useCycle(false, true);
 	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
 	const stackSmallHeight = isOpen ? '100%' : 'auto';
+	const backgroundColor = useColorModeValue('white', 'gray.900');
 
 	useEffect(() => {
 		if (isOpen) {
@@ -28,7 +29,7 @@ const SideBar = (props: StackProps) => {
 			p={4}
 			as="nav"
 			borderRadius={[0, '0.5rem', '0.5rem', '0.5rem']}
-			bg={useColorModeValue('white', 'gray.900')}
+			bg={backgroundColor}
 			w="100%"
 			maxW={['100%', '100%', '100%', '256px']}
 			h={[stackSmallHeight, '100%', '100%', '100%']}

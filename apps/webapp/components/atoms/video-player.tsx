@@ -11,10 +11,12 @@ type VideoPlayerProps = {
 
 const VideoPlayer = ({ children }: VideoPlayerProps) => {
 	const [gray200, gray700] = useToken('colors', ['gray.200', 'gray.700']);
+	const borderColor = useColorModeValue(gray200, gray700);
 	const maxHeight = useBreakpointValue({
 		base: '75vw',
 		md: '15vw',
 	});
+
 	return (
 		<video
 			style={{
@@ -23,7 +25,7 @@ const VideoPlayer = ({ children }: VideoPlayerProps) => {
 				width: '100%',
 				maxHeight: maxHeight,
 				border: '1px solid',
-				borderColor: useColorModeValue(gray200, gray700),
+				borderColor,
 				backgroundColor: 'black',
 			}}
 			controls

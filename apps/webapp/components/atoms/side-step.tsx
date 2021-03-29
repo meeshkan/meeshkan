@@ -19,13 +19,14 @@ export const SideStep = ({
 	stepName,
 	subSteps,
 }: StoryStepProps) => {
+	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	return (
 		<Box
 			px={8}
 			pt={stepNumber === 1 ? 4 : 0}
 			borderRadius="lg"
 			_hover={{
-				backgroundColor: useColorModeValue('white', 'gray.900'),
+				backgroundColor: hoverBackgroundColor,
 			}}
 		>
 			<Flex>

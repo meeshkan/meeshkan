@@ -10,6 +10,7 @@ const ConfidenceBreakdownItem = ({
 	value,
 	description,
 }: ConfidenceBreakdownItemProps) => {
+	const borderBottomColor = useColorModeValue('gray.100', 'gray.800');
 	const colorFromValue = useColorFromNumber('decimal');
 	const valueAsString = (Math.round(value * 100) / 100).toFixed(2);
 	return (
@@ -18,7 +19,7 @@ const ConfidenceBreakdownItem = ({
 			align="start"
 			lineHeight="tall"
 			borderBottom="1px solid"
-			borderBottomColor={useColorModeValue('gray.100', 'gray.800')}
+			borderBottomColor={borderBottomColor}
 			pb={3}
 		>
 			<Text
