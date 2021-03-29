@@ -67,7 +67,7 @@ import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../../../components/atoms/video-player';
 import { eightBaseToPptr } from '@frontend/downloadable-script';
-import { useToaster } from '../../../components/atoms/toast';
+import { useToaster } from '../../../hooks/use-toaster';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -83,6 +83,14 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const router = useRouter();
 	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
 	const [loading, setLoading] = useState(false);
+	const [deleting, setDeleting] = useState(false);
+	const [creatingTestCase, setCreatingTestCase] = useState(false)
+
+	const stepNumberColor = useColorModeValue('cyan.500', 'cyan.300');
+	const backLinkColor = useColorModeValue('gray.900', 'gray.200');
+	const buttonsBackgroundColor = useColorModeValue('white', 'gray.900');
+	const formLabelColor = useColorModeValue('gray.500', 'gray.400');
+	const aspectRatioBorderColor = useColorModeValue('gray.300', 'gray.700');
 
 	useEffect(() => {
 		if (hasCopied) {
@@ -144,20 +152,70 @@ const UserStoryPage = (props: UserStoryProps) => {
 	};
 
 	const updateExpectedTest = async (testCreatedDate: string) => {
-		const request = await client.request(UPDATE_EXPECTED_TEST, {
+		return client.request(UPDATE_EXPECTED_TEST, {
 			userStoryId: userStoryId,
 			testCreatedDate: testCreatedDate,
 		});
-		await mutate('/api/session');
-		return request;
 	};
 
-	const deleteRejectedRecording = async () => {
-		const request = client.request(DELETE_REJECTED_RECORDING, {
+	const onCreateTestCase = async () => {
+		if (creatingTestCase) {
+			return;
+		}
+
+		setCreatingTestCase(true);
+		const toasterId = 'creatingTestCase';
+		toaster({
+			status: 'info',
+			title: 'Creating test case...',
+			id: toasterId,
+		});
+
+		await updateExpectedTest(date);
+		await mutate('/api/session');
+		toaster.close(toasterId);
+		toaster({
+			status: 'success',
+			title: 'A test case was created!',
+			description:
+				'The user story has been marked as a test case. It can now be found in the test cases tab.',
+		});
+
+		router.push(`/${slugifiedProjectName}/user-stories`);
+		setCreatingTestCase(false);
+	};
+
+	const deleteRejectedRecording = () => {
+		return client.request(DELETE_REJECTED_RECORDING, {
 			userStoryId: userStoryId,
 		});
+	};
+
+	const onDelete = async () => {
+		if (deleting) {
+			return;
+		}
+
+		setDeleting(true);
+		const toasterId = 'deleting';
+		toaster({
+			status: 'info',
+			title: 'Deleting this user story...',
+			id: toasterId,
+		});
+
+		await deleteRejectedRecording();
 		await mutate('/api/session');
-		return request;
+		toaster.close(toasterId);
+		toaster({
+			status: 'success',
+			title: 'A recording has been rejected.',
+			description:
+				'Rejecting a recording will delete the series of steps as a user story.',
+		});
+
+		router.push(`/${slugifiedProjectName}/user-stories`);
+		setDeleting(false);
 	};
 
 	const generateVideo = (
@@ -233,7 +291,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					alignItems="center"
 					fontSize="16px"
 					fontWeight="400"
-					color={useColorModeValue('gray.900', 'gray.200')}
+					color={backLinkColor}
 					lineHeight="short"
 					mb={3}
 				>
@@ -373,16 +431,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 								</MenuItem>
 								<MenuItem
 									colorScheme="red"
-									onClick={() => {
-										deleteRejectedRecording();
-										toaster({
-											status: 'success',
-											title: 'The user story has been deleted.',
-											description:
-												'Rejecting a recording will delete the series of steps as a user story.',
-										});
-										router.push(`/${slugifiedProjectName}/user-stories`);
-									}}
+									isDisabled={deleting}
+									onClick={onDelete}
 								>
 									<TrashIcon mr={3} />
 									Delete
@@ -420,7 +470,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								alignItems="center"
 								border="1px solid"
 								borderRadius="lg"
-								borderColor={useColorModeValue('gray.300', 'gray.700')}
+								borderColor={aspectRatioBorderColor}
 							>
 								<>
 									<Button
@@ -449,7 +499,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						<FormControl mt={8}>
 							<FormLabel
 								mb={2}
-								color={useColorModeValue('gray.500', 'gray.400')}
+								color={formLabelColor}
 							>
 								What should you expect?
 							</FormLabel>
@@ -473,22 +523,14 @@ const UserStoryPage = (props: UserStoryProps) => {
 								align="center"
 								p={2}
 								borderRadius="lg"
-								backgroundColor={useColorModeValue('white', 'gray.900')}
+								backgroundColor={buttonsBackgroundColor}
 							>
 								<Button
 									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
 									variant="subtle"
 									leftIcon={<CheckmarkIcon />}
-									onClick={() => {
-										updateExpectedTest(date);
-										toaster({
-											status: 'success',
-											title: 'A test case was created!',
-											description:
-												'The User story has been marked as a test case. It can now be found in the test cases tab.',
-										});
-										router.push(`/${slugifiedProjectName}/user-stories`);
-									}}
+									isLoading={creatingTestCase}
+									onClick={onCreateTestCase}
 									mr={4}
 								>
 									Create test case
@@ -497,16 +539,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 									colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
 									variant="subtle"
 									leftIcon={<XmarkIcon />}
-									onClick={() => {
-										deleteRejectedRecording();
-										toaster({
-											status: 'success',
-											title: 'A recording has been rejected.',
-											description:
-												'Rejecting a recording will delete the series of steps as a user story.',
-										});
-										router.push(`/${slugifiedProjectName}/user-stories`);
-									}}
+									isLoading={deleting}
+									onClick={onDelete}
 								>
 									Delete recording
 								</Button>
@@ -529,12 +563,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 							h={6}
 							w={6}
 							border="1px solid"
-							borderColor={useColorModeValue('cyan.500', 'cyan.300')}
+							borderColor={stepNumberColor}
 							backgroundColor="transparentCyan.200"
 							ml={8}
 						>
 							<CheckmarkIcon
-								color={useColorModeValue('cyan.500', 'cyan.300')}
+								color={stepNumberColor}
 							/>
 						</Flex>
 					</Box>

@@ -80,6 +80,10 @@ const TestRunsPage = () => {
 		maintainAspectRatio: false,
 	};
 
+	const borderColor = useColorModeValue('gray.300', 'gray.600');
+	const backgroundColor = useColorModeValue('gray.200', 'gray.700');
+	const emptyDoughnutColor = useColorModeValue('gray.100', 'gray.800');
+
 	if (loading) {
 		return <LoadingScreen as={Card} />;
 	}
@@ -154,7 +158,7 @@ const TestRunsPage = () => {
 						<EmptyDoughnutIcon
 							h="128px"
 							w="128px"
-							color={useColorModeValue('gray.100', 'gray.800')}
+							color={emptyDoughnutColor}
 							mr={6}
 						/>
 						<Text fontStyle="italic">
@@ -193,10 +197,10 @@ const TestRunsPage = () => {
 						alignItems="center"
 						opacity="0.9"
 						border="1px dashed"
-						borderColor={useColorModeValue('gray.300', 'gray.600')}
+						borderColor={borderColor}
 						borderRadius="lg"
 						h="64px"
-						backgroundColor={useColorModeValue('gray.200', 'gray.700')}
+						backgroundColor={backgroundColor}
 					>
 						<Text fontStyle="italic" fontSize="md">
 							Test runs will show up here.
@@ -205,18 +209,18 @@ const TestRunsPage = () => {
 					<Box
 						opacity="0.6"
 						border="1px dashed"
-						borderColor={useColorModeValue('gray.300', 'gray.600')}
+						borderColor={borderColor}
 						borderRadius="lg"
 						h="64px"
-						backgroundColor={useColorModeValue('gray.200', 'gray.700')}
+						backgroundColor={backgroundColor}
 					/>
 					<Box
 						opacity="0.3"
 						border="1px dashed"
-						borderColor={useColorModeValue('gray.300', 'gray.600')}
+						borderColor={borderColor}
 						borderRadius="lg"
 						h="64px"
-						backgroundColor={useColorModeValue('gray.200', 'gray.700')}
+						backgroundColor={backgroundColor}
 					/>
 				</Stack>
 			)}

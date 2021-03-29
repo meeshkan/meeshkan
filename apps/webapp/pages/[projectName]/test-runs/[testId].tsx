@@ -54,6 +54,9 @@ const TestRun = () => {
 		project?.name,
 	]);
 
+	const headingColor = useColorModeValue('gray.900', 'gray.200');
+	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
+
 	if (loading) {
 		return <LoadingScreen as={Card} />;
 	}
@@ -91,7 +94,7 @@ const TestRun = () => {
 							alignItems="center"
 							fontSize="16px"
 							fontWeight="400"
-							color={useColorModeValue('gray.900', 'gray.200')}
+							color={headingColor}
 							lineHeight="short"
 						>
 							<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
@@ -116,7 +119,7 @@ const TestRun = () => {
 								as="h2"
 								fontSize="14px"
 								fontWeight="600"
-								color={useColorModeValue('gray.900', 'gray.200')}
+								color={headingColor}
 								lineHeight="short"
 							>
 								{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
@@ -124,10 +127,7 @@ const TestRun = () => {
 									label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
 									placement="right-start"
 								>
-									<InfoOutlineIcon
-										ml={2}
-										color={useColorModeValue('gray.400', 'gray.500')}
-									/>
+									<InfoOutlineIcon ml={2} color={tooltipIconColor} />
 								</Tooltip>
 							</Heading>
 							<Box>
@@ -224,7 +224,7 @@ const TestRun = () => {
 									return (
 										<>
 											<AccordionItem
-												key={index}
+												key={outcome.id}
 												mb={4}
 												border="none"
 												borderRadius="lg"

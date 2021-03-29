@@ -43,7 +43,7 @@ import {
 	latestVersion as latestExtensionVersion,
 	startRecording,
 } from '../../utils/extension';
-import { useToaster } from '../../components/atoms/toast';
+import { useToaster } from '../../hooks/use-toaster';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -65,6 +65,10 @@ const Settings = () => {
 	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
 		project?.configuration.authenticationTokens?.items || []
 	);
+
+	const listItemHoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
+	const avatarColor = useColorModeValue('gray.700', 'gray.200');
+	const avatarBackgroundColor = useColorModeValue('gray.200', 'gray.600');
 
 	useEffect(() => {
 		setProductUpdates(productNotifications);
@@ -292,7 +296,7 @@ const Settings = () => {
 								justify="space-between"
 								align="center"
 								_hover={{
-									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+									backgroundColor: listItemHoverBackgroundColor,
 								}}
 							>
 								<Flex w="250px">
@@ -302,8 +306,8 @@ const Settings = () => {
 										size="xs"
 										borderRadius="md"
 										mr={4}
-										color={useColorModeValue('gray.700', 'gray.200')}
-										bg={useColorModeValue('gray.200', 'gray.600')}
+										color={avatarColor}
+										bg={avatarBackgroundColor}
 									/>
 									<Text fontWeight="600" fontSize="14px" textAlign="left">
 										{memberName}
@@ -428,7 +432,7 @@ const Settings = () => {
 							justify="space-between"
 							align="center"
 							_hover={{
-								backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+								backgroundColor: listItemHoverBackgroundColor,
 							}}
 						>
 							<Flex align="center">

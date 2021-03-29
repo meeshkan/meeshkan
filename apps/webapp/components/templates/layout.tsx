@@ -6,10 +6,11 @@ type LayoutProps = {
 };
 
 const Layout = ({ children, ...props }: LayoutProps) => {
+	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	return (
 		<Stack
 			p={[0, 6, 6, 6]}
-			bg={useColorModeValue('gray.100', 'gray.800')}
+			bg={backgroundColor}
 			w="100%"
 			h={['100%', '100%', '100%', '100vh']}
 			mt={[12, 0, 0, 0]}
