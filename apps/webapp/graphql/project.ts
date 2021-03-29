@@ -122,6 +122,7 @@ export const JOIN_PROJECT = gql`
 						id
 						testOutcome {
 							items {
+								id
 								status
 								isResolved
 								errorDetails {
@@ -158,6 +159,7 @@ export const JOIN_PROJECT = gql`
 								testOutcome {
 									count
 									items {
+										id
 										status
 										isResolved
 										errorDetails {

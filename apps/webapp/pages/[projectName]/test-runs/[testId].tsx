@@ -176,7 +176,7 @@ const TestRun = () => {
 								}
 
 								return (
-									<Card {...cardOverrideProps}>
+									<Card key={outcome.id} {...cardOverrideProps}>
 										<Flex align="center" justify="space-between">
 											<Flex align="center">
 												<Tooltip

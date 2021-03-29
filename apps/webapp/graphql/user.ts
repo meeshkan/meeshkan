@@ -98,6 +98,7 @@ export const USER = gql`
 							id
 							testOutcome {
 								items {
+									id
 									status
 									isResolved
 									errorDetails {
@@ -134,6 +135,7 @@ export const USER = gql`
 									testOutcome {
 										count
 										items {
+											id
 											status
 											isResolved
 											errorDetails {
