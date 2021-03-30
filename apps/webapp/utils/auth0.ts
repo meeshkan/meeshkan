@@ -9,6 +9,7 @@ const httpTimeout = ms('10s');
 const scope = 'openid profile email id_token';
 
 const createAuth0 = (origin: string): ISignInWithAuth0 => {
+	console.log(`origin: ${origin}`);
 	return initAuth0({
 		clientId: process.env.AUTH0_CLIENT_ID,
 		clientSecret: process.env.AUTH0_CLIENT_SECRET,
@@ -37,8 +38,12 @@ const initAuth0WithReq = (req: IncomingMessage): ISignInWithAuth0 => {
 export const getUser = async (req: IncomingMessage): Promise<IUser> => {
 	const auth0 = initAuth0WithReq(req);
 	const session = await auth0.getSession(req);
+	console.log(req.headers);
+	console.log(req.cookies);
+
 	if (!session) {
-		console.error(req, auth0, session);
+		console.error(req.headers);
+		console.error(req.cookies)
 		throw new Error('User session does not exist. User must be logged in.');
 	}
 

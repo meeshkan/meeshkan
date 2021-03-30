@@ -15,6 +15,7 @@ export default async function callback(
 				session: ISession,
 				state: { inviteId?: string }
 			) => {
+				console.log(session, state);
 				const redirectParams = new URLSearchParams();
 				if (state.inviteId) {
 					redirectParams.append('inviteId', state.inviteId);
