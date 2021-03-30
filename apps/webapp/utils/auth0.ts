@@ -38,15 +38,15 @@ const initAuth0WithReq = (req: IncomingMessage): ISignInWithAuth0 => {
 export const getUser = async (req: IncomingMessage): Promise<IUser> => {
 	const auth0 = initAuth0WithReq(req);
 	const session = await auth0.getSession(req);
-	// @test-ignore
+	// @ts-ignore
 	console.log(req.headers);
-	// @test-ignore
+	// @ts-ignore
 	console.log(req.cookies);
 
 	if (!session) {
-		// @test-ignore
+		// @ts-ignore
 		console.error(req.headers);
-		// @test-ignore
+		// @ts-ignore
 		console.error(req.cookies)
 		throw new Error('User session does not exist. User must be logged in.');
 	}
