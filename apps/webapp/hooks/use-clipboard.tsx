@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useClipboard as useChakraClipboard } from '@chakra-ui/react';
-import { useToaster } from '../components/atoms/toast';
+import { useToaster } from './use-toaster';
 
 type ClipboardProps = {
 	toastTitle: string;

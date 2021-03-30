@@ -55,6 +55,9 @@ const Table = ({
 	pageCount: controlledPageCount,
 	fetchData,
 }: TableProps) => {
+	const borderBottomColor = useColorModeValue('gray.100', 'gray.700');
+	const backgroundColor = useColorModeValue('white', 'gray.900');
+	const hoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -89,15 +92,17 @@ const Table = ({
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
+
 	const router = useRouter();
 	const [video, setVideo] = useState<File['downloadUrl']>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
 	return (
 		<>
 			<ChakraTable
 				{...getTableProps()}
 				variant="simple"
-				backgroundColor={useColorModeValue('white', 'gray.900')}
+				backgroundColor={backgroundColor}
 				borderTopRightRadius="lg"
 				borderBottomRadius="lg"
 			>
@@ -161,13 +166,13 @@ const Table = ({
 							<Tr
 								{...row.getRowProps()}
 								borderBottom="1px solid"
-								borderBottomColor={useColorModeValue('gray.100', 'gray.700')}
+								borderBottomColor={borderBottomColor}
 								_last={{ border: 0 }}
 								_hover={{
 									cursor: 'pointer',
-									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+									backgroundColor: hoverBackgroundColor,
 									borderBottom: '1px solid',
-									borderBottomColor: useColorModeValue('gray.100', 'gray.700'),
+									borderBottomColor,
 								}}
 							>
 								{/* <Td p={3} border={0}>

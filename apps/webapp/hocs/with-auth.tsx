@@ -53,7 +53,7 @@ const withAuth = (PageComponent: any) => {
 			return <PageComponent {...props} />;
 		}
 
-		if (loading) {
+		if (loading && !user) {
 			return <LoadingScreen h="100vh" />;
 		}
 

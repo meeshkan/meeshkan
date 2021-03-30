@@ -10,6 +10,7 @@ type LayoutProps = {
 const Layout = ({ children, ...props }: LayoutProps) => {
 	const user = useContext(UserContext);
 
+	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	return (
 		<Analytics
 			appName="Meeshkan-webapp"
@@ -17,7 +18,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			// This is a 'super property' which attaches information to every event.
 			eventData={{
 				project: user.project,
-				// plan: '' 
+				// plan: ''
 			}}
 			profileData={{
 				$avatar: user.avatar,
@@ -25,13 +26,13 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				$distinct_id: user.idToken,
 				$first_name: user.firstName,
 				$last_name: user.lastName,
-				$created: user.createdAt,
+				// $created: user.createdAt,
 				// $transactions: "" add stripe here
 			}}
 		>
 			<Stack
 				p={[0, 6, 6, 6]}
-				bg={useColorModeValue('gray.100', 'gray.800')}
+				bg={backgroundColor}
 				w="100%"
 				h={['100%', '100%', '100%', '100vh']}
 				mt={[12, 0, 0, 0]}
@@ -40,7 +41,19 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				spacing={[0, 6, 6, 6]}
 				{...props}
 			>
-				{children}
+				<Stack
+					p={[0, 6, 6, 6]}
+					bg={useColorModeValue('gray.100', 'gray.800')}
+					w="100%"
+					h={['100%', '100%', '100%', '100vh']}
+					mt={[12, 0, 0, 0]}
+					d="flex"
+					direction={['column', 'column', 'column', 'row']}
+					spacing={[0, 6, 6, 6]}
+					{...props}
+				>
+					{children}
+				</Stack>
 			</Stack>
 		</Analytics>
 	);

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import moment from 'moment';
+import { daysUntilDate, lastNDays, isSameDay } from './date';
 import {
 	UserStoryListResponse,
 	Project,
@@ -9,9 +9,6 @@ import {
 	DataPoint,
 	DataPointTag,
 } from '@frontend/meeshkan-types';
-
-const daysUntilDate = (date: moment.Moment): number =>
-	date.diff(moment(), 'days');
 
 export const getTestRuns = (releases: ReleaseListResponse['items']) => {
 	const testRunsTotal = releases.reduce(
@@ -39,7 +36,7 @@ export const getTestRuns = (releases: ReleaseListResponse['items']) => {
 export const getDaysUntilRelease = (project: Project) => {
 	const [release] = project.release.items;
 	const releaseDate = release.releaseDate;
-	return releaseDate ? daysUntilDate(moment(releaseDate)) : null;
+	return releaseDate ? daysUntilDate(new Date(releaseDate)) : null;
 };
 
 export const getBugs = (testRuns: TestRunListResponse['items']) => {
@@ -83,9 +80,6 @@ export const getLatestTestStates = (testRuns: TestRunListResponse['items']) => {
 	return latestTestStates;
 };
 
-const lastNDays = (n: number) =>
-	[...Array(n).keys()].map((i) => moment().subtract(i, 'days')).reverse();
-
 export const getRecordingsAndTestsByDay = (
 	days: number,
 	userStories: UserStoryListResponse['items']
@@ -95,12 +89,12 @@ export const getRecordingsAndTestsByDay = (
 	lastNDays(days).forEach((day) => {
 		const recordingsOnThisDay = userStories.filter((story) => {
 			const { createdAt, isTestCase } = story;
-			return moment(createdAt).isSame(day, 'day') && !isTestCase;
+			return isSameDay(new Date(createdAt), day) && !isTestCase;
 		});
 		const testsOnThisDay = userStories.filter((story) => {
 			const { testCreatedDate, isTestCase } = story;
 			return testCreatedDate
-				? moment(testCreatedDate).isSame(day, 'day') && isTestCase
+				? isSameDay(new Date(testCreatedDate), day) && isTestCase
 				: false;
 		});
 		const dayValue = day.valueOf();
@@ -115,9 +109,6 @@ export const getRecordingsAndTestsByDay = (
 
 export const sumOfObjectValues = (object: { [key: string]: number }) =>
 	_.sum(_.values(object));
-
-export const getLastNDaysInFormat = (days: number, format: string) =>
-	lastNDays(days).map((day) => day.format(format));
 
 export const COVERAGE_DATA_POINT = 'COVERAGE_DATA_POINT';
 export const MAX_POSSIBLE_TEST_COVERAGE_SCORE = 30;

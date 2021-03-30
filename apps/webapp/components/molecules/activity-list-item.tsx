@@ -15,11 +15,12 @@ type ActivityListItemProps = {
 };
 
 const ActivityListItem = ({ title, subtitle, icon }: ActivityListItemProps) => {
+	const titleColor = useColorModeValue('gray.900', 'gray.200');
 	return (
 		<ListItem as={Flex} align="center">
 			<ListIcon as={icon} ml={2} mr={4} />
 			<Flex direction="column">
-				<Text color={useColorModeValue('gray.900', 'gray.200')}>{title}</Text>
+				<Text color={titleColor}>{title}</Text>
 				<Text fontSize="sm">{subtitle}</Text>
 			</Flex>
 		</ListItem>

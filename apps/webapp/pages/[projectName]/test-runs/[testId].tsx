@@ -6,14 +6,19 @@ import {
 	Flex,
 	Stack,
 	Text,
+	Link as ChakraLink,
 	useColorModeValue,
 	Tooltip,
+	Alert,
+	AlertDescription,
+	AlertIcon,
+	Accordion,
+	AccordionItem,
+	AccordionPanel,
+	AccordionButton,
+	AccordionIcon,
 } from '@chakra-ui/react';
-import {
-	ChevronLeftIcon,
-	ChevronDownIcon,
-	InfoOutlineIcon,
-} from '@chakra-ui/icons';
+import { ChevronLeftIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import {
 	CheckmarkIcon,
 	XmarkIcon,
@@ -34,7 +39,11 @@ import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import VideoPlayer from '../../../components/atoms/video-player';
-import { TestOutcomeListResponse } from '@frontend/meeshkan-types';
+import {
+	SeleniumCommand,
+	TestOutcomeListResponse,
+} from '@frontend/meeshkan-types';
+import { commandsToSteps } from 'apps/webapp/utils/transform-steps';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -45,11 +54,15 @@ const TestRun = () => {
 		project?.name,
 	]);
 
+	const headingColor = useColorModeValue('gray.900', 'gray.200');
+	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
+
 	if (loading) {
 		return <LoadingScreen as={Card} />;
 	}
 
 	const { testId } = router.query;
+
 	const testRun = _.find(
 		project?.release.items[0]?.testRuns?.items,
 		(item) => item.id === testId
@@ -60,7 +73,13 @@ const TestRun = () => {
 	}
 
 	const testCasesRan: number = testRun.testOutcome.count;
-	const outcomeOrder = ['failing', 'passing', 'queued', 'did not run'];
+	const outcomeOrder = [
+		'failing',
+		'passing',
+		'queued',
+		'in progress',
+		'did not run',
+	];
 	const sortedTestOutcomes: TestOutcomeListResponse['items'] = testRun.testOutcome.items.sort(
 		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
 	);
@@ -75,7 +94,7 @@ const TestRun = () => {
 							alignItems="center"
 							fontSize="16px"
 							fontWeight="400"
-							color={useColorModeValue('gray.900', 'gray.200')}
+							color={headingColor}
 							lineHeight="short"
 						>
 							<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
@@ -100,7 +119,7 @@ const TestRun = () => {
 								as="h2"
 								fontSize="14px"
 								fontWeight="600"
-								color={useColorModeValue('gray.900', 'gray.200')}
+								color={headingColor}
 								lineHeight="short"
 							>
 								{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
@@ -108,10 +127,7 @@ const TestRun = () => {
 									label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
 									placement="right-start"
 								>
-									<InfoOutlineIcon
-										ml={2}
-										color={useColorModeValue('gray.400', 'gray.500')}
-									/>
+									<InfoOutlineIcon ml={2} color={tooltipIconColor} />
 								</Tooltip>
 							</Heading>
 							<Box>
@@ -139,85 +155,171 @@ const TestRun = () => {
 							</Box>
 						</Flex>
 						<Stack spacing={4}>
-							{sortedTestOutcomes.map((outcome) => {
-								const testCase = outcome?.userStory;
-								const status = outcome?.status;
-								const isFailing = status === 'failing';
-								const icon =
-									status === 'passing' ? (
-										<CheckmarkIcon
-											w={3}
-											h={3}
-											color="green.500"
-											aria-label="Passing"
-										/>
-									) : status === 'failing' ? (
-										<XmarkIcon w={3} h={3} color="red.500" title="Failing" />
-									) : status === 'did not run' ? (
-										<MinusIcon
-											w={3}
-											h={3}
-											color="gray.500"
-											title="Didn't run"
-										/>
-									) : status === 'queued' || 'in progress' ? (
-										<CircleArrowsIcon
-											w={3}
-											h={3}
-											color="amber.500"
-											title="Queued / In progress"
-										/>
-									) : null;
+							<Accordion defaultIndex={[0]} allowMultiple>
+								{sortedTestOutcomes.map((outcome, index) => {
+									const testCase = outcome?.userStory;
+									const status = outcome?.status;
 
-								const cardOverrideProps: { bg?: string; py?: number } = {};
-								if (!isFailing) {
-									cardOverrideProps.bg = 'transparent';
-									cardOverrideProps.py = 2;
-								}
+									const outcomeCommands: SeleniumCommand[] = JSON.parse(
+										testCase?.recording?.seleniumScriptJson
+									)?.groups?.groupItems[0]?.commands?.items;
 
-								return (
-									<Card {...cardOverrideProps}>
-										<Flex align="center" justify="space-between">
-											<Flex align="center">
-												<Tooltip
-													label={status}
-													placement="bottom-start"
-													textTransform="capitalize"
+									const outcomeDetails = commandsToSteps(outcomeCommands)[
+										outcome?.errorDetails?.stepIndex
+									];
+
+									const outcomeError = (
+										outcomeCommand: string,
+										outcomeTag?: string
+									) => {
+										let errorMessage;
+										if (outcomeCommand == 'open') {
+											errorMessage = `The page your test trys to open, doesn't exist.`;
+										} else if (outcomeCommand == 'setViewportSize') {
+											errorMessage = `This test case has an unsupported screen size.`;
+										} else {
+											errorMessage = `${outcomeTag} doesn't exist. Did your app's structure change since this test case was created?`;
+										}
+										return errorMessage;
+									};
+
+									const isFailing = status === 'failing';
+									const icon =
+										status === 'passing' ? (
+											<CheckmarkIcon
+												w={3}
+												h={3}
+												color="green.500"
+												aria-label="Passing"
+											/>
+										) : status === 'failing' ? (
+											<XmarkIcon w={3} h={3} color="red.500" title="Failing" />
+										) : status === 'did not run' ? (
+											<MinusIcon
+												w={3}
+												h={3}
+												color="gray.500"
+												title="Didn't run"
+											/>
+										) : status === 'queued' || 'in progress' ? (
+											<CircleArrowsIcon
+												w={3}
+												h={3}
+												color="amber.500"
+												title="Queued / In progress"
+											/>
+										) : null;
+
+									const cardOverrideProps: { bg?: string; py?: number } = {};
+									if (!isFailing) {
+										cardOverrideProps.bg = 'transparent';
+										cardOverrideProps.py = 2;
+									}
+									const accordionItemBackground = useColorModeValue(
+										'white',
+										'gray.900'
+									);
+									const iconColor = useColorModeValue('gray.300', 'gray.600');
+
+									return (
+										<>
+											<AccordionItem
+												key={outcome.id}
+												mb={4}
+												border="none"
+												borderRadius="lg"
+												isDisabled={!isFailing}
+												bg={accordionItemBackground}
+												{...cardOverrideProps}
+											>
+												<AccordionButton
+													_hover={{
+														backgroundColor: 'none',
+													}}
+													_focus={{
+														outline: 'none',
+													}}
+													display="flex"
+													align="center"
+													justify="space-between"
+													borderRadius="lg"
+													p={4}
+													justifyContent="space-between"
 												>
-													{icon}
-												</Tooltip>
-												<Text fontSize="15px" ml={4}>
-													{testCase?.title}
-												</Text>
-											</Flex>
-											{isFailing && (
-												<ChevronDownIcon
-													transition="all 0.2s"
-													w={5}
-													h={5}
-													color="gray.500"
-												/>
-											)}
-										</Flex>
-										{isFailing && (
-											<>
-												{outcome.video && (
-													<VideoPlayer
-														src={outcome.video.downloadUrl}
-														onStart={() =>
-															mixpanel.track('Test outcome video play started')
-														}
-														onEnded={() =>
-															mixpanel.track('Test outcome video play finished')
-														}
-													/>
-												)}
-												<Text mt={4}>{outcome?.errorDetails?.exception}</Text>
-											</>
-										)}
-									</Card>
-								);
-							})}
+													<Flex align="center">
+														<Tooltip
+															label={status}
+															placement="bottom-start"
+															textTransform="capitalize"
+														>
+															{icon}
+														</Tooltip>
+														<Link
+															href={`/${slugifiedProjectName}/user-stories/${testCase.id}`}
+															passHref
+														>
+															<ChakraLink fontSize="15px" ml={4}>
+																{testCase?.title}
+															</ChakraLink>
+														</Link>
+													</Flex>
+													<AccordionIcon color={iconColor} />
+												</AccordionButton>
+
+												<AccordionPanel py={4}>
+													{isFailing && (
+														<>
+															{outcome.video && (
+																<VideoPlayer
+																	src={outcome.video.downloadUrl}
+																	onStart={() =>
+																		mixpanel.track(
+																			'Test outcome video play started'
+																		)
+																	}
+																	onEnded={() =>
+																		mixpanel.track(
+																			'Test outcome video play finished'
+																		)
+																	}
+																/>
+															)}
+															<Flex mt={4}>
+																<Flex
+																	justify="center"
+																	align="center"
+																	borderRadius="full"
+																	h={6}
+																	w={6}
+																	border="1px solid"
+																	borderColor="gray.500"
+																	fontWeight="500"
+																	fontSize="sm"
+																	mr={4}
+																>
+																	{outcome?.errorDetails?.stepIndex}
+																</Flex>
+																<Box w="full">
+																	<Text>{outcomeDetails.text}</Text>
+																	<Alert status="error" p={3} mt={3} flex="1">
+																		<AlertIcon />
+																		<AlertDescription>
+																			{outcomeError(
+																				outcomeDetails.command,
+																				outcomeDetails.tagName
+																			)}
+																		</AlertDescription>
+																	</Alert>
+																</Box>
+															</Flex>
+														</>
+													)}
+												</AccordionPanel>
+											</AccordionItem>
+										</>
+									);
+								})}
+							</Accordion>
 						</Stack>
 					</Stack>
 					<GridCard title="Technical information">

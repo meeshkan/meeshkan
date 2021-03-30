@@ -38,6 +38,14 @@ const NavButton = (props: NavButtonProps) => {
 	const { href, children, disabled, isActive = false, ...rest } = props;
 	const [isSmallScreen] = useMediaQuery('(max-width: 62em)');
 
+	const color = useColorModeValue('gray.500', 'gray.400');
+	const activeBackgroundColor = useColorModeValue('gray.100', 'gray.800');
+	const activeColor = useColorModeValue('gray.900', 'white');
+	const hoverBackgroundColor = useColorModeValue(
+		transparentize('gray.100', 0.75),
+		transparentize('gray.800', 0.75)
+	);
+
 	if (href && disabled !== true) {
 		return (
 			<NextLink href={href} passHref>
@@ -53,16 +61,13 @@ const NavButton = (props: NavButtonProps) => {
 					alignItems="center"
 					fontWeight="500"
 					fontSize="16px"
-					color={useColorModeValue('gray.500', 'gray.400')}
+					color={color}
 					_active={{
-						backgroundColor: useColorModeValue('gray.100', 'gray.800'),
-						color: useColorModeValue('gray.900', 'white'),
+						backgroundColor: activeBackgroundColor,
+						color: activeColor,
 					}}
 					_hover={{
-						backgroundColor: useColorModeValue(
-							transparentize('gray.100', 0.75),
-							transparentize('gray.800', 0.75)
-						),
+						backgroundColor: hoverBackgroundColor,
 						textDecoration: 'none',
 					}}
 					variants={isSmallScreen ? variants : {}}
@@ -87,16 +92,13 @@ const NavButton = (props: NavButtonProps) => {
 				alignItems="center"
 				fontWeight="500"
 				fontSize="16px"
-				color={useColorModeValue('gray.500', 'gray.400')}
+				color={color}
 				_active={{
-					backgroundColor: useColorModeValue('gray.100', 'gray.800'),
-					color: useColorModeValue('gray.900', 'white'),
+					backgroundColor: activeBackgroundColor,
+					color: activeColor,
 				}}
 				_hover={{
-					backgroundColor: useColorModeValue(
-						transparentize('gray.100', 0.75),
-						transparentize('gray.800', 0.75)
-					),
+					backgroundColor: hoverBackgroundColor,
 					textDecoration: 'none',
 				}}
 				variants={isSmallScreen ? variants : {}}

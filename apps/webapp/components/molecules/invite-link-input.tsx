@@ -13,7 +13,7 @@ import { UserContext } from '../../utils/user';
 import { useClipboard } from '../../hooks/use-clipboard';
 import { eightBaseClient } from '../../utils/graphql';
 import { REFRESH_INVITE_LINK } from '../../graphql/project';
-import { useToaster } from '../atoms/toast';
+import { useToaster } from '../../hooks/use-toaster';
 
 const InviteLinkInput = () => {
 	const { project, idToken } = useContext(UserContext);
@@ -21,6 +21,7 @@ const InviteLinkInput = () => {
 		project.configuration.inviteLink
 	);
 	const [loading, setLoading] = useState(false);
+	const refreshButtonBorderColor = useColorModeValue('gray.200', 'gray.700');
 	const { onCopy } = useClipboard({
 		toastTitle: "This project's invite link was copied to clipboard.",
 		toastMessage: 'Share it with your team members.',
@@ -73,7 +74,7 @@ const InviteLinkInput = () => {
 				variant="subtle"
 				ml={4}
 				border="1px solid"
-				borderColor={useColorModeValue('gray.200', 'gray.700')}
+				borderColor={refreshButtonBorderColor}
 				onClick={refreshInviteLink}
 				isLoading={loading}
 				loadingText="Refreshing"

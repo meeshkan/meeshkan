@@ -25,6 +25,8 @@ const VideoPlayer = ({
 		'gray.700',
 		'gray.800',
 	]);
+	const borderColor = useColorModeValue(gray200, gray700);
+	const backgroundColor = useColorModeValue(gray100, gray800);
 	const maxHeight = useBreakpointValue({
 		base: '75vw',
 		md: '15vw',
@@ -44,9 +46,9 @@ const VideoPlayer = ({
 				maxHeight: maxHeight,
 				borderRadius: 8,
 				border: '1px solid',
-				borderColor: useColorModeValue(gray200, gray700),
+				borderColor,
 				overflow: 'hidden',
-				backgroundColor: useColorModeValue(gray100, gray800),
+				backgroundColor,
 			}}
 		/>
 	);
