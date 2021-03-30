@@ -26,7 +26,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				$distinct_id: user.idToken,
 				$first_name: user.firstName,
 				$last_name: user.lastName,
-				// $created: user.createdAt,
+				$created: user.createdAt,
 				// $transactions: "" add stripe here
 			}}
 		>
