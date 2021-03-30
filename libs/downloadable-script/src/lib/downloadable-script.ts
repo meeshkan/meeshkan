@@ -56,8 +56,22 @@ interface ScriptToPptrOptions {
 	headless: boolean;
 }
 
+// TODO: Add support for subdomains
+const transformBaseUrlToStagingUrl = (
+	originalUrl: string,
+	stagingUrl: string
+) => {
+	const baseUrl = new URL(stagingUrl);
+	const newUrl = new URL(originalUrl);
+	newUrl.port = baseUrl.port;
+	newUrl.protocol = baseUrl.protocol;
+	newUrl.hostname = baseUrl.hostname;
+	return newUrl.toString();
+};
+
 const openToPptrString = ({ value }: Open) =>
-	`  page.goto(${JSON.stringify(value)});`;
+	`  // Replace this URL with your stagingURL
+	page.goto(${JSON.stringify(value)});`;
 
 const setViewportSizeToPptrString = ({
 	value: { xCoord, yCoord },
