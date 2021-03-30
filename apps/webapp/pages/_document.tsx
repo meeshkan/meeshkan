@@ -21,15 +21,23 @@ class MyDocument extends Document<DocumentProps> {
 		return (
 			<Html lang="en">
 				<Head>
-					{process.env.NODE_ENV === 'production' ? (
+					{process.env.NODE_ENV === 'production' ||
+					process.env.VERCEL_ENV === 'production' ? (
 						<link
 							rel="icon"
 							href="https://media.graphcms.com/Sf3Hxc3gQP6ylXt8d3EX"
 						/>
-					) : (
+					) : process.env.VERCEL_ENV === 'preview' ||
+					  process.env.VERCEL_ENV === 'development' ||
+					  process.env.NODE_ENV === 'development' ? (
 						<link
 							rel="icon"
 							href="https://media.graphcms.com/3rGTPSeRQSGrTSByY6M6"
+						/>
+					) : (
+						<link
+							rel="icon"
+							href="https://media.graphcms.com/Sf3Hxc3gQP6ylXt8d3EX"
 						/>
 					)}
 					{/* Meeshkan Recorder */}
