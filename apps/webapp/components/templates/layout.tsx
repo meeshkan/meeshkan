@@ -14,19 +14,19 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 	return (
 		<Analytics
 			appName="Meeshkan-webapp"
-			identity={user.idToken}
+			identity={user?.idToken}
 			// This is a 'super property' which attaches information to every event.
 			eventData={{
-				project: user.project,
+				project: user?.project,
 				// plan: ''
 			}}
 			profileData={{
-				$avatar: user.avatar,
-				$email: user.email,
-				$distinct_id: user.idToken,
-				$first_name: user.firstName,
-				$last_name: user.lastName,
-				$created: user.createdAt,
+				$avatar: user?.avatar,
+				$email: user?.email,
+				$distinct_id: user?.idToken,
+				$first_name: user?.firstName,
+				$last_name: user?.lastName,
+				$created: user?.createdAt,
 				// $transactions: "" add stripe here
 			}}
 		>
@@ -41,19 +41,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				spacing={[0, 6, 6, 6]}
 				{...props}
 			>
-				<Stack
-					p={[0, 6, 6, 6]}
-					bg={backgroundColor}
-					w="100%"
-					h={['100%', '100%', '100%', '100vh']}
-					mt={[12, 0, 0, 0]}
-					d="flex"
-					direction={['column', 'column', 'column', 'row']}
-					spacing={[0, 6, 6, 6]}
-					{...props}
-				>
-					{children}
-				</Stack>
+				{children}
 			</Stack>
 		</Analytics>
 	);
