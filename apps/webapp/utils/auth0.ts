@@ -38,6 +38,7 @@ export const getUser = async (req: IncomingMessage): Promise<IUser> => {
 	const auth0 = initAuth0WithReq(req);
 	const session = await auth0.getSession(req);
 	if (!session) {
+		console.error(req, auth0, session);
 		throw new Error('User session does not exist. User must be logged in.');
 	}
 
