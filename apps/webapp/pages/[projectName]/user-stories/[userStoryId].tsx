@@ -531,9 +531,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
 									variant="subtle"
 									leftIcon={<CheckmarkIcon />}
-									onClick={() => {
-										onCreateTestCase;
-									}}
+									onClick={onCreateTestCase}
 									isLoading={creatingTestCase}
 									mr={4}
 								>
