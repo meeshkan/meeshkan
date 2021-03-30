@@ -41,19 +41,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				spacing={[0, 6, 6, 6]}
 				{...props}
 			>
-				<Stack
-					p={[0, 6, 6, 6]}
-					bg={backgroundColor}
-					w="100%"
-					h={['100%', '100%', '100%', '100vh']}
-					mt={[12, 0, 0, 0]}
-					d="flex"
-					direction={['column', 'column', 'column', 'row']}
-					spacing={[0, 6, 6, 6]}
-					{...props}
-				>
-					{children}
-				</Stack>
+				{children}
 			</Stack>
 		</Analytics>
 	);
