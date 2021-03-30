@@ -45,7 +45,7 @@ const topMatterPptr = (
 					authTokens[0]?.key
 			  )}, value: ${JSON.stringify(
 					authTokens[0]?.value
-			  )}, url: ${JSON.stringify(stagingURL)} })`
+			  )}, domain: ${JSON.stringify(new URL(stagingURL).hostname)}  })`
 			: '')
 	);
 };
