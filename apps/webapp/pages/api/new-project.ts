@@ -1,11 +1,8 @@
-import {
-	NextApiRequest,
-	NextApiResponse,
-} from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) =>
 	fetch(
-		'https://hooks.slack.com/services/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',
+		'https://hooks.slack.com/services/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',
 		{
 			method: 'POST',
 			mode: 'no-cors',

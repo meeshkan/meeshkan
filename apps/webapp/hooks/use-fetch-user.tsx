@@ -10,7 +10,7 @@ type IUseFetchUser = {
 };
 
 export const useFetchUser = (): IUseFetchUser => {
-	const { data: user, error, isValidating, mutate } = useSWR('/api/session');
+	const { data: user, isValidating, mutate } = useSWR('/api/session');
 
 	useEffect(() => {
 		if (user) {

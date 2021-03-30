@@ -27,6 +27,8 @@ function SegmentedControlTab({
 	disabled,
 	selected,
 }: SegmentedControlTabProps) {
+	const selectedColor = useColorModeValue('gray.900', 'white');
+	const color = useColorModeValue('gray.700', 'gray.200');
 	return (
 		<Flex
 			position="relative"
@@ -44,8 +46,8 @@ function SegmentedControlTab({
 				textAlign="center"
 				color={
 					selected
-						? useColorModeValue('gray.900', 'white')
-						: useColorModeValue('gray.700', 'gray.200')
+						? selectedColor
+						: color
 				}
 			>
 				{children}
@@ -71,13 +73,15 @@ const SegmentedControl = ({
 	attached = false,
 	props,
 }: SegmentedControlProps) => {
+	const stackBackgroundColor = useColorModeValue('gray.200', 'gray.700');
+	const boxBackgroundColor = useColorModeValue('white', 'gray.900');
 	return (
 		<AnimateSharedLayout>
 			<Stack
 				direction="row"
 				align="center"
-				backgroundColor={useColorModeValue('gray.200', 'gray.700')}
-				p={2}
+				backgroundColor={stackBackgroundColor}
+				p={1}
 				borderTopRadius="lg"
 				borderBottomRadius={attached === true ? 0 : 'lg'}
 				w="max-content"
@@ -100,12 +104,12 @@ const SegmentedControl = ({
 									position="absolute"
 									px={2}
 									py={3}
-									top="2px"
+									top="0px"
 									left="0px"
 									right="0px"
-									bottom="2px"
-									borderRadius="6px"
-									backgroundColor={useColorModeValue('white', 'gray.900')}
+									bottom="0px"
+									borderRadius="md"
+									backgroundColor={boxBackgroundColor}
 									cursor="default"
 									width="100%"
 									userSelect="none"

@@ -1,6 +1,20 @@
 {
 	"version": 1,
 	"projects": {
+		"custom-graphql": {
+			"root": "apps/custom-graphql",
+			"sourceRoot": "apps/custom-graphql",
+			"projectType": "application",
+			"schematics": {},
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["apps/webapp/**/*.{ts,tsx}"]
+					}
+				}
+			}
+		},
 		"webapp": {
 			"root": "apps/webapp",
 			"sourceRoot": "apps/webapp",
@@ -51,32 +65,6 @@
 				}
 			}
 		},
-		"webapp-e2e": {
-			"root": "apps/webapp-e2e",
-			"sourceRoot": "apps/webapp-e2e/src",
-			"projectType": "application",
-			"architect": {
-				"e2e": {
-					"builder": "@nrwl/cypress:cypress",
-					"options": {
-						"cypressConfig": "apps/webapp-e2e/cypress.json",
-						"tsConfig": "apps/webapp-e2e/tsconfig.e2e.json",
-						"devServerTarget": "webapp:serve"
-					},
-					"configurations": {
-						"production": {
-							"devServerTarget": "webapp:serve:production"
-						}
-					}
-				},
-				"lint": {
-					"builder": "@nrwl/linter:eslint",
-					"options": {
-						"lintFilePatterns": ["apps/webapp-e2e/**/*.{js,ts}"]
-					}
-				}
-			}
-		},
 		"website": {
 			"root": "apps/website",
 			"sourceRoot": "apps/website/src",
@@ -115,32 +103,6 @@
 					"options": {
 						"jestConfig": "apps/website/jest.config.js",
 						"passWithNoTests": true
-					}
-				}
-			}
-		},
-		"website-e2e": {
-			"root": "apps/website-e2e",
-			"sourceRoot": "apps/website-e2e/src",
-			"projectType": "application",
-			"architect": {
-				"e2e": {
-					"builder": "@nrwl/cypress:cypress",
-					"options": {
-						"cypressConfig": "apps/website-e2e/cypress.json",
-						"tsConfig": "apps/website-e2e/tsconfig.e2e.json",
-						"devServerTarget": "website:serve"
-					},
-					"configurations": {
-						"production": {
-							"devServerTarget": "website:serve:production"
-						}
-					}
-				},
-				"lint": {
-					"builder": "@nrwl/linter:eslint",
-					"options": {
-						"lintFilePatterns": ["apps/website-e2e/**/*.{js,ts}"]
 					}
 				}
 			}
@@ -212,32 +174,6 @@
 					"options": {
 						"jestConfig": "apps/og-cards/jest.config.js",
 						"passWithNoTests": true
-					}
-				}
-			}
-		},
-		"og-cards-e2e": {
-			"root": "apps/og-cards-e2e",
-			"sourceRoot": "apps/og-cards-e2e/src",
-			"projectType": "application",
-			"architect": {
-				"e2e": {
-					"builder": "@nrwl/cypress:cypress",
-					"options": {
-						"cypressConfig": "apps/og-cards-e2e/cypress.json",
-						"tsConfig": "apps/og-cards-e2e/tsconfig.e2e.json",
-						"devServerTarget": "og-cards:serve"
-					},
-					"configurations": {
-						"production": {
-							"devServerTarget": "og-cards:serve:production"
-						}
-					}
-				},
-				"lint": {
-					"builder": "@nrwl/linter:eslint",
-					"options": {
-						"lintFilePatterns": ["apps/og-cards-e2e/**/*.{js,ts}"]
 					}
 				}
 			}

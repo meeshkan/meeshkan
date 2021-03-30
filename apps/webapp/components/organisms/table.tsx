@@ -17,16 +17,13 @@ import {
 	useColorModeValue,
 	Skeleton,
 	ButtonGroup,
-	Checkbox,
 	Button,
 	Modal,
 	ModalOverlay,
 	ModalBody,
 	ModalContent,
 	useDisclosure,
-	ModalCloseButton,
 	DarkMode,
-	Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -38,7 +35,6 @@ import {
 	DoubleArrowRightIcon,
 	ArrowRightIcon,
 	ExternalLinkIcon,
-	CheckmarkIcon,
 	PlayIcon,
 } from '@frontend/chakra-theme';
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
@@ -59,6 +55,9 @@ const Table = ({
 	pageCount: controlledPageCount,
 	fetchData,
 }: TableProps) => {
+	const borderBottomColor = useColorModeValue('gray.100', 'gray.700');
+	const backgroundColor = useColorModeValue('white', 'gray.900');
+	const hoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -93,15 +92,17 @@ const Table = ({
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
+
 	const router = useRouter();
 	const [video, setVideo] = useState<File['downloadUrl']>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
 	return (
 		<>
 			<ChakraTable
 				{...getTableProps()}
 				variant="simple"
-				backgroundColor={useColorModeValue('white', 'gray.900')}
+				backgroundColor={backgroundColor}
 				borderTopRightRadius="lg"
 				borderBottomRadius="lg"
 			>
@@ -165,13 +166,13 @@ const Table = ({
 							<Tr
 								{...row.getRowProps()}
 								borderBottom="1px solid"
-								borderBottomColor={useColorModeValue('gray.100', 'gray.700')}
+								borderBottomColor={borderBottomColor}
 								_last={{ border: 0 }}
 								_hover={{
 									cursor: 'pointer',
-									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+									backgroundColor: hoverBackgroundColor,
 									borderBottom: '1px solid',
-									borderBottomColor: useColorModeValue('gray.100', 'gray.700'),
+									borderBottomColor,
 								}}
 							>
 								{/* <Td p={3} border={0}>
@@ -217,7 +218,7 @@ const Table = ({
 										<Td
 											onClick={() =>
 												router.push(
-													// @ts-ignore
+													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												)
 											}
@@ -241,7 +242,7 @@ const Table = ({
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
 												window.open(
-													// @ts-ignore
+													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												);
 											}}
@@ -284,9 +285,15 @@ const Table = ({
 						</Button>
 					</DarkMode>
 					<ModalBody backgroundColor="transparent" p={0}>
-						<VideoPlayer>
-							<source src={video} type="video/webm" />
-						</VideoPlayer>
+						<VideoPlayer
+							src={video}
+							onStart={() =>
+								mixpanel.track('User story table video play started')
+							}
+							onEnded={() =>
+								mixpanel.track('User story table video play finished')
+							}
+						/>
 					</ModalBody>
 				</ModalContent>
 			</Modal>

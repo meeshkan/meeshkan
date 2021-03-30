@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useClipboard as useChakraClipboard, useToast } from '@chakra-ui/react';
+import { useClipboard as useChakraClipboard } from '@chakra-ui/react';
+import { useToaster } from './use-toaster';
 
 type ClipboardProps = {
 	toastTitle: string;
@@ -14,21 +15,18 @@ export const useClipboard = ({
 	text,
 	status,
 }: ClipboardProps) => {
-	const toast = useToast();
+	const toaster = useToaster();
 	const { hasCopied, onCopy } = useChakraClipboard(text);
 
 	useEffect(() => {
 		if (hasCopied) {
-			toast({
-				position: 'bottom-right',
+			toaster({
 				title: toastTitle,
 				description: toastMessage,
-				isClosable: true,
-				variant: 'clean',
 				status: status,
 			});
 		}
-	}, [hasCopied, toast, toastMessage]);
+	}, [hasCopied, toaster, toastMessage, status, toastTitle]);
 
 	return { hasCopied, onCopy };
 };

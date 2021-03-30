@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
 	Box,
 	Stack,
@@ -16,12 +16,7 @@ import {
 	Text,
 	StackProps,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import {
-	ArrowForwardIcon,
-	ArrowUpDownIcon,
-	ChevronDownIcon,
-} from '@chakra-ui/icons';
+import { ArrowUpDownIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
 import Card from '../atoms/card';
@@ -38,7 +33,6 @@ import {
 	DataPoint,
 	Project,
 } from '@frontend/meeshkan-types';
-import { createSlug } from '../../utils/createSlug';
 import { capitalize } from '../../utils/capitalize';
 import {
 	getTestRuns,
@@ -48,8 +42,8 @@ import {
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
-	getLastNDaysInFormat,
 } from '../../utils/metrics';
+import { lastNDays } from '../../utils/date';
 import { ChartOptions, ChartData } from 'chart.js';
 require('../molecules/rounded-chart');
 
@@ -113,14 +107,12 @@ const deltaChange = (oldv: number, newv: number) =>
 
 const Grid = (props: StackProps) => {
 	const { project: selectedProject } = useContext(UserContext);
-	const router = useRouter();
-	const slugifiedProjectName = useMemo(() => createSlug(selectedProject.name), [
-		selectedProject.name,
-	]);
 
-	const [showScript, setShowScript] = useState<boolean>(
-		!selectedProject?.hasReceivedEvents
-	);
+	const listColor = useColorModeValue('gray.600', 'gray.400');
+	const overviewColor = useColorModeValue('gray.700', 'gray.100');
+	const overviewUnitColor = useColorModeValue('gray.500', 'gray.300');
+	const barFooterColor = useColorModeValue('gray.500', 'gray.400');
+	const emptyDoughnutColor = useColorModeValue('gray.100', 'gray.800');
 
 	const doughnutOptions: ChartOptions = {
 		legend: {
@@ -148,7 +140,7 @@ const Grid = (props: StackProps) => {
 			},
 			position: 'bottom',
 		},
-		// @ts-ignore custom option
+		// @ts-expect-error this is a custom option implemented with the 'rounded-chart' import
 		cornerRadius: 6,
 		scales: {
 			yAxes: [
@@ -183,8 +175,10 @@ const Grid = (props: StackProps) => {
 
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
+	const [showScript, setShowScript] = useState(false);
 
 	useEffect(() => setVersion(versions[0]), [versions]);
+	useEffect(() => setShowScript(!selectedProject.hasReceivedEvents), [selectedProject]);
 
 	const userStories: UserStoryListResponse['items'] =
 		selectedProject.userStories.items;
@@ -248,13 +242,10 @@ const Grid = (props: StackProps) => {
 		userStories
 	);
 
-	// @ts-ignore
 	barData.datasets[0].data = Object.values(recordingsByDay);
-	// @ts-ignore
 	barData.datasets[1].data = Object.values(testsByDay);
-	const barDataLabels = getLastNDaysInFormat(
-		selectedTimePeriodInDays,
-		'MMM DD'
+	const barDataLabels = lastNDays(selectedTimePeriodInDays).map((date: Date) =>
+		date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
 	);
 	barData.labels = barDataLabels;
 
@@ -309,7 +300,7 @@ const Grid = (props: StackProps) => {
 						fontSize="md"
 						display="inline"
 						lineHeight="short"
-						color={useColorModeValue('gray.600', 'gray.400')}
+						color={listColor}
 						mr={3}
 					>
 						Release
@@ -404,7 +395,7 @@ const Grid = (props: StackProps) => {
 								<GridCard title="Confidence change">
 									<List
 										spacing={3}
-										color={useColorModeValue('gray.600', 'gray.400')}
+										color={listColor}
 										fontSize="sm"
 									>
 										{confidenceChange.length === 0 ? (
@@ -439,7 +430,7 @@ const Grid = (props: StackProps) => {
 											<Text fontWeight="900" mr={2}>
 												{totalRecordings}
 											</Text>
-											<Text color={useColorModeValue('gray.500', 'gray.400')}>
+											<Text color={barFooterColor}>
 												Recordings
 											</Text>
 										</Flex>
@@ -447,23 +438,11 @@ const Grid = (props: StackProps) => {
 											<Text fontWeight="900" mr={2}>
 												{totalTests}
 											</Text>
-											<Text color={useColorModeValue('gray.500', 'gray.400')}>
+											<Text color={barFooterColor}>
 												Test cases
 											</Text>
 										</Flex>
 									</Stack>
-									<Button
-										mt={4}
-										size="sm"
-										colorScheme="gray"
-										variant="subtle"
-										w="full"
-										onClick={() =>
-											router.push(`/${slugifiedProjectName}/user-stories`)
-										}
-									>
-										Review recordings <ArrowForwardIcon ml={2} />
-									</Button>
 								</GridCard>
 								<GridCard title="Test suite state">
 									<Box w="275px">
@@ -474,7 +453,7 @@ const Grid = (props: StackProps) => {
 												<EmptyDoughnutIcon
 													h="128px"
 													w="128px"
-													color={useColorModeValue('gray.100', 'gray.800')}
+													color={emptyDoughnutColor}
 													mr={6}
 												/>
 												<Text fontStyle="italic">
@@ -493,14 +472,14 @@ const Grid = (props: StackProps) => {
 												</Text>
 												<Text
 													fontSize="sm"
-													color={useColorModeValue('gray.500', 'gray.300')}
+													color={overviewUnitColor}
 													fontWeight="500"
 												>
 													days
 												</Text>
 											</Flex>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -516,7 +495,7 @@ const Grid = (props: StackProps) => {
 													: `Not ready`}
 											</Text>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -532,14 +511,14 @@ const Grid = (props: StackProps) => {
 												</Text>
 												<Text
 													fontSize="sm"
-													color={useColorModeValue('gray.500', 'gray.300')}
+													color={overviewUnitColor}
 													fontWeight="500"
 												>
 													bug{bugs.introduced !== 1 && 's'}
 												</Text>
 											</Flex>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -553,14 +532,14 @@ const Grid = (props: StackProps) => {
 												</Text>
 												<Text
 													fontSize="sm"
-													color={useColorModeValue('gray.500', 'gray.300')}
+													color={overviewUnitColor}
 													fontWeight="500"
 												>
 													bugs
 												</Text>
 											</Flex>
 											<Text
-												color={useColorModeValue('gray.700', 'gray.100')}
+												color={overviewColor}
 												fontWeight="700"
 												fontSize="sm"
 											>
@@ -583,7 +562,7 @@ const Grid = (props: StackProps) => {
 								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 								{/* <List
 									spacing={3}
-									color={useColorModeValue('gray.600', 'gray.400')}
+									color={listColor}
 								>
 									<ActivityListItem
 										title="Release successfully merged"
@@ -624,7 +603,7 @@ const Grid = (props: StackProps) => {
 								<Text fontStyle="italic">Coming soon, stay tuned!</Text>
 								{/* <List
 									spacing={3}
-									color={useColorModeValue('gray.600', 'gray.400')}
+									color={listColor}
 								>
 									<LinearListItem
 										title="User can't schedule pickup"

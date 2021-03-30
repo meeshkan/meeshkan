@@ -6,7 +6,6 @@ import AuthScreen from '../components/organisms/auth-screen';
 import { UserContext } from '../utils/user';
 import { Project } from '@frontend/meeshkan-types';
 import { useFetchUser } from '../hooks/use-fetch-user';
-import { NextComponentType, NextPageContext } from 'next';
 
 export interface IWithAuthProps {
 	cookies: string | undefined;
@@ -54,7 +53,7 @@ const withAuth = (PageComponent: any) => {
 			return <PageComponent {...props} />;
 		}
 
-		if (loading) {
+		if (loading && !user) {
 			return <LoadingScreen h="100vh" />;
 		}
 

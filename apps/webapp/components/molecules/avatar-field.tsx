@@ -11,7 +11,6 @@ import {
 	Button,
 	Spinner,
 } from '@chakra-ui/react';
-import _ from 'lodash';
 import { FilePlusIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
 import { FILE_UPLOAD_INFO } from '../../graphql/file';
@@ -37,7 +36,7 @@ const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
 
 	useEffect(() => {
 		setImage(existingImageUrl);
-	}, [project]);
+	}, [project, existingImageUrl]);
 
 	if (!data && !uploadInfoError) {
 		return (

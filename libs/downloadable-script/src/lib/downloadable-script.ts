@@ -1,4 +1,8 @@
-import { SeleniumScript, SeleniumGroup } from '@frontend/meeshkan-types';
+import {
+	SeleniumScript,
+	SeleniumGroup,
+	AuthenticationToken,
+} from '@frontend/meeshkan-types';
 
 interface ScriptTargetSelector {
 	xpath: string;
@@ -20,15 +24,31 @@ interface ScriptTarget {
 }
 
 const topMatterPptr = (
-	headless: boolean
-): string => `const puppeteer = require('puppeteer');
+	headless: boolean,
+	authTokens?: AuthenticationToken[],
+	stagingURL?: string
+): string => {
+	return (
+		`const puppeteer = require('puppeteer');
+
 (async () => {
-  const browser = await puppeteer.launch({headless: ${headless}});
-	const page = await browser.newPage();
-	let ddSource;
-	let ddDestination;
-	let ddSourceBB;
-	let ddDestinationBB;`;
+  const browser = await puppeteer.launch({ headless: ${headless} });
+  const page = await browser.newPage();
+  let ddSource;
+  let ddDestination;
+  let ddSourceBB;
+  let ddDestinationBB;
+
+` +
+		(authTokens && stagingURL
+			? `  await page.setCookie({ name: ${JSON.stringify(
+					authTokens[0]?.key
+			  )}, value: ${JSON.stringify(
+					authTokens[0]?.value
+			  )}, domain: ${JSON.stringify(new URL(stagingURL).hostname)}  })`
+			: '')
+	);
+};
 const bottomMatterPptr = `
   await browser.close();
 })();`;
@@ -36,8 +56,22 @@ interface ScriptToPptrOptions {
 	headless: boolean;
 }
 
+// TODO: Add support for subdomains
+const transformBaseUrlToStagingUrl = (
+	originalUrl: string,
+	stagingUrl: string
+) => {
+	const baseUrl = new URL(stagingUrl);
+	const newUrl = new URL(originalUrl);
+	newUrl.port = baseUrl.port;
+	newUrl.protocol = baseUrl.protocol;
+	newUrl.hostname = baseUrl.hostname;
+	return newUrl.toString();
+};
+
 const openToPptrString = ({ value }: Open) =>
-	`  page.goto(${JSON.stringify(value)});`;
+	`  // Replace this URL with your stagingURL
+	page.goto(${JSON.stringify(value)});`;
 
 const setViewportSizeToPptrString = ({
 	value: { xCoord, yCoord },
@@ -63,18 +97,34 @@ const typeToPptrString = ({
 const dragndropToPptrString = ({
 	sourceTarget,
 	destinationTarget,
-}: Dragndrop) => `  ddSource = (await page.$x(${JSON.stringify(
-	sourceTarget.selector.xpath
-)}))[0];
+}: Dragndrop) => {
+	const isXSame =
+		sourceTarget?.coordinates?.xCoord ===
+		destinationTarget?.coordinates?.xCoord;
+
+	const isYSame =
+		sourceTarget?.coordinates?.yCoord ===
+		destinationTarget?.coordinates?.yCoord;
+
+	if (isYSame && isXSame) {
+		return `  await (await page.$x(${JSON.stringify(
+			sourceTarget.selector.xpath
+		)}))[0].click();`;
+	} else {
+		return `  ddSource = (await page.$x(${JSON.stringify(
+			sourceTarget.selector.xpath
+		)}))[0];
   ddDestination = (await page.$x(${JSON.stringify(
 		destinationTarget.selector.xpath
 	)}))[0];
-  ddSourceBB = await ddSource.boundingBox();			
+  ddSourceBB = await ddSource.boundingBox();
   ddDestinationBB = await ddDestination.boundingBox();
   await page.mouse.move(ddSourceBB.x + ddSourceBB.width / 2, ddSourceBB.y +   ddSourceBB.height / 2);
   await page.mouse.down();
   await page.mouse.move(ddDestinationBB.x + ddDestinationBB.width / 2, ddDestinationBB.y + ddDestinationBB.height / 2);
   await page.mouse.up();`;
+	}
+};
 interface Open {
 	value: string;
 }
@@ -108,14 +158,16 @@ const eightBaseToX = (formatter: {
 	dragndrop: (o: Dragndrop) => string;
 }) => (
 	script: SeleniumScript,
-	options: ScriptToPptrOptions
+	options: ScriptToPptrOptions,
+	authTokens?: Array<AuthenticationToken>,
+	stagingURL?: string
 ): string | undefined => {
-	// @ts-ignore
+	// @ts-expect-error graphql alias causes type error
 	if (!script?.groups?.groupItems) {
 		return undefined;
 	}
 	const wait = '\n    await new Promise(r => setTimeout(r, 5000));\n';
-	// @ts-ignore
+	// @ts-expect-error groupItems is an alias and therefore not in the type used here.
 	const commands = script?.groups?.groupItems
 		?.map((group: SeleniumGroup) =>
 			group?.commands?.items?.map((command) =>
@@ -250,7 +302,10 @@ const eightBaseToX = (formatter: {
 		return undefined;
 	}
 	return (
-		topMatterPptr(options.headless) + wait + commands + wait + bottomMatterPptr
+		topMatterPptr(options.headless, authTokens, stagingURL) +
+		commands +
+		wait +
+		bottomMatterPptr
 	);
 };
 

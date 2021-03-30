@@ -17,7 +17,7 @@ const Index = (props: IndexProps) => {
 		if (hasProjects) {
 			setProject(projects[0]);
 		}
-	}, [projects, setProject]);
+	}, [projects, setProject, hasProjects]);
 
 	if (idToken && !hasProjects) {
 		return (

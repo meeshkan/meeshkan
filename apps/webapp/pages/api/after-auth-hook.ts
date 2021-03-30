@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getUser } from '../../utils/auth0';
-import { confirmOrCreateUser, getUserId } from '../../utils/user';
+import { confirmOrCreateUser } from '../../utils/user';
 import { createSlug } from '../../utils/createSlug';
 import { propagateInviteToDb } from '../../utils/invite';
 

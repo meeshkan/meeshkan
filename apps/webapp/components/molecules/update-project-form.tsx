@@ -41,12 +41,13 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const [stagingURL, setStagingURL] = useState(configuration.stagingURL);
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
+	const infoIconColor = useColorModeValue('gray.400', 'gray.500');
 
 	useEffect(() => {
 		setName(project.name);
 		setProductionURL(configuration.productionURL);
 		setStagingURL(configuration.stagingURL);
-	}, [project]);
+	}, [project, configuration.productionURL, configuration.stagingURL]);
 
 	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
 		setLoading(true);
@@ -133,7 +134,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 						<InfoOutlineIcon
 							ml={2}
 							lineHeight="short"
-							color={useColorModeValue('gray.400', 'gray.500')}
+							color={infoIconColor}
 						/>
 					</Tooltip>
 				</FormLabel>

@@ -8,7 +8,6 @@ import {
 	Text,
 	Switch,
 	IconButton,
-	useToast,
 	Avatar,
 	Flex,
 	useColorModeValue,
@@ -31,7 +30,7 @@ import InviteLinkInput from '../../components/molecules/invite-link-input';
 import ScriptTagInput from '../../components/molecules/script-tag-input';
 import { UserContext, updateProductNotifications } from '../../utils/user';
 import { User, AuthenticationToken } from '@frontend/meeshkan-types';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { eightBaseClient } from '../../utils/graphql';
 import {
 	REMOVE_TEAM_MEMBER,
 	REMOVE_AUTH_TOKEN,
@@ -44,10 +43,11 @@ import {
 	latestVersion as latestExtensionVersion,
 	startRecording,
 } from '../../utils/extension';
+import { useToaster } from '../../hooks/use-toaster';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
-	const toast = useToast();
+	const toaster = useToaster();
 	const user = useContext(UserContext);
 	const {
 		productNotifications,
@@ -66,11 +66,15 @@ const Settings = () => {
 		project?.configuration.authenticationTokens?.items || []
 	);
 
+	const listItemHoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
+	const avatarColor = useColorModeValue('gray.700', 'gray.200');
+	const avatarBackgroundColor = useColorModeValue('gray.200', 'gray.600');
+
 	useEffect(() => {
 		setProductUpdates(productNotifications);
 		setMembers(project?.members?.items);
 		setTokens(project?.configuration.authenticationTokens?.items);
-	}, [project]);
+	}, [project, productNotifications]);
 
 	const client = eightBaseClient(idToken);
 
@@ -129,26 +133,10 @@ const Settings = () => {
 		return request;
 	};
 
-	const errorToast = ({
-		title,
-		description,
-	}: {
-		title: string;
-		description: string;
-	}) => {
-		toast({
-			position: 'bottom-right',
-			title,
-			description,
-			isClosable: true,
-			status: 'error',
-			variant: 'clean',
-		});
-	};
-
 	const handleNewUserStory = async () => {
 		if (!isChrome()) {
-			errorToast({
+			toaster({
+				status: 'error',
 				title: 'Could not trigger the Meeshkan extension',
 				description:
 					'You need to be using a Chromium browser to create manual user stories, for the time being.',
@@ -159,7 +147,8 @@ const Settings = () => {
 		try {
 			const version = await getExtensionVersion();
 			if (version !== latestExtensionVersion) {
-				errorToast({
+				toaster({
+					status: 'error',
 					title: 'Meeshkan extension is outdated',
 					description:
 						'Please update to the latest version of the Meeshkan recorder extension.',
@@ -168,7 +157,8 @@ const Settings = () => {
 			}
 
 			if (!project?.configuration?.productionURL) {
-				errorToast({
+				toaster({
+					status: 'error',
 					title: 'No production URL specified',
 					description:
 						"To trigger the Meeshkan extension, you need to specify a production URL in your project's settings page.",
@@ -182,7 +172,8 @@ const Settings = () => {
 				isAuthFlow: true,
 			});
 		} catch (error) {
-			errorToast({
+			toaster({
+				status: 'error',
 				title: 'Extension is missing',
 				description:
 					'To begin creating manual user stories, please download the Meeshkan recorder extension via the Chrome Web Store.',
@@ -305,7 +296,7 @@ const Settings = () => {
 								justify="space-between"
 								align="center"
 								_hover={{
-									backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+									backgroundColor: listItemHoverBackgroundColor,
 								}}
 							>
 								<Flex w="250px">
@@ -315,8 +306,8 @@ const Settings = () => {
 										size="xs"
 										borderRadius="md"
 										mr={4}
-										color={useColorModeValue('gray.700', 'gray.200')}
-										bg={useColorModeValue('gray.200', 'gray.600')}
+										color={avatarColor}
+										bg={avatarBackgroundColor}
 									/>
 									<Text fontWeight="600" fontSize="14px" textAlign="left">
 										{memberName}
@@ -333,13 +324,10 @@ const Settings = () => {
 									colorScheme="red"
 									onClick={() => {
 										removeTeamMember(member.email);
-										toast({
-											position: 'bottom-right',
+										toaster({
 											title: `${member.email} has been successfully removed.`,
 											description: `If you didn't mean to remove them from ${project.name}, resend the invite link.`,
-											isClosable: true,
 											status: 'success',
-											variant: 'clean',
 										});
 									}}
 								/>
@@ -355,13 +343,10 @@ const Settings = () => {
 							mt={4}
 							onClick={() => {
 								inviteSupport();
-								toast({
-									position: 'bottom-right',
+								toaster({
 									title: 'Successfully authorized Meeshkan support.',
 									description: `contact@meeshkan.com has been successfully added to ${project.name}.`,
-									isClosable: true,
 									status: 'info',
-									variant: 'clean',
 								});
 							}}
 						>
@@ -447,7 +432,7 @@ const Settings = () => {
 							justify="space-between"
 							align="center"
 							_hover={{
-								backgroundColor: useColorModeValue('gray.50', 'gray.800'),
+								backgroundColor: listItemHoverBackgroundColor,
 							}}
 						>
 							<Flex align="center">
@@ -488,13 +473,10 @@ const Settings = () => {
 								colorScheme="red"
 								onClick={() => {
 									deleteToken(token.id);
-									toast({
-										position: 'bottom-right',
+									toaster({
 										title: `Successfully removed token ${token.key}.`,
 										description: `The token will no longer be used to authenticate for test runs on ${project.name}.`,
-										isClosable: true,
 										status: 'success',
-										variant: 'clean',
 									});
 								}}
 							/>

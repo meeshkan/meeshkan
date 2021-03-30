@@ -37,7 +37,6 @@ testem.log
 # lock files
 
 package-lock.json
-yarn.lock
 
 # System Files
 .DS_Store

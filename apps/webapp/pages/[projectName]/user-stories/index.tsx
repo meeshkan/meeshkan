@@ -5,7 +5,7 @@ import React, {
 	useContext,
 	ReactElement,
 } from 'react';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import {
 	Box,
 	Stack,
@@ -13,7 +13,6 @@ import {
 	useColorModeValue,
 	Flex,
 	Button,
-	Badge,
 	BoxProps,
 	useDisclosure,
 	Modal,
@@ -48,7 +47,6 @@ import {
 	CrosshairIcon,
 	SortIcon,
 	FilterIcon,
-	PlayIcon,
 } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
@@ -64,13 +62,11 @@ import {
 	UserStory,
 	UserStoryFilter,
 	UserStoryListResponse,
-	UserStory_PermissionFilter,
 } from '@frontend/meeshkan-types';
 import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
-import VideoPlayer from 'apps/webapp/components/atoms/video-player';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -79,12 +75,14 @@ type StartButtonProps = {
 };
 
 const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
+	const backgroundColor = useColorModeValue('cyan.50', 'transparentCyan.200');
+	const color = useColorModeValue('cyan.700', 'cyan.50');
 	return (
 		<Box
 			d="flex"
 			alignItems="center"
-			backgroundColor={useColorModeValue('cyan.50', 'transparentCyan.200')}
-			color={useColorModeValue('cyan.700', 'cyan.50')}
+			backgroundColor={backgroundColor}
+			color={color}
 			fontWeight="600"
 			p={4}
 			w="100%"
@@ -115,8 +113,6 @@ interface UserStoriesAliased {
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
-
-	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [toggleIndex, setToggleIndex] = useState(0);
@@ -132,6 +128,11 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			items: [],
 		},
 	});
+	
+	const gettingStartedGreenColor = useColorModeValue('cyan.500', 'cyan.300');
+	const gettingStartedGrayColor = useColorModeValue('gray.500', 'gray.400');
+	const linkBlueColor = useColorModeValue('blue.500', 'blue.300');
+	const modalHeaderColor = useColorModeValue('gray.900', 'white');
 
 	const columns: Column<UserStory>[] = useMemo(
 		() => [
@@ -240,7 +241,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
-	let significanceFilters: UserStoryFilter['OR'] = [];
+	const significanceFilters: UserStoryFilter['OR'] = [];
 	if (low) {
 		significanceFilters.push({
 			significance: {
@@ -319,7 +320,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						icon={
 							<BookIcon
 								boxSize={8}
-								color={useColorModeValue('cyan.500', 'cyan.300')}
+								color={gettingStartedGreenColor}
 								strokeWidth="2.5"
 							/>
 						}
@@ -330,7 +331,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						icon={
 							<ChatIcon
 								boxSize={8}
-								color={useColorModeValue('cyan.500', 'cyan.300')}
+								color={gettingStartedGreenColor}
 								strokeWidth="2.5"
 							/>
 						}
@@ -341,7 +342,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						d="flex"
 						alignItems="center"
 						border="1px dashed"
-						borderColor={useColorModeValue('gray.500', 'gray.400')}
+						borderColor={gettingStartedGrayColor}
 						fontWeight="600"
 						p={4}
 						w="100%"
@@ -353,7 +354,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					>
 						<PlusIcon
 							boxSize={8}
-							color={useColorModeValue('gray.500', 'gray.400')}
+							color={gettingStartedGrayColor}
 							strokeWidth="2.5"
 						/>
 						<Text ml={4}>Create a new user story</Text>
@@ -377,7 +378,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							as="h3"
 							lineHeight="tall"
 							mb={2}
-							color={useColorModeValue('gray.900', 'white')}
+							color={modalHeaderColor}
 						>
 							How to create a new User Story
 						</Heading>
@@ -406,7 +407,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 											passHref
 										>
 											<ChakraLink
-												color={useColorModeValue('blue.500', 'blue.300')}
+												color={linkBlueColor}
 											>
 												script tag
 											</ChakraLink>
@@ -434,7 +435,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 										<ChakraLink
 											href="https://chrome.google.com/webstore/detail/meeshkan-recorder/cfjdddhjecoeahjkmegbkakfpppflmgo?hl=en"
 											isExternal
-											color={useColorModeValue('blue.500', 'blue.300')}
+											color={linkBlueColor}
 										>
 											Install the chrome extension.
 										</ChakraLink>{' '}

@@ -49,6 +49,7 @@ export const UPDATE_AVATAR = gql`
 export const USER = gql`
 	query USER {
 		user {
+			createdAt
 			id
 			email
 			firstName
@@ -98,6 +99,7 @@ export const USER = gql`
 							id
 							testOutcome {
 								items {
+									id
 									status
 									isResolved
 									errorDetails {
@@ -134,6 +136,7 @@ export const USER = gql`
 									testOutcome {
 										count
 										items {
+											id
 											status
 											isResolved
 											errorDetails {
@@ -148,6 +151,9 @@ export const USER = gql`
 											userStory {
 												id
 												title
+												recording {
+													seleniumScriptJson
+												}
 											}
 										}
 									}
