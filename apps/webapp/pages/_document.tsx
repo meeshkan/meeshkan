@@ -47,7 +47,7 @@ class MyDocument extends Document<DocumentProps> {
 						}}
 					/>
 					<MixpanelScript
-						// random UUID generated
+						// random UUID generated as a secret
 						nonce={`456DE3C3-1598-4D76-BA71-DE9A6EDBFB3B`}
 						mixpanelApiKey={process.env.MIXPANEL_TOKEN || ''}
 					/>

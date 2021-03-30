@@ -49,7 +49,6 @@ const VideoPlayer = ({
 				backgroundColor: useColorModeValue(gray100, gray800),
 			}}
 		/>
-		// </Box>
 	);
 };
 
