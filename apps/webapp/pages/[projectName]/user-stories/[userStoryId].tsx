@@ -67,6 +67,7 @@ import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../../../components/atoms/video-player';
 import { eightBaseToPptr } from '@frontend/downloadable-script';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { useToaster } from '../../../hooks/use-toaster';
 
 type UserStoryProps = {
@@ -76,6 +77,7 @@ type UserStoryProps = {
 const UserStoryPage = (props: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const toaster = useToaster();
+	const mixpanel = useAnalytics();
 	const {
 		found: foundProject,
 		loading: validatingProject,
@@ -164,6 +166,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		}
 
 		setCreatingTestCase(true);
+		mixpanel.track('Create a test case');
 		const toasterId = 'creatingTestCase';
 		toaster({
 			status: 'info',
@@ -197,6 +200,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		}
 
 		setDeleting(true);
+		mixpanel.track('Delete a user story');
 		const toasterId = 'deleting';
 		toaster({
 			status: 'info',
@@ -458,12 +462,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 				>
 					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
 						{data.userStory?.recording?.video ? (
-							<VideoPlayer>
-								<source
-									src={data.userStory.recording.video.downloadUrl}
-									type="video/webm"
-								/>
-							</VideoPlayer>
+							<VideoPlayer
+								src={data.userStory.recording.video.downloadUrl}
+								onStart={() => mixpanel.track('User story video play started')}
+								onEnded={() => mixpanel.track('User story video play finished')}
+							/>
 						) : (
 							<AspectRatio
 								ratio={16 / 9}
@@ -528,8 +531,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
 									variant="subtle"
 									leftIcon={<CheckmarkIcon />}
-									isLoading={creatingTestCase}
 									onClick={onCreateTestCase}
+									isLoading={creatingTestCase}
 									mr={4}
 								>
 									Create test case

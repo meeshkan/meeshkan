@@ -49,6 +49,7 @@ export const UPDATE_AVATAR = gql`
 export const USER = gql`
 	query USER {
 		user {
+			createdAt
 			id
 			email
 			firstName

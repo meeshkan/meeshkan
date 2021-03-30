@@ -285,9 +285,15 @@ const Table = ({
 						</Button>
 					</DarkMode>
 					<ModalBody backgroundColor="transparent" p={0}>
-						<VideoPlayer>
-							<source src={video} type="video/webm" />
-						</VideoPlayer>
+						<VideoPlayer
+							src={video}
+							onStart={() =>
+								mixpanel.track('User story table video play started')
+							}
+							onEnded={() =>
+								mixpanel.track('User story table video play finished')
+							}
+						/>
 					</ModalBody>
 				</ModalContent>
 			</Modal>
