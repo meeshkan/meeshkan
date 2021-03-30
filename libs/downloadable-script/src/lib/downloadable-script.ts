@@ -1,4 +1,8 @@
-import { SeleniumScript, SeleniumGroup } from '@frontend/meeshkan-types';
+import {
+	SeleniumScript,
+	SeleniumGroup,
+	AuthenticationToken,
+} from '@frontend/meeshkan-types';
 
 interface ScriptTargetSelector {
 	xpath: string;
@@ -20,15 +24,31 @@ interface ScriptTarget {
 }
 
 const topMatterPptr = (
-	headless: boolean
-): string => `const puppeteer = require('puppeteer');
+	headless: boolean,
+	authTokens?: AuthenticationToken[],
+	stagingURL?: string
+): string => {
+	return (
+		`const puppeteer = require('puppeteer');
+
 (async () => {
-  const browser = await puppeteer.launch({headless: ${headless}});
-	const page = await browser.newPage();
-	let ddSource;
-	let ddDestination;
-	let ddSourceBB;
-	let ddDestinationBB;`;
+  const browser = await puppeteer.launch({ headless: ${headless} });
+  const page = await browser.newPage();
+  let ddSource;
+  let ddDestination;
+  let ddSourceBB;
+  let ddDestinationBB;
+
+` +
+		(authTokens && stagingURL
+			? `  await page.setCookie({ name: ${JSON.stringify(
+					authTokens[0]?.key
+			  )}, value: ${JSON.stringify(
+					authTokens[0]?.value
+			  )}, url: ${JSON.stringify(stagingURL)} })`
+			: '')
+	);
+};
 const bottomMatterPptr = `
   await browser.close();
 })();`;
@@ -124,9 +144,11 @@ const eightBaseToX = (formatter: {
 	dragndrop: (o: Dragndrop) => string;
 }) => (
 	script: SeleniumScript,
-	options: ScriptToPptrOptions
+	options: ScriptToPptrOptions,
+	authTokens?: Array<AuthenticationToken>,
+	stagingURL?: string
 ): string | undefined => {
-	// @ts-ignore
+	// @ts-expect-error graphql alias causes type error
 	if (!script?.groups?.groupItems) {
 		return undefined;
 	}
@@ -266,8 +288,7 @@ const eightBaseToX = (formatter: {
 		return undefined;
 	}
 	return (
-		topMatterPptr((options.headless = true)) +
-		wait +
+		topMatterPptr(options.headless, authTokens, stagingURL) +
 		commands +
 		wait +
 		bottomMatterPptr

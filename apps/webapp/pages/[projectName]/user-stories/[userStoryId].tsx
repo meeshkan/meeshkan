@@ -84,7 +84,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
 	const [loading, setLoading] = useState(false);
 	const [deleting, setDeleting] = useState(false);
-	const [creatingTestCase, setCreatingTestCase] = useState(false)
+	const [creatingTestCase, setCreatingTestCase] = useState(false);
 
 	const stepNumberColor = useColorModeValue('cyan.500', 'cyan.300');
 	const backLinkColor = useColorModeValue('gray.900', 'gray.200');
@@ -266,8 +266,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 			const pptrScript = eightBaseToPptr(
 				JSON.parse(data?.userStory?.recording?.seleniumScriptJson),
 				{
-					headless: false,
-				}
+					headless: true,
+				},
+				project?.configuration?.authenticationTokens?.items,
+				project?.configuration?.stagingURL
 			);
 
 			const blob = new Blob([pptrScript], {
@@ -497,10 +499,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						)}
 
 						<FormControl mt={8}>
-							<FormLabel
-								mb={2}
-								color={formLabelColor}
-							>
+							<FormLabel mb={2} color={formLabelColor}>
 								What should you expect?
 							</FormLabel>
 							<Textarea
@@ -567,9 +566,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							backgroundColor="transparentCyan.200"
 							ml={8}
 						>
-							<CheckmarkIcon
-								color={stepNumberColor}
-							/>
+							<CheckmarkIcon color={stepNumberColor} />
 						</Flex>
 					</Box>
 				</Grid>
