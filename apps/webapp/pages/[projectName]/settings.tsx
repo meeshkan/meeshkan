@@ -21,7 +21,7 @@ import { RecordIcon, TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
-import GridCard from '../../components/molecules/grid-card';
+import GridCard, { GridCardProps } from '../../components/molecules/grid-card';
 import UpdateProfileForm from '../../components/molecules/update-profile-form';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
@@ -44,6 +44,17 @@ import {
 	startRecording,
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
+
+type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>
+const SectionGridCard = (props: SectionGridCardProps) => {
+	return (
+		<GridCard
+			anchor
+			overflowY="visible"
+			{...props}
+		/>
+	);
+};
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -206,9 +217,8 @@ const Settings = () => {
 				<Heading fontSize="20px" color="gray.500" lineHeight="short">
 					Personal
 				</Heading>
-				<GridCard
+				<SectionGridCard
 					title="Profile"
-					anchor
 					subtitle="Manage your Meeshkan Profile"
 				>
 					<UpdateProfileForm
@@ -228,10 +238,9 @@ const Settings = () => {
 							</Button>
 						</LightMode>
 					</Flex>
-				</GridCard>
-				<GridCard
+				</SectionGridCard>
+				<SectionGridCard
 					title="Notifications"
-					anchor
 					subtitle="Manage the notifications you receive from Meeshkan."
 				>
 					<FormControl display="flex" alignItems="center">
@@ -250,13 +259,12 @@ const Settings = () => {
 							isChecked={productUpdates}
 						/>
 					</FormControl>
-				</GridCard>
+				</SectionGridCard>
 				<Heading fontSize="20px" color="gray.500" lineHeight="short" pt={5}>
 					Project
 				</Heading>
-				<GridCard
+				<SectionGridCard
 					title="General"
-					anchor
 					subtitle="Manage your Project settings"
 				>
 					<UpdateProjectForm setLoading={setProjectLoading} />
@@ -272,10 +280,9 @@ const Settings = () => {
 							</Button>
 						</LightMode>
 					</Flex>
-				</GridCard>
-				<GridCard
+				</SectionGridCard>
+				<SectionGridCard
 					title="Team Members"
-					anchor
 					subtitle="Manage your Project settings"
 				>
 					<Heading fontSize="18px" fontWeight="500">
@@ -353,10 +360,9 @@ const Settings = () => {
 							Allow Meeshkan support access
 						</Button>
 					)}
-				</GridCard>
-				<GridCard
+				</SectionGridCard>
+				<SectionGridCard
 					title="Privacy"
-					anchor
 					subtitle="Meeshkan ignores specific inputs by default. Customization will be possible in the future. The following data is excluded from Meeshkan recordings."
 				>
 					<Stack>
@@ -379,10 +385,9 @@ const Settings = () => {
 							(Password fields)
 						</Checkbox>
 					</Stack>
-				</GridCard>
-				<GridCard
+				</SectionGridCard>
+				<SectionGridCard
 					title="Details"
-					anchor
 					subtitle="Detailed information about your project."
 				>
 					<Heading fontSize="18px" fontWeight="500" mb={2}>
@@ -482,7 +487,7 @@ const Settings = () => {
 							/>
 						</Flex>
 					))}
-				</GridCard>
+				</SectionGridCard>
 			</Stack>
 		</Box>
 	);
