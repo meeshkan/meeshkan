@@ -44,7 +44,7 @@ const SideBarBody = () => {
 
 	if (isSettingsPage) {
 		return (
-			<>
+			<Box overflow="auto" mt={6}>
 				<Link href={`/${slugifiedProjectName}`} passHref>
 					<a>
 						<Heading
@@ -54,7 +54,6 @@ const SideBarBody = () => {
 							fontWeight="500"
 							color={settingsHeadingColor}
 							lineHeight="1"
-							mt={6}
 						>
 							<ChevronLeftIcon w={6} h={6} color="gray.500" />
 							Settings
@@ -194,47 +193,49 @@ const SideBarBody = () => {
 
 					<SideBarFooter isSettings={true} />
 				</Stack>
-			</>
+			</Box>
 		);
 	}
 
 	return (
 		<>
 			{hasProjects ? (
-				<Stack mt={6}>
-					<NavButton
-						leftIcon={<ActivityIcon />}
-						href={`/${slugifiedProjectName}`}
-						isActive={
-							router.pathname === '/' || router.pathname === `/[projectName]`
-						}
-					>
-						Health dashboard
-					</NavButton>
-					<NavButton
-						leftIcon={<VideoIcon />}
-						href={userStoriesHref}
-						isActive={
-							router.pathname.split('/').slice(-1)[0] === 'user-stories' ||
-							router.asPath.includes('/user-stories')
-						}
-					>
-						User stories
-					</NavButton>
-					<NavButton
-						leftIcon={<CheckSquareIcon />}
-						href={testRunsHref}
-						isActive={
-							router.pathname.split('/').slice(-1)[0] === 'test-runs' ||
-							router.asPath.includes('/test-runs')
-						}
-					>
-						Test runs
-					</NavButton>
-					<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
-						Releases
-					</NavButton>
-				</Stack>
+				<Box overflow="auto">
+					<Stack mt={6}>
+						<NavButton
+							leftIcon={<ActivityIcon />}
+							href={`/${slugifiedProjectName}`}
+							isActive={
+								router.pathname === '/' || router.pathname === `/[projectName]`
+							}
+						>
+							Health dashboard
+						</NavButton>
+						<NavButton
+							leftIcon={<VideoIcon />}
+							href={userStoriesHref}
+							isActive={
+								router.pathname.split('/').slice(-1)[0] === 'user-stories' ||
+								router.asPath.includes('/user-stories')
+							}
+						>
+							User stories
+						</NavButton>
+						<NavButton
+							leftIcon={<CheckSquareIcon />}
+							href={testRunsHref}
+							isActive={
+								router.pathname.split('/').slice(-1)[0] === 'test-runs' ||
+								router.asPath.includes('/test-runs')
+							}
+						>
+							Test runs
+						</NavButton>
+						<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
+							Releases
+						</NavButton>
+					</Stack>
+				</Box>
 			) : (
 				<Text mt={4} fontStyle="italic">
 					You need to finish creating your first project.
