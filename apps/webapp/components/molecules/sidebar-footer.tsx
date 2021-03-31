@@ -64,7 +64,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 			</NavButton>
 			<Divider my={4} />
 			<Flex align="center">
-				<Menu d="flex">
+				<Menu>
 					<MenuButton
 						as={Button}
 						flex="1"
