@@ -94,7 +94,7 @@ const TestRunsPage = () => {
 
 	return (
 		<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
-			<Alert status="warning" mb={4} p={3}>
+			<Alert status="warning" mb={4} p={3} flex="none">
 				<AlertIcon />
 				<AlertDescription>
 					Test runs are experimental at this time.
