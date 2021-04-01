@@ -290,7 +290,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	};
 
 	return (
-		<Stack w="100%" mb={8}>
+		<Stack p={[4, 0, 0, 0]} w="100%">
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
 				<ChakraLink
 					d="flex"
@@ -317,9 +317,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 							defaultValue={data.userStory.title}
 							// Callback invoked when user confirms value with `enter` key or by blurring input.
 							onSubmit={(e) => updateTitle(e)}
+							lineHeight="tall"
 							fontSize="xl"
 							fontWeight="900"
 							mr={4}
+							mb={[2, 0, 0]}
 						>
 							<EditablePreview />
 							<EditableInput />
@@ -354,9 +356,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 								lineHeight="normal"
 								textTransform="capitalize"
 								borderRadius="md"
+								whiteSpace="nowrap"
 								px={2}
 								py={1}
 								mr={2}
+								my={[2, 0, 0, 0]}
 							>
 								Expected behavior
 							</Code>
@@ -410,8 +414,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 							fontFamily="mono"
 							borderRadius="md"
 							w="fit-content"
+							textOverflow="ellipsis"
+							overflow="hidden"
+							whiteSpace="nowrap"
 							onChange={(e) => updateSignificance(e.target.value)}
-							mr={4}
+							mx={4}
 						>
 							<option value="low">Low significance</option>
 							<option value="medium">Medium significance</option>
@@ -449,18 +456,34 @@ const UserStoryPage = (props: UserStoryProps) => {
 				</Flex>
 			</Card>
 
-			<Box flex="1">
-				<Grid
+			<Box flex="1" overflowY="auto">
+				<Flex
+					flexDirection={['column-reverse', 'column-reverse', 'row', 'row']}
+					justifyContent="space-between"
 					w="100%"
-					templateColumns={[
-						'repeat(auto-fill, 1fr)',
-						'reapeat(auto-fill, 1fr)',
-						'repeat(3, 1fr)',
-					]}
-					gridAutoFlow="dense"
-					gap={8}
 				>
-					<Box gridColumnStart={[1, 1, 3]} gridColumnEnd={[2, 2, 3]}>
+					<Box
+						borderRadius="lg"
+						my={[6, 6, 0, 0]}
+						mr={4}
+						flex="3"
+					>
+						<StepList steps={steps} />
+						<Flex
+							justify="center"
+							align="center"
+							borderRadius="full"
+							h={6}
+							w={6}
+							border="1px solid"
+							borderColor={stepNumberColor}
+							backgroundColor="transparentCyan.200"
+							ml={[8, 4]}
+						>
+							<CheckmarkIcon color={stepNumberColor} />
+						</Flex>
+					</Box>
+					<Box flex="2">
 						{data.userStory?.recording?.video ? (
 							<VideoPlayer
 								src={data.userStory.recording.video.downloadUrl}
@@ -549,30 +572,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Flex>
 						)}
 					</Box>
-
-					<Box
-						gridColumnStart={[1, 1, 1]}
-						gridColumnEnd={[2, 2, 3]}
-						maxH="75vh"
-						overflow="auto"
-						borderRadius="lg"
-					>
-						<StepList steps={steps} />
-						<Flex
-							justify="center"
-							align="center"
-							borderRadius="full"
-							h={6}
-							w={6}
-							border="1px solid"
-							borderColor={stepNumberColor}
-							backgroundColor="transparentCyan.200"
-							ml={8}
-						>
-							<CheckmarkIcon color={stepNumberColor} />
-						</Flex>
-					</Box>
-				</Grid>
+				</Flex>
 			</Box>
 		</Stack>
 	);
