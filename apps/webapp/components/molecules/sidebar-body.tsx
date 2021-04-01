@@ -23,11 +23,13 @@ import {
 import NavButton from '../molecules/nav-button';
 import { UserContext } from '../../utils/user';
 import SideBarFooter from './sidebar-footer';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 const SideBarBody = () => {
 	const { projects, project } = useContext(UserContext);
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
+	const mixpanel = useAnalytics();
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
 	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
@@ -40,7 +42,7 @@ const SideBarBody = () => {
 
 	const settingsHeadingColor = useColorModeValue('gray.900', 'gray.200');
 	const headerColor = useColorModeValue('gray.400', 'gray.500');
-	const headerBackgroundColor = useColorModeValue('gray.100', 'gray.800')
+	const headerBackgroundColor = useColorModeValue('gray.100', 'gray.800');
 
 	if (isSettingsPage) {
 		return (
@@ -64,17 +66,8 @@ const SideBarBody = () => {
 				<Stack mt={6} spacing={6} h="100%">
 					<Box>
 						<Flex align="flex-start">
-							<Box
-								rounded="xl"
-								bg={headerBackgroundColor}
-								p={2}
-								mr={4}
-							>
-								<ProfileIcon
-									color={headerColor}
-									w={4}
-									h={4}
-								/>
+							<Box rounded="xl" bg={headerBackgroundColor} p={2} mr={4}>
+								<ProfileIcon color={headerColor} w={4} h={4} />
 							</Box>
 							<Stack spacing={2} w="full">
 								<Heading
@@ -87,6 +80,11 @@ const SideBarBody = () => {
 									Personal
 								</Heading>
 								<NavButton
+									onClick={() =>
+										mixpanel.track('Navigation', {
+											destination: '/settings#profile',
+										})
+									}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#profile`}
 									isActive={
@@ -97,6 +95,11 @@ const SideBarBody = () => {
 									Profile
 								</NavButton>
 								<NavButton
+									onClick={() =>
+										mixpanel.track('Navigation', {
+											destination: '/settings#notifications',
+										})
+									}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#notifications`}
 									isActive={
@@ -111,17 +114,8 @@ const SideBarBody = () => {
 					</Box>
 					<Box>
 						<Flex align="flex-start">
-							<Box
-								rounded="xl"
-								bg={headerBackgroundColor}
-								p={2}
-								mr={4}
-							>
-								<SuitcaseIcon
-									color={headerColor}
-									w={4}
-									h={4}
-								/>
+							<Box rounded="xl" bg={headerBackgroundColor} p={2} mr={4}>
+								<SuitcaseIcon color={headerColor} w={4} h={4} />
 							</Box>
 							<Stack spacing={2} w="full">
 								<Heading
@@ -135,6 +129,11 @@ const SideBarBody = () => {
 								</Heading>
 
 								<NavButton
+									onClick={() =>
+										mixpanel.track('Navigation', {
+											destination: '/settings#general',
+										})
+									}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#general`}
 									isActive={
@@ -145,6 +144,11 @@ const SideBarBody = () => {
 									General
 								</NavButton>
 								<NavButton
+									onClick={() =>
+										mixpanel.track('Navigation', {
+											destination: '/settings#team-members',
+										})
+									}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#team-members`}
 									isActive={
@@ -155,6 +159,11 @@ const SideBarBody = () => {
 									Team members
 								</NavButton>
 								<NavButton
+									onClick={() =>
+										mixpanel.track('Navigation', {
+											destination: '/settings#details',
+										})
+									}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#details`}
 									isActive={
@@ -165,6 +174,11 @@ const SideBarBody = () => {
 									Details
 								</NavButton>
 								<NavButton
+									onClick={() =>
+										mixpanel.track('Navigation', {
+											destination: '/settings#plan-and-billing',
+										})
+									}
 									disabled={true}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
@@ -176,6 +190,11 @@ const SideBarBody = () => {
 									Plan and Billing
 								</NavButton>
 								<NavButton
+									onClick={() =>
+										mixpanel.track('Navigation', {
+											destination: '/settings#integrations',
+										})
+									}
 									disabled={true}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#integrations`}
@@ -203,6 +222,11 @@ const SideBarBody = () => {
 			{hasProjects ? (
 				<Stack mt={6}>
 					<NavButton
+						onClick={() =>
+							mixpanel.track('Navigation', {
+								destination: 'dashboard',
+							})
+						}
 						leftIcon={<ActivityIcon />}
 						href={`/${slugifiedProjectName}`}
 						isActive={
@@ -212,6 +236,7 @@ const SideBarBody = () => {
 						Health dashboard
 					</NavButton>
 					<NavButton
+						id="user-stories"
 						leftIcon={<VideoIcon />}
 						href={userStoriesHref}
 						isActive={
@@ -222,6 +247,7 @@ const SideBarBody = () => {
 						User stories
 					</NavButton>
 					<NavButton
+						id="test-runs"
 						leftIcon={<CheckSquareIcon />}
 						href={testRunsHref}
 						isActive={
