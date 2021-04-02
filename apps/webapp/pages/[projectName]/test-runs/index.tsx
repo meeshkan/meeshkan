@@ -46,12 +46,17 @@ const TestRunsPage = () => {
 	const { project } = useContext(UserContext);
 
 	const testRuns = project?.release.items[0]?.testRuns?.items;
-	const latestTestRun = testRuns
-		?.filter((testRun) => testRun.status === 'completed')
-		.sort(
-			(a, b) =>
-				new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
-		)[0];
+	const sortedTestRuns = testRuns?.sort(
+		(a, b) =>
+			new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+	);
+
+	const completedTestRuns = sortedTestRuns
+		?.filter((testRun) => testRun.status === 'completed') || [];
+
+	const latestTestRun = completedTestRuns.length > 0
+		? completedTestRuns[0]
+		: null;
 
 	const latestTestRunStats =
 		latestTestRun &&
@@ -169,11 +174,9 @@ const TestRunsPage = () => {
 						</Flex>
 					)}
 				</GridCard>
-				{testRuns.length > 0 ? (
+				{sortedTestRuns.length > 0 ? (
 					<Stack spacing={6}>
-						{testRuns
-							.slice(0)
-							.reverse()
+						{sortedTestRuns
 							.map((testRun, index) => {
 								const { id, status, createdAt } = testRun;
 								return (
