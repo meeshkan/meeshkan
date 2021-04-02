@@ -24,6 +24,7 @@ import { show as showIntercom } from '../../utils/intercom';
 import { UserContext } from '../../utils/user';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type SideBarFooterProps = {
 	isSettings?: boolean;
@@ -32,6 +33,7 @@ type SideBarFooterProps = {
 const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 	const { projects, project, setProject } = useContext(UserContext);
 	const avatarUrl = project?.avatar?.downloadUrl;
+	const mixpanel = useAnalytics();
 	const router = useRouter();
 
 	const menuButtonBackgroundColor = useColorModeValue('gray.50', 'gray.800');
@@ -50,7 +52,14 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 
 	return (
 		<Box>
-			<NavButton onClick={showIntercom} leftIcon={<ChatIcon />} mt={2}>
+			<NavButton
+				onClick={() => {
+					showIntercom();
+					mixpanel.track('Help and Feedback');
+				}}
+				leftIcon={<ChatIcon />}
+				mt={2}
+			>
 				Help and Feedback
 			</NavButton>
 			<Divider my={4} />
@@ -79,10 +88,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								src={avatarUrl}
 								name={project?.name}
 								icon={
-									<QuestionIcon
-										color={questionIconColor}
-										fontSize="1rem"
-									/>
+									<QuestionIcon color={questionIconColor} fontSize="1rem" />
 								}
 								color={avatarColor}
 								bg={avatarBackgroundColor}
@@ -94,16 +100,17 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						</Flex>
 					</MenuButton>
 					<MenuList>
-						<MenuOptionGroup
-							value={project?.id}
-							title="Projects"
-							type="radio"
-						>
+						<MenuOptionGroup value={project?.id} title="Projects" type="radio">
 							{projects.map((project) => (
 								<MenuItemOption
 									key={project.id}
 									value={project.id}
-									onClick={() => setProject(project)}
+									onClick={() => {
+										mixpanel.track('Switch project', {
+											destination: project.name,
+										});
+										setProject(project);
+									}}
 								>
 									<Flex display="flex" alignItems="center">
 										<Avatar
@@ -131,7 +138,14 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						{isSettings ? null : (
 							<>
 								<MenuDivider />
-								<MenuItem onClick={() => router.push('/new-project')}>
+								<MenuItem
+									onClick={() => {
+										mixpanel.track('Navigation', {
+											destination: '/new-project',
+										});
+										router.push('/new-project');
+									}}
+								>
 									<PlusIcon mr={3} />
 									Create project
 								</MenuItem>
@@ -145,7 +159,10 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						colorScheme="gray"
 						color={tooltipColor}
 						icon={<SettingsIcon />}
-						onClick={() => router.push(`/${slugifiedProjectName}/settings`)}
+						onClick={() => {
+							mixpanel.track('Navigation', { destination: '/settings' });
+							router.push(`/${slugifiedProjectName}/settings`);
+						}}
 						variant="ghost"
 						size="sm"
 						ml={2}

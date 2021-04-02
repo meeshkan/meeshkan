@@ -128,7 +128,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			items: [],
 		},
 	});
-	
+
 	const gettingStartedGreenColor = useColorModeValue('cyan.500', 'cyan.300');
 	const gettingStartedGrayColor = useColorModeValue('gray.500', 'gray.400');
 	const linkBlueColor = useColorModeValue('blue.500', 'blue.300');
@@ -325,7 +325,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Read the documentation"
-						onClick={() => Router.push('https://meeshkan.com/docs')}
+						onClick={() => {
+							mixpanel.track('Read the docs');
+							Router.push('https://meeshkan.com/docs');
+						}}
 					/>
 					<StartButton
 						icon={
@@ -336,7 +339,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Chat with an expert"
-						onClick={showIntercom}
+						onClick={() => {
+							mixpanel.track('Chat with an expert');
+							showIntercom();
+						}}
 					/>
 					<Box
 						d="flex"
@@ -347,7 +353,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						p={4}
 						w="100%"
 						borderRadius="md"
-						onClick={onOpen}
+						onClick={() => {
+							onOpen();
+							mixpanel.track('Create new user story modal');
+						}}
 						_hover={{
 							cursor: 'pointer',
 						}}
@@ -406,11 +415,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 											href={`/${slugifiedProjectName}/settings#details`}
 											passHref
 										>
-											<ChakraLink
-												color={linkBlueColor}
-											>
-												script tag
-											</ChakraLink>
+											<ChakraLink color={linkBlueColor}>script tag</ChakraLink>
 										</Link>{' '}
 										in your frontend's production environment.
 									</ListItem>

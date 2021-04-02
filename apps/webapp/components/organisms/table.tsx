@@ -216,12 +216,15 @@ const Table = ({
 								{row.cells.map((cell) => {
 									return (
 										<Td
-											onClick={() =>
+											onClick={() => {
+												mixpanel.track('Navigation', {
+													destination: '/userStoryId',
+												});
 												router.push(
 													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
-												)
-											}
+												);
+											}}
 											border={0}
 											{...cell.getCellProps()}
 											py={3}
@@ -241,6 +244,9 @@ const Table = ({
 											aria-label="Open in a new tab"
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
+												mixpanel.track('Navigation', {
+													destination: '/userStoryId',
+												});
 												window.open(
 													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`

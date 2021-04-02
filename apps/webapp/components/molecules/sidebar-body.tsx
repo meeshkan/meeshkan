@@ -236,7 +236,11 @@ const SideBarBody = () => {
 						Health dashboard
 					</NavButton>
 					<NavButton
-						id="user-stories"
+						onClick={() =>
+							mixpanel.track('Navigation', {
+								destination: '/user-stories',
+							})
+						}
 						leftIcon={<VideoIcon />}
 						href={userStoriesHref}
 						isActive={
@@ -247,7 +251,11 @@ const SideBarBody = () => {
 						User stories
 					</NavButton>
 					<NavButton
-						id="test-runs"
+						onClick={() =>
+							mixpanel.track('Navigation', {
+								destination: '/test-runs',
+							})
+						}
 						leftIcon={<CheckSquareIcon />}
 						href={testRunsHref}
 						isActive={

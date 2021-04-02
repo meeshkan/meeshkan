@@ -90,7 +90,11 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 						<ChevronDownIcon color={chevronIconColor} />
 					</MenuButton>
 					<MenuList>
-						<MenuItem>
+						<MenuItem
+							onClick={() =>
+								mixpanel.track('Navigation', { destination: '/settings' })
+							}
+						>
 							<Link href={`/${slugifiedProjectName}/settings`} passHref>
 								<a>View settings</a>
 							</Link>
