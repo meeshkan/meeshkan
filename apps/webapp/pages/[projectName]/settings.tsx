@@ -51,6 +51,7 @@ const SectionGridCard = (props: SectionGridCardProps) => {
 		<GridCard
 			anchor
 			overflowY="visible"
+			maxH={null}
 			{...props}
 		/>
 	);
@@ -398,7 +399,7 @@ const Settings = () => {
 					<Spacer h={8} />
 
 					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
-						<Box>
+						<Stack flex="1">
 							<Heading fontSize="18px" fontWeight="500">
 								Authentication
 							</Heading>
@@ -412,13 +413,14 @@ const Settings = () => {
 								the tokens, or log in details you're supplying are not your own,
 								or a customer's.
 							</Text>
-						</Box>
+						</Stack>
 						<Button
 							size="sm"
 							colorScheme="red"
 							variant="subtle"
 							leftIcon={<RecordIcon />}
 							onClick={handleNewUserStory}
+							ml={2}
 						>
 							Record log in flow
 						</Button>
