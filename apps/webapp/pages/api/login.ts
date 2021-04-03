@@ -1,6 +1,6 @@
 import get from 'lodash/get';
 import { NextApiRequest, NextApiResponse } from 'next';
-import initAuth0 from '../../utils/auth0';
+import initAuth0 from '@utils/auth0';
 
 export default async function login(
 	req: NextApiRequest,

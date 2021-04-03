@@ -1,7 +1,7 @@
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
-import LoadingScreen from '../../components/organisms/loading-screen';
-import Grid from '../../components/organisms/grid';
-import Card from '../../components/atoms/card';
+import LoadingScreen from '@organisms/loading-screen';
+import Grid from '@organisms/grid';
+import Card from '@atoms/card';
 import NotFoundError from '../404';
 
 type ProjectProps = {
@@ -19,11 +19,9 @@ const Project = (props: ProjectProps) => {
 		return <NotFoundError />;
 	}
 
-	return (
-		<Grid />
-	);
+	return <Grid />;
 };
 
 export default Project;
 
-export { getServerSideProps } from '../../components/molecules/chakra';
+export { getServerSideProps } from '@molecules/chakra';

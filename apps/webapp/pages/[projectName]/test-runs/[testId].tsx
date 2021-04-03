@@ -30,20 +30,20 @@ import {
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import _ from 'lodash';
-import TestRunCard from '../../../components/molecules/test-run-card';
-import Card from '../../../components/atoms/card';
-import GridCard from '../../../components/molecules/grid-card';
+import TestRunCard from '@molecules/test-run-card';
+import Card from '@atoms/card';
+import GridCard from '@molecules/grid-card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
-import LoadingScreen from '../../../components/organisms/loading-screen';
+import LoadingScreen from '@organisms/loading-screen';
 import NotFoundError from '../../404';
-import { UserContext } from '../../../utils/user';
-import { createSlug } from '../../../utils/createSlug';
-import VideoPlayer from '../../../components/atoms/video-player';
+import { UserContext } from '@utils/user';
+import { createSlug } from '@utils/createSlug';
+import VideoPlayer from '@atoms/video-player';
 import {
 	SeleniumCommand,
 	TestOutcomeListResponse,
 } from '@frontend/meeshkan-types';
-import { commandsToSteps } from 'apps/webapp/utils/transform-steps';
+import { commandsToSteps } from '@utils/transform-steps';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();

@@ -48,24 +48,24 @@ import {
 	SortIcon,
 	FilterIcon,
 } from '@frontend/chakra-theme';
-import GridCard from '../../../components/molecules/grid-card';
-import Card from '../../../components/atoms/card';
+import GridCard from '@molecules/grid-card';
+import Card from '@atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
-import SegmentedControl from '../../../components/molecules/segmented-control';
-import Table from '../../../components/organisms/table';
-import LoadingScreen from '../../../components/organisms/loading-screen';
+import SegmentedControl from '@molecules/segmented-control';
+import Table from '@organisms/table';
+import LoadingScreen from '@organisms/loading-screen';
 import NotFoundError from '../../404';
-import { eightBaseClient } from '../../../utils/graphql';
-import { UserContext } from '../../../utils/user';
+import { eightBaseClient } from '@utils/graphql';
+import { UserContext } from '@utils/user';
 import {
 	SeleniumGroup,
 	UserStory,
 	UserStoryFilter,
 	UserStoryListResponse,
 } from '@frontend/meeshkan-types';
-import { show as showIntercom } from '../../../utils/intercom';
+import { show as showIntercom } from '@utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
-import { createSlug } from '../../../utils/createSlug';
+import { createSlug } from '@utils/createSlug';
 import Link from 'next/link';
 
 type StartButtonProps = {
@@ -128,7 +128,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			items: [],
 		},
 	});
-	
+
 	const gettingStartedGreenColor = useColorModeValue('cyan.500', 'cyan.300');
 	const gettingStartedGrayColor = useColorModeValue('gray.500', 'gray.400');
 	const linkBlueColor = useColorModeValue('blue.500', 'blue.300');
@@ -406,11 +406,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 											href={`/${slugifiedProjectName}/settings#details`}
 											passHref
 										>
-											<ChakraLink
-												color={linkBlueColor}
-											>
-												script tag
-											</ChakraLink>
+											<ChakraLink color={linkBlueColor}>script tag</ChakraLink>
 										</Link>{' '}
 										in your frontend's production environment.
 									</ListItem>
@@ -559,6 +555,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	);
 };
 
-export { getServerSideProps } from '../../../components/molecules/chakra';
+export { getServerSideProps } from '@molecules/chakra';
 
 export default UserStoriesPage;

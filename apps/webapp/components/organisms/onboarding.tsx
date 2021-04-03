@@ -1,22 +1,18 @@
 import { useState } from 'react';
-import {
-	Heading,
-	Text,
-	Box,
-	Flex,
-	Button,
-} from '@chakra-ui/react';
-import CreateProjectForm from '../molecules/create-project-form';
-import UpdateProfileForm from '../molecules/update-profile-form';
+import { Heading, Text, Box, Flex, Button } from '@chakra-ui/react';
+import CreateProjectForm from '@molecules/create-project-form';
+import UpdateProfileForm from '@molecules/update-profile-form';
 
 const Onboarding = () => {
 	const [step, setStep] = useState<1 | 2>(1);
 	const [loading, setLoading] = useState(false);
 
 	const isFirstStep = step === 1;
-	const title = isFirstStep ? 'Set up your profile' : 'Create your first project';
+	const title = isFirstStep
+		? 'Set up your profile'
+		: 'Create your first project';
 	const backButtonVisibility = isFirstStep ? 'hidden' : 'visible';
-	const submitButtonText = isFirstStep ? 'Next step' : 'Create project'
+	const submitButtonText = isFirstStep ? 'Next step' : 'Create project';
 
 	return (
 		<Flex
@@ -33,10 +29,7 @@ const Onboarding = () => {
 						Onboarding — {title}
 					</Heading>
 					{step === 1 ? (
-						<UpdateProfileForm
-							setLoading={setLoading}
-							setStep={setStep}
-						/>
+						<UpdateProfileForm setLoading={setLoading} setStep={setStep} />
 					) : (
 						<CreateProjectForm setLoading={setLoading} />
 					)}

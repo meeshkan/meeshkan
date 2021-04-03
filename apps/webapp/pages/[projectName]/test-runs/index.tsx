@@ -14,14 +14,14 @@ import {
 import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
 import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme';
-import GridCard from '../../../components/molecules/grid-card';
-import TestRunCard from '../../../components/molecules/test-run-card';
-import Card from '../../../components/atoms/card';
+import GridCard from '@molecules/grid-card';
+import TestRunCard from '@molecules/test-run-card';
+import Card from '@atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
-import LoadingScreen from '../../../components/organisms/loading-screen';
+import LoadingScreen from '@organisms/loading-screen';
 import NotFoundError from '../../404';
-import { UserContext } from '../../../utils/user';
-import { capitalize } from '../../../utils/capitalize';
+import { UserContext } from '@utils/user';
+import { capitalize } from '@utils/capitalize';
 
 const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutBackgroundColors = [
@@ -47,16 +47,14 @@ const TestRunsPage = () => {
 
 	const testRuns = project?.release.items[0]?.testRuns?.items;
 	const sortedTestRuns = testRuns?.sort(
-		(a, b) =>
-			new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 	);
 
-	const completedTestRuns = sortedTestRuns
-		?.filter((testRun) => testRun.status === 'completed') || [];
+	const completedTestRuns =
+		sortedTestRuns?.filter((testRun) => testRun.status === 'completed') || [];
 
-	const latestTestRun = completedTestRuns.length > 0
-		? completedTestRuns[0]
-		: null;
+	const latestTestRun =
+		completedTestRuns.length > 0 ? completedTestRuns[0] : null;
 
 	const latestTestRunStats =
 		latestTestRun &&
@@ -141,7 +139,8 @@ const TestRunsPage = () => {
 										>
 											<Text fontSize="40px" fontWeight="700">
 												{Math.round(
-													(latestTestRunStats[label] / totalTestRunOutcomes) * 100
+													(latestTestRunStats[label] / totalTestRunOutcomes) *
+														100
 												)}
 												%
 											</Text>
@@ -176,22 +175,21 @@ const TestRunsPage = () => {
 				</GridCard>
 				{sortedTestRuns.length > 0 ? (
 					<Stack spacing={6}>
-						{sortedTestRuns
-							.map((testRun, index) => {
-								const { id, status, createdAt } = testRun;
-								return (
-									<TestRunCard
-										id={id}
-										key={id}
-										status={status}
-										runNumber={testRuns.length - index}
-										date={new Date(createdAt)}
-										stats={_.countBy(
-											testRun.testOutcome.items.map((outcome) => outcome.status)
-										)}
-									/>
-								);
-							})}
+						{sortedTestRuns.map((testRun, index) => {
+							const { id, status, createdAt } = testRun;
+							return (
+								<TestRunCard
+									id={id}
+									key={id}
+									status={status}
+									runNumber={testRuns.length - index}
+									date={new Date(createdAt)}
+									stats={_.countBy(
+										testRun.testOutcome.items.map((outcome) => outcome.status)
+									)}
+								/>
+							);
+						})}
 					</Stack>
 				) : (
 					<Stack spacing={6}>

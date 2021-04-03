@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useSWR, { responseInterface } from 'swr';
 import { IUser } from '@frontend/meeshkan-types';
-import { boot as bootIntercom } from '../utils/intercom';
+import { boot as bootIntercom } from '@utils/intercom';
 
 type IUseFetchUser = {
 	user: void | IUser;

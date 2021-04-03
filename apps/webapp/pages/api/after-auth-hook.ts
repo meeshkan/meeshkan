@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getUser } from '../../utils/auth0';
-import { confirmOrCreateUser } from '../../utils/user';
-import { createSlug } from '../../utils/createSlug';
-import { propagateInviteToDb } from '../../utils/invite';
+import { getUser } from '@utils/auth0';
+import { confirmOrCreateUser } from '@utils/user';
+import { createSlug } from '@utils/createSlug';
+import { propagateInviteToDb } from '@utils/invite';
 
 export default async function afterAuthHook(
 	req: NextApiRequest,

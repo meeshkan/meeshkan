@@ -13,11 +13,11 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 import _ from 'lodash';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
-import AvatarField from '../molecules/avatar-field';
-import { UserContext } from '../../utils/user';
+import AvatarField from '@molecules/avatar-field';
+import { UserContext } from '@utils/user';
 import { UploadedFile } from '@frontend/meeshkan-types';
-import { updateProject } from '../../utils/project';
-import { createSlug } from '../../utils/createSlug';
+import { updateProject } from '@utils/project';
+import { createSlug } from '@utils/createSlug';
 
 type ProjectFormInputs = {
 	name: string;
@@ -131,11 +131,7 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
 						placement="right-start"
 					>
-						<InfoOutlineIcon
-							ml={2}
-							lineHeight="short"
-							color={infoIconColor}
-						/>
+						<InfoOutlineIcon ml={2} lineHeight="short" color={infoIconColor} />
 					</Tooltip>
 				</FormLabel>
 				<Input

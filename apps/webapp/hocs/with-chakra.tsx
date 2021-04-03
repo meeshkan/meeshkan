@@ -1,4 +1,4 @@
-import ChakraProvider from '../components/molecules/chakra';
+import ChakraProvider from '@molecules/chakra';
 
 export interface IWithChakraProps {
 	cookies: string | undefined;

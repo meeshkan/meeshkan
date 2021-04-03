@@ -5,7 +5,7 @@ import {
 	Link,
 	PropsOf,
 } from '@chakra-ui/react';
-import MotionButton from '../atoms/motion-button';
+import MotionButton from '@atoms/motion-button';
 import { Variants } from 'framer-motion';
 import { transparentize } from '@chakra-ui/theme-tools';
 import NextLink from 'next/link';

@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import { BoxProps, Heading, Divider, Image } from '@chakra-ui/react';
-import Card from '../atoms/card';
-import { createSlug } from '../../utils/createSlug';
+import Card from '@atoms/card';
+import { createSlug } from '@utils/createSlug';
 
 type GridCardProps = {
 	title: string;

@@ -7,9 +7,9 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCycle } from 'framer-motion';
-import MotionStack from '../atoms/motion-stack';
-import SideBarHeader from '../molecules/sidebar-header';
-import SideBarBody from '../molecules/sidebar-body';
+import MotionStack from '@atoms/motion-stack';
+import SideBarHeader from '@molecules/sidebar-header';
+import SideBarBody from '@molecules/sidebar-body';
 
 const SideBar = (props: StackProps) => {
 	const { pathname } = useRouter();

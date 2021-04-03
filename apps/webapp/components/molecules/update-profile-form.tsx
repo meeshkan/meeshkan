@@ -13,8 +13,8 @@ import {
 } from '@chakra-ui/react';
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
-import AvatarField from '../molecules/avatar-field';
-import { UserContext, updateProfile } from '../../utils/user';
+import AvatarField from '@molecules/avatar-field';
+import { UserContext, updateProfile } from '@utils/user';
 import { UploadedFile } from '@frontend/meeshkan-types';
 
 type ProfileFormInputs = {

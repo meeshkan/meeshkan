@@ -19,21 +19,21 @@ import {
 import { ArrowUpDownIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme'; // GitPullRequestIcon, // GitLabIcon, // GitCommitIcon, // GitMergeIcon,
-import Card from '../atoms/card';
-import StatCard from '../molecules/stat-card';
-import GridCard from '../molecules/grid-card';
-// import ActivityListItem from '../molecules/activity-list-item';
-// import LinearListItem from '../molecules/linear-list-item';
-import ConfidenceBreakdownItem from '../molecules/confidence-breakdown-item';
-import ScriptTag from '../../components/molecules/script-tag';
-import { UserContext } from '../../utils/user';
+import Card from '@atoms/card';
+import StatCard from '@molecules/stat-card';
+import GridCard from '@molecules/grid-card';
+// import ActivityListItem from '@molecules/activity-list-item';
+// import LinearListItem from '@molecules/linear-list-item';
+import ConfidenceBreakdownItem from '@molecules/confidence-breakdown-item';
+import ScriptTag from '@molecules/script-tag';
+import { UserContext } from '@utils/user';
 import {
 	UserStoryListResponse,
 	DataPointTag,
 	DataPoint,
 	Project,
 } from '@frontend/meeshkan-types';
-import { capitalize } from '../../utils/capitalize';
+import { capitalize } from '@utils/capitalize';
 import {
 	getTestRuns,
 	getDaysUntilRelease,
@@ -42,10 +42,10 @@ import {
 	getLatestTestStates,
 	getRecordingsAndTestsByDay,
 	sumOfObjectValues,
-} from '../../utils/metrics';
-import { lastNDays } from '../../utils/date';
+} from '@utils/metrics';
+import { lastNDays } from '@utils/date';
 import { ChartOptions, ChartData } from 'chart.js';
-require('../molecules/rounded-chart');
+require('@molecules/rounded-chart');
 
 const barData: ChartData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -178,7 +178,9 @@ const Grid = (props: StackProps) => {
 	const [showScript, setShowScript] = useState(false);
 
 	useEffect(() => setVersion(versions[0]), [versions]);
-	useEffect(() => setShowScript(!selectedProject.hasReceivedEvents), [selectedProject]);
+	useEffect(() => setShowScript(!selectedProject.hasReceivedEvents), [
+		selectedProject,
+	]);
 
 	const userStories: UserStoryListResponse['items'] =
 		selectedProject.userStories.items;
@@ -393,11 +395,7 @@ const Grid = (props: StackProps) => {
 								w="100%"
 							>
 								<GridCard title="Confidence change">
-									<List
-										spacing={3}
-										color={listColor}
-										fontSize="sm"
-									>
+									<List spacing={3} color={listColor} fontSize="sm">
 										{confidenceChange.length === 0 ? (
 											<Text>
 												There hasn't been any change to your confidence score in
@@ -430,17 +428,13 @@ const Grid = (props: StackProps) => {
 											<Text fontWeight="900" mr={2}>
 												{totalRecordings}
 											</Text>
-											<Text color={barFooterColor}>
-												Recordings
-											</Text>
+											<Text color={barFooterColor}>Recordings</Text>
 										</Flex>
 										<Flex>
 											<Text fontWeight="900" mr={2}>
 												{totalTests}
 											</Text>
-											<Text color={barFooterColor}>
-												Test cases
-											</Text>
+											<Text color={barFooterColor}>Test cases</Text>
 										</Flex>
 									</Stack>
 								</GridCard>

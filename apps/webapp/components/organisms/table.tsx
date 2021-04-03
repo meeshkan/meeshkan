@@ -26,8 +26,8 @@ import {
 	DarkMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { createSlug } from '../../utils/createSlug';
-import { UserContext } from '../../utils/user';
+import { createSlug } from '@utils/createSlug';
+import { UserContext } from '@utils/user';
 import { File, UserStoryListResponse } from '@frontend/meeshkan-types';
 import {
 	DoubleArrowLeftIcon,
@@ -38,7 +38,7 @@ import {
 	PlayIcon,
 } from '@frontend/chakra-theme';
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
-import VideoPlayer from '../atoms/video-player';
+import VideoPlayer from '@atoms/video-player';
 
 type TableProps = {
 	columns: Column[];

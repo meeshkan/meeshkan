@@ -23,11 +23,11 @@ import {
 	LogoutIcon,
 } from '@frontend/chakra-theme';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import MenuToggleButton from '../molecules/menu-toggle-button';
-import { UserContext } from '../../utils/user';
-import { shutdown as shutdownIntercom } from '../../utils/intercom';
+import MenuToggleButton from '@molecules/menu-toggle-button';
+import { UserContext } from '@utils/user';
+import { shutdown as shutdownIntercom } from '@utils/intercom';
 import Link from 'next/link';
-import { createSlug } from '../../utils/createSlug';
+import { createSlug } from '@utils/createSlug';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
@@ -84,9 +84,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							borderRadius="md"
 							backgroundColor="transparent"
 						/>
-						<ChevronDownIcon
-							color={chevronIconColor}
-						/>
+						<ChevronDownIcon color={chevronIconColor} />
 					</MenuButton>
 					<MenuList>
 						<MenuItem>

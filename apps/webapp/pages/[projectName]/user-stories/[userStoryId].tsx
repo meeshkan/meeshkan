@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState, useEffect } from 'react';
-import Card from '../../../components/atoms/card';
+import Card from '@atoms/card';
 import { mutate } from 'swr';
 import {
 	Text,
@@ -29,13 +29,13 @@ import {
 	Code,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
-import { UserContext } from '../../../utils/user';
+import { UserContext } from '@utils/user';
 import {
 	SeleniumGroup,
 	SeleniumGroupListResponse,
 	UserStory,
 } from '@frontend/meeshkan-types';
-import { eightBaseClient } from '../../../utils/graphql';
+import { eightBaseClient } from '@utils/graphql';
 import {
 	USER_STORY,
 	UPDATE_EXPECTED_TEST,
@@ -58,14 +58,14 @@ import {
 	CopyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
-import LoadingScreen from '../../../components/organisms/loading-screen';
+import LoadingScreen from '@organisms/loading-screen';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
-import { StepList } from '../../../components/molecules/side-step-list';
+import { StepList } from '@molecules/side-step-list';
 import NotFoundError from '../../404';
-import { createSlug } from '../../../utils/createSlug';
+import { createSlug } from '@utils/createSlug';
 import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
-import VideoPlayer from '../../../components/atoms/video-player';
+import VideoPlayer from '@atoms/video-player';
 import { eightBaseToPptr } from '@frontend/downloadable-script';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { useToaster } from '../../../hooks/use-toaster';
@@ -246,7 +246,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 		).then(() => setTimeout(() => setLoading(false), 30000));
 	};
 
-	if ((validatingQuery && (!data || data?.userStory?.id !== userStoryId)) || validatingProject) {
+	if (
+		(validatingQuery && (!data || data?.userStory?.id !== userStoryId)) ||
+		validatingProject
+	) {
 		return <LoadingScreen as={Card} />;
 	}
 
@@ -578,4 +581,4 @@ const UserStoryPage = (props: UserStoryProps) => {
 
 export default UserStoryPage;
 
-export { getServerSideProps } from '../../../components/molecules/chakra';
+export { getServerSideProps } from '@molecules/chakra';

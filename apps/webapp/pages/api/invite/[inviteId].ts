@@ -1,8 +1,8 @@
-import { createSlug } from './../../../utils/createSlug';
+import { createSlug } from '@utils/createSlug';
 import { NextApiRequest, NextApiResponse } from 'next';
-import initAuth0 from '../../../utils/auth0';
-import { getUserId } from '../../../utils/user';
-import { propagateInviteToDb } from '../../../utils/invite';
+import initAuth0 from '@utils/auth0';
+import { getUserId } from '@utils/user';
+import { propagateInviteToDb } from '@utils/invite';
 
 export default async function invite(
 	req: NextApiRequest,

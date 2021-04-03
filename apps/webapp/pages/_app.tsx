@@ -2,7 +2,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Layout from '../components/templates/layout';
-import SideBar from '../components/organisms/sidebar';
+import SideBar from '@organisms/sidebar';
 import withAuth from '../hocs/with-auth';
 import withChakra from '../hocs/with-chakra';
 

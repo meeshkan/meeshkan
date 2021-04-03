@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { createSlug } from '../utils/createSlug';
-import { UserContext } from '../utils/user';
+import { createSlug } from '@utils/createSlug';
+import { UserContext } from '@utils/user';
 
 export const useValidateSelectedProject = () => {
 	const [loading, setLoading] = useState(true);

@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import SegmentedControl from './segmented-control';
-import { UserContext } from '../../utils/user';
-import { eightBaseClient } from '../../utils/graphql';
+import { UserContext } from '@utils/user';
+import { eightBaseClient } from '@utils/graphql';
 import { ADD_AUTH_TOKEN } from '../../graphql/project';
 import { AuthenticationToken } from '@frontend/meeshkan-types';
 

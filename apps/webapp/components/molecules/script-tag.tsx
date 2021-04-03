@@ -10,7 +10,7 @@ import {
 	Flex,
 } from '@chakra-ui/react';
 import ScriptTagInput from './script-tag-input';
-import { UserContext } from '../../utils/user';
+import { UserContext } from '@utils/user';
 
 type ScriptCardProps = {
 	handleClose: () => void;
@@ -26,12 +26,7 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	}
 
 	return (
-		<Alert
-			rounded="lg"
-			bg={alertBackgroundColor}
-			py={5}
-			p={4}
-		>
+		<Alert rounded="lg" bg={alertBackgroundColor} py={5} p={4}>
 			<Box flex="1" overflow="auto">
 				<Flex justify="space-between">
 					<AlertTitle mb={2} fontStyle="normal">
@@ -41,10 +36,7 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 						</Code>{' '}
 						of your application:
 					</AlertTitle>
-					<CloseButton
-						size="sm"
-						onClick={handleClose}
-					/>
+					<CloseButton size="sm" onClick={handleClose} />
 				</Flex>
 				<AlertDescription>
 					<ScriptTagInput />

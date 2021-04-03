@@ -9,9 +9,9 @@ import {
 	useColorModeValue,
 } from '@chakra-ui/react';
 import { CopyIcon } from '@frontend/chakra-theme';
-import { UserContext } from '../../utils/user';
+import { UserContext } from '@utils/user';
 import { useClipboard } from '../../hooks/use-clipboard';
-import { eightBaseClient } from '../../utils/graphql';
+import { eightBaseClient } from '@utils/graphql';
 import { REFRESH_INVITE_LINK } from '../../graphql/project';
 import { useToaster } from '../../hooks/use-toaster';
 

@@ -1,9 +1,9 @@
 import { useEffect, useContext } from 'react';
 import { Stack } from '@chakra-ui/react';
-import LoadingScreen from '../components/organisms/loading-screen';
-import Onboarding from '../components/organisms/onboarding';
-import Card from '../components/atoms/card';
-import { UserContext } from '../utils/user';
+import LoadingScreen from '@organisms/loading-screen';
+import Onboarding from '@organisms/onboarding';
+import Card from '@atoms/card';
+import { UserContext } from '@utils/user';
 
 type IndexProps = {
 	cookies: string | undefined;
@@ -39,4 +39,4 @@ const Index = (props: IndexProps) => {
 
 export default Index;
 
-export { getServerSideProps } from '../components/molecules/chakra';
+export { getServerSideProps } from '@molecules/chakra';

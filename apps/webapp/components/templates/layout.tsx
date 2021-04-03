@@ -1,7 +1,7 @@
 import React, { ReactNode, useContext } from 'react';
 import { Stack, useColorModeValue } from '@chakra-ui/react';
 import { Analytics } from '@lightspeed/react-mixpanel-script';
-import { UserContext } from '../../utils/user';
+import { UserContext } from '@utils/user';
 
 type LayoutProps = {
 	children: ReactNode;

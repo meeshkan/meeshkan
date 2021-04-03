@@ -11,7 +11,7 @@ import {
 	Heading,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import commaNumber from '../../utils/comma-number';
+import commaNumber from '@utils/comma-number';
 import { useColorFromNumber } from '../../hooks/use-color-from-number';
 
 type StatCardProps = {

@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { createSlug } from '../utils/createSlug';
-import LoadingScreen from '../components/organisms/loading-screen';
-import AuthScreen from '../components/organisms/auth-screen';
-import { UserContext } from '../utils/user';
+import { createSlug } from '@utils/createSlug';
+import LoadingScreen from '@organisms/loading-screen';
+import AuthScreen from '@organisms/auth-screen';
+import { UserContext } from '@utils/user';
 import { Project } from '@frontend/meeshkan-types';
 import { useFetchUser } from '../hooks/use-fetch-user';
 

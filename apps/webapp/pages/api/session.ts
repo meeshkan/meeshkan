@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import initAuth0, { getUser as getAuth0User } from '../../utils/auth0';
-import { getUser as getEightBaseUser } from '../../utils/user';
+import initAuth0, { getUser as getAuth0User } from '@utils/auth0';
+import { getUser as getEightBaseUser } from '@utils/user';
 
 export default function session(
 	req: NextApiRequest,

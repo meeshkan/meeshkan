@@ -1,7 +1,7 @@
 import React from 'react';
-import { SideStep } from '../atoms/side-step';
+import { SideStep } from '@atoms/side-step';
 import { SeleniumGroupListResponse } from '@frontend/meeshkan-types';
-import { commandsToSteps } from '../../utils/transform-steps';
+import { commandsToSteps } from '@utils/transform-steps';
 
 type StepListProps = {
 	steps: SeleniumGroupListResponse['items'];

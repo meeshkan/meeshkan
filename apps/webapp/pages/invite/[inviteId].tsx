@@ -3,9 +3,9 @@ import { Flex, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import { LogoIcon } from '@frontend/chakra-theme';
-import LoadingScreen from '../../components/organisms/loading-screen';
+import LoadingScreen from '@organisms/loading-screen';
 import { useInviteLink } from '../../hooks/use-invite-link';
-import { UserContext } from '../../utils/user';
+import { UserContext } from '@utils/user';
 import { Project } from '@frontend/meeshkan-types';
 
 type InviteProps = {
@@ -59,4 +59,4 @@ const Invite = (props: InviteProps) => {
 
 export default Invite;
 
-export { getServerSideProps } from '../../components/molecules/chakra';
+export { getServerSideProps } from '@molecules/chakra';

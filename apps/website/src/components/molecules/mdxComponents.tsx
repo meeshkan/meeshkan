@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 import {
 	Heading,
 	Text,
@@ -10,16 +10,16 @@ import {
 	Code,
 	Alert,
 	useColorModeValue,
-} from "@chakra-ui/react"
-import CodeBlock from "./codeBlock"
-import { UniversalLink } from "../atoms/UniversalLink"
-import Video from "../atoms/video"
-import RequestAccess from "./requestAccessForm"
+} from '@chakra-ui/react';
+import CodeBlock from './codeBlock';
+import { UniversalLink } from '../atoms/UniversalLink';
+import Video from '../atoms/video';
+import RequestAccess from './requestAccessForm';
 
 type DocsHeadingProps = {
-	id: string
-	children: Object
-}
+	id: string;
+	children: Object;
+};
 
 export const DocsHeading = ({ id, children, ...props }: DocsHeadingProps) => (
 	<>
@@ -30,14 +30,14 @@ export const DocsHeading = ({ id, children, ...props }: DocsHeadingProps) => (
 			id={id}
 			// @ts-ignore
 			css={{
-				"&[id]:before": {
-					display: "block",
-					height: " 6rem",
-					marginTop: "-6rem",
-					visibility: "hidden",
+				'&[id]:before': {
+					display: 'block',
+					height: ' 6rem',
+					marginTop: '-6rem',
+					visibility: 'hidden',
 					content: `""`,
 				},
-				"&[id]:hover a": { opacity: 1 },
+				'&[id]:hover a': { opacity: 1 },
 			}}
 			pointerEvents="auto"
 			{...props}
@@ -46,10 +46,10 @@ export const DocsHeading = ({ id, children, ...props }: DocsHeadingProps) => (
 			<Box
 				aria-label="anchor"
 				as="a"
-				color={useColorModeValue("gray.200", "gray.700")}
+				color={useColorModeValue('gray.200', 'gray.700')}
 				fontWeight="normal"
 				outline="none"
-				_focus={{ opacity: 1, boxShadow: "outline" }}
+				_focus={{ opacity: 1, boxShadow: 'outline' }}
 				opacity={0}
 				ml={2}
 				href={`#${id}`}
@@ -58,7 +58,7 @@ export const DocsHeading = ({ id, children, ...props }: DocsHeadingProps) => (
 			</Box>
 		</Heading>
 	</>
-)
+);
 
 const components = {
 	h1: (props) => (
@@ -95,9 +95,9 @@ const components = {
 	blockquote: (props) => (
 		<Alert
 			my={6}
-			variant='left-accent'
+			variant="left-accent"
 			status="info"
-			css={{ "> *:first-of-type": { marginTop: 0 } }}
+			css={{ '> *:first-of-type': { marginTop: 0 } }}
 			{...props}
 		>
 			{props.children}
@@ -109,7 +109,7 @@ const components = {
 	hr: (props) => <Divider borderColor="gray.100" my={6} {...props} />,
 	a: (props) => (
 		<UniversalLink
-			color={useColorModeValue("blue.500", "blue.200")}
+			color={useColorModeValue('blue.500', 'blue.200')}
 			{...props}
 		/>
 	),
@@ -159,6 +159,6 @@ const components = {
 	thematicBreak: (props) => <Box height={6} {...props} />,
 	Video,
 	RequestAccess,
-}
+};
 
-export default components
+export default components;

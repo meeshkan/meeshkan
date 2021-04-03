@@ -1,6 +1,6 @@
 import { LogoIcon } from '@frontend/chakra-theme';
 import { Flex, Button, LightMode } from '@chakra-ui/react';
-import { goToLogin } from '../../utils/user';
+import { goToLogin } from '@utils/user';
 
 const AuthScreen = () => {
 	return (

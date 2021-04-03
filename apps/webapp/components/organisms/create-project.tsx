@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Router from 'next/router';
 import { Heading, Box, Flex, Button } from '@chakra-ui/react';
-import Card from '../atoms/card';
-import CreateProjectForm from '../molecules/create-project-form';
+import Card from '@atoms/card';
+import CreateProjectForm from '@molecules/create-project-form';
 
 const CreateProject = () => {
 	const [loading, setLoading] = useState(false);

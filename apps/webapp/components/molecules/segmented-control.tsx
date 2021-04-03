@@ -12,7 +12,7 @@ import {
 	BoxProps,
 } from '@chakra-ui/react';
 import { AnimateSharedLayout } from 'framer-motion';
-import MotionBox from '../atoms/motion-box';
+import MotionBox from '@atoms/motion-box';
 
 type SegmentedControlTabProps = {
 	children?: ReactNode;
@@ -44,11 +44,7 @@ function SegmentedControlTab({
 				px={2}
 				py={3}
 				textAlign="center"
-				color={
-					selected
-						? selectedColor
-						: color
-				}
+				color={selected ? selectedColor : color}
 			>
 				{children}
 			</Box>

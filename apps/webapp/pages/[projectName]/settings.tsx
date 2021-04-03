@@ -20,29 +20,29 @@ import {
 import { RecordIcon, TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
-import LoadingScreen from '../../components/organisms/loading-screen';
-import GridCard from '../../components/molecules/grid-card';
-import UpdateProfileForm from '../../components/molecules/update-profile-form';
-import UpdateProjectForm from '../../components/molecules/update-project-form';
-import Card from '../../components/atoms/card';
+import LoadingScreen from '@organisms/loading-screen';
+import GridCard from '@molecules/grid-card';
+import UpdateProfileForm from '@molecules/update-profile-form';
+import UpdateProjectForm from '@molecules/update-project-form';
+import Card from '@atoms/card';
 import NotFoundError from '../404';
-import InviteLinkInput from '../../components/molecules/invite-link-input';
-import ScriptTagInput from '../../components/molecules/script-tag-input';
-import { UserContext, updateProductNotifications } from '../../utils/user';
+import InviteLinkInput from '@molecules/invite-link-input';
+import ScriptTagInput from '@molecules/script-tag-input';
+import { UserContext, updateProductNotifications } from '@utils/user';
 import { User, AuthenticationToken } from '@frontend/meeshkan-types';
-import { eightBaseClient } from '../../utils/graphql';
+import { eightBaseClient } from '@utils/graphql';
 import {
 	REMOVE_TEAM_MEMBER,
 	REMOVE_AUTH_TOKEN,
 	ADD_SUPPORT,
 } from '../../graphql/project';
-import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
+import AuthenticationTokenForm from '@molecules/authentication-token-form';
 import {
 	isChrome,
 	getVersion as getExtensionVersion,
 	latestVersion as latestExtensionVersion,
 	startRecording,
-} from '../../utils/extension';
+} from '@utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
 
 const Settings = () => {
@@ -490,4 +490,4 @@ const Settings = () => {
 
 export default Settings;
 
-export { getServerSideProps } from '../../components/molecules/chakra';
+export { getServerSideProps } from '@molecules/chakra';

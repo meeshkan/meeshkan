@@ -20,10 +20,10 @@ import {
 import NavButton from './nav-button';
 import { ChatIcon, PlusIcon, SettingsIcon } from '@frontend/chakra-theme';
 import { ArrowUpDownIcon, QuestionIcon } from '@chakra-ui/icons';
-import { show as showIntercom } from '../../utils/intercom';
-import { UserContext } from '../../utils/user';
+import { show as showIntercom } from '@utils/intercom';
+import { UserContext } from '@utils/user';
 import { useRouter } from 'next/router';
-import { createSlug } from '../../utils/createSlug';
+import { createSlug } from '@utils/createSlug';
 
 type SideBarFooterProps = {
 	isSettings?: boolean;
@@ -79,10 +79,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								src={avatarUrl}
 								name={project?.name}
 								icon={
-									<QuestionIcon
-										color={questionIconColor}
-										fontSize="1rem"
-									/>
+									<QuestionIcon color={questionIconColor} fontSize="1rem" />
 								}
 								color={avatarColor}
 								bg={avatarBackgroundColor}
@@ -94,11 +91,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						</Flex>
 					</MenuButton>
 					<MenuList>
-						<MenuOptionGroup
-							value={project?.id}
-							title="Projects"
-							type="radio"
-						>
+						<MenuOptionGroup value={project?.id} title="Projects" type="radio">
 							{projects.map((project) => (
 								<MenuItemOption
 									key={project.id}

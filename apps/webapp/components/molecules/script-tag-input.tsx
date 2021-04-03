@@ -7,7 +7,7 @@ import {
 	useColorModeValue,
 } from '@chakra-ui/react';
 import { CopyIcon } from '@frontend/chakra-theme';
-import { UserContext } from '../../utils/user';
+import { UserContext } from '@utils/user';
 import { useClipboard } from '../../hooks/use-clipboard';
 
 const ScriptTagInput = () => {
@@ -20,7 +20,7 @@ const ScriptTagInput = () => {
 	}
 
 	const { onCopy } = useClipboard({
-		toastTitle: 'This project\'s script was copied to clipboard.',
+		toastTitle: "This project's script was copied to clipboard.",
 		toastMessage: 'Paste it within the `head` of your app.',
 		text: scriptTag,
 		status: 'info',

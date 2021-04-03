@@ -12,11 +12,11 @@ import {
 	Spinner,
 } from '@chakra-ui/react';
 import { FilePlusIcon } from '@frontend/chakra-theme';
-import { UserContext } from '../../utils/user';
+import { UserContext } from '@utils/user';
 import { FILE_UPLOAD_INFO } from '../../graphql/file';
-import { uploadFile } from '../../utils/file';
+import { uploadFile } from '@utils/file';
 import { UploadedFile } from '@frontend/meeshkan-types';
-import { eightBaseClient } from '../../utils/graphql';
+import { eightBaseClient } from '@utils/graphql';
 
 const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });
 
