@@ -45,8 +45,8 @@ const GenerateTests = () => {
 		},
 	};
 
-	const MotionBox = motion.custom(Box);
-	const MotionButton = motion.custom(Button);
+	const MotionBox = motion(Box);
+	const MotionButton = motion(Button);
 
 	return (
 		<>
