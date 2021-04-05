@@ -2,7 +2,6 @@ import { extendTheme } from '@chakra-ui/react';
 import customColors from './colors';
 import globalStyles from './global';
 import customComponents from './components';
-import { mode } from '@chakra-ui/theme-tools';
 
 const customTheme = extendTheme({
 	config: {

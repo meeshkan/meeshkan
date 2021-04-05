@@ -24,6 +24,7 @@ import {
 	ModalContent,
 	useDisclosure,
 	DarkMode,
+	useColorMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
@@ -95,6 +96,7 @@ const Table = ({
 
 	const router = useRouter();
 	const [video, setVideo] = useState<File['downloadUrl']>();
+	const { colorMode } = useColorMode();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -185,6 +187,10 @@ const Table = ({
 												size="xs"
 												variant="subtle"
 												colorScheme="gray"
+												sx={{
+													mixBlendMode:
+														colorMode === 'light' ? 'multiply' : 'normal',
+												}}
 												aria-label="Play the video associated with this user story"
 												leftIcon={<PlayIcon strokeWidth="2px" />}
 												onClick={() => {
@@ -237,7 +243,10 @@ const Table = ({
 										<IconButton
 											size="xs"
 											colorScheme="gray"
-											variant="subtle"
+											sx={{
+												mixBlendMode:
+													colorMode === 'light' ? 'multiply' : 'normal',
+											}}
 											aria-label="Open in a new tab"
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
