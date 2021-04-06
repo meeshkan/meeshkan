@@ -26,6 +26,7 @@ import {
 	DarkMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext } from '../../utils/user';
 import { File, UserStoryListResponse } from '@frontend/meeshkan-types';
@@ -96,6 +97,8 @@ const Table = ({
 	const router = useRouter();
 	const [video, setVideo] = useState<File['downloadUrl']>();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const mixpanel = useAnalytics();
 
 	return (
 		<>
