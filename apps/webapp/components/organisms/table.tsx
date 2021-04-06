@@ -253,18 +253,27 @@ const Table = ({
 						);
 					})}
 
-					{page.length === 0 ? (
-						<Tr _hover={undefined}>
-							<Td
-								textAlign="center"
-								py={3}
-								rowSpan={pageSize}
-								colSpan={columns.length}
+					{page.length === 0 && (
+						[...Array(pageSize).keys()].map((key) => (
+							<Tr
+								borderBottom="1px solid"
+								borderBottomColor={borderBottomColor}
+								key={key}
 							>
-								<Text fontSize="md">No User Stories</Text>
-							</Td>
-						</Tr>
-					) : null}
+								<Td pr={0} pl={3} py={3} border={0}>
+									<Skeleton borderRadius="md" height="20px" />
+								</Td>
+								{[...Array(6).keys()].map((key) => (
+									<Td py={3} border={0} key={key}>
+										<Skeleton borderRadius="md" height="20px" />
+									</Td>
+								))}
+								<Td py={3} px={0} border={0}>
+									<Skeleton borderRadius="md" height="20px" w="25px" />
+								</Td>
+							</Tr>
+						))
+					)}
 				</Tbody>
 			</ChakraTable>
 
