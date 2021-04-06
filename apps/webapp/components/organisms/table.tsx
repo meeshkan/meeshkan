@@ -217,9 +217,6 @@ const Table = ({
 									return (
 										<Td
 											onClick={() => {
-												mixpanel.track('Navigation', {
-													destination: '/userStoryId',
-												});
 												router.push(
 													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
@@ -244,9 +241,6 @@ const Table = ({
 											aria-label="Open in a new tab"
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
-												mixpanel.track('Navigation', {
-													destination: '/userStoryId',
-												});
 												window.open(
 													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`

@@ -42,10 +42,7 @@ const TestRunCard = ({
 		cursor: isIndividualTestRunPage ? undefined : 'pointer',
 		onClick: isIndividualTestRunPage
 			? undefined
-			: () => {
-					mixpanel.track('Navigation', { destination: '/testID' });
-					router.push(`${router.asPath}/${id}`);
-			  },
+			: () => router.push(`${router.asPath}/${id}`),
 	};
 
 	return (

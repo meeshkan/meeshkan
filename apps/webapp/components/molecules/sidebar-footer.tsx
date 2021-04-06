@@ -140,9 +140,6 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								<MenuDivider />
 								<MenuItem
 									onClick={() => {
-										mixpanel.track('Navigation', {
-											destination: '/new-project',
-										});
 										router.push('/new-project');
 									}}
 								>
@@ -160,7 +157,6 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						color={tooltipColor}
 						icon={<SettingsIcon />}
 						onClick={() => {
-							mixpanel.track('Navigation', { destination: '/settings' });
 							router.push(`/${slugifiedProjectName}/settings`);
 						}}
 						variant="ghost"
