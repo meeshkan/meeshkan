@@ -40,7 +40,7 @@ const SideBarBody = () => {
 
 	const settingsHeadingColor = useColorModeValue('gray.900', 'gray.200');
 	const headerColor = useColorModeValue('gray.400', 'gray.500');
-	const headerBackgroundColor = useColorModeValue('gray.100', 'gray.800')
+	const headerBackgroundColor = useColorModeValue('gray.100', 'gray.800');
 
 	if (isSettingsPage) {
 		return (
@@ -63,17 +63,8 @@ const SideBarBody = () => {
 				<Stack mt={6} spacing={6} h="100%">
 					<Box>
 						<Flex align="flex-start">
-							<Box
-								rounded="xl"
-								bg={headerBackgroundColor}
-								p={2}
-								mr={4}
-							>
-								<ProfileIcon
-									color={headerColor}
-									w={4}
-									h={4}
-								/>
+							<Box rounded="xl" bg={headerBackgroundColor} p={2} mr={4}>
+								<ProfileIcon color={headerColor} w={4} h={4} />
 							</Box>
 							<Stack spacing={2} w="full">
 								<Heading
@@ -110,17 +101,8 @@ const SideBarBody = () => {
 					</Box>
 					<Box>
 						<Flex align="flex-start">
-							<Box
-								rounded="xl"
-								bg={headerBackgroundColor}
-								p={2}
-								mr={4}
-							>
-								<SuitcaseIcon
-									color={headerColor}
-									w={4}
-									h={4}
-								/>
+							<Box rounded="xl" bg={headerBackgroundColor} p={2} mr={4}>
+								<SuitcaseIcon color={headerColor} w={4} h={4} />
 							</Box>
 							<Stack spacing={2} w="full">
 								<Heading

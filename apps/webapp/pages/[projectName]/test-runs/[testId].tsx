@@ -44,11 +44,13 @@ import {
 	TestOutcomeListResponse,
 } from '@frontend/meeshkan-types';
 import { commandsToSteps } from 'apps/webapp/utils/transform-steps';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 const TestRun = () => {
 	const { found, loading } = useValidateSelectedProject();
 	const { project } = useContext(UserContext);
 	const router = useRouter();
+	const mixpanel = useAnalytics();
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,

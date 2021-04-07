@@ -27,6 +27,7 @@ import {
 	useColorMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext } from '../../utils/user';
 import { File, UserStoryListResponse } from '@frontend/meeshkan-types';
@@ -98,6 +99,8 @@ const Table = ({
 	const [video, setVideo] = useState<File['downloadUrl']>();
 	const { colorMode } = useColorMode();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const mixpanel = useAnalytics();
 
 	return (
 		<>
@@ -222,12 +225,12 @@ const Table = ({
 								{row.cells.map((cell) => {
 									return (
 										<Td
-											onClick={() =>
+											onClick={() => {
 												router.push(
 													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
-												)
-											}
+												);
+											}}
 											border={0}
 											{...cell.getCellProps()}
 											py={3}

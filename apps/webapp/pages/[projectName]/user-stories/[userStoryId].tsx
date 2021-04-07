@@ -287,6 +287,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 				description: 'Please try again in a few seconds.',
 			});
 		}
+		mixpanel.track('Puppeteer script downloaded');
 	};
 
 	return (

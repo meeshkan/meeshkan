@@ -28,6 +28,7 @@ import { UserContext } from '../../utils/user';
 import { shutdown as shutdownIntercom } from '../../utils/intercom';
 import Link from 'next/link';
 import { createSlug } from '../../utils/createSlug';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type SideBarHeaderProps = {
 	toggle: (i?: number) => void;
@@ -36,6 +37,7 @@ type SideBarHeaderProps = {
 const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	const { avatar, name, project } = useContext(UserContext);
 	const { colorMode, toggleColorMode } = useColorMode();
+	const mixpanel = useAnalytics();
 	const inboxIconColor = useColorModeValue('gray.500', 'gray.400');
 	const chevronIconColor = useColorModeValue('gray.600', 'gray.500');
 
@@ -44,6 +46,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 	]);
 
 	const handleLogoutClick = () => {
+		mixpanel.track('Log out');
 		Router.push('/api/logout');
 		shutdownIntercom();
 	};
@@ -84,9 +87,7 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							borderRadius="md"
 							backgroundColor="transparent"
 						/>
-						<ChevronDownIcon
-							color={chevronIconColor}
-						/>
+						<ChevronDownIcon color={chevronIconColor} />
 					</MenuButton>
 					<MenuList>
 						<MenuItem>
@@ -95,7 +96,12 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 							</Link>
 						</MenuItem>
 						<MenuDivider />
-						<MenuItem onClick={toggleColorMode}>
+						<MenuItem
+							onClick={() => {
+								toggleColorMode();
+								mixpanel.track('Toggle color mode');
+							}}
+						>
 							{colorMode === 'light' ? <MoonIcon mr={3} /> : <SunIcon mr={3} />}
 							{colorMode === 'light' ? 'Dark' : 'Light'} mode
 						</MenuItem>

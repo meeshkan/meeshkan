@@ -68,6 +68,7 @@ import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -115,6 +116,7 @@ interface UserStoriesAliased {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const mixpanel = useAnalytics();
 	const { colorMode } = useColorMode();
 
 	const [toggleIndex, setToggleIndex] = useState(0);
@@ -327,7 +329,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Read the documentation"
-						onClick={() => Router.push('https://meeshkan.com/docs')}
+						onClick={() => {
+							mixpanel.track('Read the docs');
+							Router.push('https://meeshkan.com/docs');
+						}}
 					/>
 					<StartButton
 						icon={
@@ -338,7 +343,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							/>
 						}
 						text="Chat with an expert"
-						onClick={showIntercom}
+						onClick={() => {
+							mixpanel.track('Chat with an expert');
+							showIntercom();
+						}}
 					/>
 					<Box
 						d="flex"
@@ -349,7 +357,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						p={4}
 						w="100%"
 						borderRadius="md"
-						onClick={onOpen}
+						onClick={() => {
+							onOpen();
+							mixpanel.track('Create new user story modal');
+						}}
 						_hover={{
 							cursor: 'pointer',
 						}}
