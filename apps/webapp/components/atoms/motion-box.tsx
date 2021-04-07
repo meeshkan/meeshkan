@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
-const MotionBox = motion.custom(Box);
+const MotionBox = motion(Box);
 
 export default MotionBox;

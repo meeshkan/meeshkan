@@ -291,7 +291,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	};
 
 	return (
-		<Stack w="100%" mb={8}>
+		<Stack w="100%">
 			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
 				<ChakraLink
 					d="flex"
@@ -450,7 +450,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 				</Flex>
 			</Card>
 
-			<Box flex="1">
+			<Box flex="1" overflowY="auto">
 				<Grid
 					w="100%"
 					templateColumns={[
@@ -554,8 +554,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 					<Box
 						gridColumnStart={[1, 1, 1]}
 						gridColumnEnd={[2, 2, 3]}
-						maxH="75vh"
-						overflow="auto"
 						borderRadius="lg"
 					>
 						<StepList steps={steps} />
