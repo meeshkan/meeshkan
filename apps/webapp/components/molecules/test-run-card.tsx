@@ -4,7 +4,6 @@ import { CheckmarkIcon, XmarkIcon, MinusIcon } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Card from '../atoms/card';
 import { TestRun } from '@frontend/meeshkan-types';
-import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type TestRunCardProps = {
 	id?: string;
@@ -26,7 +25,6 @@ const TestRunCard = ({
 	stats,
 }: TestRunCardProps) => {
 	const router = useRouter();
-	const mixpanel = useAnalytics();
 	const isIndividualTestRunPage = router.pathname.endsWith('[testId]');
 
 	const statusColor =

@@ -67,6 +67,7 @@ import { show as showIntercom } from '../../../utils/intercom';
 import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -114,6 +115,7 @@ interface UserStoriesAliased {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const mixpanel = useAnalytics();
 
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);

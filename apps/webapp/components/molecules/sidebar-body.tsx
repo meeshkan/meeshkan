@@ -23,13 +23,11 @@ import {
 import NavButton from '../molecules/nav-button';
 import { UserContext } from '../../utils/user';
 import SideBarFooter from './sidebar-footer';
-import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 const SideBarBody = () => {
 	const { projects, project } = useContext(UserContext);
 	const router = useRouter();
 	const hasProjects = projects.length > 0;
-	const mixpanel = useAnalytics();
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
 	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
