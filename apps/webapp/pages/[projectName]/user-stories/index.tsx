@@ -37,6 +37,7 @@ import {
 	MenuOptionGroup,
 	OrderedList,
 	Code,
+	useColorMode,
 } from '@chakra-ui/react';
 import { Column } from 'react-table';
 import {
@@ -114,6 +115,7 @@ interface UserStoriesAliased {
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const { project, idToken } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { colorMode } = useColorMode();
 
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
@@ -128,7 +130,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			items: [],
 		},
 	});
-	
+
 	const gettingStartedGreenColor = useColorModeValue('cyan.500', 'cyan.300');
 	const gettingStartedGrayColor = useColorModeValue('gray.500', 'gray.400');
 	const linkBlueColor = useColorModeValue('blue.500', 'blue.300');
@@ -406,11 +408,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 											href={`/${slugifiedProjectName}/settings#details`}
 											passHref
 										>
-											<ChakraLink
-												color={linkBlueColor}
-											>
-												script tag
-											</ChakraLink>
+											<ChakraLink color={linkBlueColor}>script tag</ChakraLink>
 										</Link>{' '}
 										in your frontend's production environment.
 									</ListItem>
@@ -471,6 +469,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								as={Button}
 								size="sm"
 								variant="ghost"
+								sx={{
+									mixBlendMode: colorMode === 'light' ? 'multiply' : 'normal',
+								}}
 								colorScheme="gray"
 								fontWeight="400"
 								mr={2}
@@ -506,6 +507,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								size="sm"
 								variant="ghost"
 								colorScheme="gray"
+								sx={{
+									mixBlendMode: colorMode === 'light' ? 'multiply' : 'normal',
+								}}
 								fontWeight="400"
 								mr={toggleIndex === 0 ? 4 : 0}
 								leftIcon={<FilterIcon />}
