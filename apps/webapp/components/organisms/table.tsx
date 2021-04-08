@@ -110,6 +110,7 @@ const Table = ({
 				backgroundColor={backgroundColor}
 				borderTopRightRadius="lg"
 				borderBottomRadius="lg"
+				size="sm"
 			>
 				<Thead>
 					{headerGroups.map((headerGroup) => (

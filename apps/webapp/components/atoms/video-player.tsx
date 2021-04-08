@@ -42,7 +42,7 @@ const VideoPlayer = ({
 			url={src}
 			style={{
 				maxWidth: 'fit-content',
-				maxHeight: maxHeight,
+				maxHeight,
 				borderRadius: 8,
 				border: '1px solid',
 				borderColor,
