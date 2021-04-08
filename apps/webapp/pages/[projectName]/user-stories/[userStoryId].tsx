@@ -462,12 +462,13 @@ const UserStoryPage = (props: UserStoryProps) => {
 					flexDirection={['column-reverse', 'column-reverse', 'row', 'row']}
 					justifyContent="space-between"
 					w="100%"
+					flex="1"
 				>
 					<Box
 						borderRadius="lg"
 						my={[6, 6, 0, 0]}
 						mr={4}
-						flex="3"
+						wordBreak="break-all"
 					>
 						<StepList steps={steps} />
 						<Flex
@@ -484,7 +485,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							<CheckmarkIcon color={stepNumberColor} />
 						</Flex>
 					</Box>
-					<Box flex="2">
+					<Box>
 						{data.userStory?.recording?.video ? (
 							<VideoPlayer
 								src={data.userStory.recording.video.downloadUrl}
