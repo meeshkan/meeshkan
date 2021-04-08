@@ -24,8 +24,10 @@ import {
 	ModalContent,
 	useDisclosure,
 	DarkMode,
+	useColorMode,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext } from '../../utils/user';
 import { File, UserStoryListResponse } from '@frontend/meeshkan-types';
@@ -95,7 +97,10 @@ const Table = ({
 
 	const router = useRouter();
 	const [video, setVideo] = useState<File['downloadUrl']>();
+	const { colorMode } = useColorMode();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const mixpanel = useAnalytics();
 
 	return (
 		<>
@@ -186,6 +191,10 @@ const Table = ({
 												size="xs"
 												variant="subtle"
 												colorScheme="gray"
+												sx={{
+													mixBlendMode:
+														colorMode === 'light' ? 'multiply' : 'normal',
+												}}
 												aria-label="Play the video associated with this user story"
 												leftIcon={<PlayIcon strokeWidth="2px" />}
 												onClick={() => {
@@ -217,12 +226,12 @@ const Table = ({
 								{row.cells.map((cell) => {
 									return (
 										<Td
-											onClick={() =>
+											onClick={() => {
 												router.push(
 													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
-												)
-											}
+												);
+											}}
 											border={0}
 											{...cell.getCellProps()}
 											py={3}
@@ -238,7 +247,10 @@ const Table = ({
 										<IconButton
 											size="xs"
 											colorScheme="gray"
-											variant="subtle"
+											sx={{
+												mixBlendMode:
+													colorMode === 'light' ? 'multiply' : 'normal',
+											}}
 											aria-label="Open in a new tab"
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
@@ -254,18 +266,27 @@ const Table = ({
 						);
 					})}
 
-					{page.length === 0 ? (
-						<Tr _hover={undefined}>
-							<Td
-								textAlign="center"
-								py={3}
-								rowSpan={pageSize}
-								colSpan={columns.length}
+					{page.length === 0 && (
+						[...Array(pageSize).keys()].map((key) => (
+							<Tr
+								borderBottom="1px solid"
+								borderBottomColor={borderBottomColor}
+								key={key}
 							>
-								<Text fontSize="md">No User Stories</Text>
-							</Td>
-						</Tr>
-					) : null}
+								<Td pr={0} pl={3} py={3} border={0}>
+									<Skeleton borderRadius="md" height="20px" />
+								</Td>
+								{[...Array(6).keys()].map((key) => (
+									<Td py={3} border={0} key={key}>
+										<Skeleton borderRadius="md" height="20px" />
+									</Td>
+								))}
+								<Td py={3} px={0} border={0}>
+									<Skeleton borderRadius="md" height="20px" w="25px" />
+								</Td>
+							</Tr>
+						))
+					)}
 				</Tbody>
 			</ChakraTable>
 

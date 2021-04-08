@@ -37,7 +37,6 @@ const VideoPlayer = ({
 			light={performant ? true : false}
 			playIcon={<PlayIcon boxSize={12} color="white" />}
 			controls
-			loop
 			onStart={onStart}
 			onEnded={onEnded}
 			url={src}

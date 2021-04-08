@@ -3,7 +3,7 @@ import { BoxProps, Heading, Divider, Image } from '@chakra-ui/react';
 import Card from '../atoms/card';
 import { createSlug } from '../../utils/createSlug';
 
-type GridCardProps = {
+export type GridCardProps = {
 	title: string;
 	anchor?: boolean;
 	subtitle?: string;

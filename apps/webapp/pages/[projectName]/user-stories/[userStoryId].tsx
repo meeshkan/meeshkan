@@ -246,7 +246,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		).then(() => setTimeout(() => setLoading(false), 30000));
 	};
 
-	if ((validatingQuery && !data) || validatingProject) {
+	if ((validatingQuery && (!data || data?.userStory?.id !== userStoryId)) || validatingProject) {
 		return <LoadingScreen as={Card} />;
 	}
 
@@ -287,6 +287,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 				description: 'Please try again in a few seconds.',
 			});
 		}
+		mixpanel.track('Puppeteer script downloaded');
 	};
 
 	return (
@@ -572,7 +573,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Flex>
 						)}
 					</Box>
-				</Flex>
 			</Box>
 		</Stack>
 	);
