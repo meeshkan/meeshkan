@@ -73,15 +73,14 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						size="sm"
 						colorScheme="gray"
 						backgroundColor={menuButtonBackgroundColor}
-						textAlign="left"
-						overflow="hidden"
+						display="block"
 					>
 						<Flex
 							flex="1"
 							align="center"
+							justify="center"
 							color={menuButtonFlexColor}
 							fontWeight="600"
-							overflow="hidden"
 						>
 							<Avatar
 								src={avatarUrl}
@@ -95,7 +94,14 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								borderRadius="md"
 								mr={3}
 							/>
-							<Box as="span" flex="1">
+							<Box
+								flex="1"
+								overflow="hidden"
+								whiteSpace="nowrap"
+								display="block"
+								textOverflow="ellipsis"
+								lineHeight="tall"
+							>
 								{project?.name}
 							</Box>
 							<ArrowUpDownIcon mx={3} />
