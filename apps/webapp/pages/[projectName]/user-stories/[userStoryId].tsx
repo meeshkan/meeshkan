@@ -573,6 +573,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Flex>
 						)}
 					</Box>
+				</Flex>
 			</Box>
 		</Stack>
 	);
