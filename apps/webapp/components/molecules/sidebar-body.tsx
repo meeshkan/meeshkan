@@ -44,23 +44,27 @@ const SideBarBody = () => {
 
 	if (isSettingsPage) {
 		return (
-			<Box overflow="auto" mt={6}>
-				<Link href={`/${slugifiedProjectName}`} passHref>
-					<a>
-						<Heading
-							as={Flex}
-							align="center"
-							fontSize="20px"
-							fontWeight="500"
-							color={settingsHeadingColor}
-							lineHeight="1"
-						>
-							<ChevronLeftIcon w={6} h={6} color="gray.500" />
-							Settings
-						</Heading>
-					</a>
-				</Link>
-				<Stack mt={6} spacing={6} h="100%">
+			<Flex
+				direction="column"
+				justify="space-between"
+				h="100%"
+			>
+				<Stack spacing={6} mt={6}>
+					<Link href={`/${slugifiedProjectName}`} passHref>
+						<a>
+							<Heading
+								as={Flex}
+								align="center"
+								fontSize="20px"
+								fontWeight="500"
+								color={settingsHeadingColor}
+								lineHeight="1"
+							>
+								<ChevronLeftIcon w={6} h={6} color="gray.500" />
+								Settings
+							</Heading>
+						</a>
+					</Link>
 					<Box>
 						<Flex align="flex-start">
 							<Box rounded="xl" bg={headerBackgroundColor} p={2} mr={4}>
@@ -170,20 +174,21 @@ const SideBarBody = () => {
 							</Stack>
 						</Flex>
 					</Box>
-
-					<Spacer />
-
-					<SideBarFooter isSettings={true} />
 				</Stack>
-			</Box>
+				<SideBarFooter isSettings />
+			</Flex>
 		);
 	}
 
 	return (
-		<>
+		<Flex
+			direction="column"
+			justify="space-between"
+			h="100%"
+		>
 			{hasProjects ? (
-				<Box overflow="auto">
-					<Stack mt={6}>
+				<>
+					<Stack mt={6} flex="1">
 						<NavButton
 							leftIcon={<ActivityIcon />}
 							href={`/${slugifiedProjectName}`}
@@ -217,15 +222,14 @@ const SideBarBody = () => {
 							Releases
 						</NavButton>
 					</Stack>
-				</Box>
+				</>
 			) : (
 				<Text mt={4} fontStyle="italic">
 					You need to finish creating your first project.
 				</Text>
 			)}
-			<Spacer />
 			<SideBarFooter />
-		</>
+		</Flex>
 	);
 };
 
