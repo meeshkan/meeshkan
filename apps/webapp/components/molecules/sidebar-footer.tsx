@@ -67,22 +67,21 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 				<Menu>
 					<MenuButton
 						as={Button}
+						flex="1"
 						p={0}
 						m={0}
 						size="sm"
 						colorScheme="gray"
 						backgroundColor={menuButtonBackgroundColor}
-						rightIcon={<ArrowUpDownIcon mr={3} />}
-						w="100%"
 						textAlign="left"
+						display="block"
 					>
 						<Flex
+							flex="1"
 							align="center"
+							justify="center"
 							color={menuButtonFlexColor}
 							fontWeight="600"
-							maxW="20ch"
-							whiteSpace="nowrap"
-							overflow="hidden"
 						>
 							<Avatar
 								src={avatarUrl}
@@ -96,7 +95,17 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								borderRadius="md"
 								mr={3}
 							/>
-							{project?.name}
+							<Box
+								flex="1"
+								overflow="hidden"
+								whiteSpace="nowrap"
+								display="block"
+								textOverflow="ellipsis"
+								lineHeight="tall"
+							>
+								{project?.name}
+							</Box>
+							<ArrowUpDownIcon mx={3} />
 						</Flex>
 					</MenuButton>
 					<MenuList>
