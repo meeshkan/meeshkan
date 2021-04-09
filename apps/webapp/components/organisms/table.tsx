@@ -266,7 +266,7 @@ const Table = ({
 						);
 					})}
 
-					{page.length === 0 && (
+					{page.length === 0 && (loading ? (
 						[...Array(pageSize).keys()].map((key) => (
 							<Tr
 								borderBottom="1px solid"
@@ -286,7 +286,18 @@ const Table = ({
 								</Td>
 							</Tr>
 						))
-					)}
+					) : (
+						<Tr _hover={undefined}>
+							<Td
+								textAlign="center"
+								py={3}
+								rowSpan={pageSize}
+								colSpan={columns.length}
+							>
+								<Text fontSize="md">No User Stories</Text>
+							</Td>
+						</Tr>
+					))}
 				</Tbody>
 			</ChakraTable>
 
