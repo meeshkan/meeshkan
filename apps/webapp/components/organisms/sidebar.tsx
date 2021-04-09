@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import {
+	Box,
 	Flex,
 	StackProps,
 	useColorModeValue,
@@ -45,9 +46,18 @@ const SideBar = (props: StackProps) => {
 			initial={false}
 			{...props}
 		>
-			<Flex direction="column" h="full">
+			<Flex
+				direction="column"
+				h="full"
+				overflowY="auto"
+				p={2}
+			>
 				<SideBarHeader toggle={() => toggleOpen()} />
-				{(isOpen || !isSmallScreen) && <SideBarBody />}
+				{(isOpen || !isSmallScreen) && (
+					<Box flex="1">
+						<SideBarBody />
+					</Box>
+				)}
 			</Flex>
 		</MotionStack>
 	);
