@@ -9,3 +9,9 @@ functions:
     handler:
       code: src/triggers/invite-link/update-handler.ts
     operation: Configuration.update
+  stripe:
+    handler:
+      code: src/webhooks/stripe-webhook.ts
+    type: webhook
+    path: plan-update
+    method: POST
