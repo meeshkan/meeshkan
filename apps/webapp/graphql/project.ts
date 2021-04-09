@@ -335,3 +335,28 @@ export const REMOVE_AUTH_TOKEN = gql`
 		}
 	}
 `;
+
+export const GET_STRIPE_ID = gql`
+	query GET_STRIPE_ID($projectID: ID!) {
+		project(id: $projectID) {
+			configuration {
+				stripeCustomerID
+			}
+		}
+	}
+`;
+
+export const UPDATE_PROJECT_WITH_ID = gql`
+	mutation UPDATE_PROJECT_WITH_ID($projectID: ID!, $stripeCustomerID: String!) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: {
+				configuration: { update: { stripeCustomerID: $stripeCustomerID } }
+			}
+		) {
+			configuration {
+				stripeCustomerID
+			}
+		}
+	}
+`;
