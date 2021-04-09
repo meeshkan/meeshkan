@@ -73,6 +73,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						size="sm"
 						colorScheme="gray"
 						backgroundColor={menuButtonBackgroundColor}
+						textAlign="left"
 						display="block"
 					>
 						<Flex
