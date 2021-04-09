@@ -292,7 +292,7 @@ const Table = ({
 								textAlign="center"
 								py={3}
 								rowSpan={pageSize}
-								colSpan={columns.length}
+								colSpan={8}
 							>
 								<Text fontSize="md">No User Stories</Text>
 							</Td>
