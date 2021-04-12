@@ -55,3 +55,31 @@ export const createOrRetrieveCustomer = async ({
 		return newCustomer;
 	}
 };
+
+// Plans
+
+export const Plans = [
+	{
+		free: {
+			monthlyPriceId: null,
+			yearlyPriceId: null,
+			features: [''],
+		},
+	},
+	{
+		feedback: {
+			monthlyPriceId: `price_1IeQD9A2WCpbIMtYuC0KZchg`,
+			yearlyPriceId: `price_1IXxTbA2WCpbIMtY8hvr4kgS`,
+			features: [''],
+		},
+	},
+	{
+		business: {
+			// 29.99
+			monthlyPriceId: `price_1IXxUAA2WCpbIMtYgVTV4xzh`,
+			// 20% discount 288.00
+			yearlyPriceId: `price_1IbrAcA2WCpbIMtYJKWdTVAM`,
+			features: [''],
+		},
+	},
+];
