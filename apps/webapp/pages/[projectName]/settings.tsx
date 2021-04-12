@@ -44,6 +44,7 @@ import {
 	startRecording,
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
+import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
 
 const Settings = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -483,6 +484,7 @@ const Settings = () => {
 						</Flex>
 					))}
 				</GridCard>
+				<PlanAndBillingCard />
 			</Stack>
 		</Box>
 	);

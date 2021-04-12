@@ -1,7 +1,6 @@
 import Stripe from 'stripe';
 import { eightBaseClient } from './graphql';
 import { GET_STRIPE_ID, UPDATE_PROJECT_WITH_ID } from '../graphql/project';
-import useSWR from 'swr';
 import { Project } from '@frontend/meeshkan-types';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
@@ -24,20 +23,19 @@ export const createOrRetrieveCustomer = async ({
 	idToken: string;
 }) => {
 	const client = eightBaseClient(idToken);
-	const fetcher = (query: string) =>
-		client.request(query, {
-			projectID,
-		});
 
 	// Check if project has a stripe customer id
-	const { data, error: fetchIdError, isValidating } = useSWR<Project>(
-		GET_STRIPE_ID,
-		fetcher
-	);
-	if (fetchIdError)
-		throw new Error('there was an issue retrieving the stripe id.');
+	const data = await client.request(GET_STRIPE_ID, {
+		projectID,
+	});
 
-	if (data.configuration.stripeCustomerID == null && !isValidating) {
+	// Customer was found, return the id
+	if (data?.project?.configuration?.stripeCustomerID) {
+		await console.log(
+			`A customer id was found ${data.project.configuration.stripeCustomerID}.`
+		);
+		return data.project.configuration.stripeCustomerID;
+	} else {
 		// No customer record found, let's create one.
 		const customer = await stripe.customers.create({
 			email,
@@ -46,14 +44,14 @@ export const createOrRetrieveCustomer = async ({
 		});
 
 		// Now update the project configuration in 8base
-		const data = await client.request(UPDATE_PROJECT_WITH_ID, {
+		const newData = await client.request(UPDATE_PROJECT_WITH_ID, {
 			projectID,
 			stripeCustomerID: customer?.id,
 		});
-		console.log(
-			`New customer created and inserted for ${data?.configuration?.stripeCustomerID}.`
-		);
-		return data?.configuration?.stripeCustomerID;
+		const newCustomer = await newData?.projectUpdate?.configuration
+			?.stripeCustomerID;
+
+		await console.log(`New customer created and inserted for ${newCustomer}.`);
+		return newCustomer;
 	}
-	if (data) return data.configuration.stripeCustomerID;
 };
