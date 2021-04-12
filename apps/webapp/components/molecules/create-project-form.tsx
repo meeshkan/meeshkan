@@ -45,8 +45,6 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 			...avatarFile,
 		});
 
-		mixpanel.track('Create new project');
-
 		if (data.error) {
 			setError(data.error);
 			setLoading(false);
@@ -55,6 +53,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 
 		const [newProject] = data.userUpdate.projects.items;
 		projects.push(newProject);
+		mixpanel.track('Create new project', { projectName: newProject.name });
 		await mutateUser({ ...user, projects });
 		setLoading(false);
 

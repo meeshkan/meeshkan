@@ -17,7 +17,7 @@ import {
 } from '../../../../theme/icons';
 
 const Test = ({ success, testCase, priority, animate, colorMode }) => {
-	const MotionBox = motion.custom(Box);
+	const MotionBox = motion(Box);
 
 	const shouldReduceMotion = useReducedMotion();
 
