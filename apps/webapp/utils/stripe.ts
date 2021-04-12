@@ -61,7 +61,9 @@ export const createOrRetrieveCustomer = async ({
 export const Plans = [
 	{
 		free: {
+			// @ts-expect-error
 			monthlyPriceId: null,
+			// @ts-expect-error
 			yearlyPriceId: null,
 			features: [''],
 		},
