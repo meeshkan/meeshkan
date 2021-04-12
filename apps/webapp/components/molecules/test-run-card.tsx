@@ -43,6 +43,15 @@ const TestRunCard = ({
 			: () => router.push(`${router.asPath}/${id}`),
 	};
 
+	const formattedDate = date.toLocaleDateString('en-US', {
+		hour: 'numeric',
+		minute: 'numeric',
+		second: 'numeric',
+		hour12: false,
+		day: 'numeric',
+		month: 'short',
+	});
+
 	return (
 		<Card {...cardProps}>
 			<Flex align="center" justify="space-between">
@@ -70,7 +79,7 @@ const TestRunCard = ({
 						</Text>
 					)}
 					<Text fontSize="sm" fontWeight="300" flex="1" whiteSpace="nowrap">
-						{date.toDateString()}
+						{formattedDate}
 					</Text>
 				</Flex>
 				<Flex
