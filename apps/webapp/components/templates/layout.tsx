@@ -17,7 +17,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			identity={user?.idToken}
 			// This is a 'super property' which attaches information to every event.
 			eventData={{
-				project: user?.project,
+				project: user?.project?.name,
 				// plan: ''
 			}}
 			profileData={{

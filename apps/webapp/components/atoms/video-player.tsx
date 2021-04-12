@@ -37,13 +37,12 @@ const VideoPlayer = ({
 			light={performant ? true : false}
 			playIcon={<PlayIcon boxSize={12} color="white" />}
 			controls
-			loop
 			onStart={onStart}
 			onEnded={onEnded}
 			url={src}
 			style={{
 				maxWidth: 'fit-content',
-				maxHeight: maxHeight,
+				maxHeight,
 				borderRadius: 8,
 				border: '1px solid',
 				borderColor,
