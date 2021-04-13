@@ -484,7 +484,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							<CheckmarkIcon color={stepNumberColor} />
 						</Flex>
 					</Box>
-					<Box>
+					<Box minW="md">
 						{data.userStory?.recording?.video ? (
 							<VideoPlayer
 								src={data.userStory.recording.video.downloadUrl}
