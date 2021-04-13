@@ -13,6 +13,7 @@ export const USER_STORY = gql`
 			isAuthenticated
 			significance
 			configuration {
+				activeTestRuns
 				logInFlow {
 					id
 				}

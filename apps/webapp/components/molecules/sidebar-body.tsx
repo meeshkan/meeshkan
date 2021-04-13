@@ -10,6 +10,7 @@ import {
 	useColorModeValue,
 	Text,
 	Heading,
+	Code,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import {
@@ -44,11 +45,7 @@ const SideBarBody = () => {
 
 	if (isSettingsPage) {
 		return (
-			<Flex
-				direction="column"
-				justify="space-between"
-				h="100%"
-			>
+			<Flex direction="column" justify="space-between" h="100%">
 				<Stack spacing={6} mt={6}>
 					<Link href={`/${slugifiedProjectName}`} passHref>
 						<a>
@@ -181,11 +178,7 @@ const SideBarBody = () => {
 	}
 
 	return (
-		<Flex
-			direction="column"
-			justify="space-between"
-			h="100%"
-		>
+		<Flex direction="column" justify="space-between" h="100%">
 			{hasProjects ? (
 				<>
 					<Stack mt={6} flex="1">
@@ -216,7 +209,10 @@ const SideBarBody = () => {
 								router.asPath.includes('/test-runs')
 							}
 						>
-							Test runs
+							Test runs{' '}
+							<Code ml={2} p={2} borderRadius="md" colorScheme="cyan">
+								beta
+							</Code>
 						</NavButton>
 						<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
 							Releases
