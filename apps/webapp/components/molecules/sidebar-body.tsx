@@ -209,7 +209,7 @@ const SideBarBody = () => {
 								router.asPath.includes('/test-runs')
 							}
 						>
-							Test runs{' '}
+							Test runs <Box w="100%" />
 							<Code ml={2} p={2} borderRadius="md" colorScheme="cyan">
 								beta
 							</Code>
