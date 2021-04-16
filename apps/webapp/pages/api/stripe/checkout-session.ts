@@ -25,7 +25,7 @@ const createCheckoutSession = async (
 				idToken: idToken,
 				projectID: projectId,
 				email: email,
-				name: projectName,
+				projectName,
 			});
 
 			const session = await stripe.checkout.sessions.create({

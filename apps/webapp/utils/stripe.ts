@@ -1,7 +1,6 @@
 import Stripe from 'stripe';
 import { eightBaseClient } from './graphql';
 import { GET_STRIPE_ID, UPDATE_PROJECT_WITH_ID } from '../graphql/project';
-import { Project } from '@frontend/meeshkan-types';
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 	apiVersion: '2020-08-27',
@@ -14,12 +13,12 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 export const createOrRetrieveCustomer = async ({
 	email,
 	projectID,
-	name,
+	projectName,
 	idToken,
 }: {
 	email: string;
 	projectID: string;
-	name: string;
+	projectName: string;
 	idToken: string;
 }) => {
 	const client = eightBaseClient(idToken);
@@ -39,7 +38,7 @@ export const createOrRetrieveCustomer = async ({
 		// No customer record found, let's create one.
 		const customer = await stripe.customers.create({
 			email,
-			name,
+			name: projectName,
 			metadata: { 'project id': projectID },
 		});
 

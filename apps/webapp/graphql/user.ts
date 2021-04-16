@@ -72,7 +72,11 @@ export const USER = gql`
 						productionURL
 						stagingURL
 						inviteLink
+						plan
 						stripeCustomerID
+						billingInterval
+						subscriptionStatus
+						subscriptionStartedDate
 						authenticationTokens {
 							items {
 								id

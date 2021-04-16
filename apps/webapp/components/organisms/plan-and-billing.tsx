@@ -28,8 +28,10 @@ import { CheckSquareIcon } from '@frontend/chakra-theme';
 import SegmentedControl from '../molecules/segmented-control';
 
 const PlanAndBillingCard = () => {
-	const [billingInterval, setBillingInterval] = useState('month');
+	// Represents billing interval — 0=monthly, 1=yearly
+	const [toggleIndex, setToggleIndex] = useState(0);
 	const [priceIdLoading, setPriceIdLoading] = useState(false);
+	const [portalSession, setPortalSession] = useState(false);
 	const user = useContext(UserContext);
 
 	const postData = async ({ url = '', data = {} }) => {
@@ -57,7 +59,7 @@ const PlanAndBillingCard = () => {
 				data: {
 					price,
 					projectName: user?.project?.name,
-					projectId: user?.project?.id,
+					projectID: user?.project?.id,
 					idToken: user?.idToken,
 					email: user?.email,
 				},
@@ -73,7 +75,21 @@ const PlanAndBillingCard = () => {
 		}
 	};
 
-	const [toggleIndex, setToggleIndex] = useState(0);
+	const redirectToCustomerPortal = async () => {
+		setPortalSession(true);
+		const { url, error } = await postData({
+			url: '/api/stripe/portal-link',
+			data: {
+				projectName: user?.project?.name,
+				projectID: user?.project?.id,
+				idToken: user?.idToken,
+				email: user?.email,
+			},
+		});
+		if (error) return alert(error.message);
+		window.location.assign(url);
+		setPortalSession(false);
+	};
 
 	const iconBlue = useColorModeValue('blue.500', 'blue.300');
 	const codeBg = useColorModeValue('blue.50', 'gray.800');
@@ -149,7 +165,7 @@ const PlanAndBillingCard = () => {
 						</Text>
 						<List
 							spacing={2}
-							sx={{ '-webkit-columns': '2', '-moz-columns': '2', columns: 2 }}
+							sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
 						>
 							{feedback.features.map((feature) => (
 								<ListItem lineHeight="1.2" fontSize="14px">
@@ -229,7 +245,7 @@ const PlanAndBillingCard = () => {
 						</Text>
 						<List
 							spacing={2}
-							sx={{ '-webkit-columns': '2', '-moz-columns': '2', columns: 2 }}
+							sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
 						>
 							{business.features.map((feature) => (
 								<ListItem lineHeight="1.2" fontSize="14px">
@@ -255,6 +271,17 @@ const PlanAndBillingCard = () => {
 							}
 						>
 							Choose the Business plan
+						</Button>
+						<Button
+							variant="subtle"
+							colorScheme="gray"
+							mt={8}
+							w="full"
+							loadingText="Loading stripe"
+							isLoading={portalSession}
+							onClick={redirectToCustomerPortal}
+						>
+							Manage
 						</Button>
 					</Flex>
 				</Box>
