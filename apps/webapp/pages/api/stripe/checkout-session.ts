@@ -10,7 +10,7 @@ const createCheckoutSession = async (
 		const {
 			price,
 			projectName,
-			projectId,
+			projectID,
 			idToken,
 			email,
 			metadata = {},
@@ -23,7 +23,7 @@ const createCheckoutSession = async (
 		try {
 			const customer = await createOrRetrieveCustomer({
 				idToken: idToken,
-				projectID: projectId,
+				projectID,
 				email: email,
 				projectName,
 			});
@@ -41,7 +41,6 @@ const createCheckoutSession = async (
 				mode: 'subscription',
 				allow_promotion_codes: true,
 				subscription_data: {
-					trial_from_plan: true,
 					metadata,
 				},
 				success_url: `${origin}/${createSlug(projectName)}`,

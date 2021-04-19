@@ -484,7 +484,13 @@ const Settings = () => {
 						</Flex>
 					))}
 				</SectionGridCard>
-				<PlanAndBillingCard />
+				<GridCard
+					anchor
+					title="Plan and Billing"
+					subtitle="Information about the plan you're on and Billing powered by Stripe."
+				>
+					<PlanAndBillingCard />
+				</GridCard>
 			</Stack>
 		</Box>
 	);

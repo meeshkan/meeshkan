@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
 	Button,
 	Text,
@@ -11,16 +11,12 @@ import {
 	Flex,
 	useColorModeValue,
 	Code,
-	FormControl,
-	Input,
-	Tooltip,
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-	PopoverArrow,
-	PopoverCloseButton,
+	ModalContent,
+	ModalOverlay,
+	Modal,
+	useDisclosure,
+	ModalCloseButton,
 } from '@chakra-ui/react';
-import GridCard from '../molecules/grid-card';
 import { UserContext } from '../../utils/user';
 import { Plans } from '../../utils/stripe';
 import { getStripe } from '../../utils/stripe-client';
@@ -28,11 +24,33 @@ import { CheckSquareIcon } from '@frontend/chakra-theme';
 import SegmentedControl from '../molecules/segmented-control';
 
 const PlanAndBillingCard = () => {
+	const user = useContext(UserContext);
+
 	// Represents billing interval — 0=monthly, 1=yearly
 	const [toggleIndex, setToggleIndex] = useState(0);
-	const [priceIdLoading, setPriceIdLoading] = useState(false);
-	const [portalSession, setPortalSession] = useState(false);
-	const user = useContext(UserContext);
+	const [checkoutSessionLoading, setCheckoutSessionLoading] = useState(false);
+	const [subscriptionLoading, setSubscriptionLoading] = useState(false);
+	const [portalSessionLoading, setPortalSessionLoading] = useState(false);
+	const [plan, setPlan] = useState({
+		name: user?.project?.configuration?.plan,
+		billingInterval: user?.project?.configuration.billingInterval,
+		subscriptionStartedDate:
+			user?.project?.configuration?.subscriptionStartedDate,
+		subscriptionStatus: user?.project?.configuration?.subscriptionStatus,
+	});
+	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	useEffect(() => {
+		setPlan({
+			name: user?.project?.configuration?.plan,
+			billingInterval: user?.project?.configuration.billingInterval,
+			subscriptionStartedDate:
+				user?.project?.configuration?.subscriptionStartedDate,
+			subscriptionStatus: user?.project?.configuration?.subscriptionStatus,
+		});
+	}, [user]);
+
+	const { free, feedback, business } = Plans;
 
 	const postData = async ({ url = '', data = {} }) => {
 		const res = await fetch(url, {
@@ -50,8 +68,9 @@ const PlanAndBillingCard = () => {
 		return res.json();
 	};
 
+	// Handle the case where payment is needed
 	const handleCheckout = async (price: string) => {
-		setPriceIdLoading(true);
+		setCheckoutSessionLoading(true);
 
 		try {
 			const { sessionId } = await postData({
@@ -71,12 +90,35 @@ const PlanAndBillingCard = () => {
 		} catch (error) {
 			return alert(error.message);
 		} finally {
-			setPriceIdLoading(false);
+			setCheckoutSessionLoading(false);
 		}
 	};
 
+	// Handle the case where a subscription with out payment is being created
+	const handleSubscription = async (price: string, trial: boolean) => {
+		setSubscriptionLoading(true);
+		try {
+			const subscription = await postData({
+				url: '/api/stripe/create-subscription',
+				data: {
+					price,
+					projectName: user?.project?.name,
+					projectID: user?.project?.id,
+					idToken: user?.idToken,
+					email: user?.email,
+					trial,
+				},
+			});
+			await console.log({ subscription });
+		} catch (error) {
+			return alert(error.message);
+		}
+		setCheckoutSessionLoading(false);
+	};
+
+	// Handle the case where a subscription exists already — manage in Stripe's portal
 	const redirectToCustomerPortal = async () => {
-		setPortalSession(true);
+		setPortalSessionLoading(true);
 		const { url, error } = await postData({
 			url: '/api/stripe/portal-link',
 			data: {
@@ -88,180 +130,230 @@ const PlanAndBillingCard = () => {
 		});
 		if (error) return alert(error.message);
 		window.location.assign(url);
-		setPortalSession(false);
+		setPortalSessionLoading(false);
 	};
 
 	const iconBlue = useColorModeValue('blue.500', 'blue.300');
 	const codeBg = useColorModeValue('blue.50', 'gray.800');
 	const borderGray = useColorModeValue('gray.100', 'gray.800');
+	const secondaryText = useColorModeValue('gray.500', 'gray.400');
 	const tertiaryText = useColorModeValue('gray.300', 'gray.700');
-	const { free, feedback, business } = Plans;
+	const subtleButtonBorderColor = useColorModeValue('gray.200', 'gray.700');
 
-	return (
-		<GridCard
-			anchor
-			title="Plan and Billing"
-			subtitle="Information about the plan you're on and Billing powered by Stripe."
-		>
-			<Flex justify="center" align="center" mb={6}>
-				<Text mr={4} fontWeight="600">
-					Billing
+	const cost = `${plan.name}.${plan.billingInterval}Price`;
+
+	if (plan.name) {
+		return (
+			<Box>
+				<Text fontSize="sm" color={secondaryText} mb={2}>
+					Current plan
 				</Text>
-				<SegmentedControl
-					values={['Monthly', 'Yearly -20%']}
-					selectedIndex={toggleIndex}
-					setSelectedIndex={setToggleIndex}
-				/>
-			</Flex>
-			<Stack direction="row" w="full" spacing={8}>
-				<Flex direction="column" align="center" w="full">
-					<Code
-						variant="outline"
-						background={codeBg}
-						h="20px"
-						borderRadius="md"
-						py={2}
-						px={4}
-						colorScheme="blue"
-						maxW="fit-content"
-						mb="-10px"
-						zIndex="1"
+
+				<Flex justify="space-between" mb={4}>
+					<Box>
+						<Text fontWeight="800" fontSize="24px" mb={2}>
+							Feedback
+						</Text>
+						<Flex align="center">
+							<Text mr={3}>Billing</Text>
+							<Code p={2} borderRadius="md" fontWeight="700">
+								{plan.billingInterval}
+							</Code>
+						</Flex>
+					</Box>
+
+					<Box textAlign="end">
+						<Text fontWeight="800" fontSize="24px" mb={2}>
+							{
+								feedback[
+									plan.billingInterval == 'yearly'
+										? 'yearlyPrice'
+										: 'monthlyPrice'
+								]
+							}
+						</Text>
+						<Button
+							colorScheme="gray"
+							variant="subtle"
+							border="1px solid"
+							borderColor={subtleButtonBorderColor}
+							loadingText="Loading stripe"
+							isLoading={portalSessionLoading}
+							onClick={redirectToCustomerPortal}
+						>
+							Manage
+						</Button>
+					</Box>
+				</Flex>
+
+				<Text>
+					For questions about billing, please email <i>contact@meeshkan.com</i>.
+				</Text>
+			</Box>
+		);
+	} else {
+		return (
+			<>
+				<Flex justify="center" align="center" mb={6}>
+					<Text mr={4} fontWeight="600">
+						Billing
+					</Text>
+					<SegmentedControl
+						values={['Monthly', 'Yearly -20%']}
+						selectedIndex={toggleIndex}
+						setSelectedIndex={setToggleIndex}
+					/>
+				</Flex>
+				<Stack direction="row" w="full" spacing={8}>
+					<Flex direction="column" align="center" w="full">
+						<Code
+							variant="outline"
+							background={codeBg}
+							h="20px"
+							borderRadius="md"
+							py={2}
+							px={4}
+							colorScheme="blue"
+							maxW="fit-content"
+							mb="-10px"
+							zIndex="1"
+						>
+							Most popular
+						</Code>
+						<Box
+							p={4}
+							w="full"
+							borderRadius="lg"
+							border="1px solid"
+							borderColor={iconBlue}
+							boxShadow="0px 8px 24px 0px rgba(149,157,165,0.2)"
+						>
+							<Flex justify="space-between" mb={4}>
+								<Text fontSize="24px" fontWeight="800">
+									Feedback
+								</Text>
+								<Flex>
+									<Text
+										fontWeight="800"
+										fontSize="24px"
+										mr={4}
+										textDecor="line-through"
+										color={tertiaryText}
+									>
+										{toggleIndex === 0
+											? feedback.monthlyPrice
+											: feedback.yearlyPrice}
+									</Text>
+									<Text fontWeight="800" fontSize="24px">
+										{toggleIndex === 0
+											? feedback.discountedMonthly
+											: feedback.discountedYearly}
+									</Text>
+								</Flex>
+							</Flex>
+							<Text textAlign="center" color="gray.500" mb={8}>
+								{feedback.description}
+							</Text>
+
+							<List
+								spacing={2}
+								sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
+							>
+								{feedback.features.map((feature) => (
+									<ListItem lineHeight="1.2" fontSize="14px">
+										<ListIcon as={CheckSquareIcon} color={iconBlue} />
+										{feature}
+									</ListItem>
+								))}
+							</List>
+							<Flex direction="column" justify="center" align="center" mt={8}>
+								<LightMode>
+									<Button
+										w="full"
+										isLoading={subscriptionLoading}
+										loadingText="Creating subscription"
+										onClick={() => {
+											// handleSubscription(
+											// 	toggleIndex === 0
+											// 		? feedback.monthlyPriceId
+											// 		: feedback.yearlyPriceId,
+											// 	true
+											// );
+											onOpen();
+										}}
+									>
+										Choose the Feedback plan
+									</Button>
+								</LightMode>
+							</Flex>
+						</Box>
+					</Flex>
+
+					<Modal
+						onClose={onClose}
+						isOpen={isOpen}
+						isCentered
+						motionPreset="slideInBottom"
+						size="full"
+						scrollBehavior="inside"
 					>
-						Most popular
-					</Code>
+						<ModalOverlay />
+						<ModalContent p={4}>
+							<ModalCloseButton />
+							<Box
+								h="95vh"
+								w="full"
+								as="iframe"
+								src={`https://savvycal.com/meeshkan/customer-advisory-board?display_name=${user?.firstName}+${user?.lastName}&email=${user?.email}`}
+							/>
+						</ModalContent>
+					</Modal>
+
 					<Box
+						d="flex"
+						flexDirection="column"
+						justifyContent="space-between"
 						p={4}
 						w="full"
 						borderRadius="lg"
 						border="1px solid"
-						borderColor={iconBlue}
+						borderColor="transparent"
 						boxShadow="0px 8px 24px 0px rgba(149,157,165,0.2)"
 					>
-						<Flex justify="space-between" mb={4}>
-							<Text fontSize="24px" fontWeight="800">
-								Feedback
-							</Text>
-							<Flex>
-								<Text
-									fontWeight="800"
-									fontSize="24px"
-									mr={4}
-									textDecor="line-through"
-									color={tertiaryText}
-								>
-									{toggleIndex === 0
-										? feedback.monthlyPrice
-										: feedback.yearlyPrice}
+						<Box>
+							<Flex justify="space-between" mb={4}>
+								<Text fontSize="24px" fontWeight="800">
+									Business
 								</Text>
-								<Text fontWeight="800" fontSize="24px">
-									{toggleIndex === 0
-										? feedback.discountedMonthly
-										: feedback.discountedYearly}
-								</Text>
+								<Flex>
+									<Text fontWeight="800" fontSize="24px">
+										{toggleIndex === 0
+											? business.monthlyPrice
+											: business.yearlyPrice}
+									</Text>
+								</Flex>
 							</Flex>
-						</Flex>
-						<Text textAlign="center" color="gray.500" mb={8}>
-							{feedback.description}
-						</Text>
-						<List
-							spacing={2}
-							sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
-						>
-							{feedback.features.map((feature) => (
-								<ListItem lineHeight="1.2" fontSize="14px">
-									<ListIcon as={CheckSquareIcon} color={iconBlue} />
-									{feature}
-								</ListItem>
-							))}
-						</List>
-						<Flex direction="column" justify="center" align="center" mt={8}>
-							<Popover trigger="hover" placement="top">
-								<LightMode>
-									<PopoverTrigger>
-										<Button
-											w="full"
-											isLoading={priceIdLoading}
-											loadingText="Loading stripe"
-											onClick={() =>
-												handleCheckout(
-													toggleIndex === 0
-														? feedback.monthlyPriceId
-														: feedback.yearlyPriceId
-												)
-											}
-										>
-											Choose the Feedback plan
-										</Button>
-									</PopoverTrigger>
-								</LightMode>
-								<PopoverContent p={3}>
-									<PopoverArrow />
-									<Flex as="span" align="center">
-										Use code{' '}
-										<Code
-											ml={2}
-											px={2}
-											py={1}
-											borderRadius="md"
-											variant="outline"
-											fontSize="inherit"
-											colorScheme="red"
-										>
-											Feedback100
-										</Code>
-									</Flex>
-									<PopoverCloseButton mt="3px" />
-								</PopoverContent>
-							</Popover>
-						</Flex>
-					</Box>
-				</Flex>
-				<Box
-					d="flex"
-					flexDirection="column"
-					justifyContent="space-between"
-					p={4}
-					w="full"
-					borderRadius="lg"
-					border="1px solid"
-					borderColor="transparent"
-					boxShadow="0px 8px 24px 0px rgba(149,157,165,0.2)"
-				>
-					<Box>
-						<Flex justify="space-between" mb={4}>
-							<Text fontSize="24px" fontWeight="800">
-								Business
+							<Text textAlign="center" color="gray.500" mb={8}>
+								{business.description}
 							</Text>
-							<Flex>
-								<Text fontWeight="800" fontSize="24px">
-									{toggleIndex === 0
-										? business.monthlyPrice
-										: business.yearlyPrice}
-								</Text>
-							</Flex>
-						</Flex>
-						<Text textAlign="center" color="gray.500" mb={8}>
-							{business.description}
-						</Text>
-						<List
-							spacing={2}
-							sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
-						>
-							{business.features.map((feature) => (
-								<ListItem lineHeight="1.2" fontSize="14px">
-									<ListIcon as={CheckSquareIcon} color={iconBlue} />
-									{feature}
-								</ListItem>
-							))}
-						</List>
-					</Box>
-					<Flex justify="center">
+							<List
+								spacing={2}
+								sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
+							>
+								{business.features.map((feature) => (
+									<ListItem lineHeight="1.2" fontSize="14px">
+										<ListIcon as={CheckSquareIcon} color={iconBlue} />
+										{feature}
+									</ListItem>
+								))}
+							</List>
+						</Box>
 						<Button
 							variant="subtle"
 							mt={8}
 							w="full"
 							loadingText="Loading stripe"
-							isLoading={priceIdLoading}
+							isLoading={checkoutSessionLoading}
 							onClick={() =>
 								handleCheckout(
 									toggleIndex === 0
@@ -272,76 +364,43 @@ const PlanAndBillingCard = () => {
 						>
 							Choose the Business plan
 						</Button>
-						<Button
-							variant="subtle"
-							colorScheme="gray"
-							mt={8}
-							w="full"
-							loadingText="Loading stripe"
-							isLoading={portalSession}
-							onClick={redirectToCustomerPortal}
-						>
-							Manage
-						</Button>
-					</Flex>
-				</Box>
-			</Stack>
-			<Stack
-				w="full"
-				direction="row"
-				align="center"
-				justifyContent="space-between"
-				p={4}
-				mt={8}
-				borderRadius="lg"
-				border="1px solid"
-				borderColor={borderGray}
-			>
-				<Flex align="baseline">
-					<Text fontSize="24px" fontWeight="800" mr={4}>
-						Free
-					</Text>
-					<Text color="gray.500">{free.description}</Text>
-				</Flex>
-				<Flex
+					</Box>
+				</Stack>
+				<Stack
 					w="full"
-					as="form"
-					maxW="600px"
-					mx={['none', 'none', 'auto']}
+					direction="row"
+					align="center"
+					justifyContent="space-between"
+					p={4}
+					mt={8}
+					borderRadius="lg"
 					border="1px solid"
-					borderColor={useColorModeValue('gray.300', 'gray.700')}
-					borderRadius="xl"
-					p={2}
-					transition="all 0.2s"
-					_hover={{ borderColor: useColorModeValue('gray.400', 'gray.600') }}
-					_focusWithin={{
-						borderColor: useColorModeValue('blue.400', 'blue.600'),
-					}}
-					direction={['column', 'column', 'row']}
+					borderColor={borderGray}
 				>
-					<FormControl isRequired>
-						<Input
-							type="email"
-							name="email"
-							id="email"
-							defaultValue={user?.email}
-							placeholder="shipit@meeshkan.com"
-							_placeholder={{
-								color: useColorModeValue('gray.500', 'gray.400'),
-							}}
-							mr={4}
-							border="none"
-							_focus={{}}
-							mb={[4, 4, 0]}
-						/>
-					</FormControl>
-					<Button minW="fit-content" type="submit" variant="subtle">
+					<Flex align="baseline">
+						<Text fontSize="24px" fontWeight="800" mr={4}>
+							Free
+						</Text>
+						<Text color="gray.500">{free.description}</Text>
+					</Flex>
+
+					<Button
+						minW="fit-content"
+						type="submit"
+						variant="subtle"
+						onClick={() =>
+							handleSubscription(
+								toggleIndex === 0 ? free.monthlyPriceId : free.yearlyPriceId,
+								false
+							)
+						}
+					>
 						Subscribe to updates
 					</Button>
-				</Flex>
-			</Stack>
-		</GridCard>
-	);
+				</Stack>
+			</>
+		);
+	}
 };
 
 export default PlanAndBillingCard;
