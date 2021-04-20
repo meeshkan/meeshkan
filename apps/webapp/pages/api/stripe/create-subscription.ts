@@ -16,13 +16,14 @@ const CreateSubscription = async (
 			projectName,
 		});
 
-		await stripe.subscriptions.create({
+		const subscription = await stripe.subscriptions.create({
 			customer,
 			items: [{ price, quantity: 1 }],
 			// Three month trial
 			trial_period_days: trial === true ? 90 : 0,
+			metadata: { 'project id': projectID },
 		});
-		return res.status(200).end();
+		return res.status(200).json({ subscription });
 	} catch (error) {
 		console.log(error);
 		res

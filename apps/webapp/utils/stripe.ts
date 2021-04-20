@@ -55,23 +55,21 @@ export const createOrRetrieveCustomer = async ({
 	}
 };
 
-// Plans
-
+// Information to support Stripe Plans setup in the webapp
 export const Plans = {
 	free: {
 		monthlyPrice: '0€',
 		yearlyPrice: '0€',
 		description: 'Wait and be notified when a free plan is available.',
-		// @ts-expect-error
-		monthlyPriceId: null,
-		// @ts-expect-error
-		yearlyPriceId: null,
+		monthlyPriceId: `price_1IhzoRA2WCpbIMtYoVejfHkS`,
+		yearlyPriceId: `price_1IgRElA2WCpbIMtYvllLMJzH`,
 		features: [''],
 	},
 
 	feedback: {
 		monthlyPrice: '45€',
 		yearlyPrice: '432€',
+		// All feedback plans are free
 		discountedMonthly: '0€',
 		discountedYearly: '0€',
 		description:

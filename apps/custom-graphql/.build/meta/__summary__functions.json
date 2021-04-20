@@ -1,0 +1,41 @@
+{
+  "functions": [
+    {
+      "name": "team-create-invite-link-trigger",
+      "handler": "team-create-invite-link-trigger.handler"
+    },
+    {
+      "name": "team-update-invite-link-trigger",
+      "handler": "team-update-invite-link-trigger.handler"
+    },
+    {
+      "name": "plan-webhook",
+      "handler": "plan-webhook.handler"
+    }
+  ],
+  "resolvers": [],
+  "triggers": [
+    {
+      "name": "team-create-invite-link-trigger",
+      "operation": "create",
+      "tableName": "Configuration",
+      "functionName": "team-create-invite-link-trigger",
+      "type": "before"
+    },
+    {
+      "name": "team-update-invite-link-trigger",
+      "operation": "update",
+      "tableName": "Configuration",
+      "functionName": "team-update-invite-link-trigger",
+      "type": "before"
+    }
+  ],
+  "webhooks": [
+    {
+      "name": "plan-webhook",
+      "functionName": "plan-webhook",
+      "httpMethod": "POST",
+      "path": "plan-update"
+    }
+  ]
+}

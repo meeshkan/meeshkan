@@ -7,14 +7,7 @@ const createCheckoutSession = async (
 	res: NextApiResponse
 ) => {
 	if (req.method === 'POST') {
-		const {
-			price,
-			projectName,
-			projectID,
-			idToken,
-			email,
-			metadata = {},
-		} = req.body;
+		const { price, projectName, projectID, idToken, email } = req.body;
 
 		const host = req.headers.host;
 		const protocol = /^localhost(:\d+)?$/.test(host) ? 'http:' : 'https:';
@@ -41,7 +34,7 @@ const createCheckoutSession = async (
 				mode: 'subscription',
 				allow_promotion_codes: true,
 				subscription_data: {
-					metadata,
+					metadata: { 'project id': projectID },
 				},
 				success_url: `${origin}/${createSlug(projectName)}`,
 				cancel_url: `${origin}/${createSlug(

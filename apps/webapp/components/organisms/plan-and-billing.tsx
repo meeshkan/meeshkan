@@ -109,11 +109,11 @@ const PlanAndBillingCard = () => {
 					trial,
 				},
 			});
-			await console.log({ subscription });
 		} catch (error) {
 			return alert(error.message);
+		} finally {
+			setCheckoutSessionLoading(false);
 		}
-		setCheckoutSessionLoading(false);
 	};
 
 	// Handle the case where a subscription exists already — manage in Stripe's portal
@@ -217,6 +217,7 @@ const PlanAndBillingCard = () => {
 							maxW="fit-content"
 							mb="-10px"
 							zIndex="1"
+							fontWeight="700"
 						>
 							Most popular
 						</Code>
@@ -272,13 +273,14 @@ const PlanAndBillingCard = () => {
 										w="full"
 										isLoading={subscriptionLoading}
 										loadingText="Creating subscription"
+										isDisabled={portalSessionLoading || checkoutSessionLoading}
 										onClick={() => {
-											// handleSubscription(
-											// 	toggleIndex === 0
-											// 		? feedback.monthlyPriceId
-											// 		: feedback.yearlyPriceId,
-											// 	true
-											// );
+											handleSubscription(
+												toggleIndex === 0
+													? feedback.monthlyPriceId
+													: feedback.yearlyPriceId,
+												true
+											);
 											onOpen();
 										}}
 									>
@@ -288,26 +290,27 @@ const PlanAndBillingCard = () => {
 							</Flex>
 						</Box>
 					</Flex>
-
-					<Modal
-						onClose={onClose}
-						isOpen={isOpen}
-						isCentered
-						motionPreset="slideInBottom"
-						size="full"
-						scrollBehavior="inside"
-					>
-						<ModalOverlay />
-						<ModalContent p={4}>
-							<ModalCloseButton />
-							<Box
-								h="95vh"
-								w="full"
-								as="iframe"
-								src={`https://savvycal.com/meeshkan/customer-advisory-board?display_name=${user?.firstName}+${user?.lastName}&email=${user?.email}`}
-							/>
-						</ModalContent>
-					</Modal>
+					<LightMode>
+						<Modal
+							onClose={onClose}
+							isOpen={isOpen}
+							isCentered
+							motionPreset="slideInBottom"
+							size="full"
+							scrollBehavior="inside"
+						>
+							<ModalOverlay />
+							<ModalContent p={4}>
+								<ModalCloseButton color="gray.500" />
+								<Box
+									h="95vh"
+									w="full"
+									as="iframe"
+									src={`https://savvycal.com/meeshkan/customer-advisory-board?display_name=${user?.firstName}+${user?.lastName}&email=${user?.email}`}
+								/>
+							</ModalContent>
+						</Modal>
+					</LightMode>
 
 					<Box
 						d="flex"
@@ -354,6 +357,7 @@ const PlanAndBillingCard = () => {
 							w="full"
 							loadingText="Loading stripe"
 							isLoading={checkoutSessionLoading}
+							isDisabled={portalSessionLoading || subscriptionLoading}
 							onClick={() =>
 								handleCheckout(
 									toggleIndex === 0
@@ -388,6 +392,9 @@ const PlanAndBillingCard = () => {
 						minW="fit-content"
 						type="submit"
 						variant="subtle"
+						loadingText="Creating subscription"
+						isLoading={subscriptionLoading}
+						isDisabled={portalSessionLoading || checkoutSessionLoading}
 						onClick={() =>
 							handleSubscription(
 								toggleIndex === 0 ? free.monthlyPriceId : free.yearlyPriceId,
