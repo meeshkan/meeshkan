@@ -31,7 +31,9 @@ const SideBarBody = () => {
 	const hasProjects = projects.length > 0;
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
-	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
+	const slugifiedProjectName = useMemo(() => createSlug(
+		projectName || (projects?.length > 0 && projects[0].name) || ''
+	), [
 		projectName,
 	]);
 
