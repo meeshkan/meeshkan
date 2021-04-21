@@ -7,7 +7,7 @@ import PlanAndBillingCard from './plan-and-billing';
 
 const CreateProject = () => {
 	const [loading, setLoading] = useState(false);
-	const [stepNumber, setStepNumber] = useState(2);
+	const [stepNumber, setStepNumber] = useState(1);
 	return (
 		<Flex
 			as={Card}
@@ -32,29 +32,25 @@ const CreateProject = () => {
 							Choose your plan
 						</Heading>
 						<PlanAndBillingCard />
-						<Flex justify="space-between" align="center" w="100%">
-							<Button
-								mt={4}
-								colorScheme="gray"
-								onClick={() => Router.push('/')}
-							>
-								Back
-							</Button>
-							<Button
-								mt={4}
-								type="submit"
-								isLoading={loading}
-								loadingText="Creating project"
-								form="form"
-							>
-								Create project
-							</Button>
-						</Flex>
 					</Box>
 				) : (
 					'Error'
 				)}
 			</>
+			<Flex justify="space-between" align="center" w="100%">
+				<Button mt={4} colorScheme="gray" onClick={() => Router.push('/')}>
+					Back
+				</Button>
+				<Button
+					mt={4}
+					type="submit"
+					isLoading={loading}
+					loadingText="Creating project"
+					form="form"
+				>
+					Create project
+				</Button>
+			</Flex>
 		</Flex>
 	);
 };

@@ -38,6 +38,12 @@ const relevantEvents = new Set([
 	'event.created',
 ]);
 
+const plans = {
+	free: 'prod_JJ3LUkSBbgR8j0',
+	feedback: 'prod_JAI3521ORwEUmn',
+	business: 'prod_JAI4NZ98T60Rqn',
+};
+
 /* Webhook response objects require a statusCode attribute to be specified. A response body can get specified as a stringified JSON object and any custom headers set. */
 const responseBuilder = (code = 200, message = undefined, headers = {}) => ({
 	body: JSON.stringify({ message }),
@@ -48,31 +54,70 @@ const responseBuilder = (code = 200, message = undefined, headers = {}) => ({
 /*The webhook function's handler can be synchronous or asynchronous and is always passed the event, and context (ctx) arguments.*/
 module.exports = async (event, ctx) => {
 	let response;
+	const projectID = JSON.parse(event.body)['data']['object']['metadata'][
+		'project id'
+	];
+	const planName =
+		JSON.parse(event.body)['data']['object']['plan']['product'] == plans.free
+			? 'Free'
+			: JSON.parse(event.body)['data']['object']['plan']['product'] ==
+			  plans.feedback
+			? 'Feedback'
+			: JSON.parse(event.body)['data']['object']['plan']['product'] ==
+			  plans.business
+			? 'Business'
+			: undefined;
+	const billingInterval =
+		JSON.parse(event.body)['data']['object']['plan']['interval'] == 'month'
+			? 'monthly'
+			: 'yearly';
+	const subscriptionStatus = '';
+	const subscriptionStartedDate = new Date(
+		JSON.parse(event.body)['created'] * 1000
+	);
+
+	if (projectID === null || projectID === undefined)
+		return responseBuilder(
+			422,
+			`A project id couldn't be found in the metadata`
+		);
+
+	const planDetails = {};
 
 	try {
-		console.log({ event: event.data }, { ctx });
+		console.log(
+			{ projectID },
+			{ planName },
+			{ billingInterval },
+			{
+				subscriptionStartedDate:
+					subscriptionStartedDate.toISOString().replace('Z', '') + '+00:00',
+			}
+		);
 		/*Access posted data on the event object:*/
 		// response = await ctx.api.gqlRequest(PLAN_UPDATE, {
-		// 	projectID: event.data.metadata['project id'],
+		// 	projectID,
 		// 	planDetails: {
 		// 		planDetails: {
 		// 			plan: {
-		// 				set: '',
+		// 				set: planName,
 		// 			},
 		// 			billingInterval: {
-		// 				set: '',
+		// 				set: billingInterval,
 		// 			},
-		// 			subscriptionStatus: {
-		// 				set: '',
-		// 			},
+		// 			// subscriptionStatus: {
+		// 			// 	set: subscriptionStatus,
+		// 			// },
 		// 			subscriptionStartedDate: {
-		// 				set: '',
+		// 				set: subscriptionStartedDate,
 		// 			},
 		// 		},
 		// 	},
 		// });
+
 		/* Handle errors for failed GraphQL mutation */
 	} catch (error) {
+		console.error(error.message || 'Failed to update plan');
 		return responseBuilder(422, error.message || 'Failed to update plan');
 	}
 
@@ -80,42 +125,42 @@ module.exports = async (event, ctx) => {
 	return responseBuilder(200, 'Success');
 };
 
-// 		if (relevantEvents.has(event.type)) {
-// 			try {
-// 				switch (event.type) {
-// 					case 'product.created':
-// 					case 'product.updated':
-// 						await upsertProductRecord(event.data.object);
-// 						break;
-// 					case 'price.created':
-// 					case 'price.updated':
-// 						await upsertPriceRecord(event.data.object);
-// 						break;
-// 					case 'customer.subscription.created':
-// 					case 'customer.subscription.updated':
-// 					case 'customer.subscription.deleted':
-// 						await manageSubscriptionStatusChange(
-// 							event.data.object.id,
-// 							event.data.object.customer,
-// 							event.type === 'customer.subscription.created'
-// 						);
-// 						break;
-// 					case 'checkout.session.completed':
-// 						const checkoutSession = event.data.object;
-// 						if (checkoutSession.mode === 'subscription') {
-// 							const subscriptionId = checkoutSession.subscription;
-// 							await manageSubscriptionStatusChange(
-// 								subscriptionId,
-// 								checkoutSession.customer,
-// 								true
-// 							);
-// 						}
-// 						break;
-// 					default:
-// 						throw new Error('Unhandled relevant event!');
+// if (relevantEvents.has(event.type)) {
+// 	try {
+// 		switch (event.type) {
+// 			case 'product.created':
+// 			case 'product.updated':
+// 				await upsertProductRecord(event.data.object);
+// 				break;
+// 			case 'price.created':
+// 			case 'price.updated':
+// 				await upsertPriceRecord(event.data.object);
+// 				break;
+// 			case 'customer.subscription.created':
+// 			case 'customer.subscription.updated':
+// 			case 'customer.subscription.deleted':
+// 				await manageSubscriptionStatusChange(
+// 					event.data.object.id,
+// 					event.data.object.customer,
+// 					event.type === 'customer.subscription.created'
+// 				);
+// 				break;
+// 			case 'checkout.session.completed':
+// 				const checkoutSession = event.data.object;
+// 				if (checkoutSession.mode === 'subscription') {
+// 					const subscriptionId = checkoutSession.subscription;
+// 					await manageSubscriptionStatusChange(
+// 						subscriptionId,
+// 						checkoutSession.customer,
+// 						true
+// 					);
 // 				}
-// 			} catch (error) {
-// 				console.log(error);
-// 				return res.json({ error: 'Webhook handler failed. View logs.' });
-// 			}
+// 				break;
+// 			default:
+// 				throw new Error('Unhandled relevant event!');
 // 		}
+// 	} catch (error) {
+// 		console.log(error);
+// 		return res.json({ error: 'Webhook handler failed. View logs.' });
+// 	}
+// }
