@@ -12,8 +12,8 @@ functions:
   plan-webhook:
     type: webhook
     handler:
-      code: src/webhooks/stripe-webhook.ts
-    path: plan-update
+      code: src/webhooks/plan/handler.ts
+    path: /plan-update
     method: POST
     description: |
       Consuming events from Stripe to update plan details on 8base.
