@@ -9,11 +9,19 @@ functions:
     handler:
       code: src/triggers/invite-link/update-handler.ts
     operation: Configuration.update
-  plan-webhook:
+  update-plan:
     type: webhook
     handler:
-      code: src/webhooks/plan/handler.ts
-    path: /plan-update
+      code: src/webhooks/plan/update-handler.ts
+    path: /update-plan
     method: POST
     description: |
-      Consuming events from Stripe to update plan details on 8base.
+      Consuming create and update events from Stripe to update plan details on 8base.
+  cancel-plan:
+    type: webhook
+    handler:
+      code: src/webhooks/plan/cancel-handler.ts
+    path: /cancel-plan
+    method: POST
+    description: |
+      Consuming cancel and delete events from Stripe to update plan details on 8base.
