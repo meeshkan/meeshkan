@@ -16,6 +16,7 @@ import {
 	Modal,
 	useDisclosure,
 	ModalCloseButton,
+	ModalHeader,
 } from '@chakra-ui/react';
 import { UserContext } from '../../utils/user';
 import { Plans } from '../../utils/stripe';
@@ -83,15 +84,13 @@ const PlanAndBillingCard = () => {
 					email: user?.email,
 				},
 			});
-			await console.log({ sessionId });
 
 			const stripe = await getStripe();
 			await stripe.redirectToCheckout({ sessionId });
 		} catch (error) {
-			return alert(error.message);
-		} finally {
-			setCheckoutSessionLoading(false);
+			throw new Error(error.message);
 		}
+		setCheckoutSessionLoading(false);
 	};
 
 	// Handle the case where a subscription with out payment is being created
@@ -140,8 +139,6 @@ const PlanAndBillingCard = () => {
 	const tertiaryText = useColorModeValue('gray.300', 'gray.700');
 	const subtleButtonBorderColor = useColorModeValue('gray.200', 'gray.700');
 
-	const cost = `${plan.name}.${plan.billingInterval}Price`;
-
 	if (plan.name) {
 		return (
 			<Box>
@@ -156,9 +153,19 @@ const PlanAndBillingCard = () => {
 						</Text>
 						<Flex align="center">
 							<Text mr={3}>Billing</Text>
-							<Code p={2} borderRadius="md" fontWeight="700">
+							<Code mr={2} p={2} borderRadius="md" fontWeight="700">
 								{plan.billingInterval}
 							</Code>
+							{plan.subscriptionStatus == 'cancelled' ? (
+								<Code
+									colorScheme="red"
+									p={2}
+									borderRadius="md"
+									fontWeight="700"
+								>
+									cancelled
+								</Code>
+							) : null}
 						</Flex>
 					</Box>
 
@@ -296,11 +303,12 @@ const PlanAndBillingCard = () => {
 							isOpen={isOpen}
 							isCentered
 							motionPreset="slideInBottom"
-							size="full"
+							size="7xl"
 							scrollBehavior="inside"
 						>
 							<ModalOverlay />
 							<ModalContent p={4}>
+								<ModalHeader>Schedule your first feedback call!</ModalHeader>
 								<ModalCloseButton color="gray.500" />
 								<Box
 									h="95vh"
