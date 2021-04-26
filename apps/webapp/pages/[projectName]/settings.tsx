@@ -28,6 +28,7 @@ import Card from '../../components/atoms/card';
 import NotFoundError from '../404';
 import InviteLinkInput from '../../components/molecules/invite-link-input';
 import ScriptTagInput from '../../components/molecules/script-tag-input';
+import SegmentedControl from '../../components/molecules/segmented-control';
 import { UserContext, updateProductNotifications } from '../../utils/user';
 import { User, AuthenticationToken } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../utils/graphql';
@@ -35,6 +36,7 @@ import {
 	REMOVE_TEAM_MEMBER,
 	REMOVE_AUTH_TOKEN,
 	ADD_SUPPORT,
+	TOGGLE_TEST_RUNS,
 } from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 import {
@@ -65,6 +67,9 @@ const Settings = () => {
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
+	const [toggleTestRunnerIndex, setToggleTestRunnerIndex] = useState<
+		0 | 1 | null
+	>(null);
 	const [members, setMembers] = useState<Array<User>>(
 		project?.members?.items || []
 	);
@@ -80,7 +85,38 @@ const Settings = () => {
 		setProductUpdates(productNotifications);
 		setMembers(project?.members?.items);
 		setTokens(project?.configuration.authenticationTokens?.items);
+		setToggleTestRunnerIndex(
+			project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null
+		);
 	}, [project, productNotifications]);
+
+	useEffect(() => {
+		const handleTestRunnerToggle = async () => {
+			const res = await client.request(TOGGLE_TEST_RUNS, {
+				projectId: project.id,
+				toggle: !toggleTestRunnerIndex,
+			});
+
+			const selectedProjectIndex = _.findIndex(
+				projects,
+				(currentProject) => currentProject.id === project.id
+			);
+
+			projects[selectedProjectIndex].configuration.activeTestRuns =
+				res.projectUpdate.configuration.activeTestRuns;
+			await mutateUser({ ...user, projects });
+		};
+
+		if (
+			!project ||
+			toggleTestRunnerIndex === null ||
+			!toggleTestRunnerIndex === project.configuration.activeTestRuns
+		) {
+			return;
+		}
+
+		handleTestRunnerToggle();
+	}, [toggleTestRunnerIndex]);
 
 	const client = eightBaseClient(idToken);
 
@@ -389,6 +425,29 @@ const Settings = () => {
 						Script tag
 					</Heading>
 					<ScriptTagInput />
+
+					<Spacer h={8} />
+
+					<FormControl display="flex" alignItems="center">
+						<Stack mr={5}>
+							<Heading fontSize="18px" fontWeight="500">
+								Test runner
+							</Heading>
+							<Text
+								fontSize="sm"
+								fontWeight="400"
+								lineHeight="short"
+								color="gray.500"
+							>
+								Enable the Meeshkan test runner.
+							</Text>
+						</Stack>
+						<SegmentedControl
+							values={['on', 'off']}
+							selectedIndex={toggleTestRunnerIndex}
+							setSelectedIndex={setToggleTestRunnerIndex}
+						/>
+					</FormControl>
 
 					<Spacer h={8} />
 

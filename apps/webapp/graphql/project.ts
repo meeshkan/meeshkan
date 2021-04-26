@@ -288,6 +288,25 @@ export const PROJECT_USER_STORIES = gql`
 	}
 `;
 
+export const TOGGLE_TEST_RUNS = gql`
+	mutation TOGGLE_TEST_RUNS($projectId: ID!, $toggle: Boolean!) {
+		projectUpdate(
+			filter: {
+				id: $projectId
+			}
+			data: {
+				configuration: {
+					update: { activeTestRuns: $toggle }
+				}
+			}
+		) {
+			configuration {
+				activeTestRuns
+			}
+		}
+	}
+`;
+
 export const ADD_AUTH_TOKEN = gql`
 	mutation ADD_AUTH_TOKEN(
 		$projectID: ID!

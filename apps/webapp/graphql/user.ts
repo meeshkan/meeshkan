@@ -69,6 +69,7 @@ export const USER = gql`
 						shareUrl
 					}
 					configuration {
+						activeTestRuns
 						productionURL
 						stagingURL
 						inviteLink

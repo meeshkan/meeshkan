@@ -125,9 +125,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 		userStory: UserStory;
 	};
 
-	const { data, error, isValidating: validatingQuery } = useSWR<
-		UserStoryResponse
-	>(USER_STORY, fetcher);
+	const {
+		data,
+		error,
+		isValidating: validatingQuery,
+	} = useSWR<UserStoryResponse>(USER_STORY, fetcher);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -246,7 +248,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 		).then(() => setTimeout(() => setLoading(false), 30000));
 	};
 
-	if ((validatingQuery && (!data || data?.userStory?.id !== userStoryId)) || validatingProject) {
+	if (
+		(validatingQuery && (!data || data?.userStory?.id !== userStoryId)) ||
+		validatingProject
+	) {
 		return <LoadingScreen as={Card} />;
 	}
 
@@ -462,14 +467,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 					flexDirection={['column-reverse', 'column-reverse', 'row', 'row']}
 					justifyContent="space-between"
 					w="100%"
-					flex="1"
 				>
-					<Box
-						borderRadius="lg"
-						my={[6, 6, 0, 0]}
-						mr={4}
-						wordBreak="break-all"
-					>
+					<Box borderRadius="lg" my={[6, 6, 0, 0]} mr={4} wordBreak="break-all">
 						<StepList steps={steps} />
 						<Flex
 							justify="center"
@@ -485,7 +484,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							<CheckmarkIcon color={stepNumberColor} />
 						</Flex>
 					</Box>
-					<Box>
+					<Box minW="md">
 						{data.userStory?.recording?.video ? (
 							<VideoPlayer
 								src={data.userStory.recording.video.downloadUrl}

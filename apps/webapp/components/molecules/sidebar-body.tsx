@@ -10,6 +10,7 @@ import {
 	useColorModeValue,
 	Text,
 	Heading,
+	Code,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import {
@@ -30,9 +31,13 @@ const SideBarBody = () => {
 	const hasProjects = projects.length > 0;
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
-	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
-		projectName,
-	]);
+	const slugifiedProjectName = useMemo(
+		() =>
+			createSlug(
+				projectName || (projects?.length > 0 && projects[0].name) || ''
+			),
+		[projectName]
+	);
 
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const testRunsHref = `/${slugifiedProjectName}/test-runs`;
@@ -44,11 +49,7 @@ const SideBarBody = () => {
 
 	if (isSettingsPage) {
 		return (
-			<Flex
-				direction="column"
-				justify="space-between"
-				h="100%"
-			>
+			<Flex direction="column" justify="space-between" h="100%">
 				<Stack spacing={6} mt={6}>
 					<Link href={`/${slugifiedProjectName}`} passHref>
 						<a>
@@ -180,11 +181,7 @@ const SideBarBody = () => {
 	}
 
 	return (
-		<Flex
-			direction="column"
-			justify="space-between"
-			h="100%"
-		>
+		<Flex direction="column" justify="space-between" h="100%">
 			{hasProjects ? (
 				<>
 					<Stack mt={6} flex="1">
@@ -215,7 +212,10 @@ const SideBarBody = () => {
 								router.asPath.includes('/test-runs')
 							}
 						>
-							Test runs
+							Test runs <Box w="100%" />
+							<Code ml={2} p={2} borderRadius="md" colorScheme="cyan">
+								beta
+							</Code>
 						</NavButton>
 						<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
 							Releases
