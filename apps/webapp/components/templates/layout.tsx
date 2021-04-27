@@ -21,18 +21,16 @@ type LayoutProps = {
 };
 
 const Layout = ({ children, ...props }: LayoutProps) => {
-	const user = useContext(UserContext);
-	const [hasPlan, setHasPlan] = useState(!!user?.project?.configuration?.plan);
-
+	const { project, ...user } = useContext(UserContext);
 	const { isOpen, onOpen, onClose, onToggle } = useDisclosure({
 		defaultIsOpen: true,
 	});
 
 	useEffect(() => {
-		setHasPlan(!!user?.project?.configuration?.plan);
-		// refreshes the state of open/close for the modal
-		onOpen();
-	}, [user?.project]);
+		if (project && !project.configuration?.plan) {
+			onOpen();
+		}
+	}, [project]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');
@@ -42,8 +40,8 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			identity={user?.idToken}
 			// This is a 'super property' which attaches information to every event.
 			eventData={{
-				project: user?.project?.name,
-				plan: user?.project?.configuration?.plan,
+				project: project?.name,
+				plan: project?.configuration?.plan,
 			}}
 			profileData={{
 				$avatar: user?.avatar,
@@ -69,8 +67,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				{children}
 			</Stack>
 
-			{/* Doesn't have a plan, does have a project */}
-			{!hasPlan && user?.project ? (
+			{(project && !project.configuration?.plan) ? (
 				<Modal
 					isOpen={isOpen}
 					onClose={onClose}

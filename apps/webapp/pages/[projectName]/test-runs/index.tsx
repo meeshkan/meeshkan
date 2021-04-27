@@ -18,6 +18,7 @@ import GridCard from '../../../components/molecules/grid-card';
 import TestRunCard from '../../../components/molecules/test-run-card';
 import Card from '../../../components/atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
+import ValidatedBillingPlan from '../../../components/molecules/validated-billing-plan';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
@@ -98,138 +99,140 @@ const TestRunsPage = () => {
 	}
 
 	return (
-		<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
-			<Alert status="warning" mb={4} p={3} flex="none">
-				<AlertIcon />
-				<AlertDescription>
-					Test runs are experimental at this time.
-				</AlertDescription>
-			</Alert>
-			<Box overflowY="auto">
-				<GridCard
-					title="Latest complete test case status"
-					subtitle="This is the breakdown of tests from the newest test run. Click on individual test runs below for further details."
-					mb={12}
-					flex="0 0 auto"
-				>
-					{doughnutDataValues.length > 0 ? (
-						<Flex
-							justify="center"
-							align="center"
-							direction={['column', 'column', 'row', 'row']}
-						>
-							<Doughnut
-								data={doughnutData}
-								options={doughnutOptions}
-								height={150}
-								width={125}
-							/>
-							<Stack
-								as={List}
-								direction={['column', 'row']}
-								spacing={[4, 8]}
-								ml={[0, 0, 16]}
-								mt={[8, 0]}
+		<ValidatedBillingPlan>
+			<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
+				<Alert status="warning" mb={4} p={3} flex="none">
+					<AlertIcon />
+					<AlertDescription>
+						Test runs are experimental at this time.
+					</AlertDescription>
+				</Alert>
+				<Box overflowY="auto">
+					<GridCard
+						title="Latest complete test case status"
+						subtitle="This is the breakdown of tests from the newest test run. Click on individual test runs below for further details."
+						mb={12}
+						flex="0 0 auto"
+					>
+						{doughnutDataValues.length > 0 ? (
+							<Flex
+								justify="center"
+								align="center"
+								direction={['column', 'column', 'row', 'row']}
 							>
-								{doughnutDataLabels.map((label, index) => {
+								<Doughnut
+									data={doughnutData}
+									options={doughnutOptions}
+									height={150}
+									width={125}
+								/>
+								<Stack
+									as={List}
+									direction={['column', 'row']}
+									spacing={[4, 8]}
+									ml={[0, 0, 16]}
+									mt={[8, 0]}
+								>
+									{doughnutDataLabels.map((label, index) => {
+										return (
+											<ListItem
+												key={label}
+												d="flex"
+												flexDirection="column"
+												alignItems="center"
+											>
+												<Text fontSize="40px" fontWeight="700">
+													{Math.round(
+														(latestTestRunStats[label] / totalTestRunOutcomes) * 100
+													)}
+													%
+												</Text>
+												<Flex align="center">
+													<Box
+														borderRadius="md"
+														bg={doughnutBackgroundColors[index]}
+														w={4}
+														h={4}
+													/>
+													<Text ml={3}>{label}</Text>
+												</Flex>
+											</ListItem>
+										);
+									})}
+								</Stack>
+							</Flex>
+						) : (
+							<Flex w="100%" align="center">
+								<EmptyDoughnutIcon
+									h="128px"
+									w="128px"
+									color={emptyDoughnutColor}
+									mr={6}
+								/>
+								<Text fontStyle="italic">
+									There are no test cases with 'passing', 'failing', or 'did not
+									run' status in the latest test run.
+								</Text>
+							</Flex>
+						)}
+					</GridCard>
+					{sortedTestRuns.length > 0 ? (
+						<Stack spacing={6}>
+							{sortedTestRuns
+								.map((testRun, index) => {
+									const { id, status, createdAt } = testRun;
 									return (
-										<ListItem
-											key={label}
-											d="flex"
-											flexDirection="column"
-											alignItems="center"
-										>
-											<Text fontSize="40px" fontWeight="700">
-												{Math.round(
-													(latestTestRunStats[label] / totalTestRunOutcomes) * 100
-												)}
-												%
-											</Text>
-											<Flex align="center">
-												<Box
-													borderRadius="md"
-													bg={doughnutBackgroundColors[index]}
-													w={4}
-													h={4}
-												/>
-												<Text ml={3}>{label}</Text>
-											</Flex>
-										</ListItem>
+										<TestRunCard
+											id={id}
+											key={id}
+											status={status}
+											runNumber={testRuns.length - index}
+											date={new Date(createdAt)}
+											stats={_.countBy(
+												testRun.testOutcome.items.map((outcome) => outcome.status)
+											)}
+										/>
 									);
 								})}
-							</Stack>
-						</Flex>
+						</Stack>
 					) : (
-						<Flex w="100%" align="center">
-							<EmptyDoughnutIcon
-								h="128px"
-								w="128px"
-								color={emptyDoughnutColor}
-								mr={6}
+						<Stack spacing={6}>
+							<Box
+								display="flex"
+								justifyContent="center"
+								alignItems="center"
+								opacity="0.9"
+								border="1px dashed"
+								borderColor={borderColor}
+								borderRadius="lg"
+								h="64px"
+								backgroundColor={backgroundColor}
+							>
+								<Text fontStyle="italic" fontSize="md">
+									Test runs will show up here.
+								</Text>
+							</Box>
+							<Box
+								opacity="0.6"
+								border="1px dashed"
+								borderColor={borderColor}
+								borderRadius="lg"
+								h="64px"
+								backgroundColor={backgroundColor}
 							/>
-							<Text fontStyle="italic">
-								There are no test cases with 'passing', 'failing', or 'did not
-								run' status in the latest test run.
-							</Text>
-						</Flex>
+							<Box
+								opacity="0.3"
+								border="1px dashed"
+								borderColor={borderColor}
+								borderRadius="lg"
+								h="64px"
+								backgroundColor={backgroundColor}
+							/>
+						</Stack>
 					)}
-				</GridCard>
-				{sortedTestRuns.length > 0 ? (
-					<Stack spacing={6}>
-						{sortedTestRuns
-							.map((testRun, index) => {
-								const { id, status, createdAt } = testRun;
-								return (
-									<TestRunCard
-										id={id}
-										key={id}
-										status={status}
-										runNumber={testRuns.length - index}
-										date={new Date(createdAt)}
-										stats={_.countBy(
-											testRun.testOutcome.items.map((outcome) => outcome.status)
-										)}
-									/>
-								);
-							})}
-					</Stack>
-				) : (
-					<Stack spacing={6}>
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							opacity="0.9"
-							border="1px dashed"
-							borderColor={borderColor}
-							borderRadius="lg"
-							h="64px"
-							backgroundColor={backgroundColor}
-						>
-							<Text fontStyle="italic" fontSize="md">
-								Test runs will show up here.
-							</Text>
-						</Box>
-						<Box
-							opacity="0.6"
-							border="1px dashed"
-							borderColor={borderColor}
-							borderRadius="lg"
-							h="64px"
-							backgroundColor={backgroundColor}
-						/>
-						<Box
-							opacity="0.3"
-							border="1px dashed"
-							borderColor={borderColor}
-							borderRadius="lg"
-							h="64px"
-							backgroundColor={backgroundColor}
-						/>
-					</Stack>
-				)}
-			</Box>
-		</Flex>
+				</Box>
+			</Flex>
+		</ValidatedBillingPlan>
 	);
 };
 

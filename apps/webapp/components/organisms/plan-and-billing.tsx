@@ -292,7 +292,7 @@ const PlanAndBillingCard = () => {
 								sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
 							>
 								{feedback.features.map((feature) => (
-									<ListItem lineHeight="1.2" fontSize="14px">
+									<ListItem lineHeight="1.2" fontSize="14px" key={feature}>
 										<ListIcon as={CheckSquareIcon} color={iconBlue} />
 										{feature}
 									</ListItem>
@@ -378,7 +378,7 @@ const PlanAndBillingCard = () => {
 								sx={{ WebkitColumns: '2', MozColumns: '2', columns: 2 }}
 							>
 								{business.features.map((feature) => (
-									<ListItem lineHeight="1.2" fontSize="14px">
+									<ListItem lineHeight="1.2" fontSize="14px" key={feature}>
 										<ListIcon as={CheckSquareIcon} color={iconBlue} />
 										{feature}
 									</ListItem>

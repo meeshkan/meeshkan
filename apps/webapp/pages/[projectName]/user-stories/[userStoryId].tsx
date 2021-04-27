@@ -61,6 +61,7 @@ import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
 import { StepList } from '../../../components/molecules/side-step-list';
+import ValidatedBillingPlan from '../../../components/molecules/validated-billing-plan';
 import NotFoundError from '../../404';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
@@ -296,286 +297,288 @@ const UserStoryPage = (props: UserStoryProps) => {
 	};
 
 	return (
-		<Stack p={[4, 0, 0, 0]} w="100%">
-			<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
-				<ChakraLink
-					d="flex"
-					alignItems="center"
-					fontSize="16px"
-					fontWeight="400"
-					color={backLinkColor}
-					lineHeight="short"
-					mb={3}
-				>
-					<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
-					User stories
-				</ChakraLink>
-			</Link>
+		<ValidatedBillingPlan>
+			<Stack p={[4, 0, 0, 0]} w="100%">
+				<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
+					<ChakraLink
+						d="flex"
+						alignItems="center"
+						fontSize="16px"
+						fontWeight="400"
+						color={backLinkColor}
+						lineHeight="short"
+						mb={3}
+					>
+						<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
+						User stories
+					</ChakraLink>
+				</Link>
 
-			<Card mb={4}>
-				<Flex
-					direction={['column', 'column', 'row']}
-					align="center"
-					justify="space-between"
-				>
-					<Flex align="center" direction={['column', 'row']} mb={[4, 4, 0]}>
-						<Editable
-							defaultValue={data.userStory.title}
-							// Callback invoked when user confirms value with `enter` key or by blurring input.
-							onSubmit={(e) => updateTitle(e)}
-							lineHeight="tall"
-							fontSize="xl"
-							fontWeight="900"
-							mr={4}
-							mb={[2, 0, 0]}
-						>
-							<EditablePreview />
-							<EditableInput />
-						</Editable>
-						<Code
-							display="flex"
-							alignItems="center"
-							maxW="fit-content"
-							fontSize="md"
-							mr={2}
-							textTransform="capitalize"
-							lineHeight="normal"
-							borderRadius="md"
-							fontWeight="700"
-							px={2}
-							py={1}
-							colorScheme="gray"
-						>
-							{data.userStory.created[0] === 'user' ? (
-								<VideoIcon mr={3} />
-							) : data.userStory.created[0] === 'manual' ? (
-								<CrosshairIcon mr={3} />
-							) : null}
-							{data.userStory.created}
-						</Code>
-						{data.userStory.isTestCase === true ? null : data.userStory
-								.isExpected ? (
-							<Code
-								colorScheme="cyan"
-								fontWeight="700"
-								fontSize="md"
-								lineHeight="normal"
-								textTransform="capitalize"
-								borderRadius="md"
-								whiteSpace="nowrap"
-								px={2}
-								py={1}
-								mr={2}
-								my={[2, 0, 0, 0]}
+				<Card mb={4}>
+					<Flex
+						direction={['column', 'column', 'row']}
+						align="center"
+						justify="space-between"
+					>
+						<Flex align="center" direction={['column', 'row']} mb={[4, 4, 0]}>
+							<Editable
+								defaultValue={data.userStory.title}
+								// Callback invoked when user confirms value with `enter` key or by blurring input.
+								onSubmit={(e) => updateTitle(e)}
+								lineHeight="tall"
+								fontSize="xl"
+								fontWeight="900"
+								mr={4}
+								mb={[2, 0, 0]}
 							>
-								Expected behavior
-							</Code>
-						) : (
+								<EditablePreview />
+								<EditableInput />
+							</Editable>
 							<Code
-								colorScheme="red"
-								fontWeight="700"
-								fontSize="md"
-								textTransform="capitalize"
-								borderRadius="md"
-								px={2}
-								py={1}
-								mr={2}
-							>
-								Buggy behavior
-							</Code>
-						)}
-						{data.userStory.configuration !== null &&
-						data.userStory.configuration.logInFlow.id === userStoryId ? (
-							<Tooltip label="This is the 'Log in flow'" placement="right">
-								<Badge
-									colorScheme="amber"
-									fontWeight="700"
-									fontSize="md"
-									borderRadius="md"
-									p={2}
-								>
-									<KeyIcon />
-								</Badge>
-							</Tooltip>
-						) : null}
-						{data.userStory.isAuthenticated ? (
-							<Tooltip label="Authenticated" placement="right">
-								<Badge
-									colorScheme="amber"
-									fontWeight="700"
-									fontSize="md"
-									borderRadius="md"
-									p={2}
-								>
-									<ShieldIcon />
-								</Badge>
-							</Tooltip>
-						) : null}
-					</Flex>
-					<Flex>
-						<Select
-							variant="filled"
-							defaultValue={data.userStory.significance}
-							size="sm"
-							fontFamily="mono"
-							borderRadius="md"
-							w="fit-content"
-							textOverflow="ellipsis"
-							overflow="hidden"
-							whiteSpace="nowrap"
-							onChange={(e) => updateSignificance(e.target.value)}
-							mx={4}
-						>
-							<option value="low">Low significance</option>
-							<option value="medium">Medium significance</option>
-							<option value="high">High significance</option>
-						</Select>
-						<Menu>
-							<Tooltip label="More" placement="bottom" hasArrow>
-								<MenuButton
-									as={IconButton}
-									icon={<MoreIcon />}
-									size="sm"
-									colorScheme="gray"
-								/>
-							</Tooltip>
-							<MenuList>
-								<MenuItem onClick={() => handleDownload()}>
-									<DownloadIcon mr={3} />
-									Download Puppeteer script
-								</MenuItem>
-								<MenuItem onClick={() => handleCopy()}>
-									<CopyIcon mr={3} />
-									Copy link
-								</MenuItem>
-								<MenuItem
-									colorScheme="red"
-									isDisabled={deleting}
-									onClick={onDelete}
-								>
-									<TrashIcon mr={3} />
-									Delete
-								</MenuItem>
-							</MenuList>
-						</Menu>
-					</Flex>
-				</Flex>
-			</Card>
-
-			<Box flex="1" overflowY="auto">
-				<Flex
-					flexDirection={['column-reverse', 'column-reverse', 'row', 'row']}
-					justifyContent="space-between"
-					w="100%"
-				>
-					<Box borderRadius="lg" my={[6, 6, 0, 0]} mr={4} wordBreak="break-all">
-						<StepList steps={steps} />
-						<Flex
-							justify="center"
-							align="center"
-							borderRadius="full"
-							h={6}
-							w={6}
-							border="1px solid"
-							borderColor={stepNumberColor}
-							backgroundColor="transparentCyan.200"
-							ml={[8, 4]}
-						>
-							<CheckmarkIcon color={stepNumberColor} />
-						</Flex>
-					</Box>
-					<Box minW="md">
-						{data.userStory?.recording?.video ? (
-							<VideoPlayer
-								src={data.userStory.recording.video.downloadUrl}
-								onStart={() => mixpanel.track('User story video play started')}
-								onEnded={() => mixpanel.track('User story video play finished')}
-							/>
-						) : (
-							<AspectRatio
-								ratio={16 / 9}
 								display="flex"
-								justifyContent="center"
 								alignItems="center"
-								border="1px solid"
-								borderRadius="lg"
-								borderColor={aspectRatioBorderColor}
-							>
-								<>
-									<Button
-										colorScheme="gray"
-										isLoading={loading}
-										loadingText="Generating video"
-										onClick={() => {
-											generateVideo(
-												data.userStory.recording.startEventId,
-												data.userStory.recording.endEventId,
-												data.userStory.recording.id
-											);
-										}}
-									>
-										Generate Video
-									</Button>
-									{loading ? (
-										<Text textAlign="center" mt={8}>
-											A video should be generated in 15-30 seconds.
-										</Text>
-									) : null}
-								</>
-							</AspectRatio>
-						)}
-
-						<FormControl mt={8}>
-							<FormLabel mb={2} color={formLabelColor}>
-								What should you expect?
-							</FormLabel>
-							<Textarea
-								defaultValue={data.userStory.description}
-								name="description"
-								type="text"
-								placeholder="Use this field to communicate what this test should do."
-								resize="vertical"
-								size="sm"
+								maxW="fit-content"
+								fontSize="md"
+								mr={2}
+								textTransform="capitalize"
+								lineHeight="normal"
 								borderRadius="md"
-								onBlur={(e) => {
-									updateDescription(e.target.value);
-								}}
-							/>
-						</FormControl>
-						{data.userStory.isTestCase === true ? null : (
-							<Flex
-								mt={8}
-								justify="space-between"
-								align="center"
-								p={2}
-								borderRadius="lg"
-								backgroundColor={buttonsBackgroundColor}
+								fontWeight="700"
+								px={2}
+								py={1}
+								colorScheme="gray"
 							>
-								<Button
-									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
-									variant="subtle"
-									leftIcon={<CheckmarkIcon />}
-									onClick={onCreateTestCase}
-									isLoading={creatingTestCase}
-									mr={4}
+								{data.userStory.created[0] === 'user' ? (
+									<VideoIcon mr={3} />
+								) : data.userStory.created[0] === 'manual' ? (
+									<CrosshairIcon mr={3} />
+								) : null}
+								{data.userStory.created}
+							</Code>
+							{data.userStory.isTestCase === true ? null : data.userStory
+									.isExpected ? (
+								<Code
+									colorScheme="cyan"
+									fontWeight="700"
+									fontSize="md"
+									lineHeight="normal"
+									textTransform="capitalize"
+									borderRadius="md"
+									whiteSpace="nowrap"
+									px={2}
+									py={1}
+									mr={2}
+									my={[2, 0, 0, 0]}
 								>
-									Create test case
-								</Button>
-								<Button
-									colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
-									variant="subtle"
-									leftIcon={<XmarkIcon />}
-									isLoading={deleting}
-									onClick={onDelete}
+									Expected behavior
+								</Code>
+							) : (
+								<Code
+									colorScheme="red"
+									fontWeight="700"
+									fontSize="md"
+									textTransform="capitalize"
+									borderRadius="md"
+									px={2}
+									py={1}
+									mr={2}
 								>
-									Delete recording
-								</Button>
+									Buggy behavior
+								</Code>
+							)}
+							{data.userStory.configuration !== null &&
+							data.userStory.configuration.logInFlow.id === userStoryId ? (
+								<Tooltip label="This is the 'Log in flow'" placement="right">
+									<Badge
+										colorScheme="amber"
+										fontWeight="700"
+										fontSize="md"
+										borderRadius="md"
+										p={2}
+									>
+										<KeyIcon />
+									</Badge>
+								</Tooltip>
+							) : null}
+							{data.userStory.isAuthenticated ? (
+								<Tooltip label="Authenticated" placement="right">
+									<Badge
+										colorScheme="amber"
+										fontWeight="700"
+										fontSize="md"
+										borderRadius="md"
+										p={2}
+									>
+										<ShieldIcon />
+									</Badge>
+								</Tooltip>
+							) : null}
+						</Flex>
+						<Flex>
+							<Select
+								variant="filled"
+								defaultValue={data.userStory.significance}
+								size="sm"
+								fontFamily="mono"
+								borderRadius="md"
+								w="fit-content"
+								textOverflow="ellipsis"
+								overflow="hidden"
+								whiteSpace="nowrap"
+								onChange={(e) => updateSignificance(e.target.value)}
+								mx={4}
+							>
+								<option value="low">Low significance</option>
+								<option value="medium">Medium significance</option>
+								<option value="high">High significance</option>
+							</Select>
+							<Menu>
+								<Tooltip label="More" placement="bottom" hasArrow>
+									<MenuButton
+										as={IconButton}
+										icon={<MoreIcon />}
+										size="sm"
+										colorScheme="gray"
+									/>
+								</Tooltip>
+								<MenuList>
+									<MenuItem onClick={() => handleDownload()}>
+										<DownloadIcon mr={3} />
+										Download Puppeteer script
+									</MenuItem>
+									<MenuItem onClick={() => handleCopy()}>
+										<CopyIcon mr={3} />
+										Copy link
+									</MenuItem>
+									<MenuItem
+										colorScheme="red"
+										isDisabled={deleting}
+										onClick={onDelete}
+									>
+										<TrashIcon mr={3} />
+										Delete
+									</MenuItem>
+								</MenuList>
+							</Menu>
+						</Flex>
+					</Flex>
+				</Card>
+
+				<Box flex="1" overflowY="auto">
+					<Flex
+						flexDirection={['column-reverse', 'column-reverse', 'row', 'row']}
+						justifyContent="space-between"
+						w="100%"
+					>
+						<Box borderRadius="lg" my={[6, 6, 0, 0]} mr={4} wordBreak="break-all">
+							<StepList steps={steps} />
+							<Flex
+								justify="center"
+								align="center"
+								borderRadius="full"
+								h={6}
+								w={6}
+								border="1px solid"
+								borderColor={stepNumberColor}
+								backgroundColor="transparentCyan.200"
+								ml={[8, 4]}
+							>
+								<CheckmarkIcon color={stepNumberColor} />
 							</Flex>
-						)}
-					</Box>
-				</Flex>
-			</Box>
-		</Stack>
+						</Box>
+						<Box minW="md">
+							{data.userStory?.recording?.video ? (
+								<VideoPlayer
+									src={data.userStory.recording.video.downloadUrl}
+									onStart={() => mixpanel.track('User story video play started')}
+									onEnded={() => mixpanel.track('User story video play finished')}
+								/>
+							) : (
+								<AspectRatio
+									ratio={16 / 9}
+									display="flex"
+									justifyContent="center"
+									alignItems="center"
+									border="1px solid"
+									borderRadius="lg"
+									borderColor={aspectRatioBorderColor}
+								>
+									<>
+										<Button
+											colorScheme="gray"
+											isLoading={loading}
+											loadingText="Generating video"
+											onClick={() => {
+												generateVideo(
+													data.userStory.recording.startEventId,
+													data.userStory.recording.endEventId,
+													data.userStory.recording.id
+												);
+											}}
+										>
+											Generate Video
+										</Button>
+										{loading ? (
+											<Text textAlign="center" mt={8}>
+												A video should be generated in 15-30 seconds.
+											</Text>
+										) : null}
+									</>
+								</AspectRatio>
+							)}
+
+							<FormControl mt={8}>
+								<FormLabel mb={2} color={formLabelColor}>
+									What should you expect?
+								</FormLabel>
+								<Textarea
+									defaultValue={data.userStory.description}
+									name="description"
+									type="text"
+									placeholder="Use this field to communicate what this test should do."
+									resize="vertical"
+									size="sm"
+									borderRadius="md"
+									onBlur={(e) => {
+										updateDescription(e.target.value);
+									}}
+								/>
+							</FormControl>
+							{data.userStory.isTestCase === true ? null : (
+								<Flex
+									mt={8}
+									justify="space-between"
+									align="center"
+									p={2}
+									borderRadius="lg"
+									backgroundColor={buttonsBackgroundColor}
+								>
+									<Button
+										colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
+										variant="subtle"
+										leftIcon={<CheckmarkIcon />}
+										onClick={onCreateTestCase}
+										isLoading={creatingTestCase}
+										mr={4}
+									>
+										Create test case
+									</Button>
+									<Button
+										colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
+										variant="subtle"
+										leftIcon={<XmarkIcon />}
+										isLoading={deleting}
+										onClick={onDelete}
+									>
+										Delete recording
+									</Button>
+								</Flex>
+							)}
+						</Box>
+					</Flex>
+				</Box>
+			</Stack>
+		</ValidatedBillingPlan>
 	);
 };
 
