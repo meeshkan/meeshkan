@@ -35,6 +35,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 	}, [user?.project]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
+	const modalBackground = useColorModeValue('white', 'gray.900');
 	return (
 		<Analytics
 			appName="Meeshkan-webapp"
@@ -79,7 +80,11 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 					scrollBehavior="inside"
 				>
 					<ModalOverlay />
-					<ModalContent p={4} borderRadius="lg" backgroundColor="gray.900">
+					<ModalContent
+						p={4}
+						borderRadius="lg"
+						backgroundColor={modalBackground}
+					>
 						<ModalHeader fontWeight="700">Choose a plan</ModalHeader>
 						<ModalCloseButton />
 						<ModalBody>

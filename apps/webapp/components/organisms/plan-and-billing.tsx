@@ -17,12 +17,14 @@ import {
 	useDisclosure,
 	ModalCloseButton,
 	ModalHeader,
+	Link,
 } from '@chakra-ui/react';
 import { UserContext } from '../../utils/user';
 import { Plans } from '../../utils/stripe';
 import { getStripe } from '../../utils/stripe-client';
 import { CheckSquareIcon } from '@frontend/chakra-theme';
 import SegmentedControl from '../molecules/segmented-control';
+import { show as showIntercom } from '../../utils/intercom';
 
 const PlanAndBillingCard = () => {
 	const user = useContext(UserContext);
@@ -194,7 +196,11 @@ const PlanAndBillingCard = () => {
 				</Flex>
 
 				<Text>
-					For questions about billing, please email <i>contact@meeshkan.com</i>.
+					For questions about billing, please{' '}
+					<Link onClick={showIntercom} fontStyle="italic" color={iconBlue}>
+						start a chat
+					</Link>
+					.
 				</Text>
 			</Box>
 		);
