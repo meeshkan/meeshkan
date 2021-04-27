@@ -151,7 +151,7 @@ const PlanAndBillingCard = () => {
 				<Flex justify="space-between" mb={4}>
 					<Box>
 						<Text fontWeight="800" fontSize="24px" mb={2}>
-							Feedback
+							{plan.name}
 						</Text>
 						<Flex align="center">
 							<Text mr={3}>Billing</Text>
@@ -173,13 +173,25 @@ const PlanAndBillingCard = () => {
 
 					<Box textAlign="end">
 						<Text fontWeight="800" fontSize="24px" mb={2}>
-							{
-								feedback[
-									plan.billingInterval == 'yearly'
-										? 'yearlyPrice'
-										: 'monthlyPrice'
-								]
-							}
+							{plan.name == 'Free'
+								? free[
+										plan.billingInterval == 'yearly'
+											? 'yearlyPrice'
+											: 'monthlyPrice'
+								  ]
+								: plan.name == 'Feedback'
+								? feedback[
+										plan.billingInterval == 'yearly'
+											? 'yearlyPrice'
+											: 'monthlyPrice'
+								  ]
+								: plan.name == 'Business'
+								? business[
+										plan.billingInterval == 'yearly'
+											? 'yearlyPrice'
+											: 'monthlyPrice'
+								  ]
+								: 'NaN'}
 						</Text>
 						<Button
 							colorScheme="gray"
