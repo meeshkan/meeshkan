@@ -97,14 +97,7 @@ const TestRunsPage = () => {
 		setTestTriggering(true);
 		try {
 			await fetch(
-				process.env.VERCEL_ENV === 'preview' ||
-					process.env.VERCEL_ENV === 'development' ||
-					process.env.NODE_ENV === 'development'
-					? 'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger'
-					: process.env.NODE_ENV === 'production' ||
-					  process.env.VERCEL_ENV === 'production'
-					? 'https://7cs97h8es9.execute-api.eu-west-1.amazonaws.com/main/test-trigger'
-					: 'https://7cs97h8es9.execute-api.eu-west-1.amazonaws.com/main/test-trigger',
+				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT || 'https://7cs97h8es9.execute-api.eu-west-1.amazonaws.com/main/test-trigger',
 				{
 					method: 'POST',
 					mode: 'no-cors',
