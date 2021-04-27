@@ -158,16 +158,22 @@ const PlanAndBillingCard = () => {
 							<Code mr={2} p={2} borderRadius="md" fontWeight="700">
 								{plan.billingInterval}
 							</Code>
-							{plan.subscriptionStatus == 'cancelled' ? (
-								<Code
-									colorScheme="red"
-									p={2}
-									borderRadius="md"
-									fontWeight="700"
-								>
-									cancelled
-								</Code>
-							) : null}
+							<Code
+								colorScheme={
+									plan.subscriptionStatus == 'cancelled'
+										? 'red'
+										: plan.subscriptionStatus == 'active'
+										? 'cyan'
+										: plan.subscriptionStatus == 'trialing'
+										? 'blue'
+										: 'gray'
+								}
+								p={2}
+								borderRadius="md"
+								fontWeight="700"
+							>
+								{plan.subscriptionStatus}
+							</Code>
 						</Flex>
 					</Box>
 

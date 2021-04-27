@@ -1,4 +1,3 @@
-import React from 'react';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createOrRetrieveCustomer, stripe } from '../../../utils/stripe';
 
