@@ -203,7 +203,7 @@ const PlanAndBillingCard = () => {
 			<>
 				<Flex justify="center" align="center" mb={6}>
 					<Text mr={4} fontWeight="600">
-						Billing
+						Billed
 					</Text>
 					<SegmentedControl
 						values={['Monthly', 'Yearly -20%']}
@@ -211,7 +211,7 @@ const PlanAndBillingCard = () => {
 						setSelectedIndex={setToggleIndex}
 					/>
 				</Flex>
-				<Stack direction="row" w="full" spacing={8}>
+				<Stack direction={['column', 'column', 'row']} w="full" spacing={8}>
 					<Flex direction="column" align="center" w="full">
 						<Code
 							variant="outline"
@@ -308,7 +308,9 @@ const PlanAndBillingCard = () => {
 						>
 							<ModalOverlay />
 							<ModalContent p={4}>
-								<ModalHeader>Schedule your first feedback call!</ModalHeader>
+								<ModalHeader color="gray.700">
+									Schedule your first feedback call!
+								</ModalHeader>
 								<ModalCloseButton color="gray.500" />
 								<Box
 									h="95vh"
@@ -380,7 +382,7 @@ const PlanAndBillingCard = () => {
 				</Stack>
 				<Stack
 					w="full"
-					direction="row"
+					direction={['column', 'column', 'row']}
 					align="center"
 					justifyContent="space-between"
 					p={4}
@@ -389,7 +391,7 @@ const PlanAndBillingCard = () => {
 					border="1px solid"
 					borderColor={borderGray}
 				>
-					<Flex align="baseline">
+					<Flex align="baseline" direction={['column', 'row']}>
 						<Text fontSize="24px" fontWeight="800" mr={4}>
 							Free
 						</Text>

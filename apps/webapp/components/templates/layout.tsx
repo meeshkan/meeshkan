@@ -1,7 +1,20 @@
-import React, { ReactNode, useContext } from 'react';
-import { Stack, useColorModeValue } from '@chakra-ui/react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import {
+	Stack,
+	useColorModeValue,
+	Button,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	useDisclosure,
+} from '@chakra-ui/react';
 import { Analytics } from '@lightspeed/react-mixpanel-script';
 import { UserContext } from '../../utils/user';
+import PlanAndBillingCard from '../organisms/plan-and-billing';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -9,6 +22,17 @@ type LayoutProps = {
 
 const Layout = ({ children, ...props }: LayoutProps) => {
 	const user = useContext(UserContext);
+	const [hasPlan, setHasPlan] = useState(!!user?.project?.configuration?.plan);
+
+	const { isOpen, onOpen, onClose, onToggle } = useDisclosure({
+		defaultIsOpen: true,
+	});
+
+	useEffect(() => {
+		setHasPlan(!!user?.project?.configuration?.plan);
+		// refreshes the state of open/close for the modal
+		onOpen();
+	}, [user?.project]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	return (
@@ -18,7 +42,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			// This is a 'super property' which attaches information to every event.
 			eventData={{
 				project: user?.project?.name,
-				// plan: ''
+				plan: user?.project?.configuration?.plan,
 			}}
 			profileData={{
 				$avatar: user?.avatar,
@@ -43,6 +67,27 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			>
 				{children}
 			</Stack>
+
+			{/* Doesn't have a plan, does have a project */}
+			{!hasPlan && user?.project ? (
+				<Modal
+					isOpen={isOpen}
+					onClose={onClose}
+					size="6xl"
+					isCentered
+					motionPreset="slideInBottom"
+					scrollBehavior="inside"
+				>
+					<ModalOverlay />
+					<ModalContent p={4} borderRadius="lg" backgroundColor="gray.900">
+						<ModalHeader fontWeight="700">Choose a plan</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							<PlanAndBillingCard />
+						</ModalBody>
+					</ModalContent>
+				</Modal>
+			) : null}
 		</Analytics>
 	);
 };
