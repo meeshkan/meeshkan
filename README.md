@@ -20,7 +20,7 @@ This guide will use `yarn`. Feel free to use the `npm` equivalent to my instruct
 1. After cloning this repo to your computer — `cd` into the base repository (`meeshkan`).
 2. Duplicate the `.env.template` file, renaming it to `.env`.
    - `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, and `SESSION_COOKIE_SECRET` can all be found in Auth0. If you do not have access to Auth0, contact @k4m4 or @KenzoBenzo to get you the tokens. The value of `AUTH0_DOMAIN` is "meeshkan.eu.auth0.com".
-   - The token `EIGHT_BASE_ENDPOINT` is not currently in use but it's value is "https://api.8base.com/ckhqdz5mu01r307mn6szcbdke".
+   - The token `NEXT_PUBLIC_EIGHTBASE_ENDPOINT` changes the 8base environment between `staging` "https://api.8base.com/ckhqdz5mu01r307mn6szcbdke_staging" and `Master` "https://api.8base.com/ckhqdz5mu01r307mn6szcbdke".
    - The token `EIGHT_BASE_AUTH_PROFILE_ID` can be found in 8base (log in found in 1pw).
    - The `TEST_URL` depends on how you serve your webapp locally. If you use the command `yarn start webapp` the value will be "localhost:3000". Change accordingly for a different port.
    - The `COOKIE` token can be found in Auth0, or https://app.meeshkan.com under our internal `Meeshkan webapp` project, auth tokens.

@@ -31,7 +31,9 @@ const SideBarBody = () => {
 	const hasProjects = projects.length > 0;
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
-	const slugifiedProjectName = useMemo(() => createSlug(projectName), [
+	const slugifiedProjectName = useMemo(() => createSlug(
+		projectName || (projects?.length > 0 && projects[0].name) || ''
+	), [
 		projectName,
 	]);
 
@@ -209,7 +211,7 @@ const SideBarBody = () => {
 								router.asPath.includes('/test-runs')
 							}
 						>
-							Test runs{' '}
+							Test runs <Box w="100%" />
 							<Code ml={2} p={2} borderRadius="md" colorScheme="cyan">
 								beta
 							</Code>
