@@ -24,6 +24,7 @@ import { getStripe, Plans } from '../../utils/stripe-client';
 import { CheckSquareIcon } from '@frontend/chakra-theme';
 import SegmentedControl from '../molecules/segmented-control';
 import { show as showIntercom } from '../../utils/intercom';
+import { mutate } from 'swr';
 
 const PlanAndBillingCard = () => {
 	const user = useContext(UserContext);
@@ -108,6 +109,7 @@ const PlanAndBillingCard = () => {
 				trial,
 			},
 		});
+		await mutate('/api/session');
 		setCheckoutSessionLoading(false);
 	};
 
