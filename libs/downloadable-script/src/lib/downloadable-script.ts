@@ -40,12 +40,19 @@ const topMatterPptr = (
   let ddDestinationBB;
 
 ` +
-		(authTokens && stagingURL
-			? `  await page.setCookie({ name: ${JSON.stringify(
-					authTokens[0]?.key
-			  )}, value: ${JSON.stringify(
-					authTokens[0]?.value
-			  )}, domain: ${JSON.stringify(new URL(stagingURL).hostname)}  })`
+		((authTokens && authTokens.length > 0 && stagingURL)
+            ? authTokens.map(({ key, value, type }) => type === 'local storage'
+                ? `  await page.evaluateOnNewDocument(() => { localStorage.setItem(${JSON.stringify(
+                        key
+                    )}, ${JSON.stringify(
+                        value
+                    )}); });`
+                : `  await page.setCookie({ name: ${JSON.stringify(
+                    key
+			    )}, value: ${JSON.stringify(
+                    value
+			    )}, domain: ${JSON.stringify('.' + new URL(stagingURL).hostname)}  });`
+              ).join('\n')
 			: '')
 	);
 };
