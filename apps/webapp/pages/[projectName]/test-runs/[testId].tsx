@@ -197,7 +197,12 @@ const TestRun = () => {
 													aria-label="Passing"
 												/>
 											) : status === 'failing' ? (
-												<XmarkIcon w={3} h={3} color="red.500" title="Failing" />
+												<XmarkIcon
+													w={3}
+													h={3}
+													color="red.500"
+													title="Failing"
+												/>
 											) : status === 'did not run' ? (
 												<MinusIcon
 													w={3}
