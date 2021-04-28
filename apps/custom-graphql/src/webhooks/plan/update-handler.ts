@@ -39,7 +39,18 @@ export default async (
 			: undefined;
 	const billingInterval =
 		stripePayload['plan']['interval'] == 'month' ? 'monthly' : 'yearly';
-	const subscriptionStatus = '';
+	const cancelled: boolean =
+		JSON.parse(event.body)['data'].hasOwnProperty('previous_attributes') &&
+		JSON.parse(event.body)['data']['previous_attributes'].hasOwnProperty(
+			'cancel_at_period_end'
+		) &&
+		JSON.parse(event.body)['data']['previous_attributes'][
+			'cancel_at_period_end'
+		] == false;
+	const subscriptionStatus =
+		!cancelled &&
+		stripePayload.hasOwnProperty('status') &&
+		stripePayload['status'];
 	const subscriptionStartedDate = new Date(
 		JSON.parse(event.body)['created'] * 1000
 	);
@@ -101,8 +112,8 @@ export default async (
 		});
 	}
 
-	await ctx.api
-		.gqlRequest(
+	if (relevantEvents.has(eventType) && !cancelled) {
+		await ctx.api.gqlRequest(
 			PLAN_UPDATE,
 			{
 				projectID,
@@ -113,17 +124,17 @@ export default async (
 					billingInterval: {
 						set: billingInterval,
 					},
-					// subscriptionStatus: {
-					// 	set: subscriptionStatus,
-					// },
+					subscriptionStatus: {
+						set: subscriptionStatus,
+					},
 					subscriptionStartedDate: {
 						set: subscriptionStartedDate,
 					},
 				},
 			},
 			{ checkPermissions: false }
-		)
-		.then((result) => console.log({ result }));
+		);
+	}
 
 	return responseBuilder(200, 'Success');
 };
