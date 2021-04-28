@@ -20,8 +20,7 @@ import {
 	Link,
 } from '@chakra-ui/react';
 import { UserContext } from '../../utils/user';
-import { Plans } from '../../utils/stripe';
-import { getStripe } from '../../utils/stripe-client';
+import { getStripe, Plans } from '../../utils/stripe-client';
 import { CheckSquareIcon } from '@frontend/chakra-theme';
 import SegmentedControl from '../molecules/segmented-control';
 import { show as showIntercom } from '../../utils/intercom';

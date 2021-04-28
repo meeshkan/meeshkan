@@ -1,13 +1,11 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect } from 'react';
 import {
 	Stack,
 	useColorModeValue,
-	Button,
 	Modal,
 	ModalBody,
 	ModalCloseButton,
 	ModalContent,
-	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
 	useDisclosure,
@@ -22,7 +20,7 @@ type LayoutProps = {
 
 const Layout = ({ children, ...props }: LayoutProps) => {
 	const { project, ...user } = useContext(UserContext);
-	const { isOpen, onOpen, onClose, onToggle } = useDisclosure({
+	const { isOpen, onOpen, onClose } = useDisclosure({
 		defaultIsOpen: true,
 	});
 
@@ -67,7 +65,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				{children}
 			</Stack>
 
-			{(project && !project.configuration?.plan) ? (
+			{project && !project.configuration?.plan ? (
 				<Modal
 					isOpen={isOpen}
 					onClose={onClose}
