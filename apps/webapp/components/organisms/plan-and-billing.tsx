@@ -98,23 +98,18 @@ const PlanAndBillingCard = () => {
 	// Handle the case where a subscription with out payment is being created
 	const handleSubscription = async (price: string, trial: boolean) => {
 		setSubscriptionLoading(true);
-		try {
-			const subscription = await postData({
-				url: '/api/stripe/create-subscription',
-				data: {
-					price,
-					projectName: user?.project?.name,
-					projectID: user?.project?.id,
-					idToken: user?.idToken,
-					email: user?.email,
-					trial,
-				},
-			});
-		} catch (error) {
-			return alert(error.message);
-		} finally {
-			setCheckoutSessionLoading(false);
-		}
+		await postData({
+			url: '/api/stripe/create-subscription',
+			data: {
+				price,
+				projectName: user?.project?.name,
+				projectID: user?.project?.id,
+				idToken: user?.idToken,
+				email: user?.email,
+				trial,
+			},
+		});
+		setCheckoutSessionLoading(false);
 	};
 
 	// Handle the case where a subscription exists already — manage in Stripe's portal
