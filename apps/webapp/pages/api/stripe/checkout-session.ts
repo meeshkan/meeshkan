@@ -21,6 +21,7 @@ const createCheckoutSession = async (
 				projectName,
 			});
 
+			const slugifiedProjectName = createSlug(projectName);
 			const session = await stripe.checkout.sessions.create({
 				payment_method_types: ['card'],
 				billing_address_collection: 'auto',
@@ -36,10 +37,8 @@ const createCheckoutSession = async (
 				subscription_data: {
 					metadata: { 'project id': projectID },
 				},
-				success_url: `${origin}/${createSlug(projectName)}`,
-				cancel_url: `${origin}/${createSlug(
-					projectName
-				)}/settings#plan-and-billing`,
+				success_url: `${origin}/${slugifiedProjectName}`,
+				cancel_url: `${origin}/${slugifiedProjectName}/settings#plan-and-billing`,
 			});
 
 			return res.status(200).json({ sessionId: session.id });

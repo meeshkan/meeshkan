@@ -125,7 +125,9 @@ const PlanAndBillingCard = () => {
 				email: user?.email,
 			},
 		});
-		if (error) return alert(error.message);
+		if (error) {
+			return alert(error.message);
+		}
 		window.location.assign(url);
 		setPortalSessionLoading(false);
 	};
@@ -156,11 +158,11 @@ const PlanAndBillingCard = () => {
 							</Code>
 							<Code
 								colorScheme={
-									plan.subscriptionStatus == 'cancelled'
+									plan.subscriptionStatus === 'cancelled'
 										? 'red'
-										: plan.subscriptionStatus == 'active'
+										: plan.subscriptionStatus === 'active'
 										? 'cyan'
-										: plan.subscriptionStatus == 'trialing'
+										: plan.subscriptionStatus === 'trialing'
 										? 'blue'
 										: 'gray'
 								}
@@ -175,21 +177,21 @@ const PlanAndBillingCard = () => {
 
 					<Box textAlign="end">
 						<Text fontWeight="800" fontSize="24px" mb={2}>
-							{plan.name == 'Free'
+							{plan.name === 'Free'
 								? free[
-										plan.billingInterval == 'yearly'
+										plan.billingInterval === 'yearly'
 											? 'yearlyPrice'
 											: 'monthlyPrice'
 								  ]
-								: plan.name == 'Feedback'
+								: plan.name === 'Feedback'
 								? feedback[
-										plan.billingInterval == 'yearly'
+										plan.billingInterval === 'yearly'
 											? 'yearlyPrice'
 											: 'monthlyPrice'
 								  ]
-								: plan.name == 'Business'
+								: plan.name === 'Business'
 								? business[
-										plan.billingInterval == 'yearly'
+										plan.billingInterval === 'yearly'
 											? 'yearlyPrice'
 											: 'monthlyPrice'
 								  ]

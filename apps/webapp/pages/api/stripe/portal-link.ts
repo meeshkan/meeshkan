@@ -24,7 +24,6 @@ const createPortalLink = async (req: NextApiRequest, res: NextApiResponse) => {
 					projectName
 				)}/settings#plan-and-billing`,
 			});
-			console.log(url);
 
 			return res.status(200).json({ url });
 		} catch (err) {

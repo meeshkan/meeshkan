@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import router from 'next/router';
+import Router from 'next/router';
 import { Heading, Box, Flex, Button } from '@chakra-ui/react';
 import Card from '../atoms/card';
 import CreateProjectForm from '../molecules/create-project-form';
@@ -23,7 +23,7 @@ const CreateProject = () => {
 				<CreateProjectForm setLoading={setLoading} />
 			</Box>
 			<Flex justify="space-between" align="center" w="100%">
-				<Button mt={4} colorScheme="gray" onClick={() => router.back()}>
+				<Button mt={4} colorScheme="gray" onClick={() => Router.back()}>
 					Back
 				</Button>
 				<Button

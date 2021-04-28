@@ -34,14 +34,16 @@ export default async (
 		] == false;
 
 	// Check if this webhook payload should even be processed
-	if (!relevantEvents.has(eventType))
+	if (!relevantEvents.has(eventType)) {
 		return responseBuilder(422, `Unknown event to process.`);
+  }
 
-	if (projectID === null || projectID === undefined)
+	if (!projectID) {
 		return responseBuilder(
 			422,
 			`A project id couldn't be found in the metadata`
 		);
+  }
 
 	// If it should be processed, do different things depending on the event coming in
 

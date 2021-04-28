@@ -19,7 +19,7 @@ const CreateSubscription = async (
 			customer,
 			items: [{ price, quantity: 1 }],
 			// Three month trial
-			trial_period_days: trial === true ? 90 : 0,
+			trial_period_days: trial ? 90 : 0,
 			metadata: { 'project id': projectID },
 		});
 		return res.status(200).json({ subscription });
