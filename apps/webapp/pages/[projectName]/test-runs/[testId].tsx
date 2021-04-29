@@ -109,7 +109,7 @@ const TestRun = () => {
 					status={testRun?.status}
 					date={new Date(testRun?.createdAt)}
 					stats={_.countBy(
-						testRun?.testOutcome.items.map((outcome) => outcome.status)
+						testRun?.testOutcome?.items.map((outcome) => outcome.status)
 					)}
 				/>
 			</Stack>
@@ -226,7 +226,7 @@ const TestRun = () => {
 									return (
 										<>
 											<AccordionItem
-												key={outcome.id}
+												key={outcome?.id}
 												mb={4}
 												border="none"
 												borderRadius="lg"
@@ -271,9 +271,9 @@ const TestRun = () => {
 												<AccordionPanel py={4}>
 													{isFailing && (
 														<>
-															{outcome.video && (
+															{outcome?.video && (
 																<VideoPlayer
-																	src={outcome.video.downloadUrl}
+																	src={outcome?.video.downloadUrl}
 																	onStart={() =>
 																		mixpanel.track(
 																			'Test outcome video play started'
@@ -302,13 +302,13 @@ const TestRun = () => {
 																	{outcome?.errorDetails?.stepIndex + 1}
 																</Flex>
 																<Box w="full">
-																	<Text>{outcomeDetails.text}</Text>
+																	<Text>{outcomeDetails?.text}</Text>
 																	<Alert status="error" p={3} mt={3} flex="1">
 																		<AlertIcon />
 																		<AlertDescription>
 																			{outcomeError(
-																				outcomeDetails.command,
-																				outcomeDetails.tagName
+																				outcomeDetails?.command,
+																				outcomeDetails?.tagName
 																			)}
 																		</AlertDescription>
 																	</Alert>
