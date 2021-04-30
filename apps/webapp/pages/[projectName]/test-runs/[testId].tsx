@@ -233,7 +233,7 @@ const TestRun = () => {
 										return (
 											<>
 												<AccordionItem
-													key={outcome.id}
+													key={outcome?.id}
 													mb={4}
 													border="none"
 													borderRadius="lg"
@@ -278,9 +278,9 @@ const TestRun = () => {
 													<AccordionPanel py={4}>
 														{isFailing && (
 															<>
-																{outcome.video && (
+																{outcome?.video && (
 																	<VideoPlayer
-																		src={outcome.video.downloadUrl}
+																		src={outcome?.video.downloadUrl}
 																		onStart={() =>
 																			mixpanel.track(
 																				'Test outcome video play started'
@@ -306,16 +306,16 @@ const TestRun = () => {
 																		fontSize="sm"
 																		mr={4}
 																	>
-																		{outcome?.errorDetails?.stepIndex}
+																		{outcome?.errorDetails?.stepIndex + 1}
 																	</Flex>
 																	<Box w="full">
-																		<Text>{outcomeDetails.text}</Text>
+																		<Text>{outcomeDetails?.text}</Text>
 																		<Alert status="error" p={3} mt={3} flex="1">
 																			<AlertIcon />
 																			<AlertDescription>
 																				{outcomeError(
-																					outcomeDetails.command,
-																					outcomeDetails.tagName
+																					outcomeDetails?.command,
+																					outcomeDetails?.tagName
 																				)}
 																			</AlertDescription>
 																		</Alert>
@@ -330,62 +330,62 @@ const TestRun = () => {
 									})}
 								</Accordion>
 							</Stack>
+							<GridCard title="Technical information">
+								<Stack spacing={5}>
+									<Box>
+										<Heading
+											as="h3"
+											fontSize="15px"
+											fontWeight="600"
+											lineHeight="short"
+										>
+											Test length
+										</Heading>
+										<Text fontSize="15px">
+											{testRun?.testLength.substring(0, 2) +
+												` hrs, ` +
+												testRun?.testLength.substring(3, 5) +
+												` mins, ` +
+												testRun?.testLength.substring(6, 8) +
+												` sec ` || '-'}
+										</Text>
+									</Box>
+									<Box>
+										<Heading
+											as="h3"
+											fontSize="15px"
+											fontWeight="600"
+											lineHeight="short"
+										>
+											Web browser
+										</Heading>
+										<Text fontSize="15px">Chromium 86.0.4240.0</Text>
+									</Box>
+									<Box>
+										<Heading
+											as="h3"
+											fontSize="15px"
+											fontWeight="600"
+											lineHeight="short"
+										>
+											Operating system
+										</Heading>
+										<Text fontSize="15px">AWS Linux 2018.03</Text>
+									</Box>
+									<Box>
+										<Heading
+											as="h3"
+											fontSize="15px"
+											fontWeight="600"
+											lineHeight="short"
+										>
+											Language
+										</Heading>
+										<Text fontSize="15px">English</Text>
+									</Box>
+								</Stack>
+							</GridCard>
 						</Stack>
-						<GridCard title="Technical information">
-							<Stack spacing={5}>
-								<Box>
-									<Heading
-										as="h3"
-										fontSize="15px"
-										fontWeight="600"
-										lineHeight="short"
-									>
-										Test length
-									</Heading>
-									<Text fontSize="15px">
-										{testRun?.testLength.substring(0, 2) +
-											` hrs, ` +
-											testRun?.testLength.substring(3, 5) +
-											` mins, ` +
-											testRun?.testLength.substring(6, 8) +
-											` sec ` || '-'}
-									</Text>
-								</Box>
-								<Box>
-									<Heading
-										as="h3"
-										fontSize="15px"
-										fontWeight="600"
-										lineHeight="short"
-									>
-										Web browser
-									</Heading>
-									<Text fontSize="15px">Chromium 86.0.4240.0</Text>
-								</Box>
-								<Box>
-									<Heading
-										as="h3"
-										fontSize="15px"
-										fontWeight="600"
-										lineHeight="short"
-									>
-										Operating system
-									</Heading>
-									<Text fontSize="15px">AWS Linux 2018.03</Text>
-								</Box>
-								<Box>
-									<Heading
-										as="h3"
-										fontSize="15px"
-										fontWeight="600"
-										lineHeight="short"
-									>
-										Language
-									</Heading>
-									<Text fontSize="15px">English</Text>
-								</Box>
-							</Stack>
-						</GridCard>
 					</Flex>
 				</Box>
 			</Stack>
