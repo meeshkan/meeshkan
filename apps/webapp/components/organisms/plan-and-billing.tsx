@@ -195,7 +195,7 @@ const PlanAndBillingCard = () => {
 											? 'yearlyPrice'
 											: 'monthlyPrice'
 								  ]
-								: 'NaN'}
+								: null}
 						</Text>
 						<Button
 							colorScheme="gray"
