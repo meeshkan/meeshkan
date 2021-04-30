@@ -47,16 +47,9 @@ import {
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
 
-type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>
+type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>;
 const SectionGridCard = (props: SectionGridCardProps) => {
-	return (
-		<GridCard
-			anchor
-			overflowY="visible"
-			maxH={null}
-			{...props}
-		/>
-	);
+	return <GridCard anchor overflowY="visible" maxH={null} {...props} />;
 };
 
 const Settings = () => {
@@ -73,7 +66,9 @@ const Settings = () => {
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
-	const [toggleTestRunnerIndex, setToggleTestRunnerIndex] = useState<0 | 1 | null>(null);
+	const [toggleTestRunnerIndex, setToggleTestRunnerIndex] = useState<
+		0 | 1 | null
+	>(null);
 	const [members, setMembers] = useState<Array<User>>(
 		project?.members?.items || []
 	);
@@ -89,7 +84,9 @@ const Settings = () => {
 		setProductUpdates(productNotifications);
 		setMembers(project?.members?.items);
 		setTokens(project?.configuration.authenticationTokens?.items);
-		setToggleTestRunnerIndex(project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null);
+		setToggleTestRunnerIndex(
+			project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null
+		);
 	}, [project, productNotifications]);
 
 	useEffect(() => {
@@ -104,11 +101,16 @@ const Settings = () => {
 				(currentProject) => currentProject.id === project.id
 			);
 
-			projects[selectedProjectIndex].configuration.activeTestRuns = res.projectUpdate.configuration.activeTestRuns;
+			projects[selectedProjectIndex].configuration.activeTestRuns =
+				res.projectUpdate.configuration.activeTestRuns;
 			await mutateUser({ ...user, projects });
 		};
 
-		if (!project || toggleTestRunnerIndex === null || !toggleTestRunnerIndex === project.configuration.activeTestRuns) {
+		if (
+			!project ||
+			toggleTestRunnerIndex === null ||
+			!toggleTestRunnerIndex === project.configuration.activeTestRuns
+		) {
 			return;
 		}
 
@@ -493,8 +495,9 @@ const Settings = () => {
 							}}
 						>
 							<Flex align="center">
-								<Box w={['96px', '96px', '128px', '200px']}>
+								<Flex align="center" w={['96px', '96px', '128px', '250px']}>
 									<Badge
+										mr={4}
 										borderRadius="md"
 										p={2}
 										fontSize="sm"
@@ -503,7 +506,8 @@ const Settings = () => {
 									>
 										{token.type}
 									</Badge>
-								</Box>
+									<Text>{new Date(token.createdAt).toLocaleDateString()}</Text>
+								</Flex>
 								<Text
 									mr={[4, 16, 24]}
 									w={['64px', '80px', '128px']}

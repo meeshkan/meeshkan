@@ -76,6 +76,7 @@ export const USER = gql`
 						authenticationTokens {
 							items {
 								id
+								createdAt
 								type
 								key
 								value
