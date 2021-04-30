@@ -36,7 +36,7 @@ const PlanAndBillingCard = () => {
 	const [portalSessionLoading, setPortalSessionLoading] = useState(false);
 	const [plan, setPlan] = useState({
 		name: user?.project?.configuration?.plan,
-		billingInterval: user?.project?.configuration.billingInterval,
+		billingInterval: user?.project?.configuration?.billingInterval,
 		subscriptionStartedDate:
 			user?.project?.configuration?.subscriptionStartedDate,
 		subscriptionStatus: user?.project?.configuration?.subscriptionStatus,
@@ -46,7 +46,7 @@ const PlanAndBillingCard = () => {
 	useEffect(() => {
 		setPlan({
 			name: user?.project?.configuration?.plan,
-			billingInterval: user?.project?.configuration.billingInterval,
+			billingInterval: user?.project?.configuration?.billingInterval,
 			subscriptionStartedDate:
 				user?.project?.configuration?.subscriptionStartedDate,
 			subscriptionStatus: user?.project?.configuration?.subscriptionStatus,
