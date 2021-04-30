@@ -93,6 +93,7 @@ const PlanAndBillingCard = () => {
 			throw new Error(error.message);
 		}
 		setCheckoutSessionLoading(false);
+		await mutate('/api/session');
 	};
 
 	// Handle the case where a subscription with out payment is being created
@@ -109,8 +110,8 @@ const PlanAndBillingCard = () => {
 				trial,
 			},
 		});
-		await mutate('/api/session');
 		setCheckoutSessionLoading(false);
+		await mutate('/api/session');
 	};
 
 	// Handle the case where a subscription exists already — manage in Stripe's portal

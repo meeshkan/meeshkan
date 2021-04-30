@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from 'graphql-request';
 
 export const PLAN_UPDATE = gql`
 	mutation CONFIG_UPDATE(

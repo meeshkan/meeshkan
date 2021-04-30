@@ -36,20 +36,20 @@ export default async (
 	// Check if this webhook payload should even be processed
 	if (!relevantEvents.has(eventType)) {
 		return responseBuilder(422, `Unknown event to process.`);
-  }
+	}
 
 	if (!projectID) {
 		return responseBuilder(
 			422,
 			`A project id couldn't be found in the metadata`
 		);
-  }
+	}
 
 	// If it should be processed, do different things depending on the event coming in
 
 	if (eventType == 'customer.deleted') {
 		await ctx.api.gqlRequest(
-			// @ts-ignore
+			// @ts-expect-error
 			DELETE_CUSTOMER,
 			{ projectID },
 			{ checkPermissions: false }
@@ -58,7 +58,7 @@ export default async (
 
 	if (eventType === 'customer.subscription.deleted') {
 		await ctx.api.gqlRequest(
-			// @ts-ignore
+			// @ts-expect-error
 			CANCEL_OR_DELETE_PLAN,
 			{ projectID },
 			{ checkPermissions: false }
@@ -67,7 +67,7 @@ export default async (
 
 	if (eventType === 'customer.subscription.updated' && cancelled) {
 		await ctx.api.gqlRequest(
-			// @ts-ignore
+			// @ts-expect-error
 			CANCEL_OR_DELETE_PLAN,
 			{ projectID },
 			{ checkPermissions: false }

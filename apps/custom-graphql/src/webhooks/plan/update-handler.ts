@@ -78,7 +78,7 @@ export default async (
 			422,
 			`A project id couldn't be found in the metadata`
 		);
-  }
+	}
 
 	if (eventType == 'event.created') {
 		fetch(
@@ -116,6 +116,7 @@ export default async (
 
 	if (relevantEvents.has(eventType) && !cancelled) {
 		await ctx.api.gqlRequest(
+			// @ts-expect-error
 			PLAN_UPDATE,
 			{
 				projectID,
