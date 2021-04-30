@@ -10,16 +10,11 @@ import {
 	Alert,
 	AlertIcon,
 	AlertDescription,
-	Button,
 	useColorMode,
 } from '@chakra-ui/react';
 import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
-import theme, {
-	EmptyDoughnutIcon,
-	FilterIcon,
-	SortIcon,
-} from '@frontend/chakra-theme';
+import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import TestRunCard from '../../../components/molecules/test-run-card';
 import Card from '../../../components/atoms/card';

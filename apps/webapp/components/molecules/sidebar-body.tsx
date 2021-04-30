@@ -6,7 +6,6 @@ import {
 	Stack,
 	Box,
 	Flex,
-	Spacer,
 	useColorModeValue,
 	Text,
 	Heading,

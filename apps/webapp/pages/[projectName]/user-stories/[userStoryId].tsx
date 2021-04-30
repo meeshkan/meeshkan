@@ -14,7 +14,6 @@ import {
 	Select,
 	Link as ChakraLink,
 	Stack,
-	Grid,
 	Tooltip,
 	Textarea,
 	FormControl,
@@ -470,7 +469,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 						justifyContent="space-between"
 						w="100%"
 					>
-						<Box borderRadius="lg" my={[6, 6, 0, 0]} mr={4} wordBreak="break-all">
+						<Box
+							borderRadius="lg"
+							my={[6, 6, 0, 0]}
+							mr={4}
+							wordBreak="break-all"
+						>
 							<StepList steps={steps} />
 							<Flex
 								justify="center"
@@ -490,8 +494,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 							{data.userStory?.recording?.video ? (
 								<VideoPlayer
 									src={data.userStory.recording.video.downloadUrl}
-									onStart={() => mixpanel.track('User story video play started')}
-									onEnded={() => mixpanel.track('User story video play finished')}
+									onStart={() =>
+										mixpanel.track('User story video play started')
+									}
+									onEnded={() =>
+										mixpanel.track('User story video play finished')
+									}
 								/>
 							) : (
 								<AspectRatio

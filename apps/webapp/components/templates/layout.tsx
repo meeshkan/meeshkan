@@ -4,7 +4,6 @@ import {
 	useColorModeValue,
 	Modal,
 	ModalBody,
-	ModalCloseButton,
 	ModalContent,
 	ModalHeader,
 	ModalOverlay,
@@ -69,6 +68,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				<Modal
 					isOpen={isOpen}
 					onClose={onClose}
+					closeOnOverlayClick={false}
 					size="6xl"
 					isCentered
 					motionPreset="slideInBottom"
@@ -81,7 +81,6 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 						backgroundColor={modalBackground}
 					>
 						<ModalHeader fontWeight="700">Choose a plan</ModalHeader>
-						<ModalCloseButton />
 						<ModalBody>
 							<PlanAndBillingCard />
 						</ModalBody>
