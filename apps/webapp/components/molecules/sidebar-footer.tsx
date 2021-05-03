@@ -62,6 +62,18 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 			>
 				Help and Feedback
 			</NavButton>
+			<NavButton
+				isDisabled={isSettings}
+				onClick={() => {
+					router.push(`/${slugifiedProjectName}/settings`);
+				}}
+				aria-label="Settings"
+				leftIcon={<SettingsIcon />}
+				mt={2}
+				isActive={isSettings}
+			>
+				Settings
+			</NavButton>
 			<Divider my={4} />
 			<Flex align="center">
 				<Menu>
@@ -159,21 +171,6 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						)}
 					</MenuList>
 				</Menu>
-				<Tooltip hasArrow label="Settings">
-					<IconButton
-						aria-label="Settings"
-						colorScheme="gray"
-						color={tooltipColor}
-						icon={<SettingsIcon />}
-						onClick={() => {
-							router.push(`/${slugifiedProjectName}/settings`);
-						}}
-						variant="ghost"
-						size="sm"
-						ml={2}
-						isDisabled={isSettings}
-					/>
-				</Tooltip>
 			</Flex>
 		</Box>
 	);
