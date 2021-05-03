@@ -27,6 +27,7 @@ import {
 	IconButton,
 	useClipboard,
 	Code,
+	ButtonGroup,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
@@ -125,9 +126,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 		userStory: UserStory;
 	};
 
-	const { data, error, isValidating: validatingQuery } = useSWR<
-		UserStoryResponse
-	>(USER_STORY, fetcher);
+	const {
+		data,
+		error,
+		isValidating: validatingQuery,
+	} = useSWR<UserStoryResponse>(USER_STORY, fetcher);
 
 	// Functions that call mutations for updating the user stories
 	const updateTitle = (newTitle: string) => {
@@ -246,7 +249,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 		).then(() => setTimeout(() => setLoading(false), 30000));
 	};
 
-	if ((validatingQuery && (!data || data?.userStory?.id !== userStoryId)) || validatingProject) {
+	if (
+		(validatingQuery && (!data || data?.userStory?.id !== userStoryId)) ||
+		validatingProject
+	) {
 		return <LoadingScreen as={Card} />;
 	}
 
@@ -463,12 +469,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					justifyContent="space-between"
 					w="100%"
 				>
-					<Box
-						borderRadius="lg"
-						my={[6, 6, 0, 0]}
-						mr={4}
-						wordBreak="break-all"
-					>
+					<Box borderRadius="lg" my={[6, 6, 0, 0]} mr={4} wordBreak="break-all">
 						<StepList steps={steps} />
 						<Flex
 							justify="center"
@@ -542,36 +543,57 @@ const UserStoryPage = (props: UserStoryProps) => {
 								}}
 							/>
 						</FormControl>
-						{data.userStory.isTestCase === true ? null : (
-							<Flex
-								mt={8}
-								justify="space-between"
-								align="center"
-								p={2}
-								borderRadius="lg"
-								backgroundColor={buttonsBackgroundColor}
-							>
-								<Button
-									colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
-									variant="subtle"
-									leftIcon={<CheckmarkIcon />}
-									onClick={onCreateTestCase}
-									isLoading={creatingTestCase}
-									mr={4}
-								>
-									Create test case
-								</Button>
-								<Button
-									colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
-									variant="subtle"
-									leftIcon={<XmarkIcon />}
-									isLoading={deleting}
-									onClick={onDelete}
-								>
-									Delete recording
-								</Button>
-							</Flex>
-						)}
+						<Flex
+							mt={8}
+							justify="space-between"
+							align="center"
+							p={2}
+							borderRadius="lg"
+							backgroundColor={buttonsBackgroundColor}
+						>
+							{data?.userStory?.isTestCase === true ? (
+								<>
+									<Button
+										colorScheme="blue"
+										variant="subtle"
+										leftIcon={<CopyIcon />}
+										onClick={() => handleCopy()}
+										mr={4}
+									>
+										Copy share link
+									</Button>
+									<Button
+										colorScheme="gray"
+										leftIcon={<DownloadIcon />}
+										onClick={() => handleDownload()}
+									>
+										Download script
+									</Button>
+								</>
+							) : (
+								<>
+									<Button
+										colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
+										variant="subtle"
+										leftIcon={<CheckmarkIcon />}
+										onClick={onCreateTestCase}
+										isLoading={creatingTestCase}
+										mr={4}
+									>
+										Create test case
+									</Button>
+									<Button
+										colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
+										variant="subtle"
+										leftIcon={<XmarkIcon />}
+										isLoading={deleting}
+										onClick={onDelete}
+									>
+										Delete recording
+									</Button>
+								</>
+							)}
+						</Flex>
 					</Box>
 				</Flex>
 			</Box>
