@@ -73,6 +73,9 @@ export const USER = gql`
 						productionURL
 						stagingURL
 						inviteLink
+						logInFlow {
+							id
+						}
 						authenticationTokens {
 							items {
 								id
@@ -153,6 +156,8 @@ export const USER = gql`
 											userStory {
 												id
 												title
+												created
+												isAuthenticated
 												recording {
 													seleniumScriptJson
 												}
