@@ -20,11 +20,11 @@ import {
 	Link,
 } from '@chakra-ui/react';
 import { UserContext } from '../../utils/user';
+import { IUser } from '@frontend/meeshkan-types';
 import { getStripe, Plans } from '../../utils/stripe-client';
 import { CheckSquareIcon } from '@frontend/chakra-theme';
 import SegmentedControl from '../molecules/segmented-control';
 import { show as showIntercom } from '../../utils/intercom';
-import { mutate } from 'swr';
 import { eightBaseClient } from '../../utils/graphql';
 import { PLAN_UPDATE } from 'apps/webapp/graphql/project';
 
@@ -102,6 +102,7 @@ const PlanAndBillingCard = () => {
 		} catch (error) {
 			throw new Error(error.message);
 		}
+
 		// For speed, mutate 8base instantly. The Stripe webhook will update this if it's incorrect.
 		await client.request(PLAN_UPDATE, {
 			projectID: user?.project?.id,
@@ -109,7 +110,18 @@ const PlanAndBillingCard = () => {
 			billingInterval: chosenPlan?.billingInterval,
 			subscriptionStatus: chosenPlan?.subscriptionStatus,
 		});
-		await mutate('/api/session');
+
+		const updatedProject = user?.project;
+		updatedProject.configuration = {
+			...user?.project?.configuration,
+			stripeCustomerID: null,
+			plan: chosenPlan?.name,
+			billingInterval: chosenPlan?.billingInterval,
+			subscriptionStatus: chosenPlan?.subscriptionStatus,
+			subscriptionStartedDate: new Date(),
+		};
+
+		await user?.mutate({ ...user, project: updatedProject } as IUser, false);
 		setCheckoutSessionLoading(false);
 	};
 
@@ -131,6 +143,7 @@ const PlanAndBillingCard = () => {
 				trial,
 			},
 		});
+
 		// For speed, mutate 8base instantly. The Stripe webhook will update this if it's incorrect.
 		await client.request(PLAN_UPDATE, {
 			projectID: user?.project?.id,
@@ -138,7 +151,18 @@ const PlanAndBillingCard = () => {
 			billingInterval: chosenPlan?.billingInterval,
 			subscriptionStatus: chosenPlan?.subscriptionStatus,
 		});
-		await mutate('/api/session');
+
+		const updatedProject = user?.project;
+		updatedProject.configuration = {
+			...user?.project?.configuration,
+			stripeCustomerID: null,
+			plan: chosenPlan?.name,
+			billingInterval: chosenPlan?.billingInterval,
+			subscriptionStatus: chosenPlan?.subscriptionStatus,
+			subscriptionStartedDate: new Date(),
+		};
+
+		await user?.mutate({ ...user, project: updatedProject } as IUser, false);
 		await setSubscriptionLoading(false);
 	};
 
