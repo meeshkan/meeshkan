@@ -25,16 +25,26 @@ import { CheckSquareIcon } from '@frontend/chakra-theme';
 import SegmentedControl from '../molecules/segmented-control';
 import { show as showIntercom } from '../../utils/intercom';
 import { mutate } from 'swr';
+import { eightBaseClient } from '../../utils/graphql';
+import { PLAN_UPDATE } from 'apps/webapp/graphql/project';
+
+type PlanType = {
+	name: string;
+	billingInterval: string;
+	subscriptionStartedDate: any;
+	subscriptionStatus: string;
+};
 
 const PlanAndBillingCard = () => {
 	const user = useContext(UserContext);
+	const client = eightBaseClient(user?.idToken);
 
 	// Represents billing interval — 0=monthly, 1=yearly
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [checkoutSessionLoading, setCheckoutSessionLoading] = useState(false);
 	const [subscriptionLoading, setSubscriptionLoading] = useState(false);
 	const [portalSessionLoading, setPortalSessionLoading] = useState(false);
-	const [plan, setPlan] = useState({
+	const [plan, setPlan] = useState<PlanType>({
 		name: user?.project?.configuration?.plan,
 		billingInterval: user?.project?.configuration?.billingInterval,
 		subscriptionStartedDate:
@@ -72,8 +82,8 @@ const PlanAndBillingCard = () => {
 	};
 
 	// Handle the case where payment is needed
-	const handleCheckout = async (price: string) => {
-		setCheckoutSessionLoading(true);
+	const handleCheckout = async (price: string, chosenPlan: PlanType) => {
+		await setCheckoutSessionLoading(true);
 
 		try {
 			const { sessionId } = await postData({
@@ -92,13 +102,24 @@ const PlanAndBillingCard = () => {
 		} catch (error) {
 			throw new Error(error.message);
 		}
-		setCheckoutSessionLoading(false);
+		// For speed, mutate 8base instantly. The Stripe webhook will update this if it's incorrect.
+		await client.request(PLAN_UPDATE, {
+			projectID: user?.project?.id,
+			plan: chosenPlan?.name,
+			billingInterval: chosenPlan?.billingInterval,
+			subscriptionStatus: chosenPlan?.subscriptionStatus,
+		});
 		await mutate('/api/session');
+		setCheckoutSessionLoading(false);
 	};
 
 	// Handle the case where a subscription with out payment is being created
-	const handleSubscription = async (price: string, trial: boolean) => {
-		setSubscriptionLoading(true);
+	const handleSubscription = async (
+		price: string,
+		trial: boolean,
+		chosenPlan: PlanType
+	) => {
+		await setSubscriptionLoading(true);
 		await postData({
 			url: '/api/stripe/create-subscription',
 			data: {
@@ -110,8 +131,15 @@ const PlanAndBillingCard = () => {
 				trial,
 			},
 		});
-		setCheckoutSessionLoading(false);
+		// For speed, mutate 8base instantly. The Stripe webhook will update this if it's incorrect.
+		await client.request(PLAN_UPDATE, {
+			projectID: user?.project?.id,
+			plan: chosenPlan?.name,
+			billingInterval: chosenPlan?.billingInterval,
+			subscriptionStatus: chosenPlan?.subscriptionStatus,
+		});
 		await mutate('/api/session');
+		await setSubscriptionLoading(false);
 	};
 
 	// Handle the case where a subscription exists already — manage in Stripe's portal
@@ -309,7 +337,14 @@ const PlanAndBillingCard = () => {
 												toggleIndex === 0
 													? feedback.monthlyPriceId
 													: feedback.yearlyPriceId,
-												true
+												true,
+												{
+													name: 'Feedback',
+													billingInterval:
+														toggleIndex === 0 ? 'monthly' : 'yearly',
+													subscriptionStatus: 'trialing',
+													subscriptionStartedDate: new Date(),
+												}
 											);
 											onOpen();
 										}}
@@ -395,7 +430,13 @@ const PlanAndBillingCard = () => {
 								handleCheckout(
 									toggleIndex === 0
 										? business.monthlyPriceId
-										: business.yearlyPriceId
+										: business.yearlyPriceId,
+									{
+										name: 'Business',
+										billingInterval: toggleIndex === 0 ? 'monthly' : 'yearly',
+										subscriptionStatus: 'active',
+										subscriptionStartedDate: new Date(),
+									}
 								)
 							}
 						>
@@ -431,7 +472,13 @@ const PlanAndBillingCard = () => {
 						onClick={() =>
 							handleSubscription(
 								toggleIndex === 0 ? free.monthlyPriceId : free.yearlyPriceId,
-								false
+								false,
+								{
+									name: 'Free',
+									billingInterval: toggleIndex === 0 ? 'monthly' : 'yearly',
+									subscriptionStatus: 'active',
+									subscriptionStartedDate: new Date(),
+								}
 							)
 						}
 					>
