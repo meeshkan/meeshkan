@@ -394,7 +394,6 @@ export const PLAN_UPDATE = gql`
 				stripeCustomerID
 				billingInterval
 				subscriptionStatus
-				subscriptionStartedDate
 				project {
 					name
 				}

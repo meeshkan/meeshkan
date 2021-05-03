@@ -15,9 +15,6 @@ export const PLAN_UPDATE = gql`
 				billingInterval
 				subscriptionStatus
 				subscriptionStartedDate
-				project {
-					name
-				}
 			}
 		}
 	}
@@ -35,9 +32,6 @@ export const CANCEL_OR_DELETE_PLAN = gql`
 				billingInterval
 				subscriptionStatus
 				subscriptionStartedDate
-				project {
-					name
-				}
 			}
 		}
 	}
@@ -61,9 +55,6 @@ export const DELETE_CUSTOMER = gql`
 				billingInterval
 				subscriptionStatus
 				subscriptionStartedDate
-				project {
-					name
-				}
 			}
 		}
 	}

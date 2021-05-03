@@ -17,8 +17,6 @@ const relevantEvents = new Set([
 	'checkout.session.completed',
 	'customer.subscription.created',
 	'customer.subscription.updated',
-	// Savvycal event
-	'event.created',
 ]);
 
 export default async (
@@ -55,18 +53,6 @@ export default async (
 		JSON.parse(event.body)['created'] * 1000
 	);
 	const eventType = JSON.parse(event.body)['type'];
-	const savvyScheduler =
-		eventType == 'event.created'
-			? `${JSON.parse(event.body)['payload']['scheduler']['display_name']} | ${
-					JSON.parse(event.body)['payload']['scheduler']['email']
-			  } | ${
-					JSON.parse(event.body)['payload']['scheduler']['response_status']
-			  }`
-			: null;
-	const savvyDate =
-		eventType == 'event.created'
-			? new Date(JSON.parse(event.body)['payload']['start_at'])
-			: null;
 
 	// Check if this webhook payload should even be processed
 	if (!relevantEvents.has(eventType)) {
@@ -78,40 +64,6 @@ export default async (
 			422,
 			`A project id couldn't be found in the metadata`
 		);
-	}
-
-	if (eventType == 'event.created') {
-		fetch(
-			'https://hooks.slack.com/services/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',
-			{
-				method: 'POST',
-				mode: 'no-cors',
-				headers: { 'Content-type': 'application/json' },
-				body: JSON.stringify({
-					text: `*A new Feedback plan scheduled a CAB call! 🎉* \n\n Scheduled by: ${savvyScheduler} \n Scheduled for: \`${savvyDate.toLocaleDateString(
-						'en-US',
-						{
-							hour: 'numeric',
-							minute: 'numeric',
-							second: 'numeric',
-							hour12: false,
-							day: 'numeric',
-							month: 'short',
-							timeZoneName: 'short',
-						}
-					)} \``,
-				}),
-			}
-		).then((response) => {
-			if (response.status !== 200) {
-				return responseBuilder(
-					response.status,
-					'Slack notification was not sent'
-				);
-			}
-
-			return response;
-		});
 	}
 
 	if (relevantEvents.has(eventType) && !cancelled) {
