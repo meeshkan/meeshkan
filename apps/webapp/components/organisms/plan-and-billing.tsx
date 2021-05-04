@@ -91,7 +91,6 @@ const PlanAndBillingCard = () => {
 		trial: boolean,
 		chosenPlan: PlanType
 	) => {
-		await setSubscriptionLoading(true);
 		await postData({
 			url: '/api/stripe/create-subscription',
 			data: {
@@ -111,19 +110,6 @@ const PlanAndBillingCard = () => {
 			billingInterval: chosenPlan?.billingInterval,
 			subscriptionStatus: chosenPlan?.subscriptionStatus,
 		});
-
-		const updatedProject = user?.project;
-		updatedProject.configuration = {
-			...user?.project?.configuration,
-			stripeCustomerID: null,
-			plan: chosenPlan?.name,
-			billingInterval: chosenPlan?.billingInterval,
-			subscriptionStatus: chosenPlan?.subscriptionStatus,
-			subscriptionStartedDate: new Date(),
-		};
-
-		await user?.mutate({ ...user, project: updatedProject } as IUser, false);
-		await setSubscriptionLoading(false);
 	};
 
 	if (plan.name) {
@@ -146,6 +132,7 @@ const PlanAndBillingCard = () => {
 						handleSubscription={handleSubscription}
 						toggleIndex={toggleIndex}
 						loading={checkoutSessionLoading && subscriptionLoading}
+						setSubscriptionLoading={setSubscriptionLoading}
 					/>
 					<BusinessCard
 						handleCheckout={handleCheckout}
@@ -157,6 +144,7 @@ const PlanAndBillingCard = () => {
 					handleSubscription={handleSubscription}
 					toggleIndex={toggleIndex}
 					loading={checkoutSessionLoading && subscriptionLoading}
+					setSubscriptionLoading={setSubscriptionLoading}
 				/>
 			</>
 		);

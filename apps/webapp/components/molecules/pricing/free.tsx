@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Flex, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import { Plans } from '../../../utils/stripe-client';
-import { PlanType } from '@frontend/meeshkan-types';
+import { IUser, PlanType } from '@frontend/meeshkan-types';
+import { UserContext } from 'apps/webapp/utils/user';
 
 type FreeProps = {
-	loading: boolean;
 	toggleIndex: number;
+	loading: boolean;
+	setSubscriptionLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	handleSubscription: (
 		price: string,
 		trial: boolean,
@@ -14,10 +16,13 @@ type FreeProps = {
 };
 
 export const FreeCard = ({
-	loading,
 	toggleIndex,
+	loading,
+	setSubscriptionLoading,
 	handleSubscription,
 }: FreeProps) => {
+	const user = useContext(UserContext);
+
 	const { free } = Plans;
 	const borderGray = useColorModeValue('gray.100', 'gray.800');
 
@@ -46,7 +51,8 @@ export const FreeCard = ({
 				variant="subtle"
 				loadingText="Creating subscription"
 				isLoading={loading}
-				onClick={() =>
+				onClick={async () => {
+					setSubscriptionLoading(true);
 					handleSubscription(
 						toggleIndex === 0 ? free.monthlyPriceId : free.yearlyPriceId,
 						false,
@@ -56,8 +62,22 @@ export const FreeCard = ({
 							subscriptionStatus: 'active',
 							subscriptionStartedDate: new Date(),
 						}
-					)
-				}
+					);
+					const updatedProject = user?.project;
+					updatedProject.configuration = {
+						...user?.project?.configuration,
+						plan: 'Free',
+						billingInterval: toggleIndex === 0 ? 'monthly' : 'yearly',
+						subscriptionStatus: 'active',
+						subscriptionStartedDate: new Date(),
+					};
+
+					await user?.mutate(
+						{ ...user, project: updatedProject } as IUser,
+						false
+					);
+					setSubscriptionLoading(false);
+				}}
 			>
 				Subscribe to updates
 			</Button>

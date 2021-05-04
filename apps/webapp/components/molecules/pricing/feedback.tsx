@@ -20,11 +20,12 @@ import {
 import { CheckSquareIcon } from '@frontend/chakra-theme';
 import { Plans } from '../../../utils/stripe-client';
 import { UserContext } from '../../../utils/user';
-import { PlanType } from '@frontend/meeshkan-types';
+import { IUser, PlanType } from '@frontend/meeshkan-types';
 
 type FeedbackProps = {
 	toggleIndex: number;
 	loading: boolean;
+	setSubscriptionLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	handleSubscription: (
 		price: string,
 		trial: boolean,
@@ -35,6 +36,7 @@ type FeedbackProps = {
 export const FeedbackCard = ({
 	toggleIndex,
 	loading,
+	setSubscriptionLoading,
 	handleSubscription,
 }: FeedbackProps) => {
 	const user = useContext(UserContext);
@@ -115,7 +117,8 @@ export const FeedbackCard = ({
 								w="full"
 								isLoading={loading}
 								loadingText="Creating subscription"
-								onClick={() => {
+								onClick={async () => {
+									setSubscriptionLoading(true);
 									handleSubscription(
 										toggleIndex === 0
 											? feedback.monthlyPriceId
@@ -129,6 +132,7 @@ export const FeedbackCard = ({
 										}
 									);
 									onOpen();
+									setSubscriptionLoading(false);
 								}}
 							>
 								Choose the Feedback plan
@@ -139,7 +143,22 @@ export const FeedbackCard = ({
 			</Flex>
 			<LightMode>
 				<Modal
-					onClose={onClose}
+					onClose={async () => {
+						onClose();
+						const updatedProject = user?.project;
+						updatedProject.configuration = {
+							...user?.project?.configuration,
+							plan: 'Feedback',
+							billingInterval: toggleIndex === 0 ? 'monthly' : 'yearly',
+							subscriptionStatus: 'trialing',
+							subscriptionStartedDate: new Date(),
+						};
+
+						await user?.mutate(
+							{ ...user, project: updatedProject } as IUser,
+							false
+						);
+					}}
 					isOpen={isOpen}
 					isCentered
 					motionPreset="slideInBottom"
