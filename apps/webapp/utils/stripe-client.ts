@@ -13,6 +13,27 @@ export const getStripe = () => {
 	return stripePromise;
 };
 
+type PostProps = {
+	url: string;
+	data: Object;
+};
+
+export const postData = async ({ url = '', data = {} }: PostProps) => {
+	const res = await fetch(url, {
+		method: 'POST',
+		headers: new Headers({ 'Content-Type': 'application/json' }),
+		credentials: 'same-origin',
+		body: JSON.stringify(data),
+	});
+
+	// @ts-expect-error
+	if (res.error) {
+		throw new Error('Post request failed.');
+	}
+
+	return res.json();
+};
+
 // Information to support Stripe Plans setup in the webapp
 export const Plans = {
 	free: {
