@@ -25,6 +25,10 @@ import {
 	useDisclosure,
 	DarkMode,
 	useColorMode,
+	MenuButton,
+	Menu,
+	MenuItem,
+	MenuList,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
@@ -38,9 +42,16 @@ import {
 	ArrowRightIcon,
 	ExternalLinkIcon,
 	PlayIcon,
+	MoreIcon,
+	DownloadIcon,
+	TrashIcon,
 } from '@frontend/chakra-theme';
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../atoms/video-player';
+import { DELETE_REJECTED_RECORDING } from '../../graphql/user-story';
+import { mutate } from 'swr';
+import { eightBaseClient } from '../../utils/graphql';
+import { useToaster } from 'apps/webapp/hooks/use-toaster';
 
 type TableProps = {
 	columns: Column[];
@@ -57,9 +68,6 @@ const Table = ({
 	pageCount: controlledPageCount,
 	fetchData,
 }: TableProps) => {
-	const borderBottomColor = useColorModeValue('gray.100', 'gray.700');
-	const backgroundColor = useColorModeValue('white', 'gray.900');
-	const hoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
 	const {
 		getTableProps,
 		getTableBodyProps,
@@ -86,21 +94,51 @@ const Table = ({
 		usePagination
 	);
 
-	useEffect(() => {
-		fetchData({ pageIndex, pageSize });
-	}, [fetchData, pageIndex, pageSize]);
-
-	const { project } = useContext(UserContext);
-	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
-		project?.name,
-	]);
-
 	const router = useRouter();
 	const [video, setVideo] = useState<File['downloadUrl']>();
 	const { colorMode } = useColorMode();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
+	const borderBottomColor = useColorModeValue('gray.100', 'gray.700');
+	const backgroundColor = useColorModeValue('white', 'gray.900');
+	const hoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
+	const [deleting, setDeleting] = useState(false);
+	const user = useContext(UserContext);
+	const client = eightBaseClient(user?.idToken);
+	const toaster = useToaster();
 	const mixpanel = useAnalytics();
+
+	const slugifiedProjectName = useMemo(
+		() => createSlug(user?.project?.name || ''),
+		[user?.project?.name]
+	);
+
+	const deleteRejectedRecording = async (userStoryId: string) => {
+		await setDeleting(true);
+		mixpanel.track('Delete a user story from the table');
+		await client
+			.request(DELETE_REJECTED_RECORDING, {
+				userStoryId,
+			})
+			.then((res) =>
+				res?.userStoryDelete?.success
+					? toaster({
+							status: 'success',
+							title: 'The user story has been deleted.',
+							description:
+								'Rejecting a recording will delete the series of steps as a user story.',
+					  })
+					: toaster({
+							status: 'error',
+							title: 'The user story was not deleted.',
+							description: 'Something went wrong, try again later.',
+					  })
+			);
+		await setDeleting(false);
+	};
+
+	useEffect(() => {
+		fetchData({ pageIndex, pageSize });
+	}, [fetchData, pageIndex, pageSize, deleting]);
 
 	return (
 		<>
@@ -242,9 +280,14 @@ const Table = ({
 										</Td>
 									);
 								})}
-								<Td px={1} py={3} border={0}>
-									<Skeleton isLoaded={!loading} borderRadius="md">
+								<Td px={1} py={1} border={0}>
+									<Skeleton
+										isLoaded={!loading}
+										borderRadius="md"
+										maxW="fit-content"
+									>
 										<IconButton
+											mr={2}
 											size="xs"
 											colorScheme="gray"
 											sx={{
@@ -260,44 +303,70 @@ const Table = ({
 												);
 											}}
 										/>
+										<Menu>
+											<Tooltip label="More" placement="bottom" hasArrow>
+												<MenuButton
+													as={IconButton}
+													icon={<MoreIcon />}
+													colorScheme="gray"
+													size="xs"
+													sx={{
+														mixBlendMode:
+															colorMode === 'light' ? 'multiply' : 'normal',
+													}}
+												/>
+											</Tooltip>
+											<MenuList>
+												<MenuItem>
+													<DownloadIcon mr={3} />
+													Download Puppeteer script
+												</MenuItem>
+												<MenuItem
+													isDisabled={deleting}
+													onClick={() =>
+														// @ts-expect-error
+														deleteRejectedRecording(row.original.id)
+													}
+												>
+													<TrashIcon mr={3} />
+													Delete
+												</MenuItem>
+											</MenuList>
+										</Menu>
 									</Skeleton>
 								</Td>
 							</Tr>
 						);
 					})}
 
-					{page.length === 0 && (loading ? (
-						[...Array(pageSize).keys()].map((key) => (
-							<Tr
-								borderBottom="1px solid"
-								borderBottomColor={borderBottomColor}
-								key={key}
-							>
-								<Td pr={0} pl={3} py={3} border={0}>
-									<Skeleton borderRadius="md" height="20px" />
-								</Td>
-								{[...Array(6).keys()].map((key) => (
-									<Td py={3} border={0} key={key}>
+					{page.length === 0 &&
+						(loading ? (
+							[...Array(pageSize).keys()].map((key) => (
+								<Tr
+									borderBottom="1px solid"
+									borderBottomColor={borderBottomColor}
+									key={key}
+								>
+									<Td pr={0} pl={3} py={3} border={0}>
 										<Skeleton borderRadius="md" height="20px" />
 									</Td>
-								))}
-								<Td py={3} px={0} border={0}>
-									<Skeleton borderRadius="md" height="20px" w="25px" />
+									{[...Array(6).keys()].map((key) => (
+										<Td py={3} border={0} key={key}>
+											<Skeleton borderRadius="md" height="20px" />
+										</Td>
+									))}
+									<Td py={3} px={0} border={0}>
+										<Skeleton borderRadius="md" height="20px" w="25px" />
+									</Td>
+								</Tr>
+							))
+						) : (
+							<Tr _hover={undefined}>
+								<Td textAlign="center" py={3} rowSpan={pageSize} colSpan={8}>
+									<Text fontSize="md">No User Stories</Text>
 								</Td>
 							</Tr>
-						))
-					) : (
-						<Tr _hover={undefined}>
-							<Td
-								textAlign="center"
-								py={3}
-								rowSpan={pageSize}
-								colSpan={8}
-							>
-								<Text fontSize="md">No User Stories</Text>
-							</Td>
-						</Tr>
-					))}
+						))}
 				</Tbody>
 			</ChakraTable>
 
