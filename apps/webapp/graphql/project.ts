@@ -65,6 +65,7 @@ export const UPDATE_PROJECT = gql`
 				authenticationTokens {
 					items {
 						id
+						createdAt
 						type
 						key
 						value
@@ -98,6 +99,7 @@ export const JOIN_PROJECT = gql`
 					authenticationTokens {
 						items {
 							id
+							createdAt
 							type
 							key
 							value
@@ -245,6 +247,17 @@ export const PROJECT_USER_STORIES = gql`
 				downloadUrl
 			}
 		}
+		project {
+			configuration {
+				authenticationTokens {
+					items {
+						type
+						key
+						value
+					}
+				}
+			}
+		}
 	}
 
 	query PROJECT_USER_STORIES(
@@ -324,6 +337,7 @@ export const ADD_AUTH_TOKEN = gql`
 				authenticationTokens {
 					items {
 						id
+						createdAt
 						type
 						key
 						value

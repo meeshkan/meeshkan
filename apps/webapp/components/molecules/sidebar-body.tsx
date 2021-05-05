@@ -151,6 +151,16 @@ const SideBarBody = () => {
 								</NavButton>
 								<NavButton
 									fontSize="14px"
+									href={`/${slugifiedProjectName}/settings#authentication`}
+									isActive={
+										router.asPath ===
+										`/${slugifiedProjectName}/settings#authentication`
+									}
+								>
+									Authentication
+								</NavButton>
+								<NavButton
+									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
 									isActive={
 										router.asPath ===

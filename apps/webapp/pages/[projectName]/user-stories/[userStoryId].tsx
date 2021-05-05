@@ -552,36 +552,57 @@ const UserStoryPage = (props: UserStoryProps) => {
 									}}
 								/>
 							</FormControl>
-							{data.userStory.isTestCase === true ? null : (
-								<Flex
-									mt={8}
-									justify="space-between"
-									align="center"
-									p={2}
-									borderRadius="lg"
-									backgroundColor={buttonsBackgroundColor}
-								>
-									<Button
-										colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
-										variant="subtle"
-										leftIcon={<CheckmarkIcon />}
-										onClick={onCreateTestCase}
-										isLoading={creatingTestCase}
-										mr={4}
-									>
-										Create test case
-									</Button>
-									<Button
-										colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
-										variant="subtle"
-										leftIcon={<XmarkIcon />}
-										isLoading={deleting}
-										onClick={onDelete}
-									>
-										Delete recording
-									</Button>
-								</Flex>
-							)}
+							<Flex
+								mt={8}
+								justify="space-between"
+								align="center"
+								p={2}
+								borderRadius="lg"
+								backgroundColor={buttonsBackgroundColor}
+							>
+								{data.userStory.isTestCase === true ? (
+									<>
+										<Button
+											colorScheme="blue"
+											variant="subtle"
+											leftIcon={<CopyIcon />}
+											onClick={() => handleCopy()}
+											mr={4}
+										>
+											Copy share link
+										</Button>
+										<Button
+											colorScheme="gray"
+											leftIcon={<DownloadIcon />}
+											onClick={() => handleDownload()}
+										>
+											Download script
+										</Button>
+									</>
+								) : (
+									<>
+										<Button
+											colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
+											variant="subtle"
+											leftIcon={<CheckmarkIcon />}
+											onClick={onCreateTestCase}
+											isLoading={creatingTestCase}
+											mr={4}
+										>
+											Create test case
+										</Button>
+										<Button
+											colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
+											variant="subtle"
+											leftIcon={<XmarkIcon />}
+											isLoading={deleting}
+											onClick={onDelete}
+										>
+											Delete recording
+										</Button>
+									</>
+								)}
+							</Flex>
 						</Box>
 					</Flex>
 				</Box>

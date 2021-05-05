@@ -17,6 +17,8 @@ import {
 	AccordionPanel,
 	AccordionButton,
 	AccordionIcon,
+	Code,
+	Badge,
 } from '@chakra-ui/react';
 import { ChevronLeftIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import {
@@ -26,6 +28,10 @@ import {
 	SortIcon,
 	FilterIcon,
 	CircleArrowsIcon,
+	VideoIcon,
+	CrosshairIcon,
+	ShieldIcon,
+	KeyIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -271,6 +277,65 @@ const TestRun = () => {
 																	{testCase?.title}
 																</ChakraLink>
 															</Link>
+															{isFailing && (
+																<Code
+																	display="flex"
+																	alignItems="center"
+																	maxW="fit-content"
+																	fontSize="md"
+																	ml={4}
+																	mr={2}
+																	textTransform="capitalize"
+																	lineHeight="normal"
+																	borderRadius="md"
+																	fontWeight="700"
+																	px={2}
+																	py={1}
+																	colorScheme="gray"
+																>
+																	{testCase?.created[0] === 'user' ? (
+																		<VideoIcon mr={3} />
+																	) : testCase?.created[0] === 'manual' ? (
+																		<CrosshairIcon mr={3} />
+																	) : null}
+																	{testCase?.created}
+																</Code>
+															)}
+
+															{isFailing && testCase?.isAuthenticated ? (
+																<Tooltip
+																	label="Requires authentication"
+																	placement="right"
+																>
+																	<Badge
+																		colorScheme="amber"
+																		fontWeight="700"
+																		fontSize="md"
+																		borderRadius="md"
+																		p={2}
+																	>
+																		<ShieldIcon />
+																	</Badge>
+																</Tooltip>
+															) : null}
+															{isFailing &&
+															project?.configuration?.logInFlow?.id ===
+																testCase?.id ? (
+																<Tooltip
+																	label="This is the path your users take to sign in."
+																	placement="right"
+																>
+																	<Badge
+																		colorScheme="amber"
+																		fontWeight="700"
+																		fontSize="md"
+																		borderRadius="md"
+																		p={2}
+																	>
+																		<KeyIcon />
+																	</Badge>
+																</Tooltip>
+															) : null}
 														</Flex>
 														<AccordionIcon color={iconColor} />
 													</AccordionButton>
@@ -343,9 +408,7 @@ const TestRun = () => {
 										Test length
 									</Heading>
 									<Text fontSize="15px">
-										{testRun?.testLength.substring(0, 2) +
-											` hrs, ` +
-											testRun?.testLength.substring(3, 5) +
+										{testRun?.testLength.substring(3, 5) +
 											` mins, ` +
 											testRun?.testLength.substring(6, 8) +
 											` sec ` || '-'}

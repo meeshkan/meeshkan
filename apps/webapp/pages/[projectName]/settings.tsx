@@ -16,8 +16,10 @@ import {
 	Badge,
 	Checkbox,
 	Code,
+	Divider,
+	Tooltip,
 } from '@chakra-ui/react';
-import { RecordIcon, TrashIcon } from '@frontend/chakra-theme';
+import { KeyIcon, RecordIcon, TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -47,6 +49,8 @@ import {
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
 import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
+import Link from 'next/link';
+import { createSlug } from '../../utils/createSlug';
 
 type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>;
 const SectionGridCard = (props: SectionGridCardProps) => {
@@ -392,36 +396,12 @@ const Settings = () => {
 						</Button>
 					)}
 				</SectionGridCard>
-				<SectionGridCard
-					title="Privacy"
-					subtitle="Meeshkan ignores specific inputs by default. Customization will be possible in the future. The following data is excluded from Meeshkan recordings."
-				>
-					<Stack>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								[autocomplete=cc-*]
-							</Code>{' '}
-							(Credit card fields)
-						</Checkbox>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								input[type=hidden]
-							</Code>{' '}
-							(Hidden fields)
-						</Checkbox>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								input[type=password]
-							</Code>{' '}
-							(Password fields)
-						</Checkbox>
-					</Stack>
-				</SectionGridCard>
+
 				<SectionGridCard
 					title="Details"
-					subtitle="Detailed information about your project."
+					subtitle="Detailed configuration for your project."
 				>
-					<Heading fontSize="18px" fontWeight="500" mb={2}>
+					<Heading fontSize="18px" fontWeight="500" mb={3}>
 						Script tag
 					</Heading>
 					<ScriptTagInput />
@@ -451,22 +431,52 @@ const Settings = () => {
 
 					<Spacer h={8} />
 
-					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
-						<Stack flex="1">
-							<Heading fontSize="18px" fontWeight="500">
-								Authentication
-							</Heading>
-							<Text
-								fontSize="sm"
-								fontWeight="400"
-								lineHeight="short"
-								color="gray.500"
-							>
-								This is the user your tests will be tied to. Be sure that any of
+					<Heading fontSize="18px" fontWeight="500" mb={2}>
+						Privacy
+					</Heading>
+					<Text
+						fontSize="sm"
+						fontWeight="400"
+						lineHeight="short"
+						color="gray.500"
+						mb={4}
+					>
+						Meeshkan ignores specific inputs by default. Customization will be
+						possible in the future. The following data is excluded from Meeshkan
+						recordings.
+					</Text>
+					<Stack>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								[autocomplete=cc-*]
+							</Code>{' '}
+							(Credit card fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								input[type=hidden]
+							</Code>{' '}
+							(Hidden fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								input[type=password]
+							</Code>{' '}
+							(Password fields)
+						</Checkbox>
+					</Stack>
+				</SectionGridCard>
+
+				<SectionGridCard
+					title="Authentication"
+					subtitle="This is the user your tests will be run off of. Be sure that any of
 								the tokens, or log in details you're supplying are not your own,
-								or a customer's.
-							</Text>
-						</Stack>
+								or a customer's."
+				>
+					<Heading fontSize="18px" fontWeight="500" mb={4}>
+						1. Method: Record the path your users take to log in.
+					</Heading>
+					<Flex alignItems="flex-end" justifyContent="space-between">
 						<Button
 							size="sm"
 							colorScheme="red"
@@ -478,11 +488,62 @@ const Settings = () => {
 							Record log in flow
 						</Button>
 					</Flex>
+					{project?.configuration?.logInFlow ? (
+						<Link
+							href={`/${createSlug(project?.name)}/${
+								project?.configuration?.logInFlow?.id
+							}`}
+						>
+							<Flex
+								as="a"
+								w="100%"
+								mt={4}
+								p={3}
+								borderRadius="md"
+								justify="space-between"
+								align="center"
+								cursor="pointer"
+								_hover={{
+									backgroundColor: listItemHoverBackgroundColor,
+								}}
+							>
+								<Flex>
+									<Text>{project?.configuration?.logInFlow?.title}</Text>
+									<Tooltip label="This is the 'Log in flow'" placement="right">
+										<Badge
+											colorScheme="amber"
+											fontWeight="700"
+											fontSize="md"
+											borderRadius="md"
+											p={2}
+											ml={4}
+										>
+											<KeyIcon />
+										</Badge>
+									</Tooltip>
+								</Flex>
+
+								<Text>
+									{new Date(
+										project?.configuration?.logInFlow?.createdAt
+									).toLocaleString()}
+								</Text>
+							</Flex>
+						</Link>
+					) : null}
+
+					<Divider my={6} />
+
+					<Heading fontSize="18px" fontWeight="500" mb={4}>
+						2. Method: Add the tokens we should inject.
+					</Heading>
 
 					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
-					<Heading fontSize="14px" fontWeight="500" mt={4}>
-						Active tokens
-					</Heading>
+					{tokens?.length >= 1 ? (
+						<Heading fontSize="14px" fontWeight="500" mt={6}>
+							Active tokens
+						</Heading>
+					) : null}
 					{tokens?.map((token) => (
 						<Flex
 							key={token.key}
@@ -496,8 +557,9 @@ const Settings = () => {
 							}}
 						>
 							<Flex align="center">
-								<Box w={['96px', '96px', '128px', '200px']}>
+								<Flex align="center" w={['96px', '96px', '128px', '250px']}>
 									<Badge
+										mr={4}
 										borderRadius="md"
 										p={2}
 										fontSize="sm"
@@ -506,7 +568,8 @@ const Settings = () => {
 									>
 										{token.type}
 									</Badge>
-								</Box>
+									<Text>{new Date(token.createdAt).toLocaleDateString()}</Text>
+								</Flex>
 								<Text
 									mr={[4, 16, 24]}
 									w={['64px', '80px', '128px']}
