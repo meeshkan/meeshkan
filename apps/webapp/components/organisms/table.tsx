@@ -34,7 +34,12 @@ import { useRouter } from 'next/router';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { createSlug } from '../../utils/createSlug';
 import { UserContext } from '../../utils/user';
-import { File, UserStoryListResponse } from '@frontend/meeshkan-types';
+import {
+	AuthenticationToken,
+	File,
+	Recording,
+	UserStoryListResponse,
+} from '@frontend/meeshkan-types';
 import {
 	DoubleArrowLeftIcon,
 	ArrowLeftIcon,
@@ -49,9 +54,10 @@ import {
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
 import VideoPlayer from '../atoms/video-player';
 import { DELETE_REJECTED_RECORDING } from '../../graphql/user-story';
-import { mutate } from 'swr';
 import { eightBaseClient } from '../../utils/graphql';
 import { useToaster } from 'apps/webapp/hooks/use-toaster';
+import { eightBaseToPptr } from '@frontend/downloadable-script';
+import { saveAs } from 'file-saver';
 
 type TableProps = {
 	columns: Column[];
@@ -134,6 +140,35 @@ const Table = ({
 					  })
 			);
 		await setDeleting(false);
+	};
+
+	const handleDownload = (
+		script: Recording['seleniumScriptJson'],
+		authTokens: AuthenticationToken[],
+		title: string
+	) => {
+		try {
+			const pptrScript = eightBaseToPptr(
+				JSON.parse(script),
+				{
+					headless: true,
+				},
+				authTokens
+			);
+
+			const blob = new Blob([pptrScript], {
+				type: 'text/javascript;charset=utf-8',
+			});
+			saveAs(blob, `${createSlug(title)}.js`);
+		} catch (err) {
+			toaster({
+				status: 'error',
+				title: 'Your test case could not be generated.',
+				description: 'Please try again in a few seconds.',
+			});
+			console.log(err);
+		}
+		mixpanel.track('Puppeteer script downloaded');
 	};
 
 	useEffect(() => {
@@ -317,7 +352,19 @@ const Table = ({
 												/>
 											</Tooltip>
 											<MenuList>
-												<MenuItem>
+												<MenuItem
+													onClick={() =>
+														handleDownload(
+															// @ts-expect-error
+															row.original.recording.seleniumScriptJson,
+															// @ts-expect-error
+															row.original.project.configuration
+																.authenticationTokens.items,
+															// @ts-expect-error
+															row.original.title
+														)
+													}
+												>
 													<DownloadIcon mr={3} />
 													Download Puppeteer script
 												</MenuItem>

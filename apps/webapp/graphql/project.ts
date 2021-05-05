@@ -247,6 +247,17 @@ export const PROJECT_USER_STORIES = gql`
 				downloadUrl
 			}
 		}
+		project {
+			configuration {
+				authenticationTokens {
+					items {
+						type
+						key
+						value
+					}
+				}
+			}
+		}
 	}
 
 	query PROJECT_USER_STORIES(
