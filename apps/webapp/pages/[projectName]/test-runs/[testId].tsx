@@ -45,6 +45,7 @@ import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import VideoPlayer from '../../../components/atoms/video-player';
+import ValidatedBillingPlan from '../../../components/molecules/validated-billing-plan';
 import {
 	SeleniumCommand,
 	TestOutcomeListResponse,
@@ -93,358 +94,365 @@ const TestRun = () => {
 	);
 
 	return (
-		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
-			<Stack spacing={3}>
-				<Link href={`/${slugifiedProjectName}/test-runs`} passHref>
-					<a>
-						<Heading
-							d="flex"
-							alignItems="center"
-							fontSize="16px"
-							fontWeight="400"
-							color={headingColor}
-							lineHeight="short"
-						>
-							<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
-							Test runs
-						</Heading>
-					</a>
-				</Link>
-				<TestRunCard
-					id={testId as string}
-					status={testRun?.status}
-					date={new Date(testRun?.createdAt)}
-					stats={_.countBy(
-						testRun?.testOutcome?.items.map((outcome) => outcome.status)
-					)}
-				/>
-			</Stack>
-			<Box overflowY="scroll">
-				<Flex w="100%" h="100%">
-					<Stack spacing={3} flex="1" mr={6}>
-						<Flex align="center" justify="space-between">
+		<ValidatedBillingPlan>
+			<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
+				<Stack spacing={3}>
+					<Link href={`/${slugifiedProjectName}/test-runs`} passHref>
+						<a>
 							<Heading
-								as="h2"
-								fontSize="14px"
-								fontWeight="600"
+								d="flex"
+								alignItems="center"
+								fontSize="16px"
+								fontWeight="400"
 								color={headingColor}
 								lineHeight="short"
 							>
-								{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
-								<Tooltip
-									label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
-									placement="right-start"
-								>
-									<InfoOutlineIcon ml={2} color={tooltipIconColor} />
-								</Tooltip>
+								<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
+								Test runs
 							</Heading>
-							<Box>
-								<Button
-									size="sm"
-									variant="ghost"
-									colorScheme="gray"
-									fontWeight="400"
-									mr={2}
-									leftIcon={<SortIcon />}
-									isDisabled
+						</a>
+					</Link>
+					<TestRunCard
+						id={testId as string}
+						status={testRun?.status}
+						date={new Date(testRun?.createdAt)}
+						stats={_.countBy(
+							testRun?.testOutcome.items.map((outcome) => outcome.status)
+						)}
+					/>
+				</Stack>
+				<Box overflowY="scroll">
+					<Flex w="100%" h="100%">
+						<Stack spacing={3} flex="1" mr={6}>
+							<Flex align="center" justify="space-between">
+								<Heading
+									as="h2"
+									fontSize="14px"
+									fontWeight="600"
+									color={headingColor}
+									lineHeight="short"
 								>
-									Sort
-								</Button>
-								<Button
-									size="sm"
-									variant="ghost"
-									colorScheme="gray"
-									fontWeight="400"
-									leftIcon={<FilterIcon />}
-									isDisabled
-								>
-									Filter
-								</Button>
-							</Box>
-						</Flex>
-						<Stack spacing={4}>
-							<Accordion defaultIndex={[0]} allowMultiple>
-								{sortedTestOutcomes.map((outcome, index) => {
-									const testCase = outcome?.userStory;
-									const status = outcome?.status;
+									{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
+									<Tooltip
+										label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
+										placement="right-start"
+									>
+										<InfoOutlineIcon ml={2} color={tooltipIconColor} />
+									</Tooltip>
+								</Heading>
+								<Box>
+									<Button
+										size="sm"
+										variant="ghost"
+										colorScheme="gray"
+										fontWeight="400"
+										mr={2}
+										leftIcon={<SortIcon />}
+										isDisabled
+									>
+										Sort
+									</Button>
+									<Button
+										size="sm"
+										variant="ghost"
+										colorScheme="gray"
+										fontWeight="400"
+										leftIcon={<FilterIcon />}
+										isDisabled
+									>
+										Filter
+									</Button>
+								</Box>
+							</Flex>
+							<Stack spacing={4}>
+								<Accordion defaultIndex={[0]} allowMultiple>
+									{sortedTestOutcomes.map((outcome, index) => {
+										const testCase = outcome?.userStory;
+										const status = outcome?.status;
 
-									const outcomeCommands: SeleniumCommand[] = JSON.parse(
-										testCase?.recording?.seleniumScriptJson
-									)?.groups?.groupItems[0]?.commands?.items;
+										const outcomeCommands: SeleniumCommand[] = JSON.parse(
+											testCase?.recording?.seleniumScriptJson
+										)?.groups?.groupItems[0]?.commands?.items;
 
-									const outcomeDetails = commandsToSteps(outcomeCommands)[
-										outcome?.errorDetails?.stepIndex
-									];
+										const outcomeDetails = commandsToSteps(outcomeCommands)[
+											outcome?.errorDetails?.stepIndex
+										];
 
-									const outcomeError = (
-										outcomeCommand: string,
-										outcomeTag?: string
-									) => {
-										let errorMessage;
-										if (outcomeCommand == 'open') {
-											errorMessage = `The page your test trys to open, doesn't exist.`;
-										} else if (outcomeCommand == 'setViewportSize') {
-											errorMessage = `This test case has an unsupported screen size.`;
-										} else {
-											errorMessage = `${outcomeTag} doesn't exist. Did your app's structure change since this test case was created?`;
+										const outcomeError = (
+											outcomeCommand: string,
+											outcomeTag?: string
+										) => {
+											let errorMessage;
+											if (outcomeCommand == 'open') {
+												errorMessage = `The page your test trys to open, doesn't exist.`;
+											} else if (outcomeCommand == 'setViewportSize') {
+												errorMessage = `This test case has an unsupported screen size.`;
+											} else {
+												errorMessage = `${outcomeTag} doesn't exist. Did your app's structure change since this test case was created?`;
+											}
+											return errorMessage;
+										};
+
+										const isFailing = status === 'failing';
+										const icon =
+											status === 'passing' ? (
+												<CheckmarkIcon
+													w={3}
+													h={3}
+													color="green.500"
+													aria-label="Passing"
+												/>
+											) : status === 'failing' ? (
+												<XmarkIcon
+													w={3}
+													h={3}
+													color="red.500"
+													title="Failing"
+												/>
+											) : status === 'did not run' ? (
+												<MinusIcon
+													w={3}
+													h={3}
+													color="gray.500"
+													title="Didn't run"
+												/>
+											) : status === 'queued' || 'in progress' ? (
+												<CircleArrowsIcon
+													w={3}
+													h={3}
+													color="amber.500"
+													title="Queued / In progress"
+												/>
+											) : null;
+
+										const cardOverrideProps: { bg?: string; py?: number } = {};
+										if (!isFailing) {
+											cardOverrideProps.bg = 'transparent';
+											cardOverrideProps.py = 2;
 										}
-										return errorMessage;
-									};
+										const accordionItemBackground = useColorModeValue(
+											'white',
+											'gray.900'
+										);
+										const iconColor = useColorModeValue('gray.300', 'gray.600');
 
-									const isFailing = status === 'failing';
-									const icon =
-										status === 'passing' ? (
-											<CheckmarkIcon
-												w={3}
-												h={3}
-												color="green.500"
-												aria-label="Passing"
-											/>
-										) : status === 'failing' ? (
-											<XmarkIcon w={3} h={3} color="red.500" title="Failing" />
-										) : status === 'did not run' ? (
-											<MinusIcon
-												w={3}
-												h={3}
-												color="gray.500"
-												title="Didn't run"
-											/>
-										) : status === 'queued' || 'in progress' ? (
-											<CircleArrowsIcon
-												w={3}
-												h={3}
-												color="amber.500"
-												title="Queued / In progress"
-											/>
-										) : null;
-
-									const cardOverrideProps: { bg?: string; py?: number } = {};
-									if (!isFailing) {
-										cardOverrideProps.bg = 'transparent';
-										cardOverrideProps.py = 2;
-									}
-									const accordionItemBackground = useColorModeValue(
-										'white',
-										'gray.900'
-									);
-									const iconColor = useColorModeValue('gray.300', 'gray.600');
-
-									return (
-										<>
-											<AccordionItem
-												key={outcome?.id}
-												mb={4}
-												border="none"
-												borderRadius="lg"
-												isDisabled={!isFailing}
-												bg={accordionItemBackground}
-												{...cardOverrideProps}
-											>
-												<AccordionButton
-													_hover={{
-														backgroundColor: 'none',
-													}}
-													_focus={{
-														outline: 'none',
-													}}
-													display="flex"
-													align="center"
-													justify="space-between"
+										return (
+											<>
+												<AccordionItem
+													key={outcome?.id}
+													mb={4}
+													border="none"
 													borderRadius="lg"
-													p={4}
-													justifyContent="space-between"
+													isDisabled={!isFailing}
+													bg={accordionItemBackground}
+													{...cardOverrideProps}
 												>
-													<Flex align="center">
-														<Tooltip
-															label={status}
-															placement="bottom-start"
-															textTransform="capitalize"
-														>
-															{icon}
-														</Tooltip>
-														<Link
-															href={`/${slugifiedProjectName}/user-stories/${testCase.id}`}
-															passHref
-														>
-															<ChakraLink fontSize="15px" ml={4}>
-																{testCase?.title}
-															</ChakraLink>
-														</Link>
-														{isFailing && (
-															<Code
-																display="flex"
-																alignItems="center"
-																maxW="fit-content"
-																fontSize="md"
-																ml={4}
-																mr={2}
+													<AccordionButton
+														_hover={{
+															backgroundColor: 'none',
+														}}
+														_focus={{
+															outline: 'none',
+														}}
+														display="flex"
+														align="center"
+														justify="space-between"
+														borderRadius="lg"
+														p={4}
+														justifyContent="space-between"
+													>
+														<Flex align="center">
+															<Tooltip
+																label={status}
+																placement="bottom-start"
 																textTransform="capitalize"
-																lineHeight="normal"
-																borderRadius="md"
-																fontWeight="700"
-																px={2}
-																py={1}
-																colorScheme="gray"
 															>
-																{testCase?.created[0] === 'user' ? (
-																	<VideoIcon mr={3} />
-																) : testCase?.created[0] === 'manual' ? (
-																	<CrosshairIcon mr={3} />
-																) : null}
-																{testCase?.created}
-															</Code>
-														)}
-
-														{isFailing && testCase?.isAuthenticated ? (
-															<Tooltip
-																label="Requires authentication"
-																placement="right"
-															>
-																<Badge
-																	colorScheme="amber"
-																	fontWeight="700"
-																	fontSize="md"
-																	borderRadius="md"
-																	p={2}
-																>
-																	<ShieldIcon />
-																</Badge>
+																{icon}
 															</Tooltip>
-														) : null}
-														{isFailing &&
-														project?.configuration?.logInFlow?.id ===
-															testCase?.id ? (
-															<Tooltip
-																label="This is the path your users take to sign in."
-																placement="right"
+															<Link
+																href={`/${slugifiedProjectName}/user-stories/${testCase.id}`}
+																passHref
 															>
-																<Badge
-																	colorScheme="amber"
-																	fontWeight="700"
+																<ChakraLink fontSize="15px" ml={4}>
+																	{testCase?.title}
+																</ChakraLink>
+															</Link>
+															{isFailing && (
+																<Code
+																	display="flex"
+																	alignItems="center"
+																	maxW="fit-content"
 																	fontSize="md"
+																	ml={4}
+																	mr={2}
+																	textTransform="capitalize"
+																	lineHeight="normal"
 																	borderRadius="md"
-																	p={2}
+																	fontWeight="700"
+																	px={2}
+																	py={1}
+																	colorScheme="gray"
 																>
-																	<KeyIcon />
-																</Badge>
-															</Tooltip>
-														) : null}
-													</Flex>
-													<AccordionIcon color={iconColor} />
-												</AccordionButton>
-
-												<AccordionPanel py={4}>
-													{isFailing && (
-														<>
-															{outcome?.video && (
-																<VideoPlayer
-																	src={outcome?.video.downloadUrl}
-																	onStart={() =>
-																		mixpanel.track(
-																			'Test outcome video play started'
-																		)
-																	}
-																	onEnded={() =>
-																		mixpanel.track(
-																			'Test outcome video play finished'
-																		)
-																	}
-																/>
+																	{testCase?.created[0] === 'user' ? (
+																		<VideoIcon mr={3} />
+																	) : testCase?.created[0] === 'manual' ? (
+																		<CrosshairIcon mr={3} />
+																	) : null}
+																	{testCase?.created}
+																</Code>
 															)}
-															<Flex mt={4}>
-																<Flex
-																	justify="center"
-																	align="center"
-																	borderRadius="full"
-																	h={6}
-																	w={6}
-																	border="1px solid"
-																	borderColor="gray.500"
-																	fontWeight="500"
-																	fontSize="sm"
-																	mr={4}
+
+															{isFailing && testCase?.isAuthenticated ? (
+																<Tooltip
+																	label="Requires authentication"
+																	placement="right"
 																>
-																	{outcome?.errorDetails?.stepIndex + 1}
+																	<Badge
+																		colorScheme="amber"
+																		fontWeight="700"
+																		fontSize="md"
+																		borderRadius="md"
+																		p={2}
+																	>
+																		<ShieldIcon />
+																	</Badge>
+																</Tooltip>
+															) : null}
+															{isFailing &&
+															project?.configuration?.logInFlow?.id ===
+																testCase?.id ? (
+																<Tooltip
+																	label="This is the path your users take to sign in."
+																	placement="right"
+																>
+																	<Badge
+																		colorScheme="amber"
+																		fontWeight="700"
+																		fontSize="md"
+																		borderRadius="md"
+																		p={2}
+																	>
+																		<KeyIcon />
+																	</Badge>
+																</Tooltip>
+															) : null}
+														</Flex>
+														<AccordionIcon color={iconColor} />
+													</AccordionButton>
+
+													<AccordionPanel py={4}>
+														{isFailing && (
+															<>
+																{outcome?.video && (
+																	<VideoPlayer
+																		src={outcome?.video.downloadUrl}
+																		onStart={() =>
+																			mixpanel.track(
+																				'Test outcome video play started'
+																			)
+																		}
+																		onEnded={() =>
+																			mixpanel.track(
+																				'Test outcome video play finished'
+																			)
+																		}
+																	/>
+																)}
+																<Flex mt={4}>
+																	<Flex
+																		justify="center"
+																		align="center"
+																		borderRadius="full"
+																		h={6}
+																		w={6}
+																		border="1px solid"
+																		borderColor="gray.500"
+																		fontWeight="500"
+																		fontSize="sm"
+																		mr={4}
+																	>
+																		{outcome?.errorDetails?.stepIndex + 1}
+																	</Flex>
+																	<Box w="full">
+																		<Text>{outcomeDetails?.text}</Text>
+																		<Alert status="error" p={3} mt={3} flex="1">
+																			<AlertIcon />
+																			<AlertDescription>
+																				{outcomeError(
+																					outcomeDetails?.command,
+																					outcomeDetails?.tagName
+																				)}
+																			</AlertDescription>
+																		</Alert>
+																	</Box>
 																</Flex>
-																<Box w="full">
-																	<Text>{outcomeDetails?.text}</Text>
-																	<Alert status="error" p={3} mt={3} flex="1">
-																		<AlertIcon />
-																		<AlertDescription>
-																			{outcomeError(
-																				outcomeDetails?.command,
-																				outcomeDetails?.tagName
-																			)}
-																		</AlertDescription>
-																	</Alert>
-																</Box>
-															</Flex>
-														</>
-													)}
-												</AccordionPanel>
-											</AccordionItem>
-										</>
-									);
-								})}
-							</Accordion>
+															</>
+														)}
+													</AccordionPanel>
+												</AccordionItem>
+											</>
+										);
+									})}
+								</Accordion>
+							</Stack>
 						</Stack>
-					</Stack>
-					<GridCard title="Technical information">
-						<Stack spacing={5}>
-							<Box>
-								<Heading
-									as="h3"
-									fontSize="15px"
-									fontWeight="600"
-									lineHeight="short"
-								>
-									Test length
-								</Heading>
-								<Text fontSize="15px">
-									{testRun?.testLength.substring(3, 5) +
-										` mins, ` +
-										testRun?.testLength.substring(6, 8) +
-										` sec ` || '-'}
-								</Text>
-							</Box>
-							<Box>
-								<Heading
-									as="h3"
-									fontSize="15px"
-									fontWeight="600"
-									lineHeight="short"
-								>
-									Web browser
-								</Heading>
-								<Text fontSize="15px">Chromium 86.0.4240.0</Text>
-							</Box>
-							<Box>
-								<Heading
-									as="h3"
-									fontSize="15px"
-									fontWeight="600"
-									lineHeight="short"
-								>
-									Operating system
-								</Heading>
-								<Text fontSize="15px">AWS Linux 2018.03</Text>
-							</Box>
-							<Box>
-								<Heading
-									as="h3"
-									fontSize="15px"
-									fontWeight="600"
-									lineHeight="short"
-								>
-									Language
-								</Heading>
-								<Text fontSize="15px">English</Text>
-							</Box>
-						</Stack>
-					</GridCard>
-				</Flex>
-			</Box>
-		</Stack>
+						<GridCard title="Technical information">
+							<Stack spacing={5}>
+								<Box>
+									<Heading
+										as="h3"
+										fontSize="15px"
+										fontWeight="600"
+										lineHeight="short"
+									>
+										Test length
+									</Heading>
+									<Text fontSize="15px">
+										{testRun?.testLength.substring(3, 5) +
+											` mins, ` +
+											testRun?.testLength.substring(6, 8) +
+											` sec ` || '-'}
+									</Text>
+								</Box>
+								<Box>
+									<Heading
+										as="h3"
+										fontSize="15px"
+										fontWeight="600"
+										lineHeight="short"
+									>
+										Web browser
+									</Heading>
+									<Text fontSize="15px">Chromium 86.0.4240.0</Text>
+								</Box>
+								<Box>
+									<Heading
+										as="h3"
+										fontSize="15px"
+										fontWeight="600"
+										lineHeight="short"
+									>
+										Operating system
+									</Heading>
+									<Text fontSize="15px">AWS Linux 2018.03</Text>
+								</Box>
+								<Box>
+									<Heading
+										as="h3"
+										fontSize="15px"
+										fontWeight="600"
+										lineHeight="short"
+									>
+										Language
+									</Heading>
+									<Text fontSize="15px">English</Text>
+								</Box>
+							</Stack>
+						</GridCard>
+					</Flex>
+				</Box>
+			</Stack>
+		</ValidatedBillingPlan>
 	);
 };
 

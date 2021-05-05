@@ -40,16 +40,7 @@ function SegmentedControlTab({
 			role="button"
 			onClick={!disabled ? onSelect : undefined}
 		>
-			<Box
-				px={2}
-				py={3}
-				textAlign="center"
-				color={
-					selected
-						? selectedColor
-						: color
-				}
-			>
+			<Box p={3} textAlign="center" color={selected ? selectedColor : color}>
 				{children}
 			</Box>
 		</Flex>

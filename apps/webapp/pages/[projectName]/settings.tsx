@@ -46,6 +46,7 @@ import {
 	startRecording,
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
+import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
 
 type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>;
 const SectionGridCard = (props: SectionGridCardProps) => {
@@ -544,6 +545,13 @@ const Settings = () => {
 						</Flex>
 					))}
 				</SectionGridCard>
+				<GridCard
+					anchor
+					title="Plan and Billing"
+					subtitle="Information about the plan you're on and Billing powered by Stripe."
+				>
+					<PlanAndBillingCard />
+				</GridCard>
 			</Stack>
 		</Box>
 	);

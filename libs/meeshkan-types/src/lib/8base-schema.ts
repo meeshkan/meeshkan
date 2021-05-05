@@ -77,6 +77,7 @@ export type Activity_ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project update input from activity */
@@ -94,6 +95,7 @@ export type Activity_ProjectUpdateInput = {
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** Activity create input */
@@ -1232,6 +1234,7 @@ export type Avatar_ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project update input from avatar */
@@ -1825,6 +1828,7 @@ export type Configuration_ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project update input from configuration */
@@ -1842,6 +1846,7 @@ export type Configuration_ProjectUpdateInput = {
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** UserStory create input from configuration */
@@ -3735,6 +3740,19 @@ export type FileUploadInfoResponse = {
 	path: Scalars['String'];
 };
 
+export type FloatPredicate = {
+	equals?: Maybe<Scalars['Float']>;
+	not_equals?: Maybe<Scalars['Float']>;
+	in?: Maybe<Array<Scalars['Float']>>;
+	not_in?: Maybe<Array<Scalars['Float']>>;
+	lt?: Maybe<Scalars['Float']>;
+	lte?: Maybe<Scalars['Float']>;
+	gt?: Maybe<Scalars['Float']>;
+	gte?: Maybe<Scalars['Float']>;
+	is_empty?: Maybe<Scalars['Boolean']>;
+	is_not_empty?: Maybe<Scalars['Boolean']>;
+};
+
 export type FloatPredicateHaving = {
 	equals?: Maybe<Scalars['Float']>;
 	not_equals?: Maybe<Scalars['Float']>;
@@ -3997,6 +4015,7 @@ export type GroupByResponse = {
 	SeleniumSelectorGroup: SeleniumSelectorListResponse;
 	SeleniumGroupGroup: SeleniumGroupListResponse;
 	ErrorGroup: ErrorListResponse;
+	MetricGroup: MetricListResponse;
 };
 
 export type GroupByResponseUserGroupArgs = {
@@ -4395,6 +4414,18 @@ export type GroupByResponseErrorGroupArgs = {
 	groupBy?: Maybe<ErrorGroupBy>;
 };
 
+export type GroupByResponseMetricGroupArgs = {
+	filter?: Maybe<MetricFilter>;
+	orderBy?: Maybe<Array<Maybe<MetricOrderBy>>>;
+	sort?: Maybe<Array<MetricSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<MetricGroupBy>;
+};
+
 export type GroupBySort = {
 	alias: Scalars['String'];
 	direction: SortOrder;
@@ -4574,6 +4605,7 @@ export type Integration_ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project update input from integration */
@@ -4591,6 +4623,7 @@ export type Integration_ProjectUpdateInput = {
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** Integration relation input */
@@ -5209,12 +5242,368 @@ export type Members_ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project update input from members */
 export type Members_ProjectUpdateInput = {
 	filter?: Maybe<ProjectKeyFilter>;
 	data: ProjectUpdateInput;
+};
+
+/** This is an internal table calculating performance metrics of user story generation algos. */
+export type Metric = {
+	__typename?: 'Metric';
+	id?: Maybe<Scalars['ID']>;
+	createdAt?: Maybe<Scalars['DateTime']>;
+	updatedAt?: Maybe<Scalars['DateTime']>;
+	deletedAt?: Maybe<Scalars['Int']>;
+	createdBy?: Maybe<User>;
+	/** The average number of steps in a user story. */
+	storyLengthMean?: Maybe<Scalars['Float']>;
+	/**
+	 * The middle count of steps in a user story. There is equal probability that a
+	 * user story will have less steps and more steps.
+	 */
+	storyLengthMedian?: Maybe<Scalars['Float']>;
+	/** The minimum number of steps created for a user story. */
+	storyLengthMin?: Maybe<Scalars['Int']>;
+	/** The maximum number of steps created for a user story. */
+	storyLengthMax?: Maybe<Scalars['Int']>;
+	/** The number of flows that created new user stories. */
+	createdFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that were updating existing user stories. */
+	updatedFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that didn't get created or assigned to a user story. */
+	ignoredFlows?: Maybe<Scalars['Int']>;
+	project?: Maybe<Project>;
+	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
+	calculatedFor?: Maybe<Scalars['Date']>;
+	_description?: Maybe<Scalars['String']>;
+};
+
+export type Metric_PermissionFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	storyLengthMean?: Maybe<FloatPredicate>;
+	storyLengthMedian?: Maybe<FloatPredicate>;
+	storyLengthMin?: Maybe<IntPredicate>;
+	storyLengthMax?: Maybe<IntPredicate>;
+	createdFlows?: Maybe<IntPredicate>;
+	updatedFlows?: Maybe<IntPredicate>;
+	ignoredFlows?: Maybe<IntPredicate>;
+	calculatedFor?: Maybe<DatePredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<User_PermissionFilter>;
+	project?: Maybe<Project_PermissionFilter>;
+	AND?: Maybe<Array<Metric_PermissionFilter>>;
+	OR?: Maybe<Array<Metric_PermissionFilter>>;
+};
+
+export type Metric_PermissionRelationFilter = {
+	some?: Maybe<Metric_PermissionFilter>;
+	every?: Maybe<Metric_PermissionFilter>;
+	none?: Maybe<Metric_PermissionFilter>;
+};
+
+/** Metrics create input */
+export type MetricCreateInput = {
+	/** The average number of steps in a user story. */
+	storyLengthMean?: Maybe<Scalars['Float']>;
+	/**
+	 * The middle count of steps in a user story. There is equal probability that a
+	 * user story will have less steps and more steps.
+	 */
+	storyLengthMedian?: Maybe<Scalars['Float']>;
+	/** The minimum number of steps created for a user story. */
+	storyLengthMin?: Maybe<Scalars['Int']>;
+	/** The maximum number of steps created for a user story. */
+	storyLengthMax?: Maybe<Scalars['Int']>;
+	/** The number of flows that created new user stories. */
+	createdFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that were updating existing user stories. */
+	updatedFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that didn't get created or assigned to a user story. */
+	ignoredFlows?: Maybe<Scalars['Int']>;
+	project?: Maybe<MetricsProjectRelationInput>;
+	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
+	calculatedFor?: Maybe<Scalars['Date']>;
+};
+
+/** Metrics create many input */
+export type MetricCreateManyInput = {
+	/** The average number of steps in a user story. */
+	storyLengthMean?: Maybe<Scalars['Float']>;
+	/**
+	 * The middle count of steps in a user story. There is equal probability that a
+	 * user story will have less steps and more steps.
+	 */
+	storyLengthMedian?: Maybe<Scalars['Float']>;
+	/** The minimum number of steps created for a user story. */
+	storyLengthMin?: Maybe<Scalars['Int']>;
+	/** The maximum number of steps created for a user story. */
+	storyLengthMax?: Maybe<Scalars['Int']>;
+	/** The number of flows that created new user stories. */
+	createdFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that were updating existing user stories. */
+	updatedFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that didn't get created or assigned to a user story. */
+	ignoredFlows?: Maybe<Scalars['Int']>;
+	project: MetricsProjectManyRelationInput;
+	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
+	calculatedFor?: Maybe<Scalars['Date']>;
+};
+
+/** Metrics delete input */
+export type MetricDeleteInput = {
+	id?: Maybe<Scalars['ID']>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+/** MetricFieldsPermissions create input */
+export type MetricFieldsPermissions = {
+	createdAt?: Maybe<Scalars['Boolean']>;
+	updatedAt?: Maybe<Scalars['Boolean']>;
+	storyLengthMean?: Maybe<Scalars['Boolean']>;
+	storyLengthMedian?: Maybe<Scalars['Boolean']>;
+	storyLengthMin?: Maybe<Scalars['Boolean']>;
+	storyLengthMax?: Maybe<Scalars['Boolean']>;
+	createdFlows?: Maybe<Scalars['Boolean']>;
+	updatedFlows?: Maybe<Scalars['Boolean']>;
+	ignoredFlows?: Maybe<Scalars['Boolean']>;
+	calculatedFor?: Maybe<Scalars['Boolean']>;
+};
+
+export type MetricFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	storyLengthMean?: Maybe<FloatPredicate>;
+	storyLengthMedian?: Maybe<FloatPredicate>;
+	storyLengthMin?: Maybe<IntPredicate>;
+	storyLengthMax?: Maybe<IntPredicate>;
+	createdFlows?: Maybe<IntPredicate>;
+	updatedFlows?: Maybe<IntPredicate>;
+	ignoredFlows?: Maybe<IntPredicate>;
+	calculatedFor?: Maybe<DatePredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<UserFilter>;
+	project?: Maybe<ProjectFilter>;
+	AND?: Maybe<Array<MetricFilter>>;
+	OR?: Maybe<Array<MetricFilter>>;
+};
+
+export type MetricGroupBy = {
+	query: MetricGroupByQuery;
+	sort?: Maybe<Array<GroupBySort>>;
+	having?: Maybe<Having>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	skip?: Maybe<Scalars['Int']>;
+};
+
+export type MetricGroupByQuery = {
+	id?: Maybe<Array<GroupByField>>;
+	createdAt?: Maybe<Array<GroupByField>>;
+	updatedAt?: Maybe<Array<GroupByField>>;
+	storyLengthMean?: Maybe<Array<GroupByField>>;
+	storyLengthMedian?: Maybe<Array<GroupByField>>;
+	storyLengthMin?: Maybe<Array<GroupByField>>;
+	storyLengthMax?: Maybe<Array<GroupByField>>;
+	createdFlows?: Maybe<Array<GroupByField>>;
+	updatedFlows?: Maybe<Array<GroupByField>>;
+	ignoredFlows?: Maybe<Array<GroupByField>>;
+	calculatedFor?: Maybe<Array<GroupByField>>;
+	createdBy?: Maybe<UserGroupByQuery>;
+	project?: Maybe<ProjectGroupByQuery>;
+	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
+};
+
+export type MetricKeyFilter = {
+	id?: Maybe<Scalars['ID']>;
+};
+
+/** MetricListResponse output */
+export type MetricListResponse = {
+	__typename?: 'MetricListResponse';
+	/** List items */
+	items: Array<Metric>;
+	/** List items count */
+	count: Scalars['Int'];
+	/** Aggregated items */
+	groups: Array<GroupByResponse>;
+};
+
+/** MetricManyResponse output */
+export type MetricManyResponse = {
+	__typename?: 'MetricManyResponse';
+	/** List items */
+	items: Array<Metric>;
+	/** List items count */
+	count: Scalars['Int'];
+};
+
+/** No longer supported. Use `sort` instead. */
+export enum MetricOrderBy {
+	IdAsc = 'id_ASC',
+	IdDesc = 'id_DESC',
+	CreatedAtAsc = 'createdAt_ASC',
+	CreatedAtDesc = 'createdAt_DESC',
+	UpdatedAtAsc = 'updatedAt_ASC',
+	UpdatedAtDesc = 'updatedAt_DESC',
+	DeletedAtAsc = 'deletedAt_ASC',
+	DeletedAtDesc = 'deletedAt_DESC',
+	StoryLengthMeanAsc = 'storyLengthMean_ASC',
+	StoryLengthMeanDesc = 'storyLengthMean_DESC',
+	StoryLengthMedianAsc = 'storyLengthMedian_ASC',
+	StoryLengthMedianDesc = 'storyLengthMedian_DESC',
+	StoryLengthMinAsc = 'storyLengthMin_ASC',
+	StoryLengthMinDesc = 'storyLengthMin_DESC',
+	StoryLengthMaxAsc = 'storyLengthMax_ASC',
+	StoryLengthMaxDesc = 'storyLengthMax_DESC',
+	CreatedFlowsAsc = 'createdFlows_ASC',
+	CreatedFlowsDesc = 'createdFlows_DESC',
+	UpdatedFlowsAsc = 'updatedFlows_ASC',
+	UpdatedFlowsDesc = 'updatedFlows_DESC',
+	IgnoredFlowsAsc = 'ignoredFlows_ASC',
+	IgnoredFlowsDesc = 'ignoredFlows_DESC',
+	CalculatedForAsc = 'calculatedFor_ASC',
+	CalculatedForDesc = 'calculatedFor_DESC',
+}
+
+/** Metrics subscription payload */
+export type MetricPayload = {
+	__typename?: 'MetricPayload';
+	mutation: MutationType;
+	node?: Maybe<Metric>;
+	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
+	previousValues?: Maybe<Metric>;
+};
+
+export type MetricRelationFilter = {
+	some?: Maybe<MetricFilter>;
+	every?: Maybe<MetricFilter>;
+	none?: Maybe<MetricFilter>;
+};
+
+/** Project create input from metrics */
+export type Metrics_ProjectCreateInput = {
+	/**
+	 * The name for a product being tested on Meeshkan. We suggest this corresponds
+	 * with the repository name especially if you'll have many.
+	 */
+	name?: Maybe<Scalars['String']>;
+	avatar?: Maybe<ProjectAvatarRelationInput>;
+	release?: Maybe<ProjectReleaseRelationInput>;
+	configuration?: Maybe<ProjectConfigurationRelationInput>;
+	integration?: Maybe<ProjectIntegrationRelationInput>;
+	activity?: Maybe<ProjectActivityRelationInput>;
+	members?: Maybe<ProjectMembersRelationInput>;
+	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
+};
+
+/** Project update input from metrics */
+export type Metrics_ProjectUpdateInput = {
+	/**
+	 * The name for a product being tested on Meeshkan. We suggest this corresponds
+	 * with the repository name especially if you'll have many.
+	 */
+	name?: Maybe<Scalars['String']>;
+	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
+	release?: Maybe<ProjectReleaseUpdateRelationInput>;
+	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
+	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
+	activity?: Maybe<ProjectActivityUpdateRelationInput>;
+	members?: Maybe<ProjectMembersUpdateRelationInput>;
+	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
+};
+
+export type MetricSort = {
+	id?: Maybe<SortOrder>;
+	createdAt?: Maybe<SortOrder>;
+	updatedAt?: Maybe<SortOrder>;
+	deletedAt?: Maybe<SortOrder>;
+	storyLengthMean?: Maybe<SortOrder>;
+	storyLengthMedian?: Maybe<SortOrder>;
+	storyLengthMin?: Maybe<SortOrder>;
+	storyLengthMax?: Maybe<SortOrder>;
+	createdFlows?: Maybe<SortOrder>;
+	updatedFlows?: Maybe<SortOrder>;
+	ignoredFlows?: Maybe<SortOrder>;
+	calculatedFor?: Maybe<SortOrder>;
+	createdBy?: Maybe<UserSort>;
+	project?: Maybe<ProjectSort>;
+};
+
+/** Metrics relation input */
+export type MetricsProjectManyRelationInput = {
+	connect?: Maybe<ProjectKeyFilter>;
+};
+
+/** Metrics relation input */
+export type MetricsProjectRelationInput = {
+	connect?: Maybe<ProjectKeyFilter>;
+	create?: Maybe<Metrics_ProjectCreateInput>;
+};
+
+/** Metrics relation input */
+export type MetricsProjectUpdateRelationInput = {
+	connect?: Maybe<ProjectKeyFilter>;
+	disconnect?: Maybe<ProjectKeyFilter>;
+	reconnect?: Maybe<ProjectKeyFilter>;
+	create?: Maybe<Metrics_ProjectCreateInput>;
+	update?: Maybe<Metrics_ProjectUpdateInput>;
+};
+
+/** Metrics subscription filter */
+export type MetricSubscriptionFilter = {
+	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
+	node?: Maybe<MetricFilter>;
+	updatedFields?: Maybe<UpdatedFieldsFilter>;
+};
+
+/** Metrics update input */
+export type MetricUpdateByFilterInput = {
+	storyLengthMean?: Maybe<Array<Maybe<UpdateByFilterFloatInput>>>;
+	storyLengthMedian?: Maybe<Array<Maybe<UpdateByFilterFloatInput>>>;
+	storyLengthMin?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	storyLengthMax?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	createdFlows?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	updatedFlows?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	ignoredFlows?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	calculatedFor?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
+};
+
+/** Metrics update input */
+export type MetricUpdateInput = {
+	id?: Maybe<Scalars['ID']>;
+	/** The average number of steps in a user story. */
+	storyLengthMean?: Maybe<Scalars['Float']>;
+	/**
+	 * The middle count of steps in a user story. There is equal probability that a
+	 * user story will have less steps and more steps.
+	 */
+	storyLengthMedian?: Maybe<Scalars['Float']>;
+	/** The minimum number of steps created for a user story. */
+	storyLengthMin?: Maybe<Scalars['Int']>;
+	/** The maximum number of steps created for a user story. */
+	storyLengthMax?: Maybe<Scalars['Int']>;
+	/** The number of flows that created new user stories. */
+	createdFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that were updating existing user stories. */
+	updatedFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that didn't get created or assigned to a user story. */
+	ignoredFlows?: Maybe<Scalars['Int']>;
+	project?: Maybe<MetricsProjectUpdateRelationInput>;
+	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
+	calculatedFor?: Maybe<Scalars['Date']>;
 };
 
 /** MissingRelation */
@@ -5364,6 +5753,15 @@ export type Mutation = {
 	inviteMembers: Array<Maybe<TeamInvitation>>;
 	/** @deprecated No longer supported. Use `system.invoke` instead. */
 	invoke?: Maybe<InvokeFunctionResponse>;
+	metricCreate: Metric;
+	metricCreateMany: MetricManyResponse;
+	metricDelete?: Maybe<SuccessResponse>;
+	metricDeleteByFilter?: Maybe<SuccessResponse>;
+	metricDestroy?: Maybe<SuccessResponse>;
+	metricDestroyByFilter?: Maybe<SuccessResponse>;
+	metricRestore: Metric;
+	metricUpdate: Metric;
+	metricUpdateByFilter: MetricManyResponse;
 	/** @deprecated No longer supported. Use `system.prepareDeploy` instead. */
 	prepareDeploy: DeployDataResponse;
 	projectCreate: Project;
@@ -6190,6 +6588,51 @@ export type MutationInviteMembersArgs = {
 
 export type MutationInvokeArgs = {
 	data?: Maybe<InvokeData>;
+};
+
+export type MutationMetricCreateArgs = {
+	data: MetricCreateInput;
+};
+
+export type MutationMetricCreateManyArgs = {
+	data: Array<Maybe<MetricCreateManyInput>>;
+};
+
+export type MutationMetricDeleteArgs = {
+	data?: Maybe<MetricDeleteInput>;
+	filter?: Maybe<MetricKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMetricDeleteByFilterArgs = {
+	filter: MetricFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMetricDestroyArgs = {
+	filter?: Maybe<MetricKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMetricDestroyByFilterArgs = {
+	filter: MetricFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMetricRestoreArgs = {
+	id: Scalars['String'];
+};
+
+export type MutationMetricUpdateArgs = {
+	data: MetricUpdateInput;
+	filter?: Maybe<MetricKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+	destroyDetached?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMetricUpdateByFilterArgs = {
+	data: MetricUpdateByFilterInput;
+	filter?: Maybe<MetricFilter>;
 };
 
 export type MutationProjectCreateArgs = {
@@ -7492,6 +7935,7 @@ export type PermissionsData = {
 	SeleniumSelector?: Maybe<PermissionsDataSeleniumSelector>;
 	SeleniumGroup?: Maybe<PermissionsDataSeleniumGroup>;
 	Error?: Maybe<PermissionsDataError>;
+	Metrics?: Maybe<PermissionsDataMetrics>;
 };
 
 export type PermissionsDataActivity = {
@@ -7798,6 +8242,40 @@ export type PermissionsDataIntegrationUpdate = {
 	allow: Scalars['Boolean'];
 	filter?: Maybe<Integration_PermissionFilter>;
 	fields?: Maybe<IntegrationFieldsPermissions>;
+};
+
+export type PermissionsDataMetrics = {
+	create?: Maybe<PermissionsDataMetricsCreate>;
+	read?: Maybe<PermissionsDataMetricsRead>;
+	update?: Maybe<PermissionsDataMetricsUpdate>;
+	delete?: Maybe<PermissionsDataMetricsDelete>;
+	destroy?: Maybe<PermissionsDataMetricsDestroy>;
+};
+
+export type PermissionsDataMetricsCreate = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataMetricsDelete = {
+	allow: Scalars['Boolean'];
+	restore?: Maybe<Scalars['Boolean']>;
+	review?: Maybe<Scalars['Boolean']>;
+};
+
+export type PermissionsDataMetricsDestroy = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataMetricsRead = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<Metric_PermissionFilter>;
+	fields?: Maybe<MetricFieldsPermissions>;
+};
+
+export type PermissionsDataMetricsUpdate = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<Metric_PermissionFilter>;
+	fields?: Maybe<MetricFieldsPermissions>;
 };
 
 export type PermissionsDataProject = {
@@ -8515,6 +8993,7 @@ export type Project = {
 	members?: Maybe<UserListResponse>;
 	userStories?: Maybe<UserStoryListResponse>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<MetricListResponse>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -8568,6 +9047,19 @@ export type ProjectUserStoriesArgs = {
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
 	groupBy?: Maybe<UserStoryGroupBy>;
+};
+
+/** A project is the main entity of heirarchy in Meeshkan. It represents an application (such as Acme webapp or Acme iOs app). */
+export type ProjectMetricsArgs = {
+	filter?: Maybe<MetricFilter>;
+	orderBy?: Maybe<Array<Maybe<MetricOrderBy>>>;
+	sort?: Maybe<Array<MetricSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<MetricGroupBy>;
 };
 
 /** Activity create input from project */
@@ -8681,6 +9173,36 @@ export type Project_IntegrationUpdateInput = {
 	project?: Maybe<IntegrationProjectUpdateRelationInput>;
 };
 
+/** Metrics create input from project */
+export type Project_MetricCreateInput = {
+	/** The average number of steps in a user story. */
+	storyLengthMean?: Maybe<Scalars['Float']>;
+	/**
+	 * The middle count of steps in a user story. There is equal probability that a
+	 * user story will have less steps and more steps.
+	 */
+	storyLengthMedian?: Maybe<Scalars['Float']>;
+	/** The minimum number of steps created for a user story. */
+	storyLengthMin?: Maybe<Scalars['Int']>;
+	/** The maximum number of steps created for a user story. */
+	storyLengthMax?: Maybe<Scalars['Int']>;
+	/** The number of flows that created new user stories. */
+	createdFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that were updating existing user stories. */
+	updatedFlows?: Maybe<Scalars['Int']>;
+	/** The number of flows that didn't get created or assigned to a user story. */
+	ignoredFlows?: Maybe<Scalars['Int']>;
+	project?: Maybe<MetricsProjectRelationInput>;
+	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
+	calculatedFor?: Maybe<Scalars['Date']>;
+};
+
+/** Metrics update input from project */
+export type Project_MetricUpdateInput = {
+	filter?: Maybe<MetricKeyFilter>;
+	data: MetricUpdateInput;
+};
+
 export type Project_PermissionFilter = {
 	id?: Maybe<IdPredicate>;
 	createdAt?: Maybe<DateTimePredicate>;
@@ -8697,6 +9219,7 @@ export type Project_PermissionFilter = {
 	activity?: Maybe<Activity_PermissionRelationFilter>;
 	members?: Maybe<User_PermissionRelationFilter>;
 	userStories?: Maybe<UserStory_PermissionRelationFilter>;
+	metrics?: Maybe<Metric_PermissionRelationFilter>;
 	AND?: Maybe<Array<Project_PermissionFilter>>;
 	OR?: Maybe<Array<Project_PermissionFilter>>;
 };
@@ -8833,6 +9356,7 @@ export type ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project create many input */
@@ -8849,6 +9373,7 @@ export type ProjectCreateManyInput = {
 	members?: Maybe<ProjectMembersManyRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesManyRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsManyRelationInput>;
 };
 
 /** Project delete input */
@@ -8881,6 +9406,7 @@ export type ProjectFilter = {
 	activity?: Maybe<ActivityRelationFilter>;
 	members?: Maybe<UserRelationFilter>;
 	userStories?: Maybe<UserStoryRelationFilter>;
+	metrics?: Maybe<MetricRelationFilter>;
 	AND?: Maybe<Array<ProjectFilter>>;
 	OR?: Maybe<Array<ProjectFilter>>;
 };
@@ -8908,6 +9434,7 @@ export type ProjectGroupByQuery = {
 	activity?: Maybe<ActivityGroupByQuery>;
 	members?: Maybe<UserGroupByQuery>;
 	userStories?: Maybe<UserStoryGroupByQuery>;
+	metrics?: Maybe<MetricGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -9011,6 +9538,26 @@ export type ProjectMembersUpdateRelationInput = {
 	reconnect?: Maybe<Array<UserKeyFilter>>;
 	create?: Maybe<Array<Maybe<Projects_UserCreateInput>>>;
 	update?: Maybe<Array<Maybe<Projects_UserUpdateInput>>>;
+};
+
+/** Project relation input */
+export type ProjectMetricsManyRelationInput = {
+	connect?: Maybe<Array<MetricKeyFilter>>;
+};
+
+/** Project relation input */
+export type ProjectMetricsRelationInput = {
+	connect?: Maybe<Array<MetricKeyFilter>>;
+	create?: Maybe<Array<Maybe<Project_MetricCreateInput>>>;
+};
+
+/** Project relation input */
+export type ProjectMetricsUpdateRelationInput = {
+	connect?: Maybe<Array<MetricKeyFilter>>;
+	disconnect?: Maybe<Array<MetricKeyFilter>>;
+	reconnect?: Maybe<Array<MetricKeyFilter>>;
+	create?: Maybe<Array<Maybe<Project_MetricCreateInput>>>;
+	update?: Maybe<Array<Maybe<Project_MetricUpdateInput>>>;
 };
 
 /** No longer supported. Use `sort` instead. */
@@ -9127,6 +9674,7 @@ export type ProjectUpdateInput = {
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** Project relation input */
@@ -9200,6 +9748,8 @@ export type Query = {
 	integrationsList: IntegrationListResponse;
 	/** @deprecated No longer supported. Use `system.logsList` instead. */
 	logs?: Maybe<Array<Maybe<Scalars['String']>>>;
+	metric?: Maybe<Metric>;
+	metricsList: MetricListResponse;
 	project?: Maybe<Project>;
 	projectsList: ProjectListResponse;
 	recording?: Maybe<Recording>;
@@ -9519,6 +10069,24 @@ export type QueryLogsArgs = {
 	limit?: Maybe<Scalars['Int']>;
 	startTime?: Maybe<Scalars['DateTime']>;
 	endTime?: Maybe<Scalars['DateTime']>;
+};
+
+export type QueryMetricArgs = {
+	id?: Maybe<Scalars['ID']>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type QueryMetricsListArgs = {
+	filter?: Maybe<MetricFilter>;
+	orderBy?: Maybe<Array<Maybe<MetricOrderBy>>>;
+	sort?: Maybe<Array<MetricSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<MetricGroupBy>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
 export type QueryProjectArgs = {
@@ -10543,6 +11111,7 @@ export type Release_ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project update input from release */
@@ -10560,6 +11129,7 @@ export type Release_ProjectUpdateInput = {
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** TestRun create input from release */
@@ -14443,6 +15013,7 @@ export type Subscription = {
 	Files?: Maybe<FilePayload>;
 	Integration?: Maybe<IntegrationPayload>;
 	IntegrationDetails?: Maybe<IntegrationDetailPayload>;
+	Metrics?: Maybe<MetricPayload>;
 	Permissions?: Maybe<PermissionPayload>;
 	Project?: Maybe<ProjectPayload>;
 	Recording?: Maybe<RecordingPayload>;
@@ -14519,6 +15090,10 @@ export type SubscriptionIntegrationArgs = {
 
 export type SubscriptionIntegrationDetailsArgs = {
 	filter?: Maybe<IntegrationDetailSubscriptionFilter>;
+};
+
+export type SubscriptionMetricsArgs = {
+	filter?: Maybe<MetricSubscriptionFilter>;
 };
 
 export type SubscriptionPermissionsArgs = {
@@ -15602,6 +16177,7 @@ export type SystemQuery = {
 	tableField?: Maybe<SystemTableField>;
 	tablesList: SystemTableListResponse;
 	userBillingConfiguration: SystemUserBillingConfigurationResponse;
+	workspacesFrontendList?: Maybe<SystemWorkspaceListResponse>;
 	workspacesList?: Maybe<SystemWorkspaceListResponse>;
 };
 
@@ -15991,6 +16567,7 @@ export type SystemUserAccountInfo = {
 	__typename?: 'SystemUserAccountInfo';
 	email: Scalars['String'];
 	createdAt?: Maybe<Scalars['DateTime']>;
+	avatar?: Maybe<GraphQlFileItemResponse>;
 	firstName?: Maybe<Scalars['String']>;
 	lastName?: Maybe<Scalars['String']>;
 	timezone?: Maybe<Scalars['String']>;
@@ -15998,10 +16575,20 @@ export type SystemUserAccountInfo = {
 	permissions?: Maybe<Scalars['String']>;
 	role?: Maybe<Scalars['String']>;
 	isDeveloper?: Maybe<Scalars['Boolean']>;
+	aboutMe?: Maybe<Scalars['String']>;
+	country?: Maybe<Scalars['String']>;
+	city?: Maybe<Scalars['String']>;
+	state?: Maybe<Scalars['String']>;
+	website?: Maybe<Scalars['String']>;
+	zipCode?: Maybe<Scalars['String']>;
+	githubUsername?: Maybe<Scalars['String']>;
+	linkedInUsername?: Maybe<Scalars['String']>;
+	twitterUsername?: Maybe<Scalars['String']>;
+	addressLine1?: Maybe<Scalars['String']>;
+	addressLine2?: Maybe<Scalars['String']>;
 	type?: Maybe<SystemUserType>;
 	companyName?: Maybe<Scalars['String']>;
 	projectDescription?: Maybe<Scalars['String']>;
-	avatar?: Maybe<GraphQlFileItemResponse>;
 };
 
 export type SystemUserBillingConfigurationResponse = {
@@ -16053,12 +16640,14 @@ export type SystemWorkspaceCreateMutationInput = {
 	image?: Maybe<GraphQlCreateFileItemInput>;
 	billingPlanId?: Maybe<Scalars['ID']>;
 	organizationId?: Maybe<Scalars['ID']>;
+	kind?: Maybe<SystemWorkspaceKind>;
 };
 
 export type SystemWorkspaceCreateResponse = {
 	__typename?: 'SystemWorkspaceCreateResponse';
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
+	kind?: Maybe<Scalars['String']>;
 };
 
 /** WorkspaceDeleteMutationInput */
@@ -16066,11 +16655,43 @@ export type SystemWorkspaceDeleteMutationInput = {
 	id: Scalars['ID'];
 };
 
+export type SystemWorkspaceImage = {
+	__typename?: 'SystemWorkspaceImage';
+	id?: Maybe<Scalars['String']>;
+	downloadUrl?: Maybe<Scalars['String']>;
+};
+
+export type SystemWorkspaceItem = {
+	__typename?: 'SystemWorkspaceItem';
+	id: Scalars['ID'];
+	name: Scalars['String'];
+	isOwner: Scalars['Boolean'];
+	plan?: Maybe<SystemBillingCurrentPlanResponse>;
+	nextPlan?: Maybe<SystemBillingNextPlanResponse>;
+	lastAccess?: Maybe<Scalars['DateTime']>;
+	createdAt?: Maybe<Scalars['DateTime']>;
+	teamMemberCount?: Maybe<Scalars['Int']>;
+	region?: Maybe<Scalars['String']>;
+	owner?: Maybe<SystemUserAccountInfo>;
+	image?: Maybe<SystemWorkspaceImage>;
+	isCiCdEnabled?: Maybe<Scalars['Boolean']>;
+	apiHost?: Maybe<Scalars['String']>;
+	webSocket?: Maybe<Scalars['String']>;
+	organization?: Maybe<SystemOrganizationBaseItem>;
+	kind?: Maybe<Scalars['String']>;
+};
+
+/** Workspace Kind */
+export enum SystemWorkspaceKind {
+	Frontend = 'frontend',
+	General = 'general',
+}
+
 /** SystemWorkspaceListResponse output */
 export type SystemWorkspaceListResponse = {
 	__typename?: 'SystemWorkspaceListResponse';
 	/** List items */
-	items: Array<WorkspaceItem>;
+	items: Array<SystemWorkspaceItem>;
 	/** List items count */
 	count: Scalars['Int'];
 };
@@ -17751,6 +18372,18 @@ export type UpdateByFilterDateTimePartsInput = {
 	microseconds?: Maybe<Scalars['Int']>;
 };
 
+export type UpdateByFilterFloatInput = {
+	add?: Maybe<Scalars['Float']>;
+	sub?: Maybe<Scalars['Float']>;
+	mult?: Maybe<Scalars['Float']>;
+	div?: Maybe<Scalars['Float']>;
+	mod?: Maybe<Scalars['Float']>;
+	set?: Maybe<Scalars['Float']>;
+	pow?: Maybe<Scalars['Float']>;
+	sqrt?: Maybe<Scalars['Boolean']>;
+	prec?: Maybe<Scalars['Int']>;
+};
+
 export type UpdateByFilterIntInput = {
 	add?: Maybe<Scalars['Int']>;
 	sub?: Maybe<Scalars['Int']>;
@@ -18259,6 +18892,7 @@ export type UserStories_ProjectCreateInput = {
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
 /** Project update input from userStories */
@@ -18276,6 +18910,7 @@ export type UserStories_ProjectUpdateInput = {
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** User stories are the representation of what users do in a project's production environment. */
@@ -18934,12 +19569,14 @@ export type WorkspaceCreateMutationInput = {
 	image?: Maybe<GraphQlCreateFileItemInput>;
 	billingPlanId?: Maybe<Scalars['ID']>;
 	organizationId?: Maybe<Scalars['ID']>;
+	kind?: Maybe<WorkspaceKind>;
 };
 
 export type WorkspaceCreateResponse = {
 	__typename?: 'WorkspaceCreateResponse';
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
+	kind?: Maybe<Scalars['String']>;
 };
 
 /** WorkspaceDeleteMutationInput */
@@ -18975,8 +19612,16 @@ export type WorkspaceItem = {
 	image?: Maybe<WorkspaceImage>;
 	isCiCdEnabled?: Maybe<Scalars['Boolean']>;
 	apiHost?: Maybe<Scalars['String']>;
+	webSocket?: Maybe<Scalars['String']>;
 	organization?: Maybe<SystemOrganizationBaseItem>;
+	kind?: Maybe<Scalars['String']>;
 };
+
+/** Workspace Kind */
+export enum WorkspaceKind {
+	Frontend = 'frontend',
+	General = 'general',
+}
 
 /** WorkspaceListResponse output */
 export type WorkspaceListResponse = {

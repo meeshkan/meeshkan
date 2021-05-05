@@ -76,6 +76,11 @@ export const USER = gql`
 						logInFlow {
 							id
 						}
+						plan
+						stripeCustomerID
+						billingInterval
+						subscriptionStatus
+						subscriptionStartedDate
 						authenticationTokens {
 							items {
 								id

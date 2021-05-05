@@ -33,3 +33,10 @@ export interface IUser {
 	error?: string;
 	projects?: Array<Project>;
 }
+
+export type PlanType = {
+	name: string;
+	billingInterval: string;
+	subscriptionStartedDate: any;
+	subscriptionStatus: string;
+};
