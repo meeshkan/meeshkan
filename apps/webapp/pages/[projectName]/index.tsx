@@ -2,6 +2,7 @@ import { useValidateSelectedProject } from '../../hooks/use-validate-selected-pr
 import LoadingScreen from '../../components/organisms/loading-screen';
 import Grid from '../../components/organisms/grid';
 import Card from '../../components/atoms/card';
+import ValidatedBillingPlan from '../../components/molecules/validated-billing-plan';
 import NotFoundError from '../404';
 
 type ProjectProps = {
@@ -20,7 +21,9 @@ const Project = (props: ProjectProps) => {
 	}
 
 	return (
-		<Grid />
+		<ValidatedBillingPlan>
+			<Grid />
+		</ValidatedBillingPlan>
 	);
 };
 
