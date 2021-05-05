@@ -29,6 +29,7 @@ import {
 	Menu,
 	MenuItem,
 	MenuList,
+	Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
@@ -176,7 +177,7 @@ const Table = ({
 	}, [fetchData, pageIndex, pageSize, deleting]);
 
 	return (
-		<>
+		<Box display="block" maxWidth="100%" overflowX="scroll" overflowY="hidden">
 			<ChakraTable
 				{...getTableProps()}
 				variant="simple"
@@ -184,6 +185,8 @@ const Table = ({
 				borderTopRightRadius="lg"
 				borderBottomRadius="lg"
 				size="sm"
+				width="100%"
+				borderSpacing={0}
 			>
 				<Thead>
 					{headerGroups.map((headerGroup) => (
@@ -299,6 +302,7 @@ const Table = ({
 								{row.cells.map((cell) => {
 									return (
 										<Td
+											whiteSpace="nowrap"
 											onClick={() => {
 												router.push(
 													// @ts-expect-error
@@ -315,7 +319,8 @@ const Table = ({
 										</Td>
 									);
 								})}
-								<Td px={1} py={1} border={0}>
+
+								<Td px={1} py={1} border={0} whiteSpace="nowrap">
 									<Skeleton
 										isLoaded={!loading}
 										borderRadius="md"
@@ -519,7 +524,7 @@ const Table = ({
 					</ButtonGroup>
 				</Flex>
 			</Flex>
-		</>
+		</Box>
 	);
 };
 
