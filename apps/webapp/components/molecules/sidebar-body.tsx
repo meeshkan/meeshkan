@@ -6,7 +6,6 @@ import {
 	Stack,
 	Box,
 	Flex,
-	Spacer,
 	useColorModeValue,
 	Text,
 	Heading,
@@ -31,11 +30,13 @@ const SideBarBody = () => {
 	const hasProjects = projects.length > 0;
 	const projectName =
 		project?.name || (router.query.projectName as string) || '';
-	const slugifiedProjectName = useMemo(() => createSlug(
-		projectName || (projects?.length > 0 && projects[0].name) || ''
-	), [
-		projectName,
-	]);
+	const slugifiedProjectName = useMemo(
+		() =>
+			createSlug(
+				projectName || (projects?.length > 0 && projects[0].name) || ''
+			),
+		[projectName]
+	);
 
 	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
 	const testRunsHref = `/${slugifiedProjectName}/test-runs`;
@@ -149,7 +150,6 @@ const SideBarBody = () => {
 									Details
 								</NavButton>
 								<NavButton
-									disabled={true}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
 									isActive={

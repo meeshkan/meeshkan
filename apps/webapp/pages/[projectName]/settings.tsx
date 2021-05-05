@@ -46,17 +46,11 @@ import {
 	startRecording,
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
+import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
 
-type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>
+type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>;
 const SectionGridCard = (props: SectionGridCardProps) => {
-	return (
-		<GridCard
-			anchor
-			overflowY="visible"
-			maxH={null}
-			{...props}
-		/>
-	);
+	return <GridCard anchor overflowY="visible" maxH={null} {...props} />;
 };
 
 const Settings = () => {
@@ -73,7 +67,9 @@ const Settings = () => {
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
-	const [toggleTestRunnerIndex, setToggleTestRunnerIndex] = useState<0 | 1 | null>(null);
+	const [toggleTestRunnerIndex, setToggleTestRunnerIndex] = useState<
+		0 | 1 | null
+	>(null);
 	const [members, setMembers] = useState<Array<User>>(
 		project?.members?.items || []
 	);
@@ -89,7 +85,9 @@ const Settings = () => {
 		setProductUpdates(productNotifications);
 		setMembers(project?.members?.items);
 		setTokens(project?.configuration.authenticationTokens?.items);
-		setToggleTestRunnerIndex(project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null);
+		setToggleTestRunnerIndex(
+			project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null
+		);
 	}, [project, productNotifications]);
 
 	useEffect(() => {
@@ -104,11 +102,16 @@ const Settings = () => {
 				(currentProject) => currentProject.id === project.id
 			);
 
-			projects[selectedProjectIndex].configuration.activeTestRuns = res.projectUpdate.configuration.activeTestRuns;
+			projects[selectedProjectIndex].configuration.activeTestRuns =
+				res.projectUpdate.configuration.activeTestRuns;
 			await mutateUser({ ...user, projects });
 		};
 
-		if (!project || toggleTestRunnerIndex === null || !toggleTestRunnerIndex === project.configuration.activeTestRuns) {
+		if (
+			!project ||
+			toggleTestRunnerIndex === null ||
+			!toggleTestRunnerIndex === project.configuration.activeTestRuns
+		) {
 			return;
 		}
 
@@ -540,6 +543,13 @@ const Settings = () => {
 						</Flex>
 					))}
 				</SectionGridCard>
+				<GridCard
+					anchor
+					title="Plan and Billing"
+					subtitle="Information about the plan you're on and Billing powered by Stripe."
+				>
+					<PlanAndBillingCard />
+				</GridCard>
 			</Stack>
 		</Box>
 	);

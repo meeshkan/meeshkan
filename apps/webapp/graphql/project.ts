@@ -291,14 +291,8 @@ export const PROJECT_USER_STORIES = gql`
 export const TOGGLE_TEST_RUNS = gql`
 	mutation TOGGLE_TEST_RUNS($projectId: ID!, $toggle: Boolean!) {
 		projectUpdate(
-			filter: {
-				id: $projectId
-			}
-			data: {
-				configuration: {
-					update: { activeTestRuns: $toggle }
-				}
-			}
+			filter: { id: $projectId }
+			data: { configuration: { update: { activeTestRuns: $toggle } } }
 		) {
 			configuration {
 				activeTestRuns
@@ -351,6 +345,59 @@ export const REMOVE_AUTH_TOKEN = gql`
 			}
 		) {
 			id
+		}
+	}
+`;
+
+export const GET_STRIPE_ID = gql`
+	query GET_STRIPE_ID($projectID: ID!) {
+		project(id: $projectID) {
+			configuration {
+				stripeCustomerID
+			}
+		}
+	}
+`;
+
+export const UPDATE_PROJECT_WITH_ID = gql`
+	mutation UPDATE_PROJECT_WITH_ID($projectID: ID!, $stripeCustomerID: String!) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: {
+				configuration: { update: { stripeCustomerID: $stripeCustomerID } }
+			}
+		) {
+			configuration {
+				stripeCustomerID
+			}
+		}
+	}
+`;
+
+export const PLAN_UPDATE = gql`
+	mutation PLAN_UPDATE(
+		$projectID: ID!
+		$plan: String!
+		$billingInterval: String!
+		$subscriptionStatus: String!
+	) {
+		configurationUpdateByFilter(
+			filter: { project: { id: { equals: $projectID } } }
+			data: {
+				plan: { set: $plan }
+				billingInterval: { set: $billingInterval }
+				subscriptionStatus: { set: $subscriptionStatus }
+			}
+		) {
+			items {
+				plan
+				stripeCustomerID
+				billingInterval
+				subscriptionStatus
+				project {
+					name
+				}
+			}
 		}
 	}
 `;
