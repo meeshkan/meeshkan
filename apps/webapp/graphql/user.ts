@@ -75,6 +75,8 @@ export const USER = gql`
 						inviteLink
 						logInFlow {
 							id
+							createdAt
+							title
 						}
 						plan
 						stripeCustomerID

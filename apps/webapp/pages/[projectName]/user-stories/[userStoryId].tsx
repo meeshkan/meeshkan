@@ -26,7 +26,6 @@ import {
 	IconButton,
 	useClipboard,
 	Code,
-	ButtonGroup,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';

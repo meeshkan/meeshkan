@@ -17,8 +17,9 @@ import {
 	Checkbox,
 	Code,
 	Divider,
+	Tooltip,
 } from '@chakra-ui/react';
-import { RecordIcon, TrashIcon } from '@frontend/chakra-theme';
+import { KeyIcon, RecordIcon, TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -48,6 +49,8 @@ import {
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
 import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
+import Link from 'next/link';
+import { createSlug } from '../../utils/createSlug';
 
 type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>;
 const SectionGridCard = (props: SectionGridCardProps) => {
@@ -393,37 +396,12 @@ const Settings = () => {
 						</Button>
 					)}
 				</SectionGridCard>
-				<SectionGridCard
-					title="Privacy"
-					subtitle="Meeshkan ignores specific inputs by default. Customization will be possible in the future. The following data is excluded from Meeshkan recordings."
-				>
-					<Stack>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								[autocomplete=cc-*]
-							</Code>{' '}
-							(Credit card fields)
-						</Checkbox>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								input[type=hidden]
-							</Code>{' '}
-							(Hidden fields)
-						</Checkbox>
-						<Checkbox defaultIsChecked isDisabled>
-							<Code fontSize="md" colorScheme="cyan">
-								input[type=password]
-							</Code>{' '}
-							(Password fields)
-						</Checkbox>
-					</Stack>
-				</SectionGridCard>
 
 				<SectionGridCard
 					title="Details"
 					subtitle="Detailed configuration for your project."
 				>
-					<Heading fontSize="18px" fontWeight="500" mb={2}>
+					<Heading fontSize="18px" fontWeight="500" mb={3}>
 						Script tag
 					</Heading>
 					<ScriptTagInput />
@@ -450,7 +428,45 @@ const Settings = () => {
 							setSelectedIndex={setToggleTestRunnerIndex}
 						/>
 					</FormControl>
+
+					<Spacer h={8} />
+
+					<Heading fontSize="18px" fontWeight="500" mb={2}>
+						Privacy
+					</Heading>
+					<Text
+						fontSize="sm"
+						fontWeight="400"
+						lineHeight="short"
+						color="gray.500"
+						mb={4}
+					>
+						Meeshkan ignores specific inputs by default. Customization will be
+						possible in the future. The following data is excluded from Meeshkan
+						recordings.
+					</Text>
+					<Stack>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								[autocomplete=cc-*]
+							</Code>{' '}
+							(Credit card fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								input[type=hidden]
+							</Code>{' '}
+							(Hidden fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								input[type=password]
+							</Code>{' '}
+							(Password fields)
+						</Checkbox>
+					</Stack>
 				</SectionGridCard>
+
 				<SectionGridCard
 					title="Authentication"
 					subtitle="This is the user your tests will be run off of. Be sure that any of
@@ -472,6 +488,49 @@ const Settings = () => {
 							Record log in flow
 						</Button>
 					</Flex>
+					{project?.configuration?.logInFlow ? (
+						<Link
+							href={`/${createSlug(project?.name)}/${
+								project?.configuration?.logInFlow?.id
+							}`}
+						>
+							<Flex
+								as="a"
+								w="100%"
+								mt={4}
+								p={3}
+								borderRadius="md"
+								justify="space-between"
+								align="center"
+								cursor="pointer"
+								_hover={{
+									backgroundColor: listItemHoverBackgroundColor,
+								}}
+							>
+								<Flex>
+									<Text>{project?.configuration?.logInFlow?.title}</Text>
+									<Tooltip label="This is the 'Log in flow'" placement="right">
+										<Badge
+											colorScheme="amber"
+											fontWeight="700"
+											fontSize="md"
+											borderRadius="md"
+											p={2}
+											ml={4}
+										>
+											<KeyIcon />
+										</Badge>
+									</Tooltip>
+								</Flex>
+
+								<Text>
+									{new Date(
+										project?.configuration?.logInFlow?.createdAt
+									).toLocaleString()}
+								</Text>
+							</Flex>
+						</Link>
+					) : null}
 
 					<Divider my={6} />
 
@@ -480,9 +539,11 @@ const Settings = () => {
 					</Heading>
 
 					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
-					<Heading fontSize="14px" fontWeight="500" mt={6}>
-						Active tokens
-					</Heading>
+					{tokens?.length >= 1 ? (
+						<Heading fontSize="14px" fontWeight="500" mt={6}>
+							Active tokens
+						</Heading>
+					) : null}
 					{tokens?.map((token) => (
 						<Flex
 							key={token.key}
