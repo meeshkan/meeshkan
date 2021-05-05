@@ -16,6 +16,7 @@ import {
 	Badge,
 	Checkbox,
 	Code,
+	Divider,
 } from '@chakra-ui/react';
 import { RecordIcon, TrashIcon } from '@frontend/chakra-theme';
 import _ from 'lodash';
@@ -456,7 +457,10 @@ const Settings = () => {
 								the tokens, or log in details you're supplying are not your own,
 								or a customer's."
 				>
-					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
+					<Heading fontSize="18px" fontWeight="500" mb={4}>
+						1. Method: Record the path your users take to log in.
+					</Heading>
+					<Flex alignItems="flex-end" justifyContent="space-between">
 						<Button
 							size="sm"
 							colorScheme="red"
@@ -469,8 +473,14 @@ const Settings = () => {
 						</Button>
 					</Flex>
 
+					<Divider my={6} />
+
+					<Heading fontSize="18px" fontWeight="500" mb={4}>
+						2. Method: Add the tokens we should inject.
+					</Heading>
+
 					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
-					<Heading fontSize="14px" fontWeight="500" mt={4}>
+					<Heading fontSize="14px" fontWeight="500" mt={6}>
 						Active tokens
 					</Heading>
 					{tokens?.map((token) => (
