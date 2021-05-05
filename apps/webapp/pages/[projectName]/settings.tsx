@@ -417,9 +417,10 @@ const Settings = () => {
 						</Checkbox>
 					</Stack>
 				</SectionGridCard>
+
 				<SectionGridCard
 					title="Details"
-					subtitle="Detailed information about your project."
+					subtitle="Detailed configuration for your project."
 				>
 					<Heading fontSize="18px" fontWeight="500" mb={2}>
 						Script tag
@@ -448,25 +449,14 @@ const Settings = () => {
 							setSelectedIndex={setToggleTestRunnerIndex}
 						/>
 					</FormControl>
-
-					<Spacer h={8} />
-
-					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
-						<Stack flex="1">
-							<Heading fontSize="18px" fontWeight="500">
-								Authentication
-							</Heading>
-							<Text
-								fontSize="sm"
-								fontWeight="400"
-								lineHeight="short"
-								color="gray.500"
-							>
-								This is the user your tests will be tied to. Be sure that any of
+				</SectionGridCard>
+				<SectionGridCard
+					title="Authentication"
+					subtitle="This is the user your tests will be run off of. Be sure that any of
 								the tokens, or log in details you're supplying are not your own,
-								or a customer's.
-							</Text>
-						</Stack>
+								or a customer's."
+				>
+					<Flex alignItems="flex-end" justifyContent="space-between" mb={6}>
 						<Button
 							size="sm"
 							colorScheme="red"
