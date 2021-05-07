@@ -10,6 +10,8 @@ import {
 	Code,
 	Alert,
 	useColorModeValue,
+	UnorderedList,
+	OrderedList,
 } from "@chakra-ui/react"
 import CodeBlock from "./codeBlock"
 import { UniversalLink } from "../atoms/UniversalLink"
@@ -17,7 +19,7 @@ import Video from "../atoms/video"
 import RequestAccess from "./requestAccessForm"
 
 type DocsHeadingProps = {
-	id: string
+	id?: string
 	children: Object
 }
 
@@ -28,8 +30,7 @@ export const DocsHeading = ({ id, children, ...props }: DocsHeadingProps) => (
 			mt={8}
 			letterSpacing="wide"
 			id={id}
-			// @ts-ignore
-			css={{
+			sx={{
 				"&[id]:before": {
 					display: "block",
 					height: " 6rem",
@@ -62,7 +63,7 @@ export const DocsHeading = ({ id, children, ...props }: DocsHeadingProps) => (
 
 const components = {
 	h1: (props) => (
-		<Heading {...props} as="h1" textStyle="h1" mb={12} mt={4}>
+		<Heading {...props} as="h1" textStyle="h1" mb={12}>
 			{props.children}
 		</Heading>
 	),
@@ -95,8 +96,9 @@ const components = {
 	blockquote: (props) => (
 		<Alert
 			my={6}
-			variant='left-accent'
+			variant="left-accent"
 			status="info"
+			borderRadius="lg"
 			css={{ "> *:first-of-type": { marginTop: 0 } }}
 			{...props}
 		>
@@ -104,7 +106,15 @@ const components = {
 		</Alert>
 	),
 	inlineCode: (props) => (
-		<Code colorScheme="cyan" fontSize="inherit" {...props} />
+		<Code
+			colorScheme="cyan"
+			fontSize="inherit"
+			borderRadius="md"
+			px={2}
+			py={0}
+			fontWeight="500"
+			{...props}
+		/>
 	),
 	hr: (props) => <Divider borderColor="gray.100" my={6} {...props} />,
 	a: (props) => (
@@ -113,28 +123,21 @@ const components = {
 			{...props}
 		/>
 	),
-	img: (props) => <Image {...props} rounded="md" />,
+	img: (props) => <Image {...props} rounded="lg" />,
 	pre: (props) => <Box my="2em" fontSize="inherit" rounded="sm" {...props} />,
 	code: CodeBlock,
 	ul: (props) => (
-		<List styleType="disc" stylePosition="inside" my={8} spacing={3} {...props}>
+		<UnorderedList mt={4} spacing={3} {...props}>
 			{props.children}
-		</List>
+		</UnorderedList>
 	),
 	ol: (props) => (
-		<List
-			as="ol"
-			styleType="decimal"
-			stylePosition="inside"
-			my={8}
-			spacing={3}
-			{...props}
-		>
+		<OrderedList my={8} spacing={3} {...props}>
 			{props.children}
-		</List>
+		</OrderedList>
 	),
 	li: (props) => (
-		<ListItem lineHeight="1.6" {...props}>
+		<ListItem _last={{ mb: 8 }} lineHeight="1.6" {...props}>
 			{props.children}
 		</ListItem>
 	),
@@ -159,6 +162,7 @@ const components = {
 	thematicBreak: (props) => <Box height={6} {...props} />,
 	Video,
 	RequestAccess,
+	Script: (props) => <script {...props} />,
 }
 
 export default components

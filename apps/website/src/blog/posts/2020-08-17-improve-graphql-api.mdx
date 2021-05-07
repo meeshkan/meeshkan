@@ -23,20 +23,20 @@ Compare the two ways of defining color below.
 
 ```graphql
 enum Color {
-  Burnt_sienna
-  Fulvous
-  Mindaro
-  Skobeloff
-  Vermilion
-  Red
+	Burnt_sienna
+	Fulvous
+	Mindaro
+	Skobeloff
+	Vermilion
+	Red
 }
 
 type Region0 {
-  color: Color
+	color: Color
 }
 
 type Region1 {
-  color: String
+	color: String
 }
 ```
 
@@ -59,9 +59,9 @@ While GraphQL schemas are pretty open-ended, there are certain design choices th
 
 ```graphql
 type Post {
-  author: String
-  content: String
-  tags: [String]
+	author: String
+	content: String
+	tags: [String]
 }
 ```
 
@@ -69,9 +69,9 @@ Let's take a peek at `tags`. We are saying "You may get an array of tags, or you
 
 ```graphql
 type Post {
-  author: String
-  content: String
-  tags: [String!]!
+	author: String
+	content: String
+	tags: [String!]!
 }
 ```
 
@@ -93,37 +93,37 @@ Resolvers in most GraphQL frameworks are born type-safe, meaning that it will gi
 // a graphql schema (scroll down to see the graphql)
 export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K]
+	[K in keyof T]: T[K]
 }
 export type Scalars = {
-  ID: string
-  String: string
-  Boolean: boolean
-  Int: number
-  Float: number
-  Date: any
+	ID: string
+	String: string
+	Boolean: boolean
+	Int: number
+	Float: number
+	Date: any
 }
 
 export type Query = {
-  __typename?: "Query"
-  me: User
+	__typename?: "Query"
+	me: User
 }
 
 export enum Role {
-  User = "USER",
-  Admin = "ADMIN",
+	User = "USER",
+	Admin = "ADMIN",
 }
 
 export type Node = {
-  id: Scalars["ID"]
+	id: Scalars["ID"]
 }
 
 export type User = Node & {
-  __typename?: "User"
-  id: Scalars["ID"]
-  username: Scalars["String"]
-  email: Scalars["String"]
-  role: Role
+	__typename?: "User"
+	id: Scalars["ID"]
+	username: Scalars["String"]
+	email: Scalars["String"]
+	role: Role
 }
 /**
 scalar Date

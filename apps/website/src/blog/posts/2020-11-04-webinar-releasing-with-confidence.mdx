@@ -1,0 +1,79 @@
+---
+title: Three tips for product managers on deploying a successful release
+description: A webinar for product managers that release digital products, and the themes.
+slug: webinar-releasing-with-confidence
+date: 2020-11-04
+authors: ["mike", "kenna"]
+published: true
+tags:
+	- webinar
+---
+
+import { Button } from "@chakra-ui/react"
+import { UniversalLink } from "../../components/atoms/UniversalLink"
+
+> If you're interested in gaining confidence in your release to production, we're hosting a webinar **November 25th at 17:00 CET** and we'd love to have you!
+
+<Button
+	as={UniversalLink}
+	mt={4}
+	to="/events/confidence-in-your-merge-to-production/"
+	aria-label="Register for the release confidence webinar"
+	w={["100%", "100%", "auto"]}
+>
+	Register for the webinar
+</Button>
+
+Depending on the industry, product managers release a product from an internal staging environment to their users on cycles that range from several months to several minutes. Even though these time scales are quite different, there are certain common challenges that all product managers face.
+
+We've put together three tips for successfully releasing your software from staging to production, and at the end of this article, we'll provide a signup link for a webinar where you can learn more and discuss with other product managers.
+
+## 1. Make sure staging mirrors production
+
+There are many different environments in which software is deployed, and one important thing to clarify is what a staging environment is and what it is not.
+
+A staging environment is an environment that is as close to production as possible. For some companies, staging is production and is gated by feature flags. In other companies, many services are shared between staging and production whilst pointing to different databases. Some companies run complete clones of their production environment, and in exceptional cases, these clones are ephemeral and are fully contained in a CI/CD pipeline.
+
+What a staging environment is not is a developer's laptop, a test environment sent to a QA firm, or a battery of unit tests. While these are all useful, they serve a different purpose than staging. Staging is the last line of defense before your product gets in your users' hands. While no mistake is irreversible, companies can waste hundreds of hours and lose users without properly vetting releases in a staging environment. With this in mind, your single question should be "does this new version of my software add enough value to my users' lives to justify the fact that it changed?" You can't ask and answer that question with a half-baked staging environment. To arrive at an honest answer, your staging environment needs to be as close to the real deal as possible.
+
+The good news is that there are many different tools that help you mirror staging and production. Most cloud providers, including GCP, AWS, Azure, Vercel and Netlify, allow for the automatic deployment of preview builds as frequently as with every new code commit from your developers. The more of these your development team activates, the more closely staging will represent production. For more complex deployments, tools like Kubernetes, Nomad and Mesos allow this type of orchestration, and services like garden.io make it easier than ever for your development team to give you the staging environment you and your users deserve.
+
+Another strategy is to carve out staging environments in your production environment. Tools like LaunchDarkly help you gate certain functionality behind feature flags, which allows you to progressively activate features in production. Many companies use this to facilitate internal testing first, followed by a trusted group of alpha testers, followed by an entire user base.
+
+## 2. Employ the same checklist pre- and post-release
+
+It's normal to think of pre-release as "proactive" and post-release as "reactive". Before releasing software, you attempt to anticipate and eradicate as many issues as possible, and after a release, you keep your eye on important KPIs and use tools like PagerDuty to deal with crises if and when they arise.
+
+While proactive and reactive testing will always be part of the PM workflow, there is a third path that helps you join the two: employing a standardized ritual pre- and post-release. This can be a checklist, a morning routine of using an app, a series of automated tests, or all of the above. The important part is to do the exact same routing in staging and production, especially right before and right after a release.
+
+At Meeshkan, one way we like to think of this is ramping up frequency of testing linearly before a release, with the apex being at the moment of release, and then progressively lowering tests as the release makes its way out to your user-base. This is a great way to detect anomalies right off the bat. Anomalies can be technical, such as an invalid credential in production that is valid in staging, or they could be practical, ie a subjective aversion to a new design that causes users to engage less with a feature. Irrespective of the anomaly, consistent testing that bridges pre- and post-release will give you a solid, regular baseline against which you can detect irregularities.
+
+While that may sound difficult, there are several strategies to make this manageable. The easiest and often-times most effective is to simply have a routine that you yourself follow. Running tests regularly on tools like Device Farm, Cypress or Meeshkan is a great way to reinforce this routine and add confidence to your release process.
+
+## 3. Align your pre- and post-release checklist with user behavior
+
+PMs are obsessive about the user experience, as they should be! And yet, if you think about things from your users' perspective, very few of them interact with your service while following a checklist (unless of course you're building a checklist service, but that's probably not the case!). So, in spite of the fact that you should be methodical with pre- and post-release testing, your methodical work should represent the spontaneity, unpredictability, and sometimes dullness of a real user flow with your service.
+
+If your service has lots of features but only 2-3 that 99% of the users use, do not treat them equally. Checklists have a tendency to democratize features, but ultimately, you should give more care and attention the features your users actually use or that you can solidly predict they will use given your pre-release assumptions. This may put you at odds with a particular division of your company or developer if their feature is not getting PM love, but that's ok. The fact is that, often times, the emotional and organizational attachment companies have to features does not reflect how they are used in the wild, and it is your job as a PM to realize this and to put your time where it matters most.
+
+Another thing you'll want to replicate is the ebb and flow of your users' lives. For example, if you have an asynchronous messaging service, you want to test sending and receiving messages in intervals that represent the most common delays in user communication. While this may feel like you're slowing the testing process down, there are tools like Meeshkan that help automate the reproduction of real user behavior, including the temporality of behavior, so that the waiting inherent in testing and app can be orchestrated in the background.
+
+## We're hosting a webinar on releasing to production if you want to learn more 👇
+
+Releasing from staging to production can be an exhilarating and scary time. I recently got coffee with a PM that was giddy about their new release but who also had to cut off our conversation early because something was going wrong. This is normal, and as you build your career as a PM, some of the most meaningful moments emerge from this time where a feature set or entire new service transitions from internal to external.
+
+> One of our goals at Meeshkan is to facilitate a dialog between PMs about their release processes. By sharing knowledge, PMs can learn from each other and **release with more and more confidence** as time goes on.
+
+To that end, we're organizing a webinar entitled **Releasing with confidence: Practical tips for merging to production** on November 25th at 5PM CET.
+
+<Button
+	as={UniversalLink}
+	mt={4}
+	to="/events/confidence-in-your-merge-to-production/"
+	aria-label="Register for the release confidence webinar"
+	w={["100%", "100%", "auto"]}
+>
+	Register for the webinar
+</Button>
+
+It's a chance for the PM community to get together, hear from inspiring experts, tell their own stories, and build up invaluable release-management skills. We hope to see you there, and congratulations in advance on your next successful release!

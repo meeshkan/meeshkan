@@ -6,8 +6,7 @@ export { wrapPageElement, wrapRootElement } from "./gatsby-browser"
 export const onRenderBody = ({ setPreBodyComponents }) => {
 	setPreBodyComponents([
 		<ColorModeScript
-			// initialColorMode={customTheme.config.initialColorMode}
-			initialColorMode="light"
+			initialColorMode={customTheme.config.initialColorMode}
 			key="chakra-ui-no-flash"
 		/>,
 	])

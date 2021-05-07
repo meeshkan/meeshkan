@@ -28,14 +28,13 @@ export const Card = ({
 			{link ? (
 				<Box
 					as={UniversalLink}
-					// @ts-ignore
 					to={link}
 					aria-label={label}
-					borderRadius="md"
+					borderRadius="lg"
 					backgroundColor={
 						backgroundColor
 							? backgroundColor
-							: useColorModeValue("gray.50", "gray.800")
+							: useColorModeValue("gray.100", "gray.800")
 					}
 					p={padding}
 					position="relative"
@@ -57,7 +56,7 @@ export const Card = ({
 					backgroundColor={
 						backgroundColor
 							? backgroundColor
-							: useColorModeValue("gray.50", "gray.800")
+							: useColorModeValue("gray.100", "gray.800")
 					}
 					p={padding}
 					position="relative"

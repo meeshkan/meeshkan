@@ -1,8 +1,2 @@
-const items = [
-	"How Meeshkan works",
-	"Prioritizing bugs",
-	"Required permissions",
-	"Frequently asked questions",
-	"Terms and conditions",
-]
+const items = ["How Meeshkan works", "Terms and conditions"]
 export default items

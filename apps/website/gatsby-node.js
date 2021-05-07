@@ -1,25 +1,25 @@
 const path = require(`path`)
 
-exports.createPages = ({ actions, graphql, reporter }) => {
+exports.createPages = ({ actions, graphql }) => {
 	const { createPage } = actions
 	const blogPost = path.resolve("src/components/templates/blogPost.tsx")
-	const docPage = path.resolve(`src/components/templates/docsLayout.tsx`)
+	const changelogPage = path.resolve(
+		`src/components/templates/changelogLayout.tsx`
+	)
 
 	return graphql(`
 		{
-			documentation: allMdx(filter: { fileAbsolutePath: { regex: "/docs/" } }) {
+			changelog: allMdx(
+				filter: { fileAbsolutePath: { regex: "/changelog/" } }
+			) {
 				totalCount
 				nodes {
-					headings(depth: h1) {
+					headings(depth: h2) {
 						value
 					}
 					id
 					body
-					excerpt(pruneLength: 140)
 					slug
-					frontmatter {
-						slug
-					}
 				}
 			}
 			blog: allMdx(
@@ -45,7 +45,7 @@ exports.createPages = ({ actions, graphql, reporter }) => {
 		}
 
 		const posts = result.data.blog.nodes
-		const docs = result.data.documentation.nodes
+		const changelog = result.data.changelog.nodes
 
 		// create page for each mdx file
 		posts.forEach((post, index) => {
@@ -64,15 +64,13 @@ exports.createPages = ({ actions, graphql, reporter }) => {
 			})
 		})
 
-		docs.forEach((doc, index) => {
+		changelog.forEach((changelog, index) => {
 			createPage({
-				path: `/docs/${doc.frontmatter.slug}/`,
-				component: docPage,
+				path: `/changelog/${changelog.slug}/`,
+				component: changelogPage,
 				context: {
-					doc,
-					id: doc.id,
-					title: doc.headings[0].value,
-					slug: doc.frontmatter.slug,
+					changelog,
+					slug: changelog.slug,
 				},
 			})
 		})

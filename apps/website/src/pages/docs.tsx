@@ -82,7 +82,7 @@ const DocsHome = () => {
 							</DocsText>
 
 							<List styleType="disc" stylePosition="inside" my={4} spacing={3}>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="#what-does-meeshkan-do"
@@ -90,7 +90,7 @@ const DocsHome = () => {
 										What does Meeshkan do?
 									</UniversalLink>
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="#creating-your-meeshkan-account"
@@ -98,7 +98,7 @@ const DocsHome = () => {
 										Creating your Meeshkan account
 									</UniversalLink>
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="#authorizing-meeshkan-on-github"
@@ -106,7 +106,7 @@ const DocsHome = () => {
 										Authorizing Meeshkan on GitHub
 									</UniversalLink>
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="#configuring-your-projects"
@@ -114,7 +114,7 @@ const DocsHome = () => {
 										Configuring your projects
 									</UniversalLink>
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="#how-meeshkan-reports-bugs"
@@ -122,7 +122,7 @@ const DocsHome = () => {
 										How Meeshkan reports bugs
 									</UniversalLink>
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="#revoking-access"
@@ -130,7 +130,7 @@ const DocsHome = () => {
 										Revoking access
 									</UniversalLink>
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="#deleting-your-account"
@@ -303,12 +303,12 @@ const DocsHome = () => {
 								permanent data damage.
 							</DocsText>
 							<List styleType="disc" stylePosition="inside" my={4} spacing={3}>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<strong>Root directory</strong>: The path to your app in your
 									repository. For instance, if your app lives in the home
 									directory, then you would use `./` as your root directory.
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<strong>Build command</strong>: The command(s) your app
 									framework provides for compiling your code.{" "}
 									<Code
@@ -318,7 +318,7 @@ const DocsHome = () => {
 									is an example build command for a repository that uses NPM and
 									provides a "start" script.
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<strong>OpenAPI location</strong>: The path or endpoint to
 									your repository's <em>OpenAPI specification</em> (such as{" "}
 									<Code colorScheme="cyan" fontSize="inherit">
@@ -326,7 +326,7 @@ const DocsHome = () => {
 									</Code>
 									).
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<strong>GraphQL endpoint</strong>: The path or endpoint to
 									your repository's <em>GraphQL schema</em> (such as{" "}
 									<Code colorScheme="cyan" fontSize="inherit">
@@ -355,7 +355,7 @@ const DocsHome = () => {
 								'dockerization' process:
 							</DocsText>
 							<List styleType="disc" stylePosition="inside" my={4} spacing={3}>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="https://docs.docker.com/get-started/"
@@ -363,7 +363,7 @@ const DocsHome = () => {
 										Docker's <em>Get Started</em> Guide
 									</UniversalLink>
 								</ListItem>
-								<ListItem lineHeight='1.6'>
+								<ListItem lineHeight="1.6">
 									<UniversalLink
 										color={useColorModeValue("blue.500", "blue.200")}
 										to="https://nodejs.org/en/docs/guides/nodejs-docker-webapp/"

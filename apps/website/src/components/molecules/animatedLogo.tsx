@@ -28,7 +28,7 @@ export const AnimatedLogo = () => {
 		<motion.svg
 			viewBox="0 0 125 24"
 			// @ts-ignore
-			style={{ height: 32, width: "auto" }}
+			style={{ height: 24, width: "auto" }}
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
 		>

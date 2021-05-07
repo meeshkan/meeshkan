@@ -1,0 +1,37 @@
+---
+version: "0.5.3"
+date: 01-03-2021
+title: Release v0.5.3 | Meeshkan
+description: Release v0.5.3 | Keep up to date on the development of the Meeshkan product.
+slug: 01-03-2021
+authors: ["ben"]
+published: true
+tags:
+  - changelog
+---
+
+# Release v0.5.3
+
+### Video generation for User Stories 🎥
+
+User Stories are designed to be fully understandable from the steps alone, but sometimes you need a visual aid to gain an intuitive understanding of the steps your users took to reach their desired outcome. That's why we've added a feature that creates a video from user-generated User Stories – with 1 click, a video of the steps will be created, in just 15 seconds!
+
+We've also made some drastic improvements to our recorder script: it's now up to 400x faster than before, so your users won't see any difference in your app's performance when you've installed it, and when you create stories manually with the extension your app will run as smoothly as it does normally.
+
+Speaking of the extension, it's live on the Chrome store – [check it out](https://chrome.google.com/webstore/detail/meeshkan-recorder/cfjdddhjecoeahjkmegbkakfpppflmgo?hl=en) and [tell us what you think](mailto:contact@meeshkan.com)!
+
+**Here's everything else we've been up to in the last week:**
+
+- Hidden inputs and passwords are displayed with asterisk's(\*) instead of random text to clarify that they are in fact not passwords.
+- Settings now accessible from your avatar
+- **Chrome extension:**
+  - Now instantly creates a user story after you stop recording
+  - Script performance improved by 10x
+  - Record the `Log in flow` of your app with extension
+  - Un-inject the script when recording with the chrome extension to prevent duplicate user stories.
+
+**Fixes:**
+
+- **Now, 1 User Story per recording:** Before, multiple User Stories were being generated per recording with the extension:
+- **Now, no timeout error, no matter the story length:** Before, there was a timeout error where large User Stories wouldn't be created
+- **Now, script will only inject once, and stories have the correct number of steps:** Before, the script was injecting itself multiple times and therefore outputting 2-4x the steps performed

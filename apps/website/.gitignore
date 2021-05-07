@@ -1,0 +1,17 @@
+# Dependency directories
+node_modules/
+
+# dotenv environment variable files
+.env.local
+
+# gatsby files
+.cache/
+public
+
+# Yarn
+yarn-error.log
+
+# Other
+.DS_Store
+package-lock.json
+yarn.lock

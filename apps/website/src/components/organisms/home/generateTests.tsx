@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import TestSnippet from './testSnippet';
-import { motion } from 'framer-motion';
+import React, { useState } from "react"
+import TestSnippet from "./testSnippet"
+import { motion } from "framer-motion"
 import {
 	Button,
 	Box,
@@ -13,21 +13,21 @@ import {
 	Collapse,
 	useDisclosure,
 	LightMode,
-} from '@chakra-ui/react';
-import Codeblock from '../../molecules/codeBlock';
-import { CloseIcon, ChevronDownIcon, ArrowForwardIcon } from '@chakra-ui/icons';
-import { XmarkIcon } from '../../../../theme/icons';
+} from "@chakra-ui/react"
+import Codeblock from "../../molecules/codeBlock"
+import { CloseIcon, ChevronDownIcon, ArrowForwardIcon } from "@chakra-ui/icons"
+import { XmarkIcon } from "../../../../theme/icons"
 
 const GenerateTests = () => {
-	const [openTest, setOpenTest] = useState(false);
-	const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
+	const [openTest, setOpenTest] = useState(false)
+	const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true })
 
 	const variants = {
 		open: {
 			opacity: 1,
-			x: '0%',
+			x: "0%",
 			transition: {
-				type: 'spring',
+				type: "spring",
 				stiffness: 500,
 				damping: 60,
 				mass: 1,
@@ -35,23 +35,23 @@ const GenerateTests = () => {
 		},
 		closed: {
 			opacity: 0,
-			x: '-100%',
+			x: "-100%",
 			transition: {
-				type: 'spring',
+				type: "spring",
 				stiffness: 500,
 				damping: 60,
 				mass: 1,
 			},
 		},
-	};
+	}
 
-	const MotionBox = motion(Box);
-	const MotionButton = motion(Button);
+	const MotionBox = motion(Box)
+	const MotionButton = motion(Button)
 
 	return (
 		<>
 			<MotionBox
-				animate={openTest ? 'open' : 'closed'}
+				animate={openTest ? "open" : "closed"}
 				variants={variants}
 				backgroundColor="blackAlpha.700"
 				position="absolute"
@@ -62,8 +62,8 @@ const GenerateTests = () => {
 				borderRadius="md"
 				style={{
 					// @ts-ignore
-					backdropFilter: 'blur(6px)',
-					WebkitBackdropFilter: 'blur(6px)',
+					backdropFilter: "blur(6px)",
+					WebkitBackdropFilter: "blur(6px)",
 				}}
 				overflow="auto"
 			>
@@ -88,7 +88,7 @@ const GenerateTests = () => {
 						>
 							<XmarkIcon color="red.500" />
 						</Box>
-						<Text fontSize="sm" color="gray.500" fontWeight="600">
+						<Text fontSize="sm" color="gray.500" fontWeight={600}>
 							A user is only authorized to see their own data
 						</Text>
 					</Flex>
@@ -107,14 +107,14 @@ const GenerateTests = () => {
 				<Stack mt={4} mb={6}>
 					<Flex alignItems="center">
 						<XmarkIcon color="red.500" mr={3} size="12px" />
-						<Text color="white" mr={4} fontWeight="700">
+						<Text color="white" mr={4} fontWeight={700}>
 							Test case failed
 						</Text>
-						<Text color="red.300" fontWeight="700">
+						<Text color="red.300" fontWeight={700}>
 							Priority level 1
 						</Text>
 					</Flex>
-					<Text fontSize="sm" fontWeight="700" color="white">
+					<Text fontSize="sm" fontWeight={700} color="white">
 						Notes:
 					</Text>
 					<List styleType="disc">
@@ -136,7 +136,7 @@ const GenerateTests = () => {
 				>
 					<Flex justify="space-between" w="100%">
 						<Flex alignItems="center">
-							<Text mr={2} fontWeight="700" fontSize="sm" color="gray.700">
+							<Text mr={2} fontWeight={700} fontSize="sm" color="gray.700">
 								MUTATION
 							</Text>
 							<Text fontSize="sm" mr={4} color="gray.500">
@@ -196,7 +196,7 @@ mutation {
 			<Box
 				w={[300, 360, 460]}
 				h={380}
-				d={['block', 'block', 'flex']}
+				d={["block", "block", "flex"]}
 				alignItems="center"
 			>
 				<TestSnippet />
@@ -211,7 +211,7 @@ mutation {
 					// @ts-ignore
 					transition={{
 						duration: 5,
-						ease: 'easeInOut',
+						ease: "easeInOut",
 						times: [0, 0.25, 0.5, 0.75, 1],
 						delay: 10,
 					}}
@@ -220,7 +220,7 @@ mutation {
 				</MotionButton>
 			</Box>
 		</>
-	);
-};
+	)
+}
 
-export default GenerateTests;
+export default GenerateTests

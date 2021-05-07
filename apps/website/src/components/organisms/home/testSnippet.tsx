@@ -4,7 +4,7 @@ import { LiveProvider, LiveEditor } from "react-live"
 
 export const liveEditorStyle = {
 	fontSize: 14,
-	fontFamily: "Fira Code, monospace",
+	fontFamily: "'JetBrains mono', Fira Code, monospace",
 	overflow: "auto",
 	borderRadius: 6,
 	maxHeight: 380,

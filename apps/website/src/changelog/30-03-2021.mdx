@@ -1,0 +1,40 @@
+---
+version: "0.5.6"
+date: 30-03-2021
+title: Release v0.5.6 | Meeshkan
+description: Release v0.5.6 | Keep up to date on the development of the Meeshkan product.
+slug: 30-03-2021
+authors: ["ben"]
+published: true
+tags:
+  - changelog
+---
+
+# Test Runner in stealth mode 🥷
+
+You can already run tests you create from User Stories by [exporting Test Cases as Puppeteer scripts](https://meeshkan.com/blog/how-to-puppeteer-jest-github-action/) but we're also working to allow you to run them directly from within Meeshkan, and we've made some big strides in bringing that to life this cycle. <a onClick={() => {window.Intercom("showMessages")}}>Get in touch</a> to get early access!
+
+![screenshot](https://media.graphcms.com/So8YNavS61MGcbcTSmQn)
+
+#### Here's everything else we've been up to in the last cycle:
+
+- Increased accuracy of User Story videos by making video generation events more explicit
+- You can now clearly distinguish the log-in flow, authenticated flows, and unauthenticated flows too, with handy tags in the _Recordings_ table.
+- Videos are generated automatically for **all** User Stories
+- Started using the Puppeteer script to test the Meeshkan webapp with user-generated User Stories by setting up the GitHub action
+- Improved the output of the downloadable script
+  - Formatting improvements
+  - Insert the defined cookie by default
+  - Change dragndrop events to click events if they have the same coordinates to make things cleaner!
+- The 🤫 Test Runner `beta` changes include:
+  - Shows the step that failed and why
+  - Adds the dynamic test details (which element could not be found)
+  - Links back to the user story
+  - Fixes bug where test outcomes had a longer timeout than the test run causing uncompleted runs.
+
+![screenshot](https://media.graphcms.com/ahBpt6K2TS67doVVGlkh)
+
+#### Fixes:
+
+- **Now, script tags show correctly on the dashboard.** Before, script tags didn't correctly show, dependent on if you'd received events or not.
+- **Now, no more repeated reloads** Before, there was a reload every time you navigated back to a Meeshkan tab after moving away from it.

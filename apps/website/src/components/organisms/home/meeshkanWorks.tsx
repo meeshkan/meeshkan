@@ -1,8 +1,8 @@
-import React from 'react';
-import { SimpleGrid, Box, Code, Heading, Text } from '@chakra-ui/react';
-import { graphql, useStaticQuery } from 'gatsby';
-import Img from 'gatsby-image';
-import { SingleSection } from '../singleSection';
+import React from "react"
+import { SimpleGrid, Box, Code, Heading, Text } from "@chakra-ui/react"
+import { graphql, useStaticQuery } from "gatsby"
+import Img from "gatsby-image"
+import { SingleSection } from "../singleSection"
 
 const HowDoesMeeshkanWork = () => {
 	const data = useStaticQuery(
@@ -31,7 +31,7 @@ const HowDoesMeeshkanWork = () => {
 				}
 			}
 		`
-	);
+	)
 	return (
 		<>
 			<SingleSection heading="Test automation for your GraphQL app">
@@ -44,7 +44,7 @@ const HowDoesMeeshkanWork = () => {
 						<Code
 							colorScheme="cyan"
 							fontSize="14px"
-							fontWeight="600"
+							fontWeight={600}
 							rounded="sm"
 							padding="0px 4px"
 							minH="auto"
@@ -56,7 +56,7 @@ const HowDoesMeeshkanWork = () => {
 						<Heading as="h4" textStyle="h4" mb={4}>
 							Choose a repository
 						</Heading>
-						<Text fontSize={['md', 'md', 'lg']} lineHeight="tall">
+						<Text fontSize={["md", "md", "lg"]} lineHeight="tall">
 							Authorize Meeshkan on GitHub, choose a repository to test, and set
 							up your base configuration. That’s all you need to do to get
 							started. Test runs will be triggered on every commit!
@@ -70,7 +70,7 @@ const HowDoesMeeshkanWork = () => {
 						<Code
 							colorScheme="cyan"
 							fontSize="14px"
-							fontWeight="600"
+							fontWeight={600}
 							rounded="sm"
 							padding="0px 4px"
 							minH="auto"
@@ -82,7 +82,7 @@ const HowDoesMeeshkanWork = () => {
 						<Heading as="h4" textStyle="h4" mb={4}>
 							Continuous testing with every commit
 						</Heading>
-						<Text fontSize={['md', 'md', 'lg']} lineHeight="tall">
+						<Text fontSize={["md", "md", "lg"]} lineHeight="tall">
 							Meeshkan naturally fits into your existing workflow by testing as
 							you push commits to GitHub. Imagine Netlify, but for automated
 							testing.
@@ -96,7 +96,7 @@ const HowDoesMeeshkanWork = () => {
 						<Code
 							colorScheme="cyan"
 							fontSize="14px"
-							fontWeight="600"
+							fontWeight={600}
 							rounded="sm"
 							padding="0px 4px"
 							minH="auto"
@@ -108,7 +108,7 @@ const HowDoesMeeshkanWork = () => {
 						<Heading as="h4" textStyle="h4" mb={4}>
 							Fix vulnerabilities in your app
 						</Heading>
-						<Text fontSize={['md', 'md', 'lg']} lineHeight="tall">
+						<Text fontSize={["md", "md", "lg"]} lineHeight="tall">
 							When tests fail, your configuration can block a branch from
 							merging, direct a developer to the point of failure, and see the
 							highlight the highest priority bugs to tackle first.
@@ -117,7 +117,7 @@ const HowDoesMeeshkanWork = () => {
 				</SimpleGrid>
 			</SingleSection>
 		</>
-	);
-};
+	)
+}
 
-export default HowDoesMeeshkanWork;
+export default HowDoesMeeshkanWork

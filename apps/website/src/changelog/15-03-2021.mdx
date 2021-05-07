@@ -1,0 +1,40 @@
+---
+version: "0.5.5"
+date: 15-03-2021
+title: Release v0.5.5 | Meeshkan
+description: Release v0.5.5 | Keep up to date on the development of the Meeshkan product.
+slug: 15-03-2021
+authors: ["ben"]
+published: true
+tags:
+  - changelog
+---
+
+# Test cases are in `Beta`!
+
+The webapp now exposes the ability to download puppeteer test scripts, and upgrades to the table UI!
+
+![Meeshkan screenshot](https://media.graphcms.com/ZTRN5F1LR2caPKbgDYrw)
+
+### Another fun thing — HUGE 💃 Performance upgrades _everywhere_!
+
+Following from the upgrades to our recording script last cycle, we've made some system-wide improvements to both frontend and backend elements that **decrease loading times by 10x** and **improve the performance your webapp** if the script is installed.
+
+**Here's the magic that made it happen:**
+
+- We merged our "mutation observer diff" that continues to improve script performance (and developed our own **custom library** in the process that will be open sourced shortly!).
+- User Stories are being grouped better due to a larger window of data in context.
+- User Story steps appear instantly after a Chrome extension recording is completed.
+- Fixed bug that added quotation marks to certain string values.
+
+**Here's everything else we've been up to in the last cycle:**
+
+- To ensure that User Stories usefully illustrate how your software is used, we've filtered out rare events, so that the ones with less than 1 flow aren't shown in the User Story table.
+- Resize events have been added to User Story steps.
+- Step numbers in User Stories bring clarity to the flow of actions.
+
+**Fixes:**
+
+- **Now, graceful failure 🎩 when a drag and drop doesn't have destination coordinates.** No more scary error screens!
+- **Now, new releases to the Meeshkan Recorder Chrome extension update automatically.** Before, scripts were cached, preventing automatic updates.
+- **Now, receive only relevant notifications from the Meeshkan Recorder.** Before, there was a bug for Windows users that sent them repeat notifications.

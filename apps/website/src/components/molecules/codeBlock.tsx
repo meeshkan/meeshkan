@@ -11,12 +11,12 @@ const { Box, Button, useClipboard } = Chakra
 
 export const liveEditorStyle = {
 	fontSize: 16,
-	fontFamily: `'Operator Mono Lig', Fira Code, SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New", monospace`,
+	fontFamily: `'JetBrains mono', Fira Code, SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New", monospace`,
 	marginBottom: 16,
 	marginTop: 16,
 	overflow: "auto",
-	borderRadius: 6,
-	maxHeight: 300,
+	borderRadius: 8,
+	maxHeight: 500,
 	lineHeight: "1.5",
 	padding: 8,
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react"
 import {
 	Box,
 	Heading,
@@ -10,16 +10,16 @@ import {
 	AccordionIcon,
 	AccordionPanel,
 	Code,
-} from '@chakra-ui/react';
-import CodeBlock from '../molecules/codeBlock';
-import prettier from 'prettier/standalone';
-import parserGraphql from 'prettier/parser-graphql';
+} from "@chakra-ui/react"
+import CodeBlock from "../molecules/codeBlock"
+import prettier from "prettier/standalone"
+import parserGraphql from "prettier/parser-graphql"
 
 type TestProps = {
-	testResults: Object;
-	exchangeLength: number;
-	test: boolean;
-};
+	testResults: Object
+	exchangeLength: number
+	test: boolean
+}
 
 const TestResults = ({ testResults, exchangeLength, test }: TestProps) => {
 	return (
@@ -34,7 +34,7 @@ const TestResults = ({ testResults, exchangeLength, test }: TestProps) => {
 				overflow="auto"
 				mx="auto"
 			>
-				<Heading mb={4} fontWeight="900" fontSize="xl">
+				<Heading mb={4} fontWeight={900} fontSize="xl">
 					Test Results:
 				</Heading>
 				{exchangeLength >= 1 ? (
@@ -56,38 +56,38 @@ const TestResults = ({ testResults, exchangeLength, test }: TestProps) => {
 									>
 										<AccordionButton
 											_hover={{
-												backgroundColor: 'none',
+												backgroundColor: "none",
 											}}
 											_focus={{
-												outline: 'none',
-												borderBottom: '1px solid',
+												outline: "none",
+												borderBottom: "1px solid",
 											}}
 											_active={{
-												borderBottom: '1px solid',
+												borderBottom: "1px solid",
 											}}
 											borderRadius="sm"
 											p={4}
 											justifyContent="space-between"
 										>
 											<Flex>
-												<Text fontWeight="600" mr={2}>
-													{exchange.meta.apiType === 'graphql'
+												<Text fontWeight={600} mr={2}>
+													{exchange.meta.apiType === "graphql"
 														? JSON.parse(exchange.request.body)[
-																'query'
-														  ].startsWith('query')
-															? 'QUERY'
+																"query"
+														  ].startsWith("query")
+															? "QUERY"
 															: JSON.parse(exchange.request.body)[
-																	'query'
-															  ].startsWith('mutation')
-															? 'MUTATION'
+																	"query"
+															  ].startsWith("mutation")
+															? "MUTATION"
 															: JSON.parse(exchange.request.body)[
-																	'query'
-															  ].startsWith('subscription')
-															? 'SUBSCRIPTION'
+																	"query"
+															  ].startsWith("subscription")
+															? "SUBSCRIPTION"
 															: exchange.request.method.toUpperCase()
 														: exchange.request.method.toUpperCase()}
 												</Text>
-												<Text fontWeight="600">{exchange.meta.path}</Text>
+												<Text fontWeight={600}>{exchange.meta.path}</Text>
 											</Flex>
 											<AccordionIcon />
 										</AccordionButton>
@@ -95,7 +95,7 @@ const TestResults = ({ testResults, exchangeLength, test }: TestProps) => {
 											<Flex>
 												{exchange.response.statusCode && (
 													<Code
-														fontWeight="700"
+														fontWeight={700}
 														mb={2}
 														fontSize="md"
 														colorScheme="gray"
@@ -111,9 +111,9 @@ const TestResults = ({ testResults, exchangeLength, test }: TestProps) => {
 													</Heading>
 													<CodeBlock className="graphql" copyButton={false}>
 														{prettier.format(
-															JSON.parse(exchange.request.body)['query'],
+															JSON.parse(exchange.request.body)["query"],
 															{
-																parser: 'graphql',
+																parser: "graphql",
 																plugins: [parserGraphql],
 															}
 														)}
@@ -125,7 +125,7 @@ const TestResults = ({ testResults, exchangeLength, test }: TestProps) => {
 													<Heading as="h4" textStyle="h4" my={4}>
 														Response body:
 													</Heading>
-													{exchange.response.body.startsWith('{') !== true ? (
+													{exchange.response.body.startsWith("{") !== true ? (
 														<CodeBlock className="html" copyButton={false}>
 															{exchange.response.body}
 														</CodeBlock>
@@ -154,7 +154,7 @@ const TestResults = ({ testResults, exchangeLength, test }: TestProps) => {
 				)}
 			</Box>
 		</>
-	);
-};
+	)
+}
 
-export default TestResults;
+export default TestResults

@@ -1,0 +1,44 @@
+---
+version: "0.5.7"
+date: 12-04-2021
+title: Release v0.5.7 | Meeshkan
+description: Release v0.5.7 | Keep up to date on the development of the Meeshkan product.
+slug: 12-04-2021
+authors: ["ben"]
+published: true
+tags:
+  - changelog
+---
+
+# Test Runs are picking up the pace 🏃
+
+![Screenshot](https://user-images.githubusercontent.com/76995637/114603491-12d76480-9c98-11eb-908e-58f8efab88a1.png)
+
+After some minor tweaks, we're proud to share the Test Runner `beta` with **all** Meeshkan users! Now it only takes 1 click to turn a User Story into a Test Case, and they'll run _daily_ against your staging environment.
+
+That's **1 click** to write tests, run tests, and analyze test outcomes 😱
+
+Used together with [Test Case exports](/blog/how-to-puppeteer-jest-github-action/), you can comprehensively and rapidly test your **entire** UI.
+
+<a
+	onClick={() => {
+		window.Intercom("showMessages")
+	}}
+>
+	Need a hand setting it up?
+</a>
+
+### Here's everything else we've been up to in the last cycle:
+
+- Enuring that Test Runs are triggered only when a staging URL and Test Cases exist.
+- Video creation for all failed tests in the Test Runner
+- Test Runner respects `isAuthenticated`, and only authenticates if necessary for the Test Case
+- Script and Chrome extension refactoring for performance and type safety
+- [Chrome extension update](https://chrome.google.com/webstore/detail/meeshkan-recorder/cfjdddhjecoeahjkmegbkakfpppflmgo?hl=en) has pretty rounded corners 🤗 (this will update automatically, no need to re-install)
+- Added a skeleton table that displays while User Stories are loading
+- Added the ability to turn on/off Test Runs (_Settings_ > _Details_)
+
+#### Fixes:
+
+- **Now, recording the log-in flow is fast and smooth.** Before, recording the log-in flow manually occasionally did not correctly register as an authenticated flow.
+- **Now, scrolling is natural and consistent across all screen sizes and devices.** Before, on smaller screens and on mobile, there were some CSS and scrolling bugs in settings and the sidebar.

@@ -1,25 +1,25 @@
-import React from 'react';
-import { Link as GatsbyLink } from 'gatsby';
-import { Button } from '@chakra-ui/react';
+import React from "react"
+import { Link as GatsbyLink } from "gatsby"
+import { Button, useColorModeValue } from "@chakra-ui/react"
 
 type NavLinkProps = {
-	text: string;
-	path: string;
-};
+	text: string
+	path: string
+}
 
 const NavLink = ({ text, path, ...props }: NavLinkProps) => (
 	<Button
 		{...props}
 		variant="ghost"
+		color={useColorModeValue("gray.500", "gray.400")}
 		as={GatsbyLink}
-		// @ts-ignore
 		to={path}
 		colorScheme="gray"
-		fontWeight="600"
+		fontWeight={600}
 		lineHeight="normal"
 	>
 		{text}
 	</Button>
-);
+)
 
-export default NavLink;
+export default NavLink

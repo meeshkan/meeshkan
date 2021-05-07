@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react"
 import {
 	Box,
 	Heading,
@@ -14,83 +14,83 @@ import {
 	Collapse,
 	useColorModeValue,
 	LightMode,
-} from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import { CheckmarkIcon, GraphQLSnippetIcon } from '../../theme/icons';
-import { useMixpanel } from 'gatsby-plugin-mixpanel';
-import SEO from '../components/molecules/seo';
-import Layout from '../components/templates/layout';
-import { SingleSection } from '../components/organisms/singleSection';
-import { DoubleSection } from '../components/organisms/doubleSection';
-import { useForm } from 'react-hook-form';
-import GenerateTests from '../components/organisms/home/generateTests';
-import HowDoesMeeshkanWork from '../components/organisms/home/meeshkanWorks';
-import Callout from '../components/organisms/callout';
-import TestResults from '../components/organisms/testResults';
+} from "@chakra-ui/react"
+import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons"
+import { CheckmarkIcon, GraphQLSnippetIcon } from "../../theme/icons"
+import { useMixpanel } from "gatsby-plugin-mixpanel"
+import SEO from "../components/molecules/seo"
+import Layout from "../components/templates/layout"
+import { SingleSection } from "../components/organisms/singleSection"
+import { DoubleSection } from "../components/organisms/doubleSection"
+import { useForm } from "react-hook-form"
+import GenerateTests from "../components/organisms/home/generateTests"
+import HowDoesMeeshkanWork from "../components/organisms/home/meeshkanWorks"
+import Callout from "../components/organisms/callout"
+import TestResults from "../components/organisms/testResults"
 
 type ItemProp = {
-	text: string;
-};
+	text: string
+}
 
 function ListItem({ text }: ItemProp) {
 	return (
 		<Stack isInline mt={6} alignItems="center" spacing={4}>
 			<CheckmarkIcon color="cyan.500" size="24px" />
-			<Text fontWeight="500">{text}</Text>
+			<Text fontWeight={500}>{text}</Text>
 		</Stack>
-	);
+	)
 }
 
 const TestGraphqlPage = () => {
-	const [endpointSubmit, setEndpointSubmit] = useState(false);
-	const [testing, setTesting] = useState(false);
-	const [testResults, setTestResults] = useState(JSON);
-	const { handleSubmit, register } = useForm();
-	const [show, setShow] = React.useState(false);
-	const mixpanel = useMixpanel();
+	const [endpointSubmit, setEndpointSubmit] = useState(false)
+	const [testing, setTesting] = useState(false)
+	const [testResults, setTestResults] = useState(JSON)
+	const { handleSubmit, register } = useForm()
+	const [show, setShow] = React.useState(false)
+	const mixpanel = useMixpanel()
 
 	const onSubmit = (mixpanel) => (values) => {
-		setTesting(true);
+		setTesting(true)
 		let endpointData = JSON.stringify({
 			endpoint: values.endpoint,
 			headers: {
 				cookie: values.cookie,
 				authorization: values.authorization,
 			},
-		});
-		mixpanel.track('Test a graphql endpoint', {
-			to: 'https://meeshkan.io/runr',
-			from: 'https://meeshkan.com/test-graphql/',
-			c2a: 'Test endpoint',
+		})
+		mixpanel.track("Test a graphql endpoint", {
+			to: "https://meeshkan.io/runr",
+			from: "https://meeshkan.com/test-graphql/",
+			c2a: "Test endpoint",
 			payload: endpointData,
-		});
-		fetch('https://meeshkan.io/runr', {
-			method: 'POST',
+		})
+		fetch("https://meeshkan.io/runr", {
+			method: "POST",
 			body: endpointData,
 			headers: {
-				'Api-Key': process.env.GATSBY_MINI_TESTER_AUTH,
+				"Api-Key": process.env.GATSBY_MINI_TESTER_AUTH,
 			},
 		})
 			.then((res) => {
-				setTesting(true);
-				setEndpointSubmit(true);
+				setTesting(true)
+				setEndpointSubmit(true)
 				if (res.status !== 200) {
 					console.log(
-						'Looks like there was a problem. Status Code: ' + res.status
-					);
-					return;
+						"Looks like there was a problem. Status Code: " + res.status
+					)
+					return
 				}
 
 				res.json().then((data) => {
-					console.log(data);
-					setTestResults(data);
-				});
-				setTesting(false);
+					console.log(data)
+					setTestResults(data)
+				})
+				setTesting(false)
 			})
 			.catch((error) => {
-				error.message;
-			});
-	};
+				error.message
+			})
+	}
 
 	return (
 		<Layout>
@@ -105,7 +105,7 @@ const TestGraphqlPage = () => {
 						colorScheme="cyan"
 						letterSpacing="widest"
 						fontSize="14px"
-						fontWeight="600"
+						fontWeight={600}
 						rounded="sm"
 						padding="0px 4px"
 						minH="auto"
@@ -117,13 +117,13 @@ const TestGraphqlPage = () => {
 					as="h1"
 					textStyle="h1"
 					mb={6}
-					textAlign={['left', 'left', 'center']}
+					textAlign={["left", "left", "center"]}
 				>
 					Your search for dynamic GraphQL testing ends here.
 				</Heading>
 				<Text
-					textAlign={['left', 'left', 'center']}
-					fontSize={['lg', 'xl', '2xl']}
+					textAlign={["left", "left", "center"]}
+					fontSize={["lg", "xl", "2xl"]}
 					lineHeight="short"
 					mb={6}
 				>
@@ -140,27 +140,27 @@ const TestGraphqlPage = () => {
 
 				<Box
 					mb={4}
-					backgroundColor={useColorModeValue('gray.900', 'gray.800')}
+					backgroundColor={useColorModeValue("gray.900", "gray.800")}
 					p={4}
 					borderRadius="md"
-					w={['full', 'full', '600px']}
+					w={["full", "full", "600px"]}
 				>
 					<Stack as="form" onSubmit={handleSubmit(onSubmit(mixpanel))}>
 						<Flex
-							direction={['column', 'column', 'row']}
+							direction={["column", "column", "row"]}
 							justify="center"
 							alignItems="flex-end"
 						>
 							<DarkMode>
 								<FormControl isRequired mr={[0, 0, 4]} mb={[4, 4, 0]} w="100%">
 									<Flex align="baseline">
-										<FormLabel fontWeight="700" color="white">
+										<FormLabel fontWeight={700} color="white">
 											Endpoint
 										</FormLabel>
 										<Text
 											fontStyle="italic"
 											color="gray.500"
-											fontWeight="400"
+											fontWeight={400}
 											ml={2}
 											fontSize="14px"
 										>
@@ -175,7 +175,7 @@ const TestGraphqlPage = () => {
 										aria-label="Your GraphQL Endpoint"
 										placeholder="Your GraphQL Endpoint"
 										isDisabled={endpointSubmit}
-										fontWeight="500"
+										fontWeight={500}
 										color="white"
 									/>
 								</FormControl>
@@ -187,7 +187,7 @@ const TestGraphqlPage = () => {
 									isLoading={testing}
 									loadingText="Testing"
 									isDisabled={endpointSubmit}
-									w={['100%', '100%', 'inherit']}
+									w={["100%", "100%", "inherit"]}
 									minW="fit-content"
 								>
 									Test Endpoint
@@ -202,12 +202,12 @@ const TestGraphqlPage = () => {
 								onClick={() => setShow(!show)}
 								mb={4}
 							>
-								{show ? `Less` : `More`} options{' '}
+								{show ? `Less` : `More`} options{" "}
 								{show ? <ChevronUpIcon ml={2} /> : <ChevronDownIcon ml={2} />}
 							</Button>
 							<Collapse in={show}>
 								<Flex
-									direction={['column', 'column', 'row']}
+									direction={["column", "column", "row"]}
 									justify="center"
 									alignItems="flex-end"
 								>
@@ -215,9 +215,9 @@ const TestGraphqlPage = () => {
 										mr={[0, 0, 4]}
 										mb={[4, 4, 0]}
 										w="100%"
-										maxW={['full', 'full', '100%']}
+										maxW={["full", "full", "100%"]}
 									>
-										<FormLabel fontWeight="700" color="white">
+										<FormLabel fontWeight={700} color="white">
 											Cookie header
 										</FormLabel>
 										<Input
@@ -226,12 +226,12 @@ const TestGraphqlPage = () => {
 											borderColor="gray.500"
 											aria-label="Your GraphQL Endpoint cookie header"
 											isDisabled={endpointSubmit}
-											fontWeight="500"
+											fontWeight={500}
 											color="white"
 										/>
 									</FormControl>
-									<FormControl w="100%" maxW={['full', 'full', '100%']}>
-										<FormLabel fontWeight="700" color="white">
+									<FormControl w="100%" maxW={["full", "full", "100%"]}>
+										<FormLabel fontWeight={700} color="white">
 											Authorization header
 										</FormLabel>
 										<Input
@@ -240,7 +240,7 @@ const TestGraphqlPage = () => {
 											borderColor="gray.500"
 											aria-label="Your GraphQL Endpoint authorization"
 											isDisabled={endpointSubmit}
-											fontWeight="500"
+											fontWeight={500}
 											color="white"
 										/>
 									</FormControl>
@@ -324,7 +324,7 @@ const TestGraphqlPage = () => {
 					GraphQL testing today."
 			/>
 		</Layout>
-	);
-};
+	)
+}
 
-export default TestGraphqlPage;
+export default TestGraphqlPage

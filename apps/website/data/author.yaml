@@ -2,7 +2,7 @@
   name: Mike Solomon
   avatar: avatars/mike.png
   authorLink: https://dev.to/mikesol
-  bio: CEO
+  bio: CEO & founder
 - id: kimmo
   name: Kimmo Sääskilahti
   avatar: avatars/kimmo.png
@@ -17,12 +17,12 @@
   name: Makenna Smutz
   avatar: avatars/kenna.png
   authorLink: https://twitter.com/kenzsmutz
-  bio: COO
+  bio: COO & co-founder
 - id: nikolaos
   name: Nikolaos Kamarinakis
   avatar: avatars/nikolaos.png
   authorLink: https://nikolaskama.me/
-  bio: Developer in Residence
+  bio: Software Engineer
 - id: maria
   name: Maria Malitckaya
   avatar: avatars/maria.png
@@ -35,6 +35,11 @@
   bio: Open Source Engineer
 - id: nikolay
   name: Nikolay Zenovkin
-  avatar: avatars/nikolay.png
+  avatar: avatars/Kolya.jpg
   authorLink: https://github.com/aby2s
   bio: Data Scientist
+- id: ben
+  name: Ben Snyder
+  avatar: avatars/ben.png
+  authorLink: https://www.linkedin.com/in/bsnydr/
+  bio: Growth Marketer
