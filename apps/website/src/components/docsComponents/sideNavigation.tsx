@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Stack } from "@chakra-ui/react"
+import { Box, BoxProps, Stack } from "@chakra-ui/react"
 import items from "./items"
 import { ItemLink, stringToUrl } from "./navLink"
 
@@ -25,7 +25,7 @@ export const SideNavContent = ({ contentHeight = "calc(100vh)", ...props }) => {
 		</Box>
 	)
 }
-const SideNavContainer = (props) => (
+const SideNavContainer = (props: BoxProps) => (
 	<Box
 		position="fixed"
 		left={0}
@@ -37,7 +37,7 @@ const SideNavContainer = (props) => (
 	/>
 )
 
-const SideNav = (props) => {
+const SideNav = (props: BoxProps) => {
 	return (
 		<SideNavContainer {...props}>
 			<SideNavContent />

@@ -1,7 +1,6 @@
 import React from "react"
 import {
 	Heading,
-	Text,
 	Accordion,
 	AccordionItem,
 	AccordionButton,

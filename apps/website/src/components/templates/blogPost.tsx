@@ -33,7 +33,7 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 	const { frontmatter, body } = data.mdx
 	const { previous, next } = pageContext
 
-	const prettyDate = (date) => {
+	const prettyDate = (date: string) => {
 		const rawDate = new Date(date)
 		return rawDate.toLocaleDateString("en-US", {
 			month: "short",
@@ -63,27 +63,34 @@ const BlogPost = ({ data, pageContext }: BlogPostProps) => {
 						mx="auto"
 					>
 						{frontmatter.authors.length > 1 ? (
-							frontmatter.authors.map((author) => (
-								<Stack isInline align="center" spacing={4} mx={4}>
-									<Avatar
-										name={author.name}
-										src={author.avatar.childImageSharp.fluid.src}
-										size="md"
-									/>
-									<Box>
-										<Text
-											as={ChakraLink}
-											href={author.authorLink}
-											target="_blank"
-											rel="noopener noreferrer"
-											fontWeight={700}
-										>
-											{author.name}
-										</Text>
-										<Text>{author.bio}</Text>
-									</Box>
-								</Stack>
-							))
+							frontmatter.authors.map(
+								(author: {
+									name: string
+									authorLink: string
+									bio: string
+									avatar: { childImageSharp: { fluid: { src: string } } }
+								}) => (
+									<Stack isInline align="center" spacing={4} mx={4}>
+										<Avatar
+											name={author.name}
+											src={author.avatar.childImageSharp.fluid.src}
+											size="md"
+										/>
+										<Box>
+											<Text
+												as={ChakraLink}
+												href={author.authorLink}
+												target="_blank"
+												rel="noopener noreferrer"
+												fontWeight={700}
+											>
+												{author.name}
+											</Text>
+											<Text>{author.bio}</Text>
+										</Box>
+									</Stack>
+								)
+							)
 						) : (
 							<Stack isInline align="center" justify="center" spacing={4}>
 								<Avatar

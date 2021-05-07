@@ -3,7 +3,6 @@ import {
 	Box,
 	Flex,
 	Text,
-	SimpleGrid,
 	useColorModeValue,
 	Divider,
 	Stack,

@@ -23,6 +23,7 @@ import Layout from "../components/templates/layout"
 import { graphql, Link, useStaticQuery } from "gatsby"
 import SEO from "../components/molecules/seo"
 import { ChevronDownIcon } from "@chakra-ui/icons"
+import { Project } from "@linear/sdk"
 
 type LinkProps = {
 	url: string
@@ -149,32 +150,36 @@ const Roadmap = () => {
 	// (Q3) is from July 7 to September 9
 	// (Q4) is from October 10 to December 12
 
-	const Q2_2021 = linear.team.projects.nodes.filter((project) =>
+	const Q2_2021 = linear.team.projects.nodes.filter((project: Project) =>
 		project.milestone !== null
-			? project.milestone.name.startsWith("Q2 2021")
+			? // @ts-expect-error
+			  project.milestone.name.startsWith("Q2 2021")
 			: null
 	)
-	const Q3_2021 = linear.team.projects.nodes.filter((project) =>
+	const Q3_2021 = linear.team.projects.nodes.filter((project: Project) =>
 		project.milestone !== null
-			? project.milestone.name.startsWith("Q3 2021")
+			? // @ts-expect-error
+			  project.milestone.name.startsWith("Q3 2021")
 			: null
 	)
-	const Q4_2021 = linear.team.projects.nodes.filter((project) =>
+	const Q4_2021 = linear.team.projects.nodes.filter((project: Project) =>
 		project.milestone !== null
-			? project.milestone.name.startsWith("Q4 2021")
+			? // @ts-expect-error
+			  project.milestone.name.startsWith("Q4 2021")
 			: null
 	)
 	const backlog = linear.team.projects.nodes.filter(
-		(project) =>
+		(project: Project) =>
 			project.milestone === null &&
 			project.state !== "canceled" &&
 			project.state !== "completed"
 	)
 
 	const pastCompletion = linear.team.projects.nodes.filter(
-		(project) =>
+		(project: Project) =>
 			(project.milestone === null && project.state === "completed") ||
 			(project.milestone !== null &&
+				// @ts-expect-error
 				project.milestone.name.startsWith("Q1 2021"))
 	)
 
@@ -279,7 +284,7 @@ const Roadmap = () => {
 							Q2 2021
 						</Heading>
 						<SimpleGrid columns={[1, 1, 2]} spacing={8}>
-							{Q2_2021.map((project, index) => (
+							{Q2_2021.map((project: Project, index: number) => (
 								<Milestone
 									key={index}
 									title={project.name}
@@ -304,7 +309,7 @@ const Roadmap = () => {
 							Q3 2020
 						</Heading>
 						<SimpleGrid columns={[1, 1, 2]} spacing={8}>
-							{Q3_2021.map((project, index) => (
+							{Q3_2021.map((project: Project, index: number) => (
 								<Milestone
 									key={index}
 									title={project.name}
@@ -329,7 +334,7 @@ const Roadmap = () => {
 							Q3 2020
 						</Heading>
 						<SimpleGrid columns={[1, 1, 2]} spacing={8}>
-							{Q4_2021.map((project, index) => (
+							{Q4_2021.map((project: Project, index: number) => (
 								<Milestone
 									key={index}
 									title={project.name}
@@ -354,7 +359,7 @@ const Roadmap = () => {
 							Backlog
 						</Heading>
 						<SimpleGrid columns={[1, 1, 2]} spacing={8}>
-							{backlog.map((project, index) => (
+							{backlog.map((project: Project, index: number) => (
 								<Milestone
 									key={index}
 									title={project.name}
@@ -389,7 +394,7 @@ const Roadmap = () => {
 
 						<Collapse in={isOpen} animateOpacity>
 							<SimpleGrid columns={[1, 1, 2]} spacing={8} mt={4}>
-								{pastCompletion.map((project, index) => (
+								{pastCompletion.map((project: Project, index: number) => (
 									<Milestone
 										key={index}
 										title={project.name}

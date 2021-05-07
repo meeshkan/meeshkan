@@ -17,7 +17,7 @@ import { useMixpanel } from "gatsby-plugin-mixpanel"
 import { SingleSection } from "../components/organisms/singleSection"
 import Layout from "../components/templates/layout"
 import SEO from "../components/molecules/seo"
-import { CheckSquareIcon } from "../../theme/icons"
+import { CheckSquareIcon } from "@frontend/chakra-theme"
 import SegmentedControl from "../components/molecules/segmented-control"
 import LeadForm from "../components/molecules/leadForm"
 import { UniversalLink } from "../components/atoms/UniversalLink"
@@ -88,7 +88,9 @@ const PricingPage = () => {
 					Meeshkan Pricing
 				</Heading>
 				<Text fontSize="2xl" textAlign="center" mb={12} lineHeight="tall">
-					Quality assurance isn't all-or-nothing. Our plans scale with your team's needs: for all budgets, any volume of tests, and in as much detail as you need. Everyone deserves more confidence in each release.
+					Quality assurance isn't all-or-nothing. Our plans scale with your
+					team's needs: for all budgets, any volume of tests, and in as much
+					detail as you need. Everyone deserves more confidence in each release.
 				</Text>
 
 				<>
@@ -170,8 +172,7 @@ const PricingPage = () => {
 										<Button
 											w="full"
 											as={UniversalLink}
-											// @ts-ignore
-											href="https://app.meeshkan.com"
+											to="https://app.meeshkan.com"
 											aria-label="Go to the Meeshkan webapp to sign up"
 										>
 											Choose the Feedback plan
@@ -222,8 +223,7 @@ const PricingPage = () => {
 							</Box>
 							<Button
 								as={UniversalLink}
-								// @ts-ignore
-								href="https://app.meeshkan.com"
+								to="https://app.meeshkan.com"
 								aria-label="Go to the Meeshkan webapp to sign up"
 								variant="subtle"
 								mt={8}

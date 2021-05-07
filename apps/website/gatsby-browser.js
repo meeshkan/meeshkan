@@ -1,6 +1,6 @@
 import React from "react"
 import { ChakraProvider } from "@chakra-ui/react"
-import customTheme from "./theme/theme"
+import customTheme from "@frontend/chakra-theme"
 import Prism from "prism-react-renderer/prism"
 ;(typeof global !== "undefined" ? global : window).Prism = Prism
 require("prismjs/components/prism-haskell")

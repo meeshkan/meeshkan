@@ -1,6 +1,6 @@
 import React from "react"
 import { Box, Flex, Text } from "@chakra-ui/react"
-import { CheckmarkIcon, XmarkIcon } from "../../../theme/icons"
+import { CheckmarkIcon, XmarkIcon } from "@frontend/chakra-theme"
 
 type TestProps = {
 	success: boolean

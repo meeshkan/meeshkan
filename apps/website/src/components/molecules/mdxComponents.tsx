@@ -3,7 +3,6 @@ import {
 	Heading,
 	Text,
 	Image,
-	List,
 	ListItem,
 	Box,
 	Divider,
@@ -12,6 +11,16 @@ import {
 	useColorModeValue,
 	UnorderedList,
 	OrderedList,
+	HeadingProps,
+	TextProps,
+	AlertProps,
+	CodeProps,
+	DividerProps,
+	LinkProps,
+	ImageProps,
+	BoxProps,
+	ListProps,
+	ListItemProps,
 } from "@chakra-ui/react"
 import CodeBlock from "./codeBlock"
 import { UniversalLink } from "../atoms/UniversalLink"
@@ -62,38 +71,54 @@ export const DocsHeading = ({ id, children, ...props }: DocsHeadingProps) => (
 )
 
 const components = {
-	h1: (props) => (
+	h1: (props?: HeadingProps) => (
 		<Heading {...props} as="h1" textStyle="h1" mb={12}>
 			{props.children}
 		</Heading>
 	),
-	h2: (props) => <DocsHeading as="h2" textStyle="h2" {...props}></DocsHeading>,
-	h3: (props) => <DocsHeading as="h3" textStyle="h3" {...props} />,
-	h4: (props) => <DocsHeading as="h4" textStyle="h4" {...props} />,
-	h5: (props) => (
+	h2: (props?: HeadingProps) => (
+		<DocsHeading as="h2" textStyle="h2" {...props}>
+			{props.children}
+		</DocsHeading>
+	),
+	h3: (props?: HeadingProps) => (
+		<DocsHeading as="h3" textStyle="h3" {...props}>
+			{props.children}
+		</DocsHeading>
+	),
+	h4: (props?: HeadingProps) => (
+		<DocsHeading as="h4" textStyle="h4" {...props}>
+			{props.children}
+		</DocsHeading>
+	),
+	h5: (props: HeadingProps) => (
 		<DocsHeading
 			as="h5"
 			textStyle="h5"
 			fontSize="md"
 			fontWeight="600"
 			{...props}
-		/>
+		>
+			{props.children}
+		</DocsHeading>
 	),
-	h6: (props) => (
+	h6: (props?: HeadingProps) => (
 		<DocsHeading
 			as="h6"
 			textStyle="h6"
 			fontSize="sm"
 			fontWeight="500"
 			{...props}
-		/>
+		>
+			{props.children}
+		</DocsHeading>
 	),
-	p: (props) => (
+	p: (props?: TextProps) => (
 		<Text as="p" mt={4} lineHeight="tall" {...props}>
 			{props.children}
 		</Text>
 	),
-	blockquote: (props) => (
+	blockquote: (props?: AlertProps) => (
 		<Alert
 			my={6}
 			variant="left-accent"
@@ -105,7 +130,7 @@ const components = {
 			{props.children}
 		</Alert>
 	),
-	inlineCode: (props) => (
+	inlineCode: (props?: CodeProps) => (
 		<Code
 			colorScheme="cyan"
 			fontSize="inherit"
@@ -116,36 +141,41 @@ const components = {
 			{...props}
 		/>
 	),
-	hr: (props) => <Divider borderColor="gray.100" my={6} {...props} />,
-	a: (props) => (
+	hr: (props?: DividerProps) => (
+		<Divider borderColor="gray.100" my={6} {...props} />
+	),
+	a: (props?: LinkProps) => (
 		<UniversalLink
+			// @ts-expect-error
 			color={useColorModeValue("blue.500", "blue.200")}
 			{...props}
 		/>
 	),
-	img: (props) => <Image {...props} rounded="lg" />,
-	pre: (props) => <Box my="2em" fontSize="inherit" rounded="sm" {...props} />,
+	img: (props?: ImageProps) => <Image {...props} rounded="lg" />,
+	pre: (props?: BoxProps) => (
+		<Box my="2em" fontSize="inherit" rounded="sm" {...props} />
+	),
 	code: CodeBlock,
-	ul: (props) => (
+	ul: (props?: ListProps) => (
 		<UnorderedList mt={4} spacing={3} {...props}>
 			{props.children}
 		</UnorderedList>
 	),
-	ol: (props) => (
+	ol: (props?: ListProps) => (
 		<OrderedList my={8} spacing={3} {...props}>
 			{props.children}
 		</OrderedList>
 	),
-	li: (props) => (
+	li: (props?: ListItemProps) => (
 		<ListItem _last={{ mb: 8 }} lineHeight="1.6" {...props}>
 			{props.children}
 		</ListItem>
 	),
-	table: (props) => (
+	table: (props?: BoxProps) => (
 		<Box as="table" textAlign="left" mt={6} width="full" {...props} />
 	),
 	// tr:,
-	td: (props) => (
+	td: (props?: BoxProps) => (
 		<Box
 			as="td"
 			p={2}
@@ -156,13 +186,12 @@ const components = {
 			{...props}
 		/>
 	),
-	th: (props) => (
+	th: (props?: BoxProps) => (
 		<Box as="th" p={2} fontWeight="semibold" fontSize="sm" {...props} />
 	),
-	thematicBreak: (props) => <Box height={6} {...props} />,
+	thematicBreak: (props?: BoxProps) => <Box height={6} {...props} />,
 	Video,
 	RequestAccess,
-	Script: (props) => <script {...props} />,
 }
 
 export default components

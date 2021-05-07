@@ -13,7 +13,7 @@ import { Card } from "../components/atoms/card"
 import SEO from "../components/molecules/seo"
 import Layout from "../components/templates/layout"
 
-const BlogHome = ({ data }) => {
+const BlogHome = ({ data }: { data: any }) => {
 	return (
 		<Layout>
 			<SEO
@@ -34,56 +34,71 @@ const BlogHome = ({ data }) => {
 					]}
 					gap={6}
 				>
-					{data.allMdx.nodes.map(({ frontmatter, id }) => {
-						const rawDate = new Date(frontmatter.date)
-						const date = rawDate.toLocaleDateString("en-US", {
-							month: "short",
-							year: "numeric",
-							day: "numeric",
-						})
-						return (
-							<Card
-								key={id}
-								heading={frontmatter.title}
-								body={frontmatter.description}
-								link={`/blog/${frontmatter.slug}/`}
-								label={`Read the blog: ${frontmatter.title}.`}
-							>
-								<Flex
-									align="center"
-									justify="space-between"
-									mt={4}
-									mx="auto"
-									pos="absolute"
-									bottom={4}
-									right={6}
-									left={6}
+					{data.allMdx.nodes.map(
+						({
+							frontmatter,
+							id,
+						}: {
+							frontmatter: {
+								date: string
+								title: string
+								description: string
+								slug: string
+								authors: any
+							}
+							id: string
+						}) => {
+							const rawDate = new Date(frontmatter.date)
+							const date = rawDate.toLocaleDateString("en-US", {
+								month: "short",
+								year: "numeric",
+								day: "numeric",
+							})
+							return (
+								<Card
+									key={id}
+									heading={frontmatter.title}
+									body={frontmatter.description}
+									link={`/blog/${frontmatter.slug}/`}
+									label={`Read the blog: ${frontmatter.title}.`}
 								>
-									{frontmatter.authors.length >= 1 ? (
-										<AvatarGroup max={2} size="sm">
-											{frontmatter.authors.map((author) => (
-												<Avatar
-													name={author.name}
-													src={author.avatar.childImageSharp.fluid.src}
-													size="sm"
-												/>
-											))}
-										</AvatarGroup>
-									) : (
-										<Avatar
-											name={frontmatter.authors[0].name}
-											src={
-												frontmatter.authors[0].avatar.childImageSharp.fluid.src
-											}
-											size="sm"
-										/>
-									)}
+									<Flex
+										align="center"
+										justify="space-between"
+										mt={4}
+										mx="auto"
+										pos="absolute"
+										bottom={4}
+										right={6}
+										left={6}
+									>
+										{frontmatter.authors.length >= 1 ? (
+											<AvatarGroup max={2} size="sm">
+												{frontmatter.authors.map((author: any) => (
+													<Avatar
+														name={author.name}
+														src={author.avatar.childImageSharp.fluid.src}
+														size="sm"
+													/>
+												))}
+											</AvatarGroup>
+										) : (
+											<Avatar
+												name={frontmatter.authors[0].name}
+												src={
+													frontmatter.authors[0].avatar.childImageSharp.fluid
+														.src
+												}
+												size="sm"
+											/>
+										)}
 
-									<Text>{date}</Text>
-								</Flex>
-							</Card>
-						)
-					})}
+										<Text>{date}</Text>
+									</Flex>
+								</Card>
+							)
+						}
+					)}
 				</Grid>
 			</SingleSection>
 		</Layout>

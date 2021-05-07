@@ -37,7 +37,7 @@ import {
 	TimerIcon,
 	ChatIcon,
 	RocketshipIcon,
-} from "../../../theme/icons"
+} from "@frontend/chakra-theme"
 import { ArrowForwardIcon, ChevronDownIcon } from "@chakra-ui/icons"
 import { AnimatedLogo } from "../molecules/animatedLogo"
 
@@ -46,8 +46,7 @@ function SignUpLink() {
 		<LightMode>
 			<Button
 				as={UniversalLink}
-				// @ts-ignore
-				href="https://app.meeshkan.com/login"
+				to="https://app.meeshkan.com/login"
 				aria-label="Log in to the Meeshkan webapp"
 				lineHeight="normal"
 				ml={[0, 0, 8]}
@@ -61,8 +60,7 @@ function LogInLink() {
 	return (
 		<Button
 			as={UniversalLink}
-			// @ts-ignore
-			href="https://app.meeshkan.com"
+			to="https://app.meeshkan.com"
 			aria-label="Log in to the Meeshkan webapp"
 			variant="ghost"
 			fontWeight={600}

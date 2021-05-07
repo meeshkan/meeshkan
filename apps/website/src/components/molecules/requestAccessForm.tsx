@@ -6,7 +6,7 @@ const RequestAccessForm = () => {
 	const { handleSubmit, register, formState } = useForm()
 	const [formSubmit, setFormSubmit] = useState(false)
 
-	function onSubmit(values) {
+	function onSubmit(values: { email: string }) {
 		let sendgridData = JSON.stringify({
 			list_ids: ["065bb90b-9652-4905-85df-a6c49fb825cd"],
 			contacts: [

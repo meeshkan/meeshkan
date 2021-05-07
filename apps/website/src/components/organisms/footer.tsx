@@ -15,7 +15,7 @@ import {
 	LinkedInIcon,
 	LogoIcon,
 	TwitterIcon,
-} from "../../../theme/icons"
+} from "@frontend/chakra-theme"
 
 export function Footer() {
 	return (

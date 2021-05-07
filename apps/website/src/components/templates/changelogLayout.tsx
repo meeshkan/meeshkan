@@ -9,7 +9,7 @@ import mdxComponents from "../molecules/mdxComponents"
 import { graphql, Link } from "gatsby"
 import { ChevronLeftIcon } from "@chakra-ui/icons"
 
-const ChangelogLayout = ({ data }) => {
+const ChangelogLayout = ({ data }: { data: any }) => {
 	return (
 		<Layout>
 			<MDXProvider components={mdxComponents}>

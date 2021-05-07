@@ -19,7 +19,7 @@ import MDXComponents, {
 import SideNav from "../components/docsComponents/sideNavigation"
 import { UniversalLink } from "../components/atoms/UniversalLink"
 
-const DocsText = ({ children }) => (
+const DocsText = ({ children }: { children: any }) => (
 	<Text as="p" mt={4} lineHeight="tall">
 		{children}
 	</Text>

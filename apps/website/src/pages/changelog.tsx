@@ -8,7 +8,7 @@ import { graphql } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
 import mdxComponents from "../components/molecules/mdxComponents"
 
-const ChangelogPage = ({ data }) => {
+const ChangelogPage = ({ data }: { data: any }) => {
 	return (
 		<Layout>
 			<MDXProvider components={mdxComponents}>
@@ -23,7 +23,7 @@ const ChangelogPage = ({ data }) => {
 				>
 					<Divider />
 
-					{data.allMdx.nodes.map((changelogItem) => {
+					{data.allMdx.nodes.map((changelogItem: any) => {
 						const day = changelogItem.frontmatter.date.slice(0, 2)
 						const month = changelogItem.frontmatter.date.slice(4, 5) - 1
 						const year = changelogItem.frontmatter.date.slice(6, 10)

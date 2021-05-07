@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react"
 import Codeblock from "../../molecules/codeBlock"
 import { CloseIcon, ChevronDownIcon, ArrowForwardIcon } from "@chakra-ui/icons"
-import { XmarkIcon } from "../../../../theme/icons"
+import { XmarkIcon } from "@frontend/chakra-theme"
 
 const GenerateTests = () => {
 	const [openTest, setOpenTest] = useState(false)

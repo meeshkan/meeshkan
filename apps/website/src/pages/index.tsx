@@ -21,7 +21,6 @@ import {
 	Link,
 } from "@chakra-ui/react"
 import { SingleSection } from "../components/organisms/singleSection"
-// import { useMixpanel } from "gatsby-plugin-mixpanel"
 import { DoubleSection } from "../components/organisms/doubleSection"
 import Layout from "../components/templates/layout"
 import {
@@ -34,7 +33,7 @@ import {
 	VideoIcon,
 	WingLogo,
 	ZapIcon,
-} from "../../theme/icons"
+} from "@frontend/chakra-theme"
 import FeatureCard from "../components/molecules/featureCard"
 import Callout from "../components/organisms/callout"
 import { StoryStep } from "../components/molecules/sideStep"
@@ -43,8 +42,6 @@ import LeadForm from "../components/molecules/leadForm"
 import { VimodjiLogo } from "../components/atoms/vimodjiLogo"
 
 const IndexPage = () => {
-	// const mixpanel = useMixpanel()
-
 	return (
 		<Layout>
 			<SEO

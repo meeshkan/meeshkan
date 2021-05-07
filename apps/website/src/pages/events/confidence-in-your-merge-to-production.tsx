@@ -18,7 +18,6 @@ import SEO from "../../components/molecules/seo"
 import Layout from "../../components/templates/layout"
 import { useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
-// @ts-expect-error
 import makenna from "../../../data/avatars/kenna.png"
 
 const ConfidenceWebinarPage = () => {

@@ -18,7 +18,7 @@ import {
 	LogoIcon,
 	MoonIcon,
 	SunIcon,
-} from "../../../theme/icons"
+} from "@frontend/chakra-theme"
 import SideNavContent from "../docsComponents/sideNavigation"
 import { AnimatedLogo } from "../molecules/animatedLogo"
 

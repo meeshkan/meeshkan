@@ -2,7 +2,7 @@ import React from "react"
 import { Navigation } from "../organisms/navigation"
 import { Footer } from "../organisms/footer"
 import { Box, IconButton, useColorMode } from "@chakra-ui/react"
-import { MoonIcon, SunIcon } from "../../../theme/icons"
+import { MoonIcon, SunIcon } from "@frontend/chakra-theme"
 
 type LayoutProps = {
 	children: Object

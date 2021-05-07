@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react"
+import { Box, Heading, HeadingProps } from "@chakra-ui/react"
 import { Link as GatsbyLink } from "gatsby"
 import React, { forwardRef } from "react"
 import { useLocation } from "@reach/router"
@@ -25,7 +25,7 @@ const NavLink = ({ children, href, ...props }: NavLinkProps) => {
 	)
 }
 
-export const stringToUrl = (str, path = "/docs/") => {
+export const stringToUrl = (str: string, path = "/docs/") => {
 	return `${path}${str.toLowerCase().split(" ").join("-")}/`
 }
 
@@ -70,7 +70,7 @@ export const TopNavLink = forwardRef(
 		const activeBg = { light: "cyan.50", dark: "cyan.800" }
 		return (
 			<NavLink href={href}>
-				{(isActive) => (
+				{(isActive: boolean) => (
 					<SideNavLink
 						ref={ref}
 						aria-current={isActive ? "page" : undefined}
@@ -95,7 +95,7 @@ export const TopNavLink = forwardRef(
 	}
 )
 
-export const NavGroupHeading = (props) => (
+export const NavGroupHeading = (props: HeadingProps) => (
 	<Heading
 		color="gray.300"
 		fontSize="md"
@@ -119,7 +119,7 @@ export const ItemLink = forwardRef(
 
 		return (
 			<NavLink href={href}>
-				{(isActive) => (
+				{(isActive: boolean) => (
 					<SideNavLink
 						ref={ref}
 						aria-current={isActive ? "page" : undefined}

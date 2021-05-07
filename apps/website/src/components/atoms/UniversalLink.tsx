@@ -1,6 +1,6 @@
 import React from "react"
 import { Link as GatsbyLink } from "gatsby"
-import { Link as ChakraLink } from "@chakra-ui/react"
+import { Link as ChakraLink, LinkProps } from "@chakra-ui/react"
 
 type UniversalLinkProps = {
 	children?: any // string or Object
@@ -13,9 +13,9 @@ export const UniversalLink = ({
 	to,
 	color,
 	...props
-}: UniversalLinkProps) => {
-	const isInternal = (to) => /^\/(?!\/)/.test(to)
-	const isHash = (to) => /^#/.test(to)
+}: UniversalLinkProps & LinkProps) => {
+	const isInternal = (to: string) => /^\/(?!\/)/.test(to)
+	const isHash = (to: string) => /^#/.test(to)
 
 	// Use Gatsby Link for internal links, and <a> for others
 	if (isInternal(to) || isHash(to)) {

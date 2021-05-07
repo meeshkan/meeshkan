@@ -35,9 +35,7 @@ import Test from "../components/molecules/test"
 import { SingleSection } from "../components/organisms/singleSection"
 import { DoubleSection } from "../components/organisms/doubleSection"
 import Layout from "../components/templates/layout"
-// @ts-expect-error
 import testingEnvironment from "../static/testingEnvironment.png"
-// @ts-expect-error
 import devFlow from "../static/devFlow.png"
 import { motion } from "framer-motion"
 import {
@@ -49,7 +47,7 @@ import {
 	ZapIcon,
 	SunIcon,
 	MoonIcon,
-} from "../../theme/icons"
+} from "@frontend/chakra-theme"
 import FeatureCard from "../components/molecules/featureCard"
 import { transparentize } from "@chakra-ui/theme-tools"
 
@@ -62,7 +60,7 @@ const StagingEnvironmentPage = () => {
 	const { handleSubmit, register, formState } = useForm()
 	const [formSubmit, setFormSubmit] = useState(false)
 
-	function onSubmit(values) {
+	function onSubmit(values: { name: string; position: string; email: string }) {
 		let requestAccessData = JSON.stringify({
 			text: `${values.name} has requested access to *pre-release testing* from the staging landing page. \n You can reach them at: _*${values.email}*_. \n They are the _*${values.position}*_ at their company.`,
 		})

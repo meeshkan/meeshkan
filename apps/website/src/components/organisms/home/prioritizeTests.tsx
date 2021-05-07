@@ -7,15 +7,29 @@ import {
 	IconButton,
 	useColorMode,
 } from "@chakra-ui/react"
-import { motion, useReducedMotion } from "framer-motion"
+import { Variant, motion, useReducedMotion } from "framer-motion"
 import {
 	CheckmarkIcon,
 	XmarkIcon,
 	SunIcon,
 	MoonIcon,
-} from "../../../../theme/icons"
+} from "@frontend/chakra-theme"
 
-const Test = ({ success, testCase, priority, animate, colorMode }) => {
+type TestProps = {
+	success: boolean
+	testCase: string
+	priority: number
+	animate: Variant
+	colorMode: "light" | "dark"
+}
+
+const Test = ({
+	success,
+	testCase,
+	priority,
+	animate,
+	colorMode,
+}: TestProps) => {
 	const MotionBox = motion(Box)
 
 	const shouldReduceMotion = useReducedMotion()
