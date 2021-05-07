@@ -11,10 +11,15 @@ import {
 	AlertIcon,
 	AlertDescription,
 	useColorMode,
+	Button,
 } from '@chakra-ui/react';
 import { Doughnut } from 'react-chartjs-2';
 import _ from 'lodash';
-import theme, { EmptyDoughnutIcon } from '@frontend/chakra-theme';
+import theme, {
+	EmptyDoughnutIcon,
+	FilterIcon,
+	SortIcon,
+} from '@frontend/chakra-theme';
 import GridCard from '../../../components/molecules/grid-card';
 import TestRunCard from '../../../components/molecules/test-run-card';
 import Card from '../../../components/atoms/card';
@@ -214,6 +219,44 @@ const TestRunsPage = () => {
 							</Flex>
 						)}
 					</GridCard>
+					<Flex justify="flex-end" mb={3}>
+						<Button
+							isDisabled
+							size="sm"
+							variant="ghost"
+							sx={{
+								mixBlendMode: colorMode === 'light' ? 'multiply' : 'normal',
+							}}
+							colorScheme="gray"
+							fontWeight="400"
+							mr={2}
+							leftIcon={<SortIcon />}
+						>
+							Sort
+						</Button>
+						<Button
+							isDisabled
+							size="sm"
+							variant="ghost"
+							colorScheme="gray"
+							sx={{
+								mixBlendMode: colorMode === 'light' ? 'multiply' : 'normal',
+							}}
+							fontWeight="400"
+							mr={4}
+							leftIcon={<FilterIcon />}
+						>
+							Filter
+						</Button>
+						<Button
+							isLoading={testTriggering}
+							loadingText="Starting test run"
+							size="sm"
+							onClick={triggerTestRun}
+						>
+							Trigger test run
+						</Button>
+					</Flex>
 					{sortedTestRuns.length > 0 ? (
 						<Stack spacing={6}>
 							{sortedTestRuns.map((testRun, index) => {
