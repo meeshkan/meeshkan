@@ -18,11 +18,12 @@ type LayoutProps = {
 };
 
 const Layout = ({ children, ...props }: LayoutProps) => {
-	const { project, ...user } = useContext(UserContext);
+	const user = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure({
 		defaultIsOpen: true,
 	});
 
+	const project = user?.project;
 	useEffect(() => {
 		if (project && !project.configuration?.plan) {
 			onOpen();
