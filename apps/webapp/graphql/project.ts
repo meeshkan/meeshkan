@@ -79,6 +79,21 @@ export const UPDATE_PROJECT = gql`
 	}
 `;
 
+export const UPDATE_STAGING_URL = gql`
+	mutation UPDATE_STAGING_URL($projectID: ID!, $stagingURL: String!) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: {
+				configuration: {
+					update: { stagingURL: $stagingURL, activeTestRuns: true }
+				}
+			}
+		) {
+			id
+		}
+	}
+`;
+
 export const JOIN_PROJECT = gql`
 	mutation JOIN_PROJECT($userId: ID!, $inviteLink: String!) {
 		configurationUpdate(
