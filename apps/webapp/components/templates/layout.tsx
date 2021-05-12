@@ -12,6 +12,7 @@ import {
 import { Analytics } from '@lightspeed/react-mixpanel-script';
 import { UserContext } from '../../utils/user';
 import PlanAndBillingCard from '../organisms/plan-and-billing';
+import { handleExtensionAuthHandshake } from '../../utils/extension';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -29,6 +30,17 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			onOpen();
 		}
 	}, [project]);
+
+	const handleMessageEvent = (event: Event) => {
+		handleExtensionAuthHandshake(event, user);
+	};
+
+	useEffect(() => {
+		window.addEventListener('message', handleMessageEvent);
+		return () => {
+			window.removeEventListener('message', handleMessageEvent);
+		};
+	}, []);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');
