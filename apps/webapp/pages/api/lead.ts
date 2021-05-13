@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const { email, location } = req.body;
+	console.log({ req }, { email }, { location });
 
 	if (email && location) {
 		res.status(200).end(`success`);
