@@ -8,6 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		res.status(200).end(`success`);
 	} else {
 		res.status(422).end(`Unknown event to process.`);
+		console.error(`Unknown event to process.`, { req });
 	}
 
 	// Intercom create lead
