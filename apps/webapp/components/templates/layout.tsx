@@ -1,4 +1,5 @@
 import React, { ReactNode, useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
 	Stack,
 	useColorModeValue,
@@ -20,6 +21,7 @@ type LayoutProps = {
 
 const Layout = ({ children, ...props }: LayoutProps) => {
 	const user = useContext(UserContext);
+	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure({
 		defaultIsOpen: true,
 	});
@@ -31,16 +33,11 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		}
 	}, [project]);
 
-	const handleMessageEvent = (event: Event) => {
-		handleExtensionAuthHandshake(event, user);
-	};
-
 	useEffect(() => {
-		window.addEventListener('message', handleMessageEvent);
-		return () => {
-			window.removeEventListener('message', handleMessageEvent);
-		};
-	}, []);
+		if (router.query?.extensionAuth === '1') {
+			handleExtensionAuthHandshake(null, user);
+		}
+	}, [router.query, user]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');

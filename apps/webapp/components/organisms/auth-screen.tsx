@@ -1,10 +1,11 @@
 import { LogoIcon } from '@frontend/chakra-theme';
 import { Flex, Button, LightMode } from '@chakra-ui/react';
-import { goToLogin } from '../../utils/user';
+import { useRouter } from 'next/router';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 const AuthScreen = () => {
 	const mixpanel = useAnalytics();
+	const router = useRouter();
 
 	return (
 		<Flex align="center" justify="center" direction="column" h="100vh">
@@ -15,7 +16,9 @@ const AuthScreen = () => {
 					mt={5}
 					onClick={() => {
 						mixpanel.track('Sign In');
-						goToLogin();
+						router.push(`/api/login${
+							router.asPath ? `?redirectTo=${router.asPath}` : ''
+						}`);
 					}}
 				>
 					Sign in / Sign up
