@@ -59,13 +59,6 @@ export const handleExtensionAuthHandshake = (
 	event: Event,
 	user: IUserContext
 ): void => {
-	// TODO: handle origin
-	// if (event.origin !== extensionUrl) { }
-	if (!user) {
-		// TODO: handle unauthenticated users
-		return;
-	}
-
 	const parseProject = (project: Project) => {
 		return {
 			id: project.id,
