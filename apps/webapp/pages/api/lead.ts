@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-	const { email, location } = req.body;
+	const { email, location } = JSON.parse(req.body);
 	console.log({ req }, { email }, { location });
 
 	if (email && location) {
