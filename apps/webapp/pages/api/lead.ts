@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const { email, location } = JSON.parse(req.body);
-	console.log({ req }, { email }, { location });
 
 	if (email && location) {
 		res.status(200).end(`success`);
@@ -28,15 +27,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				owner_id: '4208214',
 			}),
 		});
+		await console.log(
+			`Successfully created intercom lead for ${
+				// @ts-expect-error
+				JSON.parse(intercomLead.body).email
+			}`,
+			{ intercomLead }
+		);
 	} catch (error) {
 		console.error(error);
 	}
 
 	// Tag new lead from intercom
 	// @ts-expect-error
-	const { id } = intercomLead;
+	const { id } = JSON.parse(intercomLead.body);
 	try {
-		await fetch(`https://api.intercom.io/contacts/${id}/tags`, {
+		let leadTags = await fetch(`https://api.intercom.io/contacts/${id}/tags`, {
 			method: 'POST',
 			headers: {
 				Authorization:
@@ -57,6 +63,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 						: null,
 			}),
 		});
+		await console.log(`Successfully tagged the intercom lead`, { leadTags });
 	} catch (error) {
 		console.error(error);
 	}
@@ -74,6 +81,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 				}),
 			}
 		);
+		await console.log('Sent the slack notification');
 	} catch (error) {
 		console.error(error);
 	}
