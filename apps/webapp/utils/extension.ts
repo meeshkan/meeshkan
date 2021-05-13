@@ -24,17 +24,14 @@ export const isChrome = (): boolean => !!window.chrome;
 
 export const startRecording = ({
 	url,
-	clientId,
 	isAuthFlow = false,
 }: {
 	url: string;
-	clientId: string;
 	isAuthFlow: boolean;
 }) => {
 	window.chrome.runtime.sendMessage(extensionId, {
 		message: 'startRecording',
 		url,
-		clientId,
 		isAuthFlow,
 	});
 };
@@ -57,7 +54,8 @@ export const getVersion = () => {
 
 export const handleExtensionAuthHandshake = (
 	event: Event,
-	user: IUserContext
+	user: IUserContext,
+	close: boolean = true
 ): void => {
 	const parseProject = (project: Project) => {
 		return {
@@ -86,5 +84,7 @@ export const handleExtensionAuthHandshake = (
 		user: extensionUser,
 	});
 
-	window.close();
+	if (close) {
+		window.close();
+	}
 };
