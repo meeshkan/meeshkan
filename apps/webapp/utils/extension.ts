@@ -1,8 +1,7 @@
 import { IUser, Project } from '@frontend/meeshkan-types';
 import { IUserContext } from '../utils/user';
 
-// TODO: add back production extension ID
-const extensionId = 'fghhgjaplgcdlcmnoocaafdljjjgghle';
+const extensionId = 'cfjdddhjecoeahjkmegbkakfpppflmgo';
 
 export interface IProject {
 	id: string;
