@@ -46,6 +46,7 @@ import {
 	getVersion as getExtensionVersion,
 	latestVersion as latestExtensionVersion,
 	startRecording,
+	handleExtensionAuthHandshake,
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
 import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
@@ -179,7 +180,7 @@ const Settings = () => {
 		return request;
 	};
 
-	const handleNewUserStory = async () => {
+	const handleRecordLoginFlow = async () => {
 		if (!isChrome()) {
 			toaster({
 				status: 'error',
@@ -192,16 +193,6 @@ const Settings = () => {
 
 		try {
 			const version = await getExtensionVersion();
-			if (version !== latestExtensionVersion) {
-				toaster({
-					status: 'error',
-					title: 'Meeshkan extension is outdated',
-					description:
-						'Please update to the latest version of the Meeshkan recorder extension.',
-				});
-				return;
-			}
-
 			if (!project?.configuration?.productionURL) {
 				toaster({
 					status: 'error',
@@ -212,9 +203,9 @@ const Settings = () => {
 				return;
 			}
 
+			handleExtensionAuthHandshake(null, user, false);
 			startRecording({
 				url: project.configuration.productionURL,
-				clientId: project.id,
 				isAuthFlow: true,
 			});
 		} catch (error) {
@@ -482,7 +473,7 @@ const Settings = () => {
 							colorScheme="red"
 							variant="subtle"
 							leftIcon={<RecordIcon />}
-							onClick={handleNewUserStory}
+							onClick={handleRecordLoginFlow}
 							ml={2}
 						>
 							Record log in flow
@@ -490,7 +481,7 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInFlow ? (
 						<Link
-							href={`/${createSlug(project?.name)}/${
+							href={`/${createSlug(project?.name)}/user-stories/${
 								project?.configuration?.logInFlow?.id
 							}`}
 						>

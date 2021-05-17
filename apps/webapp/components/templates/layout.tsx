@@ -1,4 +1,5 @@
 import React, { ReactNode, useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
 	Stack,
 	useColorModeValue,
@@ -12,6 +13,7 @@ import {
 import { Analytics } from '@lightspeed/react-mixpanel-script';
 import { UserContext } from '../../utils/user';
 import PlanAndBillingCard from '../organisms/plan-and-billing';
+import { handleExtensionAuthHandshake } from '../../utils/extension';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -19,6 +21,7 @@ type LayoutProps = {
 
 const Layout = ({ children, ...props }: LayoutProps) => {
 	const user = useContext(UserContext);
+	const router = useRouter();
 	const { isOpen, onOpen, onClose } = useDisclosure({
 		defaultIsOpen: true,
 	});
@@ -29,6 +32,12 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			onOpen();
 		}
 	}, [project]);
+
+	useEffect(() => {
+		if (router.query?.extensionAuth === '1' && user) {
+			handleExtensionAuthHandshake(null, user);
+		}
+	}, [router.query, user]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');

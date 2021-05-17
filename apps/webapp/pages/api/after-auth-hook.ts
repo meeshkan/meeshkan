@@ -11,6 +11,7 @@ export default async function afterAuthHook(
 	try {
 		const auth0User = await getUser(req);
 		const eightBaseUser = await confirmOrCreateUser(auth0User);
+
 		const inviteId = req.query?.inviteId as string;
 		if (inviteId) {
 			const response = await propagateInviteToDb(inviteId, eightBaseUser.id);
@@ -25,6 +26,12 @@ export default async function afterAuthHook(
 				res.redirect(`/${redirectTo}`);
 				return;
 			}
+		}
+
+		const redirectTo = req.query?.redirectTo as string;
+		if (redirectTo) {
+			res.redirect(redirectTo);
+			return;
 		}
 
 		res.redirect('/');
