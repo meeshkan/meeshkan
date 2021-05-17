@@ -1,10 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
+	await console.log(JSON.parse(req.body));
+
 	const { email, location } = JSON.parse(req.body);
 
 	if (email && location) {
-		res.status(200).end(`success`);
+		res.status(200).send(`success`);
 	} else {
 		res.status(422).end(`Unknown event to process.`);
 		console.error(`Unknown event to process.`, { req });
@@ -87,3 +89,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	}
 	await console.log('Sent the slack notification');
 };
+
+export default createLead;
