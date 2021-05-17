@@ -4,7 +4,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 	const resolved = await req.body;
 	const { email, location } = JSON.parse(resolved);
 
-	await console.log({ email }, { location });
+	console.log({ email }, { location });
 
 	if (email && location) {
 		console.log('Correct data sent.');
