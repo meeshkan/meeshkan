@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import fetch from 'node-fetch';
 
 const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
-	const { email, location } = JSON.parse(req.body);
+	const resolved = await req.body;
+	const { email, location } = JSON.parse(resolved);
 
 	await console.log({ email }, { location });
 
@@ -28,7 +29,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 				}),
 			});
 			intercomLead = await intercomLead.json();
-			await console.log(
+			console.log(
 				`Intercom lead successfully created for ${intercomLead.email}.`
 			);
 		} catch (error) {
@@ -64,7 +65,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 				}
 			);
 			const tags = await leadTags.json();
-			await console.log('Intercom lead successfully tagged.', { tags });
+			console.log('Intercom lead successfully tagged.', { tags });
 		} catch (error) {
 			console.error(error);
 			return;
@@ -109,8 +110,8 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 				}
 			).then(async (res) =>
 				res.status === 200
-					? await console.log('Sent the slack notification.')
-					: await console.log("Couldn't send the slack notification.")
+					? console.log('Sent the slack notification.')
+					: console.log("Couldn't send the slack notification.")
 			);
 		} catch (error) {
 			console.error(error);
