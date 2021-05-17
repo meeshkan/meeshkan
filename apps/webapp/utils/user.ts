@@ -21,7 +21,7 @@ declare global {
 	}
 }
 
-type IUserContext =
+export type IUserContext =
 	| (IUser & {
 			project: Project;
 			setProject: (project: Project) => void;
