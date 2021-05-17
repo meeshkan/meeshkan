@@ -4,7 +4,6 @@ import Grid from '../../components/organisms/grid';
 import Card from '../../components/atoms/card';
 import ValidatedBillingPlan from '../../components/molecules/validated-billing-plan';
 import NotFoundError from '../404';
-import { Button } from '@chakra-ui/react';
 
 type ProjectProps = {
 	cookies: string | undefined;
@@ -23,20 +22,6 @@ const Project = (props: ProjectProps) => {
 
 	return (
 		<ValidatedBillingPlan>
-			<Button
-				onClick={() =>
-					fetch('/api/lead', {
-						method: 'POST',
-						headers: new Headers({ 'Content-Type': 'text/plain' }),
-						body: JSON.stringify({
-							email: 'makenna+1@meeshkan.com',
-							location: 'pricing',
-						}),
-					})
-				}
-			>
-				click me
-			</Button>
 			<Grid />
 		</ValidatedBillingPlan>
 	);
