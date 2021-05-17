@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fetch from 'node-fetch';
 
 const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 	const resolved = await req.body;
