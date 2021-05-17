@@ -32,6 +32,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 			);
 		} catch (error) {
 			console.error(error);
+			return;
 		}
 
 		// Tag new lead from intercom
@@ -65,6 +66,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 			await console.log('Intercom lead successfully tagged.', { tags });
 		} catch (error) {
 			console.error(error);
+			return;
 		}
 
 		// // Send Slack notification about the new lead
@@ -111,10 +113,12 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 			);
 		} catch (error) {
 			console.error(error);
+			return;
 		}
 	} else {
 		res.status(422).send(`Both an email and location need to be provided.`);
 		console.error(`Both an email and location need to be provided.`);
+		return;
 	}
 };
 
