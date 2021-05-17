@@ -8,7 +8,6 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 	await console.log({ email }, { location });
 
 	if (email && location) {
-		res.status(200).send(`success`);
 		console.log('Correct data sent.');
 
 		// Intercom create lead
@@ -113,6 +112,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 					? console.log('Sent the slack notification.')
 					: console.log("Couldn't send the slack notification.")
 			);
+			res.status(200).send(`success`);
 		} catch (error) {
 			console.error(error);
 			return;
