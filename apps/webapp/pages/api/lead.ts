@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import fetch from 'node-fetch';
 
 const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 	const { email, location } = JSON.parse(req.body);
@@ -75,7 +76,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 				'https://hooks.slack.com/services/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',
 				{
 					method: 'POST',
-					mode: 'no-cors',
+					// mode: 'no-cors',
 					headers: { 'Content-type': 'application/json' },
 					body: JSON.stringify({
 						blocks: [
