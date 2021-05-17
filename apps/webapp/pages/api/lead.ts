@@ -25,13 +25,11 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 					email,
 					owner_id: '4208214',
 				}),
-			}).then(async (response) => {
-				const lead = await response.json();
-				await console.log(
-					`Intercom lead successfully created for ${lead.email}.`
-				);
-				return lead;
 			});
+			intercomLead = await intercomLead.json();
+			await console.log(
+				`Intercom lead successfully created for ${intercomLead.email}.`
+			);
 		} catch (error) {
 			console.error(error);
 		}
@@ -62,10 +60,9 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 								: null,
 					}),
 				}
-			).then(async (response) => {
-				const tags = await response.json();
-				await console.log('Intercom lead successfully tagged.', { tags });
-			});
+			);
+			const tags = await leadTags.json();
+			await console.log('Intercom lead successfully tagged.', { tags });
 		} catch (error) {
 			console.error(error);
 		}
