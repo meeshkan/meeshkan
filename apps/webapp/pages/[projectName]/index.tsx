@@ -27,7 +27,7 @@ const Project = (props: ProjectProps) => {
 				onClick={() =>
 					fetch('/api/lead', {
 						method: 'POST',
-						headers: new Headers({ 'Content-Type': 'application/json' }),
+						headers: new Headers({ 'Content-Type': 'text/plain' }),
 						body: JSON.stringify({
 							email: 'makenna+1@meeshkan.com',
 							location: 'pricing',
