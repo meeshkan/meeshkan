@@ -15,8 +15,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 			intercomLead = await fetch('https://api.intercom.io/contacts', {
 				method: 'POST',
 				headers: {
-					Authorization:
-						'Bearer dG9rOjcwMzdmYzAzXzdmMjdfNGIzN184ZThiXzFhOGFkN2JmMTUxZDoxOjA=',
+					Authorization: `Bearer ${process.env.INTERCOM_API_KEY}`,
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
 				},
@@ -43,8 +42,7 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 				{
 					method: 'POST',
 					headers: {
-						Authorization:
-							'Bearer dG9rOjcwMzdmYzAzXzdmMjdfNGIzN184ZThiXzFhOGFkN2JmMTUxZDoxOjA=',
+						Authorization: `Bearer ${process.env.INTERCOM_API_KEY}`,
 						'Content-Type': 'application/json',
 						Accept: 'application/json',
 					},
@@ -71,42 +69,38 @@ const createLead = async (req: NextApiRequest, res: NextApiResponse) => {
 
 		// // Send Slack notification about the new lead
 		try {
-			await fetch(
-				'https://hooks.slack.com/services/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',
-				{
-					method: 'POST',
-					// mode: 'no-cors',
-					headers: { 'Content-type': 'application/json' },
-					body: JSON.stringify({
-						blocks: [
-							{
-								type: 'section',
-								text: {
-									type: 'mrkdwn',
-									text: `A lead has entered their email into *${location}* 📝 on the website. Their email is: ${email}.`,
-								},
+			await fetch(process.env.SLACK_WEBHOOK, {
+				method: 'POST',
+				headers: { 'Content-type': 'application/json' },
+				body: JSON.stringify({
+					blocks: [
+						{
+							type: 'section',
+							text: {
+								type: 'mrkdwn',
+								text: `A lead has entered their email into *${location}* 📝 on the website. Their email is: ${email}.`,
 							},
-							{
-								type: 'section',
-								text: {
-									type: 'mrkdwn',
-									text: 'An Intercom lead has been created',
-								},
-								accessory: {
-									type: 'button',
-									text: {
-										type: 'plain_text',
-										text: 'Visit contact',
-										emoji: true,
-									},
-									style: 'primary',
-									url: `https://app.intercom.com/a/apps/nou4ik17/users/${intercomLead.id}/all-conversations`,
-								},
+						},
+						{
+							type: 'section',
+							text: {
+								type: 'mrkdwn',
+								text: 'An Intercom lead has been created',
 							},
-						],
-					}),
-				}
-			).then(async (res) =>
+							accessory: {
+								type: 'button',
+								text: {
+									type: 'plain_text',
+									text: 'Visit contact',
+									emoji: true,
+								},
+								style: 'primary',
+								url: `https://app.intercom.com/a/apps/nou4ik17/users/${intercomLead.id}/all-conversations`,
+							},
+						},
+					],
+				}),
+			}).then(async (res) =>
 				res.status === 200
 					? console.log('Sent the slack notification.')
 					: console.log("Couldn't send the slack notification.")
