@@ -6,6 +6,7 @@ import AuthScreen from '../components/organisms/auth-screen';
 import { UserContext } from '../utils/user';
 import { Project } from '@frontend/meeshkan-types';
 import { useFetchUser } from '../hooks/use-fetch-user';
+import { useFirstRender } from '../hooks/use-first-render';
 
 export interface IWithAuthProps {
 	cookies: string | undefined;
@@ -15,6 +16,7 @@ const withAuth = (PageComponent: any) => {
 	return (props: IWithAuthProps): JSX.Element => {
 		const router = useRouter();
 		const { user, loading, mutate } = useFetchUser();
+		const firstRender = useFirstRender();
 		const [project, setProject] = useState<Project>(null);
 		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
@@ -40,6 +42,20 @@ const withAuth = (PageComponent: any) => {
 			}
 		}, [slugifiedProjectName]);
 
+		useEffect(() => {
+			if ((user && !user.error) || loading || firstRender || isInvitePage) {
+				return;
+			}
+
+			router.push(
+				`/api/login${
+					router.asPath.length > 1
+						? `?redirectTo=${router.asPath}`
+						: ''
+				}`
+			);
+		}, [user, loading, firstRender]);
+
 		if (user && !user.error) {
 			const providerValue = { ...user, mutate, project, setProject };
 			return (
@@ -53,11 +69,7 @@ const withAuth = (PageComponent: any) => {
 			return <PageComponent {...props} />;
 		}
 
-		if (loading && !user) {
-			return <LoadingScreen h="100vh" />;
-		}
-
-		return <AuthScreen />;
+		return <LoadingScreen h="100vh" />;
 	};
 };
 
