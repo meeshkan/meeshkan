@@ -84,6 +84,7 @@ const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
 		<Box
 			d="flex"
 			alignItems="center"
+			id={createSlug(text)}
 			backgroundColor={backgroundColor}
 			color={color}
 			fontWeight="600"
@@ -351,6 +352,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							}}
 						/>
 						<Box
+							id="create-a-new-user-story"
 							d="flex"
 							alignItems="center"
 							border="1px dashed"

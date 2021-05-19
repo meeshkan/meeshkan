@@ -4,6 +4,11 @@ import {
 	Stack,
 	Flex,
 	List,
+	ListItem,
+	ListItemProps,
+	Link,
+	Checkbox,
+	CheckboxProps,
 	Button,
 	Menu,
 	MenuButton,
@@ -44,6 +49,7 @@ import {
 	sumOfObjectValues,
 } from '../../utils/metrics';
 import { lastNDays } from '../../utils/date';
+import { startTour } from '../../utils/intercom';
 import { ChartOptions, ChartData } from 'chart.js';
 
 const barData: ChartData = {
@@ -103,6 +109,23 @@ const calcPctChange = (
 
 const deltaChange = (oldv: number, newv: number) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
+
+const GettingStartedCheckbox = ({ isChecked, ...props }: CheckboxProps) => {
+	return <Checkbox isChecked={isChecked} isReadOnly mr={3} {...props} />;
+};
+
+type GettingStartedListItemProps = ListItemProps & {
+	isComplete: boolean;
+}
+
+const GettingStartedListItem = ({ children, isComplete, ...props }: GettingStartedListItemProps) => {
+	return (
+		<ListItem textDecoration={isComplete ? 'line-through' : null} {...props}>
+			<GettingStartedCheckbox isChecked={isComplete} />
+			{children}
+		</ListItem>
+	);
+};
 
 const Grid = (props: StackProps) => {
 	const { project: selectedProject } = useContext(UserContext);
@@ -251,6 +274,18 @@ const Grid = (props: StackProps) => {
 	const totalRecordings = sumOfObjectValues(recordingsByDay);
 	const totalTests = sumOfObjectValues(testsByDay);
 
+	const gettingStartedTodoList = {
+		hasMembers: selectedProject?.members?.items?.length > 1,
+		hasUserStories: userStories?.length > 0,
+		hasManualUserStories: !!userStories.find(
+			(userStory) => userStory.created[0] === 'manual'
+		),
+		hasTestCases: !!userStories.find((userStory) => userStory.isTestCase),
+		hasTestRuns: !!versions.find(
+			(version) => version?.testRuns?.items?.length > 0
+		),
+	};
+
 	return (
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
 			<Flex align="center" justify="space-between">
@@ -391,29 +426,61 @@ const Grid = (props: StackProps) => {
 								spacingY={6}
 								w="100%"
 							>
-								<GridCard title="Confidence change">
-									<List spacing={3} color={listColor} fontSize="sm">
-										{confidenceChange.length === 0 ? (
-											<Text>
-												There hasn't been any change to your confidence score in
-												the last {timePeriod}.
-											</Text>
-										) : null}
-										{confidenceChange
-											.slice(0, selectedTimePeriodInDays + 1)
-											.map(([key, dataPoint]) => (
-												<ConfidenceBreakdownItem
-													key={key}
-													value={calcPctChange(
-														key,
-														confidenceDataPointsNDaysAgo,
-														dataPoint
-													)}
-													description={dataPoint.title}
-												/>
-											))}
-									</List>
-								</GridCard>
+								{Object.values(gettingStartedTodoList).every((task) => task) ? (
+									<GridCard title="Confidence change">
+										<List spacing={3} color={listColor} fontSize="sm">
+											{confidenceChange.length === 0 ? (
+												<Text>
+													There hasn't been any change to your confidence score
+													in the last {timePeriod}.
+												</Text>
+											) : null}
+											{confidenceChange
+												.slice(0, selectedTimePeriodInDays + 1)
+												.map(([key, dataPoint]) => (
+													<ConfidenceBreakdownItem
+														key={key}
+														value={calcPctChange(
+															key,
+															confidenceDataPointsNDaysAgo,
+															dataPoint
+														)}
+														description={dataPoint.title}
+													/>
+												))}
+										</List>
+									</GridCard>
+								) : (
+									<GridCard title="Getting started">
+										<List spacing={5} color={listColor} fontSize="md" mt={5}>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasMembers}>
+												<Link onClick={() => startTour(239291)}>
+													Invite your team.
+												</Link>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasUserStories}>
+												<Link onClick={() => startTour(239430)}>
+													Install the script in the head of your webapp.
+												</Link>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasManualUserStories}>
+												<Link onClick={() => startTour(239432)}>
+													Create a User Story.
+												</Link>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestCases}>
+												<Link onClick={() => startTour(239433)}>
+													Promote a User Story to a Test Case.
+												</Link>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestRuns}>
+												<Link onClick={() => startTour(239435)}>
+													Trigger a Test Run.
+												</Link>
+											</GettingStartedListItem>
+										</List>
+									</GridCard>
+								)}
 								<GridCard title="Recordings &amp; Test cases">
 									<Bar data={barData} options={barOptions} />
 									<Stack

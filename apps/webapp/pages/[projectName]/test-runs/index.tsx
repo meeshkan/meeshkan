@@ -307,6 +307,7 @@ const TestRunsPage = () => {
 						</Button>
 						<LightMode>
 							<Button
+								id="trigger-test-run"
 								isLoading={testTriggering}
 								loadingText="Starting test run"
 								size="sm"

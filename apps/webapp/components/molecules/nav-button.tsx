@@ -9,6 +9,8 @@ import MotionButton from '../atoms/motion-button';
 import { Variants } from 'framer-motion';
 import { transparentize } from '@chakra-ui/theme-tools';
 import NextLink from 'next/link';
+import innerText from '../../utils/inner-text';
+import { createSlug } from '../../utils/createSlug';
 
 const variants: Variants = {
 	open: {
@@ -50,6 +52,7 @@ const NavButton = (props: NavButtonProps) => {
 		return (
 			<NextLink href={href} passHref>
 				<MotionButton
+					id={createSlug(innerText(children))}
 					as={Link}
 					aria-current={isActive ? 'page' : undefined}
 					isActive={isActive}
