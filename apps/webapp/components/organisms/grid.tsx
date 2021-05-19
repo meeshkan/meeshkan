@@ -108,9 +108,7 @@ const deltaChange = (oldv: number, newv: number) =>
 	oldv === 0 ? (newv === 0 ? 0 : 100) : ((oldv - newv) * 100) / oldv;
 
 const GettingStartedCheckbox = ({ isChecked, ...props }: CheckboxProps) => {
-	return (
-		<Checkbox isChecked={isChecked} isReadOnly mr={3} {...props} />
-	);
+	return <Checkbox isChecked={isChecked} isReadOnly mr={3} {...props} />;
 };
 
 const Grid = (props: StackProps) => {
@@ -263,9 +261,13 @@ const Grid = (props: StackProps) => {
 	const gettingStartedTodoList = {
 		hasMembers: selectedProject?.members?.items?.length > 1,
 		hasUserStories: userStories?.length > 0,
-		hasManualUserStories: !!userStories.find(userStory => userStory.created[0] === 'manual'),
-		hasTestCases: !!userStories.find(userStory => userStory.isTestCase),
-		hasTestRuns: !!versions.find(version => version?.testRuns?.items?.length > 0),
+		hasManualUserStories: !!userStories.find(
+			(userStory) => userStory.created[0] === 'manual'
+		),
+		hasTestCases: !!userStories.find((userStory) => userStory.isTestCase),
+		hasTestRuns: !!versions.find(
+			(version) => version?.testRuns?.items?.length > 0
+		),
 	};
 
 	return (
@@ -408,13 +410,13 @@ const Grid = (props: StackProps) => {
 								spacingY={6}
 								w="100%"
 							>
-								{Object.values(gettingStartedTodoList).every(task => task) ? (
+								{Object.values(gettingStartedTodoList).every((task) => task) ? (
 									<GridCard title="Confidence change">
 										<List spacing={3} color={listColor} fontSize="sm">
 											{confidenceChange.length === 0 ? (
 												<Text>
-													There hasn't been any change to your confidence score in
-													the last {timePeriod}.
+													There hasn't been any change to your confidence score
+													in the last {timePeriod}.
 												</Text>
 											) : null}
 											{confidenceChange
@@ -436,27 +438,39 @@ const Grid = (props: StackProps) => {
 									<GridCard title="Getting started">
 										<List spacing={5} color={listColor} fontSize="md" mt={5}>
 											<ListItem>
-												<GettingStartedCheckbox isChecked={gettingStartedTodoList.hasMembers} />
+												<GettingStartedCheckbox
+													isChecked={gettingStartedTodoList.hasMembers}
+												/>
 												Invite your team.
 											</ListItem>
 											<ListItem>
-												<GettingStartedCheckbox isChecked={gettingStartedTodoList.hasUserStories} />
+												<GettingStartedCheckbox
+													isChecked={gettingStartedTodoList.hasUserStories}
+												/>
 												Install the script in the head of your webapp.
 											</ListItem>
 											<ListItem>
-												<GettingStartedCheckbox isChecked={gettingStartedTodoList.hasManualUserStories} />
+												<GettingStartedCheckbox
+													isChecked={
+														gettingStartedTodoList.hasManualUserStories
+													}
+												/>
 												Record a manual User Story.
 											</ListItem>
 											<ListItem>
-												<GettingStartedCheckbox isChecked={gettingStartedTodoList.hasTestCases} />
+												<GettingStartedCheckbox
+													isChecked={gettingStartedTodoList.hasTestCases}
+												/>
 												Promote a User Story to a Test Case.
 											</ListItem>
 											<ListItem>
-												<GettingStartedCheckbox isChecked={gettingStartedTodoList.hasTestRuns} />
+												<GettingStartedCheckbox
+													isChecked={gettingStartedTodoList.hasTestRuns}
+												/>
 												Trigger a Test Run.
 											</ListItem>
 										</List>
-									</GridCard>	
+									</GridCard>
 								)}
 								<GridCard title="Recordings &amp; Test cases">
 									<Bar data={barData} options={barOptions} />
