@@ -459,22 +459,22 @@ const Grid = (props: StackProps) => {
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasUserStories}>
-												<Link onClick={() => startTour(19715437)}>
+												<Link onClick={() => startTour(239430)}>
 													Install the script in the head of your webapp.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasManualUserStories}>
-												<Link onClick={() => startTour(19715445)}>
+												<Link onClick={() => startTour(239432)}>
 													Create a User Story.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestCases}>
-												<Link onClick={() => startTour(19715456)}>
+												<Link onClick={() => startTour(239433)}>
 													Promote a User Story to a Test Case.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestRuns}>
-												<Link onClick={() => startTour(19715469)}>
+												<Link onClick={() => startTour(239435)}>
 													Trigger a Test Run.
 												</Link>
 											</GettingStartedListItem>
