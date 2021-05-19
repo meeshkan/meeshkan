@@ -109,7 +109,7 @@ const deltaChange = (oldv: number, newv: number) =>
 
 const GettingStartedCheckbox = ({ isChecked, ...props }: CheckboxProps) => {
 	return (
-		<Checkbox isChecked={isChecked} isDisabled mr={3} {...props} />
+		<Checkbox isChecked={isChecked} isReadOnly mr={3} {...props} />
 	);
 };
 
