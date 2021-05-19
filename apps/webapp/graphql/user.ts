@@ -129,6 +129,7 @@ export const USER = gql`
 							testCreatedDate
 							isTestCase
 							createdAt
+							created
 						}
 					}
 					release {

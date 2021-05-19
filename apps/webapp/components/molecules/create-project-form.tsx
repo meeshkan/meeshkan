@@ -62,7 +62,7 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="form">
-			<AvatarField onUpload={setAvatarFile} />
+			<AvatarField location="a project" onUpload={setAvatarFile} />
 			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 				<FormLabel>Name your project</FormLabel>
 				<Input

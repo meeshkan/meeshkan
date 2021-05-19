@@ -180,6 +180,7 @@ const Table = ({
 		<Box display="block" maxWidth="100%" overflowX="scroll" overflowY="hidden">
 			<ChakraTable
 				{...getTableProps()}
+				id="user-stories-table"
 				variant="simple"
 				backgroundColor={backgroundColor}
 				borderTopRightRadius="lg"

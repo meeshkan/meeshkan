@@ -84,6 +84,7 @@ const StartButton = ({ icon, text, ...props }: StartButtonProps & BoxProps) => {
 		<Box
 			d="flex"
 			alignItems="center"
+			id={createSlug(text)}
 			backgroundColor={backgroundColor}
 			color={color}
 			fontWeight="600"
@@ -333,7 +334,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							text="Read the documentation"
 							onClick={() => {
 								mixpanel.track('Read the docs');
-								Router.push('https://meeshkan.com/docs');
+								Router.push('https://intercom.help/meeshkan-app/en/');
 							}}
 						/>
 						<StartButton
@@ -351,6 +352,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							}}
 						/>
 						<Box
+							id="create-a-new-user-story"
 							d="flex"
 							alignItems="center"
 							border="1px dashed"
@@ -406,9 +408,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						<ModalBody px={6} pb={4} pt={8}>
 							<OrderedList spacing={6}>
 								<ListItem lineHeight="1.6">
-									<strong>Recording production user behavior.</strong> This is the
-									preferred method of recording as it's the best indication of
-									meaningful test coverage.
+									<strong>Recording production user behavior.</strong> This is
+									the preferred method of recording as it's the best indication
+									of meaningful test coverage.
 									<List
 										listStyleType="disc"
 										listStylePosition="inside"
@@ -421,21 +423,23 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 												href={`/${slugifiedProjectName}/settings#details`}
 												passHref
 											>
-												<ChakraLink color={linkBlueColor}>script tag</ChakraLink>
+												<ChakraLink color={linkBlueColor}>
+													script tag
+												</ChakraLink>
 											</Link>{' '}
 											in your frontend's production environment.
 										</ListItem>
 										<ListItem lineHeight="1.6">
-											Once an hour has passed since installation, new user stories
-											will be generated.
+											Once an hour has passed since installation, new user
+											stories will be generated.
 										</ListItem>
 									</List>
 								</ListItem>
 								<ListItem lineHeight="1.6">
 									<strong>Manually, using the chrome extension.</strong> This is
-									is great if you are a developer or product manager testing a new
-									feature where user behavior is still unknown but you'd like to
-									test it as further development continues.
+									is great if you are a developer or product manager testing a
+									new feature where user behavior is still unknown but you'd
+									like to test it as further development continues.
 									<List
 										listStyleType="disc"
 										listStylePosition="inside"
@@ -532,7 +536,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								<MenuList>
 									<MenuGroup title="Significance">
 										<MenuItem>
-											<Checkbox isChecked={high} onChange={() => setHigh(!high)}>
+											<Checkbox
+												isChecked={high}
+												onChange={() => setHigh(!high)}
+											>
 												High significance
 											</Checkbox>
 										</MenuItem>

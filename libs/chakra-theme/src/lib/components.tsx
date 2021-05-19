@@ -86,6 +86,14 @@ const customComponents = {
 			colorScheme: 'blue',
 		},
 	},
+	Checkbox: {
+		parts: ['container', 'control', 'label', 'icon'],
+		baseStyle: {
+			control: {
+				borderRadius: 'md',
+			},
+		},
+	},
 	Text: {
 		baseStyle: {
 			fontSize: '16px',

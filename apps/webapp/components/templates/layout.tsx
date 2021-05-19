@@ -34,7 +34,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 	}, [project]);
 
 	useEffect(() => {
-		if (router.query?.extensionAuth === '1' && user) {
+		if (router.query?.extensionAuth === '1' && user && project) {
 			handleExtensionAuthHandshake(null, user);
 		}
 	}, [router.query, user]);
