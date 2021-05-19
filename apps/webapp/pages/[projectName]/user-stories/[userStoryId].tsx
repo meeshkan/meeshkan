@@ -582,6 +582,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								) : (
 									<>
 										<Button
+											id="create-test-case"
 											colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
 											variant="subtle"
 											leftIcon={<CheckmarkIcon />}
@@ -592,6 +593,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 											Create test case
 										</Button>
 										<Button
+											id="delete-recording"
 											colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
 											variant="subtle"
 											leftIcon={<XmarkIcon />}

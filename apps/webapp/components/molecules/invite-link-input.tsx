@@ -61,6 +61,7 @@ const InviteLinkInput = () => {
 				/>
 				<InputRightElement>
 					<IconButton
+						id="copy-invite-link"
 						icon={<CopyIcon color="gray.500" />}
 						aria-label="Copy invite link"
 						onClick={onCopy}

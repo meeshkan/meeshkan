@@ -41,6 +41,7 @@ const ScriptTagInput = () => {
 			/>
 			<InputRightElement>
 				<IconButton
+					id="copy-script-tag"
 					icon={<CopyIcon color="gray.500" />}
 					aria-label="Copy script tag"
 					onClick={onCopy}
