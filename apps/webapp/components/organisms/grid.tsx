@@ -5,6 +5,7 @@ import {
 	Flex,
 	List,
 	ListItem,
+	ListItemProps,
 	Link,
 	Checkbox,
 	CheckboxProps,
@@ -111,6 +112,19 @@ const deltaChange = (oldv: number, newv: number) =>
 
 const GettingStartedCheckbox = ({ isChecked, ...props }: CheckboxProps) => {
 	return <Checkbox isChecked={isChecked} isReadOnly mr={3} {...props} />;
+};
+
+type GettingStartedListItemProps = ListItemProps & {
+	isComplete: boolean;
+}
+
+const GettingStartedListItem = ({ children, isComplete, ...props }: GettingStartedListItemProps) => {
+	return (
+		<ListItem textDecoration={isComplete ? 'line-through' : null} {...props}>
+			<GettingStartedCheckbox isChecked={isComplete} />
+			{children}
+		</ListItem>
+	);
 };
 
 const Grid = (props: StackProps) => {
@@ -439,48 +453,31 @@ const Grid = (props: StackProps) => {
 								) : (
 									<GridCard title="Getting started">
 										<List spacing={5} color={listColor} fontSize="md" mt={5}>
-											<ListItem>
-												<GettingStartedCheckbox
-													isChecked={gettingStartedTodoList.hasMembers}
-												/>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasMembers}>
 												<Link onClick={() => trackEvent('invite-team-tour')}>
 													Invite your team.
 												</Link>
-											</ListItem>
-											<ListItem>
-												<GettingStartedCheckbox
-													isChecked={gettingStartedTodoList.hasUserStories}
-												/>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasUserStories}>
 												<Link onClick={() => trackEvent('install-script-tour')}>
 													Install the script in the head of your webapp.
 												</Link>
-											</ListItem>
-											<ListItem>
-												<GettingStartedCheckbox
-													isChecked={
-														gettingStartedTodoList.hasManualUserStories
-													}
-												/>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasManualUserStories}>
 												<Link onClick={() => trackEvent('create-user-story-tour')}>
 													Create a User Story.
 												</Link>
-											</ListItem>
-											<ListItem>
-												<GettingStartedCheckbox
-													isChecked={gettingStartedTodoList.hasTestCases}
-												/>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestCases}>
 												<Link onClick={() => trackEvent('create-test-case-tour')}>
 													Promote a User Story to a Test Case.
 												</Link>
-											</ListItem>
-											<ListItem>
-												<GettingStartedCheckbox
-													isChecked={gettingStartedTodoList.hasTestRuns}
-												/>
+											</GettingStartedListItem>
+											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestRuns}>
 												<Link onClick={() => trackEvent('trigger-test-run-tour')}>
 													Trigger a Test Run.
 												</Link>
-											</ListItem>
+											</GettingStartedListItem>
 										</List>
 									</GridCard>
 								)}
