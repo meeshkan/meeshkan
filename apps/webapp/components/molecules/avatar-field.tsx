@@ -23,9 +23,14 @@ const ReactFilestack = dynamic(() => import('filestack-react'), { ssr: false });
 type AvatarFieldProps = {
 	onUpload: (file: UploadedFile) => void | Promise<{ error?: typeof Error }>;
 	existingImageUrl?: string;
+	location?: string;
 };
 
-const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
+const AvatarField = ({
+	onUpload,
+	existingImageUrl,
+	location,
+}: AvatarFieldProps) => {
 	const [error, setError] = useState('');
 	const { project, idToken } = useContext(UserContext);
 	const [loading, setLoading] = useState(false);
@@ -72,7 +77,7 @@ const AvatarField = ({ onUpload, existingImageUrl }: AvatarFieldProps) => {
 		<FormControl id="avatar" isInvalid={!!error} mb={6}>
 			<Flex justify="space-between">
 				<Box>
-					<FormLabel>Upload an avatar</FormLabel>
+					<FormLabel>Upload {location ? location : 'an'} avatar</FormLabel>
 					<Text mt={3} color="gray.500">
 						We suggest an image that is 200px by 200px or bigger.
 					</Text>
