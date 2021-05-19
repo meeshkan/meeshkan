@@ -73,9 +73,20 @@ export const USER = gql`
 						productionURL
 						stagingURL
 						inviteLink
+						logInFlow {
+							id
+							createdAt
+							title
+						}
+						plan
+						stripeCustomerID
+						billingInterval
+						subscriptionStatus
+						subscriptionStartedDate
 						authenticationTokens {
 							items {
 								id
+								createdAt
 								type
 								key
 								value
@@ -152,6 +163,8 @@ export const USER = gql`
 											userStory {
 												id
 												title
+												created
+												isAuthenticated
 												recording {
 													seleniumScriptJson
 												}

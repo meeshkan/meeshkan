@@ -48,7 +48,6 @@ import {
 } from '../../utils/metrics';
 import { lastNDays } from '../../utils/date';
 import { ChartOptions, ChartData } from 'chart.js';
-require('../molecules/rounded-chart');
 
 const barData: ChartData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -126,13 +125,11 @@ const Grid = (props: StackProps) => {
 			},
 			position: 'bottom',
 		},
-		// @ts-expect-error this is a custom option implemented with the 'rounded-chart' import
-		cornerRadius: 6,
 		scales: {
 			yAxes: [
 				{
 					type: 'linear',
-					stacked: false,
+					stacked: true,
 					ticks: {
 						maxTicksLimit: 4,
 						beginAtZero: true,
@@ -145,7 +142,7 @@ const Grid = (props: StackProps) => {
 			],
 			xAxes: [
 				{
-					stacked: false,
+					stacked: true,
 					ticks: {
 						display: true,
 					},
@@ -164,7 +161,9 @@ const Grid = (props: StackProps) => {
 	const [showScript, setShowScript] = useState(false);
 
 	useEffect(() => setVersion(versions[0]), [versions]);
-	useEffect(() => setShowScript(!selectedProject.hasReceivedEvents), [selectedProject]);
+	useEffect(() => setShowScript(!selectedProject.hasReceivedEvents), [
+		selectedProject,
+	]);
 
 	const userStories: UserStoryListResponse['items'] =
 		selectedProject.userStories.items;
@@ -388,11 +387,7 @@ const Grid = (props: StackProps) => {
 								w="100%"
 							>
 								<GridCard title="Confidence change">
-									<List
-										spacing={3}
-										color={listColor}
-										fontSize="sm"
-									>
+									<List spacing={3} color={listColor} fontSize="sm">
 										{confidenceChange.length === 0 ? (
 											<Text>
 												There hasn't been any change to your confidence score in
@@ -421,17 +416,13 @@ const Grid = (props: StackProps) => {
 											<Text fontWeight="900" mr={2}>
 												{totalRecordings}
 											</Text>
-											<Text color={barFooterColor}>
-												Recordings
-											</Text>
+											<Text color={barFooterColor}>Recordings</Text>
 										</Flex>
 										<Flex>
 											<Text fontWeight="900" mr={2}>
 												{totalTests}
 											</Text>
-											<Text color={barFooterColor}>
-												Test cases
-											</Text>
+											<Text color={barFooterColor}>Test cases</Text>
 										</Flex>
 									</Stack>
 								</GridCard>

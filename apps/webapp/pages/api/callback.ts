@@ -13,11 +13,15 @@ export default async function callback(
 				_: NextApiRequest,
 				__: NextApiResponse,
 				session: ISession,
-				state: { inviteId?: string }
+				state: { inviteId?: string; redirectTo?: string; }
 			) => {
 				const redirectParams = new URLSearchParams();
 				if (state.inviteId) {
 					redirectParams.append('inviteId', state.inviteId);
+				}
+
+				if (state.redirectTo) {
+					redirectParams.append('redirectTo', state.redirectTo);
 				}
 
 				return {

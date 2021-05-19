@@ -14,7 +14,10 @@ export default async function login(
 				login_hint: get(session, 'user.name'),
 			},
 			getState: (req: NextApiRequest) =>
-				req.query.inviteId ? { inviteId: req.query.inviteId } : {},
+				({
+					inviteId: req.query.inviteId,
+					redirectTo: req.query.redirectTo,
+				}),
 		});
 	} catch (error) {
 		console.error(error);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
@@ -24,7 +24,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 		router.events.on('routeChangeComplete', handleRouteChange);
 		return () => {
 			router.events.off('routeChangeComplete', handleRouteChange);
-		}
+		};
 	}, []);
 
 	return (
@@ -38,6 +38,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 			</Head>
 			<Layout>
 				{!isInvitePage && <SideBar />}
+				
 				<Component {...pageProps} />
 			</Layout>
 		</>

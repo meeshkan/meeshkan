@@ -1,7 +1,19 @@
-import React, { ReactNode, useContext } from 'react';
-import { Stack, useColorModeValue } from '@chakra-ui/react';
+import React, { ReactNode, useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import {
+	Stack,
+	useColorModeValue,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalHeader,
+	ModalOverlay,
+	useDisclosure,
+} from '@chakra-ui/react';
 import { Analytics } from '@lightspeed/react-mixpanel-script';
 import { UserContext } from '../../utils/user';
+import PlanAndBillingCard from '../organisms/plan-and-billing';
+import { handleExtensionAuthHandshake } from '../../utils/extension';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -9,16 +21,34 @@ type LayoutProps = {
 
 const Layout = ({ children, ...props }: LayoutProps) => {
 	const user = useContext(UserContext);
+	const router = useRouter();
+	const { isOpen, onOpen, onClose } = useDisclosure({
+		defaultIsOpen: true,
+	});
+
+	const project = user?.project;
+	useEffect(() => {
+		if (project && !project.configuration?.plan) {
+			onOpen();
+		}
+	}, [project]);
+
+	useEffect(() => {
+		if (router.query?.extensionAuth === '1' && user) {
+			handleExtensionAuthHandshake(null, user);
+		}
+	}, [router.query, user]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
+	const modalBackground = useColorModeValue('white', 'gray.900');
 	return (
 		<Analytics
 			appName="Meeshkan-webapp"
 			identity={user?.idToken}
 			// This is a 'super property' which attaches information to every event.
 			eventData={{
-				project: user?.project?.name,
-				// plan: ''
+				project: project?.name,
+				plan: project?.configuration?.plan,
 			}}
 			profileData={{
 				$avatar: user?.avatar,
@@ -43,6 +73,30 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			>
 				{children}
 			</Stack>
+
+			{project && !project.configuration?.plan ? (
+				<Modal
+					isOpen={isOpen}
+					onClose={onClose}
+					closeOnOverlayClick={false}
+					size="6xl"
+					isCentered
+					motionPreset="slideInBottom"
+					scrollBehavior="inside"
+				>
+					<ModalOverlay />
+					<ModalContent
+						p={4}
+						borderRadius="lg"
+						backgroundColor={modalBackground}
+					>
+						<ModalHeader fontWeight="700">Choose a plan</ModalHeader>
+						<ModalBody>
+							<PlanAndBillingCard />
+						</ModalBody>
+					</ModalContent>
+				</Modal>
+			) : null}
 		</Analytics>
 	);
 };
