@@ -5,9 +5,6 @@ import {
 	Text,
 	Flex,
 	Badge,
-	Editable,
-	EditablePreview,
-	EditableInput,
 	Box,
 	useColorModeValue,
 	Button,
@@ -26,6 +23,9 @@ import {
 	IconButton,
 	useClipboard,
 	Code,
+	Input,
+	InputGroup,
+	InputLeftElement,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
@@ -55,6 +55,7 @@ import {
 	TrashIcon,
 	MoreIcon,
 	CopyIcon,
+	PencilIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -320,7 +321,25 @@ const UserStoryPage = (props: UserStoryProps) => {
 						justify="space-between"
 					>
 						<Flex align="center" direction={['column', 'row']} mb={[4, 4, 0]}>
-							<Editable
+							<InputGroup size="sm" w="300px">
+								<InputLeftElement
+									pointerEvents="none"
+									children={<PencilIcon />}
+								/>
+								<Input
+									pl={6}
+									borderRadius="md"
+									defaultValue={data.userStory.title}
+									// Callback invoked when user confirms value with `enter` key or by blurring input.
+									onBlur={(e) => updateTitle(e.target.value)}
+									lineHeight="tall"
+									fontSize="base"
+									fontWeight="700"
+									mr={4}
+									mb={[2, 0, 0]}
+								/>
+							</InputGroup>
+							{/* <Editable
 								defaultValue={data.userStory.title}
 								// Callback invoked when user confirms value with `enter` key or by blurring input.
 								onSubmit={(e) => updateTitle(e)}
@@ -332,7 +351,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							>
 								<EditablePreview />
 								<EditableInput />
-							</Editable>
+							</Editable> */}
 							<Code
 								display="flex"
 								alignItems="center"
