@@ -308,6 +308,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						color={backLinkColor}
 						lineHeight="short"
 						mb={3}
+						maxW="fit-content"
 					>
 						<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
 						User stories
@@ -339,19 +340,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 									mb={[2, 0, 0]}
 								/>
 							</InputGroup>
-							{/* <Editable
-								defaultValue={data.userStory.title}
-								// Callback invoked when user confirms value with `enter` key or by blurring input.
-								onSubmit={(e) => updateTitle(e)}
-								lineHeight="tall"
-								fontSize="xl"
-								fontWeight="900"
-								mr={4}
-								mb={[2, 0, 0]}
-							>
-								<EditablePreview />
-								<EditableInput />
-							</Editable> */}
 							<Code
 								display="flex"
 								alignItems="center"
