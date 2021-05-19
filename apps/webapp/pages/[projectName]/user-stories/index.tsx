@@ -352,6 +352,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							}}
 						/>
 						<Box
+							id="create-a-new-user-story"
 							d="flex"
 							alignItems="center"
 							border="1px dashed"
