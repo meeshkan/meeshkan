@@ -49,7 +49,7 @@ import {
 	sumOfObjectValues,
 } from '../../utils/metrics';
 import { lastNDays } from '../../utils/date';
-import { trackEvent } from '../../utils/intercom';
+import { startTour } from '../../utils/intercom';
 import { ChartOptions, ChartData } from 'chart.js';
 
 const barData: ChartData = {
@@ -454,27 +454,27 @@ const Grid = (props: StackProps) => {
 									<GridCard title="Getting started">
 										<List spacing={5} color={listColor} fontSize="md" mt={5}>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasMembers}>
-												<Link onClick={() => trackEvent('invite-team-tour')}>
+												<Link onClick={() => startTour(19709784)}>
 													Invite your team.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasUserStories}>
-												<Link onClick={() => trackEvent('install-script-tour')}>
+												<Link onClick={() => startTour(19715437)}>
 													Install the script in the head of your webapp.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasManualUserStories}>
-												<Link onClick={() => trackEvent('create-user-story-tour')}>
+												<Link onClick={() => startTour(19715445)}>
 													Create a User Story.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestCases}>
-												<Link onClick={() => trackEvent('create-test-case-tour')}>
+												<Link onClick={() => startTour(19715456)}>
 													Promote a User Story to a Test Case.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestRuns}>
-												<Link onClick={() => trackEvent('trigger-test-run-tour')}>
+												<Link onClick={() => startTour(19715469)}>
 													Trigger a Test Run.
 												</Link>
 											</GettingStartedListItem>

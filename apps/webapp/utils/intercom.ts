@@ -15,6 +15,7 @@ export interface Intercom {
 	(command: 'showMessages'): void;
 	(command: 'onHide', param?: () => void): void;
 	(command: 'trackEvent', event: string): void;
+	(command: 'startTour', id: number): void;
 }
 
 export const boot = ({ email, id }: { email: string; id: string }) => {
@@ -46,4 +47,8 @@ export const show = () => {
 
 export const trackEvent = (event: string) => {
 	window.Intercom('trackEvent', event);
+};
+
+export const startTour = (id: number) => {
+	window.Intercom('startTour', id);
 };
