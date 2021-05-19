@@ -164,7 +164,7 @@ const TestRunsPage = () => {
 		} else {
 			onOpen();
 		}
-		setTestTriggering(false);
+		setTimeout(() => setTestTriggering(false), 2000);
 	};
 
 	const handleStagingURLForm = async (
