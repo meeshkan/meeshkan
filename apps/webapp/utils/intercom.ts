@@ -14,6 +14,7 @@ export interface Intercom {
 	(command: 'show'): void;
 	(command: 'showMessages'): void;
 	(command: 'onHide', param?: () => void): void;
+	(command: 'trackEvent', event: string): void;
 }
 
 export const boot = ({ email, id }: { email: string; id: string }) => {
@@ -41,4 +42,8 @@ export const show = () => {
 	window.Intercom('onHide', () => {
 		update({ hide_default_launcher: true });
 	});
+};
+
+export const trackEvent = (event: string) => {
+	window.Intercom('trackEvent', event);
 };

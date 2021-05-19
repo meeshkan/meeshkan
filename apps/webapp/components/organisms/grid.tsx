@@ -5,6 +5,7 @@ import {
 	Flex,
 	List,
 	ListItem,
+	Link,
 	Checkbox,
 	CheckboxProps,
 	Button,
@@ -47,6 +48,7 @@ import {
 	sumOfObjectValues,
 } from '../../utils/metrics';
 import { lastNDays } from '../../utils/date';
+import { trackEvent } from '../../utils/intercom';
 import { ChartOptions, ChartData } from 'chart.js';
 
 const barData: ChartData = {
@@ -441,13 +443,17 @@ const Grid = (props: StackProps) => {
 												<GettingStartedCheckbox
 													isChecked={gettingStartedTodoList.hasMembers}
 												/>
-												Invite your team.
+												<Link onClick={() => trackEvent('invite-team-tour')}>
+													Invite your team.
+												</Link>
 											</ListItem>
 											<ListItem>
 												<GettingStartedCheckbox
 													isChecked={gettingStartedTodoList.hasUserStories}
 												/>
-												Install the script in the head of your webapp.
+												<Link onClick={() => trackEvent('install-script-tour')}>
+													Install the script in the head of your webapp.
+												</Link>
 											</ListItem>
 											<ListItem>
 												<GettingStartedCheckbox
@@ -455,19 +461,25 @@ const Grid = (props: StackProps) => {
 														gettingStartedTodoList.hasManualUserStories
 													}
 												/>
-												Record a manual User Story.
+												<Link onClick={() => trackEvent('create-user-story-tour')}>
+													Create a User Story.
+												</Link>
 											</ListItem>
 											<ListItem>
 												<GettingStartedCheckbox
 													isChecked={gettingStartedTodoList.hasTestCases}
 												/>
-												Promote a User Story to a Test Case.
+												<Link onClick={() => trackEvent('create-test-case-tour')}>
+													Promote a User Story to a Test Case.
+												</Link>
 											</ListItem>
 											<ListItem>
 												<GettingStartedCheckbox
 													isChecked={gettingStartedTodoList.hasTestRuns}
 												/>
-												Trigger a Test Run.
+												<Link onClick={() => trackEvent('trigger-test-run-tour')}>
+													Trigger a Test Run.
+												</Link>
 											</ListItem>
 										</List>
 									</GridCard>
