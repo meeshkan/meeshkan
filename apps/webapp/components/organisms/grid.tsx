@@ -454,7 +454,7 @@ const Grid = (props: StackProps) => {
 									<GridCard title="Getting started">
 										<List spacing={5} color={listColor} fontSize="md" mt={5}>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasMembers}>
-												<Link onClick={() => startTour(19709784)}>
+												<Link onClick={() => startTour(239291)}>
 													Invite your team.
 												</Link>
 											</GettingStartedListItem>
