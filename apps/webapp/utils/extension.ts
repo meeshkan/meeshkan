@@ -80,12 +80,14 @@ export const handleExtensionAuthHandshake = (
 	};
 
 	const chromeRuntime = window.chrome.runtime;
-	if (chromeRuntime) {
-		chromeRuntime.sendMessage(extensionId, {
-			message: 'authenticateUser',
-			user: extensionUser,
-		});
+	if (!chromeRuntime) {
+		return;
 	}
+
+	chromeRuntime.sendMessage(extensionId, {
+		message: 'authenticateUser',
+		user: extensionUser,
+	});
 
 	if (close) {
 		window.close();
