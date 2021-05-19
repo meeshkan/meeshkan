@@ -29,6 +29,7 @@ const ScriptTagInput = () => {
 	return (
 		<InputGroup>
 			<Input
+				id="script-tag-input"
 				value={scriptTag}
 				bg={inputBackgroundColor}
 				fontFamily="mono"

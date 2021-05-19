@@ -54,6 +54,7 @@ const InviteLinkInput = () => {
 		<Flex>
 			<InputGroup mb={4}>
 				<Input
+					id="invite-link-input"
 					value={inviteLink}
 					color="blue.400"
 					onClick={onCopy}
