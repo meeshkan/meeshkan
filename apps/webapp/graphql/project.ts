@@ -70,6 +70,7 @@ export const PROJECT = gql`
 					testCreatedDate
 					isTestCase
 					createdAt
+					created
 				}
 			}
 			release {
