@@ -8,7 +8,7 @@ type ValidatedBillingPlanProps = {
 
 const ValidatedBillingPlan = ({ children }: ValidatedBillingPlanProps) => {
 	const { project } = useContext(UserContext);
-	const onFreePlan = project?.configuration.plan === 'Free';
+	const onFreePlan = project?.configuration?.plan === 'Free';
 
 	if (onFreePlan) {
 		return (

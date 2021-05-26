@@ -18,6 +18,7 @@ const withAuth = (PageComponent: any) => {
 		const { user, loading, mutate } = useFetchUser();
 		const firstRender = useFirstRender();
 		const [project, setProject] = useState<Project>(null);
+		const [loadingProject, setLoadingProject] = useState<boolean>(false);
 		const isInvitePage = router.pathname === '/invite/[inviteId]';
 
 		const slugifiedProjectName = useMemo(
@@ -57,7 +58,15 @@ const withAuth = (PageComponent: any) => {
 		}, [user, loading, firstRender]);
 
 		if (user && !user.error) {
-			const providerValue = { ...user, mutate, project, setProject };
+			const providerValue = {
+				...user,
+				mutate,
+				project,
+				setProject,
+				loadingProject,
+				setLoadingProject,
+			};
+
 			return (
 				<UserContext.Provider value={providerValue}>
 					<PageComponent {...props} />

@@ -1,7 +1,13 @@
-import { CREATE_PROJECT, UPDATE_PROJECT } from '../graphql/project';
+import { PROJECT, CREATE_PROJECT, UPDATE_PROJECT } from '../graphql/project';
 import { CURRENT_USER } from '../graphql/user';
 import { getDateInEightBaseFormat } from './date';
 import { eightBaseClient } from './graphql';
+
+export const getProject = async (idToken: string, id: string) => {
+	const client = eightBaseClient(idToken);
+	const data = await client.request(PROJECT, { projectId: id });
+	return data.project;
+};
 
 export const createProject = async (
 	idToken: string,
