@@ -432,14 +432,10 @@ const Grid = (props: StackProps) => {
 											) : null}
 											{confidenceChange
 												.slice(0, selectedTimePeriodInDays + 1)
-												.map(([key, dataPoint]) => (
+												.map(([key, dataPoint]: [string, DataPoint]) => (
 													<ConfidenceBreakdownItem
 														key={key}
-														value={calcPctChange(
-															key,
-															confidenceDataPointsNDaysAgo,
-															dataPoint
-														)}
+														value={dataPoint.percentageChange}
 														description={dataPoint.title}
 													/>
 												))}
