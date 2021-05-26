@@ -17,18 +17,15 @@ export const useValidateSelectedProject = () => {
 				(project) => createSlug(project?.name || '') === projectName
 			);
 
-			let fetchedProject;
-			if (selectedProject) {
-				if (selectedProject.id !== project?.id) {
-					setLoadingProject(true);
-				}
-
+			let fetchedProject = project;
+			if (selectedProject && selectedProject.id !== project?.id) {
+				setLoadingProject(true);
 				fetchedProject = await getProject(idToken, selectedProject.id);
+				setProject(fetchedProject)
+				setLoadingProject(false);
 			}
 
 			if (fetchedProject) {
-				setProject(fetchedProject);
-				setLoadingProject(false);
 				setLoading(false);
 				setFound(true);
 			} else {
