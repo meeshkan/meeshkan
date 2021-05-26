@@ -51,7 +51,7 @@ const SideBarBody = () => {
 			<Flex direction="column" justify="space-between" h="100%">
 				<Stack spacing={6} mt={6}>
 					<Link href={`/${slugifiedProjectName}`} passHref>
-						<a>
+						<a id="settings-back">
 							<Heading
 								as={Flex}
 								align="center"

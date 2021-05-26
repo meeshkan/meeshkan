@@ -106,6 +106,7 @@ const TestRun = () => {
 								fontWeight="400"
 								color={headingColor}
 								lineHeight="short"
+								maxW="fit-content"
 							>
 								<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
 								Test runs

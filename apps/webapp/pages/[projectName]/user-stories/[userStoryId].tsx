@@ -5,9 +5,6 @@ import {
 	Text,
 	Flex,
 	Badge,
-	Editable,
-	EditablePreview,
-	EditableInput,
 	Box,
 	useColorModeValue,
 	Button,
@@ -26,6 +23,9 @@ import {
 	IconButton,
 	useClipboard,
 	Code,
+	Input,
+	InputGroup,
+	InputLeftElement,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
@@ -55,6 +55,7 @@ import {
 	TrashIcon,
 	MoreIcon,
 	CopyIcon,
+	PencilIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -307,6 +308,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						color={backLinkColor}
 						lineHeight="short"
 						mb={3}
+						maxW="fit-content"
 					>
 						<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
 						User stories
@@ -320,19 +322,24 @@ const UserStoryPage = (props: UserStoryProps) => {
 						justify="space-between"
 					>
 						<Flex align="center" direction={['column', 'row']} mb={[4, 4, 0]}>
-							<Editable
-								defaultValue={data.userStory.title}
-								// Callback invoked when user confirms value with `enter` key or by blurring input.
-								onSubmit={(e) => updateTitle(e)}
-								lineHeight="tall"
-								fontSize="xl"
-								fontWeight="900"
-								mr={4}
-								mb={[2, 0, 0]}
-							>
-								<EditablePreview />
-								<EditableInput />
-							</Editable>
+							<InputGroup size="sm" w="300px">
+								<InputLeftElement
+									pointerEvents="none"
+									children={<PencilIcon />}
+								/>
+								<Input
+									pl={6}
+									borderRadius="md"
+									defaultValue={data.userStory.title}
+									// Callback invoked when user confirms value with `enter` key or by blurring input.
+									onBlur={(e) => updateTitle(e.target.value)}
+									lineHeight="tall"
+									fontSize="base"
+									fontWeight="700"
+									mr={4}
+									mb={[2, 0, 0]}
+								/>
+							</InputGroup>
 							<Code
 								display="flex"
 								alignItems="center"
@@ -582,6 +589,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								) : (
 									<>
 										<Button
+											id="create-test-case"
 											colorScheme={data.userStory.isExpected ? 'cyan' : 'gray'}
 											variant="subtle"
 											leftIcon={<CheckmarkIcon />}
@@ -592,6 +600,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 											Create test case
 										</Button>
 										<Button
+											id="delete-recording"
 											colorScheme={data.userStory.isExpected ? 'gray' : 'red'}
 											variant="subtle"
 											leftIcon={<XmarkIcon />}

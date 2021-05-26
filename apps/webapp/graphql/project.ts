@@ -184,6 +184,11 @@ export const UPDATE_PROJECT = gql`
 			id
 			name
 			configuration {
+				plan
+				stripeCustomerID
+				billingInterval
+				subscriptionStatus
+				subscriptionStartedDate
 				inviteLink
 				productionURL
 				stagingURL

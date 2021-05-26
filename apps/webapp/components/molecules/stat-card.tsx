@@ -68,14 +68,21 @@ const StatCard = ({
 					) : (
 						<>
 							<Badge
+								d="inline-flex"
+								alignItems="center"
+								maxW="fit-content"
 								variant="subtle"
 								colorScheme={isPositiveChange ? 'cyan' : 'red'}
-								rounded="lg"
+								rounded="md"
 								mr={2}
 								fontSize="sm"
 								p={2}
 							>
-								{isPositiveChange ? <ArrowUpIcon /> : <ArrowDownIcon />}
+								{isPositiveChange ? (
+									<ArrowUpIcon mr={2} />
+								) : (
+									<ArrowDownIcon mr={2} />
+								)}
 								{Math.abs(percentageChange).toFixed(2)}%
 							</Badge>
 							{dataPoints !== null && dataPoints !== undefined ? (
@@ -83,7 +90,7 @@ const StatCard = ({
 									variant="subtle"
 									colorScheme="gray"
 									fontWeight="400"
-									rounded="lg"
+									rounded="md"
 									textTransform="none"
 									p={2}
 									fontSize="sm"

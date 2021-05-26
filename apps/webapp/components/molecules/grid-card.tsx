@@ -19,10 +19,11 @@ const GridCard = ({
 	leftIconSrc,
 	...props
 }: GridCardProps) => {
+	const slugifiedTitle = useMemo(() => createSlug(title), [title]);
 	return (
-		<Card overflowY="auto" maxH="80vh" {...props}>
+		<Card overflowY="auto" maxH="80vh" id={slugifiedTitle} {...props}>
 			<Heading
-				id={anchor && useMemo(() => createSlug(title), [title])}
+				id={anchor && slugifiedTitle}
 				as="h2"
 				d="flex"
 				alignItems="center"

@@ -29,6 +29,7 @@ const ScriptTagInput = () => {
 	return (
 		<InputGroup>
 			<Input
+				id="script-tag-input"
 				value={scriptTag}
 				bg={inputBackgroundColor}
 				fontFamily="mono"
@@ -41,6 +42,7 @@ const ScriptTagInput = () => {
 			/>
 			<InputRightElement>
 				<IconButton
+					id="copy-script-tag"
 					icon={<CopyIcon color="gray.500" />}
 					aria-label="Copy script tag"
 					onClick={onCopy}

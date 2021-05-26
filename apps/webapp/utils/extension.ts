@@ -79,7 +79,12 @@ export const handleExtensionAuthHandshake = (
 				: null,
 	};
 
-	window.chrome.runtime.sendMessage(extensionId, {
+	const chromeRuntime = window.chrome.runtime;
+	if (!chromeRuntime) {
+		return;
+	}
+
+	chromeRuntime.sendMessage(extensionId, {
 		message: 'authenticateUser',
 		user: extensionUser,
 	});
