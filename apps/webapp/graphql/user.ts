@@ -55,6 +55,7 @@ export const USER = gql`
 			firstName
 			lastName
 			jobTitle
+			productNotifications
 			avatar {
 				downloadUrl
 				shareUrl
@@ -83,6 +84,7 @@ export const UPDATE_PRODUCT_NOTIFICATIONS = gql`
 			data: { productNotifications: $productNotifications }
 		) {
 			id
+			productNotifications
 		}
 	}
 `;

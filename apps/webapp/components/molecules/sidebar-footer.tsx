@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
 	Avatar,
 	Box,
@@ -51,6 +51,10 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 	const [selectedProject, setSelectedProject] = useState<SelectedProject>(
 		project as SelectedProject
 	);
+
+	useEffect(() => {
+		setSelectedProject(project as SelectedProject);
+	}, [project]);
 
 	const mixpanel = useAnalytics();
 	const router = useRouter();

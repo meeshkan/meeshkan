@@ -152,6 +152,11 @@ export const CREATE_PROJECT = gql`
 			projects(filter: { name: { equals: $projectName } }) {
 				items {
 					id
+					name
+					avatar {
+						downloadUrl
+						shareUrl
+					}
 				}
 			}
 		}
@@ -227,97 +232,6 @@ export const JOIN_PROJECT = gql`
 					downloadUrl
 					shareUrl
 				}
-				configuration {
-					productionURL
-					stagingURL
-					inviteLink
-					authenticationTokens {
-						items {
-							id
-							createdAt
-							type
-							key
-							value
-						}
-					}
-				}
-				hasReceivedEvents
-				members {
-					count
-					items {
-						firstName
-						lastName
-						email
-						avatar {
-							downloadUrl
-						}
-					}
-				}
-				userStories {
-					count
-					items {
-						id
-						testOutcome {
-							items {
-								id
-								status
-								isResolved
-								errorDetails {
-									stepIndex
-									exception
-								}
-								createdAt
-								video {
-									downloadUrl
-									shareUrl
-								}
-							}
-						}
-						title
-						testCreatedDate
-						isTestCase
-						createdAt
-					}
-				}
-				release {
-					count
-					items {
-						id
-						name
-						releaseDate
-						testRuns {
-							count
-							items {
-								id
-								status
-								ciRun
-								createdAt
-								testLength
-								testOutcome {
-									count
-									items {
-										id
-										status
-										isResolved
-										errorDetails {
-											stepIndex
-											exception
-										}
-										createdAt
-										video {
-											downloadUrl
-											shareUrl
-										}
-										userStory {
-											id
-											title
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 	}
@@ -330,6 +244,16 @@ export const REMOVE_TEAM_MEMBER = gql`
 			data: { members: { disconnect: { email: $memberEmail } } }
 		) {
 			id
+			members {
+				items {
+					avatar {
+						downloadUrl
+					}
+					firstName
+					lastName
+					email
+				}
+			}
 		}
 	}
 `;
@@ -493,7 +417,17 @@ export const REMOVE_AUTH_TOKEN = gql`
 				}
 			}
 		) {
-			id
+			configuration {
+				authenticationTokens {
+					items {
+						id
+						createdAt
+						type
+						key
+						value
+					}
+				}
+			}
 		}
 	}
 `;
