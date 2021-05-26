@@ -74,7 +74,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 				{children}
 			</Stack>
 
-			{project && !project.configuration?.plan ? (
+			{project?.configuration && !project.configuration?.plan ? (
 				<Modal
 					isOpen={isOpen}
 					onClose={onClose}
