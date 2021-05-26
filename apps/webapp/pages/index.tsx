@@ -21,7 +21,6 @@ const Index = (props: IndexProps) => {
 			}
 
 			setLoadingProject(true);
-			console.log(`3: ${loadingProject}`)
 			const firstProject = await getProject(idToken, projects[0].id);
 			setProject(firstProject);
 			setLoadingProject(false);
