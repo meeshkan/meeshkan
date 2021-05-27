@@ -25,6 +25,8 @@ export type IUserContext =
 	| (IUser & {
 			project: Project;
 			setProject: (project: Project) => void;
+			loadingProject: boolean;
+			setLoadingProject: (loading: boolean) => void;
 			mutate: responseInterface<void | IUser, any>['mutate'];
 	  })
 	| null;

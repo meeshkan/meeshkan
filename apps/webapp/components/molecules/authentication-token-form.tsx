@@ -26,13 +26,13 @@ const AuthenticationTokenForm = ({
 	const [loading, setLoading] = useState(false);
 	const { register, handleSubmit } = useForm<AuthenticationToken>();
 	const user = useContext(UserContext);
-	const { projects, project, idToken, mutate: mutateUser } = user;
+	const { idToken, project, setProject, mutate: mutateUser } = user;
 
 	const client = eightBaseClient(idToken);
 
 	const onSubmit = async (formData: AuthenticationToken): Promise<void> => {
 		setLoading(true);
-		client
+		const response = await client
 			.request(ADD_AUTH_TOKEN, {
 				projectID: project.id,
 				type:
@@ -43,13 +43,21 @@ const AuthenticationTokenForm = ({
 						: undefined,
 				key: formData.key,
 				value: formData.value,
-			})
-			.then((res) => {
-				setTokens(res.projectUpdate.configuration.authenticationTokens.items);
-				setLoading(false);
 			});
 
-		await mutateUser({ ...user, projects }, false);
+		const updatedAuthenticationTokens = response.projectUpdate.configuration.authenticationTokens.items;
+		setTokens(updatedAuthenticationTokens);
+		setLoading(false);
+		setProject({
+			...project,
+			configuration: {
+				...project.configuration,
+				authenticationTokens: {
+					...project.configuration.authenticationTokens,
+					items: updatedAuthenticationTokens,
+				},
+			},
+		});
 	};
 
 	return (

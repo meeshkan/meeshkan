@@ -66,6 +66,7 @@ const Settings = () => {
 		productNotifications,
 		idToken,
 		project,
+		setProject,
 		projects,
 		mutate: mutateUser,
 	} = user;
@@ -96,20 +97,20 @@ const Settings = () => {
 	}, [project, productNotifications]);
 
 	useEffect(() => {
-		const handleTestRunnerToggle = async () => {
-			const res = await client.request(TOGGLE_TEST_RUNS, {
+		const handleTestRunnerToggle = async (): Promise<void> => {
+			const response = await client.request(TOGGLE_TEST_RUNS, {
 				projectId: project.id,
 				toggle: !toggleTestRunnerIndex,
 			});
 
-			const selectedProjectIndex = _.findIndex(
-				projects,
-				(currentProject) => currentProject.id === project.id
-			);
-
-			projects[selectedProjectIndex].configuration.activeTestRuns =
-				res.projectUpdate.configuration.activeTestRuns;
-			await mutateUser({ ...user, projects });
+			const updatedTestRunnerToggle = response.projectUpdate.configuration.activeTestRuns;
+			setProject({
+				...project,
+				configuration: {
+					...project.configuration,
+					activeTestRuns: updatedTestRunnerToggle,
+				},
+			});
 		};
 
 		if (
@@ -133,51 +134,52 @@ const Settings = () => {
 		return <NotFoundError />;
 	}
 
-	const handleSwitchToggle = async (event: ChangeEvent<HTMLInputElement>) => {
+	const handleSwitchToggle = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
 		const { checked } = event.target;
 		setProductUpdates(checked);
 
-		await updateProductNotifications(idToken, {
+		const response = await updateProductNotifications(idToken, {
 			productNotifications: checked,
 		});
 
-		await mutateUser({ ...user, productNotifications: checked }, false);
+		await mutateUser({ ...user, productNotifications: response.userUpdate.productNotifications });
 	};
 
-	const removeTeamMember = async (memberEmail: string) => {
-		const request = client.request(REMOVE_TEAM_MEMBER, {
+	const removeTeamMember = async (memberEmail: string): Promise<void> => {
+		const response = await client.request(REMOVE_TEAM_MEMBER, {
 			projectId: project.id,
 			memberEmail: memberEmail,
 		});
 
-		const updatedMembers = members?.filter(
-			(member) => member.email !== memberEmail
-		);
+		const updatedMembers = response.members.items;
 		setMembers(updatedMembers);
-
-		const selectedProjectIndex = _.findIndex(
-			projects,
-			(currentProject) => currentProject.id === project.id
-		);
-
-		projects[selectedProjectIndex].members.items = members;
-		await mutateUser({ ...user, projects });
-
-		return request;
+		setProject({
+			...project,
+			members: {
+				...project.members,
+				items: updatedMembers,
+			},
+		});
 	};
 
-	const deleteToken = async (tokenID: string) => {
-		const request = client.request(REMOVE_AUTH_TOKEN, {
+	const deleteToken = async (tokenID: string): Promise<void> => {
+		const response = await client.request(REMOVE_AUTH_TOKEN, {
 			projectID: project.id,
 			tokenID: tokenID,
 		});
 
-		const updatedTokens = tokens?.filter((token) => token.id !== tokenID);
-		setTokens(updatedTokens);
-
-		await mutateUser({ ...user, projects });
-
-		return request;
+		const updatedAuthenticationTokens = response.projectUpdate.configuration.authenticationTokens.items;
+		setTokens(updatedAuthenticationTokens);
+		setProject({
+			...project,
+			configuration: {
+				...project.configuration,
+				authenticationTokens: {
+					...project.configuration.authenticationTokens,
+					items: updatedAuthenticationTokens,
+				},
+			},
+		});
 	};
 
 	const handleRecordLoginFlow = async () => {
@@ -222,19 +224,20 @@ const Settings = () => {
 		return member.email === 'contact@meeshkan.com';
 	});
 
-	const inviteSupport = async () => {
-		const res = await client.request(ADD_SUPPORT, {
+	const inviteSupport = async (): Promise<void> => {
+		const response = await client.request(ADD_SUPPORT, {
 			projectID: project.id,
 		});
-		setMembers(res.projectUpdate.members.items);
 
-		const selectedProjectIndex = _.findIndex(
-			projects,
-			(currentProject) => currentProject.id === project.id
-		);
-
-		projects[selectedProjectIndex].members = res.projectUpdate.members;
-		await mutateUser({ ...user, projects });
+		const updatedMembers = response.projectUpdate.members.items;
+		setMembers(updatedMembers);
+		setProject({
+			...project,
+			members: {
+				...project.members,
+				items: updatedMembers,
+			},
+		});
 	};
 
 	return (

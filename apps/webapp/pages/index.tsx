@@ -4,20 +4,30 @@ import LoadingScreen from '../components/organisms/loading-screen';
 import Onboarding from '../components/organisms/onboarding';
 import Card from '../components/atoms/card';
 import { UserContext } from '../utils/user';
+import { getProject } from '../utils/project';
 
 type IndexProps = {
 	cookies: string | undefined;
 };
 
 const Index = (props: IndexProps) => {
-	const { idToken, projects, setProject } = useContext(UserContext);
+	const { idToken, projects, setProject, loadingProject, setLoadingProject } = useContext(UserContext);
 	const hasProjects = projects.length > 0;
 
 	useEffect(() => {
-		if (hasProjects) {
-			setProject(projects[0]);
+		const setDefaultProject = async () => {
+			if (!hasProjects) {
+				return;
+			}
+
+			setLoadingProject(true);
+			const firstProject = await getProject(idToken, projects[0].id);
+			setProject(firstProject);
+			setLoadingProject(false);
 		}
-	}, [projects, setProject, hasProjects]);
+
+		setDefaultProject();
+	}, [idToken, projects, setLoadingProject, setProject, hasProjects]);
 
 	if (idToken && !hasProjects) {
 		return (

@@ -2,28 +2,40 @@ import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { createSlug } from '../utils/createSlug';
 import { UserContext } from '../utils/user';
+import { getProject } from '../utils/project';
 
 export const useValidateSelectedProject = () => {
 	const [loading, setLoading] = useState(true);
 	const [found, setFound] = useState(true);
-	const { projects, setProject } = useContext(UserContext);
+	const { idToken, projects, project, setProject, loadingProject, setLoadingProject } = useContext(UserContext);
 	const router = useRouter();
 	const { projectName } = router.query;
 
 	useEffect(() => {
-		const selectedProject = projects.find(
-			(project) => createSlug(project?.name || '') === projectName
-		);
+		const fetchProject = async () => {
+			const selectedProject = projects.find(
+				(project) => createSlug(project?.name || '') === projectName
+			);
 
-		if (selectedProject) {
-			setLoading(false);
-			setProject(selectedProject);
-			setFound(true);
-		} else {
-			setLoading(false);
-			setFound(false);
-		}
+			let fetchedProject = project;
+			if (selectedProject && selectedProject.id !== project?.id) {
+				setLoadingProject(true);
+				fetchedProject = await getProject(idToken, selectedProject.id);
+				setProject(fetchedProject)
+				setLoadingProject(false);
+			}
+
+			if (fetchedProject) {
+				setLoading(false);
+				setFound(true);
+			} else {
+				setLoading(false);
+				setFound(false);
+			}
+		};
+
+		fetchProject();
 	}, [projectName, projects, setProject]);
 
-	return { found, loading };
+	return { found, loading: loading || loadingProject };
 };

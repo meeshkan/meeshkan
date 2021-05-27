@@ -1,5 +1,126 @@
 import { gql } from 'graphql-request';
 
+export const PROJECT = gql`
+	query PROJECT($projectId: ID!) {
+		project(id: $projectId) {
+			id
+			name
+			avatar {
+				downloadUrl
+				shareUrl
+			}
+			configuration {
+				activeTestRuns
+				productionURL
+				stagingURL
+				inviteLink
+				logInFlow {
+					id
+					createdAt
+					title
+				}
+				plan
+				stripeCustomerID
+				billingInterval
+				subscriptionStatus
+				subscriptionStartedDate
+				authenticationTokens {
+					items {
+						id
+						createdAt
+						type
+						key
+						value
+					}
+				}
+			}
+			hasReceivedEvents
+			members {
+				count
+				items {
+					firstName
+					lastName
+					email
+					avatar {
+						downloadUrl
+					}
+				}
+			}
+			userStories {
+				count
+				items {
+					id
+					testOutcome {
+						items {
+							id
+							status
+							isResolved
+							errorDetails {
+								stepIndex
+								exception
+							}
+							createdAt
+							video {
+								downloadUrl
+								shareUrl
+							}
+						}
+					}
+					title
+					testCreatedDate
+					isTestCase
+					createdAt
+					created
+				}
+			}
+			release {
+				count
+				items {
+					id
+					name
+					releaseDate
+					testRuns {
+						count
+						items {
+							id
+							status
+							ciRun
+							createdAt
+							testLength
+							testOutcome {
+								count
+								items {
+									id
+									status
+									isResolved
+									errorDetails {
+										stepIndex
+										exception
+									}
+									createdAt
+									video {
+										downloadUrl
+										shareUrl
+									}
+									userStory {
+										id
+										title
+										created
+										isAuthenticated
+										recording {
+											seleniumScriptJson
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`;
+
 export const CREATE_PROJECT = gql`
 	mutation CREATE_PROJECT(
 		$userId: ID!
@@ -32,6 +153,11 @@ export const CREATE_PROJECT = gql`
 			projects(filter: { name: { equals: $projectName } }) {
 				items {
 					id
+					name
+					avatar {
+						downloadUrl
+						shareUrl
+					}
 				}
 			}
 		}
@@ -112,102 +238,6 @@ export const JOIN_PROJECT = gql`
 					downloadUrl
 					shareUrl
 				}
-				configuration {
-					productionURL
-					stagingURL
-					inviteLink
-					plan
-					stripeCustomerID
-					billingInterval
-					subscriptionStatus
-					subscriptionStartedDate
-					authenticationTokens {
-						items {
-							id
-							createdAt
-							type
-							key
-							value
-						}
-					}
-				}
-				hasReceivedEvents
-				members {
-					count
-					items {
-						firstName
-						lastName
-						email
-						avatar {
-							downloadUrl
-						}
-					}
-				}
-				userStories {
-					count
-					items {
-						id
-						testOutcome {
-							items {
-								id
-								status
-								isResolved
-								errorDetails {
-									stepIndex
-									exception
-								}
-								createdAt
-								video {
-									downloadUrl
-									shareUrl
-								}
-							}
-						}
-						title
-						testCreatedDate
-						isTestCase
-						createdAt
-					}
-				}
-				release {
-					count
-					items {
-						id
-						name
-						releaseDate
-						testRuns {
-							count
-							items {
-								id
-								status
-								ciRun
-								createdAt
-								testLength
-								testOutcome {
-									count
-									items {
-										id
-										status
-										isResolved
-										errorDetails {
-											stepIndex
-											exception
-										}
-										createdAt
-										video {
-											downloadUrl
-											shareUrl
-										}
-										userStory {
-											id
-											title
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 	}
@@ -220,6 +250,16 @@ export const REMOVE_TEAM_MEMBER = gql`
 			data: { members: { disconnect: { email: $memberEmail } } }
 		) {
 			id
+			members {
+				items {
+					avatar {
+						downloadUrl
+					}
+					firstName
+					lastName
+					email
+				}
+			}
 		}
 	}
 `;
@@ -383,7 +423,17 @@ export const REMOVE_AUTH_TOKEN = gql`
 				}
 			}
 		) {
-			id
+			configuration {
+				authenticationTokens {
+					items {
+						id
+						createdAt
+						type
+						key
+						value
+					}
+				}
+			}
 		}
 	}
 `;

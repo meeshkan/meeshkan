@@ -110,6 +110,23 @@ export const getRecordingsAndTestsByDay = (
 export const sumOfObjectValues = (object: { [key: string]: number }) =>
 	_.sum(_.values(object));
 
+// TODO: fill me in with correct info once we can determine
+// the release start date. For now, set arbitrarily to 30 days.
+export const getReleaseStartFromProject = (project: Project) =>
+	new Date().getTime() - 1000 * 60 * 60 * 24 * 30;
+
+export const calculatePercentageChange = (
+	key: string,
+	confidenceScoreNDaysAgo: Record<string, DataPoint>,
+	dataPoint: DataPoint
+) =>
+	confidenceScoreNDaysAgo[key]
+		? dataPoint.score - confidenceScoreNDaysAgo[key].score
+		: dataPoint.score;
+
+export const deltaChange = (oldValue: number, newValue: number) =>
+	oldValue === 0 ? (newValue === 0 ? 0 : 100) : ((oldValue - newValue) * 100) / oldValue;
+
 export const COVERAGE_DATA_POINT = 'COVERAGE_DATA_POINT';
 export const MAX_POSSIBLE_TEST_COVERAGE_SCORE = 30;
 export const MAX_POSSIBLE_TEST_RUN_SCORE = 70;

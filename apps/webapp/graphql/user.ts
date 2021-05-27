@@ -68,114 +68,6 @@ export const USER = gql`
 						downloadUrl
 						shareUrl
 					}
-					configuration {
-						activeTestRuns
-						productionURL
-						stagingURL
-						inviteLink
-						logInFlow {
-							id
-							createdAt
-							title
-						}
-						plan
-						stripeCustomerID
-						billingInterval
-						subscriptionStatus
-						subscriptionStartedDate
-						authenticationTokens {
-							items {
-								id
-								createdAt
-								type
-								key
-								value
-							}
-						}
-					}
-					hasReceivedEvents
-					members {
-						count
-						items {
-							firstName
-							lastName
-							email
-							avatar {
-								downloadUrl
-							}
-						}
-					}
-					userStories {
-						count
-						items {
-							id
-							testOutcome {
-								items {
-									id
-									status
-									isResolved
-									errorDetails {
-										stepIndex
-										exception
-									}
-									createdAt
-									video {
-										downloadUrl
-										shareUrl
-									}
-								}
-							}
-							title
-							testCreatedDate
-							isTestCase
-							createdAt
-							created
-						}
-					}
-					release {
-						count
-						items {
-							id
-							name
-							releaseDate
-							testRuns {
-								count
-								items {
-									id
-									status
-									ciRun
-									createdAt
-									testLength
-									testOutcome {
-										count
-										items {
-											id
-											status
-											isResolved
-											errorDetails {
-												stepIndex
-												exception
-											}
-											createdAt
-											video {
-												downloadUrl
-												shareUrl
-											}
-											userStory {
-												id
-												title
-												created
-												isAuthenticated
-												recording {
-													seleniumScriptJson
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
 				}
 			}
 		}
@@ -192,6 +84,7 @@ export const UPDATE_PRODUCT_NOTIFICATIONS = gql`
 			data: { productNotifications: $productNotifications }
 		) {
 			id
+			productNotifications
 		}
 	}
 `;
