@@ -24,6 +24,8 @@ export const HumanTag = (tag: string): string => {
 		? 'Text'
 		: tag === 'DIV'
 		? 'Div'
+		: tag === 'IMG'
+		? 'Image'
 		: tag === 'SELECT'
 		? 'Dropdown'
 		: tag === 'NAV'
