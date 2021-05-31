@@ -157,7 +157,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Test',
 				accessor: (originalRow, rowIndex) => {
-					console.log(originalRow.isTestCase)
 					return (
 						<Checkbox isDisabled isChecked={originalRow.isTestCase} />
 					)
