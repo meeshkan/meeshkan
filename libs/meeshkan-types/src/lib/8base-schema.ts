@@ -1157,6 +1157,7 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration update input from authenticationTokens */
@@ -1181,6 +1182,7 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 export type AuthenticationTokenSort = {
@@ -1324,6 +1326,20 @@ export type BillingInvoiceItem = {
 	status?: Maybe<Scalars['String']>;
 	total?: Maybe<Scalars['Float']>;
 	description?: Maybe<Scalars['String']>;
+	plan?: Maybe<BillingInvoiceItemPlanInfo>;
+	workspace?: Maybe<BillingInvoiceItemWorkspaceInfo>;
+};
+
+export type BillingInvoiceItemPlanInfo = {
+	__typename?: 'BillingInvoiceItemPlanInfo';
+	id?: Maybe<Scalars['ID']>;
+	name?: Maybe<Scalars['String']>;
+};
+
+export type BillingInvoiceItemWorkspaceInfo = {
+	__typename?: 'BillingInvoiceItemWorkspaceInfo';
+	id?: Maybe<Scalars['ID']>;
+	name?: Maybe<Scalars['String']>;
 };
 
 export enum BillingInvoicesListFilterType {
@@ -1759,6 +1775,7 @@ export type Configuration = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -1804,6 +1821,7 @@ export type Configuration_PermissionFilter = {
 	subscriptionStartedDate?: Maybe<DatePredicate>;
 	subscriptionStatus?: Maybe<StringPredicate>;
 	billingInterval?: Maybe<StringPredicate>;
+	hasScheduledCall?: Maybe<BoolPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	project?: Maybe<Project_PermissionFilter>;
@@ -1963,6 +1981,7 @@ export type ConfigurationCreateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration create many input */
@@ -1986,6 +2005,7 @@ export type ConfigurationCreateManyInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration delete input */
@@ -2007,6 +2027,7 @@ export type ConfigurationFieldsPermissions = {
 	subscriptionStartedDate?: Maybe<Scalars['Boolean']>;
 	subscriptionStatus?: Maybe<Scalars['Boolean']>;
 	billingInterval?: Maybe<Scalars['Boolean']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 export type ConfigurationFilter = {
@@ -2023,6 +2044,7 @@ export type ConfigurationFilter = {
 	subscriptionStartedDate?: Maybe<DatePredicate>;
 	subscriptionStatus?: Maybe<StringPredicate>;
 	billingInterval?: Maybe<StringPredicate>;
+	hasScheduledCall?: Maybe<BoolPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	project?: Maybe<ProjectFilter>;
@@ -2054,6 +2076,7 @@ export type ConfigurationGroupByQuery = {
 	subscriptionStartedDate?: Maybe<Array<GroupByField>>;
 	subscriptionStatus?: Maybe<Array<GroupByField>>;
 	billingInterval?: Maybe<Array<GroupByField>>;
+	hasScheduledCall?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	authenticationTokens?: Maybe<AuthenticationTokenGroupByQuery>;
@@ -2134,6 +2157,8 @@ export enum ConfigurationOrderBy {
 	SubscriptionStatusDesc = 'subscriptionStatus_DESC',
 	BillingIntervalAsc = 'billingInterval_ASC',
 	BillingIntervalDesc = 'billingInterval_DESC',
+	HasScheduledCallAsc = 'hasScheduledCall_ASC',
+	HasScheduledCallDesc = 'hasScheduledCall_DESC',
 }
 
 /** Configuration subscription payload */
@@ -2169,6 +2194,7 @@ export type ConfigurationSort = {
 	subscriptionStartedDate?: Maybe<SortOrder>;
 	subscriptionStatus?: Maybe<SortOrder>;
 	billingInterval?: Maybe<SortOrder>;
+	hasScheduledCall?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
 	logInFlow?: Maybe<UserStorySort>;
@@ -2192,6 +2218,7 @@ export type ConfigurationUpdateByFilterInput = {
 	subscriptionStartedDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
 	subscriptionStatus?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	billingInterval?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
+	hasScheduledCall?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 };
 
 /** Configuration update input */
@@ -2217,6 +2244,7 @@ export type ConfigurationUpdateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** Integration create input from continuousIntegration */
@@ -5193,6 +5221,7 @@ export type LogInFlow_ConfigurationCreateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration update input from logInFlow */
@@ -5217,6 +5246,7 @@ export type LogInFlow_ConfigurationUpdateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** LoginResponse */
@@ -5279,6 +5309,10 @@ export type Metric = {
 	project?: Maybe<Project>;
 	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
 	calculatedFor?: Maybe<Scalars['Date']>;
+	/** The number of user stories that had a create user story mutation run. */
+	sentStories?: Maybe<Scalars['Int']>;
+	/** The number of user stories that should have been updated with an additional 'flow id' that counts repeated flows. */
+	updatedStories?: Maybe<Scalars['Int']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -5295,6 +5329,8 @@ export type Metric_PermissionFilter = {
 	updatedFlows?: Maybe<IntPredicate>;
 	ignoredFlows?: Maybe<IntPredicate>;
 	calculatedFor?: Maybe<DatePredicate>;
+	sentStories?: Maybe<IntPredicate>;
+	updatedStories?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	project?: Maybe<Project_PermissionFilter>;
@@ -5330,6 +5366,10 @@ export type MetricCreateInput = {
 	project?: Maybe<MetricsProjectRelationInput>;
 	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
 	calculatedFor?: Maybe<Scalars['Date']>;
+	/** The number of user stories that had a create user story mutation run. */
+	sentStories?: Maybe<Scalars['Int']>;
+	/** The number of user stories that should have been updated with an additional 'flow id' that counts repeated flows. */
+	updatedStories?: Maybe<Scalars['Int']>;
 };
 
 /** Metrics create many input */
@@ -5354,6 +5394,10 @@ export type MetricCreateManyInput = {
 	project: MetricsProjectManyRelationInput;
 	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
 	calculatedFor?: Maybe<Scalars['Date']>;
+	/** The number of user stories that had a create user story mutation run. */
+	sentStories?: Maybe<Scalars['Int']>;
+	/** The number of user stories that should have been updated with an additional 'flow id' that counts repeated flows. */
+	updatedStories?: Maybe<Scalars['Int']>;
 };
 
 /** Metrics delete input */
@@ -5374,6 +5418,8 @@ export type MetricFieldsPermissions = {
 	updatedFlows?: Maybe<Scalars['Boolean']>;
 	ignoredFlows?: Maybe<Scalars['Boolean']>;
 	calculatedFor?: Maybe<Scalars['Boolean']>;
+	sentStories?: Maybe<Scalars['Boolean']>;
+	updatedStories?: Maybe<Scalars['Boolean']>;
 };
 
 export type MetricFilter = {
@@ -5389,6 +5435,8 @@ export type MetricFilter = {
 	updatedFlows?: Maybe<IntPredicate>;
 	ignoredFlows?: Maybe<IntPredicate>;
 	calculatedFor?: Maybe<DatePredicate>;
+	sentStories?: Maybe<IntPredicate>;
+	updatedStories?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	project?: Maybe<ProjectFilter>;
@@ -5417,6 +5465,8 @@ export type MetricGroupByQuery = {
 	updatedFlows?: Maybe<Array<GroupByField>>;
 	ignoredFlows?: Maybe<Array<GroupByField>>;
 	calculatedFor?: Maybe<Array<GroupByField>>;
+	sentStories?: Maybe<Array<GroupByField>>;
+	updatedStories?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
@@ -5472,6 +5522,10 @@ export enum MetricOrderBy {
 	IgnoredFlowsDesc = 'ignoredFlows_DESC',
 	CalculatedForAsc = 'calculatedFor_ASC',
 	CalculatedForDesc = 'calculatedFor_DESC',
+	SentStoriesAsc = 'sentStories_ASC',
+	SentStoriesDesc = 'sentStories_DESC',
+	UpdatedStoriesAsc = 'updatedStories_ASC',
+	UpdatedStoriesDesc = 'updatedStories_DESC',
 }
 
 /** Metrics subscription payload */
@@ -5538,6 +5592,8 @@ export type MetricSort = {
 	updatedFlows?: Maybe<SortOrder>;
 	ignoredFlows?: Maybe<SortOrder>;
 	calculatedFor?: Maybe<SortOrder>;
+	sentStories?: Maybe<SortOrder>;
+	updatedStories?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
 };
@@ -5579,6 +5635,8 @@ export type MetricUpdateByFilterInput = {
 	updatedFlows?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
 	ignoredFlows?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
 	calculatedFor?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
+	sentStories?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	updatedStories?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
 };
 
 /** Metrics update input */
@@ -5604,6 +5662,10 @@ export type MetricUpdateInput = {
 	project?: Maybe<MetricsProjectUpdateRelationInput>;
 	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
 	calculatedFor?: Maybe<Scalars['Date']>;
+	/** The number of user stories that had a create user story mutation run. */
+	sentStories?: Maybe<Scalars['Int']>;
+	/** The number of user stories that should have been updated with an additional 'flow id' that counts repeated flows. */
+	updatedStories?: Maybe<Scalars['Int']>;
 };
 
 /** MissingRelation */
@@ -9125,6 +9187,7 @@ export type Project_ConfigurationCreateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration update input from project */
@@ -9149,6 +9212,7 @@ export type Project_ConfigurationUpdateInput = {
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 };
 
 /** Integration create input from project */
@@ -9195,6 +9259,10 @@ export type Project_MetricCreateInput = {
 	project?: Maybe<MetricsProjectRelationInput>;
 	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
 	calculatedFor?: Maybe<Scalars['Date']>;
+	/** The number of user stories that had a create user story mutation run. */
+	sentStories?: Maybe<Scalars['Int']>;
+	/** The number of user stories that should have been updated with an additional 'flow id' that counts repeated flows. */
+	updatedStories?: Maybe<Scalars['Int']>;
 };
 
 /** Metrics update input from project */
@@ -15309,6 +15377,20 @@ export type SystemBillingInvoiceItem = {
 	status?: Maybe<Scalars['String']>;
 	total?: Maybe<Scalars['Float']>;
 	description?: Maybe<Scalars['String']>;
+	plan?: Maybe<SystemBillingInvoiceItemPlanInfo>;
+	workspace?: Maybe<SystemBillingInvoiceItemWorkspaceInfo>;
+};
+
+export type SystemBillingInvoiceItemPlanInfo = {
+	__typename?: 'SystemBillingInvoiceItemPlanInfo';
+	id?: Maybe<Scalars['ID']>;
+	name?: Maybe<Scalars['String']>;
+};
+
+export type SystemBillingInvoiceItemWorkspaceInfo = {
+	__typename?: 'SystemBillingInvoiceItemWorkspaceInfo';
+	id?: Maybe<Scalars['ID']>;
+	name?: Maybe<Scalars['String']>;
 };
 
 export enum SystemBillingInvoicesListFilterType {
@@ -15525,6 +15607,7 @@ export type SystemEnvironmentRoleList = {
 export type SystemEnvironmentSettings = {
 	__typename?: 'SystemEnvironmentSettings';
 	deleteLock?: Maybe<Scalars['Boolean']>;
+	fileManagementProvider?: Maybe<Scalars['String']>;
 };
 
 /** SystemEnvironmentsListResponse output */
@@ -16641,6 +16724,7 @@ export type SystemWorkspaceCreateMutationInput = {
 	billingPlanId?: Maybe<Scalars['ID']>;
 	organizationId?: Maybe<Scalars['ID']>;
 	kind?: Maybe<SystemWorkspaceKind>;
+	description?: Maybe<Scalars['String']>;
 };
 
 export type SystemWorkspaceCreateResponse = {
@@ -16648,6 +16732,7 @@ export type SystemWorkspaceCreateResponse = {
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
 	kind?: Maybe<Scalars['String']>;
+	description?: Maybe<Scalars['String']>;
 };
 
 /** WorkspaceDeleteMutationInput */
@@ -16679,6 +16764,7 @@ export type SystemWorkspaceItem = {
 	webSocket?: Maybe<Scalars['String']>;
 	organization?: Maybe<SystemOrganizationBaseItem>;
 	kind?: Maybe<Scalars['String']>;
+	description?: Maybe<Scalars['String']>;
 };
 
 /** Workspace Kind */
@@ -16710,6 +16796,7 @@ export type SystemWorkspaceUpdateMutationInput = {
 	id: Scalars['ID'];
 	name?: Maybe<Scalars['String']>;
 	image?: Maybe<GraphQlCreateFileItemInput>;
+	description?: Maybe<Scalars['String']>;
 };
 
 export type SystemWorkspaceUpdateResponse = {
@@ -16717,6 +16804,7 @@ export type SystemWorkspaceUpdateResponse = {
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
 	image?: Maybe<GraphQlFileItemResponse>;
+	description?: Maybe<Scalars['String']>;
 };
 
 /** Table */
@@ -19570,6 +19658,7 @@ export type WorkspaceCreateMutationInput = {
 	billingPlanId?: Maybe<Scalars['ID']>;
 	organizationId?: Maybe<Scalars['ID']>;
 	kind?: Maybe<WorkspaceKind>;
+	description?: Maybe<Scalars['String']>;
 };
 
 export type WorkspaceCreateResponse = {
@@ -19577,6 +19666,7 @@ export type WorkspaceCreateResponse = {
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
 	kind?: Maybe<Scalars['String']>;
+	description?: Maybe<Scalars['String']>;
 };
 
 /** WorkspaceDeleteMutationInput */
@@ -19615,6 +19705,7 @@ export type WorkspaceItem = {
 	webSocket?: Maybe<Scalars['String']>;
 	organization?: Maybe<SystemOrganizationBaseItem>;
 	kind?: Maybe<Scalars['String']>;
+	description?: Maybe<Scalars['String']>;
 };
 
 /** Workspace Kind */
@@ -19659,6 +19750,7 @@ export type WorkspaceUpdateMutationInput = {
 	id: Scalars['ID'];
 	name?: Maybe<Scalars['String']>;
 	image?: Maybe<GraphQlCreateFileItemInput>;
+	description?: Maybe<Scalars['String']>;
 };
 
 export type WorkspaceUpdateResponse = {
@@ -19666,4 +19758,5 @@ export type WorkspaceUpdateResponse = {
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
 	image?: Maybe<GraphQlFileItemResponse>;
+	description?: Maybe<Scalars['String']>;
 };
