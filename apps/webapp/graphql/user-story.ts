@@ -216,42 +216,44 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 	}
 `;
 export const UPDATE_REQUIRES_AUTHENTICATION = gql`
-	mutation UPDATE_REQUIRES_AUTHENTICATION(
-		$userStoryId: ID!
-		$isAuthenticated: Boolean!
-	) {
-		userStoryUpdate(
-			filter: { id: $userStoryId }
-			data: { isAuthenticated: $isAuthenticated }
-		) {
-			id
-			title
-			description
-			isTestCase
-			flowIDs
-			created
-			isExpected
-			isAuthenticated
-			significance
-			recording {
-				video {
-					downloadUrl
-					shareUrl
-				}
-				id
-				startEventId
-				endEventId
-				environment {
-					items {
-						ipAddress
-						browser
-						browserVersion
-						operatingSystem
-						language
-					}
-				}
-				seleniumScriptJson
-			}
-		}
-	}
+mutation UPDATE_REQUIRES_AUTHENTICATION(
+  $userStoryId: ID!
+  $isAuthenticated: Boolean!
+) {
+  userStoryUpdateByFilter(
+    filter: { id: { equals: $userStoryId } }
+    data: { isAuthenticated: { set: $isAuthenticated } }
+  ) {
+    items {
+      id
+      title
+      description
+      isTestCase
+      flowIDs
+      created
+      isExpected
+      isAuthenticated
+      significance
+      recording {
+        video {
+          downloadUrl
+          shareUrl
+        }
+        id
+        startEventId
+        endEventId
+        environment {
+          items {
+            ipAddress
+            browser
+            browserVersion
+            operatingSystem
+            language
+          }
+        }
+        seleniumScriptJson
+      }
+    }
+  }
+}
 `;

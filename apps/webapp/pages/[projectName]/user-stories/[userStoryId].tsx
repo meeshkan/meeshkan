@@ -171,13 +171,14 @@ const UserStoryPage = (props: UserStoryProps) => {
 			userStoryId: userStoryId,
 			isAuthenticated,
 		});
-		const updatedUserStories = [...response.project.userStories.items];
+
+		const updatedUserStories = [...response.userStoryUpdateByFilter.items];
 
 		updatedUserStories.find(userStory => userStory.id === userStoryId).isAuthenticated = isAuthenticated;
 
 		setProject({
 			...project,
-			userStories: { ...project.userStories, items: updatedUserStories }
+			userStories: { items: updatedUserStories }
 		});
 	};
 
