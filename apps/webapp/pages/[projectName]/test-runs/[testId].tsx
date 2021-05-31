@@ -65,7 +65,7 @@ const TestRun = () => {
 
 	const headingColor = useColorModeValue('gray.900', 'gray.200');
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
-	const alertLink = useColorModeValue('red.700', 'red.300');
+	const alertLinkColor = useColorModeValue('red.700', 'red.300');
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
@@ -102,8 +102,6 @@ const TestRun = () => {
 
 	const hasAuthTokens: boolean =
 		project?.configuration?.authenticationTokens?.items?.length >= 1 ? true : false;
-
-
 
 	return (
 		<ValidatedBillingPlan>
@@ -181,7 +179,7 @@ const TestRun = () => {
 								{testsNeedAuthentication && !hasLogInStory && !hasAuthTokens ? (<Alert status="error" p={3} mt={3} flex="1">
 									<AlertIcon />
 									<AlertDescription>
-										At least one of your tests require authentication. <Link href={`/${slugifiedProjectName}/settings#authentication`} passHref><ChakraLink color={alertLink} textDecor="underline">Authentication settings</ChakraLink></Link>
+										At least one of your tests requires authentication. <Link href={`/${slugifiedProjectName}/settings#authentication`} passHref><ChakraLink color={alertLinkColor} textDecor="underline">Authentication settings</ChakraLink></Link>
 									</AlertDescription>
 								</Alert>) : null}
 								<Accordion defaultIndex={[0]} allowMultiple>
