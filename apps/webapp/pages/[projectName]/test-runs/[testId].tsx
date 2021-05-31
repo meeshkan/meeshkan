@@ -185,8 +185,7 @@ const TestRun = () => {
 									</AlertDescription>
 								</Alert>) : null}
 								<Accordion defaultIndex={[0]} allowMultiple>
-									{sortedTestOutcomes.map((outcome, index) => {
-										// Check for isAuthenticationRequired, does the logInFlowExists, and authenticationTokensExist to determine failure step
+									{sortedTestOutcomes.map((outcome) => {
 										const testCase = outcome?.userStory;
 										const status = outcome?.status;
 
@@ -203,7 +202,6 @@ const TestRun = () => {
 												1 -
 												stepsInLogInStory
 												: outcome?.errorDetails?.stepIndex + 1;
-
 										const errorInLogIn: boolean = errorStepIndex > 0 && !NaN ? false : true
 
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
