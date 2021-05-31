@@ -18,6 +18,9 @@ export const PROJECT = gql`
 					id
 					createdAt
 					title
+					recording {
+						seleniumScriptJson
+					}
 				}
 				plan
 				stripeCustomerID

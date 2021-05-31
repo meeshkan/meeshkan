@@ -65,6 +65,7 @@ const TestRun = () => {
 
 	const headingColor = useColorModeValue('gray.900', 'gray.200');
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
+	const alertLink = useColorModeValue('red.700', 'red.300');
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
@@ -92,6 +93,17 @@ const TestRun = () => {
 	const sortedTestOutcomes: TestOutcomeListResponse['items'] = testRun.testOutcome.items.sort(
 		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
 	);
+
+	const testsNeedAuthentication: boolean = true;
+	const stepsInLogInStory = project?.configuration?.logInFlow ? JSON.parse(project?.configuration?.logInFlow?.recording?.seleniumScriptJson)?.groups?.groupItems[0]?.commands?.items?.length : 0
+	const hasLogInStory: boolean = project?.configuration?.logInFlow
+		? true
+		: false;
+
+	const hasAuthTokens: boolean =
+		project?.configuration?.authenticationTokens?.items?.length >= 1 ? true : false;
+
+
 
 	return (
 		<ValidatedBillingPlan>
@@ -166,25 +178,47 @@ const TestRun = () => {
 								</Box>
 							</Flex>
 							<Stack spacing={4}>
+								{testsNeedAuthentication && !hasLogInStory && !hasAuthTokens ? (<Alert status="error" p={3} mt={3} flex="1">
+									<AlertIcon />
+									<AlertDescription>
+										At least one of your tests require authentication. <Link href={`/${slugifiedProjectName}/settings#authentication`} passHref><ChakraLink color={alertLink} textDecor="underline">Authentication settings</ChakraLink></Link>
+									</AlertDescription>
+								</Alert>) : null}
 								<Accordion defaultIndex={[0]} allowMultiple>
 									{sortedTestOutcomes.map((outcome, index) => {
+										// Check for isAuthenticationRequired, does the logInFlowExists, and authenticationTokensExist to determine failure step
 										const testCase = outcome?.userStory;
 										const status = outcome?.status;
+
+										const requiresAuthentication: boolean =
+											testCase?.isAuthenticated;
 
 										const outcomeCommands: SeleniumCommand[] = JSON.parse(
 											testCase?.recording?.seleniumScriptJson
 										)?.groups?.groupItems[0]?.commands?.items;
 
+										const errorStepIndex: number =
+											testsNeedAuthentication && hasLogInStory
+												? outcome?.errorDetails?.stepIndex +
+												1 -
+												stepsInLogInStory
+												: outcome?.errorDetails?.stepIndex + 1;
+
+										const errorInLogIn: boolean = errorStepIndex > 0 && !NaN ? false : true
+
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
-											outcome?.errorDetails?.stepIndex
+											errorStepIndex
 										];
+
 
 										const outcomeError = (
 											outcomeCommand: string,
 											outcomeTag?: string
 										) => {
 											let errorMessage;
-											if (outcomeCommand == 'open') {
+											if (outcomeCommand == 'auth') {
+												errorMessage = `This test failed while the fake user was logging in.`;
+											} else if (outcomeCommand == 'open') {
 												errorMessage = `The page your test trys to open, doesn't exist.`;
 											} else if (outcomeCommand == 'setViewportSize') {
 												errorMessage = `This test case has an unsupported screen size.`;
@@ -303,7 +337,7 @@ const TestRun = () => {
 																</Code>
 															)}
 
-															{isFailing && testCase?.isAuthenticated ? (
+															{isFailing && requiresAuthentication ? (
 																<Tooltip
 																	label="Requires authentication"
 																	placement="right"
@@ -320,7 +354,7 @@ const TestRun = () => {
 																</Tooltip>
 															) : null}
 															{isFailing &&
-															project?.configuration?.logInFlow?.id ===
+																project?.configuration?.logInFlow?.id ===
 																testCase?.id ? (
 																<Tooltip
 																	label="This is the path your users take to sign in."
@@ -376,11 +410,11 @@ const TestRun = () => {
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
-																		<Alert status="error" p={3} mt={3} flex="1">
+																		<Alert status="error" p={3} mt={errorInLogIn ? 0 : 3} flex="1">
 																			<AlertIcon />
 																			<AlertDescription>
 																				{outcomeError(
-																					outcomeDetails?.command,
+																					errorInLogIn ? "auth" : outcomeDetails?.command,
 																					outcomeDetails?.tagName
 																				)}
 																			</AlertDescription>
