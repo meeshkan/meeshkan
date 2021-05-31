@@ -79,7 +79,7 @@ type UserStoryProps = {
 };
 
 const UserStoryPage = (props: UserStoryProps) => {
-	const { project, idToken } = useContext(UserContext);
+	const { project, setProject, idToken } = useContext(UserContext);
 	const toaster = useToaster();
 	const mixpanel = useAnalytics();
 	const {
@@ -167,11 +167,18 @@ const UserStoryPage = (props: UserStoryProps) => {
 	};
 
 	const updateRequiresAuthentication = async (isAuthenticated: boolean) => {
-		client.request(UPDATE_REQUIRES_AUTHENTICATION, {
+		const response = await client.request(UPDATE_REQUIRES_AUTHENTICATION, {
 			userStoryId: userStoryId,
 			isAuthenticated,
 		});
-		await mutate('/api/session');
+		const updatedUserStories = [...response.project.userStories.items];
+
+		updatedUserStories.find(userStory => userStory.id === userStoryId).isAuthenticated = isAuthenticated;
+
+		setProject({
+			...project,
+			userStories: { ...project.userStories, items: updatedUserStories }
+		});
 	};
 
 	const onCreateTestCase = async () => {
