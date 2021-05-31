@@ -202,7 +202,7 @@ const TestRun = () => {
 												1 -
 												stepsInLogInStory
 												: outcome?.errorDetails?.stepIndex + 1;
-										const errorInLogIn: boolean = errorStepIndex > 0 && !NaN ? false : true
+										const errorInLogIn: boolean = errorStepIndex > 0 && !isNaN(errorStepIndex) ? false : true
 
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
 											errorStepIndex
