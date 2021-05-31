@@ -72,6 +72,7 @@ export const PROJECT = gql`
 					title
 					testCreatedDate
 					isTestCase
+					isAuthenticated
 					createdAt
 					created
 				}

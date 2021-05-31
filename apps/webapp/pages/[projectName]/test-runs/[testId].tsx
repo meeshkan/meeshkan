@@ -94,8 +94,9 @@ const TestRun = () => {
 		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
 	);
 
-	const testsNeedAuthentication: boolean = true;
-	const stepsInLogInStory = project?.configuration?.logInFlow ? JSON.parse(project?.configuration?.logInFlow?.recording?.seleniumScriptJson)?.groups?.groupItems[0]?.commands?.items?.length : 0
+	const testsNeedAuthentication: boolean = project?.userStories?.items.some((story) => story.isAuthenticated)
+	const seleniumScriptJson = project?.configuration?.logInFlow?.recording?.seleniumScriptJson;
+	const stepsInLogInStory = (project?.configuration?.logInFlow && seleniumScriptJson) ? JSON.parse(seleniumScriptJson)?.groups?.groupItems[0]?.commands?.items?.length : 0
 	const hasLogInStory: boolean = !!project?.configuration?.logInFlow;
 
 	const hasAuthTokens: boolean =
@@ -193,7 +194,7 @@ const TestRun = () => {
 										)?.groups?.groupItems[0]?.commands?.items;
 
 										const errorStepIndex: number =
-											testsNeedAuthentication && hasLogInStory
+											requiresAuthentication && hasLogInStory
 												? outcome?.errorDetails?.stepIndex +
 												1 -
 												stepsInLogInStory
