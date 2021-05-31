@@ -1,128 +1,158 @@
 import { gql } from 'graphql-request';
 
 export const PROJECT = gql`
-	query PROJECT($projectId: ID!) {
-		project(id: $projectId) {
-			id
-			name
-			avatar {
-				downloadUrl
-				shareUrl
-			}
-			configuration {
-				activeTestRuns
-				productionURL
-				stagingURL
-				inviteLink
-				logInFlow {
-					id
-					createdAt
-					title
-					recording {
-						seleniumScriptJson
-					}
-				}
-				plan
-				stripeCustomerID
-				billingInterval
-				subscriptionStatus
-				subscriptionStartedDate
-				authenticationTokens {
-					items {
-						id
-						createdAt
-						type
-						key
-						value
-					}
-				}
-			}
-			hasReceivedEvents
-			members {
-				count
-				items {
-					firstName
-					lastName
-					email
-					avatar {
-						downloadUrl
-					}
-				}
-			}
-			userStories {
-				count
-				items {
-					id
-					testOutcome {
-						items {
-							id
-							status
-							isResolved
-							errorDetails {
-								stepIndex
-								exception
-							}
-							createdAt
-							video {
-								downloadUrl
-								shareUrl
-							}
-						}
-					}
-					title
-					testCreatedDate
-					isTestCase
-					isAuthenticated
-					createdAt
-					created
-				}
-			}
-			release {
-				count
-				items {
-					id
-					name
-					releaseDate
-					testRuns {
-						count
-						items {
-							id
-							status
-							ciRun
-							createdAt
-							testLength
-							testOutcome {
-								count
-								items {
-									id
-									status
-									isResolved
-									errorDetails {
-										stepIndex
-										exception
-									}
-									createdAt
-									video {
-										downloadUrl
-										shareUrl
-									}
-									userStory {
-										id
-										title
-										created
-										isAuthenticated
-										recording {
-											seleniumScriptJson
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+query PROJECT($projectId: ID!) {
+  project(id: $projectId) {
+    id
+    name
+    avatar {
+      downloadUrl
+      shareUrl
+    }
+    configuration {
+      activeTestRuns
+      productionURL
+      stagingURL
+      inviteLink
+      logInStory {
+        id
+        createdAt
+        title
+        scriptCommands {
+          items {
+            command
+            sIndex
+            value
+            xCoordinate
+            yCoordinate
+            xpath
+            selector
+            className
+            tagName
+            tagId
+            innerText
+            altOrAriaText
+            scrollTop
+            scrollLeft
+            destinationXCoordinate
+            destinationYCoordinate
+            destinationTagName
+          }
+        }
+      }
+      plan
+      stripeCustomerID
+      billingInterval
+      subscriptionStatus
+      subscriptionStartedDate
+      authenticationTokens {
+        items {
+          id
+          createdAt
+          type
+          key
+          value
+        }
+      }
+    }
+    hasReceivedEvents
+    members {
+      count
+      items {
+        firstName
+        lastName
+        email
+        avatar {
+          downloadUrl
+        }
+      }
+    }
+    userStories {
+      count
+      items {
+        id
+        testOutcome {
+          items {
+            id
+            status
+            isResolved
+            errorStepIndex
+            createdAt
+            video {
+              downloadUrl
+              shareUrl
+            }
+          }
+        }
+        title
+        testCreatedDate
+        isTestCase
+        requiresAuthentication
+        createdAt
+        created
+      }
+    }
+    release {
+      count
+      items {
+        id
+        name
+        releaseDate
+        testRuns {
+          count
+          items {
+            id
+            status
+            runLink
+            createdAt
+            testLength
+            testOutcome {
+              count
+              items {
+                id
+                status
+                isResolved
+                errorStepIndex
+                createdAt
+                video {
+                  downloadUrl
+                  shareUrl
+                }
+                userStory {
+                  id
+                  title
+                  created
+                  requiresAuthentication
+                  scriptCommands {
+                    items {
+                      command
+                      sIndex
+                      value
+                      xCoordinate
+                      yCoordinate
+                      xpath
+                      selector
+                      className
+                      tagName
+                      tagId
+                      innerText
+                      altOrAriaText
+                      scrollTop
+                      scrollLeft
+                      destinationXCoordinate
+                      destinationYCoordinate
+                      destinationTagName
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 `;
 
 export const CREATE_PROJECT = gql`
@@ -303,71 +333,91 @@ export const REFRESH_INVITE_LINK = gql`
 `;
 
 export const PROJECT_USER_STORIES = gql`
-	fragment stories on UserStory {
-		id
-		createdAt
-		title
-		flowIDs
-		created
-		significance
-		recording {
-			seleniumScriptJson
-			video {
-				downloadUrl
-			}
-		}
-		project {
-			configuration {
-				authenticationTokens {
-					items {
-						type
-						key
-						value
-					}
-				}
-			}
-		}
-	}
+fragment stories on UserStory {
+  id
+  createdAt
+  title
+  flows {
+    count
+  }
+  created
+  significance
+  video {
+    downloadUrl
+  }
+  scriptCommands {
+    items {
+      command
+      sIndex
+      value
+      xCoordinate
+      yCoordinate
+      xpath
+      selector
+      className
+      tagName
+      tagId
+      innerText
+      altOrAriaText
+      scrollTop
+      scrollLeft
+      destinationXCoordinate
+      destinationYCoordinate
+      destinationTagName
+    }
+  }
+  project {
+    configuration {
+      authenticationTokens {
+        items {
+          type
+          key
+          value
+        }
+      }
+    }
+  }
+}
 
-	query PROJECT_USER_STORIES(
-		$projectId: ID!
-		$first: Int!
-		$skip: Int!
-		$significanceFilters: [UserStoryFilter!]
-		$sort: UserStoryOrderBy
-	) {
-		recordings: userStoriesList(
-			filter: {
-				project: { id: { equals: $projectId } }
-				isTestCase: { equals: false }
-				OR: $significanceFilters
-			}
-			orderBy: [$sort]
-			first: $first
-			skip: $skip
-		) {
-			count
-			items {
-				...stories
-			}
-		}
-		testCases: userStoriesList(
-			filter: {
-				project: { id: { equals: $projectId } }
-				isTestCase: { equals: true }
-				OR: $significanceFilters
-			}
-			orderBy: [$sort]
-			first: $first
-			skip: $skip
-		) {
-			count
-			items {
-				testCreatedDate
-				...stories
-			}
-		}
-	}
+query PROJECT_USER_STORIES(
+  $projectId: ID!
+  $first: Int!
+  $skip: Int!
+  $significanceFilters: [UserStoryFilter!]
+  $sort: UserStoryOrderBy
+) {
+  recordings: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      isTestCase: { equals: false }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      ...stories
+    }
+  }
+  testCases: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      isTestCase: { equals: true }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      testCreatedDate
+      ...stories
+    }
+  }
+}
 `;
 
 export const TOGGLE_TEST_RUNS = gql`
