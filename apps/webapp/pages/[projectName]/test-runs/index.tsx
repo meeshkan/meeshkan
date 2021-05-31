@@ -49,7 +49,7 @@ import { useToaster } from '../../../hooks/use-toaster';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import { eightBaseClient } from '../../../utils/graphql';
-import { UPDATE_STAGING_URL } from '../../../graphql/project';
+import { UPDATE_STAGING_URL, TOGGLE_TEST_RUNS } from '../../../graphql/project';
 import { mutate } from 'swr';
 
 const doughnutDefaultDataValues = [80, 8, 12];
@@ -73,7 +73,7 @@ const doughnutData = {
 const TestRunsPage = () => {
 	const { found, loading } = useValidateSelectedProject();
 	const user = useContext(UserContext);
-	const { idToken, project } = user;
+	const { idToken, project, setProject } = user;
 	const { colorMode } = useColorMode();
 	const [testTriggering, setTestTriggering] = useState(false);
 	const toaster = useToaster();
@@ -125,9 +125,29 @@ const TestRunsPage = () => {
 		saveToProject: boolean;
 	};
 
+	const activateTestRuns = async () => {
+		const response = await client.request(TOGGLE_TEST_RUNS, {
+			projectId: project?.id,
+			toggle: true,
+		});
+
+		const updatedTestRunnerToggle = response.projectUpdate.configuration.activeTestRuns;
+		setProject({
+			...project,
+			configuration: {
+				...project.configuration,
+				activeTestRuns: updatedTestRunnerToggle,
+			},
+		});
+	};
+
 	const triggerTestRun = async (stagingURL: string) => {
 		try {
-			await fetch(
+			if (project && !project.configuration.activeTestRuns) {
+				await activateTestRuns();
+			}
+
+			const response = await fetch(
 				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
 					'https://7cs97h8es9.execute-api.eu-west-1.amazonaws.com/main/test-trigger',
 				{
@@ -142,6 +162,7 @@ const TestRunsPage = () => {
 					}),
 				}
 			);
+
 			await toaster({
 				title: 'Test run triggered',
 				description: 'The run should show up shortly.',
@@ -160,11 +181,11 @@ const TestRunsPage = () => {
 	const handleTriggerTestRun = async () => {
 		setTestTriggering(true);
 		if (project?.configuration?.stagingURL) {
-			triggerTestRun(project?.configuration?.stagingURL);
+			await triggerTestRun(project?.configuration?.stagingURL);
+			setTimeout(() => setTestTriggering(false), 2000);
 		} else {
 			onOpen();
 		}
-		setTimeout(() => setTestTriggering(false), 2000);
 	};
 
 	const handleStagingURLForm = async (
