@@ -36,8 +36,13 @@ export type Activity = {
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
+	/** A headline of what happened/changed. */
 	title?: Maybe<Scalars['String']>;
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
+	/** When did this activity happen? */
 	dateTime?: Maybe<Scalars['Date']>;
+	/** The project this activity happened on. */
 	project?: Maybe<Project>;
 	_description?: Maybe<Scalars['String']>;
 };
@@ -48,6 +53,7 @@ export type Activity_PermissionFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	title?: Maybe<StringPredicate>;
+	description?: Maybe<StringPredicate>;
 	dateTime?: Maybe<DatePredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
@@ -70,13 +76,16 @@ export type Activity_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration: ProjectConfigurationRelationInput;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -88,26 +97,37 @@ export type Activity_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
-	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** Activity create input */
 export type ActivityCreateInput = {
+	/** A headline of what happened/changed. */
 	title: Scalars['String'];
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
+	/** When did this activity happen? */
 	dateTime: Scalars['Date'];
 	project: ActivityProjectRelationInput;
 };
 
 /** Activity create many input */
 export type ActivityCreateManyInput = {
+	/** A headline of what happened/changed. */
 	title: Scalars['String'];
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
+	/** When did this activity happen? */
 	dateTime: Scalars['Date'];
 	project: ActivityProjectManyRelationInput;
 };
@@ -123,6 +143,7 @@ export type ActivityFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
 	title?: Maybe<Scalars['Boolean']>;
+	description?: Maybe<Scalars['Boolean']>;
 	dateTime?: Maybe<Scalars['Boolean']>;
 };
 
@@ -132,6 +153,7 @@ export type ActivityFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	title?: Maybe<StringPredicate>;
+	description?: Maybe<StringPredicate>;
 	dateTime?: Maybe<DatePredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
@@ -154,6 +176,7 @@ export type ActivityGroupByQuery = {
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
 	title?: Maybe<Array<GroupByField>>;
+	description?: Maybe<Array<GroupByField>>;
 	dateTime?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
@@ -196,6 +219,8 @@ export enum ActivityOrderBy {
 	DeletedAtDesc = 'deletedAt_DESC',
 	TitleAsc = 'title_ASC',
 	TitleDesc = 'title_DESC',
+	DescriptionAsc = 'description_ASC',
+	DescriptionDesc = 'description_DESC',
 	DateTimeAsc = 'dateTime_ASC',
 	DateTimeDesc = 'dateTime_DESC',
 }
@@ -241,6 +266,7 @@ export type ActivitySort = {
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
 	title?: Maybe<SortOrder>;
+	description?: Maybe<SortOrder>;
 	dateTime?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
@@ -256,13 +282,18 @@ export type ActivitySubscriptionFilter = {
 /** Activity update input */
 export type ActivityUpdateByFilterInput = {
 	title?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	description?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	dateTime?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
 };
 
 /** Activity update input */
 export type ActivityUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
+	/** A headline of what happened/changed. */
 	title?: Maybe<Scalars['String']>;
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
+	/** When did this activity happen? */
 	dateTime?: Maybe<Scalars['Date']>;
 	project?: Maybe<ActivityProjectUpdateRelationInput>;
 };
@@ -960,10 +991,16 @@ export type AuthenticationToken = {
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
-	/** What type of authentication token is this storing? */
+	/**
+	 * What type of authentication token is this storing? Options are: `cookie` or
+	 * `local storage` with the default being `cookie`.
+	 */
 	type?: Maybe<Scalars['String']>;
+	/** The key or name defining this token. */
 	key?: Maybe<Scalars['String']>;
+	/** What is the value of this token? */
 	value?: Maybe<Scalars['String']>;
+	/** Which configuration (and therefore project) does this token belong on? */
 	configuration?: Maybe<Configuration>;
 	_description?: Maybe<Scalars['String']>;
 };
@@ -1011,18 +1048,28 @@ export type AuthenticationTokenConfigurationUpdateRelationInput = {
 
 /** AuthenticationToken create input */
 export type AuthenticationTokenCreateInput = {
-	/** What type of authentication token is this storing? */
+	/**
+	 * What type of authentication token is this storing? Options are: `cookie` or
+	 * `local storage` with the default being `cookie`.
+	 */
 	type?: Maybe<Scalars['String']>;
+	/** The key or name defining this token. */
 	key: Scalars['String'];
+	/** What is the value of this token? */
 	value?: Maybe<Scalars['String']>;
 	configuration?: Maybe<AuthenticationTokenConfigurationRelationInput>;
 };
 
 /** AuthenticationToken create many input */
 export type AuthenticationTokenCreateManyInput = {
-	/** What type of authentication token is this storing? */
+	/**
+	 * What type of authentication token is this storing? Options are: `cookie` or
+	 * `local storage` with the default being `cookie`.
+	 */
 	type?: Maybe<Scalars['String']>;
+	/** The key or name defining this token. */
 	key: Scalars['String'];
+	/** What is the value of this token? */
 	value?: Maybe<Scalars['String']>;
 	configuration?: Maybe<AuthenticationTokenConfigurationManyRelationInput>;
 };
@@ -1137,52 +1184,102 @@ export type AuthenticationTokenRelationFilter = {
 
 /** Configuration create input from authenticationTokens */
 export type AuthenticationTokens_ConfigurationCreateInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
 	inviteLink: Scalars['String'];
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowRelationInput>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
 };
 
 /** Configuration update input from authenticationTokens */
 export type AuthenticationTokens_ConfigurationUpdateInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
 	inviteLink?: Maybe<Scalars['String']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowUpdateRelationInput>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
 };
 
 export type AuthenticationTokenSort = {
@@ -1214,9 +1311,14 @@ export type AuthenticationTokenUpdateByFilterInput = {
 /** AuthenticationToken update input */
 export type AuthenticationTokenUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
-	/** What type of authentication token is this storing? */
+	/**
+	 * What type of authentication token is this storing? Options are: `cookie` or
+	 * `local storage` with the default being `cookie`.
+	 */
 	type?: Maybe<Scalars['String']>;
+	/** The key or name defining this token. */
 	key?: Maybe<Scalars['String']>;
+	/** What is the value of this token? */
 	value?: Maybe<Scalars['String']>;
 	configuration?: Maybe<AuthenticationTokenConfigurationUpdateRelationInput>;
 };
@@ -1229,13 +1331,16 @@ export type Avatar_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration: ProjectConfigurationRelationInput;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -1261,6 +1366,7 @@ export type Avatar_UserCreateInput = {
 	avatar?: Maybe<UsersAvatarRelationInput>;
 	roles?: Maybe<UsersRolesRelationInput>;
 	projects?: Maybe<UsersProjectsRelationInput>;
+	/** What is the job title of this individual? */
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
@@ -1620,120 +1726,10 @@ export type CiCdMigrationUpdateInput = {
 	code?: Maybe<Scalars['String']>;
 };
 
-/** SeleniumCommand create input from click */
-export type Click_SeleniumCommandCreateInput = {
-	open?: Maybe<SeleniumCommandOpenRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeRelationInput>;
-	click?: Maybe<SeleniumCommandClickRelationInput>;
-	type?: Maybe<SeleniumCommandTypeRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupRelationInput>;
-};
-
-/** SeleniumCommand update input from click */
-export type Click_SeleniumCommandUpdateInput = {
-	open?: Maybe<SeleniumCommandOpenUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeUpdateRelationInput>;
-	click?: Maybe<SeleniumCommandClickUpdateRelationInput>;
-	type?: Maybe<SeleniumCommandTypeUpdateRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropUpdateRelationInput>;
-	sIndex?: Maybe<Scalars['Int']>;
-	group?: Maybe<SeleniumCommandGroupUpdateRelationInput>;
-};
-
-/** SeleniumTarget create input from click */
-export type Click_SeleniumTargetCreateInput = {
-	click?: Maybe<SeleniumTargetClickRelationInput>;
-	type?: Maybe<SeleniumTargetTypeRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationRelationInput>;
-	selector: SeleniumTargetSelectorRelationInput;
-	coordinates?: Maybe<SeleniumTargetCoordinatesRelationInput>;
-};
-
-/** SeleniumTarget update input from click */
-export type Click_SeleniumTargetUpdateInput = {
-	click?: Maybe<SeleniumTargetClickUpdateRelationInput>;
-	type?: Maybe<SeleniumTargetTypeUpdateRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceUpdateRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationUpdateRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorUpdateRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesUpdateRelationInput>;
-};
-
 /** Authentication Profile Attributes for Cognito */
 export type CognitoAuthProfileAttributes = {
 	__typename?: 'CognitoAuthProfileAttributes';
 	clientAuthDomain?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumClick create input from command */
-export type Command_SeleniumClickCreateInput = {
-	target: SeleniumClickTargetRelationInput;
-	command?: Maybe<SeleniumClickCommandRelationInput>;
-};
-
-/** SeleniumClick update input from command */
-export type Command_SeleniumClickUpdateInput = {
-	target?: Maybe<SeleniumClickTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumClickCommandUpdateRelationInput>;
-};
-
-/** SeleniumDragndrop create input from command */
-export type Command_SeleniumDragndropCreateInput = {
-	sourceTarget: SeleniumDragndropSourceTargetRelationInput;
-	destinationTarget: SeleniumDragndropDestinationTargetRelationInput;
-	command?: Maybe<SeleniumDragndropCommandRelationInput>;
-};
-
-/** SeleniumDragndrop update input from command */
-export type Command_SeleniumDragndropUpdateInput = {
-	sourceTarget?: Maybe<SeleniumDragndropSourceTargetUpdateRelationInput>;
-	destinationTarget?: Maybe<SeleniumDragndropDestinationTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumDragndropCommandUpdateRelationInput>;
-};
-
-/** SeleniumOpen create input from command */
-export type Command_SeleniumOpenCreateInput = {
-	value: Scalars['String'];
-	command?: Maybe<SeleniumOpenCommandRelationInput>;
-};
-
-/** SeleniumOpen update input from command */
-export type Command_SeleniumOpenUpdateInput = {
-	value?: Maybe<Scalars['String']>;
-	command?: Maybe<SeleniumOpenCommandUpdateRelationInput>;
-};
-
-/** SeleniumType create input from command */
-export type Command_SeleniumTypeCreateInput = {
-	target: SeleniumTypeTargetRelationInput;
-	command?: Maybe<SeleniumTypeCommandRelationInput>;
-	value: Scalars['String'];
-};
-
-/** SeleniumType update input from command */
-export type Command_SeleniumTypeUpdateInput = {
-	target?: Maybe<SeleniumTypeTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumTypeCommandUpdateRelationInput>;
-	value?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumGroup create input from commands */
-export type Commands_SeleniumGroupCreateInput = {
-	script?: Maybe<SeleniumGroupScriptRelationInput>;
-	commands?: Maybe<SeleniumGroupCommandsRelationInput>;
-	gIndex: Scalars['Int'];
-	name?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumGroup update input from commands */
-export type Commands_SeleniumGroupUpdateInput = {
-	script?: Maybe<SeleniumGroupScriptUpdateRelationInput>;
-	commands?: Maybe<SeleniumGroupCommandsUpdateRelationInput>;
-	gIndex?: Maybe<Scalars['Int']>;
-	name?: Maybe<Scalars['String']>;
 };
 
 /** Computed field mode */
@@ -1750,32 +1746,64 @@ export type Configuration = {
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
-	inviteLink?: Maybe<Scalars['String']>;
-	project?: Maybe<Project>;
-	authenticationTokens?: Maybe<AuthenticationTokenListResponse>;
 	/**
-	 * This is the connection between a single user story and configuration that
-	 * represents the 'logInFlow'. Only one can be connected. `logInFlow` is for the
-	 * user story showing a user in the action of logging in.
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
 	 */
-	logInFlow?: Maybe<UserStory>;
+	inviteLink?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** The project these extra settings are for. */
+	project?: Maybe<Project>;
+	/**
+	 * A one configuration to many Authentication tokens relation. Authentication
+	 * tokens represent one way to sign into a service to perform authenticated
+	 * actions on their app.
+	 */
+	authenticationTokens?: Maybe<AuthenticationTokenListResponse>;
+	/**
+	 * This is the connection between a single user story and configuration that
+	 * represents the 'logInStory'. Only one can be connected. `logInStory` is for
+	 * the user story showing a user in the action of logging in and is prepended to
+	 * tests requiring authentication, when present.
+	 */
+	logInStory?: Maybe<UserStory>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -1794,9 +1822,14 @@ export type ConfigurationAuthenticationTokensArgs = {
 
 /** AuthenticationToken create input from configuration */
 export type Configuration_AuthenticationTokenCreateInput = {
-	/** What type of authentication token is this storing? */
+	/**
+	 * What type of authentication token is this storing? Options are: `cookie` or
+	 * `local storage` with the default being `cookie`.
+	 */
 	type?: Maybe<Scalars['String']>;
+	/** The key or name defining this token. */
 	key: Scalars['String'];
+	/** What is the value of this token? */
 	value?: Maybe<Scalars['String']>;
 	configuration?: Maybe<AuthenticationTokenConfigurationRelationInput>;
 };
@@ -1812,10 +1845,10 @@ export type Configuration_PermissionFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
+	inviteLink?: Maybe<StringPredicate>;
 	productionURL?: Maybe<StringPredicate>;
 	stagingURL?: Maybe<StringPredicate>;
 	stripeCustomerID?: Maybe<StringPredicate>;
-	inviteLink?: Maybe<StringPredicate>;
 	activeTestRuns?: Maybe<BoolPredicate>;
 	plan?: Maybe<StringPredicate>;
 	subscriptionStartedDate?: Maybe<DatePredicate>;
@@ -1826,7 +1859,7 @@ export type Configuration_PermissionFilter = {
 	createdBy?: Maybe<User_PermissionFilter>;
 	project?: Maybe<Project_PermissionFilter>;
 	authenticationTokens?: Maybe<AuthenticationToken_PermissionRelationFilter>;
-	logInFlow?: Maybe<UserStory_PermissionFilter>;
+	logInStory?: Maybe<UserStory_PermissionFilter>;
 	AND?: Maybe<Array<Configuration_PermissionFilter>>;
 	OR?: Maybe<Array<Configuration_PermissionFilter>>;
 };
@@ -1839,13 +1872,16 @@ export type Configuration_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -1857,86 +1893,17 @@ export type Configuration_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
-	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
-};
-
-/** UserStory create input from configuration */
-export type Configuration_UserStoryCreateInput = {
-	/** The human readable title of a user story describes what the flow does. */
-	title?: Maybe<Scalars['String']>;
-	/** This is an optional field that allows you to describe what to expect from the test. */
-	description?: Maybe<Scalars['String']>;
-	/** The indication of whether a user story has been marked as expected application behavior, or not. */
-	isTestCase?: Maybe<Scalars['Boolean']>;
-	/** When was this recording marked as a test case? */
-	testCreatedDate?: Maybe<Scalars['DateTime']>;
-	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Scalars['String']>>;
-	/**
-	 * The initial inference/calculated guess if a User Story should become a test or
-	 * not. Guesses the answer to the question: "Is the application behaving as expected"
-	 */
-	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
-	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationRelationInput>;
-};
-
-/** UserStory update input from configuration */
-export type Configuration_UserStoryUpdateInput = {
-	/** The human readable title of a user story describes what the flow does. */
-	title?: Maybe<Scalars['String']>;
-	/** This is an optional field that allows you to describe what to expect from the test. */
-	description?: Maybe<Scalars['String']>;
-	/** The indication of whether a user story has been marked as expected application behavior, or not. */
-	isTestCase?: Maybe<Scalars['Boolean']>;
-	/** When was this recording marked as a test case? */
-	testCreatedDate?: Maybe<Scalars['DateTime']>;
-	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Maybe<Scalars['String']>>>;
-	/**
-	 * The initial inference/calculated guess if a User Story should become a test or
-	 * not. Guesses the answer to the question: "Is the application behaving as expected"
-	 */
-	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingUpdateRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
-	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationUpdateRelationInput>;
 };
 
 /** Configuration relation input */
@@ -1961,51 +1928,101 @@ export type ConfigurationAuthenticationTokensUpdateRelationInput = {
 
 /** Configuration create input */
 export type ConfigurationCreateInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
 	inviteLink: Scalars['String'];
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowRelationInput>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
 };
 
 /** Configuration create many input */
 export type ConfigurationCreateManyInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
 	inviteLink: Scalars['String'];
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensManyRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowManyRelationInput>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensManyRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryManyRelationInput>;
 };
 
 /** Configuration delete input */
@@ -2018,10 +2035,10 @@ export type ConfigurationDeleteInput = {
 export type ConfigurationFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
+	inviteLink?: Maybe<Scalars['Boolean']>;
 	productionURL?: Maybe<Scalars['Boolean']>;
 	stagingURL?: Maybe<Scalars['Boolean']>;
 	stripeCustomerID?: Maybe<Scalars['Boolean']>;
-	inviteLink?: Maybe<Scalars['Boolean']>;
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
 	plan?: Maybe<Scalars['Boolean']>;
 	subscriptionStartedDate?: Maybe<Scalars['Boolean']>;
@@ -2035,10 +2052,10 @@ export type ConfigurationFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
+	inviteLink?: Maybe<StringPredicate>;
 	productionURL?: Maybe<StringPredicate>;
 	stagingURL?: Maybe<StringPredicate>;
 	stripeCustomerID?: Maybe<StringPredicate>;
-	inviteLink?: Maybe<StringPredicate>;
 	activeTestRuns?: Maybe<BoolPredicate>;
 	plan?: Maybe<StringPredicate>;
 	subscriptionStartedDate?: Maybe<DatePredicate>;
@@ -2049,7 +2066,7 @@ export type ConfigurationFilter = {
 	createdBy?: Maybe<UserFilter>;
 	project?: Maybe<ProjectFilter>;
 	authenticationTokens?: Maybe<AuthenticationTokenRelationFilter>;
-	logInFlow?: Maybe<UserStoryFilter>;
+	logInStory?: Maybe<UserStoryFilter>;
 	AND?: Maybe<Array<ConfigurationFilter>>;
 	OR?: Maybe<Array<ConfigurationFilter>>;
 };
@@ -2067,10 +2084,10 @@ export type ConfigurationGroupByQuery = {
 	id?: Maybe<Array<GroupByField>>;
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
+	inviteLink?: Maybe<Array<GroupByField>>;
 	productionURL?: Maybe<Array<GroupByField>>;
 	stagingURL?: Maybe<Array<GroupByField>>;
 	stripeCustomerID?: Maybe<Array<GroupByField>>;
-	inviteLink?: Maybe<Array<GroupByField>>;
 	activeTestRuns?: Maybe<Array<GroupByField>>;
 	plan?: Maybe<Array<GroupByField>>;
 	subscriptionStartedDate?: Maybe<Array<GroupByField>>;
@@ -2080,7 +2097,7 @@ export type ConfigurationGroupByQuery = {
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	authenticationTokens?: Maybe<AuthenticationTokenGroupByQuery>;
-	logInFlow?: Maybe<UserStoryGroupByQuery>;
+	logInStory?: Maybe<UserStoryGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -2101,23 +2118,23 @@ export type ConfigurationListResponse = {
 };
 
 /** Configuration relation input */
-export type ConfigurationLogInFlowManyRelationInput = {
+export type ConfigurationLogInStoryManyRelationInput = {
 	connect?: Maybe<UserStoryKeyFilter>;
 };
 
 /** Configuration relation input */
-export type ConfigurationLogInFlowRelationInput = {
+export type ConfigurationLogInStoryRelationInput = {
 	connect?: Maybe<UserStoryKeyFilter>;
-	create?: Maybe<Configuration_UserStoryCreateInput>;
+	create?: Maybe<LogInStoryConfig_UserStoryCreateInput>;
 };
 
 /** Configuration relation input */
-export type ConfigurationLogInFlowUpdateRelationInput = {
+export type ConfigurationLogInStoryUpdateRelationInput = {
 	connect?: Maybe<UserStoryKeyFilter>;
 	disconnect?: Maybe<UserStoryKeyFilter>;
 	reconnect?: Maybe<UserStoryKeyFilter>;
-	create?: Maybe<Configuration_UserStoryCreateInput>;
-	update?: Maybe<Configuration_UserStoryUpdateInput>;
+	create?: Maybe<LogInStoryConfig_UserStoryCreateInput>;
+	update?: Maybe<LogInStoryConfig_UserStoryUpdateInput>;
 };
 
 /** ConfigurationManyResponse output */
@@ -2139,14 +2156,14 @@ export enum ConfigurationOrderBy {
 	UpdatedAtDesc = 'updatedAt_DESC',
 	DeletedAtAsc = 'deletedAt_ASC',
 	DeletedAtDesc = 'deletedAt_DESC',
+	InviteLinkAsc = 'inviteLink_ASC',
+	InviteLinkDesc = 'inviteLink_DESC',
 	ProductionUrlAsc = 'productionURL_ASC',
 	ProductionUrlDesc = 'productionURL_DESC',
 	StagingUrlAsc = 'stagingURL_ASC',
 	StagingUrlDesc = 'stagingURL_DESC',
 	StripeCustomerIdAsc = 'stripeCustomerID_ASC',
 	StripeCustomerIdDesc = 'stripeCustomerID_DESC',
-	InviteLinkAsc = 'inviteLink_ASC',
-	InviteLinkDesc = 'inviteLink_DESC',
 	ActiveTestRunsAsc = 'activeTestRuns_ASC',
 	ActiveTestRunsDesc = 'activeTestRuns_DESC',
 	PlanAsc = 'plan_ASC',
@@ -2185,10 +2202,10 @@ export type ConfigurationSort = {
 	createdAt?: Maybe<SortOrder>;
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
+	inviteLink?: Maybe<SortOrder>;
 	productionURL?: Maybe<SortOrder>;
 	stagingURL?: Maybe<SortOrder>;
 	stripeCustomerID?: Maybe<SortOrder>;
-	inviteLink?: Maybe<SortOrder>;
 	activeTestRuns?: Maybe<SortOrder>;
 	plan?: Maybe<SortOrder>;
 	subscriptionStartedDate?: Maybe<SortOrder>;
@@ -2197,7 +2214,7 @@ export type ConfigurationSort = {
 	hasScheduledCall?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
-	logInFlow?: Maybe<UserStorySort>;
+	logInStory?: Maybe<UserStorySort>;
 };
 
 /** Configuration subscription filter */
@@ -2209,10 +2226,10 @@ export type ConfigurationSubscriptionFilter = {
 
 /** Configuration update input */
 export type ConfigurationUpdateByFilterInput = {
+	inviteLink?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	productionURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	stagingURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	stripeCustomerID?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	inviteLink?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	activeTestRuns?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 	plan?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	subscriptionStartedDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
@@ -2224,69 +2241,52 @@ export type ConfigurationUpdateByFilterInput = {
 /** Configuration update input */
 export type ConfigurationUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
 	inviteLink?: Maybe<Scalars['String']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowUpdateRelationInput>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-};
-
-/** Integration create input from continuousIntegration */
-export type ContinuousIntegration_IntegrationCreateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementRelationInput>;
-	slack?: Maybe<IntegrationSlackRelationInput>;
-	project?: Maybe<IntegrationProjectRelationInput>;
-};
-
-/** Integration update input from continuousIntegration */
-export type ContinuousIntegration_IntegrationUpdateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationUpdateRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementUpdateRelationInput>;
-	slack?: Maybe<IntegrationSlackUpdateRelationInput>;
-	project?: Maybe<IntegrationProjectUpdateRelationInput>;
-};
-
-/** SeleniumTarget create input from coordinates */
-export type Coordinates_SeleniumTargetCreateInput = {
-	click?: Maybe<SeleniumTargetClickRelationInput>;
-	type?: Maybe<SeleniumTargetTypeRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesRelationInput>;
-};
-
-/** SeleniumTarget update input from coordinates */
-export type Coordinates_SeleniumTargetUpdateInput = {
-	click?: Maybe<SeleniumTargetClickUpdateRelationInput>;
-	type?: Maybe<SeleniumTargetTypeUpdateRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceUpdateRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationUpdateRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorUpdateRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesUpdateRelationInput>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
 };
 
 /** Custom Table Field Type */
@@ -2456,247 +2456,10 @@ export type DeployStatusResult = {
 	message?: Maybe<Scalars['String']>;
 };
 
-/** SeleniumDragndrop create input from destinationTarget */
-export type DestinationTarget_SeleniumDragndropCreateInput = {
-	sourceTarget?: Maybe<SeleniumDragndropSourceTargetRelationInput>;
-	destinationTarget?: Maybe<SeleniumDragndropDestinationTargetRelationInput>;
-	command?: Maybe<SeleniumDragndropCommandRelationInput>;
-};
-
-/** SeleniumDragndrop update input from destinationTarget */
-export type DestinationTarget_SeleniumDragndropUpdateInput = {
-	sourceTarget?: Maybe<SeleniumDragndropSourceTargetUpdateRelationInput>;
-	destinationTarget?: Maybe<SeleniumDragndropDestinationTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumDragndropCommandUpdateRelationInput>;
-};
-
-/** SeleniumCommand create input from dragndrop */
-export type Dragndrop_SeleniumCommandCreateInput = {
-	open?: Maybe<SeleniumCommandOpenRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeRelationInput>;
-	click?: Maybe<SeleniumCommandClickRelationInput>;
-	type?: Maybe<SeleniumCommandTypeRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupRelationInput>;
-};
-
-/** SeleniumCommand update input from dragndrop */
-export type Dragndrop_SeleniumCommandUpdateInput = {
-	open?: Maybe<SeleniumCommandOpenUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeUpdateRelationInput>;
-	click?: Maybe<SeleniumCommandClickUpdateRelationInput>;
-	type?: Maybe<SeleniumCommandTypeUpdateRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropUpdateRelationInput>;
-	sIndex?: Maybe<Scalars['Int']>;
-	group?: Maybe<SeleniumCommandGroupUpdateRelationInput>;
-};
-
-/** SeleniumTarget create input from dragndropDestination */
-export type DragndropDestination_SeleniumTargetCreateInput = {
-	click?: Maybe<SeleniumTargetClickRelationInput>;
-	type?: Maybe<SeleniumTargetTypeRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationRelationInput>;
-	selector: SeleniumTargetSelectorRelationInput;
-	coordinates?: Maybe<SeleniumTargetCoordinatesRelationInput>;
-};
-
-/** SeleniumTarget update input from dragndropDestination */
-export type DragndropDestination_SeleniumTargetUpdateInput = {
-	click?: Maybe<SeleniumTargetClickUpdateRelationInput>;
-	type?: Maybe<SeleniumTargetTypeUpdateRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceUpdateRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationUpdateRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorUpdateRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesUpdateRelationInput>;
-};
-
-/** SeleniumTarget create input from dragndropSource */
-export type DragndropSource_SeleniumTargetCreateInput = {
-	click?: Maybe<SeleniumTargetClickRelationInput>;
-	type?: Maybe<SeleniumTargetTypeRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationRelationInput>;
-	selector: SeleniumTargetSelectorRelationInput;
-	coordinates?: Maybe<SeleniumTargetCoordinatesRelationInput>;
-};
-
-/** SeleniumTarget update input from dragndropSource */
-export type DragndropSource_SeleniumTargetUpdateInput = {
-	click?: Maybe<SeleniumTargetClickUpdateRelationInput>;
-	type?: Maybe<SeleniumTargetTypeUpdateRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceUpdateRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationUpdateRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorUpdateRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesUpdateRelationInput>;
-};
-
-/** Information about an individual environment (with a one:many relationship to recording) to help understand a bug. */
-export type Environment = {
-	__typename?: 'Environment';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	ipAddress?: Maybe<Scalars['String']>;
-	browser?: Maybe<Scalars['String']>;
-	browserVersion?: Maybe<Scalars['String']>;
-	operatingSystem?: Maybe<Scalars['String']>;
-	language?: Maybe<Scalars['String']>;
-	recording?: Maybe<Recording>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type Environment_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	ipAddress?: Maybe<StringPredicate>;
-	browser?: Maybe<StringPredicate>;
-	browserVersion?: Maybe<StringPredicate>;
-	operatingSystem?: Maybe<StringPredicate>;
-	language?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	recording?: Maybe<Recording_PermissionFilter>;
-	AND?: Maybe<Array<Environment_PermissionFilter>>;
-	OR?: Maybe<Array<Environment_PermissionFilter>>;
-};
-
-export type Environment_PermissionRelationFilter = {
-	some?: Maybe<Environment_PermissionFilter>;
-	every?: Maybe<Environment_PermissionFilter>;
-	none?: Maybe<Environment_PermissionFilter>;
-};
-
-/** Recording create input from environment */
-export type Environment_RecordingCreateInput = {
-	environment?: Maybe<RecordingEnvironmentRelationInput>;
-	userStory?: Maybe<RecordingUserStoryRelationInput>;
-	video?: Maybe<RecordingVideoRelationInput>;
-	seleniumScript: RecordingSeleniumScriptRelationInput;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
-/** Recording update input from environment */
-export type Environment_RecordingUpdateInput = {
-	environment?: Maybe<RecordingEnvironmentUpdateRelationInput>;
-	userStory?: Maybe<RecordingUserStoryUpdateRelationInput>;
-	video?: Maybe<RecordingVideoUpdateRelationInput>;
-	seleniumScript?: Maybe<RecordingSeleniumScriptUpdateRelationInput>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
 export type EnvironmentBackupItem = {
 	__typename?: 'EnvironmentBackupItem';
 	name: Scalars['String'];
 	size: Scalars['Float'];
-};
-
-/** Environment create input */
-export type EnvironmentCreateInput = {
-	ipAddress?: Maybe<Scalars['String']>;
-	browser?: Maybe<Scalars['String']>;
-	browserVersion?: Maybe<Scalars['String']>;
-	operatingSystem?: Maybe<Scalars['String']>;
-	language?: Maybe<Scalars['String']>;
-	recording?: Maybe<EnvironmentRecordingRelationInput>;
-};
-
-/** Environment create many input */
-export type EnvironmentCreateManyInput = {
-	ipAddress?: Maybe<Scalars['String']>;
-	browser?: Maybe<Scalars['String']>;
-	browserVersion?: Maybe<Scalars['String']>;
-	operatingSystem?: Maybe<Scalars['String']>;
-	language?: Maybe<Scalars['String']>;
-	recording?: Maybe<EnvironmentRecordingManyRelationInput>;
-};
-
-/** Environment delete input */
-export type EnvironmentDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** EnvironmentFieldsPermissions create input */
-export type EnvironmentFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	ipAddress?: Maybe<Scalars['Boolean']>;
-	browser?: Maybe<Scalars['Boolean']>;
-	browserVersion?: Maybe<Scalars['Boolean']>;
-	operatingSystem?: Maybe<Scalars['Boolean']>;
-	language?: Maybe<Scalars['Boolean']>;
-};
-
-export type EnvironmentFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	ipAddress?: Maybe<StringPredicate>;
-	browser?: Maybe<StringPredicate>;
-	browserVersion?: Maybe<StringPredicate>;
-	operatingSystem?: Maybe<StringPredicate>;
-	language?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	recording?: Maybe<RecordingFilter>;
-	AND?: Maybe<Array<EnvironmentFilter>>;
-	OR?: Maybe<Array<EnvironmentFilter>>;
-};
-
-export type EnvironmentGroupBy = {
-	query: EnvironmentGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type EnvironmentGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	ipAddress?: Maybe<Array<GroupByField>>;
-	browser?: Maybe<Array<GroupByField>>;
-	browserVersion?: Maybe<Array<GroupByField>>;
-	operatingSystem?: Maybe<Array<GroupByField>>;
-	language?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	recording?: Maybe<RecordingGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
 export type EnvironmentItem = {
@@ -2705,131 +2468,9 @@ export type EnvironmentItem = {
 	name: Scalars['String'];
 };
 
-export type EnvironmentKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** EnvironmentListResponse output */
-export type EnvironmentListResponse = {
-	__typename?: 'EnvironmentListResponse';
-	/** List items */
-	items: Array<Environment>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** EnvironmentManyResponse output */
-export type EnvironmentManyResponse = {
-	__typename?: 'EnvironmentManyResponse';
-	/** List items */
-	items: Array<Environment>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum EnvironmentOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	IpAddressAsc = 'ipAddress_ASC',
-	IpAddressDesc = 'ipAddress_DESC',
-	BrowserAsc = 'browser_ASC',
-	BrowserDesc = 'browser_DESC',
-	BrowserVersionAsc = 'browserVersion_ASC',
-	BrowserVersionDesc = 'browserVersion_DESC',
-	OperatingSystemAsc = 'operatingSystem_ASC',
-	OperatingSystemDesc = 'operatingSystem_DESC',
-	LanguageAsc = 'language_ASC',
-	LanguageDesc = 'language_DESC',
-}
-
-/** Environment subscription payload */
-export type EnvironmentPayload = {
-	__typename?: 'EnvironmentPayload';
-	mutation: MutationType;
-	node?: Maybe<Environment>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<Environment>;
-};
-
-/** Environment relation input */
-export type EnvironmentRecordingManyRelationInput = {
-	connect?: Maybe<RecordingKeyFilter>;
-};
-
-/** Environment relation input */
-export type EnvironmentRecordingRelationInput = {
-	connect?: Maybe<RecordingKeyFilter>;
-	create?: Maybe<Environment_RecordingCreateInput>;
-};
-
-/** Environment relation input */
-export type EnvironmentRecordingUpdateRelationInput = {
-	connect?: Maybe<RecordingKeyFilter>;
-	disconnect?: Maybe<RecordingKeyFilter>;
-	reconnect?: Maybe<RecordingKeyFilter>;
-	create?: Maybe<Environment_RecordingCreateInput>;
-	update?: Maybe<Environment_RecordingUpdateInput>;
-};
-
-export type EnvironmentRelationFilter = {
-	some?: Maybe<EnvironmentFilter>;
-	every?: Maybe<EnvironmentFilter>;
-	none?: Maybe<EnvironmentFilter>;
-};
-
 /** EnvironmentSetupInput */
 export type EnvironmentSetupInput = {
 	deleteLock?: Maybe<Scalars['Boolean']>;
-};
-
-export type EnvironmentSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	ipAddress?: Maybe<SortOrder>;
-	browser?: Maybe<SortOrder>;
-	browserVersion?: Maybe<SortOrder>;
-	operatingSystem?: Maybe<SortOrder>;
-	language?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	recording?: Maybe<RecordingSort>;
-};
-
-/** Environment subscription filter */
-export type EnvironmentSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<EnvironmentFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** Environment update input */
-export type EnvironmentUpdateByFilterInput = {
-	ipAddress?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	browser?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	browserVersion?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	operatingSystem?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	language?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-};
-
-/** Environment update input */
-export type EnvironmentUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	ipAddress?: Maybe<Scalars['String']>;
-	browser?: Maybe<Scalars['String']>;
-	browserVersion?: Maybe<Scalars['String']>;
-	operatingSystem?: Maybe<Scalars['String']>;
-	language?: Maybe<Scalars['String']>;
-	recording?: Maybe<EnvironmentRecordingUpdateRelationInput>;
 };
 
 export type EnvironmentVariable = {
@@ -2974,228 +2615,6 @@ export type EnvironmentVariableUpdateInput = {
 	value?: Maybe<Scalars['String']>;
 };
 
-export type Error = {
-	__typename?: 'Error';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	stepIndex?: Maybe<Scalars['Int']>;
-	exception?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<TestOutcomeListResponse>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type ErrorTestOutcomeArgs = {
-	filter?: Maybe<TestOutcomeFilter>;
-	orderBy?: Maybe<Array<Maybe<TestOutcomeOrderBy>>>;
-	sort?: Maybe<Array<TestOutcomeSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<TestOutcomeGroupBy>;
-};
-
-export type Error_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	stepIndex?: Maybe<IntPredicate>;
-	exception?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	testOutcome?: Maybe<TestOutcome_PermissionRelationFilter>;
-	AND?: Maybe<Array<Error_PermissionFilter>>;
-	OR?: Maybe<Array<Error_PermissionFilter>>;
-};
-
-/** Error create input */
-export type ErrorCreateInput = {
-	stepIndex: Scalars['Int'];
-	exception: Scalars['String'];
-	testOutcome?: Maybe<ErrorTestOutcomeRelationInput>;
-};
-
-/** Error create many input */
-export type ErrorCreateManyInput = {
-	stepIndex: Scalars['Int'];
-	exception: Scalars['String'];
-	testOutcome?: Maybe<ErrorTestOutcomeManyRelationInput>;
-};
-
-/** Error delete input */
-export type ErrorDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** TestOutcome create input from errorDetails */
-export type ErrorDetails_TestOutcomeCreateInput = {
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
-	video?: Maybe<TestOutcomeVideoRelationInput>;
-	errorDetails?: Maybe<TestOutcomeErrorDetailsRelationInput>;
-};
-
-/** TestOutcome update input from errorDetails */
-export type ErrorDetails_TestOutcomeUpdateInput = {
-	filter?: Maybe<TestOutcomeKeyFilter>;
-	data: TestOutcomeUpdateInput;
-};
-
-/** ErrorFieldsPermissions create input */
-export type ErrorFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	stepIndex?: Maybe<Scalars['Boolean']>;
-	exception?: Maybe<Scalars['Boolean']>;
-};
-
-export type ErrorFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	stepIndex?: Maybe<IntPredicate>;
-	exception?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	testOutcome?: Maybe<TestOutcomeRelationFilter>;
-	AND?: Maybe<Array<ErrorFilter>>;
-	OR?: Maybe<Array<ErrorFilter>>;
-};
-
-export type ErrorGroupBy = {
-	query: ErrorGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type ErrorGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	stepIndex?: Maybe<Array<GroupByField>>;
-	exception?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	testOutcome?: Maybe<TestOutcomeGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type ErrorKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** ErrorListResponse output */
-export type ErrorListResponse = {
-	__typename?: 'ErrorListResponse';
-	/** List items */
-	items: Array<Error>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** ErrorManyResponse output */
-export type ErrorManyResponse = {
-	__typename?: 'ErrorManyResponse';
-	/** List items */
-	items: Array<Error>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum ErrorOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	StepIndexAsc = 'stepIndex_ASC',
-	StepIndexDesc = 'stepIndex_DESC',
-	ExceptionAsc = 'exception_ASC',
-	ExceptionDesc = 'exception_DESC',
-}
-
-/** Error subscription payload */
-export type ErrorPayload = {
-	__typename?: 'ErrorPayload';
-	mutation: MutationType;
-	node?: Maybe<Error>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<Error>;
-};
-
-export type ErrorSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	stepIndex?: Maybe<SortOrder>;
-	exception?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-};
-
-/** Error subscription filter */
-export type ErrorSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<ErrorFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** Error relation input */
-export type ErrorTestOutcomeManyRelationInput = {
-	connect?: Maybe<Array<TestOutcomeKeyFilter>>;
-};
-
-/** Error relation input */
-export type ErrorTestOutcomeRelationInput = {
-	connect?: Maybe<Array<TestOutcomeKeyFilter>>;
-	create?: Maybe<Array<Maybe<ErrorDetails_TestOutcomeCreateInput>>>;
-};
-
-/** Error relation input */
-export type ErrorTestOutcomeUpdateRelationInput = {
-	connect?: Maybe<Array<TestOutcomeKeyFilter>>;
-	disconnect?: Maybe<Array<TestOutcomeKeyFilter>>;
-	reconnect?: Maybe<Array<TestOutcomeKeyFilter>>;
-	create?: Maybe<Array<Maybe<ErrorDetails_TestOutcomeCreateInput>>>;
-	update?: Maybe<Array<Maybe<ErrorDetails_TestOutcomeUpdateInput>>>;
-};
-
-/** Error update input */
-export type ErrorUpdateByFilterInput = {
-	stepIndex?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
-	exception?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-};
-
-/** Error update input */
-export type ErrorUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	stepIndex?: Maybe<Scalars['Int']>;
-	exception?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<ErrorTestOutcomeUpdateRelationInput>;
-};
-
 /** Facebook connection params */
 export type FacebookOptions = {
 	__typename?: 'FacebookOptions';
@@ -3295,8 +2714,9 @@ export type File = {
 	users_avatar?: Maybe<UserListResponse>;
 	teamMembers_avatar?: Maybe<TeamMemberListResponse>;
 	project_avatar?: Maybe<ProjectListResponse>;
-	recording_video?: Maybe<RecordingListResponse>;
 	testOutcome_video?: Maybe<TestOutcomeListResponse>;
+	flow_video?: Maybe<FlowListResponse>;
+	userStory_video?: Maybe<UserStoryListResponse>;
 	previewUrl?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
@@ -3361,18 +2781,6 @@ export type FileProject_AvatarArgs = {
 	groupBy?: Maybe<ProjectGroupBy>;
 };
 
-export type FileRecording_VideoArgs = {
-	filter?: Maybe<RecordingFilter>;
-	orderBy?: Maybe<Array<Maybe<RecordingOrderBy>>>;
-	sort?: Maybe<Array<RecordingSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<RecordingGroupBy>;
-};
-
 export type FileTestOutcome_VideoArgs = {
 	filter?: Maybe<TestOutcomeFilter>;
 	orderBy?: Maybe<Array<Maybe<TestOutcomeOrderBy>>>;
@@ -3383,6 +2791,30 @@ export type FileTestOutcome_VideoArgs = {
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
 	groupBy?: Maybe<TestOutcomeGroupBy>;
+};
+
+export type FileFlow_VideoArgs = {
+	filter?: Maybe<FlowFilter>;
+	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
+	sort?: Maybe<Array<FlowSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<FlowGroupBy>;
+};
+
+export type FileUserStory_VideoArgs = {
+	filter?: Maybe<UserStoryFilter>;
+	orderBy?: Maybe<Array<Maybe<UserStoryOrderBy>>>;
+	sort?: Maybe<Array<UserStorySort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<UserStoryGroupBy>;
 };
 
 export type File_PermissionFilter = {
@@ -3405,8 +2837,9 @@ export type File_PermissionFilter = {
 	users_avatar?: Maybe<User_PermissionRelationFilter>;
 	teamMembers_avatar?: Maybe<TeamMember_PermissionRelationFilter>;
 	project_avatar?: Maybe<Project_PermissionRelationFilter>;
-	recording_video?: Maybe<Recording_PermissionRelationFilter>;
 	testOutcome_video?: Maybe<TestOutcome_PermissionRelationFilter>;
+	flow_video?: Maybe<Flow_PermissionRelationFilter>;
+	userStory_video?: Maybe<UserStory_PermissionRelationFilter>;
 	AND?: Maybe<Array<File_PermissionFilter>>;
 	OR?: Maybe<Array<File_PermissionFilter>>;
 };
@@ -3421,8 +2854,9 @@ export type FileCreateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
 };
 
 /** Files create many input */
@@ -3435,8 +2869,9 @@ export type FileCreateManyInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarManyRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarManyRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarManyRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoManyRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoManyRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoManyRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoManyRelationInput>;
 };
 
 /** Files delete input */
@@ -3495,8 +2930,9 @@ export type FileFilter = {
 	users_avatar?: Maybe<UserRelationFilter>;
 	teamMembers_avatar?: Maybe<TeamMemberRelationFilter>;
 	project_avatar?: Maybe<ProjectRelationFilter>;
-	recording_video?: Maybe<RecordingRelationFilter>;
 	testOutcome_video?: Maybe<TestOutcomeRelationFilter>;
+	flow_video?: Maybe<FlowRelationFilter>;
+	userStory_video?: Maybe<UserStoryRelationFilter>;
 	AND?: Maybe<Array<FileFilter>>;
 	OR?: Maybe<Array<FileFilter>>;
 };
@@ -3531,8 +2967,9 @@ export type FileGroupByQuery = {
 	users_avatar?: Maybe<UserGroupByQuery>;
 	teamMembers_avatar?: Maybe<TeamMemberGroupByQuery>;
 	project_avatar?: Maybe<ProjectGroupByQuery>;
-	recording_video?: Maybe<RecordingGroupByQuery>;
 	testOutcome_video?: Maybe<TestOutcomeGroupByQuery>;
+	flow_video?: Maybe<FlowGroupByQuery>;
+	userStory_video?: Maybe<UserStoryGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -3604,6 +3041,26 @@ export type FilePayload = {
 	previousValues?: Maybe<File>;
 };
 
+/** Files relation input */
+export type FilesFlow_VideoManyRelationInput = {
+	connect?: Maybe<Array<FlowKeyFilter>>;
+};
+
+/** Files relation input */
+export type FilesFlow_VideoRelationInput = {
+	connect?: Maybe<Array<FlowKeyFilter>>;
+	create?: Maybe<Array<Maybe<Video_FlowCreateInput>>>;
+};
+
+/** Files relation input */
+export type FilesFlow_VideoUpdateRelationInput = {
+	connect?: Maybe<Array<FlowKeyFilter>>;
+	disconnect?: Maybe<Array<FlowKeyFilter>>;
+	reconnect?: Maybe<Array<FlowKeyFilter>>;
+	create?: Maybe<Array<Maybe<Video_FlowCreateInput>>>;
+	update?: Maybe<Array<Maybe<Video_FlowUpdateInput>>>;
+};
+
 export type FileSort = {
 	id?: Maybe<SortOrder>;
 	createdAt?: Maybe<SortOrder>;
@@ -3638,26 +3095,6 @@ export type FilesProject_AvatarUpdateRelationInput = {
 	reconnect?: Maybe<Array<ProjectKeyFilter>>;
 	create?: Maybe<Array<Maybe<Avatar_ProjectCreateInput>>>;
 	update?: Maybe<Array<Maybe<Avatar_ProjectUpdateInput>>>;
-};
-
-/** Files relation input */
-export type FilesRecording_VideoManyRelationInput = {
-	connect?: Maybe<Array<RecordingKeyFilter>>;
-};
-
-/** Files relation input */
-export type FilesRecording_VideoRelationInput = {
-	connect?: Maybe<Array<RecordingKeyFilter>>;
-	create?: Maybe<Array<Maybe<Video_RecordingCreateInput>>>;
-};
-
-/** Files relation input */
-export type FilesRecording_VideoUpdateRelationInput = {
-	connect?: Maybe<Array<RecordingKeyFilter>>;
-	disconnect?: Maybe<Array<RecordingKeyFilter>>;
-	reconnect?: Maybe<Array<RecordingKeyFilter>>;
-	create?: Maybe<Array<Maybe<Video_RecordingCreateInput>>>;
-	update?: Maybe<Array<Maybe<Video_RecordingUpdateInput>>>;
 };
 
 /** Files relation input */
@@ -3725,6 +3162,26 @@ export type FilesUsers_AvatarUpdateRelationInput = {
 	update?: Maybe<Array<Maybe<Avatar_UserUpdateInput>>>;
 };
 
+/** Files relation input */
+export type FilesUserStory_VideoManyRelationInput = {
+	connect?: Maybe<Array<UserStoryKeyFilter>>;
+};
+
+/** Files relation input */
+export type FilesUserStory_VideoRelationInput = {
+	connect?: Maybe<Array<UserStoryKeyFilter>>;
+	create?: Maybe<Array<Maybe<Video_UserStoryCreateInput>>>;
+};
+
+/** Files relation input */
+export type FilesUserStory_VideoUpdateRelationInput = {
+	connect?: Maybe<Array<UserStoryKeyFilter>>;
+	disconnect?: Maybe<Array<UserStoryKeyFilter>>;
+	reconnect?: Maybe<Array<UserStoryKeyFilter>>;
+	create?: Maybe<Array<Maybe<Video_UserStoryCreateInput>>>;
+	update?: Maybe<Array<Maybe<Video_UserStoryUpdateInput>>>;
+};
+
 /** File Type Format Enum */
 export enum FileTypeFormatEnum {
 	File = 'FILE',
@@ -3756,8 +3213,9 @@ export type FileUpdateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
 };
 
 export type FileUploadInfoResponse = {
@@ -3794,6 +3252,477 @@ export type FloatPredicateHaving = {
 	is_not_empty?: Maybe<Scalars['Boolean']>;
 	AND?: Maybe<Array<FloatPredicateHaving>>;
 	OR?: Maybe<Array<FloatPredicateHaving>>;
+};
+
+/**
+ * Information about an individual flows (with a one:many relationship to user
+ * story) to help understand a the make up of a story.
+ */
+export type Flow = {
+	__typename?: 'Flow';
+	id?: Maybe<Scalars['ID']>;
+	createdAt?: Maybe<Scalars['DateTime']>;
+	updatedAt?: Maybe<Scalars['DateTime']>;
+	deletedAt?: Maybe<Scalars['Int']>;
+	createdBy?: Maybe<User>;
+	ipAddress?: Maybe<Scalars['String']>;
+	browser?: Maybe<Scalars['String']>;
+	browserVersion?: Maybe<Scalars['String']>;
+	operatingSystem?: Maybe<Scalars['String']>;
+	language?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** A video of the steps in this flow. */
+	video?: Maybe<File>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** The UUID that is the index in the backend flow table. */
+	flowId?: Maybe<Scalars['String']>;
+	/**
+	 * A many Flows to one User story relation. Which flows make up a user story?
+	 * This helps provide context to a generalized representation.
+	 */
+	userStory?: Maybe<UserStory>;
+	_description?: Maybe<Scalars['String']>;
+};
+
+export type Flow_PermissionFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	ipAddress?: Maybe<StringPredicate>;
+	browser?: Maybe<StringPredicate>;
+	browserVersion?: Maybe<StringPredicate>;
+	operatingSystem?: Maybe<StringPredicate>;
+	language?: Maybe<StringPredicate>;
+	startEventId?: Maybe<StringPredicate>;
+	endEventId?: Maybe<StringPredicate>;
+	videoGenerationVersion?: Maybe<StringPredicate>;
+	flowId?: Maybe<StringPredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<User_PermissionFilter>;
+	video?: Maybe<File_PermissionFilter>;
+	userStory?: Maybe<UserStory_PermissionFilter>;
+	AND?: Maybe<Array<Flow_PermissionFilter>>;
+	OR?: Maybe<Array<Flow_PermissionFilter>>;
+};
+
+export type Flow_PermissionRelationFilter = {
+	some?: Maybe<Flow_PermissionFilter>;
+	every?: Maybe<Flow_PermissionFilter>;
+	none?: Maybe<Flow_PermissionFilter>;
+};
+
+/** Files create input from flow_video */
+export type Flow_Video_FileCreateInput = {
+	fileId?: Maybe<Scalars['String']>;
+	public?: Maybe<Scalars['Boolean']>;
+	filename?: Maybe<Scalars['String']>;
+	meta?: Maybe<Scalars['JSON']>;
+	mods?: Maybe<Scalars['JSON']>;
+	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
+	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
+	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
+	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+};
+
+/** Files update input from flow_video */
+export type Flow_Video_FileUpdateInput = {
+	fileId?: Maybe<Scalars['String']>;
+	public?: Maybe<Scalars['Boolean']>;
+	filename?: Maybe<Scalars['String']>;
+	meta?: Maybe<Scalars['JSON']>;
+	mods?: Maybe<Scalars['JSON']>;
+	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
+	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
+	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
+	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+};
+
+/** Flow create input */
+export type FlowCreateInput = {
+	ipAddress?: Maybe<Scalars['String']>;
+	browser?: Maybe<Scalars['String']>;
+	browserVersion?: Maybe<Scalars['String']>;
+	operatingSystem?: Maybe<Scalars['String']>;
+	language?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	video?: Maybe<FlowVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** The UUID that is the index in the backend flow table. */
+	flowId?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryRelationInput>;
+};
+
+/** Flow create many input */
+export type FlowCreateManyInput = {
+	ipAddress?: Maybe<Scalars['String']>;
+	browser?: Maybe<Scalars['String']>;
+	browserVersion?: Maybe<Scalars['String']>;
+	operatingSystem?: Maybe<Scalars['String']>;
+	language?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	video?: Maybe<FlowVideoManyRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** The UUID that is the index in the backend flow table. */
+	flowId?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryManyRelationInput>;
+};
+
+/** Flow delete input */
+export type FlowDeleteInput = {
+	id?: Maybe<Scalars['ID']>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+/** FlowFieldsPermissions create input */
+export type FlowFieldsPermissions = {
+	createdAt?: Maybe<Scalars['Boolean']>;
+	updatedAt?: Maybe<Scalars['Boolean']>;
+	ipAddress?: Maybe<Scalars['Boolean']>;
+	browser?: Maybe<Scalars['Boolean']>;
+	browserVersion?: Maybe<Scalars['Boolean']>;
+	operatingSystem?: Maybe<Scalars['Boolean']>;
+	language?: Maybe<Scalars['Boolean']>;
+	startEventId?: Maybe<Scalars['Boolean']>;
+	endEventId?: Maybe<Scalars['Boolean']>;
+	videoGenerationVersion?: Maybe<Scalars['Boolean']>;
+	flowId?: Maybe<Scalars['Boolean']>;
+};
+
+export type FlowFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	ipAddress?: Maybe<StringPredicate>;
+	browser?: Maybe<StringPredicate>;
+	browserVersion?: Maybe<StringPredicate>;
+	operatingSystem?: Maybe<StringPredicate>;
+	language?: Maybe<StringPredicate>;
+	startEventId?: Maybe<StringPredicate>;
+	endEventId?: Maybe<StringPredicate>;
+	videoGenerationVersion?: Maybe<StringPredicate>;
+	flowId?: Maybe<StringPredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<UserFilter>;
+	video?: Maybe<FileFilter>;
+	userStory?: Maybe<UserStoryFilter>;
+	AND?: Maybe<Array<FlowFilter>>;
+	OR?: Maybe<Array<FlowFilter>>;
+};
+
+export type FlowGroupBy = {
+	query: FlowGroupByQuery;
+	sort?: Maybe<Array<GroupBySort>>;
+	having?: Maybe<Having>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	skip?: Maybe<Scalars['Int']>;
+};
+
+export type FlowGroupByQuery = {
+	id?: Maybe<Array<GroupByField>>;
+	createdAt?: Maybe<Array<GroupByField>>;
+	updatedAt?: Maybe<Array<GroupByField>>;
+	ipAddress?: Maybe<Array<GroupByField>>;
+	browser?: Maybe<Array<GroupByField>>;
+	browserVersion?: Maybe<Array<GroupByField>>;
+	operatingSystem?: Maybe<Array<GroupByField>>;
+	language?: Maybe<Array<GroupByField>>;
+	startEventId?: Maybe<Array<GroupByField>>;
+	endEventId?: Maybe<Array<GroupByField>>;
+	videoGenerationVersion?: Maybe<Array<GroupByField>>;
+	flowId?: Maybe<Array<GroupByField>>;
+	createdBy?: Maybe<UserGroupByQuery>;
+	video?: Maybe<FileGroupByQuery>;
+	userStory?: Maybe<UserStoryGroupByQuery>;
+	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
+};
+
+export type FlowKeyFilter = {
+	id?: Maybe<Scalars['ID']>;
+};
+
+/** FlowListResponse output */
+export type FlowListResponse = {
+	__typename?: 'FlowListResponse';
+	/** List items */
+	items: Array<Flow>;
+	/** List items count */
+	count: Scalars['Int'];
+	/** Aggregated items */
+	groups: Array<GroupByResponse>;
+};
+
+/** FlowManyResponse output */
+export type FlowManyResponse = {
+	__typename?: 'FlowManyResponse';
+	/** List items */
+	items: Array<Flow>;
+	/** List items count */
+	count: Scalars['Int'];
+};
+
+/** No longer supported. Use `sort` instead. */
+export enum FlowOrderBy {
+	IdAsc = 'id_ASC',
+	IdDesc = 'id_DESC',
+	CreatedAtAsc = 'createdAt_ASC',
+	CreatedAtDesc = 'createdAt_DESC',
+	UpdatedAtAsc = 'updatedAt_ASC',
+	UpdatedAtDesc = 'updatedAt_DESC',
+	DeletedAtAsc = 'deletedAt_ASC',
+	DeletedAtDesc = 'deletedAt_DESC',
+	IpAddressAsc = 'ipAddress_ASC',
+	IpAddressDesc = 'ipAddress_DESC',
+	BrowserAsc = 'browser_ASC',
+	BrowserDesc = 'browser_DESC',
+	BrowserVersionAsc = 'browserVersion_ASC',
+	BrowserVersionDesc = 'browserVersion_DESC',
+	OperatingSystemAsc = 'operatingSystem_ASC',
+	OperatingSystemDesc = 'operatingSystem_DESC',
+	LanguageAsc = 'language_ASC',
+	LanguageDesc = 'language_DESC',
+	StartEventIdAsc = 'startEventId_ASC',
+	StartEventIdDesc = 'startEventId_DESC',
+	EndEventIdAsc = 'endEventId_ASC',
+	EndEventIdDesc = 'endEventId_DESC',
+	VideoGenerationVersionAsc = 'videoGenerationVersion_ASC',
+	VideoGenerationVersionDesc = 'videoGenerationVersion_DESC',
+	FlowIdAsc = 'flowId_ASC',
+	FlowIdDesc = 'flowId_DESC',
+}
+
+/** Flow subscription payload */
+export type FlowPayload = {
+	__typename?: 'FlowPayload';
+	mutation: MutationType;
+	node?: Maybe<Flow>;
+	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
+	previousValues?: Maybe<Flow>;
+};
+
+export type FlowRelationFilter = {
+	some?: Maybe<FlowFilter>;
+	every?: Maybe<FlowFilter>;
+	none?: Maybe<FlowFilter>;
+};
+
+/** UserStory create input from flows */
+export type Flows_UserStoryCreateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
+};
+
+/** UserStory update input from flows */
+export type Flows_UserStoryUpdateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created?: Maybe<Scalars['String']>;
+	video?: Maybe<UserStoryVideoUpdateRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
+};
+
+export type FlowSort = {
+	id?: Maybe<SortOrder>;
+	createdAt?: Maybe<SortOrder>;
+	updatedAt?: Maybe<SortOrder>;
+	deletedAt?: Maybe<SortOrder>;
+	ipAddress?: Maybe<SortOrder>;
+	browser?: Maybe<SortOrder>;
+	browserVersion?: Maybe<SortOrder>;
+	operatingSystem?: Maybe<SortOrder>;
+	language?: Maybe<SortOrder>;
+	startEventId?: Maybe<SortOrder>;
+	endEventId?: Maybe<SortOrder>;
+	videoGenerationVersion?: Maybe<SortOrder>;
+	flowId?: Maybe<SortOrder>;
+	createdBy?: Maybe<UserSort>;
+	video?: Maybe<FileSort>;
+	userStory?: Maybe<UserStorySort>;
+};
+
+/** Flow subscription filter */
+export type FlowSubscriptionFilter = {
+	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
+	node?: Maybe<FlowFilter>;
+	updatedFields?: Maybe<UpdatedFieldsFilter>;
+};
+
+/** Flow update input */
+export type FlowUpdateByFilterInput = {
+	ipAddress?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	browser?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	browserVersion?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	operatingSystem?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	language?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	startEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	endEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	videoGenerationVersion?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	flowId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+};
+
+/** Flow update input */
+export type FlowUpdateInput = {
+	id?: Maybe<Scalars['ID']>;
+	ipAddress?: Maybe<Scalars['String']>;
+	browser?: Maybe<Scalars['String']>;
+	browserVersion?: Maybe<Scalars['String']>;
+	operatingSystem?: Maybe<Scalars['String']>;
+	language?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	video?: Maybe<FlowVideoUpdateRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** The UUID that is the index in the backend flow table. */
+	flowId?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryUpdateRelationInput>;
+};
+
+/** Flow relation input */
+export type FlowUserStoryManyRelationInput = {
+	connect?: Maybe<UserStoryKeyFilter>;
+};
+
+/** Flow relation input */
+export type FlowUserStoryRelationInput = {
+	connect?: Maybe<UserStoryKeyFilter>;
+	create?: Maybe<Flows_UserStoryCreateInput>;
+};
+
+/** Flow relation input */
+export type FlowUserStoryUpdateRelationInput = {
+	connect?: Maybe<UserStoryKeyFilter>;
+	disconnect?: Maybe<UserStoryKeyFilter>;
+	reconnect?: Maybe<UserStoryKeyFilter>;
+	create?: Maybe<Flows_UserStoryCreateInput>;
+	update?: Maybe<Flows_UserStoryUpdateInput>;
+};
+
+/** Flow relation input */
+export type FlowVideoManyRelationInput = {
+	connect?: Maybe<FileKeyFilter>;
+};
+
+/** Flow relation input */
+export type FlowVideoRelationInput = {
+	connect?: Maybe<FileKeyFilter>;
+	create?: Maybe<Flow_Video_FileCreateInput>;
+};
+
+/** Flow relation input */
+export type FlowVideoUpdateRelationInput = {
+	connect?: Maybe<FileKeyFilter>;
+	disconnect?: Maybe<FileKeyFilter>;
+	reconnect?: Maybe<FileKeyFilter>;
+	create?: Maybe<Flow_Video_FileCreateInput>;
+	update?: Maybe<Flow_Video_FileUpdateInput>;
 };
 
 /** FunctionInfo */
@@ -3939,23 +3868,6 @@ export type GraphQlFileItemResponse = {
 	downloadUrl?: Maybe<Scalars['String']>;
 };
 
-/** SeleniumCommand create input from group */
-export type Group_SeleniumCommandCreateInput = {
-	open?: Maybe<SeleniumCommandOpenRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeRelationInput>;
-	click?: Maybe<SeleniumCommandClickRelationInput>;
-	type?: Maybe<SeleniumCommandTypeRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupRelationInput>;
-};
-
-/** SeleniumCommand update input from group */
-export type Group_SeleniumCommandUpdateInput = {
-	filter?: Maybe<SeleniumCommandKeyFilter>;
-	data: SeleniumCommandUpdateInput;
-};
-
 export type GroupByField = {
 	as?: Maybe<Scalars['String']>;
 	fn?: Maybe<Array<Maybe<GroupByFieldFunction>>>;
@@ -4020,30 +3932,15 @@ export type GroupByResponse = {
 	CiCdMigrationGroup: CiCdMigrationListResponse;
 	ProjectGroup: ProjectListResponse;
 	ConfigurationGroup: ConfigurationListResponse;
-	IntegrationGroup: IntegrationListResponse;
-	IntegrationDetailGroup: IntegrationDetailListResponse;
-	SlackGroup: SlackListResponse;
 	ActivityGroup: ActivityListResponse;
 	UserStoryGroup: UserStoryListResponse;
-	RecordingGroup: RecordingListResponse;
-	EnvironmentGroup: EnvironmentListResponse;
+	FlowGroup: FlowListResponse;
 	TestOutcomeGroup: TestOutcomeListResponse;
 	TestRunGroup: TestRunListResponse;
 	ReleaseGroup: ReleaseListResponse;
 	AuthenticationTokenGroup: AuthenticationTokenListResponse;
-	SeleniumScriptGroup: SeleniumScriptListResponse;
-	SeleniumOpenGroup: SeleniumOpenListResponse;
-	SeleniumSetViewportSizeGroup: SeleniumSetViewportSizeListResponse;
-	SeleniumClickGroup: SeleniumClickListResponse;
-	SeleniumTargetGroup: SeleniumTargetListResponse;
-	SeleniumTypeGroup: SeleniumTypeListResponse;
-	SeleniumDragndropGroup: SeleniumDragndropListResponse;
-	SeleniumPointGroup: SeleniumPointListResponse;
-	SeleniumCommandGroup: SeleniumCommandListResponse;
-	SeleniumSelectorGroup: SeleniumSelectorListResponse;
-	SeleniumGroupGroup: SeleniumGroupListResponse;
-	ErrorGroup: ErrorListResponse;
 	MetricGroup: MetricListResponse;
+	ScriptCommandGroup: ScriptCommandListResponse;
 };
 
 export type GroupByResponseUserGroupArgs = {
@@ -4166,42 +4063,6 @@ export type GroupByResponseConfigurationGroupArgs = {
 	groupBy?: Maybe<ConfigurationGroupBy>;
 };
 
-export type GroupByResponseIntegrationGroupArgs = {
-	filter?: Maybe<IntegrationFilter>;
-	orderBy?: Maybe<Array<Maybe<IntegrationOrderBy>>>;
-	sort?: Maybe<Array<IntegrationSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<IntegrationGroupBy>;
-};
-
-export type GroupByResponseIntegrationDetailGroupArgs = {
-	filter?: Maybe<IntegrationDetailFilter>;
-	orderBy?: Maybe<Array<Maybe<IntegrationDetailOrderBy>>>;
-	sort?: Maybe<Array<IntegrationDetailSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<IntegrationDetailGroupBy>;
-};
-
-export type GroupByResponseSlackGroupArgs = {
-	filter?: Maybe<SlackFilter>;
-	orderBy?: Maybe<Array<Maybe<SlackOrderBy>>>;
-	sort?: Maybe<Array<SlackSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SlackGroupBy>;
-};
-
 export type GroupByResponseActivityGroupArgs = {
 	filter?: Maybe<ActivityFilter>;
 	orderBy?: Maybe<Array<Maybe<ActivityOrderBy>>>;
@@ -4226,28 +4087,16 @@ export type GroupByResponseUserStoryGroupArgs = {
 	groupBy?: Maybe<UserStoryGroupBy>;
 };
 
-export type GroupByResponseRecordingGroupArgs = {
-	filter?: Maybe<RecordingFilter>;
-	orderBy?: Maybe<Array<Maybe<RecordingOrderBy>>>;
-	sort?: Maybe<Array<RecordingSort>>;
+export type GroupByResponseFlowGroupArgs = {
+	filter?: Maybe<FlowFilter>;
+	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
+	sort?: Maybe<Array<FlowSort>>;
 	skip?: Maybe<Scalars['Int']>;
 	after?: Maybe<Scalars['String']>;
 	before?: Maybe<Scalars['String']>;
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<RecordingGroupBy>;
-};
-
-export type GroupByResponseEnvironmentGroupArgs = {
-	filter?: Maybe<EnvironmentFilter>;
-	orderBy?: Maybe<Array<Maybe<EnvironmentOrderBy>>>;
-	sort?: Maybe<Array<EnvironmentSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<EnvironmentGroupBy>;
+	groupBy?: Maybe<FlowGroupBy>;
 };
 
 export type GroupByResponseTestOutcomeGroupArgs = {
@@ -4298,150 +4147,6 @@ export type GroupByResponseAuthenticationTokenGroupArgs = {
 	groupBy?: Maybe<AuthenticationTokenGroupBy>;
 };
 
-export type GroupByResponseSeleniumScriptGroupArgs = {
-	filter?: Maybe<SeleniumScriptFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumScriptOrderBy>>>;
-	sort?: Maybe<Array<SeleniumScriptSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumScriptGroupBy>;
-};
-
-export type GroupByResponseSeleniumOpenGroupArgs = {
-	filter?: Maybe<SeleniumOpenFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumOpenOrderBy>>>;
-	sort?: Maybe<Array<SeleniumOpenSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumOpenGroupBy>;
-};
-
-export type GroupByResponseSeleniumSetViewportSizeGroupArgs = {
-	filter?: Maybe<SeleniumSetViewportSizeFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumSetViewportSizeOrderBy>>>;
-	sort?: Maybe<Array<SeleniumSetViewportSizeSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumSetViewportSizeGroupBy>;
-};
-
-export type GroupByResponseSeleniumClickGroupArgs = {
-	filter?: Maybe<SeleniumClickFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumClickOrderBy>>>;
-	sort?: Maybe<Array<SeleniumClickSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumClickGroupBy>;
-};
-
-export type GroupByResponseSeleniumTargetGroupArgs = {
-	filter?: Maybe<SeleniumTargetFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumTargetOrderBy>>>;
-	sort?: Maybe<Array<SeleniumTargetSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumTargetGroupBy>;
-};
-
-export type GroupByResponseSeleniumTypeGroupArgs = {
-	filter?: Maybe<SeleniumTypeFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumTypeOrderBy>>>;
-	sort?: Maybe<Array<SeleniumTypeSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumTypeGroupBy>;
-};
-
-export type GroupByResponseSeleniumDragndropGroupArgs = {
-	filter?: Maybe<SeleniumDragndropFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumDragndropOrderBy>>>;
-	sort?: Maybe<Array<SeleniumDragndropSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumDragndropGroupBy>;
-};
-
-export type GroupByResponseSeleniumPointGroupArgs = {
-	filter?: Maybe<SeleniumPointFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumPointOrderBy>>>;
-	sort?: Maybe<Array<SeleniumPointSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumPointGroupBy>;
-};
-
-export type GroupByResponseSeleniumCommandGroupArgs = {
-	filter?: Maybe<SeleniumCommandFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumCommandOrderBy>>>;
-	sort?: Maybe<Array<SeleniumCommandSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumCommandGroupBy>;
-};
-
-export type GroupByResponseSeleniumSelectorGroupArgs = {
-	filter?: Maybe<SeleniumSelectorFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumSelectorOrderBy>>>;
-	sort?: Maybe<Array<SeleniumSelectorSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumSelectorGroupBy>;
-};
-
-export type GroupByResponseSeleniumGroupGroupArgs = {
-	filter?: Maybe<SeleniumGroupFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumGroupOrderBy>>>;
-	sort?: Maybe<Array<SeleniumGroupSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumGroupGroupBy>;
-};
-
-export type GroupByResponseErrorGroupArgs = {
-	filter?: Maybe<ErrorFilter>;
-	orderBy?: Maybe<Array<Maybe<ErrorOrderBy>>>;
-	sort?: Maybe<Array<ErrorSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<ErrorGroupBy>;
-};
-
 export type GroupByResponseMetricGroupArgs = {
 	filter?: Maybe<MetricFilter>;
 	orderBy?: Maybe<Array<Maybe<MetricOrderBy>>>;
@@ -4454,6 +4159,18 @@ export type GroupByResponseMetricGroupArgs = {
 	groupBy?: Maybe<MetricGroupBy>;
 };
 
+export type GroupByResponseScriptCommandGroupArgs = {
+	filter?: Maybe<ScriptCommandFilter>;
+	orderBy?: Maybe<Array<Maybe<ScriptCommandOrderBy>>>;
+	sort?: Maybe<Array<ScriptCommandSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<ScriptCommandGroupBy>;
+};
+
 export type GroupBySort = {
 	alias: Scalars['String'];
 	direction: SortOrder;
@@ -4461,20 +4178,6 @@ export type GroupBySort = {
 
 export type GroupIdentifiersGroupByField = {
 	as: Scalars['String'];
-};
-
-/** SeleniumScript create input from groups */
-export type Groups_SeleniumScriptCreateInput = {
-	version: Scalars['String'];
-	recording?: Maybe<SeleniumScriptRecordingRelationInput>;
-	groups?: Maybe<SeleniumScriptGroupsRelationInput>;
-};
-
-/** SeleniumScript update input from groups */
-export type Groups_SeleniumScriptUpdateInput = {
-	version?: Maybe<Scalars['String']>;
-	recording?: Maybe<SeleniumScriptRecordingUpdateRelationInput>;
-	groups?: Maybe<SeleniumScriptGroupsUpdateRelationInput>;
 };
 
 export type Having = {
@@ -4561,572 +4264,6 @@ export type IndexUpdateInput = {
 	name?: Maybe<Scalars['String']>;
 };
 
-/** This table stores information and settings necessary for CI, project management, and slack integrations. */
-export type Integration = {
-	__typename?: 'Integration';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationDetail>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationDetail>;
-	slack?: Maybe<Slack>;
-	project?: Maybe<Project>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-/** IntegrationDetails create input from integration */
-export type Integration_IntegrationDetailCreateInput = {
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<IntegrationDetailsIntegrationRelationInput>;
-	projectManagement?: Maybe<IntegrationDetailsProjectManagementRelationInput>;
-};
-
-/** IntegrationDetails update input from integration */
-export type Integration_IntegrationDetailUpdateInput = {
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<IntegrationDetailsIntegrationUpdateRelationInput>;
-	projectManagement?: Maybe<IntegrationDetailsProjectManagementUpdateRelationInput>;
-};
-
-export type Integration_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	continuousIntegrationProvider?: Maybe<StringPredicate>;
-	projectManagementProvider?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	continuousIntegration?: Maybe<IntegrationDetail_PermissionFilter>;
-	projectManagement?: Maybe<IntegrationDetail_PermissionFilter>;
-	slack?: Maybe<Slack_PermissionFilter>;
-	project?: Maybe<Project_PermissionFilter>;
-	AND?: Maybe<Array<Integration_PermissionFilter>>;
-	OR?: Maybe<Array<Integration_PermissionFilter>>;
-};
-
-export type Integration_PermissionRelationFilter = {
-	some?: Maybe<Integration_PermissionFilter>;
-	every?: Maybe<Integration_PermissionFilter>;
-	none?: Maybe<Integration_PermissionFilter>;
-};
-
-/** Project create input from integration */
-export type Integration_ProjectCreateInput = {
-	/**
-	 * The name for a product being tested on Meeshkan. We suggest this corresponds
-	 * with the repository name especially if you'll have many.
-	 */
-	name?: Maybe<Scalars['String']>;
-	avatar?: Maybe<ProjectAvatarRelationInput>;
-	release?: Maybe<ProjectReleaseRelationInput>;
-	configuration?: Maybe<ProjectConfigurationRelationInput>;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
-	activity?: Maybe<ProjectActivityRelationInput>;
-	members?: Maybe<ProjectMembersRelationInput>;
-	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
-	metrics?: Maybe<ProjectMetricsRelationInput>;
-};
-
-/** Project update input from integration */
-export type Integration_ProjectUpdateInput = {
-	/**
-	 * The name for a product being tested on Meeshkan. We suggest this corresponds
-	 * with the repository name especially if you'll have many.
-	 */
-	name?: Maybe<Scalars['String']>;
-	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
-	release?: Maybe<ProjectReleaseUpdateRelationInput>;
-	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
-	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
-	activity?: Maybe<ProjectActivityUpdateRelationInput>;
-	members?: Maybe<ProjectMembersUpdateRelationInput>;
-	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
-	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
-};
-
-/** Integration relation input */
-export type IntegrationContinuousIntegrationManyRelationInput = {
-	connect?: Maybe<IntegrationDetailKeyFilter>;
-};
-
-/** Integration relation input */
-export type IntegrationContinuousIntegrationRelationInput = {
-	connect?: Maybe<IntegrationDetailKeyFilter>;
-	create?: Maybe<Integration_IntegrationDetailCreateInput>;
-};
-
-/** Integration relation input */
-export type IntegrationContinuousIntegrationUpdateRelationInput = {
-	connect?: Maybe<IntegrationDetailKeyFilter>;
-	disconnect?: Maybe<IntegrationDetailKeyFilter>;
-	reconnect?: Maybe<IntegrationDetailKeyFilter>;
-	create?: Maybe<Integration_IntegrationDetailCreateInput>;
-	update?: Maybe<Integration_IntegrationDetailUpdateInput>;
-};
-
-/** Integration create input */
-export type IntegrationCreateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementRelationInput>;
-	slack?: Maybe<IntegrationSlackRelationInput>;
-	project?: Maybe<IntegrationProjectRelationInput>;
-};
-
-/** Integration create many input */
-export type IntegrationCreateManyInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationManyRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementManyRelationInput>;
-	slack?: Maybe<IntegrationSlackManyRelationInput>;
-	project: IntegrationProjectManyRelationInput;
-};
-
-/** Integration delete input */
-export type IntegrationDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** Storing access information for integrations. */
-export type IntegrationDetail = {
-	__typename?: 'IntegrationDetail';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<Integration>;
-	projectManagement?: Maybe<Integration>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type IntegrationDetail_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	authenticated?: Maybe<BoolPredicate>;
-	accessToken?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	integration?: Maybe<Integration_PermissionFilter>;
-	projectManagement?: Maybe<Integration_PermissionFilter>;
-	AND?: Maybe<Array<IntegrationDetail_PermissionFilter>>;
-	OR?: Maybe<Array<IntegrationDetail_PermissionFilter>>;
-};
-
-/** IntegrationDetails create input */
-export type IntegrationDetailCreateInput = {
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<IntegrationDetailsIntegrationRelationInput>;
-	projectManagement?: Maybe<IntegrationDetailsProjectManagementRelationInput>;
-};
-
-/** IntegrationDetails create many input */
-export type IntegrationDetailCreateManyInput = {
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<IntegrationDetailsIntegrationManyRelationInput>;
-	projectManagement?: Maybe<IntegrationDetailsProjectManagementManyRelationInput>;
-};
-
-/** IntegrationDetails delete input */
-export type IntegrationDetailDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** IntegrationDetailFieldsPermissions create input */
-export type IntegrationDetailFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['Boolean']>;
-};
-
-export type IntegrationDetailFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	authenticated?: Maybe<BoolPredicate>;
-	accessToken?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	integration?: Maybe<IntegrationFilter>;
-	projectManagement?: Maybe<IntegrationFilter>;
-	AND?: Maybe<Array<IntegrationDetailFilter>>;
-	OR?: Maybe<Array<IntegrationDetailFilter>>;
-};
-
-export type IntegrationDetailGroupBy = {
-	query: IntegrationDetailGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type IntegrationDetailGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	authenticated?: Maybe<Array<GroupByField>>;
-	accessToken?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	integration?: Maybe<IntegrationGroupByQuery>;
-	projectManagement?: Maybe<IntegrationGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type IntegrationDetailKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** IntegrationDetailListResponse output */
-export type IntegrationDetailListResponse = {
-	__typename?: 'IntegrationDetailListResponse';
-	/** List items */
-	items: Array<IntegrationDetail>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** IntegrationDetailManyResponse output */
-export type IntegrationDetailManyResponse = {
-	__typename?: 'IntegrationDetailManyResponse';
-	/** List items */
-	items: Array<IntegrationDetail>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum IntegrationDetailOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	AuthenticatedAsc = 'authenticated_ASC',
-	AuthenticatedDesc = 'authenticated_DESC',
-	AccessTokenAsc = 'accessToken_ASC',
-	AccessTokenDesc = 'accessToken_DESC',
-}
-
-/** IntegrationDetails subscription payload */
-export type IntegrationDetailPayload = {
-	__typename?: 'IntegrationDetailPayload';
-	mutation: MutationType;
-	node?: Maybe<IntegrationDetail>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<IntegrationDetail>;
-};
-
-/** IntegrationDetails relation input */
-export type IntegrationDetailsIntegrationManyRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-};
-
-/** IntegrationDetails relation input */
-export type IntegrationDetailsIntegrationRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-	create?: Maybe<ContinuousIntegration_IntegrationCreateInput>;
-};
-
-/** IntegrationDetails relation input */
-export type IntegrationDetailsIntegrationUpdateRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-	disconnect?: Maybe<IntegrationKeyFilter>;
-	reconnect?: Maybe<IntegrationKeyFilter>;
-	create?: Maybe<ContinuousIntegration_IntegrationCreateInput>;
-	update?: Maybe<ContinuousIntegration_IntegrationUpdateInput>;
-};
-
-export type IntegrationDetailSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	authenticated?: Maybe<SortOrder>;
-	accessToken?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	integration?: Maybe<IntegrationSort>;
-	projectManagement?: Maybe<IntegrationSort>;
-};
-
-/** IntegrationDetails relation input */
-export type IntegrationDetailsProjectManagementManyRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-};
-
-/** IntegrationDetails relation input */
-export type IntegrationDetailsProjectManagementRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-	create?: Maybe<ProjectManagement_IntegrationCreateInput>;
-};
-
-/** IntegrationDetails relation input */
-export type IntegrationDetailsProjectManagementUpdateRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-	disconnect?: Maybe<IntegrationKeyFilter>;
-	reconnect?: Maybe<IntegrationKeyFilter>;
-	create?: Maybe<ProjectManagement_IntegrationCreateInput>;
-	update?: Maybe<ProjectManagement_IntegrationUpdateInput>;
-};
-
-/** IntegrationDetails subscription filter */
-export type IntegrationDetailSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<IntegrationDetailFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** IntegrationDetails update input */
-export type IntegrationDetailUpdateByFilterInput = {
-	authenticated?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
-	accessToken?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-};
-
-/** IntegrationDetails update input */
-export type IntegrationDetailUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<IntegrationDetailsIntegrationUpdateRelationInput>;
-	projectManagement?: Maybe<IntegrationDetailsProjectManagementUpdateRelationInput>;
-};
-
-/** IntegrationFieldsPermissions create input */
-export type IntegrationFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	continuousIntegrationProvider?: Maybe<Scalars['Boolean']>;
-	projectManagementProvider?: Maybe<Scalars['Boolean']>;
-};
-
-export type IntegrationFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	continuousIntegrationProvider?: Maybe<StringPredicate>;
-	projectManagementProvider?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	continuousIntegration?: Maybe<IntegrationDetailFilter>;
-	projectManagement?: Maybe<IntegrationDetailFilter>;
-	slack?: Maybe<SlackFilter>;
-	project?: Maybe<ProjectFilter>;
-	AND?: Maybe<Array<IntegrationFilter>>;
-	OR?: Maybe<Array<IntegrationFilter>>;
-};
-
-export type IntegrationGroupBy = {
-	query: IntegrationGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type IntegrationGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	continuousIntegrationProvider?: Maybe<Array<GroupByField>>;
-	projectManagementProvider?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	continuousIntegration?: Maybe<IntegrationDetailGroupByQuery>;
-	projectManagement?: Maybe<IntegrationDetailGroupByQuery>;
-	slack?: Maybe<SlackGroupByQuery>;
-	project?: Maybe<ProjectGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type IntegrationKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** IntegrationListResponse output */
-export type IntegrationListResponse = {
-	__typename?: 'IntegrationListResponse';
-	/** List items */
-	items: Array<Integration>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** IntegrationManyResponse output */
-export type IntegrationManyResponse = {
-	__typename?: 'IntegrationManyResponse';
-	/** List items */
-	items: Array<Integration>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum IntegrationOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	ContinuousIntegrationProviderAsc = 'continuousIntegrationProvider_ASC',
-	ContinuousIntegrationProviderDesc = 'continuousIntegrationProvider_DESC',
-	ProjectManagementProviderAsc = 'projectManagementProvider_ASC',
-	ProjectManagementProviderDesc = 'projectManagementProvider_DESC',
-}
-
-/** Integration subscription payload */
-export type IntegrationPayload = {
-	__typename?: 'IntegrationPayload';
-	mutation: MutationType;
-	node?: Maybe<Integration>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<Integration>;
-};
-
-/** Integration relation input */
-export type IntegrationProjectManagementManyRelationInput = {
-	connect?: Maybe<IntegrationDetailKeyFilter>;
-};
-
-/** Integration relation input */
-export type IntegrationProjectManagementRelationInput = {
-	connect?: Maybe<IntegrationDetailKeyFilter>;
-	create?: Maybe<ProjectManagement_IntegrationDetailCreateInput>;
-};
-
-/** Integration relation input */
-export type IntegrationProjectManagementUpdateRelationInput = {
-	connect?: Maybe<IntegrationDetailKeyFilter>;
-	disconnect?: Maybe<IntegrationDetailKeyFilter>;
-	reconnect?: Maybe<IntegrationDetailKeyFilter>;
-	create?: Maybe<ProjectManagement_IntegrationDetailCreateInput>;
-	update?: Maybe<ProjectManagement_IntegrationDetailUpdateInput>;
-};
-
-/** Integration relation input */
-export type IntegrationProjectManyRelationInput = {
-	connect?: Maybe<ProjectKeyFilter>;
-};
-
-/** Integration relation input */
-export type IntegrationProjectRelationInput = {
-	connect?: Maybe<ProjectKeyFilter>;
-	create?: Maybe<Integration_ProjectCreateInput>;
-};
-
-/** Integration relation input */
-export type IntegrationProjectUpdateRelationInput = {
-	connect?: Maybe<ProjectKeyFilter>;
-	disconnect?: Maybe<ProjectKeyFilter>;
-	reconnect?: Maybe<ProjectKeyFilter>;
-	create?: Maybe<Integration_ProjectCreateInput>;
-	update?: Maybe<Integration_ProjectUpdateInput>;
-};
-
-export type IntegrationRelationFilter = {
-	some?: Maybe<IntegrationFilter>;
-	every?: Maybe<IntegrationFilter>;
-	none?: Maybe<IntegrationFilter>;
-};
-
-/** Integration relation input */
-export type IntegrationSlackManyRelationInput = {
-	connect?: Maybe<SlackKeyFilter>;
-};
-
-/** Integration relation input */
-export type IntegrationSlackRelationInput = {
-	connect?: Maybe<SlackKeyFilter>;
-	create?: Maybe<Slack_SlackCreateInput>;
-};
-
-/** Integration relation input */
-export type IntegrationSlackUpdateRelationInput = {
-	connect?: Maybe<SlackKeyFilter>;
-	disconnect?: Maybe<SlackKeyFilter>;
-	reconnect?: Maybe<SlackKeyFilter>;
-	create?: Maybe<Slack_SlackCreateInput>;
-	update?: Maybe<Slack_SlackUpdateInput>;
-};
-
-export type IntegrationSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	continuousIntegrationProvider?: Maybe<SortOrder>;
-	projectManagementProvider?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	continuousIntegration?: Maybe<IntegrationDetailSort>;
-	projectManagement?: Maybe<IntegrationDetailSort>;
-	slack?: Maybe<SlackSort>;
-	project?: Maybe<ProjectSort>;
-};
-
-/** Integration subscription filter */
-export type IntegrationSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<IntegrationFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** Integration update input */
-export type IntegrationUpdateByFilterInput = {
-	continuousIntegrationProvider?: Maybe<
-		Array<Maybe<UpdateByFilterStringSwitchInput>>
-	>;
-	projectManagementProvider?: Maybe<
-		Array<Maybe<UpdateByFilterStringSwitchInput>>
-	>;
-};
-
-/** Integration update input */
-export type IntegrationUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationUpdateRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementUpdateRelationInput>;
-	slack?: Maybe<IntegrationSlackUpdateRelationInput>;
-	project?: Maybe<IntegrationProjectUpdateRelationInput>;
-};
-
 export type IntPredicate = {
 	equals?: Maybe<Scalars['Int']>;
 	not_equals?: Maybe<Scalars['Int']>;
@@ -5199,62 +4336,214 @@ export type LocateFunctionArguments = {
 	pos?: Maybe<Scalars['Int']>;
 };
 
-/** Configuration create input from logInFlow */
-export type LogInFlow_ConfigurationCreateInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
-	inviteLink: Scalars['String'];
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowRelationInput>;
-	/**
-	 * This defines whether the cron job that triggers test runs, should continue for
-	 * this project. It is represented as test runs 'on'/'off' in the webapp.
-	 */
-	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
-	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
-	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
-	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
-	billingInterval?: Maybe<Scalars['String']>;
-	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-};
-
-/** Configuration update input from logInFlow */
-export type LogInFlow_ConfigurationUpdateInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
-	inviteLink?: Maybe<Scalars['String']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowUpdateRelationInput>;
-	/**
-	 * This defines whether the cron job that triggers test runs, should continue for
-	 * this project. It is represented as test runs 'on'/'off' in the webapp.
-	 */
-	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
-	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
-	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
-	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
-	billingInterval?: Maybe<Scalars['String']>;
-	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-};
-
 /** LoginResponse */
 export type LoginResponse = {
 	__typename?: 'LoginResponse';
 	success?: Maybe<Scalars['Boolean']>;
 	auth?: Maybe<Auth>;
 	workspaces?: Maybe<Array<WorkspaceInfo>>;
+};
+
+/** Configuration create input from logInStory */
+export type LogInStory_ConfigurationCreateInput = {
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink: Scalars['String'];
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * This defines whether the cron job that triggers test runs, should continue for
+	 * this project. It is represented as test runs 'on'/'off' in the webapp.
+	 */
+	activeTestRuns?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
+	plan?: Maybe<Scalars['String']>;
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
+	subscriptionStartedDate?: Maybe<Scalars['Date']>;
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
+	subscriptionStatus?: Maybe<Scalars['String']>;
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
+	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
+};
+
+/** Configuration update input from logInStory */
+export type LogInStory_ConfigurationUpdateInput = {
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * This defines whether the cron job that triggers test runs, should continue for
+	 * this project. It is represented as test runs 'on'/'off' in the webapp.
+	 */
+	activeTestRuns?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
+	plan?: Maybe<Scalars['String']>;
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
+	subscriptionStartedDate?: Maybe<Scalars['Date']>;
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
+	subscriptionStatus?: Maybe<Scalars['String']>;
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
+	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
+};
+
+/** UserStory create input from logInStoryConfig */
+export type LogInStoryConfig_UserStoryCreateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
+};
+
+/** UserStory update input from logInStoryConfig */
+export type LogInStoryConfig_UserStoryUpdateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created?: Maybe<Scalars['String']>;
+	video?: Maybe<UserStoryVideoUpdateRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 };
 
 /** Project create input from members */
@@ -5265,13 +4554,16 @@ export type Members_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -5306,6 +4598,7 @@ export type Metric = {
 	updatedFlows?: Maybe<Scalars['Int']>;
 	/** The number of flows that didn't get created or assigned to a user story. */
 	ignoredFlows?: Maybe<Scalars['Int']>;
+	/** The project these metrics are stored for. */
 	project?: Maybe<Project>;
 	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
 	calculatedFor?: Maybe<Scalars['Date']>;
@@ -5551,13 +4844,16 @@ export type Metrics_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -5569,13 +4865,16 @@ export type Metrics_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
-	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -5747,15 +5046,6 @@ export type Mutation = {
 	configurationUpdateByFilter: ConfigurationManyResponse;
 	/** @deprecated No longer supported. Use `system.deploy` instead. */
 	deploy?: Maybe<Scalars['Boolean']>;
-	environmentCreate: Environment;
-	environmentCreateMany: EnvironmentManyResponse;
-	environmentDelete?: Maybe<SuccessResponse>;
-	environmentDeleteByFilter?: Maybe<SuccessResponse>;
-	environmentDestroy?: Maybe<SuccessResponse>;
-	environmentDestroyByFilter?: Maybe<SuccessResponse>;
-	environmentRestore: Environment;
-	environmentUpdate: Environment;
-	environmentUpdateByFilter: EnvironmentManyResponse;
 	environmentVariableCreate: EnvironmentVariable;
 	environmentVariableCreateMany: EnvironmentVariableManyResponse;
 	environmentVariableDelete?: Maybe<SuccessResponse>;
@@ -5765,15 +5055,6 @@ export type Mutation = {
 	environmentVariableRestore: EnvironmentVariable;
 	environmentVariableUpdate: EnvironmentVariable;
 	environmentVariableUpdateByFilter: EnvironmentVariableManyResponse;
-	errorCreate: Error;
-	errorCreateMany: ErrorManyResponse;
-	errorDelete?: Maybe<SuccessResponse>;
-	errorDeleteByFilter?: Maybe<SuccessResponse>;
-	errorDestroy?: Maybe<SuccessResponse>;
-	errorDestroyByFilter?: Maybe<SuccessResponse>;
-	errorRestore: Error;
-	errorUpdate: Error;
-	errorUpdateByFilter: ErrorManyResponse;
 	/** @deprecated No longer supported. Use `system.fieldCreate` instead. */
 	fieldCreate: TableField;
 	/** @deprecated No longer supported. Use `system.fieldDelete` instead. */
@@ -5791,27 +5072,18 @@ export type Mutation = {
 	fileRestore: File;
 	fileUpdate: File;
 	fileUpdateByFilter: FileManyResponse;
+	flowCreate: Flow;
+	flowCreateMany: FlowManyResponse;
+	flowDelete?: Maybe<SuccessResponse>;
+	flowDeleteByFilter?: Maybe<SuccessResponse>;
+	flowDestroy?: Maybe<SuccessResponse>;
+	flowDestroyByFilter?: Maybe<SuccessResponse>;
+	flowRestore: Flow;
+	flowUpdate: Flow;
+	flowUpdateByFilter: FlowManyResponse;
 	indexCreate: TableIndex;
 	indexDelete?: Maybe<SuccessResponse>;
 	indexUpdate: TableIndex;
-	integrationCreate: Integration;
-	integrationCreateMany: IntegrationManyResponse;
-	integrationDelete?: Maybe<SuccessResponse>;
-	integrationDeleteByFilter?: Maybe<SuccessResponse>;
-	integrationDestroy?: Maybe<SuccessResponse>;
-	integrationDestroyByFilter?: Maybe<SuccessResponse>;
-	integrationDetailCreate: IntegrationDetail;
-	integrationDetailCreateMany: IntegrationDetailManyResponse;
-	integrationDetailDelete?: Maybe<SuccessResponse>;
-	integrationDetailDeleteByFilter?: Maybe<SuccessResponse>;
-	integrationDetailDestroy?: Maybe<SuccessResponse>;
-	integrationDetailDestroyByFilter?: Maybe<SuccessResponse>;
-	integrationDetailRestore: IntegrationDetail;
-	integrationDetailUpdate: IntegrationDetail;
-	integrationDetailUpdateByFilter: IntegrationDetailManyResponse;
-	integrationRestore: Integration;
-	integrationUpdate: Integration;
-	integrationUpdateByFilter: IntegrationManyResponse;
 	inviteMembers: Array<Maybe<TeamInvitation>>;
 	/** @deprecated No longer supported. Use `system.invoke` instead. */
 	invoke?: Maybe<InvokeFunctionResponse>;
@@ -5835,15 +5107,6 @@ export type Mutation = {
 	projectRestore: Project;
 	projectUpdate: Project;
 	projectUpdateByFilter: ProjectManyResponse;
-	recordingCreate: Recording;
-	recordingCreateMany: RecordingManyResponse;
-	recordingDelete?: Maybe<SuccessResponse>;
-	recordingDeleteByFilter?: Maybe<SuccessResponse>;
-	recordingDestroy?: Maybe<SuccessResponse>;
-	recordingDestroyByFilter?: Maybe<SuccessResponse>;
-	recordingRestore: Recording;
-	recordingUpdate: Recording;
-	recordingUpdateByFilter: RecordingManyResponse;
 	releaseCreate: Release;
 	releaseCreateMany: ReleaseManyResponse;
 	releaseDelete?: Maybe<SuccessResponse>;
@@ -5862,112 +5125,17 @@ export type Mutation = {
 	roleRestore: Role;
 	roleUpdate: Role;
 	roleUpdateByFilter: RoleManyResponse;
-	seleniumClickCreate: SeleniumClick;
-	seleniumClickCreateMany: SeleniumClickManyResponse;
-	seleniumClickDelete?: Maybe<SuccessResponse>;
-	seleniumClickDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumClickDestroy?: Maybe<SuccessResponse>;
-	seleniumClickDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumClickRestore: SeleniumClick;
-	seleniumClickUpdate: SeleniumClick;
-	seleniumCommandCreate: SeleniumCommand;
-	seleniumCommandCreateMany: SeleniumCommandManyResponse;
-	seleniumCommandDelete?: Maybe<SuccessResponse>;
-	seleniumCommandDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumCommandDestroy?: Maybe<SuccessResponse>;
-	seleniumCommandDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumCommandRestore: SeleniumCommand;
-	seleniumCommandUpdate: SeleniumCommand;
-	seleniumCommandUpdateByFilter: SeleniumCommandManyResponse;
-	seleniumDragndropCreate: SeleniumDragndrop;
-	seleniumDragndropCreateMany: SeleniumDragndropManyResponse;
-	seleniumDragndropDelete?: Maybe<SuccessResponse>;
-	seleniumDragndropDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumDragndropDestroy?: Maybe<SuccessResponse>;
-	seleniumDragndropDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumDragndropRestore: SeleniumDragndrop;
-	seleniumDragndropUpdate: SeleniumDragndrop;
-	seleniumGroupCreate: SeleniumGroup;
-	seleniumGroupCreateMany: SeleniumGroupManyResponse;
-	seleniumGroupDelete?: Maybe<SuccessResponse>;
-	seleniumGroupDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumGroupDestroy?: Maybe<SuccessResponse>;
-	seleniumGroupDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumGroupRestore: SeleniumGroup;
-	seleniumGroupUpdate: SeleniumGroup;
-	seleniumGroupUpdateByFilter: SeleniumGroupManyResponse;
-	seleniumOpenCreate: SeleniumOpen;
-	seleniumOpenCreateMany: SeleniumOpenManyResponse;
-	seleniumOpenDelete?: Maybe<SuccessResponse>;
-	seleniumOpenDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumOpenDestroy?: Maybe<SuccessResponse>;
-	seleniumOpenDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumOpenRestore: SeleniumOpen;
-	seleniumOpenUpdate: SeleniumOpen;
-	seleniumOpenUpdateByFilter: SeleniumOpenManyResponse;
-	seleniumPointCreate: SeleniumPoint;
-	seleniumPointCreateMany: SeleniumPointManyResponse;
-	seleniumPointDelete?: Maybe<SuccessResponse>;
-	seleniumPointDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumPointDestroy?: Maybe<SuccessResponse>;
-	seleniumPointDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumPointRestore: SeleniumPoint;
-	seleniumPointUpdate: SeleniumPoint;
-	seleniumPointUpdateByFilter: SeleniumPointManyResponse;
-	seleniumScriptCreate: SeleniumScript;
-	seleniumScriptCreateMany: SeleniumScriptManyResponse;
-	seleniumScriptDelete?: Maybe<SuccessResponse>;
-	seleniumScriptDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumScriptDestroy?: Maybe<SuccessResponse>;
-	seleniumScriptDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumScriptRestore: SeleniumScript;
-	seleniumScriptUpdate: SeleniumScript;
-	seleniumScriptUpdateByFilter: SeleniumScriptManyResponse;
-	seleniumSelectorCreate: SeleniumSelector;
-	seleniumSelectorCreateMany: SeleniumSelectorManyResponse;
-	seleniumSelectorDelete?: Maybe<SuccessResponse>;
-	seleniumSelectorDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumSelectorDestroy?: Maybe<SuccessResponse>;
-	seleniumSelectorDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumSelectorRestore: SeleniumSelector;
-	seleniumSelectorUpdate: SeleniumSelector;
-	seleniumSelectorUpdateByFilter: SeleniumSelectorManyResponse;
-	seleniumSetViewportSizeCreate: SeleniumSetViewportSize;
-	seleniumSetViewportSizeCreateMany: SeleniumSetViewportSizeManyResponse;
-	seleniumSetViewportSizeDelete?: Maybe<SuccessResponse>;
-	seleniumSetViewportSizeDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumSetViewportSizeDestroy?: Maybe<SuccessResponse>;
-	seleniumSetViewportSizeDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumSetViewportSizeRestore: SeleniumSetViewportSize;
-	seleniumSetViewportSizeUpdate: SeleniumSetViewportSize;
-	seleniumTargetCreate: SeleniumTarget;
-	seleniumTargetCreateMany: SeleniumTargetManyResponse;
-	seleniumTargetDelete?: Maybe<SuccessResponse>;
-	seleniumTargetDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumTargetDestroy?: Maybe<SuccessResponse>;
-	seleniumTargetDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumTargetRestore: SeleniumTarget;
-	seleniumTargetUpdate: SeleniumTarget;
-	seleniumTypeCreate: SeleniumType;
-	seleniumTypeCreateMany: SeleniumTypeManyResponse;
-	seleniumTypeDelete?: Maybe<SuccessResponse>;
-	seleniumTypeDeleteByFilter?: Maybe<SuccessResponse>;
-	seleniumTypeDestroy?: Maybe<SuccessResponse>;
-	seleniumTypeDestroyByFilter?: Maybe<SuccessResponse>;
-	seleniumTypeRestore: SeleniumType;
-	seleniumTypeUpdate: SeleniumType;
-	seleniumTypeUpdateByFilter: SeleniumTypeManyResponse;
+	scriptCommandCreate: ScriptCommand;
+	scriptCommandCreateMany: ScriptCommandManyResponse;
+	scriptCommandDelete?: Maybe<SuccessResponse>;
+	scriptCommandDeleteByFilter?: Maybe<SuccessResponse>;
+	scriptCommandDestroy?: Maybe<SuccessResponse>;
+	scriptCommandDestroyByFilter?: Maybe<SuccessResponse>;
+	scriptCommandRestore: ScriptCommand;
+	scriptCommandUpdate: ScriptCommand;
+	scriptCommandUpdateByFilter: ScriptCommandManyResponse;
 	sendInvitationTo8base?: Maybe<SuccessResponse>;
 	settingsUpdate: Setting;
-	slackCreate: Slack;
-	slackCreateMany: SlackManyResponse;
-	slackDelete?: Maybe<SuccessResponse>;
-	slackDeleteByFilter?: Maybe<SuccessResponse>;
-	slackDestroy?: Maybe<SuccessResponse>;
-	slackDestroyByFilter?: Maybe<SuccessResponse>;
-	slackRestore: Slack;
-	slackUpdate: Slack;
-	slackUpdateByFilter: SlackManyResponse;
 	system?: Maybe<SystemMutation>;
 	/** @deprecated No longer supported. Use `system.tableCreate` instead. */
 	tableCreate: Table;
@@ -6345,51 +5513,6 @@ export type MutationDeployArgs = {
 	data?: Maybe<DeployingBuildInput>;
 };
 
-export type MutationEnvironmentCreateArgs = {
-	data: EnvironmentCreateInput;
-};
-
-export type MutationEnvironmentCreateManyArgs = {
-	data: Array<Maybe<EnvironmentCreateManyInput>>;
-};
-
-export type MutationEnvironmentDeleteArgs = {
-	data?: Maybe<EnvironmentDeleteInput>;
-	filter?: Maybe<EnvironmentKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationEnvironmentDeleteByFilterArgs = {
-	filter: EnvironmentFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationEnvironmentDestroyArgs = {
-	filter?: Maybe<EnvironmentKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationEnvironmentDestroyByFilterArgs = {
-	filter: EnvironmentFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationEnvironmentRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationEnvironmentUpdateArgs = {
-	data: EnvironmentUpdateInput;
-	filter?: Maybe<EnvironmentKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationEnvironmentUpdateByFilterArgs = {
-	data: EnvironmentUpdateByFilterInput;
-	filter?: Maybe<EnvironmentFilter>;
-};
-
 export type MutationEnvironmentVariableCreateArgs = {
 	data: EnvironmentVariableCreateInput;
 };
@@ -6433,51 +5556,6 @@ export type MutationEnvironmentVariableUpdateArgs = {
 export type MutationEnvironmentVariableUpdateByFilterArgs = {
 	data: EnvironmentVariableUpdateByFilterInput;
 	filter?: Maybe<EnvironmentVariableFilter>;
-};
-
-export type MutationErrorCreateArgs = {
-	data: ErrorCreateInput;
-};
-
-export type MutationErrorCreateManyArgs = {
-	data: Array<Maybe<ErrorCreateManyInput>>;
-};
-
-export type MutationErrorDeleteArgs = {
-	data?: Maybe<ErrorDeleteInput>;
-	filter?: Maybe<ErrorKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationErrorDeleteByFilterArgs = {
-	filter: ErrorFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationErrorDestroyArgs = {
-	filter?: Maybe<ErrorKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationErrorDestroyByFilterArgs = {
-	filter: ErrorFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationErrorRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationErrorUpdateArgs = {
-	data: ErrorUpdateInput;
-	filter?: Maybe<ErrorKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationErrorUpdateByFilterArgs = {
-	data: ErrorUpdateByFilterInput;
-	filter?: Maybe<ErrorFilter>;
 };
 
 export type MutationFieldCreateArgs = {
@@ -6541,6 +5619,51 @@ export type MutationFileUpdateByFilterArgs = {
 	filter?: Maybe<FileFilter>;
 };
 
+export type MutationFlowCreateArgs = {
+	data: FlowCreateInput;
+};
+
+export type MutationFlowCreateManyArgs = {
+	data: Array<Maybe<FlowCreateManyInput>>;
+};
+
+export type MutationFlowDeleteArgs = {
+	data?: Maybe<FlowDeleteInput>;
+	filter?: Maybe<FlowKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationFlowDeleteByFilterArgs = {
+	filter: FlowFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationFlowDestroyArgs = {
+	filter?: Maybe<FlowKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationFlowDestroyByFilterArgs = {
+	filter: FlowFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationFlowRestoreArgs = {
+	id: Scalars['String'];
+};
+
+export type MutationFlowUpdateArgs = {
+	data: FlowUpdateInput;
+	filter?: Maybe<FlowKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+	destroyDetached?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationFlowUpdateByFilterArgs = {
+	data: FlowUpdateByFilterInput;
+	filter?: Maybe<FlowFilter>;
+};
+
 export type MutationIndexCreateArgs = {
 	data: IndexCreateInput;
 };
@@ -6551,96 +5674,6 @@ export type MutationIndexDeleteArgs = {
 
 export type MutationIndexUpdateArgs = {
 	data: IndexUpdateInput;
-};
-
-export type MutationIntegrationCreateArgs = {
-	data: IntegrationCreateInput;
-};
-
-export type MutationIntegrationCreateManyArgs = {
-	data: Array<Maybe<IntegrationCreateManyInput>>;
-};
-
-export type MutationIntegrationDeleteArgs = {
-	data?: Maybe<IntegrationDeleteInput>;
-	filter?: Maybe<IntegrationKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDeleteByFilterArgs = {
-	filter: IntegrationFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDestroyArgs = {
-	filter?: Maybe<IntegrationKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDestroyByFilterArgs = {
-	filter: IntegrationFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDetailCreateArgs = {
-	data: IntegrationDetailCreateInput;
-};
-
-export type MutationIntegrationDetailCreateManyArgs = {
-	data: Array<Maybe<IntegrationDetailCreateManyInput>>;
-};
-
-export type MutationIntegrationDetailDeleteArgs = {
-	data?: Maybe<IntegrationDetailDeleteInput>;
-	filter?: Maybe<IntegrationDetailKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDetailDeleteByFilterArgs = {
-	filter: IntegrationDetailFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDetailDestroyArgs = {
-	filter?: Maybe<IntegrationDetailKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDetailDestroyByFilterArgs = {
-	filter: IntegrationDetailFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDetailRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationIntegrationDetailUpdateArgs = {
-	data: IntegrationDetailUpdateInput;
-	filter?: Maybe<IntegrationDetailKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationDetailUpdateByFilterArgs = {
-	data: IntegrationDetailUpdateByFilterInput;
-	filter?: Maybe<IntegrationDetailFilter>;
-};
-
-export type MutationIntegrationRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationIntegrationUpdateArgs = {
-	data: IntegrationUpdateInput;
-	filter?: Maybe<IntegrationKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationIntegrationUpdateByFilterArgs = {
-	data: IntegrationUpdateByFilterInput;
-	filter?: Maybe<IntegrationFilter>;
 };
 
 export type MutationInviteMembersArgs = {
@@ -6742,51 +5775,6 @@ export type MutationProjectUpdateByFilterArgs = {
 	filter?: Maybe<ProjectFilter>;
 };
 
-export type MutationRecordingCreateArgs = {
-	data: RecordingCreateInput;
-};
-
-export type MutationRecordingCreateManyArgs = {
-	data: Array<Maybe<RecordingCreateManyInput>>;
-};
-
-export type MutationRecordingDeleteArgs = {
-	data?: Maybe<RecordingDeleteInput>;
-	filter?: Maybe<RecordingKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationRecordingDeleteByFilterArgs = {
-	filter: RecordingFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationRecordingDestroyArgs = {
-	filter?: Maybe<RecordingKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationRecordingDestroyByFilterArgs = {
-	filter: RecordingFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationRecordingRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationRecordingUpdateArgs = {
-	data: RecordingUpdateInput;
-	filter?: Maybe<RecordingKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationRecordingUpdateByFilterArgs = {
-	data: RecordingUpdateByFilterInput;
-	filter?: Maybe<RecordingFilter>;
-};
-
 export type MutationReleaseCreateArgs = {
 	data: ReleaseCreateInput;
 };
@@ -6877,479 +5865,49 @@ export type MutationRoleUpdateByFilterArgs = {
 	filter?: Maybe<RoleFilter>;
 };
 
-export type MutationSeleniumClickCreateArgs = {
-	data: SeleniumClickCreateInput;
+export type MutationScriptCommandCreateArgs = {
+	data: ScriptCommandCreateInput;
 };
 
-export type MutationSeleniumClickCreateManyArgs = {
-	data: Array<Maybe<SeleniumClickCreateManyInput>>;
+export type MutationScriptCommandCreateManyArgs = {
+	data: Array<Maybe<ScriptCommandCreateManyInput>>;
 };
 
-export type MutationSeleniumClickDeleteArgs = {
-	data?: Maybe<SeleniumClickDeleteInput>;
-	filter?: Maybe<SeleniumClickKeyFilter>;
+export type MutationScriptCommandDeleteArgs = {
+	data?: Maybe<ScriptCommandDeleteInput>;
+	filter?: Maybe<ScriptCommandKeyFilter>;
 	force?: Maybe<Scalars['Boolean']>;
 };
 
-export type MutationSeleniumClickDeleteByFilterArgs = {
-	filter: SeleniumClickFilter;
+export type MutationScriptCommandDeleteByFilterArgs = {
+	filter: ScriptCommandFilter;
 	force?: Maybe<Scalars['Boolean']>;
 };
 
-export type MutationSeleniumClickDestroyArgs = {
-	filter?: Maybe<SeleniumClickKeyFilter>;
+export type MutationScriptCommandDestroyArgs = {
+	filter?: Maybe<ScriptCommandKeyFilter>;
 	force?: Maybe<Scalars['Boolean']>;
 };
 
-export type MutationSeleniumClickDestroyByFilterArgs = {
-	filter: SeleniumClickFilter;
+export type MutationScriptCommandDestroyByFilterArgs = {
+	filter: ScriptCommandFilter;
 	force?: Maybe<Scalars['Boolean']>;
 };
 
-export type MutationSeleniumClickRestoreArgs = {
+export type MutationScriptCommandRestoreArgs = {
 	id: Scalars['String'];
 };
 
-export type MutationSeleniumClickUpdateArgs = {
-	data: SeleniumClickUpdateInput;
-	filter?: Maybe<SeleniumClickKeyFilter>;
+export type MutationScriptCommandUpdateArgs = {
+	data: ScriptCommandUpdateInput;
+	filter?: Maybe<ScriptCommandKeyFilter>;
 	force?: Maybe<Scalars['Boolean']>;
 	destroyDetached?: Maybe<Scalars['Boolean']>;
 };
 
-export type MutationSeleniumCommandCreateArgs = {
-	data: SeleniumCommandCreateInput;
-};
-
-export type MutationSeleniumCommandCreateManyArgs = {
-	data: Array<Maybe<SeleniumCommandCreateManyInput>>;
-};
-
-export type MutationSeleniumCommandDeleteArgs = {
-	data?: Maybe<SeleniumCommandDeleteInput>;
-	filter?: Maybe<SeleniumCommandKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumCommandDeleteByFilterArgs = {
-	filter: SeleniumCommandFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumCommandDestroyArgs = {
-	filter?: Maybe<SeleniumCommandKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumCommandDestroyByFilterArgs = {
-	filter: SeleniumCommandFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumCommandRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumCommandUpdateArgs = {
-	data: SeleniumCommandUpdateInput;
-	filter?: Maybe<SeleniumCommandKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumCommandUpdateByFilterArgs = {
-	data: SeleniumCommandUpdateByFilterInput;
-	filter?: Maybe<SeleniumCommandFilter>;
-};
-
-export type MutationSeleniumDragndropCreateArgs = {
-	data: SeleniumDragndropCreateInput;
-};
-
-export type MutationSeleniumDragndropCreateManyArgs = {
-	data: Array<Maybe<SeleniumDragndropCreateManyInput>>;
-};
-
-export type MutationSeleniumDragndropDeleteArgs = {
-	data?: Maybe<SeleniumDragndropDeleteInput>;
-	filter?: Maybe<SeleniumDragndropKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumDragndropDeleteByFilterArgs = {
-	filter: SeleniumDragndropFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumDragndropDestroyArgs = {
-	filter?: Maybe<SeleniumDragndropKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumDragndropDestroyByFilterArgs = {
-	filter: SeleniumDragndropFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumDragndropRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumDragndropUpdateArgs = {
-	data: SeleniumDragndropUpdateInput;
-	filter?: Maybe<SeleniumDragndropKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumGroupCreateArgs = {
-	data: SeleniumGroupCreateInput;
-};
-
-export type MutationSeleniumGroupCreateManyArgs = {
-	data: Array<Maybe<SeleniumGroupCreateManyInput>>;
-};
-
-export type MutationSeleniumGroupDeleteArgs = {
-	data?: Maybe<SeleniumGroupDeleteInput>;
-	filter?: Maybe<SeleniumGroupKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumGroupDeleteByFilterArgs = {
-	filter: SeleniumGroupFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumGroupDestroyArgs = {
-	filter?: Maybe<SeleniumGroupKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumGroupDestroyByFilterArgs = {
-	filter: SeleniumGroupFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumGroupRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumGroupUpdateArgs = {
-	data: SeleniumGroupUpdateInput;
-	filter?: Maybe<SeleniumGroupKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumGroupUpdateByFilterArgs = {
-	data: SeleniumGroupUpdateByFilterInput;
-	filter?: Maybe<SeleniumGroupFilter>;
-};
-
-export type MutationSeleniumOpenCreateArgs = {
-	data: SeleniumOpenCreateInput;
-};
-
-export type MutationSeleniumOpenCreateManyArgs = {
-	data: Array<Maybe<SeleniumOpenCreateManyInput>>;
-};
-
-export type MutationSeleniumOpenDeleteArgs = {
-	data?: Maybe<SeleniumOpenDeleteInput>;
-	filter?: Maybe<SeleniumOpenKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumOpenDeleteByFilterArgs = {
-	filter: SeleniumOpenFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumOpenDestroyArgs = {
-	filter?: Maybe<SeleniumOpenKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumOpenDestroyByFilterArgs = {
-	filter: SeleniumOpenFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumOpenRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumOpenUpdateArgs = {
-	data: SeleniumOpenUpdateInput;
-	filter?: Maybe<SeleniumOpenKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumOpenUpdateByFilterArgs = {
-	data: SeleniumOpenUpdateByFilterInput;
-	filter?: Maybe<SeleniumOpenFilter>;
-};
-
-export type MutationSeleniumPointCreateArgs = {
-	data: SeleniumPointCreateInput;
-};
-
-export type MutationSeleniumPointCreateManyArgs = {
-	data: Array<Maybe<SeleniumPointCreateManyInput>>;
-};
-
-export type MutationSeleniumPointDeleteArgs = {
-	data?: Maybe<SeleniumPointDeleteInput>;
-	filter?: Maybe<SeleniumPointKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumPointDeleteByFilterArgs = {
-	filter: SeleniumPointFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumPointDestroyArgs = {
-	filter?: Maybe<SeleniumPointKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumPointDestroyByFilterArgs = {
-	filter: SeleniumPointFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumPointRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumPointUpdateArgs = {
-	data: SeleniumPointUpdateInput;
-	filter?: Maybe<SeleniumPointKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumPointUpdateByFilterArgs = {
-	data: SeleniumPointUpdateByFilterInput;
-	filter?: Maybe<SeleniumPointFilter>;
-};
-
-export type MutationSeleniumScriptCreateArgs = {
-	data: SeleniumScriptCreateInput;
-};
-
-export type MutationSeleniumScriptCreateManyArgs = {
-	data: Array<Maybe<SeleniumScriptCreateManyInput>>;
-};
-
-export type MutationSeleniumScriptDeleteArgs = {
-	data?: Maybe<SeleniumScriptDeleteInput>;
-	filter?: Maybe<SeleniumScriptKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumScriptDeleteByFilterArgs = {
-	filter: SeleniumScriptFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumScriptDestroyArgs = {
-	filter?: Maybe<SeleniumScriptKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumScriptDestroyByFilterArgs = {
-	filter: SeleniumScriptFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumScriptRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumScriptUpdateArgs = {
-	data: SeleniumScriptUpdateInput;
-	filter?: Maybe<SeleniumScriptKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumScriptUpdateByFilterArgs = {
-	data: SeleniumScriptUpdateByFilterInput;
-	filter?: Maybe<SeleniumScriptFilter>;
-};
-
-export type MutationSeleniumSelectorCreateArgs = {
-	data: SeleniumSelectorCreateInput;
-};
-
-export type MutationSeleniumSelectorCreateManyArgs = {
-	data: Array<Maybe<SeleniumSelectorCreateManyInput>>;
-};
-
-export type MutationSeleniumSelectorDeleteArgs = {
-	data?: Maybe<SeleniumSelectorDeleteInput>;
-	filter?: Maybe<SeleniumSelectorKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSelectorDeleteByFilterArgs = {
-	filter: SeleniumSelectorFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSelectorDestroyArgs = {
-	filter?: Maybe<SeleniumSelectorKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSelectorDestroyByFilterArgs = {
-	filter: SeleniumSelectorFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSelectorRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumSelectorUpdateArgs = {
-	data: SeleniumSelectorUpdateInput;
-	filter?: Maybe<SeleniumSelectorKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSelectorUpdateByFilterArgs = {
-	data: SeleniumSelectorUpdateByFilterInput;
-	filter?: Maybe<SeleniumSelectorFilter>;
-};
-
-export type MutationSeleniumSetViewportSizeCreateArgs = {
-	data: SeleniumSetViewportSizeCreateInput;
-};
-
-export type MutationSeleniumSetViewportSizeCreateManyArgs = {
-	data: Array<Maybe<SeleniumSetViewportSizeCreateManyInput>>;
-};
-
-export type MutationSeleniumSetViewportSizeDeleteArgs = {
-	data?: Maybe<SeleniumSetViewportSizeDeleteInput>;
-	filter?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSetViewportSizeDeleteByFilterArgs = {
-	filter: SeleniumSetViewportSizeFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSetViewportSizeDestroyArgs = {
-	filter?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSetViewportSizeDestroyByFilterArgs = {
-	filter: SeleniumSetViewportSizeFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumSetViewportSizeRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumSetViewportSizeUpdateArgs = {
-	data: SeleniumSetViewportSizeUpdateInput;
-	filter?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTargetCreateArgs = {
-	data: SeleniumTargetCreateInput;
-};
-
-export type MutationSeleniumTargetCreateManyArgs = {
-	data: Array<Maybe<SeleniumTargetCreateManyInput>>;
-};
-
-export type MutationSeleniumTargetDeleteArgs = {
-	data?: Maybe<SeleniumTargetDeleteInput>;
-	filter?: Maybe<SeleniumTargetKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTargetDeleteByFilterArgs = {
-	filter: SeleniumTargetFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTargetDestroyArgs = {
-	filter?: Maybe<SeleniumTargetKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTargetDestroyByFilterArgs = {
-	filter: SeleniumTargetFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTargetRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumTargetUpdateArgs = {
-	data: SeleniumTargetUpdateInput;
-	filter?: Maybe<SeleniumTargetKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTypeCreateArgs = {
-	data: SeleniumTypeCreateInput;
-};
-
-export type MutationSeleniumTypeCreateManyArgs = {
-	data: Array<Maybe<SeleniumTypeCreateManyInput>>;
-};
-
-export type MutationSeleniumTypeDeleteArgs = {
-	data?: Maybe<SeleniumTypeDeleteInput>;
-	filter?: Maybe<SeleniumTypeKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTypeDeleteByFilterArgs = {
-	filter: SeleniumTypeFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTypeDestroyArgs = {
-	filter?: Maybe<SeleniumTypeKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTypeDestroyByFilterArgs = {
-	filter: SeleniumTypeFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTypeRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSeleniumTypeUpdateArgs = {
-	data: SeleniumTypeUpdateInput;
-	filter?: Maybe<SeleniumTypeKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSeleniumTypeUpdateByFilterArgs = {
-	data: SeleniumTypeUpdateByFilterInput;
-	filter?: Maybe<SeleniumTypeFilter>;
+export type MutationScriptCommandUpdateByFilterArgs = {
+	data: ScriptCommandUpdateByFilterInput;
+	filter?: Maybe<ScriptCommandFilter>;
 };
 
 export type MutationSendInvitationTo8baseArgs = {
@@ -7358,51 +5916,6 @@ export type MutationSendInvitationTo8baseArgs = {
 
 export type MutationSettingsUpdateArgs = {
 	data: SettingUpdateInput;
-};
-
-export type MutationSlackCreateArgs = {
-	data: SlackCreateInput;
-};
-
-export type MutationSlackCreateManyArgs = {
-	data: Array<Maybe<SlackCreateManyInput>>;
-};
-
-export type MutationSlackDeleteArgs = {
-	data?: Maybe<SlackDeleteInput>;
-	filter?: Maybe<SlackKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSlackDeleteByFilterArgs = {
-	filter: SlackFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSlackDestroyArgs = {
-	filter?: Maybe<SlackKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSlackDestroyByFilterArgs = {
-	filter: SlackFilter;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSlackRestoreArgs = {
-	id: Scalars['String'];
-};
-
-export type MutationSlackUpdateArgs = {
-	data: SlackUpdateInput;
-	filter?: Maybe<SlackKeyFilter>;
-	force?: Maybe<Scalars['Boolean']>;
-	destroyDetached?: Maybe<Scalars['Boolean']>;
-};
-
-export type MutationSlackUpdateByFilterArgs = {
-	data: SlackUpdateByFilterInput;
-	filter?: Maybe<SlackFilter>;
 };
 
 export type MutationTableCreateArgs = {
@@ -7762,28 +6275,6 @@ export enum NumberTypeFormatEnum {
 	Scientific = 'SCIENTIFIC',
 }
 
-/** SeleniumCommand create input from open */
-export type Open_SeleniumCommandCreateInput = {
-	open?: Maybe<SeleniumCommandOpenRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeRelationInput>;
-	click?: Maybe<SeleniumCommandClickRelationInput>;
-	type?: Maybe<SeleniumCommandTypeRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupRelationInput>;
-};
-
-/** SeleniumCommand update input from open */
-export type Open_SeleniumCommandUpdateInput = {
-	open?: Maybe<SeleniumCommandOpenUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeUpdateRelationInput>;
-	click?: Maybe<SeleniumCommandClickUpdateRelationInput>;
-	type?: Maybe<SeleniumCommandTypeUpdateRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropUpdateRelationInput>;
-	sIndex?: Maybe<Scalars['Int']>;
-	group?: Maybe<SeleniumCommandGroupUpdateRelationInput>;
-};
-
 export type OrganizationUserInvitationResponse = {
 	__typename?: 'OrganizationUserInvitationResponse';
 	invitationId: Scalars['String'];
@@ -7974,30 +6465,15 @@ export type PermissionsData = {
 	CiCdMigrations?: Maybe<PermissionsDataCiCdMigrations>;
 	Project?: Maybe<PermissionsDataProject>;
 	Configuration?: Maybe<PermissionsDataConfiguration>;
-	Integration?: Maybe<PermissionsDataIntegration>;
-	IntegrationDetails?: Maybe<PermissionsDataIntegrationDetails>;
-	Slack?: Maybe<PermissionsDataSlack>;
 	Activity?: Maybe<PermissionsDataActivity>;
 	UserStory?: Maybe<PermissionsDataUserStory>;
-	Recording?: Maybe<PermissionsDataRecording>;
-	Environment?: Maybe<PermissionsDataEnvironment>;
+	Flow?: Maybe<PermissionsDataFlow>;
 	TestOutcome?: Maybe<PermissionsDataTestOutcome>;
 	TestRun?: Maybe<PermissionsDataTestRun>;
 	Release?: Maybe<PermissionsDataRelease>;
 	AuthenticationToken?: Maybe<PermissionsDataAuthenticationToken>;
-	SeleniumScript?: Maybe<PermissionsDataSeleniumScript>;
-	SeleniumOpen?: Maybe<PermissionsDataSeleniumOpen>;
-	SeleniumSetViewportSize?: Maybe<PermissionsDataSeleniumSetViewportSize>;
-	SeleniumClick?: Maybe<PermissionsDataSeleniumClick>;
-	SeleniumTarget?: Maybe<PermissionsDataSeleniumTarget>;
-	SeleniumType?: Maybe<PermissionsDataSeleniumType>;
-	SeleniumDragndrop?: Maybe<PermissionsDataSeleniumDragndrop>;
-	SeleniumPoint?: Maybe<PermissionsDataSeleniumPoint>;
-	SeleniumCommand?: Maybe<PermissionsDataSeleniumCommand>;
-	SeleniumSelector?: Maybe<PermissionsDataSeleniumSelector>;
-	SeleniumGroup?: Maybe<PermissionsDataSeleniumGroup>;
-	Error?: Maybe<PermissionsDataError>;
 	Metrics?: Maybe<PermissionsDataMetrics>;
+	ScriptCommands?: Maybe<PermissionsDataScriptCommands>;
 };
 
 export type PermissionsDataActivity = {
@@ -8136,74 +6612,6 @@ export type PermissionsDataConfigurationUpdate = {
 	fields?: Maybe<ConfigurationFieldsPermissions>;
 };
 
-export type PermissionsDataEnvironment = {
-	create?: Maybe<PermissionsDataEnvironmentCreate>;
-	read?: Maybe<PermissionsDataEnvironmentRead>;
-	update?: Maybe<PermissionsDataEnvironmentUpdate>;
-	delete?: Maybe<PermissionsDataEnvironmentDelete>;
-	destroy?: Maybe<PermissionsDataEnvironmentDestroy>;
-};
-
-export type PermissionsDataEnvironmentCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataEnvironmentDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataEnvironmentDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataEnvironmentRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Environment_PermissionFilter>;
-	fields?: Maybe<EnvironmentFieldsPermissions>;
-};
-
-export type PermissionsDataEnvironmentUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Environment_PermissionFilter>;
-	fields?: Maybe<EnvironmentFieldsPermissions>;
-};
-
-export type PermissionsDataError = {
-	create?: Maybe<PermissionsDataErrorCreate>;
-	read?: Maybe<PermissionsDataErrorRead>;
-	update?: Maybe<PermissionsDataErrorUpdate>;
-	delete?: Maybe<PermissionsDataErrorDelete>;
-	destroy?: Maybe<PermissionsDataErrorDestroy>;
-};
-
-export type PermissionsDataErrorCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataErrorDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataErrorDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataErrorRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Error_PermissionFilter>;
-	fields?: Maybe<ErrorFieldsPermissions>;
-};
-
-export type PermissionsDataErrorUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Error_PermissionFilter>;
-	fields?: Maybe<ErrorFieldsPermissions>;
-};
-
 export type PermissionsDataFiles = {
 	create?: Maybe<PermissionsDataFilesCreate>;
 	read?: Maybe<PermissionsDataFilesRead>;
@@ -8238,72 +6646,38 @@ export type PermissionsDataFilesUpdate = {
 	fields?: Maybe<FileFieldsPermissions>;
 };
 
-export type PermissionsDataIntegration = {
-	create?: Maybe<PermissionsDataIntegrationCreate>;
-	read?: Maybe<PermissionsDataIntegrationRead>;
-	update?: Maybe<PermissionsDataIntegrationUpdate>;
-	delete?: Maybe<PermissionsDataIntegrationDelete>;
-	destroy?: Maybe<PermissionsDataIntegrationDestroy>;
+export type PermissionsDataFlow = {
+	create?: Maybe<PermissionsDataFlowCreate>;
+	read?: Maybe<PermissionsDataFlowRead>;
+	update?: Maybe<PermissionsDataFlowUpdate>;
+	delete?: Maybe<PermissionsDataFlowDelete>;
+	destroy?: Maybe<PermissionsDataFlowDestroy>;
 };
 
-export type PermissionsDataIntegrationCreate = {
+export type PermissionsDataFlowCreate = {
 	allow: Scalars['Boolean'];
 };
 
-export type PermissionsDataIntegrationDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataIntegrationDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataIntegrationDetails = {
-	create?: Maybe<PermissionsDataIntegrationDetailsCreate>;
-	read?: Maybe<PermissionsDataIntegrationDetailsRead>;
-	update?: Maybe<PermissionsDataIntegrationDetailsUpdate>;
-	delete?: Maybe<PermissionsDataIntegrationDetailsDelete>;
-	destroy?: Maybe<PermissionsDataIntegrationDetailsDestroy>;
-};
-
-export type PermissionsDataIntegrationDetailsCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataIntegrationDetailsDelete = {
+export type PermissionsDataFlowDelete = {
 	allow: Scalars['Boolean'];
 	restore?: Maybe<Scalars['Boolean']>;
 	review?: Maybe<Scalars['Boolean']>;
 };
 
-export type PermissionsDataIntegrationDetailsDestroy = {
+export type PermissionsDataFlowDestroy = {
 	allow: Scalars['Boolean'];
 };
 
-export type PermissionsDataIntegrationDetailsRead = {
+export type PermissionsDataFlowRead = {
 	allow: Scalars['Boolean'];
-	filter?: Maybe<IntegrationDetail_PermissionFilter>;
-	fields?: Maybe<IntegrationDetailFieldsPermissions>;
+	filter?: Maybe<Flow_PermissionFilter>;
+	fields?: Maybe<FlowFieldsPermissions>;
 };
 
-export type PermissionsDataIntegrationDetailsUpdate = {
+export type PermissionsDataFlowUpdate = {
 	allow: Scalars['Boolean'];
-	filter?: Maybe<IntegrationDetail_PermissionFilter>;
-	fields?: Maybe<IntegrationDetailFieldsPermissions>;
-};
-
-export type PermissionsDataIntegrationRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Integration_PermissionFilter>;
-	fields?: Maybe<IntegrationFieldsPermissions>;
-};
-
-export type PermissionsDataIntegrationUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Integration_PermissionFilter>;
-	fields?: Maybe<IntegrationFieldsPermissions>;
+	filter?: Maybe<Flow_PermissionFilter>;
+	fields?: Maybe<FlowFieldsPermissions>;
 };
 
 export type PermissionsDataMetrics = {
@@ -8374,40 +6748,6 @@ export type PermissionsDataProjectUpdate = {
 	fields?: Maybe<ProjectFieldsPermissions>;
 };
 
-export type PermissionsDataRecording = {
-	create?: Maybe<PermissionsDataRecordingCreate>;
-	read?: Maybe<PermissionsDataRecordingRead>;
-	update?: Maybe<PermissionsDataRecordingUpdate>;
-	delete?: Maybe<PermissionsDataRecordingDelete>;
-	destroy?: Maybe<PermissionsDataRecordingDestroy>;
-};
-
-export type PermissionsDataRecordingCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataRecordingDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataRecordingDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataRecordingRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Recording_PermissionFilter>;
-	fields?: Maybe<RecordingFieldsPermissions>;
-};
-
-export type PermissionsDataRecordingUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Recording_PermissionFilter>;
-	fields?: Maybe<RecordingFieldsPermissions>;
-};
-
 export type PermissionsDataRelease = {
 	create?: Maybe<PermissionsDataReleaseCreate>;
 	read?: Maybe<PermissionsDataReleaseRead>;
@@ -8476,412 +6816,38 @@ export type PermissionsDataRolesUpdate = {
 	fields?: Maybe<RoleFieldsPermissions>;
 };
 
-export type PermissionsDataSeleniumClick = {
-	create?: Maybe<PermissionsDataSeleniumClickCreate>;
-	read?: Maybe<PermissionsDataSeleniumClickRead>;
-	update?: Maybe<PermissionsDataSeleniumClickUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumClickDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumClickDestroy>;
+export type PermissionsDataScriptCommands = {
+	create?: Maybe<PermissionsDataScriptCommandsCreate>;
+	read?: Maybe<PermissionsDataScriptCommandsRead>;
+	update?: Maybe<PermissionsDataScriptCommandsUpdate>;
+	delete?: Maybe<PermissionsDataScriptCommandsDelete>;
+	destroy?: Maybe<PermissionsDataScriptCommandsDestroy>;
 };
 
-export type PermissionsDataSeleniumClickCreate = {
+export type PermissionsDataScriptCommandsCreate = {
 	allow: Scalars['Boolean'];
 };
 
-export type PermissionsDataSeleniumClickDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumClickDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumClickRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumClick_PermissionFilter>;
-	fields?: Maybe<SeleniumClickFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumClickUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumClick_PermissionFilter>;
-	fields?: Maybe<SeleniumClickFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumCommand = {
-	create?: Maybe<PermissionsDataSeleniumCommandCreate>;
-	read?: Maybe<PermissionsDataSeleniumCommandRead>;
-	update?: Maybe<PermissionsDataSeleniumCommandUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumCommandDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumCommandDestroy>;
-};
-
-export type PermissionsDataSeleniumCommandCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumCommandDelete = {
+export type PermissionsDataScriptCommandsDelete = {
 	allow: Scalars['Boolean'];
 	restore?: Maybe<Scalars['Boolean']>;
 	review?: Maybe<Scalars['Boolean']>;
 };
 
-export type PermissionsDataSeleniumCommandDestroy = {
+export type PermissionsDataScriptCommandsDestroy = {
 	allow: Scalars['Boolean'];
 };
 
-export type PermissionsDataSeleniumCommandRead = {
+export type PermissionsDataScriptCommandsRead = {
 	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumCommand_PermissionFilter>;
-	fields?: Maybe<SeleniumCommandFieldsPermissions>;
+	filter?: Maybe<ScriptCommand_PermissionFilter>;
+	fields?: Maybe<ScriptCommandFieldsPermissions>;
 };
 
-export type PermissionsDataSeleniumCommandUpdate = {
+export type PermissionsDataScriptCommandsUpdate = {
 	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumCommand_PermissionFilter>;
-	fields?: Maybe<SeleniumCommandFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumDragndrop = {
-	create?: Maybe<PermissionsDataSeleniumDragndropCreate>;
-	read?: Maybe<PermissionsDataSeleniumDragndropRead>;
-	update?: Maybe<PermissionsDataSeleniumDragndropUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumDragndropDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumDragndropDestroy>;
-};
-
-export type PermissionsDataSeleniumDragndropCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumDragndropDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumDragndropDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumDragndropRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumDragndrop_PermissionFilter>;
-	fields?: Maybe<SeleniumDragndropFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumDragndropUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumDragndrop_PermissionFilter>;
-	fields?: Maybe<SeleniumDragndropFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumGroup = {
-	create?: Maybe<PermissionsDataSeleniumGroupCreate>;
-	read?: Maybe<PermissionsDataSeleniumGroupRead>;
-	update?: Maybe<PermissionsDataSeleniumGroupUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumGroupDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumGroupDestroy>;
-};
-
-export type PermissionsDataSeleniumGroupCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumGroupDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumGroupDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumGroupRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumGroup_PermissionFilter>;
-	fields?: Maybe<SeleniumGroupFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumGroupUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumGroup_PermissionFilter>;
-	fields?: Maybe<SeleniumGroupFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumOpen = {
-	create?: Maybe<PermissionsDataSeleniumOpenCreate>;
-	read?: Maybe<PermissionsDataSeleniumOpenRead>;
-	update?: Maybe<PermissionsDataSeleniumOpenUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumOpenDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumOpenDestroy>;
-};
-
-export type PermissionsDataSeleniumOpenCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumOpenDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumOpenDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumOpenRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumOpen_PermissionFilter>;
-	fields?: Maybe<SeleniumOpenFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumOpenUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumOpen_PermissionFilter>;
-	fields?: Maybe<SeleniumOpenFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumPoint = {
-	create?: Maybe<PermissionsDataSeleniumPointCreate>;
-	read?: Maybe<PermissionsDataSeleniumPointRead>;
-	update?: Maybe<PermissionsDataSeleniumPointUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumPointDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumPointDestroy>;
-};
-
-export type PermissionsDataSeleniumPointCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumPointDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumPointDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumPointRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumPoint_PermissionFilter>;
-	fields?: Maybe<SeleniumPointFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumPointUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumPoint_PermissionFilter>;
-	fields?: Maybe<SeleniumPointFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumScript = {
-	create?: Maybe<PermissionsDataSeleniumScriptCreate>;
-	read?: Maybe<PermissionsDataSeleniumScriptRead>;
-	update?: Maybe<PermissionsDataSeleniumScriptUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumScriptDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumScriptDestroy>;
-};
-
-export type PermissionsDataSeleniumScriptCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumScriptDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumScriptDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumScriptRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumScript_PermissionFilter>;
-	fields?: Maybe<SeleniumScriptFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumScriptUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumScript_PermissionFilter>;
-	fields?: Maybe<SeleniumScriptFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumSelector = {
-	create?: Maybe<PermissionsDataSeleniumSelectorCreate>;
-	read?: Maybe<PermissionsDataSeleniumSelectorRead>;
-	update?: Maybe<PermissionsDataSeleniumSelectorUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumSelectorDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumSelectorDestroy>;
-};
-
-export type PermissionsDataSeleniumSelectorCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumSelectorDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumSelectorDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumSelectorRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumSelector_PermissionFilter>;
-	fields?: Maybe<SeleniumSelectorFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumSelectorUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumSelector_PermissionFilter>;
-	fields?: Maybe<SeleniumSelectorFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumSetViewportSize = {
-	create?: Maybe<PermissionsDataSeleniumSetViewportSizeCreate>;
-	read?: Maybe<PermissionsDataSeleniumSetViewportSizeRead>;
-	update?: Maybe<PermissionsDataSeleniumSetViewportSizeUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumSetViewportSizeDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumSetViewportSizeDestroy>;
-};
-
-export type PermissionsDataSeleniumSetViewportSizeCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumSetViewportSizeDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumSetViewportSizeDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumSetViewportSizeRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumSetViewportSize_PermissionFilter>;
-	fields?: Maybe<SeleniumSetViewportSizeFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumSetViewportSizeUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumSetViewportSize_PermissionFilter>;
-	fields?: Maybe<SeleniumSetViewportSizeFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumTarget = {
-	create?: Maybe<PermissionsDataSeleniumTargetCreate>;
-	read?: Maybe<PermissionsDataSeleniumTargetRead>;
-	update?: Maybe<PermissionsDataSeleniumTargetUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumTargetDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumTargetDestroy>;
-};
-
-export type PermissionsDataSeleniumTargetCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumTargetDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumTargetDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumTargetRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumTarget_PermissionFilter>;
-	fields?: Maybe<SeleniumTargetFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumTargetUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumTarget_PermissionFilter>;
-	fields?: Maybe<SeleniumTargetFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumType = {
-	create?: Maybe<PermissionsDataSeleniumTypeCreate>;
-	read?: Maybe<PermissionsDataSeleniumTypeRead>;
-	update?: Maybe<PermissionsDataSeleniumTypeUpdate>;
-	delete?: Maybe<PermissionsDataSeleniumTypeDelete>;
-	destroy?: Maybe<PermissionsDataSeleniumTypeDestroy>;
-};
-
-export type PermissionsDataSeleniumTypeCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumTypeDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSeleniumTypeDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSeleniumTypeRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumType_PermissionFilter>;
-	fields?: Maybe<SeleniumTypeFieldsPermissions>;
-};
-
-export type PermissionsDataSeleniumTypeUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<SeleniumType_PermissionFilter>;
-	fields?: Maybe<SeleniumTypeFieldsPermissions>;
-};
-
-export type PermissionsDataSlack = {
-	create?: Maybe<PermissionsDataSlackCreate>;
-	read?: Maybe<PermissionsDataSlackRead>;
-	update?: Maybe<PermissionsDataSlackUpdate>;
-	delete?: Maybe<PermissionsDataSlackDelete>;
-	destroy?: Maybe<PermissionsDataSlackDestroy>;
-};
-
-export type PermissionsDataSlackCreate = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSlackDelete = {
-	allow: Scalars['Boolean'];
-	restore?: Maybe<Scalars['Boolean']>;
-	review?: Maybe<Scalars['Boolean']>;
-};
-
-export type PermissionsDataSlackDestroy = {
-	allow: Scalars['Boolean'];
-};
-
-export type PermissionsDataSlackRead = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Slack_PermissionFilter>;
-	fields?: Maybe<SlackFieldsPermissions>;
-};
-
-export type PermissionsDataSlackUpdate = {
-	allow: Scalars['Boolean'];
-	filter?: Maybe<Slack_PermissionFilter>;
-	fields?: Maybe<SlackFieldsPermissions>;
+	filter?: Maybe<ScriptCommand_PermissionFilter>;
+	fields?: Maybe<ScriptCommandFieldsPermissions>;
 };
 
 export type PermissionsDataTestOutcome = {
@@ -9033,7 +6999,7 @@ export type PermissionSubscriptionFilter = {
 	updatedFields?: Maybe<UpdatedFieldsFilter>;
 };
 
-/** A project is the main entity of heirarchy in Meeshkan. It represents an application (such as Acme webapp or Acme iOs app). */
+/** A project is the main entity of hierarchy in Meeshkan. It represents an application (such as a webapp or IOS app). */
 export type Project = {
 	__typename?: 'Project';
 	id?: Maybe<Scalars['ID']>;
@@ -9046,20 +7012,42 @@ export type Project = {
 	 * with the repository name especially if you'll have many.
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** This avatar image represents your project. */
+	/** This avatar image represents your project such as a logo. */
 	avatar?: Maybe<File>;
-	release?: Maybe<ReleaseListResponse>;
-	configuration?: Maybe<Configuration>;
-	integration?: Maybe<Integration>;
-	activity?: Maybe<ActivityListResponse>;
-	members?: Maybe<UserListResponse>;
-	userStories?: Maybe<UserStoryListResponse>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This is a relation to Release (table) that allows many releases to a single
+	 * project. A release is a cadence of time in which a batch of work is worked on
+	 * and then pushed to production.
+	 */
+	release?: Maybe<ReleaseListResponse>;
+	/** This is a relation to Configuration (table). It stores additional details and settings for a project. */
+	configuration?: Maybe<Configuration>;
+	/** This is a one Project to many Activity (table) relation. It stores details of updates on a given project. */
+	activity?: Maybe<ActivityListResponse>;
+	/**
+	 * This is a many Project to many User (table) relationship. Users can have
+	 * multiple projects and projects can have multiple members.
+	 */
+	members?: Maybe<UserListResponse>;
+	/**
+	 * A one project to many User story (table) relation. User stories are the
+	 * representation of a series of events that users do in a project's production environment.
+	 */
+	userStories?: Maybe<UserStoryListResponse>;
+	/**
+	 * A one project to many Metric relation. Metric is an internal table calculating
+	 * performance metrics of user story generation algos.
+	 */
 	metrics?: Maybe<MetricListResponse>;
 	_description?: Maybe<Scalars['String']>;
 };
 
-/** A project is the main entity of heirarchy in Meeshkan. It represents an application (such as Acme webapp or Acme iOs app). */
+/** A project is the main entity of hierarchy in Meeshkan. It represents an application (such as a webapp or IOS app). */
 export type ProjectReleaseArgs = {
 	filter?: Maybe<ReleaseFilter>;
 	orderBy?: Maybe<Array<Maybe<ReleaseOrderBy>>>;
@@ -9072,7 +7060,7 @@ export type ProjectReleaseArgs = {
 	groupBy?: Maybe<ReleaseGroupBy>;
 };
 
-/** A project is the main entity of heirarchy in Meeshkan. It represents an application (such as Acme webapp or Acme iOs app). */
+/** A project is the main entity of hierarchy in Meeshkan. It represents an application (such as a webapp or IOS app). */
 export type ProjectActivityArgs = {
 	filter?: Maybe<ActivityFilter>;
 	orderBy?: Maybe<Array<Maybe<ActivityOrderBy>>>;
@@ -9085,7 +7073,7 @@ export type ProjectActivityArgs = {
 	groupBy?: Maybe<ActivityGroupBy>;
 };
 
-/** A project is the main entity of heirarchy in Meeshkan. It represents an application (such as Acme webapp or Acme iOs app). */
+/** A project is the main entity of hierarchy in Meeshkan. It represents an application (such as a webapp or IOS app). */
 export type ProjectMembersArgs = {
 	filter?: Maybe<UserFilter>;
 	orderBy?: Maybe<Array<Maybe<UserOrderBy>>>;
@@ -9098,7 +7086,7 @@ export type ProjectMembersArgs = {
 	groupBy?: Maybe<UserGroupBy>;
 };
 
-/** A project is the main entity of heirarchy in Meeshkan. It represents an application (such as Acme webapp or Acme iOs app). */
+/** A project is the main entity of hierarchy in Meeshkan. It represents an application (such as a webapp or IOS app). */
 export type ProjectUserStoriesArgs = {
 	filter?: Maybe<UserStoryFilter>;
 	orderBy?: Maybe<Array<Maybe<UserStoryOrderBy>>>;
@@ -9111,7 +7099,7 @@ export type ProjectUserStoriesArgs = {
 	groupBy?: Maybe<UserStoryGroupBy>;
 };
 
-/** A project is the main entity of heirarchy in Meeshkan. It represents an application (such as Acme webapp or Acme iOs app). */
+/** A project is the main entity of hierarchy in Meeshkan. It represents an application (such as a webapp or IOS app). */
 export type ProjectMetricsArgs = {
 	filter?: Maybe<MetricFilter>;
 	orderBy?: Maybe<Array<Maybe<MetricOrderBy>>>;
@@ -9126,7 +7114,11 @@ export type ProjectMetricsArgs = {
 
 /** Activity create input from project */
 export type Project_ActivityCreateInput = {
+	/** A headline of what happened/changed. */
 	title: Scalars['String'];
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
+	/** When did this activity happen? */
 	dateTime: Scalars['Date'];
 	project?: Maybe<ActivityProjectRelationInput>;
 };
@@ -9147,8 +7139,9 @@ export type Project_Avatar_FileCreateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
 };
 
 /** Files update input from project_avatar */
@@ -9161,80 +7154,109 @@ export type Project_Avatar_FileUpdateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
 };
 
 /** Configuration create input from project */
 export type Project_ConfigurationCreateInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
 	inviteLink: Scalars['String'];
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowRelationInput>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
 };
 
 /** Configuration update input from project */
 export type Project_ConfigurationUpdateInput = {
-	productionURL?: Maybe<Scalars['String']>;
-	stagingURL?: Maybe<Scalars['String']>;
-	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
 	inviteLink?: Maybe<Scalars['String']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInFlow?: Maybe<ConfigurationLogInFlowUpdateRelationInput>;
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
+	 * This is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
 	 */
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
-	/** This represents the plan this project is on in Stripe. This is updated by the logic webhook in `custom-graphql` */
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`.
+	 */
 	plan?: Maybe<Scalars['String']>;
-	/** This is the date that a subscription started for this project. */
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
-	/** This represents a few of the important subscription statuses in 8base. */
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  — fully started a subscription.
+	 * 2. `trialing` — started a subscription but isn't paying
+	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
-	/** The options are 'monthly' or 'yearly'. */
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-};
-
-/** Integration create input from project */
-export type Project_IntegrationCreateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementRelationInput>;
-	slack?: Maybe<IntegrationSlackRelationInput>;
-	project?: Maybe<IntegrationProjectRelationInput>;
-};
-
-/** Integration update input from project */
-export type Project_IntegrationUpdateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationUpdateRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementUpdateRelationInput>;
-	slack?: Maybe<IntegrationSlackUpdateRelationInput>;
-	project?: Maybe<IntegrationProjectUpdateRelationInput>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
 };
 
 /** Metrics create input from project */
@@ -9283,7 +7305,6 @@ export type Project_PermissionFilter = {
 	avatar?: Maybe<File_PermissionFilter>;
 	release?: Maybe<Release_PermissionRelationFilter>;
 	configuration?: Maybe<Configuration_PermissionFilter>;
-	integration?: Maybe<Integration_PermissionFilter>;
 	activity?: Maybe<Activity_PermissionRelationFilter>;
 	members?: Maybe<User_PermissionRelationFilter>;
 	userStories?: Maybe<UserStory_PermissionRelationFilter>;
@@ -9305,6 +7326,8 @@ export type Project_ReleaseCreateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsRelationInput>;
@@ -9319,7 +7342,7 @@ export type Project_ReleaseUpdateInput = {
 
 /** UserStory create input from project */
 export type Project_UserStoryCreateInput = {
-	/** The human readable title of a user story describes what the flow does. */
+	/** The human readable title of a user story describes what the story does. */
 	title?: Maybe<Scalars['String']>;
 	/** This is an optional field that allows you to describe what to expect from the test. */
 	description?: Maybe<Scalars['String']>;
@@ -9328,29 +7351,44 @@ export type Project_UserStoryCreateInput = {
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
 	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Scalars['String']>>;
-	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
 	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationRelationInput>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from project */
@@ -9417,13 +7455,16 @@ export type ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -9435,12 +7476,15 @@ export type ProjectCreateManyInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarManyRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseManyRelationInput>;
-	integration?: Maybe<ProjectIntegrationManyRelationInput>;
 	activity?: Maybe<ProjectActivityManyRelationInput>;
 	members?: Maybe<ProjectMembersManyRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesManyRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsManyRelationInput>;
 };
 
@@ -9470,7 +7514,6 @@ export type ProjectFilter = {
 	avatar?: Maybe<FileFilter>;
 	release?: Maybe<ReleaseRelationFilter>;
 	configuration?: Maybe<ConfigurationFilter>;
-	integration?: Maybe<IntegrationFilter>;
 	activity?: Maybe<ActivityRelationFilter>;
 	members?: Maybe<UserRelationFilter>;
 	userStories?: Maybe<UserStoryRelationFilter>;
@@ -9498,32 +7541,11 @@ export type ProjectGroupByQuery = {
 	avatar?: Maybe<FileGroupByQuery>;
 	release?: Maybe<ReleaseGroupByQuery>;
 	configuration?: Maybe<ConfigurationGroupByQuery>;
-	integration?: Maybe<IntegrationGroupByQuery>;
 	activity?: Maybe<ActivityGroupByQuery>;
 	members?: Maybe<UserGroupByQuery>;
 	userStories?: Maybe<UserStoryGroupByQuery>;
 	metrics?: Maybe<MetricGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-/** Project relation input */
-export type ProjectIntegrationManyRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-};
-
-/** Project relation input */
-export type ProjectIntegrationRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-	create?: Maybe<Project_IntegrationCreateInput>;
-};
-
-/** Project relation input */
-export type ProjectIntegrationUpdateRelationInput = {
-	connect?: Maybe<IntegrationKeyFilter>;
-	disconnect?: Maybe<IntegrationKeyFilter>;
-	reconnect?: Maybe<IntegrationKeyFilter>;
-	create?: Maybe<Project_IntegrationCreateInput>;
-	update?: Maybe<Project_IntegrationUpdateInput>;
 };
 
 export type ProjectKeyFilter = {
@@ -9539,44 +7561,6 @@ export type ProjectListResponse = {
 	count: Scalars['Int'];
 	/** Aggregated items */
 	groups: Array<GroupByResponse>;
-};
-
-/** Integration create input from projectManagement */
-export type ProjectManagement_IntegrationCreateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementRelationInput>;
-	slack?: Maybe<IntegrationSlackRelationInput>;
-	project?: Maybe<IntegrationProjectRelationInput>;
-};
-
-/** IntegrationDetails create input from projectManagement */
-export type ProjectManagement_IntegrationDetailCreateInput = {
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<IntegrationDetailsIntegrationRelationInput>;
-	projectManagement?: Maybe<IntegrationDetailsProjectManagementRelationInput>;
-};
-
-/** IntegrationDetails update input from projectManagement */
-export type ProjectManagement_IntegrationDetailUpdateInput = {
-	authenticated?: Maybe<Scalars['Boolean']>;
-	accessToken?: Maybe<Scalars['String']>;
-	integration?: Maybe<IntegrationDetailsIntegrationUpdateRelationInput>;
-	projectManagement?: Maybe<IntegrationDetailsProjectManagementUpdateRelationInput>;
-};
-
-/** Integration update input from projectManagement */
-export type ProjectManagement_IntegrationUpdateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationUpdateRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementUpdateRelationInput>;
-	slack?: Maybe<IntegrationSlackUpdateRelationInput>;
-	project?: Maybe<IntegrationProjectUpdateRelationInput>;
 };
 
 /** ProjectManyResponse output */
@@ -9689,6 +7673,7 @@ export type Projects_UserCreateInput = {
 	avatar?: Maybe<UsersAvatarRelationInput>;
 	roles?: Maybe<UsersRolesRelationInput>;
 	projects?: Maybe<UsersProjectsRelationInput>;
+	/** What is the job title of this individual? */
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
@@ -9710,7 +7695,6 @@ export type ProjectSort = {
 	createdBy?: Maybe<UserSort>;
 	avatar?: Maybe<FileSort>;
 	configuration?: Maybe<ConfigurationSort>;
-	integration?: Maybe<IntegrationSort>;
 };
 
 /** Project subscription filter */
@@ -9735,13 +7719,16 @@ export type ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
-	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -9798,59 +7785,29 @@ export type Query = {
 	configurationsList: ConfigurationListResponse;
 	/** @deprecated No longer supported. Use `system.deployStatus` instead. */
 	deployStatus: DeployStatusResult;
-	environment?: Maybe<Environment>;
 	environmentVariable?: Maybe<EnvironmentVariable>;
 	environmentVariablesList: EnvironmentVariableListResponse;
-	environmentsList: EnvironmentListResponse;
-	error?: Maybe<Error>;
-	errorsList: ErrorListResponse;
 	file?: Maybe<File>;
 	fileUploadInfo?: Maybe<FileUploadInfoResponse>;
 	filesList: FileListResponse;
+	flow?: Maybe<Flow>;
+	flowsList: FlowListResponse;
 	/** @deprecated No longer supported. Use `system.functionsList` instead. */
 	functionsList?: Maybe<FunctionListResponse>;
 	getWorkspaceTransferInfo?: Maybe<WorkspaceTransferItem>;
-	integration?: Maybe<Integration>;
-	integrationDetail?: Maybe<IntegrationDetail>;
-	integrationDetailsList: IntegrationDetailListResponse;
-	integrationsList: IntegrationListResponse;
 	/** @deprecated No longer supported. Use `system.logsList` instead. */
 	logs?: Maybe<Array<Maybe<Scalars['String']>>>;
 	metric?: Maybe<Metric>;
 	metricsList: MetricListResponse;
 	project?: Maybe<Project>;
 	projectsList: ProjectListResponse;
-	recording?: Maybe<Recording>;
-	recordingsList: RecordingListResponse;
 	release?: Maybe<Release>;
 	releasesList: ReleaseListResponse;
 	role?: Maybe<Role>;
 	rolesList: RoleListResponse;
-	seleniumClick?: Maybe<SeleniumClick>;
-	seleniumClicksList: SeleniumClickListResponse;
-	seleniumCommand?: Maybe<SeleniumCommand>;
-	seleniumCommandsList: SeleniumCommandListResponse;
-	seleniumDragndrop?: Maybe<SeleniumDragndrop>;
-	seleniumDragndropsList: SeleniumDragndropListResponse;
-	seleniumGroup?: Maybe<SeleniumGroup>;
-	seleniumGroupsList: SeleniumGroupListResponse;
-	seleniumOpen?: Maybe<SeleniumOpen>;
-	seleniumOpensList: SeleniumOpenListResponse;
-	seleniumPoint?: Maybe<SeleniumPoint>;
-	seleniumPointsList: SeleniumPointListResponse;
-	seleniumScript?: Maybe<SeleniumScript>;
-	seleniumScriptsList: SeleniumScriptListResponse;
-	seleniumSelector?: Maybe<SeleniumSelector>;
-	seleniumSelectorsList: SeleniumSelectorListResponse;
-	seleniumSetViewportSize?: Maybe<SeleniumSetViewportSize>;
-	seleniumSetViewportSizesList: SeleniumSetViewportSizeListResponse;
-	seleniumTarget?: Maybe<SeleniumTarget>;
-	seleniumTargetsList: SeleniumTargetListResponse;
-	seleniumType?: Maybe<SeleniumType>;
-	seleniumTypesList: SeleniumTypeListResponse;
+	scriptCommand?: Maybe<ScriptCommand>;
+	scriptCommandsList: ScriptCommandListResponse;
 	settings?: Maybe<Setting>;
-	slack?: Maybe<Slack>;
-	slacksList: SlackListResponse;
 	system?: Maybe<SystemQuery>;
 	/** @deprecated No longer supported. Use `system.table` instead. */
 	table?: Maybe<Table>;
@@ -10011,11 +7968,6 @@ export type QueryDeployStatusArgs = {
 	buildName: Scalars['String'];
 };
 
-export type QueryEnvironmentArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
 export type QueryEnvironmentVariableArgs = {
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
@@ -10032,37 +7984,6 @@ export type QueryEnvironmentVariablesListArgs = {
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
 	groupBy?: Maybe<EnvironmentVariableGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QueryEnvironmentsListArgs = {
-	filter?: Maybe<EnvironmentFilter>;
-	orderBy?: Maybe<Array<Maybe<EnvironmentOrderBy>>>;
-	sort?: Maybe<Array<EnvironmentSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<EnvironmentGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QueryErrorArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QueryErrorsListArgs = {
-	filter?: Maybe<ErrorFilter>;
-	orderBy?: Maybe<Array<Maybe<ErrorOrderBy>>>;
-	sort?: Maybe<Array<ErrorSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<ErrorGroupBy>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
@@ -10085,6 +8006,24 @@ export type QueryFilesListArgs = {
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
+export type QueryFlowArgs = {
+	id?: Maybe<Scalars['ID']>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type QueryFlowsListArgs = {
+	filter?: Maybe<FlowFilter>;
+	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
+	sort?: Maybe<Array<FlowSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<FlowGroupBy>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
 export type QueryFunctionsListArgs = {
 	applicationId?: Maybe<Scalars['String']>;
 	filter?: Maybe<FunctionInfoFilter>;
@@ -10093,42 +8032,6 @@ export type QueryFunctionsListArgs = {
 
 export type QueryGetWorkspaceTransferInfoArgs = {
 	workspaceId: Scalars['String'];
-};
-
-export type QueryIntegrationArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QueryIntegrationDetailArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QueryIntegrationDetailsListArgs = {
-	filter?: Maybe<IntegrationDetailFilter>;
-	orderBy?: Maybe<Array<Maybe<IntegrationDetailOrderBy>>>;
-	sort?: Maybe<Array<IntegrationDetailSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<IntegrationDetailGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QueryIntegrationsListArgs = {
-	filter?: Maybe<IntegrationFilter>;
-	orderBy?: Maybe<Array<Maybe<IntegrationOrderBy>>>;
-	sort?: Maybe<Array<IntegrationSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<IntegrationGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
 export type QueryLogsArgs = {
@@ -10175,24 +8078,6 @@ export type QueryProjectsListArgs = {
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
-export type QueryRecordingArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QueryRecordingsListArgs = {
-	filter?: Maybe<RecordingFilter>;
-	orderBy?: Maybe<Array<Maybe<RecordingOrderBy>>>;
-	sort?: Maybe<Array<RecordingSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<RecordingGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
 export type QueryReleaseArgs = {
 	id?: Maybe<Scalars['ID']>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
@@ -10230,219 +8115,21 @@ export type QueryRolesListArgs = {
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
-export type QuerySeleniumClickArgs = {
+export type QueryScriptCommandArgs = {
 	id?: Maybe<Scalars['ID']>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
-export type QuerySeleniumClicksListArgs = {
-	filter?: Maybe<SeleniumClickFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumClickOrderBy>>>;
-	sort?: Maybe<Array<SeleniumClickSort>>;
+export type QueryScriptCommandsListArgs = {
+	filter?: Maybe<ScriptCommandFilter>;
+	orderBy?: Maybe<Array<Maybe<ScriptCommandOrderBy>>>;
+	sort?: Maybe<Array<ScriptCommandSort>>;
 	skip?: Maybe<Scalars['Int']>;
 	after?: Maybe<Scalars['String']>;
 	before?: Maybe<Scalars['String']>;
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumClickGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumCommandArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumCommandsListArgs = {
-	filter?: Maybe<SeleniumCommandFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumCommandOrderBy>>>;
-	sort?: Maybe<Array<SeleniumCommandSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumCommandGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumDragndropArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumDragndropsListArgs = {
-	filter?: Maybe<SeleniumDragndropFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumDragndropOrderBy>>>;
-	sort?: Maybe<Array<SeleniumDragndropSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumDragndropGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumGroupArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumGroupsListArgs = {
-	filter?: Maybe<SeleniumGroupFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumGroupOrderBy>>>;
-	sort?: Maybe<Array<SeleniumGroupSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumGroupGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumOpenArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumOpensListArgs = {
-	filter?: Maybe<SeleniumOpenFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumOpenOrderBy>>>;
-	sort?: Maybe<Array<SeleniumOpenSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumOpenGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumPointArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumPointsListArgs = {
-	filter?: Maybe<SeleniumPointFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumPointOrderBy>>>;
-	sort?: Maybe<Array<SeleniumPointSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumPointGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumScriptArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumScriptsListArgs = {
-	filter?: Maybe<SeleniumScriptFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumScriptOrderBy>>>;
-	sort?: Maybe<Array<SeleniumScriptSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumScriptGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumSelectorArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumSelectorsListArgs = {
-	filter?: Maybe<SeleniumSelectorFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumSelectorOrderBy>>>;
-	sort?: Maybe<Array<SeleniumSelectorSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumSelectorGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumSetViewportSizeArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumSetViewportSizesListArgs = {
-	filter?: Maybe<SeleniumSetViewportSizeFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumSetViewportSizeOrderBy>>>;
-	sort?: Maybe<Array<SeleniumSetViewportSizeSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumSetViewportSizeGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumTargetArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumTargetsListArgs = {
-	filter?: Maybe<SeleniumTargetFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumTargetOrderBy>>>;
-	sort?: Maybe<Array<SeleniumTargetSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumTargetGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumTypeArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySeleniumTypesListArgs = {
-	filter?: Maybe<SeleniumTypeFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumTypeOrderBy>>>;
-	sort?: Maybe<Array<SeleniumTypeSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumTypeGroupBy>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySlackArgs = {
-	id?: Maybe<Scalars['ID']>;
-	withDeleted?: Maybe<Scalars['Boolean']>;
-};
-
-export type QuerySlacksListArgs = {
-	filter?: Maybe<SlackFilter>;
-	orderBy?: Maybe<Array<Maybe<SlackOrderBy>>>;
-	sort?: Maybe<Array<SlackSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SlackGroupBy>;
+	groupBy?: Maybe<ScriptCommandGroupBy>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
@@ -10555,493 +8242,6 @@ export type QueryUsersListArgs = {
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
-/** A recording is the assets that represents a User story. This includes videos and side script files. */
-export type Recording = {
-	__typename?: 'Recording';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	environment?: Maybe<EnvironmentListResponse>;
-	userStory?: Maybe<UserStory>;
-	video?: Maybe<File>;
-	seleniumScript?: Maybe<SeleniumScript>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-/** A recording is the assets that represents a User story. This includes videos and side script files. */
-export type RecordingEnvironmentArgs = {
-	filter?: Maybe<EnvironmentFilter>;
-	orderBy?: Maybe<Array<Maybe<EnvironmentOrderBy>>>;
-	sort?: Maybe<Array<EnvironmentSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<EnvironmentGroupBy>;
-};
-
-/** Environment create input from recording */
-export type Recording_EnvironmentCreateInput = {
-	ipAddress?: Maybe<Scalars['String']>;
-	browser?: Maybe<Scalars['String']>;
-	browserVersion?: Maybe<Scalars['String']>;
-	operatingSystem?: Maybe<Scalars['String']>;
-	language?: Maybe<Scalars['String']>;
-	recording?: Maybe<EnvironmentRecordingRelationInput>;
-};
-
-/** Environment update input from recording */
-export type Recording_EnvironmentUpdateInput = {
-	filter?: Maybe<EnvironmentKeyFilter>;
-	data: EnvironmentUpdateInput;
-};
-
-export type Recording_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	startEventId?: Maybe<StringPredicate>;
-	endEventId?: Maybe<StringPredicate>;
-	videoGenerationVersion?: Maybe<StringPredicate>;
-	nExpectedCommands?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	environment?: Maybe<Environment_PermissionRelationFilter>;
-	userStory?: Maybe<UserStory_PermissionFilter>;
-	video?: Maybe<File_PermissionFilter>;
-	seleniumScript?: Maybe<SeleniumScript_PermissionFilter>;
-	AND?: Maybe<Array<Recording_PermissionFilter>>;
-	OR?: Maybe<Array<Recording_PermissionFilter>>;
-};
-
-export type Recording_PermissionRelationFilter = {
-	some?: Maybe<Recording_PermissionFilter>;
-	every?: Maybe<Recording_PermissionFilter>;
-	none?: Maybe<Recording_PermissionFilter>;
-};
-
-/** SeleniumScript create input from recording */
-export type Recording_SeleniumScriptCreateInput = {
-	version: Scalars['String'];
-	recording?: Maybe<SeleniumScriptRecordingRelationInput>;
-	groups?: Maybe<SeleniumScriptGroupsRelationInput>;
-};
-
-/** SeleniumScript update input from recording */
-export type Recording_SeleniumScriptUpdateInput = {
-	version?: Maybe<Scalars['String']>;
-	recording?: Maybe<SeleniumScriptRecordingUpdateRelationInput>;
-	groups?: Maybe<SeleniumScriptGroupsUpdateRelationInput>;
-};
-
-/** UserStory create input from recording */
-export type Recording_UserStoryCreateInput = {
-	/** The human readable title of a user story describes what the flow does. */
-	title?: Maybe<Scalars['String']>;
-	/** This is an optional field that allows you to describe what to expect from the test. */
-	description?: Maybe<Scalars['String']>;
-	/** The indication of whether a user story has been marked as expected application behavior, or not. */
-	isTestCase?: Maybe<Scalars['Boolean']>;
-	/** When was this recording marked as a test case? */
-	testCreatedDate?: Maybe<Scalars['DateTime']>;
-	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Scalars['String']>>;
-	/**
-	 * The initial inference/calculated guess if a User Story should become a test or
-	 * not. Guesses the answer to the question: "Is the application behaving as expected"
-	 */
-	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
-	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationRelationInput>;
-};
-
-/** UserStory update input from recording */
-export type Recording_UserStoryUpdateInput = {
-	/** The human readable title of a user story describes what the flow does. */
-	title?: Maybe<Scalars['String']>;
-	/** This is an optional field that allows you to describe what to expect from the test. */
-	description?: Maybe<Scalars['String']>;
-	/** The indication of whether a user story has been marked as expected application behavior, or not. */
-	isTestCase?: Maybe<Scalars['Boolean']>;
-	/** When was this recording marked as a test case? */
-	testCreatedDate?: Maybe<Scalars['DateTime']>;
-	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Maybe<Scalars['String']>>>;
-	/**
-	 * The initial inference/calculated guess if a User Story should become a test or
-	 * not. Guesses the answer to the question: "Is the application behaving as expected"
-	 */
-	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingUpdateRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
-	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationUpdateRelationInput>;
-};
-
-/** Files create input from recording_video */
-export type Recording_Video_FileCreateInput = {
-	fileId?: Maybe<Scalars['String']>;
-	public?: Maybe<Scalars['Boolean']>;
-	filename?: Maybe<Scalars['String']>;
-	meta?: Maybe<Scalars['JSON']>;
-	mods?: Maybe<Scalars['JSON']>;
-	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
-	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
-	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoRelationInput>;
-	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-};
-
-/** Files update input from recording_video */
-export type Recording_Video_FileUpdateInput = {
-	fileId?: Maybe<Scalars['String']>;
-	public?: Maybe<Scalars['Boolean']>;
-	filename?: Maybe<Scalars['String']>;
-	meta?: Maybe<Scalars['JSON']>;
-	mods?: Maybe<Scalars['JSON']>;
-	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
-	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
-	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoUpdateRelationInput>;
-	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-};
-
-/** Recording create input */
-export type RecordingCreateInput = {
-	environment?: Maybe<RecordingEnvironmentRelationInput>;
-	userStory?: Maybe<RecordingUserStoryRelationInput>;
-	video?: Maybe<RecordingVideoRelationInput>;
-	seleniumScript?: Maybe<RecordingSeleniumScriptRelationInput>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
-/** Recording create many input */
-export type RecordingCreateManyInput = {
-	environment?: Maybe<RecordingEnvironmentManyRelationInput>;
-	userStory?: Maybe<RecordingUserStoryManyRelationInput>;
-	video?: Maybe<RecordingVideoManyRelationInput>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
-/** Recording delete input */
-export type RecordingDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** Recording relation input */
-export type RecordingEnvironmentManyRelationInput = {
-	connect?: Maybe<Array<EnvironmentKeyFilter>>;
-};
-
-/** Recording relation input */
-export type RecordingEnvironmentRelationInput = {
-	connect?: Maybe<Array<EnvironmentKeyFilter>>;
-	create?: Maybe<Array<Maybe<Recording_EnvironmentCreateInput>>>;
-};
-
-/** Recording relation input */
-export type RecordingEnvironmentUpdateRelationInput = {
-	connect?: Maybe<Array<EnvironmentKeyFilter>>;
-	disconnect?: Maybe<Array<EnvironmentKeyFilter>>;
-	reconnect?: Maybe<Array<EnvironmentKeyFilter>>;
-	create?: Maybe<Array<Maybe<Recording_EnvironmentCreateInput>>>;
-	update?: Maybe<Array<Maybe<Recording_EnvironmentUpdateInput>>>;
-};
-
-/** RecordingFieldsPermissions create input */
-export type RecordingFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	startEventId?: Maybe<Scalars['Boolean']>;
-	endEventId?: Maybe<Scalars['Boolean']>;
-	videoGenerationVersion?: Maybe<Scalars['Boolean']>;
-	seleniumScriptJson?: Maybe<Scalars['Boolean']>;
-	nExpectedCommands?: Maybe<Scalars['Boolean']>;
-};
-
-export type RecordingFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	startEventId?: Maybe<StringPredicate>;
-	endEventId?: Maybe<StringPredicate>;
-	videoGenerationVersion?: Maybe<StringPredicate>;
-	nExpectedCommands?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	environment?: Maybe<EnvironmentRelationFilter>;
-	userStory?: Maybe<UserStoryFilter>;
-	video?: Maybe<FileFilter>;
-	seleniumScript?: Maybe<SeleniumScriptFilter>;
-	AND?: Maybe<Array<RecordingFilter>>;
-	OR?: Maybe<Array<RecordingFilter>>;
-};
-
-export type RecordingGroupBy = {
-	query: RecordingGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type RecordingGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	startEventId?: Maybe<Array<GroupByField>>;
-	endEventId?: Maybe<Array<GroupByField>>;
-	videoGenerationVersion?: Maybe<Array<GroupByField>>;
-	seleniumScriptJson?: Maybe<Array<GroupByField>>;
-	nExpectedCommands?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	environment?: Maybe<EnvironmentGroupByQuery>;
-	userStory?: Maybe<UserStoryGroupByQuery>;
-	video?: Maybe<FileGroupByQuery>;
-	seleniumScript?: Maybe<SeleniumScriptGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type RecordingKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** RecordingListResponse output */
-export type RecordingListResponse = {
-	__typename?: 'RecordingListResponse';
-	/** List items */
-	items: Array<Recording>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** RecordingManyResponse output */
-export type RecordingManyResponse = {
-	__typename?: 'RecordingManyResponse';
-	/** List items */
-	items: Array<Recording>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum RecordingOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	StartEventIdAsc = 'startEventId_ASC',
-	StartEventIdDesc = 'startEventId_DESC',
-	EndEventIdAsc = 'endEventId_ASC',
-	EndEventIdDesc = 'endEventId_DESC',
-	VideoGenerationVersionAsc = 'videoGenerationVersion_ASC',
-	VideoGenerationVersionDesc = 'videoGenerationVersion_DESC',
-	SeleniumScriptJsonAsc = 'seleniumScriptJson_ASC',
-	SeleniumScriptJsonDesc = 'seleniumScriptJson_DESC',
-	NExpectedCommandsAsc = 'nExpectedCommands_ASC',
-	NExpectedCommandsDesc = 'nExpectedCommands_DESC',
-}
-
-/** Recording subscription payload */
-export type RecordingPayload = {
-	__typename?: 'RecordingPayload';
-	mutation: MutationType;
-	node?: Maybe<Recording>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<Recording>;
-};
-
-export type RecordingRelationFilter = {
-	some?: Maybe<RecordingFilter>;
-	every?: Maybe<RecordingFilter>;
-	none?: Maybe<RecordingFilter>;
-};
-
-/** Recording relation input */
-export type RecordingSeleniumScriptRelationInput = {
-	create?: Maybe<Recording_SeleniumScriptCreateInput>;
-};
-
-/** Recording relation input */
-export type RecordingSeleniumScriptUpdateRelationInput = {
-	update?: Maybe<Recording_SeleniumScriptUpdateInput>;
-};
-
-export type RecordingSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	startEventId?: Maybe<SortOrder>;
-	endEventId?: Maybe<SortOrder>;
-	videoGenerationVersion?: Maybe<SortOrder>;
-	nExpectedCommands?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	userStory?: Maybe<UserStorySort>;
-	video?: Maybe<FileSort>;
-	seleniumScript?: Maybe<SeleniumScriptSort>;
-};
-
-/** Recording subscription filter */
-export type RecordingSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<RecordingFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** Recording update input */
-export type RecordingUpdateByFilterInput = {
-	startEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	endEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	videoGenerationVersion?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
-	seleniumScriptJson?: Maybe<Array<Maybe<UpdateByFilterJsonInput>>>;
-	nExpectedCommands?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
-};
-
-/** Recording update input */
-export type RecordingUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	environment?: Maybe<RecordingEnvironmentUpdateRelationInput>;
-	userStory?: Maybe<RecordingUserStoryUpdateRelationInput>;
-	video?: Maybe<RecordingVideoUpdateRelationInput>;
-	seleniumScript?: Maybe<RecordingSeleniumScriptUpdateRelationInput>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
-/** Recording relation input */
-export type RecordingUserStoryManyRelationInput = {
-	connect?: Maybe<UserStoryKeyFilter>;
-};
-
-/** Recording relation input */
-export type RecordingUserStoryRelationInput = {
-	connect?: Maybe<UserStoryKeyFilter>;
-	create?: Maybe<Recording_UserStoryCreateInput>;
-};
-
-/** Recording relation input */
-export type RecordingUserStoryUpdateRelationInput = {
-	connect?: Maybe<UserStoryKeyFilter>;
-	disconnect?: Maybe<UserStoryKeyFilter>;
-	reconnect?: Maybe<UserStoryKeyFilter>;
-	create?: Maybe<Recording_UserStoryCreateInput>;
-	update?: Maybe<Recording_UserStoryUpdateInput>;
-};
-
-/** Recording relation input */
-export type RecordingVideoManyRelationInput = {
-	connect?: Maybe<FileKeyFilter>;
-};
-
-/** Recording relation input */
-export type RecordingVideoRelationInput = {
-	connect?: Maybe<FileKeyFilter>;
-	create?: Maybe<Recording_Video_FileCreateInput>;
-};
-
-/** Recording relation input */
-export type RecordingVideoUpdateRelationInput = {
-	connect?: Maybe<FileKeyFilter>;
-	disconnect?: Maybe<FileKeyFilter>;
-	reconnect?: Maybe<FileKeyFilter>;
-	create?: Maybe<Recording_Video_FileCreateInput>;
-	update?: Maybe<Recording_Video_FileUpdateInput>;
-};
-
 /** RefreshTokenInput */
 export type RefreshTokenInput = {
 	email?: Maybe<Scalars['String']>;
@@ -11123,9 +8323,13 @@ export type Release = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
+	/** Test runs in the context of this release. How is the health of my project in this cadence that we're developing? */
 	testRuns?: Maybe<TestRunListResponse>;
+	/** The project this release belongs to. */
 	project?: Maybe<Project>;
 	_description?: Maybe<Scalars['String']>;
 };
@@ -11149,6 +8353,7 @@ export type Release_PermissionFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	name?: Maybe<StringPredicate>;
+	startDate?: Maybe<DatePredicate>;
 	releaseDate?: Maybe<DatePredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
@@ -11172,13 +8377,16 @@ export type Release_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration: ProjectConfigurationRelationInput;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -11190,24 +8398,38 @@ export type Release_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
-	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
 /** TestRun create input from release */
 export type Release_TestRunCreateInput = {
+	/**
+	 * The status of the entire test run. The default assigned value is `queued`. Accepted values include:
+	 * 1. `queued` a run is triggered but hasn't started yet.
+	 * 2. `running` the test run is in progress.
+	 * 3. `runError` something went wrong during the test run.
+	 * 4. `completed` the test run finished with out any issues running the test cases.
+	 */
 	status?: Maybe<Scalars['String']>;
-	ciRun?: Maybe<Scalars['String']>;
+	/** The optional backlink to a CI/CD run or trigger (commit). */
+	runLink?: Maybe<Scalars['String']>;
+	/**
+	 * How long did this test take? It is optional because test runs are created
+	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
+	 */
+	testLength?: Maybe<Scalars['String']>;
 	release?: Maybe<TestRunReleaseRelationInput>;
 	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
-	/** How long did this test take? Use a HH:MM:ss format. i.e. 14:50:19 */
-	testLength?: Maybe<Scalars['String']>;
 };
 
 /** TestRun update input from release */
@@ -11223,6 +8445,8 @@ export type ReleaseCreateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsRelationInput>;
@@ -11236,6 +8460,8 @@ export type ReleaseCreateManyInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsManyRelationInput>;
@@ -11253,6 +8479,7 @@ export type ReleaseFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
 	name?: Maybe<Scalars['Boolean']>;
+	startDate?: Maybe<Scalars['Boolean']>;
 	releaseDate?: Maybe<Scalars['Boolean']>;
 };
 
@@ -11262,6 +8489,7 @@ export type ReleaseFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	name?: Maybe<StringPredicate>;
+	startDate?: Maybe<DatePredicate>;
 	releaseDate?: Maybe<DatePredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
@@ -11285,6 +8513,7 @@ export type ReleaseGroupByQuery = {
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
 	name?: Maybe<Array<GroupByField>>;
+	startDate?: Maybe<Array<GroupByField>>;
 	releaseDate?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	testRuns?: Maybe<TestRunGroupByQuery>;
@@ -11328,6 +8557,8 @@ export enum ReleaseOrderBy {
 	DeletedAtDesc = 'deletedAt_DESC',
 	NameAsc = 'name_ASC',
 	NameDesc = 'name_DESC',
+	StartDateAsc = 'startDate_ASC',
+	StartDateDesc = 'startDate_DESC',
 	ReleaseDateAsc = 'releaseDate_ASC',
 	ReleaseDateDesc = 'releaseDate_DESC',
 }
@@ -11373,6 +8604,7 @@ export type ReleaseSort = {
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
 	name?: Maybe<SortOrder>;
+	startDate?: Maybe<SortOrder>;
 	releaseDate?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
@@ -11407,7 +8639,8 @@ export type ReleaseTestRunsUpdateRelationInput = {
 
 /** Release update input */
 export type ReleaseUpdateByFilterInput = {
-	name?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
+	name?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	startDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
 	releaseDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
 };
 
@@ -11419,6 +8652,8 @@ export type ReleaseUpdateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsUpdateRelationInput>;
@@ -11701,6 +8936,7 @@ export type Roles_UserCreateInput = {
 	avatar?: Maybe<UsersAvatarRelationInput>;
 	roles?: Maybe<UsersRolesRelationInput>;
 	projects?: Maybe<UsersProjectsRelationInput>;
+	/** What is the job title of this individual? */
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
@@ -11838,1760 +9074,383 @@ export enum SchemaOriginType {
 	View = 'VIEW',
 }
 
-/** SeleniumGroup create input from script */
-export type Script_SeleniumGroupCreateInput = {
-	script?: Maybe<SeleniumGroupScriptRelationInput>;
-	commands?: Maybe<SeleniumGroupCommandsRelationInput>;
-	gIndex: Scalars['Int'];
-	name?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumGroup update input from script */
-export type Script_SeleniumGroupUpdateInput = {
-	filter?: Maybe<SeleniumGroupKeyFilter>;
-	data: SeleniumGroupUpdateInput;
-};
-
-/** SeleniumTarget create input from selector */
-export type Selector_SeleniumTargetCreateInput = {
-	click?: Maybe<SeleniumTargetClickRelationInput>;
-	type?: Maybe<SeleniumTargetTypeRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesRelationInput>;
-};
-
-/** SeleniumTarget update input from selector */
-export type Selector_SeleniumTargetUpdateInput = {
-	click?: Maybe<SeleniumTargetClickUpdateRelationInput>;
-	type?: Maybe<SeleniumTargetTypeUpdateRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceUpdateRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationUpdateRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorUpdateRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesUpdateRelationInput>;
-};
-
-export type SeleniumClick = {
-	__typename?: 'SeleniumClick';
+/** This represents a single event, and all of the data that could be collected around it. */
+export type ScriptCommand = {
+	__typename?: 'ScriptCommand';
 	id?: Maybe<Scalars['ID']>;
 	createdAt?: Maybe<Scalars['DateTime']>;
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
-	target?: Maybe<SeleniumTarget>;
-	command?: Maybe<SeleniumCommand>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumClick_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	target?: Maybe<SeleniumTarget_PermissionFilter>;
-	command?: Maybe<SeleniumCommand_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumClick_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumClick_PermissionFilter>>;
-};
-
-/** SeleniumClick relation input */
-export type SeleniumClickCommandManyRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-};
-
-/** SeleniumClick relation input */
-export type SeleniumClickCommandRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Click_SeleniumCommandCreateInput>;
-};
-
-/** SeleniumClick relation input */
-export type SeleniumClickCommandUpdateRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	disconnect?: Maybe<SeleniumCommandKeyFilter>;
-	reconnect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Click_SeleniumCommandCreateInput>;
-	update?: Maybe<Click_SeleniumCommandUpdateInput>;
-};
-
-/** SeleniumClick create input */
-export type SeleniumClickCreateInput = {
-	target?: Maybe<SeleniumClickTargetRelationInput>;
-	command?: Maybe<SeleniumClickCommandRelationInput>;
-};
-
-/** SeleniumClick create many input */
-export type SeleniumClickCreateManyInput = {
-	target: SeleniumClickTargetManyRelationInput;
-	command?: Maybe<SeleniumClickCommandManyRelationInput>;
-};
-
-/** SeleniumClick delete input */
-export type SeleniumClickDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumClickFieldsPermissions create input */
-export type SeleniumClickFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumClickFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	target?: Maybe<SeleniumTargetFilter>;
-	command?: Maybe<SeleniumCommandFilter>;
-	AND?: Maybe<Array<SeleniumClickFilter>>;
-	OR?: Maybe<Array<SeleniumClickFilter>>;
-};
-
-export type SeleniumClickGroupBy = {
-	query: SeleniumClickGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumClickGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	target?: Maybe<SeleniumTargetGroupByQuery>;
-	command?: Maybe<SeleniumCommandGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumClickKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumClickListResponse output */
-export type SeleniumClickListResponse = {
-	__typename?: 'SeleniumClickListResponse';
-	/** List items */
-	items: Array<SeleniumClick>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumClickManyResponse output */
-export type SeleniumClickManyResponse = {
-	__typename?: 'SeleniumClickManyResponse';
-	/** List items */
-	items: Array<SeleniumClick>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumClickOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-}
-
-/** SeleniumClick subscription payload */
-export type SeleniumClickPayload = {
-	__typename?: 'SeleniumClickPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumClick>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumClick>;
-};
-
-export type SeleniumClickSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	target?: Maybe<SeleniumTargetSort>;
-	command?: Maybe<SeleniumCommandSort>;
-};
-
-/** SeleniumClick subscription filter */
-export type SeleniumClickSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumClickFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumClick relation input */
-export type SeleniumClickTargetManyRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-};
-
-/** SeleniumClick relation input */
-export type SeleniumClickTargetRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Click_SeleniumTargetCreateInput>;
-};
-
-/** SeleniumClick relation input */
-export type SeleniumClickTargetUpdateRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	disconnect?: Maybe<SeleniumTargetKeyFilter>;
-	reconnect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Click_SeleniumTargetCreateInput>;
-	update?: Maybe<Click_SeleniumTargetUpdateInput>;
-};
-
-/** SeleniumClick update input */
-export type SeleniumClickUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	target?: Maybe<SeleniumClickTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumClickCommandUpdateRelationInput>;
-};
-
-export type SeleniumCommand = {
-	__typename?: 'SeleniumCommand';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	open?: Maybe<SeleniumOpen>;
-	setViewportSize?: Maybe<SeleniumSetViewportSize>;
-	click?: Maybe<SeleniumClick>;
-	type?: Maybe<SeleniumType>;
-	dragndrop?: Maybe<SeleniumDragndrop>;
-	sIndex?: Maybe<Scalars['Int']>;
-	group?: Maybe<SeleniumGroup>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumCommand_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	sIndex?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	open?: Maybe<SeleniumOpen_PermissionFilter>;
-	setViewportSize?: Maybe<SeleniumSetViewportSize_PermissionFilter>;
-	click?: Maybe<SeleniumClick_PermissionFilter>;
-	type?: Maybe<SeleniumType_PermissionFilter>;
-	dragndrop?: Maybe<SeleniumDragndrop_PermissionFilter>;
-	group?: Maybe<SeleniumGroup_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumCommand_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumCommand_PermissionFilter>>;
-};
-
-export type SeleniumCommand_PermissionRelationFilter = {
-	some?: Maybe<SeleniumCommand_PermissionFilter>;
-	every?: Maybe<SeleniumCommand_PermissionFilter>;
-	none?: Maybe<SeleniumCommand_PermissionFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandClickManyRelationInput = {
-	connect?: Maybe<SeleniumClickKeyFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandClickRelationInput = {
-	connect?: Maybe<SeleniumClickKeyFilter>;
-	create?: Maybe<Command_SeleniumClickCreateInput>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandClickUpdateRelationInput = {
-	connect?: Maybe<SeleniumClickKeyFilter>;
-	disconnect?: Maybe<SeleniumClickKeyFilter>;
-	reconnect?: Maybe<SeleniumClickKeyFilter>;
-	create?: Maybe<Command_SeleniumClickCreateInput>;
-	update?: Maybe<Command_SeleniumClickUpdateInput>;
-};
-
-/** SeleniumCommand create input */
-export type SeleniumCommandCreateInput = {
-	open?: Maybe<SeleniumCommandOpenRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeRelationInput>;
-	click?: Maybe<SeleniumCommandClickRelationInput>;
-	type?: Maybe<SeleniumCommandTypeRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupRelationInput>;
-};
-
-/** SeleniumCommand create many input */
-export type SeleniumCommandCreateManyInput = {
-	open?: Maybe<SeleniumCommandOpenManyRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeManyRelationInput>;
-	click?: Maybe<SeleniumCommandClickManyRelationInput>;
-	type?: Maybe<SeleniumCommandTypeManyRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropManyRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupManyRelationInput>;
-};
-
-/** SeleniumCommand delete input */
-export type SeleniumCommandDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandDragndropManyRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandDragndropRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-	create?: Maybe<Command_SeleniumDragndropCreateInput>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandDragndropUpdateRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-	disconnect?: Maybe<SeleniumDragndropKeyFilter>;
-	reconnect?: Maybe<SeleniumDragndropKeyFilter>;
-	create?: Maybe<Command_SeleniumDragndropCreateInput>;
-	update?: Maybe<Command_SeleniumDragndropUpdateInput>;
-};
-
-/** SeleniumCommandFieldsPermissions create input */
-export type SeleniumCommandFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	sIndex?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumCommandFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	sIndex?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	open?: Maybe<SeleniumOpenFilter>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeFilter>;
-	click?: Maybe<SeleniumClickFilter>;
-	type?: Maybe<SeleniumTypeFilter>;
-	dragndrop?: Maybe<SeleniumDragndropFilter>;
-	group?: Maybe<SeleniumGroupFilter>;
-	AND?: Maybe<Array<SeleniumCommandFilter>>;
-	OR?: Maybe<Array<SeleniumCommandFilter>>;
-};
-
-export type SeleniumCommandGroupBy = {
-	query: SeleniumCommandGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumCommandGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	sIndex?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	open?: Maybe<SeleniumOpenGroupByQuery>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeGroupByQuery>;
-	click?: Maybe<SeleniumClickGroupByQuery>;
-	type?: Maybe<SeleniumTypeGroupByQuery>;
-	dragndrop?: Maybe<SeleniumDragndropGroupByQuery>;
-	group?: Maybe<SeleniumGroupGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandGroupManyRelationInput = {
-	connect?: Maybe<SeleniumGroupKeyFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandGroupRelationInput = {
-	connect?: Maybe<SeleniumGroupKeyFilter>;
-	create?: Maybe<Commands_SeleniumGroupCreateInput>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandGroupUpdateRelationInput = {
-	connect?: Maybe<SeleniumGroupKeyFilter>;
-	disconnect?: Maybe<SeleniumGroupKeyFilter>;
-	reconnect?: Maybe<SeleniumGroupKeyFilter>;
-	create?: Maybe<Commands_SeleniumGroupCreateInput>;
-	update?: Maybe<Commands_SeleniumGroupUpdateInput>;
-};
-
-export type SeleniumCommandKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumCommandListResponse output */
-export type SeleniumCommandListResponse = {
-	__typename?: 'SeleniumCommandListResponse';
-	/** List items */
-	items: Array<SeleniumCommand>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumCommandManyResponse output */
-export type SeleniumCommandManyResponse = {
-	__typename?: 'SeleniumCommandManyResponse';
-	/** List items */
-	items: Array<SeleniumCommand>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandOpenManyRelationInput = {
-	connect?: Maybe<SeleniumOpenKeyFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandOpenRelationInput = {
-	connect?: Maybe<SeleniumOpenKeyFilter>;
-	create?: Maybe<Command_SeleniumOpenCreateInput>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandOpenUpdateRelationInput = {
-	connect?: Maybe<SeleniumOpenKeyFilter>;
-	disconnect?: Maybe<SeleniumOpenKeyFilter>;
-	reconnect?: Maybe<SeleniumOpenKeyFilter>;
-	create?: Maybe<Command_SeleniumOpenCreateInput>;
-	update?: Maybe<Command_SeleniumOpenUpdateInput>;
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumCommandOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	SIndexAsc = 'sIndex_ASC',
-	SIndexDesc = 'sIndex_DESC',
-}
-
-/** SeleniumCommand subscription payload */
-export type SeleniumCommandPayload = {
-	__typename?: 'SeleniumCommandPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumCommand>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumCommand>;
-};
-
-export type SeleniumCommandRelationFilter = {
-	some?: Maybe<SeleniumCommandFilter>;
-	every?: Maybe<SeleniumCommandFilter>;
-	none?: Maybe<SeleniumCommandFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandSetViewportSizeManyRelationInput = {
-	connect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandSetViewportSizeRelationInput = {
-	connect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	create?: Maybe<SetViewportSize_SeleniumSetViewportSizeCreateInput>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandSetViewportSizeUpdateRelationInput = {
-	connect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	disconnect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	reconnect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	create?: Maybe<SetViewportSize_SeleniumSetViewportSizeCreateInput>;
-	update?: Maybe<SetViewportSize_SeleniumSetViewportSizeUpdateInput>;
-};
-
-export type SeleniumCommandSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	sIndex?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	open?: Maybe<SeleniumOpenSort>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSort>;
-	click?: Maybe<SeleniumClickSort>;
-	type?: Maybe<SeleniumTypeSort>;
-	dragndrop?: Maybe<SeleniumDragndropSort>;
-	group?: Maybe<SeleniumGroupSort>;
-};
-
-/** SeleniumCommand subscription filter */
-export type SeleniumCommandSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumCommandFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandTypeManyRelationInput = {
-	connect?: Maybe<SeleniumTypeKeyFilter>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandTypeRelationInput = {
-	connect?: Maybe<SeleniumTypeKeyFilter>;
-	create?: Maybe<Command_SeleniumTypeCreateInput>;
-};
-
-/** SeleniumCommand relation input */
-export type SeleniumCommandTypeUpdateRelationInput = {
-	connect?: Maybe<SeleniumTypeKeyFilter>;
-	disconnect?: Maybe<SeleniumTypeKeyFilter>;
-	reconnect?: Maybe<SeleniumTypeKeyFilter>;
-	create?: Maybe<Command_SeleniumTypeCreateInput>;
-	update?: Maybe<Command_SeleniumTypeUpdateInput>;
-};
-
-/** SeleniumCommand update input */
-export type SeleniumCommandUpdateByFilterInput = {
-	sIndex?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
-};
-
-/** SeleniumCommand update input */
-export type SeleniumCommandUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	open?: Maybe<SeleniumCommandOpenUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeUpdateRelationInput>;
-	click?: Maybe<SeleniumCommandClickUpdateRelationInput>;
-	type?: Maybe<SeleniumCommandTypeUpdateRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropUpdateRelationInput>;
-	sIndex?: Maybe<Scalars['Int']>;
-	group?: Maybe<SeleniumCommandGroupUpdateRelationInput>;
-};
-
-export type SeleniumDragndrop = {
-	__typename?: 'SeleniumDragndrop';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	sourceTarget?: Maybe<SeleniumTarget>;
-	destinationTarget?: Maybe<SeleniumTarget>;
-	command?: Maybe<SeleniumCommand>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumDragndrop_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	sourceTarget?: Maybe<SeleniumTarget_PermissionFilter>;
-	destinationTarget?: Maybe<SeleniumTarget_PermissionFilter>;
-	command?: Maybe<SeleniumCommand_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumDragndrop_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumDragndrop_PermissionFilter>>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropCommandManyRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropCommandRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Dragndrop_SeleniumCommandCreateInput>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropCommandUpdateRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	disconnect?: Maybe<SeleniumCommandKeyFilter>;
-	reconnect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Dragndrop_SeleniumCommandCreateInput>;
-	update?: Maybe<Dragndrop_SeleniumCommandUpdateInput>;
-};
-
-/** SeleniumDragndrop create input */
-export type SeleniumDragndropCreateInput = {
-	sourceTarget?: Maybe<SeleniumDragndropSourceTargetRelationInput>;
-	destinationTarget?: Maybe<SeleniumDragndropDestinationTargetRelationInput>;
-	command?: Maybe<SeleniumDragndropCommandRelationInput>;
-};
-
-/** SeleniumDragndrop create many input */
-export type SeleniumDragndropCreateManyInput = {
-	sourceTarget: SeleniumDragndropSourceTargetManyRelationInput;
-	destinationTarget: SeleniumDragndropDestinationTargetManyRelationInput;
-	command?: Maybe<SeleniumDragndropCommandManyRelationInput>;
-};
-
-/** SeleniumDragndrop delete input */
-export type SeleniumDragndropDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropDestinationTargetManyRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropDestinationTargetRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<DragndropDestination_SeleniumTargetCreateInput>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropDestinationTargetUpdateRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	disconnect?: Maybe<SeleniumTargetKeyFilter>;
-	reconnect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<DragndropDestination_SeleniumTargetCreateInput>;
-	update?: Maybe<DragndropDestination_SeleniumTargetUpdateInput>;
-};
-
-/** SeleniumDragndropFieldsPermissions create input */
-export type SeleniumDragndropFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumDragndropFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	sourceTarget?: Maybe<SeleniumTargetFilter>;
-	destinationTarget?: Maybe<SeleniumTargetFilter>;
-	command?: Maybe<SeleniumCommandFilter>;
-	AND?: Maybe<Array<SeleniumDragndropFilter>>;
-	OR?: Maybe<Array<SeleniumDragndropFilter>>;
-};
-
-export type SeleniumDragndropGroupBy = {
-	query: SeleniumDragndropGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumDragndropGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	sourceTarget?: Maybe<SeleniumTargetGroupByQuery>;
-	destinationTarget?: Maybe<SeleniumTargetGroupByQuery>;
-	command?: Maybe<SeleniumCommandGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumDragndropKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumDragndropListResponse output */
-export type SeleniumDragndropListResponse = {
-	__typename?: 'SeleniumDragndropListResponse';
-	/** List items */
-	items: Array<SeleniumDragndrop>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumDragndropManyResponse output */
-export type SeleniumDragndropManyResponse = {
-	__typename?: 'SeleniumDragndropManyResponse';
-	/** List items */
-	items: Array<SeleniumDragndrop>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumDragndropOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-}
-
-/** SeleniumDragndrop subscription payload */
-export type SeleniumDragndropPayload = {
-	__typename?: 'SeleniumDragndropPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumDragndrop>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumDragndrop>;
-};
-
-export type SeleniumDragndropSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	sourceTarget?: Maybe<SeleniumTargetSort>;
-	destinationTarget?: Maybe<SeleniumTargetSort>;
-	command?: Maybe<SeleniumCommandSort>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropSourceTargetManyRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropSourceTargetRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<DragndropSource_SeleniumTargetCreateInput>;
-};
-
-/** SeleniumDragndrop relation input */
-export type SeleniumDragndropSourceTargetUpdateRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	disconnect?: Maybe<SeleniumTargetKeyFilter>;
-	reconnect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<DragndropSource_SeleniumTargetCreateInput>;
-	update?: Maybe<DragndropSource_SeleniumTargetUpdateInput>;
-};
-
-/** SeleniumDragndrop subscription filter */
-export type SeleniumDragndropSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumDragndropFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumDragndrop update input */
-export type SeleniumDragndropUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	sourceTarget?: Maybe<SeleniumDragndropSourceTargetUpdateRelationInput>;
-	destinationTarget?: Maybe<SeleniumDragndropDestinationTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumDragndropCommandUpdateRelationInput>;
-};
-
-export type SeleniumGroup = {
-	__typename?: 'SeleniumGroup';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	script?: Maybe<SeleniumScript>;
-	commands?: Maybe<SeleniumCommandListResponse>;
-	gIndex?: Maybe<Scalars['Int']>;
-	name?: Maybe<Scalars['String']>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumGroupCommandsArgs = {
-	filter?: Maybe<SeleniumCommandFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumCommandOrderBy>>>;
-	sort?: Maybe<Array<SeleniumCommandSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumCommandGroupBy>;
-};
-
-export type SeleniumGroup_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	gIndex?: Maybe<IntPredicate>;
-	name?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	script?: Maybe<SeleniumScript_PermissionFilter>;
-	commands?: Maybe<SeleniumCommand_PermissionRelationFilter>;
-	AND?: Maybe<Array<SeleniumGroup_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumGroup_PermissionFilter>>;
-};
-
-export type SeleniumGroup_PermissionRelationFilter = {
-	some?: Maybe<SeleniumGroup_PermissionFilter>;
-	every?: Maybe<SeleniumGroup_PermissionFilter>;
-	none?: Maybe<SeleniumGroup_PermissionFilter>;
-};
-
-/** SeleniumGroup relation input */
-export type SeleniumGroupCommandsManyRelationInput = {
-	connect?: Maybe<Array<SeleniumCommandKeyFilter>>;
-};
-
-/** SeleniumGroup relation input */
-export type SeleniumGroupCommandsRelationInput = {
-	connect?: Maybe<Array<SeleniumCommandKeyFilter>>;
-	create?: Maybe<Array<Maybe<Group_SeleniumCommandCreateInput>>>;
-};
-
-/** SeleniumGroup relation input */
-export type SeleniumGroupCommandsUpdateRelationInput = {
-	connect?: Maybe<Array<SeleniumCommandKeyFilter>>;
-	disconnect?: Maybe<Array<SeleniumCommandKeyFilter>>;
-	reconnect?: Maybe<Array<SeleniumCommandKeyFilter>>;
-	create?: Maybe<Array<Maybe<Group_SeleniumCommandCreateInput>>>;
-	update?: Maybe<Array<Maybe<Group_SeleniumCommandUpdateInput>>>;
-};
-
-/** SeleniumGroup create input */
-export type SeleniumGroupCreateInput = {
-	script?: Maybe<SeleniumGroupScriptRelationInput>;
-	commands?: Maybe<SeleniumGroupCommandsRelationInput>;
-	gIndex: Scalars['Int'];
-	name?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumGroup create many input */
-export type SeleniumGroupCreateManyInput = {
-	script?: Maybe<SeleniumGroupScriptManyRelationInput>;
-	commands?: Maybe<SeleniumGroupCommandsManyRelationInput>;
-	gIndex: Scalars['Int'];
-	name?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumGroup delete input */
-export type SeleniumGroupDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumGroupFieldsPermissions create input */
-export type SeleniumGroupFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	gIndex?: Maybe<Scalars['Boolean']>;
-	name?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumGroupFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	gIndex?: Maybe<IntPredicate>;
-	name?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	script?: Maybe<SeleniumScriptFilter>;
-	commands?: Maybe<SeleniumCommandRelationFilter>;
-	AND?: Maybe<Array<SeleniumGroupFilter>>;
-	OR?: Maybe<Array<SeleniumGroupFilter>>;
-};
-
-export type SeleniumGroupGroupBy = {
-	query: SeleniumGroupGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumGroupGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	gIndex?: Maybe<Array<GroupByField>>;
-	name?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	script?: Maybe<SeleniumScriptGroupByQuery>;
-	commands?: Maybe<SeleniumCommandGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumGroupKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumGroupListResponse output */
-export type SeleniumGroupListResponse = {
-	__typename?: 'SeleniumGroupListResponse';
-	/** List items */
-	items: Array<SeleniumGroup>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumGroupManyResponse output */
-export type SeleniumGroupManyResponse = {
-	__typename?: 'SeleniumGroupManyResponse';
-	/** List items */
-	items: Array<SeleniumGroup>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumGroupOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	GIndexAsc = 'gIndex_ASC',
-	GIndexDesc = 'gIndex_DESC',
-	NameAsc = 'name_ASC',
-	NameDesc = 'name_DESC',
-}
-
-/** SeleniumGroup subscription payload */
-export type SeleniumGroupPayload = {
-	__typename?: 'SeleniumGroupPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumGroup>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumGroup>;
-};
-
-export type SeleniumGroupRelationFilter = {
-	some?: Maybe<SeleniumGroupFilter>;
-	every?: Maybe<SeleniumGroupFilter>;
-	none?: Maybe<SeleniumGroupFilter>;
-};
-
-/** SeleniumGroup relation input */
-export type SeleniumGroupScriptManyRelationInput = {
-	connect?: Maybe<SeleniumScriptKeyFilter>;
-};
-
-/** SeleniumGroup relation input */
-export type SeleniumGroupScriptRelationInput = {
-	connect?: Maybe<SeleniumScriptKeyFilter>;
-	create?: Maybe<Groups_SeleniumScriptCreateInput>;
-};
-
-/** SeleniumGroup relation input */
-export type SeleniumGroupScriptUpdateRelationInput = {
-	connect?: Maybe<SeleniumScriptKeyFilter>;
-	disconnect?: Maybe<SeleniumScriptKeyFilter>;
-	reconnect?: Maybe<SeleniumScriptKeyFilter>;
-	create?: Maybe<Groups_SeleniumScriptCreateInput>;
-	update?: Maybe<Groups_SeleniumScriptUpdateInput>;
-};
-
-export type SeleniumGroupSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	gIndex?: Maybe<SortOrder>;
-	name?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	script?: Maybe<SeleniumScriptSort>;
-};
-
-/** SeleniumGroup subscription filter */
-export type SeleniumGroupSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumGroupFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumGroup update input */
-export type SeleniumGroupUpdateByFilterInput = {
-	gIndex?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
-	name?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-};
-
-/** SeleniumGroup update input */
-export type SeleniumGroupUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	script?: Maybe<SeleniumGroupScriptUpdateRelationInput>;
-	commands?: Maybe<SeleniumGroupCommandsUpdateRelationInput>;
-	gIndex?: Maybe<Scalars['Int']>;
-	name?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumOpen = {
-	__typename?: 'SeleniumOpen';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	value?: Maybe<Scalars['String']>;
-	command?: Maybe<SeleniumCommand>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumOpen_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	value?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	command?: Maybe<SeleniumCommand_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumOpen_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumOpen_PermissionFilter>>;
-};
-
-/** SeleniumOpen relation input */
-export type SeleniumOpenCommandManyRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-};
-
-/** SeleniumOpen relation input */
-export type SeleniumOpenCommandRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Open_SeleniumCommandCreateInput>;
-};
-
-/** SeleniumOpen relation input */
-export type SeleniumOpenCommandUpdateRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	disconnect?: Maybe<SeleniumCommandKeyFilter>;
-	reconnect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Open_SeleniumCommandCreateInput>;
-	update?: Maybe<Open_SeleniumCommandUpdateInput>;
-};
-
-/** SeleniumOpen create input */
-export type SeleniumOpenCreateInput = {
-	value: Scalars['String'];
-	command?: Maybe<SeleniumOpenCommandRelationInput>;
-};
-
-/** SeleniumOpen create many input */
-export type SeleniumOpenCreateManyInput = {
-	value: Scalars['String'];
-	command?: Maybe<SeleniumOpenCommandManyRelationInput>;
-};
-
-/** SeleniumOpen delete input */
-export type SeleniumOpenDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumOpenFieldsPermissions create input */
-export type SeleniumOpenFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	value?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumOpenFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	value?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	command?: Maybe<SeleniumCommandFilter>;
-	AND?: Maybe<Array<SeleniumOpenFilter>>;
-	OR?: Maybe<Array<SeleniumOpenFilter>>;
-};
-
-export type SeleniumOpenGroupBy = {
-	query: SeleniumOpenGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumOpenGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	value?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	command?: Maybe<SeleniumCommandGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumOpenKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumOpenListResponse output */
-export type SeleniumOpenListResponse = {
-	__typename?: 'SeleniumOpenListResponse';
-	/** List items */
-	items: Array<SeleniumOpen>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumOpenManyResponse output */
-export type SeleniumOpenManyResponse = {
-	__typename?: 'SeleniumOpenManyResponse';
-	/** List items */
-	items: Array<SeleniumOpen>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumOpenOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	ValueAsc = 'value_ASC',
-	ValueDesc = 'value_DESC',
-}
-
-/** SeleniumOpen subscription payload */
-export type SeleniumOpenPayload = {
-	__typename?: 'SeleniumOpenPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumOpen>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumOpen>;
-};
-
-export type SeleniumOpenSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	value?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	command?: Maybe<SeleniumCommandSort>;
-};
-
-/** SeleniumOpen subscription filter */
-export type SeleniumOpenSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumOpenFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumOpen update input */
-export type SeleniumOpenUpdateByFilterInput = {
-	value?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-};
-
-/** SeleniumOpen update input */
-export type SeleniumOpenUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	value?: Maybe<Scalars['String']>;
-	command?: Maybe<SeleniumOpenCommandUpdateRelationInput>;
-};
-
-export type SeleniumPoint = {
-	__typename?: 'SeleniumPoint';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	setViewportSize?: Maybe<SeleniumSetViewportSize>;
-	target?: Maybe<SeleniumTarget>;
-	xCoord?: Maybe<Scalars['Int']>;
-	yCoord?: Maybe<Scalars['Int']>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumPoint_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	xCoord?: Maybe<IntPredicate>;
-	yCoord?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	setViewportSize?: Maybe<SeleniumSetViewportSize_PermissionFilter>;
-	target?: Maybe<SeleniumTarget_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumPoint_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumPoint_PermissionFilter>>;
-};
-
-/** SeleniumPoint create input */
-export type SeleniumPointCreateInput = {
-	setViewportSize?: Maybe<SeleniumPointSetViewportSizeRelationInput>;
-	target?: Maybe<SeleniumPointTargetRelationInput>;
-	xCoord: Scalars['Int'];
-	yCoord: Scalars['Int'];
-};
-
-/** SeleniumPoint create many input */
-export type SeleniumPointCreateManyInput = {
-	setViewportSize?: Maybe<SeleniumPointSetViewportSizeManyRelationInput>;
-	target?: Maybe<SeleniumPointTargetManyRelationInput>;
-	xCoord: Scalars['Int'];
-	yCoord: Scalars['Int'];
-};
-
-/** SeleniumPoint delete input */
-export type SeleniumPointDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumPointFieldsPermissions create input */
-export type SeleniumPointFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	xCoord?: Maybe<Scalars['Boolean']>;
-	yCoord?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumPointFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	xCoord?: Maybe<IntPredicate>;
-	yCoord?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeFilter>;
-	target?: Maybe<SeleniumTargetFilter>;
-	AND?: Maybe<Array<SeleniumPointFilter>>;
-	OR?: Maybe<Array<SeleniumPointFilter>>;
-};
-
-export type SeleniumPointGroupBy = {
-	query: SeleniumPointGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumPointGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	xCoord?: Maybe<Array<GroupByField>>;
-	yCoord?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeGroupByQuery>;
-	target?: Maybe<SeleniumTargetGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumPointKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumPointListResponse output */
-export type SeleniumPointListResponse = {
-	__typename?: 'SeleniumPointListResponse';
-	/** List items */
-	items: Array<SeleniumPoint>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumPointManyResponse output */
-export type SeleniumPointManyResponse = {
-	__typename?: 'SeleniumPointManyResponse';
-	/** List items */
-	items: Array<SeleniumPoint>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumPointOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	XCoordAsc = 'xCoord_ASC',
-	XCoordDesc = 'xCoord_DESC',
-	YCoordAsc = 'yCoord_ASC',
-	YCoordDesc = 'yCoord_DESC',
-}
-
-/** SeleniumPoint subscription payload */
-export type SeleniumPointPayload = {
-	__typename?: 'SeleniumPointPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumPoint>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumPoint>;
-};
-
-/** SeleniumPoint relation input */
-export type SeleniumPointSetViewportSizeManyRelationInput = {
-	connect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-};
-
-/** SeleniumPoint relation input */
-export type SeleniumPointSetViewportSizeRelationInput = {
-	connect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	create?: Maybe<Value_SeleniumSetViewportSizeCreateInput>;
-};
-
-/** SeleniumPoint relation input */
-export type SeleniumPointSetViewportSizeUpdateRelationInput = {
-	connect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	disconnect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	reconnect?: Maybe<SeleniumSetViewportSizeKeyFilter>;
-	create?: Maybe<Value_SeleniumSetViewportSizeCreateInput>;
-	update?: Maybe<Value_SeleniumSetViewportSizeUpdateInput>;
-};
-
-export type SeleniumPointSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	xCoord?: Maybe<SortOrder>;
-	yCoord?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSort>;
-	target?: Maybe<SeleniumTargetSort>;
-};
-
-/** SeleniumPoint subscription filter */
-export type SeleniumPointSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumPointFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumPoint relation input */
-export type SeleniumPointTargetManyRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-};
-
-/** SeleniumPoint relation input */
-export type SeleniumPointTargetRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Coordinates_SeleniumTargetCreateInput>;
-};
-
-/** SeleniumPoint relation input */
-export type SeleniumPointTargetUpdateRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	disconnect?: Maybe<SeleniumTargetKeyFilter>;
-	reconnect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Coordinates_SeleniumTargetCreateInput>;
-	update?: Maybe<Coordinates_SeleniumTargetUpdateInput>;
-};
-
-/** SeleniumPoint update input */
-export type SeleniumPointUpdateByFilterInput = {
-	xCoord?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
-	yCoord?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
-};
-
-/** SeleniumPoint update input */
-export type SeleniumPointUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	setViewportSize?: Maybe<SeleniumPointSetViewportSizeUpdateRelationInput>;
-	target?: Maybe<SeleniumPointTargetUpdateRelationInput>;
-	xCoord?: Maybe<Scalars['Int']>;
-	yCoord?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumScript = {
-	__typename?: 'SeleniumScript';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	version?: Maybe<Scalars['String']>;
-	recording?: Maybe<Recording>;
-	groups?: Maybe<SeleniumGroupListResponse>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumScriptGroupsArgs = {
-	filter?: Maybe<SeleniumGroupFilter>;
-	orderBy?: Maybe<Array<Maybe<SeleniumGroupOrderBy>>>;
-	sort?: Maybe<Array<SeleniumGroupSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<SeleniumGroupGroupBy>;
-};
-
-export type SeleniumScript_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	version?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	recording?: Maybe<Recording_PermissionFilter>;
-	groups?: Maybe<SeleniumGroup_PermissionRelationFilter>;
-	AND?: Maybe<Array<SeleniumScript_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumScript_PermissionFilter>>;
-};
-
-/** Recording create input from seleniumScript */
-export type SeleniumScript_RecordingCreateInput = {
-	environment?: Maybe<RecordingEnvironmentRelationInput>;
-	userStory?: Maybe<RecordingUserStoryRelationInput>;
-	video?: Maybe<RecordingVideoRelationInput>;
-	seleniumScript?: Maybe<RecordingSeleniumScriptRelationInput>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
+	userStories?: Maybe<UserStory>;
 	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
+	 * Command represents what type of event this is, and gives context to the client
+	 * and the test runner. Only one can be defined and it's a mandatory field. The options are:
+	 * 1. `open`
+	 * 2. `set viewport size`
+	 * 3. `click`
+	 * 4. `type`
+	 * 5. `drag and drop`
+	 * 6. `navigation`
+	 * 7. `scroll`
+	 * 8. `api request`
 	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
-/** Recording update input from seleniumScript */
-export type SeleniumScript_RecordingUpdateInput = {
-	environment?: Maybe<RecordingEnvironmentUpdateRelationInput>;
-	userStory?: Maybe<RecordingUserStoryUpdateRelationInput>;
-	video?: Maybe<RecordingVideoUpdateRelationInput>;
-	seleniumScript?: Maybe<RecordingSeleniumScriptUpdateRelationInput>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
-/** SeleniumScript create input */
-export type SeleniumScriptCreateInput = {
-	version: Scalars['String'];
-	recording?: Maybe<SeleniumScriptRecordingRelationInput>;
-	groups?: Maybe<SeleniumScriptGroupsRelationInput>;
-};
-
-/** SeleniumScript create many input */
-export type SeleniumScriptCreateManyInput = {
-	version: Scalars['String'];
-	groups?: Maybe<SeleniumScriptGroupsManyRelationInput>;
-};
-
-/** SeleniumScript delete input */
-export type SeleniumScriptDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumScriptFieldsPermissions create input */
-export type SeleniumScriptFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	version?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumScriptFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	version?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	recording?: Maybe<RecordingFilter>;
-	groups?: Maybe<SeleniumGroupRelationFilter>;
-	AND?: Maybe<Array<SeleniumScriptFilter>>;
-	OR?: Maybe<Array<SeleniumScriptFilter>>;
-};
-
-export type SeleniumScriptGroupBy = {
-	query: SeleniumScriptGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumScriptGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	version?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	recording?: Maybe<RecordingGroupByQuery>;
-	groups?: Maybe<SeleniumGroupGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-/** SeleniumScript relation input */
-export type SeleniumScriptGroupsManyRelationInput = {
-	connect?: Maybe<Array<SeleniumGroupKeyFilter>>;
-};
-
-/** SeleniumScript relation input */
-export type SeleniumScriptGroupsRelationInput = {
-	connect?: Maybe<Array<SeleniumGroupKeyFilter>>;
-	create?: Maybe<Array<Maybe<Script_SeleniumGroupCreateInput>>>;
-};
-
-/** SeleniumScript relation input */
-export type SeleniumScriptGroupsUpdateRelationInput = {
-	connect?: Maybe<Array<SeleniumGroupKeyFilter>>;
-	disconnect?: Maybe<Array<SeleniumGroupKeyFilter>>;
-	reconnect?: Maybe<Array<SeleniumGroupKeyFilter>>;
-	create?: Maybe<Array<Maybe<Script_SeleniumGroupCreateInput>>>;
-	update?: Maybe<Array<Maybe<Script_SeleniumGroupUpdateInput>>>;
-};
-
-export type SeleniumScriptKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumScriptListResponse output */
-export type SeleniumScriptListResponse = {
-	__typename?: 'SeleniumScriptListResponse';
-	/** List items */
-	items: Array<SeleniumScript>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumScriptManyResponse output */
-export type SeleniumScriptManyResponse = {
-	__typename?: 'SeleniumScriptManyResponse';
-	/** List items */
-	items: Array<SeleniumScript>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumScriptOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	VersionAsc = 'version_ASC',
-	VersionDesc = 'version_DESC',
-}
-
-/** SeleniumScript subscription payload */
-export type SeleniumScriptPayload = {
-	__typename?: 'SeleniumScriptPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumScript>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumScript>;
-};
-
-/** SeleniumScript relation input */
-export type SeleniumScriptRecordingRelationInput = {
-	create?: Maybe<SeleniumScript_RecordingCreateInput>;
-};
-
-/** SeleniumScript relation input */
-export type SeleniumScriptRecordingUpdateRelationInput = {
-	update?: Maybe<SeleniumScript_RecordingUpdateInput>;
-};
-
-export type SeleniumScriptSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	version?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	recording?: Maybe<RecordingSort>;
-};
-
-/** SeleniumScript subscription filter */
-export type SeleniumScriptSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumScriptFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumScript update input */
-export type SeleniumScriptUpdateByFilterInput = {
-	version?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
-};
-
-/** SeleniumScript update input */
-export type SeleniumScriptUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	version?: Maybe<Scalars['String']>;
-	recording?: Maybe<SeleniumScriptRecordingUpdateRelationInput>;
-	groups?: Maybe<SeleniumScriptGroupsUpdateRelationInput>;
-};
-
-export type SeleniumSelector = {
-	__typename?: 'SeleniumSelector';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	target?: Maybe<SeleniumTarget>;
+	command?: Maybe<Scalars['String']>;
+	/** Which step in the test is this? */
+	sIndex?: Maybe<Scalars['Int']>;
+	/** The generic value field used if a command only requires a string representation. */
+	value?: Maybe<Scalars['String']>;
+	/** The target X coordinate. What is the x coordinate of the element this event is taking place on/in? */
+	xCoordinate?: Maybe<Scalars['Int']>;
+	/** The target Y coordinate. What is the y coordinate of the element this event is taking place on/in? */
+	yCoordinate?: Maybe<Scalars['Int']>;
+	/** Which element in the DOM is this happening on? This represents the full xpath. */
 	xpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. */
 	selector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. */
 	className?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? */
 	tagName?: Maybe<Scalars['String']>;
 	tagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. */
 	innerText?: Maybe<Scalars['String']>;
+	/**
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	altOrAriaText?: Maybe<Scalars['String']>;
+	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
+	scrollTop?: Maybe<Scalars['Float']>;
+	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
+	scrollLeft?: Maybe<Scalars['Float']>;
+	/**
+	 * The target destination X coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the x coordinate end up?
+	 */
+	destinationXCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * The target destination Y coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the y coordinate end up?
+	 */
+	destinationYCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * Which element in the DOM is this happening on? This represents the full xpath.
+	 * This is used for drag and drop events for the drop half. What is the xpath of
+	 * where this ended up?
+	 */
+	destinationXpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationSelector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationClassName?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? This is used for drag and drop events for the drop half. */
+	destinationTagName?: Maybe<Scalars['String']>;
+	/** This is used for drag and drop events for the drop half. */
+	destinationTagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationInnerText?: Maybe<Scalars['String']>;
+	/**
+	 * This is used for drag and drop events for the drop half.
+	 *
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	destinationAltOrAriaText?: Maybe<Scalars['String']>;
+	request?: Maybe<Scalars['JSON']>;
+	response?: Maybe<Scalars['JSON']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
-export type SeleniumSelector_PermissionFilter = {
+export type ScriptCommand_PermissionFilter = {
 	id?: Maybe<IdPredicate>;
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
+	command?: Maybe<StringPredicate>;
+	sIndex?: Maybe<IntPredicate>;
+	value?: Maybe<StringPredicate>;
+	xCoordinate?: Maybe<IntPredicate>;
+	yCoordinate?: Maybe<IntPredicate>;
 	xpath?: Maybe<StringPredicate>;
 	selector?: Maybe<StringPredicate>;
 	className?: Maybe<StringPredicate>;
 	tagName?: Maybe<StringPredicate>;
 	tagId?: Maybe<StringPredicate>;
 	innerText?: Maybe<StringPredicate>;
+	altOrAriaText?: Maybe<StringPredicate>;
+	scrollTop?: Maybe<FloatPredicate>;
+	scrollLeft?: Maybe<FloatPredicate>;
+	destinationXCoordinate?: Maybe<IntPredicate>;
+	destinationYCoordinate?: Maybe<IntPredicate>;
+	destinationXpath?: Maybe<StringPredicate>;
+	destinationSelector?: Maybe<StringPredicate>;
+	destinationClassName?: Maybe<StringPredicate>;
+	destinationTagName?: Maybe<StringPredicate>;
+	destinationTagId?: Maybe<StringPredicate>;
+	destinationInnerText?: Maybe<StringPredicate>;
+	destinationAltOrAriaText?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
-	target?: Maybe<SeleniumTarget_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumSelector_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumSelector_PermissionFilter>>;
+	userStories?: Maybe<UserStory_PermissionFilter>;
+	AND?: Maybe<Array<ScriptCommand_PermissionFilter>>;
+	OR?: Maybe<Array<ScriptCommand_PermissionFilter>>;
 };
 
-/** SeleniumSelector create input */
-export type SeleniumSelectorCreateInput = {
-	target?: Maybe<SeleniumSelectorTargetRelationInput>;
+export type ScriptCommand_PermissionRelationFilter = {
+	some?: Maybe<ScriptCommand_PermissionFilter>;
+	every?: Maybe<ScriptCommand_PermissionFilter>;
+	none?: Maybe<ScriptCommand_PermissionFilter>;
+};
+
+/** ScriptCommands create input */
+export type ScriptCommandCreateInput = {
+	userStories?: Maybe<ScriptCommandsUserStoriesRelationInput>;
+	/**
+	 * Command represents what type of event this is, and gives context to the client
+	 * and the test runner. Only one can be defined and it's a mandatory field. The options are:
+	 * 1. `open`
+	 * 2. `set viewport size`
+	 * 3. `click`
+	 * 4. `type`
+	 * 5. `drag and drop`
+	 * 6. `navigation`
+	 * 7. `scroll`
+	 * 8. `api request`
+	 */
+	command: Scalars['String'];
+	/** Which step in the test is this? */
+	sIndex: Scalars['Int'];
+	/** The generic value field used if a command only requires a string representation. */
+	value?: Maybe<Scalars['String']>;
+	/** The target X coordinate. What is the x coordinate of the element this event is taking place on/in? */
+	xCoordinate?: Maybe<Scalars['Int']>;
+	/** The target Y coordinate. What is the y coordinate of the element this event is taking place on/in? */
+	yCoordinate?: Maybe<Scalars['Int']>;
+	/** Which element in the DOM is this happening on? This represents the full xpath. */
 	xpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. */
 	selector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. */
 	className?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? */
 	tagName?: Maybe<Scalars['String']>;
 	tagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. */
 	innerText?: Maybe<Scalars['String']>;
+	/**
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	altOrAriaText?: Maybe<Scalars['String']>;
+	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
+	scrollTop?: Maybe<Scalars['Float']>;
+	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
+	scrollLeft?: Maybe<Scalars['Float']>;
+	/**
+	 * The target destination X coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the x coordinate end up?
+	 */
+	destinationXCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * The target destination Y coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the y coordinate end up?
+	 */
+	destinationYCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * Which element in the DOM is this happening on? This represents the full xpath.
+	 * This is used for drag and drop events for the drop half. What is the xpath of
+	 * where this ended up?
+	 */
+	destinationXpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationSelector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationClassName?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? This is used for drag and drop events for the drop half. */
+	destinationTagName?: Maybe<Scalars['String']>;
+	/** This is used for drag and drop events for the drop half. */
+	destinationTagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationInnerText?: Maybe<Scalars['String']>;
+	/**
+	 * This is used for drag and drop events for the drop half.
+	 *
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	destinationAltOrAriaText?: Maybe<Scalars['String']>;
+	request?: Maybe<Scalars['JSON']>;
+	response?: Maybe<Scalars['JSON']>;
 };
 
-/** SeleniumSelector create many input */
-export type SeleniumSelectorCreateManyInput = {
-	target?: Maybe<SeleniumSelectorTargetManyRelationInput>;
+/** ScriptCommands create many input */
+export type ScriptCommandCreateManyInput = {
+	userStories: ScriptCommandsUserStoriesManyRelationInput;
+	/**
+	 * Command represents what type of event this is, and gives context to the client
+	 * and the test runner. Only one can be defined and it's a mandatory field. The options are:
+	 * 1. `open`
+	 * 2. `set viewport size`
+	 * 3. `click`
+	 * 4. `type`
+	 * 5. `drag and drop`
+	 * 6. `navigation`
+	 * 7. `scroll`
+	 * 8. `api request`
+	 */
+	command: Scalars['String'];
+	/** Which step in the test is this? */
+	sIndex: Scalars['Int'];
+	/** The generic value field used if a command only requires a string representation. */
+	value?: Maybe<Scalars['String']>;
+	/** The target X coordinate. What is the x coordinate of the element this event is taking place on/in? */
+	xCoordinate?: Maybe<Scalars['Int']>;
+	/** The target Y coordinate. What is the y coordinate of the element this event is taking place on/in? */
+	yCoordinate?: Maybe<Scalars['Int']>;
+	/** Which element in the DOM is this happening on? This represents the full xpath. */
 	xpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. */
 	selector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. */
 	className?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? */
 	tagName?: Maybe<Scalars['String']>;
 	tagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. */
 	innerText?: Maybe<Scalars['String']>;
+	/**
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	altOrAriaText?: Maybe<Scalars['String']>;
+	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
+	scrollTop?: Maybe<Scalars['Float']>;
+	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
+	scrollLeft?: Maybe<Scalars['Float']>;
+	/**
+	 * The target destination X coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the x coordinate end up?
+	 */
+	destinationXCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * The target destination Y coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the y coordinate end up?
+	 */
+	destinationYCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * Which element in the DOM is this happening on? This represents the full xpath.
+	 * This is used for drag and drop events for the drop half. What is the xpath of
+	 * where this ended up?
+	 */
+	destinationXpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationSelector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationClassName?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? This is used for drag and drop events for the drop half. */
+	destinationTagName?: Maybe<Scalars['String']>;
+	/** This is used for drag and drop events for the drop half. */
+	destinationTagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationInnerText?: Maybe<Scalars['String']>;
+	/**
+	 * This is used for drag and drop events for the drop half.
+	 *
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	destinationAltOrAriaText?: Maybe<Scalars['String']>;
+	request?: Maybe<Scalars['JSON']>;
+	response?: Maybe<Scalars['JSON']>;
 };
 
-/** SeleniumSelector delete input */
-export type SeleniumSelectorDeleteInput = {
+/** ScriptCommands delete input */
+export type ScriptCommandDeleteInput = {
 	id?: Maybe<Scalars['ID']>;
 	force?: Maybe<Scalars['Boolean']>;
 };
 
-/** SeleniumSelectorFieldsPermissions create input */
-export type SeleniumSelectorFieldsPermissions = {
+/** ScriptCommandFieldsPermissions create input */
+export type ScriptCommandFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
+	command?: Maybe<Scalars['Boolean']>;
+	sIndex?: Maybe<Scalars['Boolean']>;
+	value?: Maybe<Scalars['Boolean']>;
+	xCoordinate?: Maybe<Scalars['Boolean']>;
+	yCoordinate?: Maybe<Scalars['Boolean']>;
 	xpath?: Maybe<Scalars['Boolean']>;
 	selector?: Maybe<Scalars['Boolean']>;
 	className?: Maybe<Scalars['Boolean']>;
 	tagName?: Maybe<Scalars['Boolean']>;
 	tagId?: Maybe<Scalars['Boolean']>;
 	innerText?: Maybe<Scalars['Boolean']>;
+	altOrAriaText?: Maybe<Scalars['Boolean']>;
+	scrollTop?: Maybe<Scalars['Boolean']>;
+	scrollLeft?: Maybe<Scalars['Boolean']>;
+	destinationXCoordinate?: Maybe<Scalars['Boolean']>;
+	destinationYCoordinate?: Maybe<Scalars['Boolean']>;
+	destinationXpath?: Maybe<Scalars['Boolean']>;
+	destinationSelector?: Maybe<Scalars['Boolean']>;
+	destinationClassName?: Maybe<Scalars['Boolean']>;
+	destinationTagName?: Maybe<Scalars['Boolean']>;
+	destinationTagId?: Maybe<Scalars['Boolean']>;
+	destinationInnerText?: Maybe<Scalars['Boolean']>;
+	destinationAltOrAriaText?: Maybe<Scalars['Boolean']>;
+	request?: Maybe<Scalars['Boolean']>;
+	response?: Maybe<Scalars['Boolean']>;
 };
 
-export type SeleniumSelectorFilter = {
+export type ScriptCommandFilter = {
 	id?: Maybe<IdPredicate>;
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
+	command?: Maybe<StringPredicate>;
+	sIndex?: Maybe<IntPredicate>;
+	value?: Maybe<StringPredicate>;
+	xCoordinate?: Maybe<IntPredicate>;
+	yCoordinate?: Maybe<IntPredicate>;
 	xpath?: Maybe<StringPredicate>;
 	selector?: Maybe<StringPredicate>;
 	className?: Maybe<StringPredicate>;
 	tagName?: Maybe<StringPredicate>;
 	tagId?: Maybe<StringPredicate>;
 	innerText?: Maybe<StringPredicate>;
+	altOrAriaText?: Maybe<StringPredicate>;
+	scrollTop?: Maybe<FloatPredicate>;
+	scrollLeft?: Maybe<FloatPredicate>;
+	destinationXCoordinate?: Maybe<IntPredicate>;
+	destinationYCoordinate?: Maybe<IntPredicate>;
+	destinationXpath?: Maybe<StringPredicate>;
+	destinationSelector?: Maybe<StringPredicate>;
+	destinationClassName?: Maybe<StringPredicate>;
+	destinationTagName?: Maybe<StringPredicate>;
+	destinationTagId?: Maybe<StringPredicate>;
+	destinationInnerText?: Maybe<StringPredicate>;
+	destinationAltOrAriaText?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
-	target?: Maybe<SeleniumTargetFilter>;
-	AND?: Maybe<Array<SeleniumSelectorFilter>>;
-	OR?: Maybe<Array<SeleniumSelectorFilter>>;
+	userStories?: Maybe<UserStoryFilter>;
+	AND?: Maybe<Array<ScriptCommandFilter>>;
+	OR?: Maybe<Array<ScriptCommandFilter>>;
 };
 
-export type SeleniumSelectorGroupBy = {
-	query: SeleniumSelectorGroupByQuery;
+export type ScriptCommandGroupBy = {
+	query: ScriptCommandGroupByQuery;
 	sort?: Maybe<Array<GroupBySort>>;
 	having?: Maybe<Having>;
 	first?: Maybe<Scalars['Int']>;
@@ -13599,47 +9458,66 @@ export type SeleniumSelectorGroupBy = {
 	skip?: Maybe<Scalars['Int']>;
 };
 
-export type SeleniumSelectorGroupByQuery = {
+export type ScriptCommandGroupByQuery = {
 	id?: Maybe<Array<GroupByField>>;
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
+	command?: Maybe<Array<GroupByField>>;
+	sIndex?: Maybe<Array<GroupByField>>;
+	value?: Maybe<Array<GroupByField>>;
+	xCoordinate?: Maybe<Array<GroupByField>>;
+	yCoordinate?: Maybe<Array<GroupByField>>;
 	xpath?: Maybe<Array<GroupByField>>;
 	selector?: Maybe<Array<GroupByField>>;
 	className?: Maybe<Array<GroupByField>>;
 	tagName?: Maybe<Array<GroupByField>>;
 	tagId?: Maybe<Array<GroupByField>>;
 	innerText?: Maybe<Array<GroupByField>>;
+	altOrAriaText?: Maybe<Array<GroupByField>>;
+	scrollTop?: Maybe<Array<GroupByField>>;
+	scrollLeft?: Maybe<Array<GroupByField>>;
+	destinationXCoordinate?: Maybe<Array<GroupByField>>;
+	destinationYCoordinate?: Maybe<Array<GroupByField>>;
+	destinationXpath?: Maybe<Array<GroupByField>>;
+	destinationSelector?: Maybe<Array<GroupByField>>;
+	destinationClassName?: Maybe<Array<GroupByField>>;
+	destinationTagName?: Maybe<Array<GroupByField>>;
+	destinationTagId?: Maybe<Array<GroupByField>>;
+	destinationInnerText?: Maybe<Array<GroupByField>>;
+	destinationAltOrAriaText?: Maybe<Array<GroupByField>>;
+	request?: Maybe<Array<GroupByField>>;
+	response?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
-	target?: Maybe<SeleniumTargetGroupByQuery>;
+	userStories?: Maybe<UserStoryGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
-export type SeleniumSelectorKeyFilter = {
+export type ScriptCommandKeyFilter = {
 	id?: Maybe<Scalars['ID']>;
 };
 
-/** SeleniumSelectorListResponse output */
-export type SeleniumSelectorListResponse = {
-	__typename?: 'SeleniumSelectorListResponse';
+/** ScriptCommandListResponse output */
+export type ScriptCommandListResponse = {
+	__typename?: 'ScriptCommandListResponse';
 	/** List items */
-	items: Array<SeleniumSelector>;
+	items: Array<ScriptCommand>;
 	/** List items count */
 	count: Scalars['Int'];
 	/** Aggregated items */
 	groups: Array<GroupByResponse>;
 };
 
-/** SeleniumSelectorManyResponse output */
-export type SeleniumSelectorManyResponse = {
-	__typename?: 'SeleniumSelectorManyResponse';
+/** ScriptCommandManyResponse output */
+export type ScriptCommandManyResponse = {
+	__typename?: 'ScriptCommandManyResponse';
 	/** List items */
-	items: Array<SeleniumSelector>;
+	items: Array<ScriptCommand>;
 	/** List items count */
 	count: Scalars['Int'];
 };
 
 /** No longer supported. Use `sort` instead. */
-export enum SeleniumSelectorOrderBy {
+export enum ScriptCommandOrderBy {
 	IdAsc = 'id_ASC',
 	IdDesc = 'id_DESC',
 	CreatedAtAsc = 'createdAt_ASC',
@@ -13648,6 +9526,16 @@ export enum SeleniumSelectorOrderBy {
 	UpdatedAtDesc = 'updatedAt_DESC',
 	DeletedAtAsc = 'deletedAt_ASC',
 	DeletedAtDesc = 'deletedAt_DESC',
+	CommandAsc = 'command_ASC',
+	CommandDesc = 'command_DESC',
+	SIndexAsc = 'sIndex_ASC',
+	SIndexDesc = 'sIndex_DESC',
+	ValueAsc = 'value_ASC',
+	ValueDesc = 'value_DESC',
+	XCoordinateAsc = 'xCoordinate_ASC',
+	XCoordinateDesc = 'xCoordinate_DESC',
+	YCoordinateAsc = 'yCoordinate_ASC',
+	YCoordinateDesc = 'yCoordinate_DESC',
 	XpathAsc = 'xpath_ASC',
 	XpathDesc = 'xpath_DESC',
 	SelectorAsc = 'selector_ASC',
@@ -13660,777 +9548,325 @@ export enum SeleniumSelectorOrderBy {
 	TagIdDesc = 'tagId_DESC',
 	InnerTextAsc = 'innerText_ASC',
 	InnerTextDesc = 'innerText_DESC',
+	AltOrAriaTextAsc = 'altOrAriaText_ASC',
+	AltOrAriaTextDesc = 'altOrAriaText_DESC',
+	ScrollTopAsc = 'scrollTop_ASC',
+	ScrollTopDesc = 'scrollTop_DESC',
+	ScrollLeftAsc = 'scrollLeft_ASC',
+	ScrollLeftDesc = 'scrollLeft_DESC',
+	DestinationXCoordinateAsc = 'destinationXCoordinate_ASC',
+	DestinationXCoordinateDesc = 'destinationXCoordinate_DESC',
+	DestinationYCoordinateAsc = 'destinationYCoordinate_ASC',
+	DestinationYCoordinateDesc = 'destinationYCoordinate_DESC',
+	DestinationXpathAsc = 'destinationXpath_ASC',
+	DestinationXpathDesc = 'destinationXpath_DESC',
+	DestinationSelectorAsc = 'destinationSelector_ASC',
+	DestinationSelectorDesc = 'destinationSelector_DESC',
+	DestinationClassNameAsc = 'destinationClassName_ASC',
+	DestinationClassNameDesc = 'destinationClassName_DESC',
+	DestinationTagNameAsc = 'destinationTagName_ASC',
+	DestinationTagNameDesc = 'destinationTagName_DESC',
+	DestinationTagIdAsc = 'destinationTagId_ASC',
+	DestinationTagIdDesc = 'destinationTagId_DESC',
+	DestinationInnerTextAsc = 'destinationInnerText_ASC',
+	DestinationInnerTextDesc = 'destinationInnerText_DESC',
+	DestinationAltOrAriaTextAsc = 'destinationAltOrAriaText_ASC',
+	DestinationAltOrAriaTextDesc = 'destinationAltOrAriaText_DESC',
+	RequestAsc = 'request_ASC',
+	RequestDesc = 'request_DESC',
+	ResponseAsc = 'response_ASC',
+	ResponseDesc = 'response_DESC',
 }
 
-/** SeleniumSelector subscription payload */
-export type SeleniumSelectorPayload = {
-	__typename?: 'SeleniumSelectorPayload';
+/** ScriptCommands subscription payload */
+export type ScriptCommandPayload = {
+	__typename?: 'ScriptCommandPayload';
 	mutation: MutationType;
-	node?: Maybe<SeleniumSelector>;
+	node?: Maybe<ScriptCommand>;
 	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumSelector>;
+	previousValues?: Maybe<ScriptCommand>;
 };
 
-export type SeleniumSelectorSort = {
+export type ScriptCommandRelationFilter = {
+	some?: Maybe<ScriptCommandFilter>;
+	every?: Maybe<ScriptCommandFilter>;
+	none?: Maybe<ScriptCommandFilter>;
+};
+
+/** UserStory create input from scriptCommands */
+export type ScriptCommands_UserStoryCreateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
+};
+
+/** UserStory update input from scriptCommands */
+export type ScriptCommands_UserStoryUpdateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created?: Maybe<Scalars['String']>;
+	video?: Maybe<UserStoryVideoUpdateRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
+};
+
+export type ScriptCommandSort = {
 	id?: Maybe<SortOrder>;
 	createdAt?: Maybe<SortOrder>;
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
+	command?: Maybe<SortOrder>;
+	sIndex?: Maybe<SortOrder>;
+	value?: Maybe<SortOrder>;
+	xCoordinate?: Maybe<SortOrder>;
+	yCoordinate?: Maybe<SortOrder>;
 	xpath?: Maybe<SortOrder>;
 	selector?: Maybe<SortOrder>;
 	className?: Maybe<SortOrder>;
 	tagName?: Maybe<SortOrder>;
 	tagId?: Maybe<SortOrder>;
 	innerText?: Maybe<SortOrder>;
+	altOrAriaText?: Maybe<SortOrder>;
+	scrollTop?: Maybe<SortOrder>;
+	scrollLeft?: Maybe<SortOrder>;
+	destinationXCoordinate?: Maybe<SortOrder>;
+	destinationYCoordinate?: Maybe<SortOrder>;
+	destinationXpath?: Maybe<SortOrder>;
+	destinationSelector?: Maybe<SortOrder>;
+	destinationClassName?: Maybe<SortOrder>;
+	destinationTagName?: Maybe<SortOrder>;
+	destinationTagId?: Maybe<SortOrder>;
+	destinationInnerText?: Maybe<SortOrder>;
+	destinationAltOrAriaText?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
-	target?: Maybe<SeleniumTargetSort>;
+	userStories?: Maybe<UserStorySort>;
 };
 
-/** SeleniumSelector subscription filter */
-export type SeleniumSelectorSubscriptionFilter = {
+/** ScriptCommands subscription filter */
+export type ScriptCommandSubscriptionFilter = {
 	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumSelectorFilter>;
+	node?: Maybe<ScriptCommandFilter>;
 	updatedFields?: Maybe<UpdatedFieldsFilter>;
 };
 
-/** SeleniumSelector relation input */
-export type SeleniumSelectorTargetManyRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
+/** ScriptCommands relation input */
+export type ScriptCommandsUserStoriesManyRelationInput = {
+	connect?: Maybe<UserStoryKeyFilter>;
 };
 
-/** SeleniumSelector relation input */
-export type SeleniumSelectorTargetRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Selector_SeleniumTargetCreateInput>;
+/** ScriptCommands relation input */
+export type ScriptCommandsUserStoriesRelationInput = {
+	connect?: Maybe<UserStoryKeyFilter>;
+	create?: Maybe<ScriptCommands_UserStoryCreateInput>;
 };
 
-/** SeleniumSelector relation input */
-export type SeleniumSelectorTargetUpdateRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	disconnect?: Maybe<SeleniumTargetKeyFilter>;
-	reconnect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Selector_SeleniumTargetCreateInput>;
-	update?: Maybe<Selector_SeleniumTargetUpdateInput>;
+/** ScriptCommands relation input */
+export type ScriptCommandsUserStoriesUpdateRelationInput = {
+	connect?: Maybe<UserStoryKeyFilter>;
+	disconnect?: Maybe<UserStoryKeyFilter>;
+	reconnect?: Maybe<UserStoryKeyFilter>;
+	create?: Maybe<ScriptCommands_UserStoryCreateInput>;
+	update?: Maybe<ScriptCommands_UserStoryUpdateInput>;
 };
 
-/** SeleniumSelector update input */
-export type SeleniumSelectorUpdateByFilterInput = {
+/** ScriptCommands update input */
+export type ScriptCommandUpdateByFilterInput = {
+	command?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
+	sIndex?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	value?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	xCoordinate?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	yCoordinate?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
 	xpath?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	selector?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	className?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	tagName?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	tagId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	innerText?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	altOrAriaText?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	scrollTop?: Maybe<Array<Maybe<UpdateByFilterFloatInput>>>;
+	scrollLeft?: Maybe<Array<Maybe<UpdateByFilterFloatInput>>>;
+	destinationXCoordinate?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	destinationYCoordinate?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	destinationXpath?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	destinationSelector?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	destinationClassName?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	destinationTagName?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	destinationTagId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	destinationInnerText?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	destinationAltOrAriaText?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	request?: Maybe<Array<Maybe<UpdateByFilterJsonInput>>>;
+	response?: Maybe<Array<Maybe<UpdateByFilterJsonInput>>>;
 };
 
-/** SeleniumSelector update input */
-export type SeleniumSelectorUpdateInput = {
+/** ScriptCommands update input */
+export type ScriptCommandUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
-	target?: Maybe<SeleniumSelectorTargetUpdateRelationInput>;
+	userStories?: Maybe<ScriptCommandsUserStoriesUpdateRelationInput>;
+	/**
+	 * Command represents what type of event this is, and gives context to the client
+	 * and the test runner. Only one can be defined and it's a mandatory field. The options are:
+	 * 1. `open`
+	 * 2. `set viewport size`
+	 * 3. `click`
+	 * 4. `type`
+	 * 5. `drag and drop`
+	 * 6. `navigation`
+	 * 7. `scroll`
+	 * 8. `api request`
+	 */
+	command?: Maybe<Scalars['String']>;
+	/** Which step in the test is this? */
+	sIndex?: Maybe<Scalars['Int']>;
+	/** The generic value field used if a command only requires a string representation. */
+	value?: Maybe<Scalars['String']>;
+	/** The target X coordinate. What is the x coordinate of the element this event is taking place on/in? */
+	xCoordinate?: Maybe<Scalars['Int']>;
+	/** The target Y coordinate. What is the y coordinate of the element this event is taking place on/in? */
+	yCoordinate?: Maybe<Scalars['Int']>;
+	/** Which element in the DOM is this happening on? This represents the full xpath. */
 	xpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. */
 	selector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. */
 	className?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? */
 	tagName?: Maybe<Scalars['String']>;
 	tagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. */
 	innerText?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumSetViewportSize = {
-	__typename?: 'SeleniumSetViewportSize';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	value?: Maybe<SeleniumPoint>;
-	setViewportSize?: Maybe<SeleniumCommand>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumSetViewportSize_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	value?: Maybe<SeleniumPoint_PermissionFilter>;
-	setViewportSize?: Maybe<SeleniumCommand_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumSetViewportSize_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumSetViewportSize_PermissionFilter>>;
-};
-
-/** SeleniumSetViewportSize create input */
-export type SeleniumSetViewportSizeCreateInput = {
-	value?: Maybe<SeleniumSetViewportSizeValueRelationInput>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSetViewportSizeRelationInput>;
-};
-
-/** SeleniumSetViewportSize create many input */
-export type SeleniumSetViewportSizeCreateManyInput = {
-	value: SeleniumSetViewportSizeValueManyRelationInput;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSetViewportSizeManyRelationInput>;
-};
-
-/** SeleniumSetViewportSize delete input */
-export type SeleniumSetViewportSizeDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumSetViewportSizeFieldsPermissions create input */
-export type SeleniumSetViewportSizeFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumSetViewportSizeFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	value?: Maybe<SeleniumPointFilter>;
-	setViewportSize?: Maybe<SeleniumCommandFilter>;
-	AND?: Maybe<Array<SeleniumSetViewportSizeFilter>>;
-	OR?: Maybe<Array<SeleniumSetViewportSizeFilter>>;
-};
-
-export type SeleniumSetViewportSizeGroupBy = {
-	query: SeleniumSetViewportSizeGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumSetViewportSizeGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	value?: Maybe<SeleniumPointGroupByQuery>;
-	setViewportSize?: Maybe<SeleniumCommandGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumSetViewportSizeKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumSetViewportSizeListResponse output */
-export type SeleniumSetViewportSizeListResponse = {
-	__typename?: 'SeleniumSetViewportSizeListResponse';
-	/** List items */
-	items: Array<SeleniumSetViewportSize>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumSetViewportSizeManyResponse output */
-export type SeleniumSetViewportSizeManyResponse = {
-	__typename?: 'SeleniumSetViewportSizeManyResponse';
-	/** List items */
-	items: Array<SeleniumSetViewportSize>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumSetViewportSizeOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-}
-
-/** SeleniumSetViewportSize subscription payload */
-export type SeleniumSetViewportSizePayload = {
-	__typename?: 'SeleniumSetViewportSizePayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumSetViewportSize>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumSetViewportSize>;
-};
-
-/** SeleniumSetViewportSize relation input */
-export type SeleniumSetViewportSizeSetViewportSizeManyRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-};
-
-/** SeleniumSetViewportSize relation input */
-export type SeleniumSetViewportSizeSetViewportSizeRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<SetViewportSize_SeleniumCommandCreateInput>;
-};
-
-/** SeleniumSetViewportSize relation input */
-export type SeleniumSetViewportSizeSetViewportSizeUpdateRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	disconnect?: Maybe<SeleniumCommandKeyFilter>;
-	reconnect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<SetViewportSize_SeleniumCommandCreateInput>;
-	update?: Maybe<SetViewportSize_SeleniumCommandUpdateInput>;
-};
-
-export type SeleniumSetViewportSizeSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	value?: Maybe<SeleniumPointSort>;
-	setViewportSize?: Maybe<SeleniumCommandSort>;
-};
-
-/** SeleniumSetViewportSize subscription filter */
-export type SeleniumSetViewportSizeSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumSetViewportSizeFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumSetViewportSize update input */
-export type SeleniumSetViewportSizeUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	value?: Maybe<SeleniumSetViewportSizeValueUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSetViewportSizeUpdateRelationInput>;
-};
-
-/** SeleniumSetViewportSize relation input */
-export type SeleniumSetViewportSizeValueManyRelationInput = {
-	connect?: Maybe<SeleniumPointKeyFilter>;
-};
-
-/** SeleniumSetViewportSize relation input */
-export type SeleniumSetViewportSizeValueRelationInput = {
-	connect?: Maybe<SeleniumPointKeyFilter>;
-	create?: Maybe<SetViewportSize_SeleniumPointCreateInput>;
-};
-
-/** SeleniumSetViewportSize relation input */
-export type SeleniumSetViewportSizeValueUpdateRelationInput = {
-	connect?: Maybe<SeleniumPointKeyFilter>;
-	disconnect?: Maybe<SeleniumPointKeyFilter>;
-	reconnect?: Maybe<SeleniumPointKeyFilter>;
-	create?: Maybe<SetViewportSize_SeleniumPointCreateInput>;
-	update?: Maybe<SetViewportSize_SeleniumPointUpdateInput>;
-};
-
-export type SeleniumTarget = {
-	__typename?: 'SeleniumTarget';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	click?: Maybe<SeleniumClick>;
-	type?: Maybe<SeleniumType>;
-	dragndropSource?: Maybe<SeleniumDragndrop>;
-	dragndropDestination?: Maybe<SeleniumDragndrop>;
-	selector?: Maybe<SeleniumSelector>;
-	coordinates?: Maybe<SeleniumPoint>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumTarget_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	click?: Maybe<SeleniumClick_PermissionFilter>;
-	type?: Maybe<SeleniumType_PermissionFilter>;
-	dragndropSource?: Maybe<SeleniumDragndrop_PermissionFilter>;
-	dragndropDestination?: Maybe<SeleniumDragndrop_PermissionFilter>;
-	selector?: Maybe<SeleniumSelector_PermissionFilter>;
-	coordinates?: Maybe<SeleniumPoint_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumTarget_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumTarget_PermissionFilter>>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetClickManyRelationInput = {
-	connect?: Maybe<SeleniumClickKeyFilter>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetClickRelationInput = {
-	connect?: Maybe<SeleniumClickKeyFilter>;
-	create?: Maybe<Target_SeleniumClickCreateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetClickUpdateRelationInput = {
-	connect?: Maybe<SeleniumClickKeyFilter>;
-	disconnect?: Maybe<SeleniumClickKeyFilter>;
-	reconnect?: Maybe<SeleniumClickKeyFilter>;
-	create?: Maybe<Target_SeleniumClickCreateInput>;
-	update?: Maybe<Target_SeleniumClickUpdateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetCoordinatesManyRelationInput = {
-	connect?: Maybe<SeleniumPointKeyFilter>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetCoordinatesRelationInput = {
-	connect?: Maybe<SeleniumPointKeyFilter>;
-	create?: Maybe<Target_SeleniumPointCreateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetCoordinatesUpdateRelationInput = {
-	connect?: Maybe<SeleniumPointKeyFilter>;
-	disconnect?: Maybe<SeleniumPointKeyFilter>;
-	reconnect?: Maybe<SeleniumPointKeyFilter>;
-	create?: Maybe<Target_SeleniumPointCreateInput>;
-	update?: Maybe<Target_SeleniumPointUpdateInput>;
-};
-
-/** SeleniumTarget create input */
-export type SeleniumTargetCreateInput = {
-	click?: Maybe<SeleniumTargetClickRelationInput>;
-	type?: Maybe<SeleniumTargetTypeRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesRelationInput>;
-};
-
-/** SeleniumTarget create many input */
-export type SeleniumTargetCreateManyInput = {
-	click?: Maybe<SeleniumTargetClickManyRelationInput>;
-	type?: Maybe<SeleniumTargetTypeManyRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceManyRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationManyRelationInput>;
-	selector: SeleniumTargetSelectorManyRelationInput;
-	coordinates?: Maybe<SeleniumTargetCoordinatesManyRelationInput>;
-};
-
-/** SeleniumTarget delete input */
-export type SeleniumTargetDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetDragndropDestinationManyRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetDragndropDestinationRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-	create?: Maybe<DestinationTarget_SeleniumDragndropCreateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetDragndropDestinationUpdateRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-	disconnect?: Maybe<SeleniumDragndropKeyFilter>;
-	reconnect?: Maybe<SeleniumDragndropKeyFilter>;
-	create?: Maybe<DestinationTarget_SeleniumDragndropCreateInput>;
-	update?: Maybe<DestinationTarget_SeleniumDragndropUpdateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetDragndropSourceManyRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetDragndropSourceRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-	create?: Maybe<SourceTarget_SeleniumDragndropCreateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetDragndropSourceUpdateRelationInput = {
-	connect?: Maybe<SeleniumDragndropKeyFilter>;
-	disconnect?: Maybe<SeleniumDragndropKeyFilter>;
-	reconnect?: Maybe<SeleniumDragndropKeyFilter>;
-	create?: Maybe<SourceTarget_SeleniumDragndropCreateInput>;
-	update?: Maybe<SourceTarget_SeleniumDragndropUpdateInput>;
-};
-
-/** SeleniumTargetFieldsPermissions create input */
-export type SeleniumTargetFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumTargetFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	click?: Maybe<SeleniumClickFilter>;
-	type?: Maybe<SeleniumTypeFilter>;
-	dragndropSource?: Maybe<SeleniumDragndropFilter>;
-	dragndropDestination?: Maybe<SeleniumDragndropFilter>;
-	selector?: Maybe<SeleniumSelectorFilter>;
-	coordinates?: Maybe<SeleniumPointFilter>;
-	AND?: Maybe<Array<SeleniumTargetFilter>>;
-	OR?: Maybe<Array<SeleniumTargetFilter>>;
-};
-
-export type SeleniumTargetGroupBy = {
-	query: SeleniumTargetGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumTargetGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	click?: Maybe<SeleniumClickGroupByQuery>;
-	type?: Maybe<SeleniumTypeGroupByQuery>;
-	dragndropSource?: Maybe<SeleniumDragndropGroupByQuery>;
-	dragndropDestination?: Maybe<SeleniumDragndropGroupByQuery>;
-	selector?: Maybe<SeleniumSelectorGroupByQuery>;
-	coordinates?: Maybe<SeleniumPointGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumTargetKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumTargetListResponse output */
-export type SeleniumTargetListResponse = {
-	__typename?: 'SeleniumTargetListResponse';
-	/** List items */
-	items: Array<SeleniumTarget>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumTargetManyResponse output */
-export type SeleniumTargetManyResponse = {
-	__typename?: 'SeleniumTargetManyResponse';
-	/** List items */
-	items: Array<SeleniumTarget>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumTargetOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-}
-
-/** SeleniumTarget subscription payload */
-export type SeleniumTargetPayload = {
-	__typename?: 'SeleniumTargetPayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumTarget>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumTarget>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetSelectorManyRelationInput = {
-	connect?: Maybe<SeleniumSelectorKeyFilter>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetSelectorRelationInput = {
-	connect?: Maybe<SeleniumSelectorKeyFilter>;
-	create?: Maybe<Target_SeleniumSelectorCreateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetSelectorUpdateRelationInput = {
-	connect?: Maybe<SeleniumSelectorKeyFilter>;
-	disconnect?: Maybe<SeleniumSelectorKeyFilter>;
-	reconnect?: Maybe<SeleniumSelectorKeyFilter>;
-	create?: Maybe<Target_SeleniumSelectorCreateInput>;
-	update?: Maybe<Target_SeleniumSelectorUpdateInput>;
-};
-
-export type SeleniumTargetSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	click?: Maybe<SeleniumClickSort>;
-	type?: Maybe<SeleniumTypeSort>;
-	dragndropSource?: Maybe<SeleniumDragndropSort>;
-	dragndropDestination?: Maybe<SeleniumDragndropSort>;
-	selector?: Maybe<SeleniumSelectorSort>;
-	coordinates?: Maybe<SeleniumPointSort>;
-};
-
-/** SeleniumTarget subscription filter */
-export type SeleniumTargetSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumTargetFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetTypeManyRelationInput = {
-	connect?: Maybe<SeleniumTypeKeyFilter>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetTypeRelationInput = {
-	connect?: Maybe<SeleniumTypeKeyFilter>;
-	create?: Maybe<Target_SeleniumTypeCreateInput>;
-};
-
-/** SeleniumTarget relation input */
-export type SeleniumTargetTypeUpdateRelationInput = {
-	connect?: Maybe<SeleniumTypeKeyFilter>;
-	disconnect?: Maybe<SeleniumTypeKeyFilter>;
-	reconnect?: Maybe<SeleniumTypeKeyFilter>;
-	create?: Maybe<Target_SeleniumTypeCreateInput>;
-	update?: Maybe<Target_SeleniumTypeUpdateInput>;
-};
-
-/** SeleniumTarget update input */
-export type SeleniumTargetUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	click?: Maybe<SeleniumTargetClickUpdateRelationInput>;
-	type?: Maybe<SeleniumTargetTypeUpdateRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceUpdateRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationUpdateRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorUpdateRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesUpdateRelationInput>;
-};
-
-export type SeleniumType = {
-	__typename?: 'SeleniumType';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	target?: Maybe<SeleniumTarget>;
-	command?: Maybe<SeleniumCommand>;
-	value?: Maybe<Scalars['String']>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-export type SeleniumType_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	value?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	target?: Maybe<SeleniumTarget_PermissionFilter>;
-	command?: Maybe<SeleniumCommand_PermissionFilter>;
-	AND?: Maybe<Array<SeleniumType_PermissionFilter>>;
-	OR?: Maybe<Array<SeleniumType_PermissionFilter>>;
-};
-
-/** SeleniumType relation input */
-export type SeleniumTypeCommandManyRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-};
-
-/** SeleniumType relation input */
-export type SeleniumTypeCommandRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Type_SeleniumCommandCreateInput>;
-};
-
-/** SeleniumType relation input */
-export type SeleniumTypeCommandUpdateRelationInput = {
-	connect?: Maybe<SeleniumCommandKeyFilter>;
-	disconnect?: Maybe<SeleniumCommandKeyFilter>;
-	reconnect?: Maybe<SeleniumCommandKeyFilter>;
-	create?: Maybe<Type_SeleniumCommandCreateInput>;
-	update?: Maybe<Type_SeleniumCommandUpdateInput>;
-};
-
-/** SeleniumType create input */
-export type SeleniumTypeCreateInput = {
-	target?: Maybe<SeleniumTypeTargetRelationInput>;
-	command?: Maybe<SeleniumTypeCommandRelationInput>;
-	value: Scalars['String'];
-};
-
-/** SeleniumType create many input */
-export type SeleniumTypeCreateManyInput = {
-	target: SeleniumTypeTargetManyRelationInput;
-	command?: Maybe<SeleniumTypeCommandManyRelationInput>;
-	value: Scalars['String'];
-};
-
-/** SeleniumType delete input */
-export type SeleniumTypeDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SeleniumTypeFieldsPermissions create input */
-export type SeleniumTypeFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	value?: Maybe<Scalars['Boolean']>;
-};
-
-export type SeleniumTypeFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	value?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	target?: Maybe<SeleniumTargetFilter>;
-	command?: Maybe<SeleniumCommandFilter>;
-	AND?: Maybe<Array<SeleniumTypeFilter>>;
-	OR?: Maybe<Array<SeleniumTypeFilter>>;
-};
-
-export type SeleniumTypeGroupBy = {
-	query: SeleniumTypeGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SeleniumTypeGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	value?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	target?: Maybe<SeleniumTargetGroupByQuery>;
-	command?: Maybe<SeleniumCommandGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SeleniumTypeKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SeleniumTypeListResponse output */
-export type SeleniumTypeListResponse = {
-	__typename?: 'SeleniumTypeListResponse';
-	/** List items */
-	items: Array<SeleniumType>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SeleniumTypeManyResponse output */
-export type SeleniumTypeManyResponse = {
-	__typename?: 'SeleniumTypeManyResponse';
-	/** List items */
-	items: Array<SeleniumType>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SeleniumTypeOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	ValueAsc = 'value_ASC',
-	ValueDesc = 'value_DESC',
-}
-
-/** SeleniumType subscription payload */
-export type SeleniumTypePayload = {
-	__typename?: 'SeleniumTypePayload';
-	mutation: MutationType;
-	node?: Maybe<SeleniumType>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<SeleniumType>;
-};
-
-export type SeleniumTypeSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	value?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-	target?: Maybe<SeleniumTargetSort>;
-	command?: Maybe<SeleniumCommandSort>;
-};
-
-/** SeleniumType subscription filter */
-export type SeleniumTypeSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SeleniumTypeFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** SeleniumType relation input */
-export type SeleniumTypeTargetManyRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-};
-
-/** SeleniumType relation input */
-export type SeleniumTypeTargetRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Type_SeleniumTargetCreateInput>;
-};
-
-/** SeleniumType relation input */
-export type SeleniumTypeTargetUpdateRelationInput = {
-	connect?: Maybe<SeleniumTargetKeyFilter>;
-	disconnect?: Maybe<SeleniumTargetKeyFilter>;
-	reconnect?: Maybe<SeleniumTargetKeyFilter>;
-	create?: Maybe<Type_SeleniumTargetCreateInput>;
-	update?: Maybe<Type_SeleniumTargetUpdateInput>;
-};
-
-/** SeleniumType update input */
-export type SeleniumTypeUpdateByFilterInput = {
-	value?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-};
-
-/** SeleniumType update input */
-export type SeleniumTypeUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	target?: Maybe<SeleniumTypeTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumTypeCommandUpdateRelationInput>;
-	value?: Maybe<Scalars['String']>;
+	/**
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	altOrAriaText?: Maybe<Scalars['String']>;
+	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
+	scrollTop?: Maybe<Scalars['Float']>;
+	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
+	scrollLeft?: Maybe<Scalars['Float']>;
+	/**
+	 * The target destination X coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the x coordinate end up?
+	 */
+	destinationXCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * The target destination Y coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the y coordinate end up?
+	 */
+	destinationYCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * Which element in the DOM is this happening on? This represents the full xpath.
+	 * This is used for drag and drop events for the drop half. What is the xpath of
+	 * where this ended up?
+	 */
+	destinationXpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationSelector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationClassName?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? This is used for drag and drop events for the drop half. */
+	destinationTagName?: Maybe<Scalars['String']>;
+	/** This is used for drag and drop events for the drop half. */
+	destinationTagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationInnerText?: Maybe<Scalars['String']>;
+	/**
+	 * This is used for drag and drop events for the drop half.
+	 *
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	destinationAltOrAriaText?: Maybe<Scalars['String']>;
+	request?: Maybe<Scalars['JSON']>;
+	response?: Maybe<Scalars['JSON']>;
 };
 
 export type Setting = {
@@ -14701,293 +10137,9 @@ export type SettingUpdateInput = {
 	leftNavColor?: Maybe<Scalars['String']>;
 };
 
-/** SeleniumCommand create input from setViewportSize */
-export type SetViewportSize_SeleniumCommandCreateInput = {
-	open?: Maybe<SeleniumCommandOpenRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeRelationInput>;
-	click?: Maybe<SeleniumCommandClickRelationInput>;
-	type?: Maybe<SeleniumCommandTypeRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupRelationInput>;
-};
-
-/** SeleniumCommand update input from setViewportSize */
-export type SetViewportSize_SeleniumCommandUpdateInput = {
-	open?: Maybe<SeleniumCommandOpenUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeUpdateRelationInput>;
-	click?: Maybe<SeleniumCommandClickUpdateRelationInput>;
-	type?: Maybe<SeleniumCommandTypeUpdateRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropUpdateRelationInput>;
-	sIndex?: Maybe<Scalars['Int']>;
-	group?: Maybe<SeleniumCommandGroupUpdateRelationInput>;
-};
-
-/** SeleniumPoint create input from setViewportSize */
-export type SetViewportSize_SeleniumPointCreateInput = {
-	setViewportSize?: Maybe<SeleniumPointSetViewportSizeRelationInput>;
-	target?: Maybe<SeleniumPointTargetRelationInput>;
-	xCoord: Scalars['Int'];
-	yCoord: Scalars['Int'];
-};
-
-/** SeleniumPoint update input from setViewportSize */
-export type SetViewportSize_SeleniumPointUpdateInput = {
-	setViewportSize?: Maybe<SeleniumPointSetViewportSizeUpdateRelationInput>;
-	target?: Maybe<SeleniumPointTargetUpdateRelationInput>;
-	xCoord?: Maybe<Scalars['Int']>;
-	yCoord?: Maybe<Scalars['Int']>;
-};
-
-/** SeleniumSetViewportSize create input from setViewportSize */
-export type SetViewportSize_SeleniumSetViewportSizeCreateInput = {
-	value: SeleniumSetViewportSizeValueRelationInput;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSetViewportSizeRelationInput>;
-};
-
-/** SeleniumSetViewportSize update input from setViewportSize */
-export type SetViewportSize_SeleniumSetViewportSizeUpdateInput = {
-	value?: Maybe<SeleniumSetViewportSizeValueUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSetViewportSizeUpdateRelationInput>;
-};
-
 /** SignUpResendInput */
 export type SignUpResendInput = {
 	email: Scalars['String'];
-};
-
-/** This represents the information needed for slack notifications to be sent to a Slack workspace. */
-export type Slack = {
-	__typename?: 'Slack';
-	id?: Maybe<Scalars['ID']>;
-	createdAt?: Maybe<Scalars['DateTime']>;
-	updatedAt?: Maybe<Scalars['DateTime']>;
-	deletedAt?: Maybe<Scalars['Int']>;
-	createdBy?: Maybe<User>;
-	syncCheckSum?: Maybe<Scalars['String']>;
-	syncNonce?: Maybe<Scalars['String']>;
-	slack?: Maybe<IntegrationListResponse>;
-	_description?: Maybe<Scalars['String']>;
-};
-
-/** This represents the information needed for slack notifications to be sent to a Slack workspace. */
-export type SlackSlackArgs = {
-	filter?: Maybe<IntegrationFilter>;
-	orderBy?: Maybe<Array<Maybe<IntegrationOrderBy>>>;
-	sort?: Maybe<Array<IntegrationSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<IntegrationGroupBy>;
-};
-
-/** Integration create input from slack */
-export type Slack_IntegrationCreateInput = {
-	/** Where is your CI pipeline? */
-	continuousIntegrationProvider?: Maybe<Scalars['String']>;
-	continuousIntegration?: Maybe<IntegrationContinuousIntegrationRelationInput>;
-	projectManagementProvider?: Maybe<Scalars['String']>;
-	projectManagement?: Maybe<IntegrationProjectManagementRelationInput>;
-	slack?: Maybe<IntegrationSlackRelationInput>;
-	project?: Maybe<IntegrationProjectRelationInput>;
-};
-
-/** Integration update input from slack */
-export type Slack_IntegrationUpdateInput = {
-	filter?: Maybe<IntegrationKeyFilter>;
-	data: IntegrationUpdateInput;
-};
-
-export type Slack_PermissionFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	syncCheckSum?: Maybe<StringPredicate>;
-	syncNonce?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<User_PermissionFilter>;
-	slack?: Maybe<Integration_PermissionRelationFilter>;
-	AND?: Maybe<Array<Slack_PermissionFilter>>;
-	OR?: Maybe<Array<Slack_PermissionFilter>>;
-};
-
-/** Slack create input from slack */
-export type Slack_SlackCreateInput = {
-	syncCheckSum: Scalars['String'];
-	syncNonce: Scalars['String'];
-	slack?: Maybe<SlackSlackRelationInput>;
-};
-
-/** Slack update input from slack */
-export type Slack_SlackUpdateInput = {
-	syncCheckSum?: Maybe<Scalars['String']>;
-	syncNonce?: Maybe<Scalars['String']>;
-	slack?: Maybe<SlackSlackUpdateRelationInput>;
-};
-
-/** Slack create input */
-export type SlackCreateInput = {
-	syncCheckSum: Scalars['String'];
-	syncNonce: Scalars['String'];
-	slack?: Maybe<SlackSlackRelationInput>;
-};
-
-/** Slack create many input */
-export type SlackCreateManyInput = {
-	syncCheckSum: Scalars['String'];
-	syncNonce: Scalars['String'];
-	slack?: Maybe<SlackSlackManyRelationInput>;
-};
-
-/** Slack delete input */
-export type SlackDeleteInput = {
-	id?: Maybe<Scalars['ID']>;
-	force?: Maybe<Scalars['Boolean']>;
-};
-
-/** SlackFieldsPermissions create input */
-export type SlackFieldsPermissions = {
-	createdAt?: Maybe<Scalars['Boolean']>;
-	updatedAt?: Maybe<Scalars['Boolean']>;
-	syncCheckSum?: Maybe<Scalars['Boolean']>;
-	syncNonce?: Maybe<Scalars['Boolean']>;
-};
-
-export type SlackFilter = {
-	id?: Maybe<IdPredicate>;
-	createdAt?: Maybe<DateTimePredicate>;
-	updatedAt?: Maybe<DateTimePredicate>;
-	deletedAt?: Maybe<IntPredicate>;
-	syncCheckSum?: Maybe<StringPredicate>;
-	syncNonce?: Maybe<StringPredicate>;
-	_fullText?: Maybe<Scalars['String']>;
-	createdBy?: Maybe<UserFilter>;
-	slack?: Maybe<IntegrationRelationFilter>;
-	AND?: Maybe<Array<SlackFilter>>;
-	OR?: Maybe<Array<SlackFilter>>;
-};
-
-export type SlackGroupBy = {
-	query: SlackGroupByQuery;
-	sort?: Maybe<Array<GroupBySort>>;
-	having?: Maybe<Having>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	skip?: Maybe<Scalars['Int']>;
-};
-
-export type SlackGroupByQuery = {
-	id?: Maybe<Array<GroupByField>>;
-	createdAt?: Maybe<Array<GroupByField>>;
-	updatedAt?: Maybe<Array<GroupByField>>;
-	syncCheckSum?: Maybe<Array<GroupByField>>;
-	syncNonce?: Maybe<Array<GroupByField>>;
-	createdBy?: Maybe<UserGroupByQuery>;
-	slack?: Maybe<IntegrationGroupByQuery>;
-	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
-};
-
-export type SlackKeyFilter = {
-	id?: Maybe<Scalars['ID']>;
-};
-
-/** SlackListResponse output */
-export type SlackListResponse = {
-	__typename?: 'SlackListResponse';
-	/** List items */
-	items: Array<Slack>;
-	/** List items count */
-	count: Scalars['Int'];
-	/** Aggregated items */
-	groups: Array<GroupByResponse>;
-};
-
-/** SlackManyResponse output */
-export type SlackManyResponse = {
-	__typename?: 'SlackManyResponse';
-	/** List items */
-	items: Array<Slack>;
-	/** List items count */
-	count: Scalars['Int'];
-};
-
-/** No longer supported. Use `sort` instead. */
-export enum SlackOrderBy {
-	IdAsc = 'id_ASC',
-	IdDesc = 'id_DESC',
-	CreatedAtAsc = 'createdAt_ASC',
-	CreatedAtDesc = 'createdAt_DESC',
-	UpdatedAtAsc = 'updatedAt_ASC',
-	UpdatedAtDesc = 'updatedAt_DESC',
-	DeletedAtAsc = 'deletedAt_ASC',
-	DeletedAtDesc = 'deletedAt_DESC',
-	SyncCheckSumAsc = 'syncCheckSum_ASC',
-	SyncCheckSumDesc = 'syncCheckSum_DESC',
-	SyncNonceAsc = 'syncNonce_ASC',
-	SyncNonceDesc = 'syncNonce_DESC',
-}
-
-/** Slack subscription payload */
-export type SlackPayload = {
-	__typename?: 'SlackPayload';
-	mutation: MutationType;
-	node?: Maybe<Slack>;
-	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
-	previousValues?: Maybe<Slack>;
-};
-
-/** Slack relation input */
-export type SlackSlackManyRelationInput = {
-	connect?: Maybe<Array<IntegrationKeyFilter>>;
-};
-
-/** Slack relation input */
-export type SlackSlackRelationInput = {
-	connect?: Maybe<Array<IntegrationKeyFilter>>;
-	create?: Maybe<Array<Maybe<Slack_IntegrationCreateInput>>>;
-};
-
-/** Slack relation input */
-export type SlackSlackUpdateRelationInput = {
-	connect?: Maybe<Array<IntegrationKeyFilter>>;
-	disconnect?: Maybe<Array<IntegrationKeyFilter>>;
-	reconnect?: Maybe<Array<IntegrationKeyFilter>>;
-	create?: Maybe<Array<Maybe<Slack_IntegrationCreateInput>>>;
-	update?: Maybe<Array<Maybe<Slack_IntegrationUpdateInput>>>;
-};
-
-export type SlackSort = {
-	id?: Maybe<SortOrder>;
-	createdAt?: Maybe<SortOrder>;
-	updatedAt?: Maybe<SortOrder>;
-	deletedAt?: Maybe<SortOrder>;
-	syncCheckSum?: Maybe<SortOrder>;
-	syncNonce?: Maybe<SortOrder>;
-	createdBy?: Maybe<UserSort>;
-};
-
-/** Slack subscription filter */
-export type SlackSubscriptionFilter = {
-	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
-	node?: Maybe<SlackFilter>;
-	updatedFields?: Maybe<UpdatedFieldsFilter>;
-};
-
-/** Slack update input */
-export type SlackUpdateByFilterInput = {
-	syncCheckSum?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	syncNonce?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-};
-
-/** Slack update input */
-export type SlackUpdateInput = {
-	id?: Maybe<Scalars['ID']>;
-	syncCheckSum?: Maybe<Scalars['String']>;
-	syncNonce?: Maybe<Scalars['String']>;
-	slack?: Maybe<SlackSlackUpdateRelationInput>;
 };
 
 /** Smart Field Attributes */
@@ -15008,20 +10160,6 @@ export enum SortOrder {
 	Asc = 'ASC',
 	Desc = 'DESC',
 }
-
-/** SeleniumDragndrop create input from sourceTarget */
-export type SourceTarget_SeleniumDragndropCreateInput = {
-	sourceTarget?: Maybe<SeleniumDragndropSourceTargetRelationInput>;
-	destinationTarget: SeleniumDragndropDestinationTargetRelationInput;
-	command?: Maybe<SeleniumDragndropCommandRelationInput>;
-};
-
-/** SeleniumDragndrop update input from sourceTarget */
-export type SourceTarget_SeleniumDragndropUpdateInput = {
-	sourceTarget?: Maybe<SeleniumDragndropSourceTargetUpdateRelationInput>;
-	destinationTarget?: Maybe<SeleniumDragndropDestinationTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumDragndropCommandUpdateRelationInput>;
-};
 
 export type StringPadFunctionArguments = {
 	len: Scalars['Int'];
@@ -15075,31 +10213,16 @@ export type Subscription = {
 	AuthenticationToken?: Maybe<AuthenticationTokenPayload>;
 	CiCdMigrations?: Maybe<CiCdMigrationPayload>;
 	Configuration?: Maybe<ConfigurationPayload>;
-	Environment?: Maybe<EnvironmentPayload>;
 	EnvironmentVariables?: Maybe<EnvironmentVariablePayload>;
-	Error?: Maybe<ErrorPayload>;
 	Files?: Maybe<FilePayload>;
-	Integration?: Maybe<IntegrationPayload>;
-	IntegrationDetails?: Maybe<IntegrationDetailPayload>;
+	Flow?: Maybe<FlowPayload>;
 	Metrics?: Maybe<MetricPayload>;
 	Permissions?: Maybe<PermissionPayload>;
 	Project?: Maybe<ProjectPayload>;
-	Recording?: Maybe<RecordingPayload>;
 	Release?: Maybe<ReleasePayload>;
 	Roles?: Maybe<RolePayload>;
-	SeleniumClick?: Maybe<SeleniumClickPayload>;
-	SeleniumCommand?: Maybe<SeleniumCommandPayload>;
-	SeleniumDragndrop?: Maybe<SeleniumDragndropPayload>;
-	SeleniumGroup?: Maybe<SeleniumGroupPayload>;
-	SeleniumOpen?: Maybe<SeleniumOpenPayload>;
-	SeleniumPoint?: Maybe<SeleniumPointPayload>;
-	SeleniumScript?: Maybe<SeleniumScriptPayload>;
-	SeleniumSelector?: Maybe<SeleniumSelectorPayload>;
-	SeleniumSetViewportSize?: Maybe<SeleniumSetViewportSizePayload>;
-	SeleniumTarget?: Maybe<SeleniumTargetPayload>;
-	SeleniumType?: Maybe<SeleniumTypePayload>;
+	ScriptCommands?: Maybe<ScriptCommandPayload>;
 	Settings?: Maybe<SettingPayload>;
-	Slack?: Maybe<SlackPayload>;
 	TeamInvitations?: Maybe<TeamInvitationPayload>;
 	TeamMembers?: Maybe<TeamMemberPayload>;
 	TestOutcome?: Maybe<TestOutcomePayload>;
@@ -15136,28 +10259,16 @@ export type SubscriptionConfigurationArgs = {
 	filter?: Maybe<ConfigurationSubscriptionFilter>;
 };
 
-export type SubscriptionEnvironmentArgs = {
-	filter?: Maybe<EnvironmentSubscriptionFilter>;
-};
-
 export type SubscriptionEnvironmentVariablesArgs = {
 	filter?: Maybe<EnvironmentVariableSubscriptionFilter>;
-};
-
-export type SubscriptionErrorArgs = {
-	filter?: Maybe<ErrorSubscriptionFilter>;
 };
 
 export type SubscriptionFilesArgs = {
 	filter?: Maybe<FileSubscriptionFilter>;
 };
 
-export type SubscriptionIntegrationArgs = {
-	filter?: Maybe<IntegrationSubscriptionFilter>;
-};
-
-export type SubscriptionIntegrationDetailsArgs = {
-	filter?: Maybe<IntegrationDetailSubscriptionFilter>;
+export type SubscriptionFlowArgs = {
+	filter?: Maybe<FlowSubscriptionFilter>;
 };
 
 export type SubscriptionMetricsArgs = {
@@ -15172,10 +10283,6 @@ export type SubscriptionProjectArgs = {
 	filter?: Maybe<ProjectSubscriptionFilter>;
 };
 
-export type SubscriptionRecordingArgs = {
-	filter?: Maybe<RecordingSubscriptionFilter>;
-};
-
 export type SubscriptionReleaseArgs = {
 	filter?: Maybe<ReleaseSubscriptionFilter>;
 };
@@ -15184,56 +10291,12 @@ export type SubscriptionRolesArgs = {
 	filter?: Maybe<RoleSubscriptionFilter>;
 };
 
-export type SubscriptionSeleniumClickArgs = {
-	filter?: Maybe<SeleniumClickSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumCommandArgs = {
-	filter?: Maybe<SeleniumCommandSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumDragndropArgs = {
-	filter?: Maybe<SeleniumDragndropSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumGroupArgs = {
-	filter?: Maybe<SeleniumGroupSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumOpenArgs = {
-	filter?: Maybe<SeleniumOpenSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumPointArgs = {
-	filter?: Maybe<SeleniumPointSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumScriptArgs = {
-	filter?: Maybe<SeleniumScriptSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumSelectorArgs = {
-	filter?: Maybe<SeleniumSelectorSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumSetViewportSizeArgs = {
-	filter?: Maybe<SeleniumSetViewportSizeSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumTargetArgs = {
-	filter?: Maybe<SeleniumTargetSubscriptionFilter>;
-};
-
-export type SubscriptionSeleniumTypeArgs = {
-	filter?: Maybe<SeleniumTypeSubscriptionFilter>;
+export type SubscriptionScriptCommandsArgs = {
+	filter?: Maybe<ScriptCommandSubscriptionFilter>;
 };
 
 export type SubscriptionSettingsArgs = {
 	filter?: Maybe<SettingSubscriptionFilter>;
-};
-
-export type SubscriptionSlackArgs = {
-	filter?: Maybe<SlackSubscriptionFilter>;
 };
 
 export type SubscriptionTeamInvitationsArgs = {
@@ -17011,70 +12074,6 @@ export type TableUpdateInput = {
 	description?: Maybe<Scalars['String']>;
 };
 
-/** SeleniumClick create input from target */
-export type Target_SeleniumClickCreateInput = {
-	target?: Maybe<SeleniumClickTargetRelationInput>;
-	command?: Maybe<SeleniumClickCommandRelationInput>;
-};
-
-/** SeleniumClick update input from target */
-export type Target_SeleniumClickUpdateInput = {
-	target?: Maybe<SeleniumClickTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumClickCommandUpdateRelationInput>;
-};
-
-/** SeleniumPoint create input from target */
-export type Target_SeleniumPointCreateInput = {
-	setViewportSize?: Maybe<SeleniumPointSetViewportSizeRelationInput>;
-	target?: Maybe<SeleniumPointTargetRelationInput>;
-	xCoord: Scalars['Int'];
-	yCoord: Scalars['Int'];
-};
-
-/** SeleniumPoint update input from target */
-export type Target_SeleniumPointUpdateInput = {
-	setViewportSize?: Maybe<SeleniumPointSetViewportSizeUpdateRelationInput>;
-	target?: Maybe<SeleniumPointTargetUpdateRelationInput>;
-	xCoord?: Maybe<Scalars['Int']>;
-	yCoord?: Maybe<Scalars['Int']>;
-};
-
-/** SeleniumSelector create input from target */
-export type Target_SeleniumSelectorCreateInput = {
-	target?: Maybe<SeleniumSelectorTargetRelationInput>;
-	xpath?: Maybe<Scalars['String']>;
-	selector?: Maybe<Scalars['String']>;
-	className?: Maybe<Scalars['String']>;
-	tagName?: Maybe<Scalars['String']>;
-	tagId?: Maybe<Scalars['String']>;
-	innerText?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumSelector update input from target */
-export type Target_SeleniumSelectorUpdateInput = {
-	target?: Maybe<SeleniumSelectorTargetUpdateRelationInput>;
-	xpath?: Maybe<Scalars['String']>;
-	selector?: Maybe<Scalars['String']>;
-	className?: Maybe<Scalars['String']>;
-	tagName?: Maybe<Scalars['String']>;
-	tagId?: Maybe<Scalars['String']>;
-	innerText?: Maybe<Scalars['String']>;
-};
-
-/** SeleniumType create input from target */
-export type Target_SeleniumTypeCreateInput = {
-	target?: Maybe<SeleniumTypeTargetRelationInput>;
-	command?: Maybe<SeleniumTypeCommandRelationInput>;
-	value: Scalars['String'];
-};
-
-/** SeleniumType update input from target */
-export type Target_SeleniumTypeUpdateInput = {
-	target?: Maybe<SeleniumTypeTargetUpdateRelationInput>;
-	command?: Maybe<SeleniumTypeCommandUpdateRelationInput>;
-	value?: Maybe<Scalars['String']>;
-};
-
 export type TeamInvitation = {
 	__typename?: 'TeamInvitation';
 	id?: Maybe<Scalars['ID']>;
@@ -17497,8 +12496,9 @@ export type TeamMembers_Avatar_FileCreateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
 };
 
 /** Files update input from teamMembers_avatar */
@@ -17511,8 +12511,9 @@ export type TeamMembers_Avatar_FileUpdateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
 };
 
 /** Roles create input from teamMembers */
@@ -17609,7 +12610,10 @@ export type TeamMemberUpdateInput = {
 	learningMode?: Maybe<Scalars['Boolean']>;
 };
 
-/** This represents the outcome of an individual user story each time it's included in a test run. */
+/**
+ * This represents the outcome of an individual test case (user story marked as
+ * `isTestCase=true`) each time it's included in a test run.
+ */
 export type TestOutcome = {
 	__typename?: 'TestOutcome';
 	id?: Maybe<Scalars['ID']>;
@@ -17617,33 +12621,31 @@ export type TestOutcome = {
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
-	userStory?: Maybe<UserStory>;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
 	 * The status of a test case in an individual test run. Test runs create test
 	 * outcomes for each test case / user story in the run.
 	 */
 	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestRun>;
-	/** The recorded playback of user stories. */
+	/**
+	 * The recorded playback of what happened when replaying a test case during a
+	 * test run. This field is only filled for failing test outcomes.
+	 */
 	video?: Maybe<File>;
-	errorDetails?: Maybe<Error>;
+	/**
+	 * Has the bug been resolved? This is an optional field to represent the
+	 * resolution of an issue by means of a linked bug ticket being merged.
+	 */
+	isResolved?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This field should only be filled if the status is `failing`. It's the
+	 * step-index where a test case failed to complete an event.
+	 */
+	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** This is a relation to the single User story (table) that this outcome represents. */
+	userStory?: Maybe<UserStory>;
+	/** This is the relation to which test run (table) this outcome was generated from. */
+	testRun?: Maybe<TestRun>;
 	_description?: Maybe<Scalars['String']>;
-};
-
-/** Error create input from testOutcome */
-export type TestOutcome_ErrorCreateInput = {
-	stepIndex: Scalars['Int'];
-	exception: Scalars['String'];
-	testOutcome?: Maybe<ErrorTestOutcomeRelationInput>;
-};
-
-/** Error update input from testOutcome */
-export type TestOutcome_ErrorUpdateInput = {
-	stepIndex?: Maybe<Scalars['Int']>;
-	exception?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<ErrorTestOutcomeUpdateRelationInput>;
 };
 
 export type TestOutcome_PermissionFilter = {
@@ -17651,14 +12653,14 @@ export type TestOutcome_PermissionFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
-	isResolved?: Maybe<BoolPredicate>;
 	status?: Maybe<StringPredicate>;
+	isResolved?: Maybe<BoolPredicate>;
+	errorStepIndex?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
+	video?: Maybe<File_PermissionFilter>;
 	userStory?: Maybe<UserStory_PermissionFilter>;
 	testRun?: Maybe<TestRun_PermissionFilter>;
-	video?: Maybe<File_PermissionFilter>;
-	errorDetails?: Maybe<Error_PermissionFilter>;
 	AND?: Maybe<Array<TestOutcome_PermissionFilter>>;
 	OR?: Maybe<Array<TestOutcome_PermissionFilter>>;
 };
@@ -17671,27 +12673,49 @@ export type TestOutcome_PermissionRelationFilter = {
 
 /** TestRun create input from testOutcome */
 export type TestOutcome_TestRunCreateInput = {
+	/**
+	 * The status of the entire test run. The default assigned value is `queued`. Accepted values include:
+	 * 1. `queued` a run is triggered but hasn't started yet.
+	 * 2. `running` the test run is in progress.
+	 * 3. `runError` something went wrong during the test run.
+	 * 4. `completed` the test run finished with out any issues running the test cases.
+	 */
 	status?: Maybe<Scalars['String']>;
-	ciRun?: Maybe<Scalars['String']>;
+	/** The optional backlink to a CI/CD run or trigger (commit). */
+	runLink?: Maybe<Scalars['String']>;
+	/**
+	 * How long did this test take? It is optional because test runs are created
+	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
+	 */
+	testLength?: Maybe<Scalars['String']>;
 	release?: Maybe<TestRunReleaseRelationInput>;
 	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
-	/** How long did this test take? Use a HH:MM:ss format. i.e. 14:50:19 */
-	testLength?: Maybe<Scalars['String']>;
 };
 
 /** TestRun update input from testOutcome */
 export type TestOutcome_TestRunUpdateInput = {
+	/**
+	 * The status of the entire test run. The default assigned value is `queued`. Accepted values include:
+	 * 1. `queued` a run is triggered but hasn't started yet.
+	 * 2. `running` the test run is in progress.
+	 * 3. `runError` something went wrong during the test run.
+	 * 4. `completed` the test run finished with out any issues running the test cases.
+	 */
 	status?: Maybe<Scalars['String']>;
-	ciRun?: Maybe<Scalars['String']>;
+	/** The optional backlink to a CI/CD run or trigger (commit). */
+	runLink?: Maybe<Scalars['String']>;
+	/**
+	 * How long did this test take? It is optional because test runs are created
+	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
+	 */
+	testLength?: Maybe<Scalars['String']>;
 	release?: Maybe<TestRunReleaseUpdateRelationInput>;
 	testOutcome?: Maybe<TestRunTestOutcomeUpdateRelationInput>;
-	/** How long did this test take? Use a HH:MM:ss format. i.e. 14:50:19 */
-	testLength?: Maybe<Scalars['String']>;
 };
 
 /** UserStory create input from testOutcome */
 export type TestOutcome_UserStoryCreateInput = {
-	/** The human readable title of a user story describes what the flow does. */
+	/** The human readable title of a user story describes what the story does. */
 	title?: Maybe<Scalars['String']>;
 	/** This is an optional field that allows you to describe what to expect from the test. */
 	description?: Maybe<Scalars['String']>;
@@ -17700,34 +12724,49 @@ export type TestOutcome_UserStoryCreateInput = {
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
 	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Scalars['String']>>;
-	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
 	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationRelationInput>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from testOutcome */
 export type TestOutcome_UserStoryUpdateInput = {
-	/** The human readable title of a user story describes what the flow does. */
+	/** The human readable title of a user story describes what the story does. */
 	title?: Maybe<Scalars['String']>;
 	/** This is an optional field that allows you to describe what to expect from the test. */
 	description?: Maybe<Scalars['String']>;
@@ -17736,29 +12775,44 @@ export type TestOutcome_UserStoryUpdateInput = {
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
 	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Maybe<Scalars['String']>>>;
-	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingUpdateRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
 	/**
 	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationUpdateRelationInput>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created?: Maybe<Scalars['String']>;
+	video?: Maybe<UserStoryVideoUpdateRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 };
 
 /** Files create input from testOutcome_video */
@@ -17771,8 +12825,9 @@ export type TestOutcome_Video_FileCreateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
 };
 
 /** Files update input from testOutcome_video */
@@ -17785,38 +12840,53 @@ export type TestOutcome_Video_FileUpdateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
 };
 
 /** TestOutcome create input */
 export type TestOutcomeCreateInput = {
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
 	 * The status of a test case in an individual test run. Test runs create test
 	 * outcomes for each test case / user story in the run.
 	 */
 	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 	video?: Maybe<TestOutcomeVideoRelationInput>;
-	errorDetails?: Maybe<TestOutcomeErrorDetailsRelationInput>;
+	/**
+	 * Has the bug been resolved? This is an optional field to represent the
+	 * resolution of an issue by means of a linked bug ticket being merged.
+	 */
+	isResolved?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This field should only be filled if the status is `failing`. It's the
+	 * step-index where a test case failed to complete an event.
+	 */
+	errorStepIndex?: Maybe<Scalars['Int']>;
+	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome create many input */
 export type TestOutcomeCreateManyInput = {
-	userStory: TestOutcomeUserStoryManyRelationInput;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
 	 * The status of a test case in an individual test run. Test runs create test
 	 * outcomes for each test case / user story in the run.
 	 */
 	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestOutcomeTestRunManyRelationInput>;
 	video?: Maybe<TestOutcomeVideoManyRelationInput>;
-	errorDetails?: Maybe<TestOutcomeErrorDetailsManyRelationInput>;
+	/**
+	 * Has the bug been resolved? This is an optional field to represent the
+	 * resolution of an issue by means of a linked bug ticket being merged.
+	 */
+	isResolved?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This field should only be filled if the status is `failing`. It's the
+	 * step-index where a test case failed to complete an event.
+	 */
+	errorStepIndex?: Maybe<Scalars['Int']>;
+	userStory: TestOutcomeUserStoryManyRelationInput;
+	testRun?: Maybe<TestOutcomeTestRunManyRelationInput>;
 };
 
 /** TestOutcome delete input */
@@ -17825,32 +12895,13 @@ export type TestOutcomeDeleteInput = {
 	force?: Maybe<Scalars['Boolean']>;
 };
 
-/** TestOutcome relation input */
-export type TestOutcomeErrorDetailsManyRelationInput = {
-	connect?: Maybe<ErrorKeyFilter>;
-};
-
-/** TestOutcome relation input */
-export type TestOutcomeErrorDetailsRelationInput = {
-	connect?: Maybe<ErrorKeyFilter>;
-	create?: Maybe<TestOutcome_ErrorCreateInput>;
-};
-
-/** TestOutcome relation input */
-export type TestOutcomeErrorDetailsUpdateRelationInput = {
-	connect?: Maybe<ErrorKeyFilter>;
-	disconnect?: Maybe<ErrorKeyFilter>;
-	reconnect?: Maybe<ErrorKeyFilter>;
-	create?: Maybe<TestOutcome_ErrorCreateInput>;
-	update?: Maybe<TestOutcome_ErrorUpdateInput>;
-};
-
 /** TestOutcomeFieldsPermissions create input */
 export type TestOutcomeFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
-	isResolved?: Maybe<Scalars['Boolean']>;
 	status?: Maybe<Scalars['Boolean']>;
+	isResolved?: Maybe<Scalars['Boolean']>;
+	errorStepIndex?: Maybe<Scalars['Boolean']>;
 };
 
 export type TestOutcomeFilter = {
@@ -17858,14 +12909,14 @@ export type TestOutcomeFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
-	isResolved?: Maybe<BoolPredicate>;
 	status?: Maybe<StringPredicate>;
+	isResolved?: Maybe<BoolPredicate>;
+	errorStepIndex?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
+	video?: Maybe<FileFilter>;
 	userStory?: Maybe<UserStoryFilter>;
 	testRun?: Maybe<TestRunFilter>;
-	video?: Maybe<FileFilter>;
-	errorDetails?: Maybe<ErrorFilter>;
 	AND?: Maybe<Array<TestOutcomeFilter>>;
 	OR?: Maybe<Array<TestOutcomeFilter>>;
 };
@@ -17883,13 +12934,13 @@ export type TestOutcomeGroupByQuery = {
 	id?: Maybe<Array<GroupByField>>;
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
-	isResolved?: Maybe<Array<GroupByField>>;
 	status?: Maybe<Array<GroupByField>>;
+	isResolved?: Maybe<Array<GroupByField>>;
+	errorStepIndex?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
+	video?: Maybe<FileGroupByQuery>;
 	userStory?: Maybe<UserStoryGroupByQuery>;
 	testRun?: Maybe<TestRunGroupByQuery>;
-	video?: Maybe<FileGroupByQuery>;
-	errorDetails?: Maybe<ErrorGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -17927,10 +12978,12 @@ export enum TestOutcomeOrderBy {
 	UpdatedAtDesc = 'updatedAt_DESC',
 	DeletedAtAsc = 'deletedAt_ASC',
 	DeletedAtDesc = 'deletedAt_DESC',
-	IsResolvedAsc = 'isResolved_ASC',
-	IsResolvedDesc = 'isResolved_DESC',
 	StatusAsc = 'status_ASC',
 	StatusDesc = 'status_DESC',
+	IsResolvedAsc = 'isResolved_ASC',
+	IsResolvedDesc = 'isResolved_DESC',
+	ErrorStepIndexAsc = 'errorStepIndex_ASC',
+	ErrorStepIndexDesc = 'errorStepIndex_DESC',
 }
 
 /** TestOutcome subscription payload */
@@ -17953,13 +13006,13 @@ export type TestOutcomeSort = {
 	createdAt?: Maybe<SortOrder>;
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
-	isResolved?: Maybe<SortOrder>;
 	status?: Maybe<SortOrder>;
+	isResolved?: Maybe<SortOrder>;
+	errorStepIndex?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
+	video?: Maybe<FileSort>;
 	userStory?: Maybe<UserStorySort>;
 	testRun?: Maybe<TestRunSort>;
-	video?: Maybe<FileSort>;
-	errorDetails?: Maybe<ErrorSort>;
 };
 
 /** TestOutcome subscription filter */
@@ -17991,24 +13044,32 @@ export type TestOutcomeTestRunUpdateRelationInput = {
 
 /** TestOutcome update input */
 export type TestOutcomeUpdateByFilterInput = {
-	isResolved?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 	status?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
+	isResolved?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
+	errorStepIndex?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
 };
 
 /** TestOutcome update input */
 export type TestOutcomeUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
-	userStory?: Maybe<TestOutcomeUserStoryUpdateRelationInput>;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
 	 * The status of a test case in an individual test run. Test runs create test
 	 * outcomes for each test case / user story in the run.
 	 */
 	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestOutcomeTestRunUpdateRelationInput>;
 	video?: Maybe<TestOutcomeVideoUpdateRelationInput>;
-	errorDetails?: Maybe<TestOutcomeErrorDetailsUpdateRelationInput>;
+	/**
+	 * Has the bug been resolved? This is an optional field to represent the
+	 * resolution of an issue by means of a linked bug ticket being merged.
+	 */
+	isResolved?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This field should only be filled if the status is `failing`. It's the
+	 * step-index where a test case failed to complete an event.
+	 */
+	errorStepIndex?: Maybe<Scalars['Int']>;
+	userStory?: Maybe<TestOutcomeUserStoryUpdateRelationInput>;
+	testRun?: Maybe<TestOutcomeTestRunUpdateRelationInput>;
 };
 
 /** TestOutcome relation input */
@@ -18062,12 +13123,29 @@ export type TestRun = {
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
+	/**
+	 * The status of the entire test run. The default assigned value is `queued`. Accepted values include:
+	 * 1. `queued` a run is triggered but hasn't started yet.
+	 * 2. `running` the test run is in progress.
+	 * 3. `runError` something went wrong during the test run.
+	 * 4. `completed` the test run finished with out any issues running the test cases.
+	 */
 	status?: Maybe<Scalars['String']>;
-	ciRun?: Maybe<Scalars['String']>;
-	release?: Maybe<Release>;
-	testOutcome?: Maybe<TestOutcomeListResponse>;
-	/** How long did this test take? Use a HH:MM:ss format. i.e. 14:50:19 */
+	/** The optional backlink to a CI/CD run or trigger (commit). */
+	runLink?: Maybe<Scalars['String']>;
+	/**
+	 * How long did this test take? It is optional because test runs are created
+	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
+	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** This is a relation to the release (table) this test run is in context of. */
+	release?: Maybe<Release>;
+	/**
+	 * Test outcomes represent the result of an individual test case (user story
+	 * marked as `isTestCase=true`) in a particular run. There should be one outcome
+	 * per test run that represents a test case for the project in context.
+	 */
+	testOutcome?: Maybe<TestOutcomeListResponse>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -18093,7 +13171,7 @@ export type TestRun_PermissionFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	status?: Maybe<StringPredicate>;
-	ciRun?: Maybe<StringPredicate>;
+	runLink?: Maybe<StringPredicate>;
 	testLength?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
@@ -18111,17 +13189,24 @@ export type TestRun_PermissionRelationFilter = {
 
 /** TestOutcome create input from testRun */
 export type TestRun_TestOutcomeCreateInput = {
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
 	 * The status of a test case in an individual test run. Test runs create test
 	 * outcomes for each test case / user story in the run.
 	 */
 	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 	video?: Maybe<TestOutcomeVideoRelationInput>;
-	errorDetails?: Maybe<TestOutcomeErrorDetailsRelationInput>;
+	/**
+	 * Has the bug been resolved? This is an optional field to represent the
+	 * resolution of an issue by means of a linked bug ticket being merged.
+	 */
+	isResolved?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This field should only be filled if the status is `failing`. It's the
+	 * step-index where a test case failed to complete an event.
+	 */
+	errorStepIndex?: Maybe<Scalars['Int']>;
+	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome update input from testRun */
@@ -18132,22 +13217,44 @@ export type TestRun_TestOutcomeUpdateInput = {
 
 /** TestRun create input */
 export type TestRunCreateInput = {
+	/**
+	 * The status of the entire test run. The default assigned value is `queued`. Accepted values include:
+	 * 1. `queued` a run is triggered but hasn't started yet.
+	 * 2. `running` the test run is in progress.
+	 * 3. `runError` something went wrong during the test run.
+	 * 4. `completed` the test run finished with out any issues running the test cases.
+	 */
 	status?: Maybe<Scalars['String']>;
-	ciRun?: Maybe<Scalars['String']>;
+	/** The optional backlink to a CI/CD run or trigger (commit). */
+	runLink?: Maybe<Scalars['String']>;
+	/**
+	 * How long did this test take? It is optional because test runs are created
+	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
+	 */
+	testLength?: Maybe<Scalars['String']>;
 	release?: Maybe<TestRunReleaseRelationInput>;
 	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
-	/** How long did this test take? Use a HH:MM:ss format. i.e. 14:50:19 */
-	testLength?: Maybe<Scalars['String']>;
 };
 
 /** TestRun create many input */
 export type TestRunCreateManyInput = {
+	/**
+	 * The status of the entire test run. The default assigned value is `queued`. Accepted values include:
+	 * 1. `queued` a run is triggered but hasn't started yet.
+	 * 2. `running` the test run is in progress.
+	 * 3. `runError` something went wrong during the test run.
+	 * 4. `completed` the test run finished with out any issues running the test cases.
+	 */
 	status?: Maybe<Scalars['String']>;
-	ciRun?: Maybe<Scalars['String']>;
+	/** The optional backlink to a CI/CD run or trigger (commit). */
+	runLink?: Maybe<Scalars['String']>;
+	/**
+	 * How long did this test take? It is optional because test runs are created
+	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
+	 */
+	testLength?: Maybe<Scalars['String']>;
 	release: TestRunReleaseManyRelationInput;
 	testOutcome?: Maybe<TestRunTestOutcomeManyRelationInput>;
-	/** How long did this test take? Use a HH:MM:ss format. i.e. 14:50:19 */
-	testLength?: Maybe<Scalars['String']>;
 };
 
 /** TestRun delete input */
@@ -18161,7 +13268,7 @@ export type TestRunFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
 	status?: Maybe<Scalars['Boolean']>;
-	ciRun?: Maybe<Scalars['Boolean']>;
+	runLink?: Maybe<Scalars['Boolean']>;
 	testLength?: Maybe<Scalars['Boolean']>;
 };
 
@@ -18171,7 +13278,7 @@ export type TestRunFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	status?: Maybe<StringPredicate>;
-	ciRun?: Maybe<StringPredicate>;
+	runLink?: Maybe<StringPredicate>;
 	testLength?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
@@ -18195,7 +13302,7 @@ export type TestRunGroupByQuery = {
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
 	status?: Maybe<Array<GroupByField>>;
-	ciRun?: Maybe<Array<GroupByField>>;
+	runLink?: Maybe<Array<GroupByField>>;
 	testLength?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	release?: Maybe<ReleaseGroupByQuery>;
@@ -18239,8 +13346,8 @@ export enum TestRunOrderBy {
 	DeletedAtDesc = 'deletedAt_DESC',
 	StatusAsc = 'status_ASC',
 	StatusDesc = 'status_DESC',
-	CiRunAsc = 'ciRun_ASC',
-	CiRunDesc = 'ciRun_DESC',
+	RunLinkAsc = 'runLink_ASC',
+	RunLinkDesc = 'runLink_DESC',
 	TestLengthAsc = 'testLength_ASC',
 	TestLengthDesc = 'testLength_DESC',
 }
@@ -18287,6 +13394,8 @@ export type TestRuns_ReleaseCreateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsRelationInput>;
@@ -18300,6 +13409,8 @@ export type TestRuns_ReleaseUpdateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsUpdateRelationInput>;
@@ -18312,7 +13423,7 @@ export type TestRunSort = {
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
 	status?: Maybe<SortOrder>;
-	ciRun?: Maybe<SortOrder>;
+	runLink?: Maybe<SortOrder>;
 	testLength?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	release?: Maybe<ReleaseSort>;
@@ -18348,19 +13459,30 @@ export type TestRunTestOutcomeUpdateRelationInput = {
 /** TestRun update input */
 export type TestRunUpdateByFilterInput = {
 	status?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
-	ciRun?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	runLink?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	testLength?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** TestRun update input */
 export type TestRunUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
+	/**
+	 * The status of the entire test run. The default assigned value is `queued`. Accepted values include:
+	 * 1. `queued` a run is triggered but hasn't started yet.
+	 * 2. `running` the test run is in progress.
+	 * 3. `runError` something went wrong during the test run.
+	 * 4. `completed` the test run finished with out any issues running the test cases.
+	 */
 	status?: Maybe<Scalars['String']>;
-	ciRun?: Maybe<Scalars['String']>;
+	/** The optional backlink to a CI/CD run or trigger (commit). */
+	runLink?: Maybe<Scalars['String']>;
+	/**
+	 * How long did this test take? It is optional because test runs are created
+	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
+	 */
+	testLength?: Maybe<Scalars['String']>;
 	release?: Maybe<TestRunReleaseUpdateRelationInput>;
 	testOutcome?: Maybe<TestRunTestOutcomeUpdateRelationInput>;
-	/** How long did this test take? Use a HH:MM:ss format. i.e. 14:50:19 */
-	testLength?: Maybe<Scalars['String']>;
 };
 
 /** Text Field Attributes */
@@ -18383,48 +13505,6 @@ export enum TextTypeFormatEnum {
 export type TrimFunctionArguments = {
 	str: Scalars['String'];
 	mode?: Maybe<StringTrimMode>;
-};
-
-/** SeleniumCommand create input from type */
-export type Type_SeleniumCommandCreateInput = {
-	open?: Maybe<SeleniumCommandOpenRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeRelationInput>;
-	click?: Maybe<SeleniumCommandClickRelationInput>;
-	type?: Maybe<SeleniumCommandTypeRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropRelationInput>;
-	sIndex: Scalars['Int'];
-	group?: Maybe<SeleniumCommandGroupRelationInput>;
-};
-
-/** SeleniumCommand update input from type */
-export type Type_SeleniumCommandUpdateInput = {
-	open?: Maybe<SeleniumCommandOpenUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumCommandSetViewportSizeUpdateRelationInput>;
-	click?: Maybe<SeleniumCommandClickUpdateRelationInput>;
-	type?: Maybe<SeleniumCommandTypeUpdateRelationInput>;
-	dragndrop?: Maybe<SeleniumCommandDragndropUpdateRelationInput>;
-	sIndex?: Maybe<Scalars['Int']>;
-	group?: Maybe<SeleniumCommandGroupUpdateRelationInput>;
-};
-
-/** SeleniumTarget create input from type */
-export type Type_SeleniumTargetCreateInput = {
-	click?: Maybe<SeleniumTargetClickRelationInput>;
-	type?: Maybe<SeleniumTargetTypeRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationRelationInput>;
-	selector: SeleniumTargetSelectorRelationInput;
-	coordinates?: Maybe<SeleniumTargetCoordinatesRelationInput>;
-};
-
-/** SeleniumTarget update input from type */
-export type Type_SeleniumTargetUpdateInput = {
-	click?: Maybe<SeleniumTargetClickUpdateRelationInput>;
-	type?: Maybe<SeleniumTargetTypeUpdateRelationInput>;
-	dragndropSource?: Maybe<SeleniumTargetDragndropSourceUpdateRelationInput>;
-	dragndropDestination?: Maybe<SeleniumTargetDragndropDestinationUpdateRelationInput>;
-	selector?: Maybe<SeleniumTargetSelectorUpdateRelationInput>;
-	coordinates?: Maybe<SeleniumTargetCoordinatesUpdateRelationInput>;
 };
 
 export type UpdateByFilterBooleanSwitchInput = {
@@ -18488,20 +13568,6 @@ export type UpdateByFilterJsonInput = {
 	set?: Maybe<Scalars['JSON']>;
 };
 
-export type UpdateByFilterListIntInput = {
-	set?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	push?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	unshift?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	insert?: Maybe<UpdateByFilterListIntInsertOperationInput>;
-	remove?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	swap?: Maybe<Array<Maybe<Scalars['Int']>>>;
-};
-
-export type UpdateByFilterListIntInsertOperationInput = {
-	start: Scalars['Int'];
-	values: Array<Scalars['Int']>;
-};
-
 export type UpdateByFilterListStringInput = {
 	set?: Maybe<Array<Maybe<Scalars['String']>>>;
 	push?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -18549,7 +13615,9 @@ export type User = {
 	timezone?: Maybe<Scalars['String']>;
 	avatar?: Maybe<File>;
 	roles?: Maybe<RoleListResponse>;
+	/** This represents all of the projects a user is a part of. */
 	projects?: Maybe<ProjectListResponse>;
+	/** What is the job title of this individual? */
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
@@ -18634,6 +13702,7 @@ export type UserCreateInput = {
 	avatar?: Maybe<UsersAvatarRelationInput>;
 	roles?: Maybe<UsersRolesRelationInput>;
 	projects?: Maybe<UsersProjectsRelationInput>;
+	/** What is the job title of this individual? */
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
@@ -18649,6 +13718,7 @@ export type UserCreateManyInput = {
 	avatar?: Maybe<UsersAvatarManyRelationInput>;
 	roles?: Maybe<UsersRolesManyRelationInput>;
 	projects?: Maybe<UsersProjectsManyRelationInput>;
+	/** What is the job title of this individual? */
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
@@ -18852,8 +13922,9 @@ export type Users_Avatar_FileCreateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
 };
 
 /** Files update input from users_avatar */
@@ -18866,8 +13937,9 @@ export type Users_Avatar_FileUpdateInput = {
 	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
-	recording_video?: Maybe<FilesRecording_VideoUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
 };
 
 /** Roles create input from users */
@@ -18973,13 +14045,16 @@ export type UserStories_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
-	integration?: Maybe<ProjectIntegrationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -18991,14 +14066,108 @@ export type UserStories_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
-	integration?: Maybe<ProjectIntegrationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
+};
+
+/** ScriptCommands create input from userStories */
+export type UserStories_ScriptCommandCreateInput = {
+	userStories?: Maybe<ScriptCommandsUserStoriesRelationInput>;
+	/**
+	 * Command represents what type of event this is, and gives context to the client
+	 * and the test runner. Only one can be defined and it's a mandatory field. The options are:
+	 * 1. `open`
+	 * 2. `set viewport size`
+	 * 3. `click`
+	 * 4. `type`
+	 * 5. `drag and drop`
+	 * 6. `navigation`
+	 * 7. `scroll`
+	 * 8. `api request`
+	 */
+	command: Scalars['String'];
+	/** Which step in the test is this? */
+	sIndex: Scalars['Int'];
+	/** The generic value field used if a command only requires a string representation. */
+	value?: Maybe<Scalars['String']>;
+	/** The target X coordinate. What is the x coordinate of the element this event is taking place on/in? */
+	xCoordinate?: Maybe<Scalars['Int']>;
+	/** The target Y coordinate. What is the y coordinate of the element this event is taking place on/in? */
+	yCoordinate?: Maybe<Scalars['Int']>;
+	/** Which element in the DOM is this happening on? This represents the full xpath. */
+	xpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. */
+	selector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. */
+	className?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? */
+	tagName?: Maybe<Scalars['String']>;
+	tagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. */
+	innerText?: Maybe<Scalars['String']>;
+	/**
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	altOrAriaText?: Maybe<Scalars['String']>;
+	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
+	scrollTop?: Maybe<Scalars['Float']>;
+	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
+	scrollLeft?: Maybe<Scalars['Float']>;
+	/**
+	 * The target destination X coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the x coordinate end up?
+	 */
+	destinationXCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * The target destination Y coordinate. This is used for drag and drop events for
+	 * the drop half. Where did the y coordinate end up?
+	 */
+	destinationYCoordinate?: Maybe<Scalars['Int']>;
+	/**
+	 * Which element in the DOM is this happening on? This represents the full xpath.
+	 * This is used for drag and drop events for the drop half. What is the xpath of
+	 * where this ended up?
+	 */
+	destinationXpath?: Maybe<Scalars['String']>;
+	/** The CSS selector that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationSelector?: Maybe<Scalars['String']>;
+	/** The element's class name that this event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationClassName?: Maybe<Scalars['String']>;
+	/** Which HTML tag did this event happen on/in? This is used for drag and drop events for the drop half. */
+	destinationTagName?: Maybe<Scalars['String']>;
+	/** This is used for drag and drop events for the drop half. */
+	destinationTagId?: Maybe<Scalars['String']>;
+	/** Any text that is a child to the element the event happened on/in. This is used for drag and drop events for the drop half. */
+	destinationInnerText?: Maybe<Scalars['String']>;
+	/**
+	 * This is used for drag and drop events for the drop half.
+	 *
+	 * Alt text for events happening on images.
+	 *
+	 * The aria-label attribute is used to define a string that labels the current
+	 * element. Used in cases where a text label is not visible on the screen.
+	 */
+	destinationAltOrAriaText?: Maybe<Scalars['String']>;
+	request?: Maybe<Scalars['JSON']>;
+	response?: Maybe<Scalars['JSON']>;
+};
+
+/** ScriptCommands update input from userStories */
+export type UserStories_ScriptCommandUpdateInput = {
+	filter?: Maybe<ScriptCommandKeyFilter>;
+	data: ScriptCommandUpdateInput;
 };
 
 /** User stories are the representation of what users do in a project's production environment. */
@@ -19009,7 +14178,7 @@ export type UserStory = {
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
-	/** The human readable title of a user story describes what the flow does. */
+	/** The human readable title of a user story describes what the story does. */
 	title?: Maybe<Scalars['String']>;
 	/** This is an optional field that allows you to describe what to expect from the test. */
 	description?: Maybe<Scalars['String']>;
@@ -19018,33 +14187,62 @@ export type UserStory = {
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
 	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Maybe<Scalars['String']>>>;
-	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	/**
-	 * The user flows that make up a user story. The first recording in the index
-	 * should be the main 'expected' flow, with subsequent recordings signifying buggy flows.
-	 */
-	recording?: Maybe<Recording>;
-	testOutcome?: Maybe<TestOutcomeListResponse>;
-	project?: Maybe<Project>;
 	/**
 	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<Configuration>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created?: Maybe<Scalars['String']>;
+	/** A video representation of the user story recreated out of the DOM/s the events were generated from. */
+	video?: Maybe<File>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	/**
+	 * Each time this user story is included in a test run, it produces a test
+	 * outcome that explains its current state of being able to pass.
+	 */
+	testOutcome?: Maybe<TestOutcomeListResponse>;
+	/**
+	 * Information about an individual flows that make up this user story such as the
+	 * user agent, video, and flow id. The count of `flows` will also answer the
+	 * question "How many of my users are doing this?".
+	 */
+	flows?: Maybe<FlowListResponse>;
+	/** The application (project) this user story represents. */
+	project?: Maybe<Project>;
+	/**
+	 * This is the one user story to one configuration relation that represents a
+	 * single user story being the log in story. The log in story is a single user
+	 * story that records redacted fields like password to be replayed infront of
+	 * other user stories to authenticate a session.
+	 */
+	logInStoryConfig?: Maybe<Configuration>;
+	/** A one user story to many script commands relation. This represents which events make up a user story. */
+	scriptCommands?: Maybe<ScriptCommandListResponse>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -19061,6 +14259,57 @@ export type UserStoryTestOutcomeArgs = {
 	groupBy?: Maybe<TestOutcomeGroupBy>;
 };
 
+/** User stories are the representation of what users do in a project's production environment. */
+export type UserStoryFlowsArgs = {
+	filter?: Maybe<FlowFilter>;
+	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
+	sort?: Maybe<Array<FlowSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<FlowGroupBy>;
+};
+
+/** User stories are the representation of what users do in a project's production environment. */
+export type UserStoryScriptCommandsArgs = {
+	filter?: Maybe<ScriptCommandFilter>;
+	orderBy?: Maybe<Array<Maybe<ScriptCommandOrderBy>>>;
+	sort?: Maybe<Array<ScriptCommandSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<ScriptCommandGroupBy>;
+};
+
+/** Flow create input from userStory */
+export type UserStory_FlowCreateInput = {
+	ipAddress?: Maybe<Scalars['String']>;
+	browser?: Maybe<Scalars['String']>;
+	browserVersion?: Maybe<Scalars['String']>;
+	operatingSystem?: Maybe<Scalars['String']>;
+	language?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	video?: Maybe<FlowVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** The UUID that is the index in the backend flow table. */
+	flowId?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryRelationInput>;
+};
+
+/** Flow update input from userStory */
+export type UserStory_FlowUpdateInput = {
+	filter?: Maybe<FlowKeyFilter>;
+	data: FlowUpdateInput;
+};
+
 export type UserStory_PermissionFilter = {
 	id?: Maybe<IdPredicate>;
 	createdAt?: Maybe<DateTimePredicate>;
@@ -19071,14 +14320,21 @@ export type UserStory_PermissionFilter = {
 	isTestCase?: Maybe<BoolPredicate>;
 	testCreatedDate?: Maybe<DateTimePredicate>;
 	isExpected?: Maybe<BoolPredicate>;
+	requiresAuthentication?: Maybe<BoolPredicate>;
 	significance?: Maybe<StringPredicate>;
-	isAuthenticated?: Maybe<BoolPredicate>;
+	created?: Maybe<StringPredicate>;
+	videoGenerationVersion?: Maybe<StringPredicate>;
+	startEventId?: Maybe<StringPredicate>;
+	endEventId?: Maybe<StringPredicate>;
+	scriptVersion?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
-	recording?: Maybe<Recording_PermissionFilter>;
+	video?: Maybe<File_PermissionFilter>;
 	testOutcome?: Maybe<TestOutcome_PermissionRelationFilter>;
+	flows?: Maybe<Flow_PermissionRelationFilter>;
 	project?: Maybe<Project_PermissionFilter>;
-	configuration?: Maybe<Configuration_PermissionFilter>;
+	logInStoryConfig?: Maybe<Configuration_PermissionFilter>;
+	scriptCommands?: Maybe<ScriptCommand_PermissionRelationFilter>;
 	AND?: Maybe<Array<UserStory_PermissionFilter>>;
 	OR?: Maybe<Array<UserStory_PermissionFilter>>;
 };
@@ -19089,63 +14345,26 @@ export type UserStory_PermissionRelationFilter = {
 	none?: Maybe<UserStory_PermissionFilter>;
 };
 
-/** Recording create input from userStory */
-export type UserStory_RecordingCreateInput = {
-	environment?: Maybe<RecordingEnvironmentRelationInput>;
-	userStory?: Maybe<RecordingUserStoryRelationInput>;
-	video?: Maybe<RecordingVideoRelationInput>;
-	seleniumScript: RecordingSeleniumScriptRelationInput;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
-/** Recording update input from userStory */
-export type UserStory_RecordingUpdateInput = {
-	environment?: Maybe<RecordingEnvironmentUpdateRelationInput>;
-	userStory?: Maybe<RecordingUserStoryUpdateRelationInput>;
-	video?: Maybe<RecordingVideoUpdateRelationInput>;
-	seleniumScript?: Maybe<RecordingSeleniumScriptUpdateRelationInput>;
-	/** This is the UUID that correlates to the first event in a video in the backend database. */
-	startEventId?: Maybe<Scalars['String']>;
-	/** This is the UUID that correlates to the last event in a video in the backend database. */
-	endEventId?: Maybe<Scalars['String']>;
-	/** This version allows us to peg what data and strategy was used to generate a video. */
-	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
-};
-
 /** TestOutcome create input from userStory */
 export type UserStory_TestOutcomeCreateInput = {
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
 	 * The status of a test case in an individual test run. Test runs create test
 	 * outcomes for each test case / user story in the run.
 	 */
 	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 	video?: Maybe<TestOutcomeVideoRelationInput>;
-	errorDetails?: Maybe<TestOutcomeErrorDetailsRelationInput>;
+	/**
+	 * Has the bug been resolved? This is an optional field to represent the
+	 * resolution of an issue by means of a linked bug ticket being merged.
+	 */
+	isResolved?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This field should only be filled if the status is `failing`. It's the
+	 * step-index where a test case failed to complete an event.
+	 */
+	errorStepIndex?: Maybe<Scalars['Int']>;
+	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome update input from userStory */
@@ -19154,29 +14373,39 @@ export type UserStory_TestOutcomeUpdateInput = {
 	data: TestOutcomeUpdateInput;
 };
 
-/** UserStory relation input */
-export type UserStoryConfigurationManyRelationInput = {
-	connect?: Maybe<ConfigurationKeyFilter>;
+/** Files create input from userStory_video */
+export type UserStory_Video_FileCreateInput = {
+	fileId?: Maybe<Scalars['String']>;
+	public?: Maybe<Scalars['Boolean']>;
+	filename?: Maybe<Scalars['String']>;
+	meta?: Maybe<Scalars['JSON']>;
+	mods?: Maybe<Scalars['JSON']>;
+	users_avatar?: Maybe<FilesUsers_AvatarRelationInput>;
+	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
+	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
+	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
 };
 
-/** UserStory relation input */
-export type UserStoryConfigurationRelationInput = {
-	connect?: Maybe<ConfigurationKeyFilter>;
-	create?: Maybe<LogInFlow_ConfigurationCreateInput>;
-};
-
-/** UserStory relation input */
-export type UserStoryConfigurationUpdateRelationInput = {
-	connect?: Maybe<ConfigurationKeyFilter>;
-	disconnect?: Maybe<ConfigurationKeyFilter>;
-	reconnect?: Maybe<ConfigurationKeyFilter>;
-	create?: Maybe<LogInFlow_ConfigurationCreateInput>;
-	update?: Maybe<LogInFlow_ConfigurationUpdateInput>;
+/** Files update input from userStory_video */
+export type UserStory_Video_FileUpdateInput = {
+	fileId?: Maybe<Scalars['String']>;
+	public?: Maybe<Scalars['Boolean']>;
+	filename?: Maybe<Scalars['String']>;
+	meta?: Maybe<Scalars['JSON']>;
+	mods?: Maybe<Scalars['JSON']>;
+	users_avatar?: Maybe<FilesUsers_AvatarUpdateRelationInput>;
+	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
+	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
+	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
 };
 
 /** UserStory create input */
 export type UserStoryCreateInput = {
-	/** The human readable title of a user story describes what the flow does. */
+	/** The human readable title of a user story describes what the story does. */
 	title?: Maybe<Scalars['String']>;
 	/** This is an optional field that allows you to describe what to expect from the test. */
 	description?: Maybe<Scalars['String']>;
@@ -19185,34 +14414,49 @@ export type UserStoryCreateInput = {
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
 	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Scalars['String']>>;
-	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
 	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationRelationInput>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory create many input */
 export type UserStoryCreateManyInput = {
-	/** The human readable title of a user story describes what the flow does. */
+	/** The human readable title of a user story describes what the story does. */
 	title?: Maybe<Scalars['String']>;
 	/** This is an optional field that allows you to describe what to expect from the test. */
 	description?: Maybe<Scalars['String']>;
@@ -19221,29 +14465,44 @@ export type UserStoryCreateManyInput = {
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
 	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Scalars['String']>>;
-	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingManyRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeManyRelationInput>;
-	project: UserStoryProjectManyRelationInput;
 	/**
 	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationManyRelationInput>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoManyRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeManyRelationInput>;
+	flows?: Maybe<UserStoryFlowsManyRelationInput>;
+	project: UserStoryProjectManyRelationInput;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigManyRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsManyRelationInput>;
 };
 
 /** UserStory delete input */
@@ -19260,11 +14519,14 @@ export type UserStoryFieldsPermissions = {
 	description?: Maybe<Scalars['Boolean']>;
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	testCreatedDate?: Maybe<Scalars['Boolean']>;
-	flowIDs?: Maybe<Scalars['Boolean']>;
-	created?: Maybe<Scalars['Boolean']>;
 	isExpected?: Maybe<Scalars['Boolean']>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	significance?: Maybe<Scalars['Boolean']>;
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
+	created?: Maybe<Scalars['Boolean']>;
+	videoGenerationVersion?: Maybe<Scalars['Boolean']>;
+	startEventId?: Maybe<Scalars['Boolean']>;
+	endEventId?: Maybe<Scalars['Boolean']>;
+	scriptVersion?: Maybe<Scalars['Boolean']>;
 };
 
 export type UserStoryFilter = {
@@ -19277,16 +14539,43 @@ export type UserStoryFilter = {
 	isTestCase?: Maybe<BoolPredicate>;
 	testCreatedDate?: Maybe<DateTimePredicate>;
 	isExpected?: Maybe<BoolPredicate>;
+	requiresAuthentication?: Maybe<BoolPredicate>;
 	significance?: Maybe<StringPredicate>;
-	isAuthenticated?: Maybe<BoolPredicate>;
+	created?: Maybe<StringPredicate>;
+	videoGenerationVersion?: Maybe<StringPredicate>;
+	startEventId?: Maybe<StringPredicate>;
+	endEventId?: Maybe<StringPredicate>;
+	scriptVersion?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
-	recording?: Maybe<RecordingFilter>;
+	video?: Maybe<FileFilter>;
 	testOutcome?: Maybe<TestOutcomeRelationFilter>;
+	flows?: Maybe<FlowRelationFilter>;
 	project?: Maybe<ProjectFilter>;
-	configuration?: Maybe<ConfigurationFilter>;
+	logInStoryConfig?: Maybe<ConfigurationFilter>;
+	scriptCommands?: Maybe<ScriptCommandRelationFilter>;
 	AND?: Maybe<Array<UserStoryFilter>>;
 	OR?: Maybe<Array<UserStoryFilter>>;
+};
+
+/** UserStory relation input */
+export type UserStoryFlowsManyRelationInput = {
+	connect?: Maybe<Array<FlowKeyFilter>>;
+};
+
+/** UserStory relation input */
+export type UserStoryFlowsRelationInput = {
+	connect?: Maybe<Array<FlowKeyFilter>>;
+	create?: Maybe<Array<Maybe<UserStory_FlowCreateInput>>>;
+};
+
+/** UserStory relation input */
+export type UserStoryFlowsUpdateRelationInput = {
+	connect?: Maybe<Array<FlowKeyFilter>>;
+	disconnect?: Maybe<Array<FlowKeyFilter>>;
+	reconnect?: Maybe<Array<FlowKeyFilter>>;
+	create?: Maybe<Array<Maybe<UserStory_FlowCreateInput>>>;
+	update?: Maybe<Array<Maybe<UserStory_FlowUpdateInput>>>;
 };
 
 export type UserStoryGroupBy = {
@@ -19306,16 +14595,21 @@ export type UserStoryGroupByQuery = {
 	description?: Maybe<Array<GroupByField>>;
 	isTestCase?: Maybe<Array<GroupByField>>;
 	testCreatedDate?: Maybe<Array<GroupByField>>;
-	flowIDs?: Maybe<Array<GroupByField>>;
-	created?: Maybe<Array<GroupByField>>;
 	isExpected?: Maybe<Array<GroupByField>>;
+	requiresAuthentication?: Maybe<Array<GroupByField>>;
 	significance?: Maybe<Array<GroupByField>>;
-	isAuthenticated?: Maybe<Array<GroupByField>>;
+	created?: Maybe<Array<GroupByField>>;
+	videoGenerationVersion?: Maybe<Array<GroupByField>>;
+	startEventId?: Maybe<Array<GroupByField>>;
+	endEventId?: Maybe<Array<GroupByField>>;
+	scriptVersion?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
-	recording?: Maybe<RecordingGroupByQuery>;
+	video?: Maybe<FileGroupByQuery>;
 	testOutcome?: Maybe<TestOutcomeGroupByQuery>;
+	flows?: Maybe<FlowGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
-	configuration?: Maybe<ConfigurationGroupByQuery>;
+	logInStoryConfig?: Maybe<ConfigurationGroupByQuery>;
+	scriptCommands?: Maybe<ScriptCommandGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -19332,6 +14626,26 @@ export type UserStoryListResponse = {
 	count: Scalars['Int'];
 	/** Aggregated items */
 	groups: Array<GroupByResponse>;
+};
+
+/** UserStory relation input */
+export type UserStoryLogInStoryConfigManyRelationInput = {
+	connect?: Maybe<ConfigurationKeyFilter>;
+};
+
+/** UserStory relation input */
+export type UserStoryLogInStoryConfigRelationInput = {
+	connect?: Maybe<ConfigurationKeyFilter>;
+	create?: Maybe<LogInStory_ConfigurationCreateInput>;
+};
+
+/** UserStory relation input */
+export type UserStoryLogInStoryConfigUpdateRelationInput = {
+	connect?: Maybe<ConfigurationKeyFilter>;
+	disconnect?: Maybe<ConfigurationKeyFilter>;
+	reconnect?: Maybe<ConfigurationKeyFilter>;
+	create?: Maybe<LogInStory_ConfigurationCreateInput>;
+	update?: Maybe<LogInStory_ConfigurationUpdateInput>;
 };
 
 /** UserStoryManyResponse output */
@@ -19363,10 +14677,20 @@ export enum UserStoryOrderBy {
 	TestCreatedDateDesc = 'testCreatedDate_DESC',
 	IsExpectedAsc = 'isExpected_ASC',
 	IsExpectedDesc = 'isExpected_DESC',
+	RequiresAuthenticationAsc = 'requiresAuthentication_ASC',
+	RequiresAuthenticationDesc = 'requiresAuthentication_DESC',
 	SignificanceAsc = 'significance_ASC',
 	SignificanceDesc = 'significance_DESC',
-	IsAuthenticatedAsc = 'isAuthenticated_ASC',
-	IsAuthenticatedDesc = 'isAuthenticated_DESC',
+	CreatedAsc = 'created_ASC',
+	CreatedDesc = 'created_DESC',
+	VideoGenerationVersionAsc = 'videoGenerationVersion_ASC',
+	VideoGenerationVersionDesc = 'videoGenerationVersion_DESC',
+	StartEventIdAsc = 'startEventId_ASC',
+	StartEventIdDesc = 'startEventId_DESC',
+	EndEventIdAsc = 'endEventId_ASC',
+	EndEventIdDesc = 'endEventId_DESC',
+	ScriptVersionAsc = 'scriptVersion_ASC',
+	ScriptVersionDesc = 'scriptVersion_DESC',
 }
 
 /** UserStory subscription payload */
@@ -19398,30 +14722,30 @@ export type UserStoryProjectUpdateRelationInput = {
 	update?: Maybe<UserStories_ProjectUpdateInput>;
 };
 
-/** UserStory relation input */
-export type UserStoryRecordingManyRelationInput = {
-	connect?: Maybe<RecordingKeyFilter>;
-};
-
-/** UserStory relation input */
-export type UserStoryRecordingRelationInput = {
-	connect?: Maybe<RecordingKeyFilter>;
-	create?: Maybe<UserStory_RecordingCreateInput>;
-};
-
-/** UserStory relation input */
-export type UserStoryRecordingUpdateRelationInput = {
-	connect?: Maybe<RecordingKeyFilter>;
-	disconnect?: Maybe<RecordingKeyFilter>;
-	reconnect?: Maybe<RecordingKeyFilter>;
-	create?: Maybe<UserStory_RecordingCreateInput>;
-	update?: Maybe<UserStory_RecordingUpdateInput>;
-};
-
 export type UserStoryRelationFilter = {
 	some?: Maybe<UserStoryFilter>;
 	every?: Maybe<UserStoryFilter>;
 	none?: Maybe<UserStoryFilter>;
+};
+
+/** UserStory relation input */
+export type UserStoryScriptCommandsManyRelationInput = {
+	connect?: Maybe<Array<ScriptCommandKeyFilter>>;
+};
+
+/** UserStory relation input */
+export type UserStoryScriptCommandsRelationInput = {
+	connect?: Maybe<Array<ScriptCommandKeyFilter>>;
+	create?: Maybe<Array<Maybe<UserStories_ScriptCommandCreateInput>>>;
+};
+
+/** UserStory relation input */
+export type UserStoryScriptCommandsUpdateRelationInput = {
+	connect?: Maybe<Array<ScriptCommandKeyFilter>>;
+	disconnect?: Maybe<Array<ScriptCommandKeyFilter>>;
+	reconnect?: Maybe<Array<ScriptCommandKeyFilter>>;
+	create?: Maybe<Array<Maybe<UserStories_ScriptCommandCreateInput>>>;
+	update?: Maybe<Array<Maybe<UserStories_ScriptCommandUpdateInput>>>;
 };
 
 export type UserStorySort = {
@@ -19434,12 +14758,17 @@ export type UserStorySort = {
 	isTestCase?: Maybe<SortOrder>;
 	testCreatedDate?: Maybe<SortOrder>;
 	isExpected?: Maybe<SortOrder>;
+	requiresAuthentication?: Maybe<SortOrder>;
 	significance?: Maybe<SortOrder>;
-	isAuthenticated?: Maybe<SortOrder>;
+	created?: Maybe<SortOrder>;
+	videoGenerationVersion?: Maybe<SortOrder>;
+	startEventId?: Maybe<SortOrder>;
+	endEventId?: Maybe<SortOrder>;
+	scriptVersion?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
-	recording?: Maybe<RecordingSort>;
+	video?: Maybe<FileSort>;
 	project?: Maybe<ProjectSort>;
-	configuration?: Maybe<ConfigurationSort>;
+	logInStoryConfig?: Maybe<ConfigurationSort>;
 };
 
 /** UserStory subscription filter */
@@ -19475,17 +14804,22 @@ export type UserStoryUpdateByFilterInput = {
 	description?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	isTestCase?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 	testCreatedDate?: Maybe<Array<Maybe<UpdateByFilterDateTimeInput>>>;
-	flowIDs?: Maybe<Array<Maybe<UpdateByFilterListIntInput>>>;
-	created?: Maybe<Array<Maybe<UpdateByFilterListStringInput>>>;
 	isExpected?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
+	requiresAuthentication?: Maybe<
+		Array<Maybe<UpdateByFilterBooleanSwitchInput>>
+	>;
 	significance?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
-	isAuthenticated?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
+	created?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
+	videoGenerationVersion?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	startEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	endEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	scriptVersion?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** UserStory update input */
 export type UserStoryUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
-	/** The human readable title of a user story describes what the flow does. */
+	/** The human readable title of a user story describes what the story does. */
 	title?: Maybe<Scalars['String']>;
 	/** This is an optional field that allows you to describe what to expect from the test. */
 	description?: Maybe<Scalars['String']>;
@@ -19494,29 +14828,64 @@ export type UserStoryUpdateInput = {
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
 	/**
-	 * A list of flow (same user actions in the same order) ids that are grouped
-	 * together. Answers the question "How many of my users are doing this?"
-	 */
-	flowIDs?: Maybe<Array<Maybe<Scalars['Int']>>>;
-	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
-	created?: Maybe<Array<Maybe<Scalars['String']>>>;
-	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/** Marks the significance of a user story for calculation of the confidence score and weight of choices. */
-	significance?: Maybe<Scalars['String']>;
-	recording?: Maybe<UserStoryRecordingUpdateRelationInput>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
 	/**
 	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `isAuthenticated` is marking a test as needing to be logged in
-	 * to complete the set of actions in the user story.
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	isAuthenticated?: Maybe<Scalars['Boolean']>;
-	configuration?: Maybe<UserStoryConfigurationUpdateRelationInput>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created?: Maybe<Scalars['String']>;
+	video?: Maybe<UserStoryVideoUpdateRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
+};
+
+/** UserStory relation input */
+export type UserStoryVideoManyRelationInput = {
+	connect?: Maybe<FileKeyFilter>;
+};
+
+/** UserStory relation input */
+export type UserStoryVideoRelationInput = {
+	connect?: Maybe<FileKeyFilter>;
+	create?: Maybe<UserStory_Video_FileCreateInput>;
+};
+
+/** UserStory relation input */
+export type UserStoryVideoUpdateRelationInput = {
+	connect?: Maybe<FileKeyFilter>;
+	disconnect?: Maybe<FileKeyFilter>;
+	reconnect?: Maybe<FileKeyFilter>;
+	create?: Maybe<UserStory_Video_FileCreateInput>;
+	update?: Maybe<UserStory_Video_FileUpdateInput>;
 };
 
 /** Users subscription filter */
@@ -19551,6 +14920,7 @@ export type UserUpdateInput = {
 	avatar?: Maybe<UsersAvatarUpdateRelationInput>;
 	roles?: Maybe<UsersRolesUpdateRelationInput>;
 	projects?: Maybe<UsersProjectsUpdateRelationInput>;
+	/** What is the job title of this individual? */
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
@@ -19562,70 +14932,119 @@ export type UuidFieldTypeAttributes = {
 	fieldSize?: Maybe<Scalars['Int']>;
 };
 
-/** SeleniumSetViewportSize create input from value */
-export type Value_SeleniumSetViewportSizeCreateInput = {
-	value?: Maybe<SeleniumSetViewportSizeValueRelationInput>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSetViewportSizeRelationInput>;
-};
-
-/** SeleniumSetViewportSize update input from value */
-export type Value_SeleniumSetViewportSizeUpdateInput = {
-	value?: Maybe<SeleniumSetViewportSizeValueUpdateRelationInput>;
-	setViewportSize?: Maybe<SeleniumSetViewportSizeSetViewportSizeUpdateRelationInput>;
-};
-
 /** VerificationEmailResendInput */
 export type VerificationEmailResendInput = {
 	email: Scalars['String'];
 };
 
-/** Recording create input from video */
-export type Video_RecordingCreateInput = {
-	environment?: Maybe<RecordingEnvironmentRelationInput>;
-	userStory?: Maybe<RecordingUserStoryRelationInput>;
-	video?: Maybe<RecordingVideoRelationInput>;
-	seleniumScript: RecordingSeleniumScriptRelationInput;
+/** Flow create input from video */
+export type Video_FlowCreateInput = {
+	ipAddress?: Maybe<Scalars['String']>;
+	browser?: Maybe<Scalars['String']>;
+	browserVersion?: Maybe<Scalars['String']>;
+	operatingSystem?: Maybe<Scalars['String']>;
+	language?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the first event in a video in the backend database. */
 	startEventId?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the last event in a video in the backend database. */
 	endEventId?: Maybe<Scalars['String']>;
+	video?: Maybe<FlowVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
-	seleniumScriptJson?: Maybe<Scalars['JSON']>;
-	/**
-	 * The number of expected commands in a recording. If the story has less than
-	 * this after a certain amount of time, we can deem it to be an error. Currently
-	 * an experimental field in our quest to find the best way to report progress of
-	 * user story creation to our clients.
-	 */
-	nExpectedCommands?: Maybe<Scalars['Int']>;
+	/** The UUID that is the index in the backend flow table. */
+	flowId?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryRelationInput>;
 };
 
-/** Recording update input from video */
-export type Video_RecordingUpdateInput = {
-	filter?: Maybe<RecordingKeyFilter>;
-	data: RecordingUpdateInput;
+/** Flow update input from video */
+export type Video_FlowUpdateInput = {
+	filter?: Maybe<FlowKeyFilter>;
+	data: FlowUpdateInput;
 };
 
 /** TestOutcome create input from video */
 export type Video_TestOutcomeCreateInput = {
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	/** Has the bug been resolved? */
-	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
 	 * The status of a test case in an individual test run. Test runs create test
 	 * outcomes for each test case / user story in the run.
 	 */
 	status?: Maybe<Scalars['String']>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 	video?: Maybe<TestOutcomeVideoRelationInput>;
-	errorDetails?: Maybe<TestOutcomeErrorDetailsRelationInput>;
+	/**
+	 * Has the bug been resolved? This is an optional field to represent the
+	 * resolution of an issue by means of a linked bug ticket being merged.
+	 */
+	isResolved?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This field should only be filled if the status is `failing`. It's the
+	 * step-index where a test case failed to complete an event.
+	 */
+	errorStepIndex?: Maybe<Scalars['Int']>;
+	userStory: TestOutcomeUserStoryRelationInput;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome update input from video */
 export type Video_TestOutcomeUpdateInput = {
 	filter?: Maybe<TestOutcomeKeyFilter>;
 	data: TestOutcomeUpdateInput;
+};
+
+/** UserStory create input from video */
+export type Video_UserStoryCreateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	/**
+	 * Is the answer to "Who created this user story?", a user or a product manager
+	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
+	 * field that has no default value so it needs to be specified in a create mutation.
+	 */
+	created: Scalars['String'];
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
+};
+
+/** UserStory update input from video */
+export type Video_UserStoryUpdateInput = {
+	filter?: Maybe<UserStoryKeyFilter>;
+	data: UserStoryUpdateInput;
 };
 
 /** View Attributes */
