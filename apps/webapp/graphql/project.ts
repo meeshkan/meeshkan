@@ -304,70 +304,85 @@ export const REFRESH_INVITE_LINK = gql`
 
 export const PROJECT_USER_STORIES = gql`
 	fragment stories on UserStory {
-		id
-		createdAt
-		title
-		flowIDs
-		created
-		significance
-		recording {
-			seleniumScriptJson
-			video {
-				downloadUrl
-			}
-		}
-		project {
-			configuration {
-				authenticationTokens {
-					items {
-						type
-						key
-						value
-					}
-				}
-			}
-		}
-	}
+  id
+  createdAt
+  title
+  flowIDs
+  created
+  significance
+	isTestCase
+  recording {
+    seleniumScriptJson
+    video {
+      downloadUrl
+    }
+  }
+  project {
+    configuration {
+      authenticationTokens {
+        items {
+          type
+          key
+          value
+        }
+      }
+    }
+  }
+}
 
-	query PROJECT_USER_STORIES(
-		$projectId: ID!
-		$first: Int!
-		$skip: Int!
-		$significanceFilters: [UserStoryFilter!]
-		$sort: UserStoryOrderBy
-	) {
-		recordings: userStoriesList(
-			filter: {
-				project: { id: { equals: $projectId } }
-				isTestCase: { equals: false }
-				OR: $significanceFilters
-			}
-			orderBy: [$sort]
-			first: $first
-			skip: $skip
-		) {
-			count
-			items {
-				...stories
-			}
-		}
-		testCases: userStoriesList(
-			filter: {
-				project: { id: { equals: $projectId } }
-				isTestCase: { equals: true }
-				OR: $significanceFilters
-			}
-			orderBy: [$sort]
-			first: $first
-			skip: $skip
-		) {
-			count
-			items {
-				testCreatedDate
-				...stories
-			}
-		}
-	}
+query PROJECT_USER_STORIES(
+  $projectId: ID!
+  $first: Int!
+  $skip: Int!
+  $significanceFilters: [UserStoryFilter!]
+  $sort: UserStoryOrderBy
+) {
+  all: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      ...stories
+    }
+  }
+  recordings: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      isTestCase: { equals: false }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      ...stories
+    }
+  }
+  testCases: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      isTestCase: { equals: true }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      testCreatedDate
+      ...stories
+    }
+  }
+}
 `;
 
 export const TOGGLE_TEST_RUNS = gql`
