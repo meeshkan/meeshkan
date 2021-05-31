@@ -178,7 +178,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 
 		setProject({
 			...project,
-			userStories: { items: updatedUserStories }
+			userStories: { ...project.userStories, items: updatedUserStories }
 		});
 	};
 
