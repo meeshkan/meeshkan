@@ -96,12 +96,10 @@ const TestRun = () => {
 
 	const testsNeedAuthentication: boolean = true;
 	const stepsInLogInStory = project?.configuration?.logInFlow ? JSON.parse(project?.configuration?.logInFlow?.recording?.seleniumScriptJson)?.groups?.groupItems[0]?.commands?.items?.length : 0
-	const hasLogInStory: boolean = project?.configuration?.logInFlow
-		? true
-		: false;
+	const hasLogInStory: boolean = !!project?.configuration?.logInFlow;
 
 	const hasAuthTokens: boolean =
-		project?.configuration?.authenticationTokens?.items?.length >= 1 ? true : false;
+		(project?.configuration?.authenticationTokens?.items?.length || 0) >= 1;
 
 	return (
 		<ValidatedBillingPlan>
