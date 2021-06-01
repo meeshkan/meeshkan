@@ -317,7 +317,7 @@ const Table = ({
 											{...cell.getCellProps()}
 											py={3}
 										>
-											<Skeleton isLoaded={!loading} borderRadius="md" minH={6}>
+											<Skeleton isLoaded={!loading} borderRadius="md" minH={6} d='flex' alignItems='center'>
 												{cell.render('Cell')}
 											</Skeleton>
 										</Td>
