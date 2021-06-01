@@ -262,7 +262,11 @@ const Table = ({
 								</Td> */}
 								{data[rowId].recording.video ? (
 									<Td p={3} border={0}>
-										<Skeleton isLoaded={!loading} borderRadius="md">
+										<Skeleton
+											isLoaded={!loading}
+											borderRadius="md"
+											maxW="fit-content"
+										>
 											<Button
 												size="xs"
 												variant="subtle"
@@ -284,7 +288,7 @@ const Table = ({
 									</Td>
 								) : (
 									<Td p={3} border={0}>
-										<Skeleton isLoaded={!loading} borderRadius="md">
+										<Skeleton isLoaded={!loading} borderRadius="md" maxW="fit-content">
 											<Button
 												size="xs"
 												variant="subtle"
@@ -313,7 +317,7 @@ const Table = ({
 											{...cell.getCellProps()}
 											py={3}
 										>
-											<Skeleton isLoaded={!loading} borderRadius="md">
+											<Skeleton isLoaded={!loading} borderRadius="md" minH={6}>
 												{cell.render('Cell')}
 											</Skeleton>
 										</Td>
