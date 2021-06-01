@@ -9122,6 +9122,8 @@ export type ScriptCommand = {
 	 * element. Used in cases where a text label is not visible on the screen.
 	 */
 	altOrAriaText?: Maybe<Scalars['String']>;
+	/** What page did this event take place on? */
+	documentURL?: Maybe<Scalars['String']>;
 	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
 	scrollTop?: Maybe<Scalars['Float']>;
 	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
@@ -9183,6 +9185,7 @@ export type ScriptCommand_PermissionFilter = {
 	tagId?: Maybe<StringPredicate>;
 	innerText?: Maybe<StringPredicate>;
 	altOrAriaText?: Maybe<StringPredicate>;
+	documentURL?: Maybe<StringPredicate>;
 	scrollTop?: Maybe<FloatPredicate>;
 	scrollLeft?: Maybe<FloatPredicate>;
 	destinationXCoordinate?: Maybe<IntPredicate>;
@@ -9249,6 +9252,8 @@ export type ScriptCommandCreateInput = {
 	 * element. Used in cases where a text label is not visible on the screen.
 	 */
 	altOrAriaText?: Maybe<Scalars['String']>;
+	/** What page did this event take place on? */
+	documentURL?: Maybe<Scalars['String']>;
 	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
 	scrollTop?: Maybe<Scalars['Float']>;
 	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
@@ -9334,6 +9339,8 @@ export type ScriptCommandCreateManyInput = {
 	 * element. Used in cases where a text label is not visible on the screen.
 	 */
 	altOrAriaText?: Maybe<Scalars['String']>;
+	/** What page did this event take place on? */
+	documentURL?: Maybe<Scalars['String']>;
 	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
 	scrollTop?: Maybe<Scalars['Float']>;
 	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
@@ -9399,6 +9406,7 @@ export type ScriptCommandFieldsPermissions = {
 	tagId?: Maybe<Scalars['Boolean']>;
 	innerText?: Maybe<Scalars['Boolean']>;
 	altOrAriaText?: Maybe<Scalars['Boolean']>;
+	documentURL?: Maybe<Scalars['Boolean']>;
 	scrollTop?: Maybe<Scalars['Boolean']>;
 	scrollLeft?: Maybe<Scalars['Boolean']>;
 	destinationXCoordinate?: Maybe<Scalars['Boolean']>;
@@ -9431,6 +9439,7 @@ export type ScriptCommandFilter = {
 	tagId?: Maybe<StringPredicate>;
 	innerText?: Maybe<StringPredicate>;
 	altOrAriaText?: Maybe<StringPredicate>;
+	documentURL?: Maybe<StringPredicate>;
 	scrollTop?: Maybe<FloatPredicate>;
 	scrollLeft?: Maybe<FloatPredicate>;
 	destinationXCoordinate?: Maybe<IntPredicate>;
@@ -9474,6 +9483,7 @@ export type ScriptCommandGroupByQuery = {
 	tagId?: Maybe<Array<GroupByField>>;
 	innerText?: Maybe<Array<GroupByField>>;
 	altOrAriaText?: Maybe<Array<GroupByField>>;
+	documentURL?: Maybe<Array<GroupByField>>;
 	scrollTop?: Maybe<Array<GroupByField>>;
 	scrollLeft?: Maybe<Array<GroupByField>>;
 	destinationXCoordinate?: Maybe<Array<GroupByField>>;
@@ -9550,6 +9560,8 @@ export enum ScriptCommandOrderBy {
 	InnerTextDesc = 'innerText_DESC',
 	AltOrAriaTextAsc = 'altOrAriaText_ASC',
 	AltOrAriaTextDesc = 'altOrAriaText_DESC',
+	DocumentUrlAsc = 'documentURL_ASC',
+	DocumentUrlDesc = 'documentURL_DESC',
 	ScrollTopAsc = 'scrollTop_ASC',
 	ScrollTopDesc = 'scrollTop_DESC',
 	ScrollLeftAsc = 'scrollLeft_ASC',
@@ -9712,6 +9724,7 @@ export type ScriptCommandSort = {
 	tagId?: Maybe<SortOrder>;
 	innerText?: Maybe<SortOrder>;
 	altOrAriaText?: Maybe<SortOrder>;
+	documentURL?: Maybe<SortOrder>;
 	scrollTop?: Maybe<SortOrder>;
 	scrollLeft?: Maybe<SortOrder>;
 	destinationXCoordinate?: Maybe<SortOrder>;
@@ -9768,6 +9781,7 @@ export type ScriptCommandUpdateByFilterInput = {
 	tagId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	innerText?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	altOrAriaText?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	documentURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	scrollTop?: Maybe<Array<Maybe<UpdateByFilterFloatInput>>>;
 	scrollLeft?: Maybe<Array<Maybe<UpdateByFilterFloatInput>>>;
 	destinationXCoordinate?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
@@ -9826,6 +9840,8 @@ export type ScriptCommandUpdateInput = {
 	 * element. Used in cases where a text label is not visible on the screen.
 	 */
 	altOrAriaText?: Maybe<Scalars['String']>;
+	/** What page did this event take place on? */
+	documentURL?: Maybe<Scalars['String']>;
 	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
 	scrollTop?: Maybe<Scalars['Float']>;
 	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
@@ -14121,6 +14137,8 @@ export type UserStories_ScriptCommandCreateInput = {
 	 * element. Used in cases where a text label is not visible on the screen.
 	 */
 	altOrAriaText?: Maybe<Scalars['String']>;
+	/** What page did this event take place on? */
+	documentURL?: Maybe<Scalars['String']>;
 	/** Returns the number of pixels an element's content is scrolled vertically. Stored with a max of 2 decimal places. */
 	scrollTop?: Maybe<Scalars['Float']>;
 	/** Returns the number of pixels an element's content is scrolled horizontally. Stored with a max of 2 decimal places. */
