@@ -387,6 +387,20 @@ query PROJECT_USER_STORIES(
   $significanceFilters: [UserStoryFilter!]
   $sort: UserStoryOrderBy
 ) {
+  all: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      ...stories
+    }
+  }
   recordings: userStoriesList(
     filter: {
       project: { id: { equals: $projectId } }

@@ -148,10 +148,10 @@ const Settings = () => {
 	const removeTeamMember = async (memberEmail: string): Promise<void> => {
 		const response = await client.request(REMOVE_TEAM_MEMBER, {
 			projectId: project.id,
-			memberEmail: memberEmail,
+			memberEmail,
 		});
 
-		const updatedMembers = response.members.items;
+		const updatedMembers = response.projectUpdate.members.items;
 		setMembers(updatedMembers);
 		setProject({
 			...project,

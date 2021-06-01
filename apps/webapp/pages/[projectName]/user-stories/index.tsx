@@ -104,6 +104,10 @@ type UserStoryProps = {
 };
 
 interface UserStoriesAliased {
+	all: {
+		count: UserStoryListResponse['count'];
+		items: UserStoryListResponse['items'];
+	};
 	recordings: {
 		count: UserStoryListResponse['count'];
 		items: UserStoryListResponse['items'];
@@ -122,8 +126,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
-	const [pageCount, setPageCount] = React.useState(1);
+	const [pageSize, setPageSize] = React.useState(10);
 	const [tableData, setTableData] = useState<UserStoriesAliased>({
+		all: {
+			count: 0,
+			items: [],
+		},
 		recordings: {
 			count: 0,
 			items: [],
@@ -133,6 +141,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			items: [],
 		},
 	});
+	const recordCount = toggleIndex === 0 ? tableData.all.count : toggleIndex === 1 ? tableData.recordings.count : tableData.testCases.count
 
 	const gettingStartedGreenColor = useColorModeValue('cyan.500', 'cyan.300');
 	const gettingStartedGrayColor = useColorModeValue('gray.500', 'gray.400');
@@ -144,6 +153,14 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Title',
 				accessor: 'title',
+			},
+			{
+				Header: 'Test',
+				accessor: (originalRow, rowIndex) => {
+					return (
+						<Checkbox isDisabled isChecked={originalRow.isTestCase} />
+					)
+				}
 			},
 			{
 				Header: 'Created at',
@@ -284,16 +301,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				})
 				.then((res) => {
 					setTableData(res);
-					const recordCount =
-						toggleIndex === 0 ? res.recordings.count : res.testCases.count;
-					setPageCount(
-						Math.ceil((recordCount === 0 ? 1 : recordCount) / pageSize)
-					);
+					setPageSize(pageSize)
 					setTableLoading(false);
 				});
 			return request;
 		},
-		[idToken, projectId, toggleIndex, low, medium, high, sort]
+		[idToken, projectId, low, medium, high, sort]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
@@ -469,7 +482,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					<Flex justify="space-between" align="center">
 						<SegmentedControl
 							attached={true}
-							values={['Recordings', 'Test cases']}
+							values={["All", 'Recordings', 'Test cases']}
 							selectedIndex={toggleIndex}
 							setSelectedIndex={setToggleIndex}
 						/>
@@ -552,7 +565,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 									</MenuGroup>
 								</MenuList>
 							</Menu>
-							{toggleIndex === 0 ? (
+							{toggleIndex === 1 ? (
 								<Button size="sm" isDisabled>
 									Review recordings
 								</Button>
@@ -564,12 +577,12 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						columns={columns}
 						data={
 							toggleIndex === 0
-								? tableData.recordings.items
-								: tableData.testCases.items
+								? tableData.all.items : toggleIndex === 1 ? tableData.recordings.items
+									: tableData.testCases.items
 						}
 						fetchData={fetchData}
 						loading={tableLoading}
-						pageCount={pageCount}
+						pageCount={Math.ceil((recordCount === 0 ? 1 : recordCount) / pageSize)}
 					/>
 				</Box>
 			</Stack>
