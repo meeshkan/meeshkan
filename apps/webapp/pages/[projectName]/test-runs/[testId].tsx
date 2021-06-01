@@ -401,7 +401,11 @@ const TestRun = () => {
 																		fontSize="sm"
 																		mr={4}
 																	>
-																		{outcome?.errorDetails?.stepIndex + 1}
+																		{requiresAuthentication && hasLogInStory
+																			? outcome?.errorDetails?.stepIndex +
+																			1 -
+																			stepsInLogInStory
+																			: outcome?.errorDetails?.stepIndex + 1}
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
