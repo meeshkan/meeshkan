@@ -346,6 +346,7 @@ fragment stories on UserStory {
     downloadUrl
   }
   scriptCommands {
+		count
     items {
       command
       sIndex

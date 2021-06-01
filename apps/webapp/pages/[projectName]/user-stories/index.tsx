@@ -60,7 +60,6 @@ import NotFoundError from '../../404';
 import { eightBaseClient } from '../../../utils/graphql';
 import { UserContext } from '../../../utils/user';
 import {
-	SeleniumGroup,
 	UserStory,
 	UserStoryFilter,
 	UserStoryListResponse,
@@ -163,7 +162,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: '# repeated',
 				accessor: (originalRow, rowIndex) => {
-					return originalRow.flowIDs.length;
+					return originalRow.flows.count
 				},
 			},
 			{
@@ -182,16 +181,16 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 							px={2}
 							py={1}
 							colorScheme={
-								created[0] === 'user'
+								created === 'user'
 									? 'cyan'
-									: created[0] === 'manual'
-									? 'blue'
-									: 'gray'
+									: created === 'manual'
+										? 'blue'
+										: 'gray'
 							}
 						>
-							{created[0] === 'user' ? (
+							{created === 'user' ? (
 								<VideoIcon mr={3} />
-							) : created[0] === 'manual' ? (
+							) : created === 'manual' ? (
 								<CrosshairIcon mr={3} />
 							) : null}
 							{created}
@@ -215,10 +214,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								significance === 'low'
 									? 'gray'
 									: significance === 'medium'
-									? 'amber'
-									: significance === 'high'
-									? 'cyan'
-									: null
+										? 'amber'
+										: significance === 'high'
+											? 'cyan'
+											: null
 							}
 						>
 							{significance}
@@ -229,13 +228,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					let count = 0;
-					JSON.parse(
-						originalRow.recording.seleniumScriptJson
-					).groups.groupItems.forEach(
-						(step: SeleniumGroup) => (count = count + step.commands.count)
-					);
-					return count;
+					return originalRow.scriptCommands.count
 				},
 			},
 		],
