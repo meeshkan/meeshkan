@@ -52,7 +52,7 @@ const NavButton = (props: NavButtonProps) => {
 		return (
 			<NextLink href={href} passHref>
 				<MotionButton
-					id={createSlug(innerText(children))}
+					id={`nav-${createSlug(innerText(children))}`}
 					as={Link}
 					aria-current={isActive ? 'page' : undefined}
 					isActive={isActive}
