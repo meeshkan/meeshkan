@@ -319,9 +319,8 @@ const Settings = () => {
 					</Heading>
 					<InviteLinkInput />
 					{members?.map((member: User) => {
-						const memberName = `${member.firstName || ''} ${
-							member.lastName || ''
-						}`;
+						const memberName = `${member.firstName || ''} ${member.lastName || ''
+							}`;
 						const memberAvatar = member?.avatar?.downloadUrl;
 						return (
 							<Flex
@@ -482,11 +481,10 @@ const Settings = () => {
 							Record log in flow
 						</Button>
 					</Flex>
-					{project?.configuration?.logInFlow ? (
+					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/user-stories/${
-								project?.configuration?.logInFlow?.id
-							}`}
+							href={`/${createSlug(project?.name)}/user-stories/${project?.configuration?.logInStory?.id
+								}`}
 						>
 							<Flex
 								as="a"
@@ -502,7 +500,7 @@ const Settings = () => {
 								}}
 							>
 								<Flex>
-									<Text>{project?.configuration?.logInFlow?.title}</Text>
+									<Text>{project?.configuration?.logInStory?.title}</Text>
 									<Tooltip label="This is the 'Log in flow'" placement="right">
 										<Badge
 											colorScheme="amber"
@@ -519,7 +517,7 @@ const Settings = () => {
 
 								<Text>
 									{new Date(
-										project?.configuration?.logInFlow?.createdAt
+										project?.configuration?.logInStory?.createdAt
 									).toLocaleString()}
 								</Text>
 							</Flex>
