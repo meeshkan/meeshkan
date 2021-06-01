@@ -150,7 +150,7 @@ const Table = ({
 	) => {
 		try {
 			const pptrScript = eightBaseToPptr(
-				JSON.parse(script),
+				script,
 				{
 					headless: true,
 				},
@@ -365,7 +365,7 @@ const Table = ({
 													onClick={() =>
 														handleDownload(
 															// @ts-expect-error
-															row.original.recording.seleniumScriptJson,
+															row.original.scriptCommands,
 															// @ts-expect-error
 															row.original.project.configuration
 																.authenticationTokens.items,

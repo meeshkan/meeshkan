@@ -287,7 +287,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const handleDownload = () => {
 		try {
 			const pptrScript = eightBaseToPptr(
-				data?.userStory?.scriptCommands.items,
+				data?.userStory?.scriptCommands,
 				{
 					headless: true,
 				},

@@ -1,7 +1,7 @@
 import {
-	SeleniumScript,
-	SeleniumGroup,
+	ScriptCommandListResponse,
 	AuthenticationToken,
+	ScriptCommand,
 } from '@frontend/meeshkan-types';
 
 interface ScriptTargetSelector {
@@ -164,7 +164,7 @@ const eightBaseToX = (formatter: {
 	type: (o: Type) => string;
 	dragndrop: (o: Dragndrop) => string;
 }) => (
-	script: SeleniumScript,
+	script: ScriptCommandListResponse,
 	options: ScriptToPptrOptions,
 	authTokens?: Array<AuthenticationToken>,
 	stagingURL?: string
@@ -173,133 +173,116 @@ const eightBaseToX = (formatter: {
 			return undefined;
 		}
 		const wait = '\n    await new Promise(r => setTimeout(r, 5000));\n';
-		script?.map((group: SeleniumGroup) =>
-			group?.commands?.items?.map((command) =>
-				command?.open?.value
-					? formatter.open({
-						value: command.open.value,
+		const commands = script?.items?.map((event: ScriptCommand) =>
+			event?.command === 'open' && event?.value
+				? formatter.open({
+					value: event.value,
+				})
+				: event?.command === 'set viewport size' && event?.xCoordinate && event?.yCoordinate
+					? formatter.setViewportSize({
+						value: {
+							xCoord: event.xCoordinate,
+							yCoord: event.yCoordinate,
+						},
 					})
-					: command?.setViewportSize?.value?.xCoord &&
-						command.setViewportSize.value.yCoord
-						? formatter.setViewportSize({
-							value: {
-								xCoord: command.setViewportSize.value.xCoord,
-								yCoord: command.setViewportSize.value.yCoord,
+					: event?.command === 'click' && event?.xpath && event?.tagName
+						? formatter.click({
+							target: {
+								selector: {
+									xpath: event.xpath,
+									selector: n2u(event.selector),
+									className: n2u(event.className),
+									tagName: event.tagName,
+									tagId: n2u(event.tagId),
+									innerText: n2u(event.innerText),
+								},
+								coordinates:
+									event?.xCoordinate && event?.yCoordinate
+										? {
+											xCoord: event.xCoordinate,
+											yCoord: event.yCoordinate,
+										}
+										: undefined,
 							},
 						})
-						: command?.click?.target?.selector?.xpath &&
-							command.click.target.selector.tagName
-							? formatter.click({
+						: event?.command === 'type' && event?.xpath && event?.tagName && event?.value
+							? formatter.type({
+								value: event.value,
 								target: {
 									selector: {
-										xpath: command.click.target.selector.xpath,
-										selector: n2u(command.click.target.selector.selector),
-										className: n2u(command.click.target.selector.className),
-										tagName: command.click.target.selector.tagName,
-										tagId: n2u(command.click.target.selector.tagId),
-										innerText: n2u(command.click.target.selector.innerText),
+										xpath: event.xpath,
+										selector: n2u(event.selector),
+										className: n2u(event.className),
+										tagName: event.tagName,
+										tagId: n2u(event.tagId),
+										innerText: n2u(event.innerText),
 									},
 									coordinates:
-										command?.click?.target?.coordinates?.xCoord &&
-											command.click.target.coordinates.yCoord
+										event?.xCoordinate && event?.yCoordinate
 											? {
-												xCoord: command.click.target.coordinates.xCoord,
-												yCoord: command.click.target.coordinates.yCoord,
+												xCoord: event.xCoordinate,
+												yCoord: event.yCoordinate,
 											}
 											: undefined,
 								},
 							})
-							: command?.type?.target?.selector?.xpath &&
-								command?.type?.target?.selector?.tagName &&
-								command?.type?.value
-								? formatter.type({
-									value: command.type.value,
-									target: {
+							: event?.command === 'drag and drop' && event?.xpath && event?.tagName && event?.destinationXpath && event?.destinationTagName
+								? formatter.dragndrop({
+									sourceTarget: {
 										selector: {
-											xpath: command.type.target.selector.xpath,
-											selector: n2u(command.type.target.selector.selector),
-											className: n2u(command.type.target.selector.className),
-											tagName: command.type.target.selector.tagName,
-											tagId: n2u(command.type.target.selector.tagId),
-											innerText: n2u(command.type.target.selector.innerText),
+											xpath: event.xpath,
+											selector: n2u(
+												event.selector
+											),
+											className: n2u(
+												event.className
+											),
+											tagName: event.tagName,
+											tagId: n2u(event.tagId),
+											innerText: n2u(
+												event.innerText
+											),
 										},
 										coordinates:
-											command?.type?.target?.coordinates?.xCoord &&
-												command.type.target.coordinates.yCoord
+											event?.xCoordinate && event?.yCoordinate
 												? {
-													xCoord: command.type.target.coordinates.xCoord,
-													yCoord: command.type.target.coordinates.yCoord,
+													xCoord:
+														event.xCoordinate,
+													yCoord:
+														event.yCoordinate,
+												}
+												: undefined,
+									},
+									destinationTarget: {
+										selector: {
+											xpath: event?.destinationXpath,
+											selector: n2u(
+												event?.destinationSelector
+											),
+											className: n2u(
+												event?.destinationClassName
+											),
+											tagName: event?.destinationTagName,
+											tagId: n2u(
+												event?.destinationTagId
+											),
+											innerText: n2u(
+												event?.destinationInnerText
+											),
+										},
+										coordinates:
+											event?.destinationXCoordinate && event?.destinationYCoordinate
+												? {
+													xCoord:
+														event.destinationXCoordinate,
+													yCoord:
+														event.destinationYCoordinate,
 												}
 												: undefined,
 									},
 								})
-								: command?.dragndrop?.sourceTarget?.selector?.xpath &&
-									command?.dragndrop?.sourceTarget?.selector?.tagName &&
-									command?.dragndrop?.destinationTarget?.selector?.xpath &&
-									command?.dragndrop?.destinationTarget?.selector?.tagName
-									? formatter.dragndrop({
-										sourceTarget: {
-											selector: {
-												xpath: command.dragndrop.sourceTarget.selector.xpath,
-												selector: n2u(
-													command.dragndrop.sourceTarget.selector.selector
-												),
-												className: n2u(
-													command.dragndrop.sourceTarget.selector.className
-												),
-												tagName: command.dragndrop.sourceTarget.selector.tagName,
-												tagId: n2u(command.dragndrop.sourceTarget.selector.tagId),
-												innerText: n2u(
-													command.dragndrop.sourceTarget.selector.innerText
-												),
-											},
-											coordinates:
-												command?.dragndrop?.sourceTarget?.coordinates?.xCoord &&
-													command.dragndrop.sourceTarget.coordinates.yCoord
-													? {
-														xCoord:
-															command.dragndrop.sourceTarget.coordinates.xCoord,
-														yCoord:
-															command.dragndrop.sourceTarget.coordinates.yCoord,
-													}
-													: undefined,
-										},
-										destinationTarget: {
-											selector: {
-												xpath: command.dragndrop.destinationTarget.selector.xpath,
-												selector: n2u(
-													command.dragndrop.destinationTarget.selector.selector
-												),
-												className: n2u(
-													command.dragndrop.destinationTarget.selector.className
-												),
-												tagName: command.dragndrop.destinationTarget.selector.tagName,
-												tagId: n2u(
-													command.dragndrop.destinationTarget.selector.tagId
-												),
-												innerText: n2u(
-													command.dragndrop.destinationTarget.selector.innerText
-												),
-											},
-											coordinates:
-												command?.dragndrop?.destinationTarget?.coordinates?.xCoord &&
-													command.dragndrop.destinationTarget.coordinates.yCoord
-													? {
-														xCoord:
-															command.dragndrop.destinationTarget.coordinates
-																.xCoord,
-														yCoord:
-															command.dragndrop.destinationTarget.coordinates
-																.yCoord,
-													}
-													: undefined,
-										},
-									})
-									: undefined
-			)
+								: undefined
 		)
-			?.filter(isInhabited)
-			?.reduce((a: SeleniumGroup[], b: SeleniumGroup[]) => [...a, ...b], [])
 			?.filter(isInhabited)
 			?.reduce((a: string, b: string) => a + wait + b, '');
 		if (!commands) {
