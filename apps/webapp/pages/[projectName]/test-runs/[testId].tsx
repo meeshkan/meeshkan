@@ -47,7 +47,7 @@ import { createSlug } from '../../../utils/createSlug';
 import VideoPlayer from '../../../components/atoms/video-player';
 import ValidatedBillingPlan from '../../../components/molecules/validated-billing-plan';
 import {
-	SeleniumCommand,
+	ScriptCommandListResponse,
 	TestOutcomeListResponse,
 } from '@frontend/meeshkan-types';
 import { commandsToSteps } from 'apps/webapp/utils/transform-steps';
@@ -94,10 +94,9 @@ const TestRun = () => {
 		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
 	);
 
-	const testsNeedAuthentication: boolean = project?.userStories?.items.some((story) => story.isAuthenticated)
-	const seleniumScriptJson = project?.configuration?.logInFlow?.recording?.seleniumScriptJson;
-	const stepsInLogInStory = (project?.configuration?.logInFlow && seleniumScriptJson) ? JSON.parse(seleniumScriptJson)?.groups?.groupItems[0]?.commands?.items?.length : 0
-	const hasLogInStory: boolean = !!project?.configuration?.logInFlow;
+	const testsNeedAuthentication: boolean = project?.userStories?.items.some((story) => story.requiresAuthentication)
+	const stepsInLogInStory: number = project?.configuration?.logInStory?.scriptCommands?.count
+	const hasLogInStory: boolean = !!project?.configuration?.logInStory;
 
 	const hasAuthTokens: boolean =
 		(project?.configuration?.authenticationTokens?.items?.length || 0) >= 1;
@@ -187,22 +186,15 @@ const TestRun = () => {
 										const status = outcome?.status;
 
 										const requiresAuthentication: boolean =
-											testCase?.isAuthenticated;
+											testCase?.requiresAuthentication;
 
-										const outcomeCommands: SeleniumCommand[] = JSON.parse(
-											testCase?.recording?.seleniumScriptJson
-										)?.groups?.groupItems[0]?.commands?.items;
+										const outcomeCommands: ScriptCommandListResponse['items'] = testCase?.scriptCommands?.items
 
-										const errorStepIndex: number =
-											requiresAuthentication && hasLogInStory
-												? outcome?.errorDetails?.stepIndex +
-												1 -
-												stepsInLogInStory
-												: outcome?.errorDetails?.stepIndex + 1;
-										const errorInLogIn: boolean = errorStepIndex > 0 && !isNaN(errorStepIndex) ? false : true
+										const contextualErrorStepIndex: number = requiresAuthentication && hasLogInStory ? outcome?.errorStepIndex + 1 - stepsInLogInStory : outcome?.errorStepIndex + 1;
+										const errorInLogIn: boolean = contextualErrorStepIndex > 0 && !isNaN(contextualErrorStepIndex) ? false : true
 
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
-											errorStepIndex
+											contextualErrorStepIndex
 										];
 
 
@@ -349,7 +341,7 @@ const TestRun = () => {
 																</Tooltip>
 															) : null}
 															{isFailing &&
-																project?.configuration?.logInFlow?.id ===
+																project?.configuration?.logInStory?.id ===
 																testCase?.id ? (
 																<Tooltip
 																	label="This is the path your users take to sign in."
@@ -401,11 +393,7 @@ const TestRun = () => {
 																		fontSize="sm"
 																		mr={4}
 																	>
-																		{requiresAuthentication && hasLogInStory
-																			? outcome?.errorDetails?.stepIndex +
-																			1 -
-																			stepsInLogInStory
-																			: outcome?.errorDetails?.stepIndex + 1}
+																		{requiresAuthentication && hasLogInStory ? outcome?.errorStepIndex + 1 - stepsInLogInStory : outcome?.errorStepIndex + 1}
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>

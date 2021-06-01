@@ -19,6 +19,7 @@ query PROJECT($projectId: ID!) {
         createdAt
         title
         scriptCommands {
+					count
           items {
             command
             sIndex
