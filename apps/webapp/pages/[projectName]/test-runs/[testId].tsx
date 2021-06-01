@@ -190,7 +190,7 @@ const TestRun = () => {
 
 										const outcomeCommands: ScriptCommandListResponse['items'] = testCase?.scriptCommands?.items
 
-										const contextualErrorStepIndex: number = requiresAuthentication && hasLogInStory ? outcome?.errorStepIndex + 1 - stepsInLogInStory : outcome?.errorStepIndex + 1;
+										const contextualErrorStepIndex: number = requiresAuthentication && hasLogInStory ? outcome?.errorStepIndex - stepsInLogInStory : outcome?.errorStepIndex;
 										const errorInLogIn: boolean = contextualErrorStepIndex > 0 && !isNaN(contextualErrorStepIndex) ? false : true
 
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
