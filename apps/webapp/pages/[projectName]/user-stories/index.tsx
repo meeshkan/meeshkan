@@ -589,7 +589,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 						}
 						fetchData={fetchData}
 						loading={tableLoading}
-						// pageCount={pageCount}
 						pageCount={Math.ceil((recordCount === 0 ? 1 : recordCount) / pageSize)}
 					/>
 				</Box>
