@@ -26,6 +26,8 @@ import {
 	Input,
 	InputGroup,
 	InputLeftElement,
+	Checkbox,
+	MenuDivider,
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
@@ -42,6 +44,7 @@ import {
 	UPDATE_STORY_TITLE,
 	UPDATE_STORY_DESCRIPTION,
 	UPDATE_STORY_SIGNIFICANCE,
+	UPDATE_REQUIRES_AUTHENTICATION,
 } from '../../../graphql/user-story';
 import useSWR from 'swr';
 import {
@@ -76,7 +79,7 @@ type UserStoryProps = {
 };
 
 const UserStoryPage = (props: UserStoryProps) => {
-	const { project, idToken } = useContext(UserContext);
+	const { project, setProject, idToken } = useContext(UserContext);
 	const toaster = useToaster();
 	const mixpanel = useAnalytics();
 	const {
@@ -160,6 +163,22 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return client.request(UPDATE_EXPECTED_TEST, {
 			userStoryId: userStoryId,
 			testCreatedDate: testCreatedDate,
+		});
+	};
+
+	const updateRequiresAuthentication = async (isAuthenticated: boolean) => {
+		const response = await client.request(UPDATE_REQUIRES_AUTHENTICATION, {
+			userStoryId: userStoryId,
+			isAuthenticated,
+		});
+
+		const updatedUserStories = [...response.userStoryUpdateByFilter.items];
+
+		updatedUserStories.find(userStory => userStory.id === userStoryId).isAuthenticated = isAuthenticated;
+
+		setProject({
+			...project,
+			userStories: { ...project.userStories, items: updatedUserStories }
 		});
 	};
 
@@ -362,7 +381,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								{data.userStory.created}
 							</Code>
 							{data.userStory.isTestCase === true ? null : data.userStory
-									.isExpected ? (
+								.isExpected ? (
 								<Code
 									colorScheme="cyan"
 									fontWeight="700"
@@ -393,7 +412,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								</Code>
 							)}
 							{data.userStory.configuration !== null &&
-							data.userStory.configuration.logInFlow.id === userStoryId ? (
+								data.userStory.configuration.logInFlow.id === userStoryId ? (
 								<Tooltip label="This is the 'Log in flow'" placement="right">
 									<Badge
 										colorScheme="amber"
@@ -407,7 +426,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								</Tooltip>
 							) : null}
 							{data.userStory.isAuthenticated ? (
-								<Tooltip label="Authenticated" placement="right">
+								<Tooltip label="Requires authentication" placement="right">
 									<Badge
 										colorScheme="amber"
 										fontWeight="700"
@@ -438,7 +457,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								<option value="medium">Medium significance</option>
 								<option value="high">High significance</option>
 							</Select>
-							<Menu>
+							<Menu closeOnSelect={false}>
 								<Tooltip label="More" placement="bottom" hasArrow>
 									<MenuButton
 										as={IconButton}
@@ -456,8 +475,11 @@ const UserStoryPage = (props: UserStoryProps) => {
 										<CopyIcon mr={3} />
 										Copy link
 									</MenuItem>
+									<MenuItem>
+										<Checkbox onChange={() => { updateRequiresAuthentication(!data?.userStory?.isAuthenticated) }} defaultChecked={data?.userStory?.isAuthenticated}>Requires authentication</Checkbox>
+									</MenuItem>
+									<MenuDivider />
 									<MenuItem
-										colorScheme="red"
 										isDisabled={deleting}
 										onClick={onDelete}
 									>

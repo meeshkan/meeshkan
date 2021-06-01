@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
 	Avatar,
 	Box,
@@ -20,19 +20,42 @@ import {
 import NavButton from './nav-button';
 import { ChatIcon, PlusIcon, SettingsIcon } from '@frontend/chakra-theme';
 import { ArrowUpDownIcon, QuestionIcon } from '@chakra-ui/icons';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { show as showIntercom } from '../../utils/intercom';
 import { UserContext } from '../../utils/user';
+import { getProject } from '../../utils/project';
 import { useRouter } from 'next/router';
 import { createSlug } from '../../utils/createSlug';
-import { useAnalytics } from '@lightspeed/react-mixpanel-script';
+
+type SelectedProject = {
+	name: string;
+	avatar?: {
+		downloadUrl: string;
+	};
+}
 
 type SideBarFooterProps = {
 	isSettings?: boolean;
 };
 
 const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
-	const { projects, project, setProject } = useContext(UserContext);
-	const avatarUrl = project?.avatar?.downloadUrl;
+	const {
+		idToken,
+		projects,
+		project,
+		setProject,
+		loadingProject,
+		setLoadingProject,
+	} = useContext(UserContext);
+
+	const [selectedProject, setSelectedProject] = useState<SelectedProject>(
+		project as SelectedProject
+	);
+
+	useEffect(() => {
+		setSelectedProject(project as SelectedProject);
+	}, [project]);
+
 	const mixpanel = useAnalytics();
 	const router = useRouter();
 
@@ -86,6 +109,8 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 						colorScheme="gray"
 						backgroundColor={menuButtonBackgroundColor}
 						textAlign="left"
+						isLoading={loadingProject}
+						isDisabled={loadingProject}
 						display="block"
 					>
 						<Flex
@@ -96,8 +121,8 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 							fontWeight="600"
 						>
 							<Avatar
-								src={avatarUrl}
-								name={project?.name}
+								src={selectedProject?.avatar?.downloadUrl}
+								name={selectedProject?.name}
 								icon={
 									<QuestionIcon color={questionIconColor} fontSize="1rem" />
 								}
@@ -115,7 +140,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								textOverflow="ellipsis"
 								lineHeight="tall"
 							>
-								{project?.name}
+								{selectedProject?.name}
 							</Box>
 							<ArrowUpDownIcon mx={3} />
 						</Flex>
@@ -126,11 +151,16 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 								<MenuItemOption
 									key={project.id}
 									value={project.id}
-									onClick={() => {
+									onClick={async () => {
 										mixpanel.track('Switch project', {
 											destination: project.name,
 										});
-										setProject(project);
+
+										setSelectedProject(project as SelectedProject);
+										setLoadingProject(true);
+										const selectedProject = await getProject(idToken, project.id);
+										await setLoadingProject(false);
+										setProject(selectedProject);
 									}}
 								>
 									<Flex display="flex" alignItems="center">

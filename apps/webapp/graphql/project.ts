@@ -1,5 +1,130 @@
 import { gql } from 'graphql-request';
 
+export const PROJECT = gql`
+	query PROJECT($projectId: ID!) {
+		project(id: $projectId) {
+			id
+			name
+			avatar {
+				downloadUrl
+				shareUrl
+			}
+			configuration {
+				activeTestRuns
+				productionURL
+				stagingURL
+				inviteLink
+				logInFlow {
+					id
+					createdAt
+					title
+					recording {
+						seleniumScriptJson
+					}
+				}
+				plan
+				stripeCustomerID
+				billingInterval
+				subscriptionStatus
+				subscriptionStartedDate
+				authenticationTokens {
+					items {
+						id
+						createdAt
+						type
+						key
+						value
+					}
+				}
+			}
+			hasReceivedEvents
+			members {
+				count
+				items {
+					firstName
+					lastName
+					email
+					avatar {
+						downloadUrl
+					}
+				}
+			}
+			userStories {
+				count
+				items {
+					id
+					testOutcome {
+						items {
+							id
+							status
+							isResolved
+							errorDetails {
+								stepIndex
+								exception
+							}
+							createdAt
+							video {
+								downloadUrl
+								shareUrl
+							}
+						}
+					}
+					title
+					testCreatedDate
+					isTestCase
+					isAuthenticated
+					createdAt
+					created
+				}
+			}
+			release {
+				count
+				items {
+					id
+					name
+					releaseDate
+					testRuns {
+						count
+						items {
+							id
+							status
+							ciRun
+							createdAt
+							testLength
+							testOutcome {
+								count
+								items {
+									id
+									status
+									isResolved
+									errorDetails {
+										stepIndex
+										exception
+									}
+									createdAt
+									video {
+										downloadUrl
+										shareUrl
+									}
+									userStory {
+										id
+										title
+										created
+										isAuthenticated
+										recording {
+											seleniumScriptJson
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`;
+
 export const CREATE_PROJECT = gql`
 	mutation CREATE_PROJECT(
 		$userId: ID!
@@ -32,6 +157,11 @@ export const CREATE_PROJECT = gql`
 			projects(filter: { name: { equals: $projectName } }) {
 				items {
 					id
+					name
+					avatar {
+						downloadUrl
+						shareUrl
+					}
 				}
 			}
 		}
@@ -59,6 +189,11 @@ export const UPDATE_PROJECT = gql`
 			id
 			name
 			configuration {
+				plan
+				stripeCustomerID
+				billingInterval
+				subscriptionStatus
+				subscriptionStartedDate
 				inviteLink
 				productionURL
 				stagingURL
@@ -107,97 +242,6 @@ export const JOIN_PROJECT = gql`
 					downloadUrl
 					shareUrl
 				}
-				configuration {
-					productionURL
-					stagingURL
-					inviteLink
-					authenticationTokens {
-						items {
-							id
-							createdAt
-							type
-							key
-							value
-						}
-					}
-				}
-				hasReceivedEvents
-				members {
-					count
-					items {
-						firstName
-						lastName
-						email
-						avatar {
-							downloadUrl
-						}
-					}
-				}
-				userStories {
-					count
-					items {
-						id
-						testOutcome {
-							items {
-								id
-								status
-								isResolved
-								errorDetails {
-									stepIndex
-									exception
-								}
-								createdAt
-								video {
-									downloadUrl
-									shareUrl
-								}
-							}
-						}
-						title
-						testCreatedDate
-						isTestCase
-						createdAt
-					}
-				}
-				release {
-					count
-					items {
-						id
-						name
-						releaseDate
-						testRuns {
-							count
-							items {
-								id
-								status
-								ciRun
-								createdAt
-								testLength
-								testOutcome {
-									count
-									items {
-										id
-										status
-										isResolved
-										errorDetails {
-											stepIndex
-											exception
-										}
-										createdAt
-										video {
-											downloadUrl
-											shareUrl
-										}
-										userStory {
-											id
-											title
-										}
-									}
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 	}
@@ -210,6 +254,16 @@ export const REMOVE_TEAM_MEMBER = gql`
 			data: { members: { disconnect: { email: $memberEmail } } }
 		) {
 			id
+			members {
+				items {
+					avatar {
+						downloadUrl
+					}
+					firstName
+					lastName
+					email
+				}
+			}
 		}
 	}
 `;
@@ -250,70 +304,85 @@ export const REFRESH_INVITE_LINK = gql`
 
 export const PROJECT_USER_STORIES = gql`
 	fragment stories on UserStory {
-		id
-		createdAt
-		title
-		flowIDs
-		created
-		significance
-		recording {
-			seleniumScriptJson
-			video {
-				downloadUrl
-			}
-		}
-		project {
-			configuration {
-				authenticationTokens {
-					items {
-						type
-						key
-						value
-					}
-				}
-			}
-		}
-	}
+  id
+  createdAt
+  title
+  flowIDs
+  created
+  significance
+	isTestCase
+  recording {
+    seleniumScriptJson
+    video {
+      downloadUrl
+    }
+  }
+  project {
+    configuration {
+      authenticationTokens {
+        items {
+          type
+          key
+          value
+        }
+      }
+    }
+  }
+}
 
-	query PROJECT_USER_STORIES(
-		$projectId: ID!
-		$first: Int!
-		$skip: Int!
-		$significanceFilters: [UserStoryFilter!]
-		$sort: UserStoryOrderBy
-	) {
-		recordings: userStoriesList(
-			filter: {
-				project: { id: { equals: $projectId } }
-				isTestCase: { equals: false }
-				OR: $significanceFilters
-			}
-			orderBy: [$sort]
-			first: $first
-			skip: $skip
-		) {
-			count
-			items {
-				...stories
-			}
-		}
-		testCases: userStoriesList(
-			filter: {
-				project: { id: { equals: $projectId } }
-				isTestCase: { equals: true }
-				OR: $significanceFilters
-			}
-			orderBy: [$sort]
-			first: $first
-			skip: $skip
-		) {
-			count
-			items {
-				testCreatedDate
-				...stories
-			}
-		}
-	}
+query PROJECT_USER_STORIES(
+  $projectId: ID!
+  $first: Int!
+  $skip: Int!
+  $significanceFilters: [UserStoryFilter!]
+  $sort: UserStoryOrderBy
+) {
+  all: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      ...stories
+    }
+  }
+  recordings: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      isTestCase: { equals: false }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      ...stories
+    }
+  }
+  testCases: userStoriesList(
+    filter: {
+      project: { id: { equals: $projectId } }
+      isTestCase: { equals: true }
+      OR: $significanceFilters
+    }
+    orderBy: [$sort]
+    first: $first
+    skip: $skip
+  ) {
+    count
+    items {
+      testCreatedDate
+      ...stories
+    }
+  }
+}
 `;
 
 export const TOGGLE_TEST_RUNS = gql`
@@ -373,7 +442,17 @@ export const REMOVE_AUTH_TOKEN = gql`
 				}
 			}
 		) {
-			id
+			configuration {
+				authenticationTokens {
+					items {
+						id
+						createdAt
+						type
+						key
+						value
+					}
+				}
+			}
 		}
 	}
 `;
