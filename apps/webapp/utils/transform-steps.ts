@@ -1,42 +1,42 @@
 import React from 'react';
-import { SeleniumCommandListResponse } from '@frontend/meeshkan-types';
+import { ScriptCommandListResponse } from '@frontend/meeshkan-types';
 
 export const HumanTag = (tag: string): string => {
 	return tag === ('A' || 'a')
 		? 'Link'
 		: tag === ('TD' || 'TR')
-		? 'Table item'
-		: tag === 'LI'
-		? 'List item'
-		: tag === 'UL'
-		? 'Unordered list'
-		: tag === 'OL'
-		? 'Ordered list'
-		: tag === 'INPUT'
-		? 'Input'
-		: tag === 'SPAN'
-		? 'Span'
-		: tag === 'TEXTAREA'
-		? 'Text input'
-		: tag === 'BUTTON'
-		? 'Button'
-		: tag === 'P'
-		? 'Text'
-		: tag === 'DIV'
-		? 'Div'
-		: tag === 'IMG'
-		? 'Image'
-		: tag === 'SELECT'
-		? 'Dropdown'
-		: tag === 'NAV'
-		? 'Navigation bar'
-		: tag === 'LABEL'
-		? 'Form label'
-		: tag === 'CODE'
-		? 'Code block'
-		: tag === 'VIDEO'
-		? 'Video'
-		: tag;
+			? 'Table item'
+			: tag === 'LI'
+				? 'List item'
+				: tag === 'UL'
+					? 'Unordered list'
+					: tag === 'OL'
+						? 'Ordered list'
+						: tag === 'INPUT'
+							? 'Input'
+							: tag === 'SPAN'
+								? 'Span'
+								: tag === 'TEXTAREA'
+									? 'Text input'
+									: tag === 'BUTTON'
+										? 'Button'
+										: tag === 'P'
+											? 'Text'
+											: tag === 'DIV'
+												? 'Div'
+												: tag === 'IMG'
+													? 'Image'
+													: tag === 'SELECT'
+														? 'Dropdown'
+														: tag === 'NAV'
+															? 'Navigation bar'
+															: tag === 'LABEL'
+																? 'Form label'
+																: tag === 'CODE'
+																	? 'Code block'
+																	: tag === 'VIDEO'
+																		? 'Video'
+																		: tag;
 };
 
 export const NotNullText = (text: string) => {
@@ -44,80 +44,79 @@ export const NotNullText = (text: string) => {
 };
 
 export const commandsToSteps = (
-	commands: SeleniumCommandListResponse['items']
+	commands: ScriptCommandListResponse['items']
 ) => {
 	// @ts-expect-error want to type this, but not set a default value
 	const subSteps: [
 		{ text: string; sIndex: number; command: string; tagName?: string }
 	] = [];
-	commands.forEach((command) => {
-		if (command.open) {
+	commands.forEach((commandData) => {
+
+		if (commandData.command === 'open') {
 			subSteps.push({
-				text: `Open ${command.open.value}.`,
-				sIndex: command.sIndex,
+				text: `Open ${commandData.value}.`,
+				sIndex: commandData.sIndex,
 				command: 'open',
 			});
 		}
-		if (command.setViewportSize) {
+		if (commandData.command === 'set viewport size') {
 			subSteps.push({
-				text: `Set viewport size to ${command.setViewportSize.value.xCoord}px by ${command.setViewportSize.value.yCoord}px.`,
-				sIndex: command.sIndex,
+				text: `Set viewport size to ${commandData.xCoordinate}px by ${commandData.yCoordinate}px.`,
+				sIndex: commandData.sIndex,
 				command: 'setViewportSize',
 			});
 		}
-		if (command.click) {
+		if (commandData.command === 'click') {
 			subSteps.push({
 				text: `Click ${HumanTag(
-					command.click.target.selector.tagName
-				)}${NotNullText(command.click.target.selector.innerText)}.`,
-				sIndex: command.sIndex,
+					commandData.tagName
+				)}${NotNullText(commandData.innerText)}.`,
+				sIndex: commandData.sIndex,
 				command: 'click',
-				tagName: HumanTag(command.click.target.selector.tagName),
+				tagName: HumanTag(commandData.tagName),
 			});
 		}
-		if (command.type) {
+		if (commandData.command === 'type') {
 			subSteps.push({
-				text: `Type "${command.type.value}" in ${HumanTag(
-					command.type.target.selector.tagName
+				text: `Type "${commandData.value}" in ${HumanTag(
+					commandData.tagName
 				)}.`,
-				sIndex: command.sIndex,
+				sIndex: commandData.sIndex,
 				command: 'type',
-				tagName: HumanTag(command.type.target.selector.tagName),
+				tagName: HumanTag(commandData.tagName),
 			});
 		}
 
 		// Is the source target and destination target the same? return a boolean
 		const isXSame =
-			command.dragndrop?.sourceTarget?.coordinates?.xCoord ===
-			command.dragndrop?.destinationTarget?.coordinates?.xCoord;
+			commandData.command === 'drag and drop' && commandData.xCoordinate ===
+			commandData.destinationXCoordinate
 
 		const isYSame =
-			command.dragndrop?.sourceTarget?.coordinates?.yCoord ===
-			command.dragndrop?.destinationTarget?.coordinates?.yCoord;
+			commandData.command === 'drag and drop' && commandData.yCoordinate ===
+			commandData.destinationYCoordinate
 
-		if (command.dragndrop && !isYSame && !isXSame) {
+		if (commandData.command === 'drag and drop' && !isYSame && !isXSame) {
 			subSteps.push({
 				text: `Drag ${HumanTag(
-					command.dragndrop.sourceTarget.selector.tagName
+					commandData.tagName
 				)}${NotNullText(
-					command.dragndrop.sourceTarget.selector.innerText
-				)} from ${command.dragndrop.sourceTarget.coordinates.xCoord}, ${
-					command.dragndrop.sourceTarget.coordinates.yCoord
-				}. Then drop at ${
-					command.dragndrop.destinationTarget?.coordinates?.xCoord
-				}, ${command.dragndrop.destinationTarget?.coordinates?.yCoord}.`,
-				sIndex: command.sIndex,
+					commandData.innerText
+				)} from ${commandData.xCoordinate}, ${commandData.yCoordinate
+					}. Then drop at ${commandData.destinationYCoordinate
+					}, ${commandData.yCoordinate}.`,
+				sIndex: commandData.sIndex,
 				command: 'dragndrop',
-				tagName: HumanTag(command.dragndrop.sourceTarget.selector.tagName),
+				tagName: HumanTag(commandData.tagName),
 			});
-		} else if (command.dragndrop && isYSame && isXSame) {
+		} else if (commandData.command === 'drag and drop' && isYSame && isXSame) {
 			subSteps.push({
 				text: `Click ${HumanTag(
-					command.dragndrop.sourceTarget.selector.tagName
-				)}${NotNullText(command.dragndrop.sourceTarget.selector.innerText)}.`,
-				sIndex: command.sIndex,
+					commandData.tagName
+				)}${NotNullText(commandData.innerText)}.`,
+				sIndex: commandData.sIndex,
 				command: 'dragndrop',
-				tagName: HumanTag(command.dragndrop.sourceTarget.selector.tagName),
+				tagName: HumanTag(commandData.tagName),
 			});
 		}
 	});

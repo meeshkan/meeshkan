@@ -38,8 +38,8 @@ import { UserContext } from '../../utils/user';
 import {
 	AuthenticationToken,
 	File,
-	Recording,
 	UserStoryListResponse,
+	ScriptCommandListResponse
 } from '@frontend/meeshkan-types';
 import {
 	DoubleArrowLeftIcon,
@@ -144,7 +144,7 @@ const Table = ({
 	};
 
 	const handleDownload = (
-		script: Recording['seleniumScriptJson'],
+		script: ScriptCommandListResponse,
 		authTokens: AuthenticationToken[],
 		title: string
 	) => {
@@ -260,7 +260,7 @@ const Table = ({
 								{/* <Td p={3} border={0}>
 									<Checkbox borderRadius="md" icon={<CheckmarkIcon />} />
 								</Td> */}
-								{data[rowId].recording.video ? (
+								{data[rowId].video ? (
 									<Td p={3} border={0}>
 										<Skeleton
 											isLoaded={!loading}
@@ -278,7 +278,7 @@ const Table = ({
 												aria-label="Play the video associated with this user story"
 												leftIcon={<PlayIcon strokeWidth="2px" />}
 												onClick={() => {
-													setVideo(data[rowId].recording.video.downloadUrl);
+													setVideo(data[rowId].video.downloadUrl);
 													onOpen();
 												}}
 											>

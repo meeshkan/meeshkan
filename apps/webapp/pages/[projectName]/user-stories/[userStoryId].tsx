@@ -32,8 +32,7 @@ import {
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
 import {
-	SeleniumGroup,
-	SeleniumGroupListResponse,
+	ScriptCommandListResponse,
 	UserStory,
 } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
@@ -247,7 +246,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const generateVideo = (
 		startEventID: string,
 		endEventID: string,
-		recordingID: string
+		userStoryID: string
 	) => {
 		setLoading(true);
 
@@ -262,7 +261,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 				body: JSON.stringify({
 					startEventID,
 					endEventID,
-					recordingID,
+					userStoryID,
 				}),
 			}
 		).then(() => setTimeout(() => setLoading(false), 30000));
@@ -283,17 +282,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return <Text color="red.500">{error}</Text>;
 	}
 
-	const steps: SeleniumGroupListResponse['items'] = [];
-	JSON.parse(
-		data.userStory.recording.seleniumScriptJson
-	)?.groups?.groupItems.forEach((item: SeleniumGroup) => {
-		steps.push(item);
-	});
+	const steps: ScriptCommandListResponse['items'] = data.userStory.scriptCommands.items
 
 	const handleDownload = () => {
 		try {
 			const pptrScript = eightBaseToPptr(
-				JSON.parse(data?.userStory?.recording?.seleniumScriptJson),
+				data?.userStory?.scriptCommands.items,
 				{
 					headless: true,
 				},
@@ -373,9 +367,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 								py={1}
 								colorScheme="gray"
 							>
-								{data.userStory.created[0] === 'user' ? (
+								{data.userStory.created === 'user' ? (
 									<VideoIcon mr={3} />
-								) : data.userStory.created[0] === 'manual' ? (
+								) : data.userStory.created === 'manual' ? (
 									<CrosshairIcon mr={3} />
 								) : null}
 								{data.userStory.created}
@@ -411,8 +405,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 									Buggy behavior
 								</Code>
 							)}
-							{data.userStory.configuration !== null &&
-								data.userStory.configuration.logInFlow.id === userStoryId ? (
+							{data.userStory.logInStoryConfig !== null &&
+								data.userStory.logInStoryConfig.logInStory.id === userStoryId ? (
 								<Tooltip label="This is the 'Log in flow'" placement="right">
 									<Badge
 										colorScheme="amber"
@@ -425,7 +419,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 									</Badge>
 								</Tooltip>
 							) : null}
-							{data.userStory.isAuthenticated ? (
+							{data.userStory.requiresAuthentication ? (
 								<Tooltip label="Requires authentication" placement="right">
 									<Badge
 										colorScheme="amber"
@@ -476,7 +470,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 										Copy link
 									</MenuItem>
 									<MenuItem>
-										<Checkbox onChange={() => { updateRequiresAuthentication(!data?.userStory?.isAuthenticated) }} defaultChecked={data?.userStory?.isAuthenticated}>Requires authentication</Checkbox>
+										<Checkbox onChange={() => { updateRequiresAuthentication(!data?.userStory?.requiresAuthentication) }} defaultChecked={data?.userStory?.requiresAuthentication}>Requires authentication</Checkbox>
 									</MenuItem>
 									<MenuDivider />
 									<MenuItem
@@ -520,9 +514,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 							</Flex>
 						</Box>
 						<Box minW="md">
-							{data.userStory?.recording?.video ? (
+							{data.userStory?.video ? (
 								<VideoPlayer
-									src={data.userStory.recording.video.downloadUrl}
+									src={data.userStory.video.downloadUrl}
 									onStart={() =>
 										mixpanel.track('User story video play started')
 									}
@@ -547,9 +541,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 											loadingText="Generating video"
 											onClick={() => {
 												generateVideo(
-													data.userStory.recording.startEventId,
-													data.userStory.recording.endEventId,
-													data.userStory.recording.id
+													data.userStory.startEventId,
+													data.userStory.endEventId,
+													data.userStory.id
 												);
 											}}
 										>

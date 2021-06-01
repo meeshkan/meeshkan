@@ -27,6 +27,11 @@ query USER_STORY($userStoryId: ID!) {
     }
     startEventId
     endEventId
+    logInStoryConfig {
+      logInStory {
+        id
+      }
+    }
     scriptCommands {
       items {
         command
