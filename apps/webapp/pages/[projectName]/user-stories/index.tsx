@@ -316,7 +316,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[idToken, projectId, toggleIndex, low, medium, high, sort]
+		[idToken, projectId, low, medium, high, sort]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
