@@ -343,6 +343,7 @@ fragment stories on UserStory {
   }
   created
   significance
+	isTestCase
   video {
     downloadUrl
   }

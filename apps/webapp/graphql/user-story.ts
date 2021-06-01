@@ -33,6 +33,7 @@ query USER_STORY($userStoryId: ID!) {
       }
     }
     scriptCommands {
+      count
       items {
         command
         sIndex

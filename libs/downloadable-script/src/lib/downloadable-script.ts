@@ -170,6 +170,7 @@ const eightBaseToX = (formatter: {
 	stagingURL?: string
 ): string | undefined => {
 		if (!script?.count) {
+			console.error('no steps exist')
 			return undefined;
 		}
 		const wait = '\n    await new Promise(r => setTimeout(r, 5000));\n';
