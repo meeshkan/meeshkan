@@ -64,6 +64,9 @@ export const USER = gql`
 				items {
 					id
 					name
+					configuration {
+						id
+					}
 					avatar {
 						downloadUrl
 						shareUrl

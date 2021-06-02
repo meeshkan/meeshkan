@@ -10,6 +10,7 @@ export const PROJECT = gql`
 				shareUrl
 			}
 			configuration {
+				id
 				activeTestRuns
 				productionURL
 				stagingURL
