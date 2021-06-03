@@ -1,6 +1,6 @@
 name: Run Meeshkan tests
 
-on: push
+on: pull_request
 
 jobs:
   run-tests:
@@ -20,4 +20,3 @@ jobs:
           client_id: ${{ secrets.MEESHKAN_CLIENT_ID }}
           client_secret: ${{ secrets.MEESHKAN_CLIENT_SECRET }}
           url: ${{ steps.wait-for-vercel.outputs.url }}
-
