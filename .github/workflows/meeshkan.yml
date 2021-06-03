@@ -11,7 +11,7 @@ jobs:
         id: wait-for-vercel
         uses: patrickedqvist/wait-for-vercel-preview@master
         with:
-          token: ${{ secrets.VERCEL_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           max_timeout: 200
 
       - name: Run Meeshkan tests
