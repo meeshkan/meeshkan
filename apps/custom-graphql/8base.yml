@@ -27,13 +27,13 @@ functions:
     description: >
       Consuming cancel and delete events from Stripe to update plan details on
       8base.
-  client-secret-create:
-    type: trigger.before
-    handler:
-      code: src/triggers/client-secret/create-handler.ts
-    operation: Configuration.create
-  client-secret-update:
-    type: trigger.before
-    handler:
-      code: src/triggers/client-secret/update-handler.ts
-    operation: Configuration.update
+  # client-secret-create:
+  #   type: trigger.before
+  #   handler:
+  #     code: src/triggers/client-secret/create-handler.ts
+  #   operation: Configuration.create
+  # client-secret-update:
+  #   type: trigger.before
+  #   handler:
+  #     code: src/triggers/client-secret/update-handler.ts
+  #   operation: Configuration.update
