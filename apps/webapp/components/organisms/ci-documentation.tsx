@@ -141,8 +141,8 @@ meeshkan-tests:
       -e CI_COMMIT_SHA=$CI_COMMIT_SHA
       -e CI_PROVIDER="gitlab"
       -e MEESHKAN_URL=$(cat preview-deployment-url.txt)
-      -e MEESHKAN_CLIENT_ID=${project?.id}
-      -e MEESHKAN_CLIENT_SECRET=${project?.configuration?.clientSecret}
+      -e MEESHKAN_CLIENT_ID="${project?.id || `$MEESHKAN_CLIENT_ID`}"
+      -e MEESHKAN_CLIENT_SECRET="${project?.configuration?.clientSecret || `$MEESHKAN_CLIENT_SECRET`}"
       meeshkan/test-trigger:latest`
 								}
 							</Code>
@@ -188,8 +188,8 @@ pipelines:
             variables:
               CI_PROVIDER: "bitbucket"
               MEESHKAN_URL: $(cat preview-deployment-url.txt)
-              MEESHKAN_CLIENT_ID: "${project?.id}"
-              MEESHKAN_CLIENT_SECRET: "${project?.configuration?.clientSecret}"`
+              MEESHKAN_CLIENT_ID: "${project?.id || `$MEESHKAN_CLIENT_ID`}"
+              MEESHKAN_CLIENT_SECRET: "${project?.configuration?.clientSecret || `$MEESHKAN_CLIENT_SECRET`}"`
 							}
 						</Code>
 					</AccordionPanel>

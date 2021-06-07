@@ -59,24 +59,29 @@ const InviteLinkInput = () => {
 				color="blue.400"
 				onClick={onCopy}
 				isReadOnly
+				borderRightRadius="0"
 			/>
-			<ButtonGroup isAttached colorScheme='gray'
+			<IconButton
+				id="copy-invite-link"
+				icon={<CopyIcon />}
+				aria-label="Copy invite link"
+				onClick={onCopy}
+				borderLeftRadius="0"
+				colorScheme='gray'
 				variant="outline"
-				borderColor={refreshButtonBorderColor} ml={4} size="md">
-				<IconButton
-					id="copy-invite-link"
-					icon={<CopyIcon />}
-					aria-label="Copy invite link"
-					onClick={onCopy}
-				/>
-				<Button
-					onClick={refreshInviteLink}
-					isLoading={loading}
-					loadingText="Refreshing"
-				>
-					Refresh link
-				</Button>
-			</ButtonGroup>
+				borderColor={refreshButtonBorderColor} size="md"
+			/>
+
+			<Button
+				onClick={refreshInviteLink}
+				isLoading={loading}
+				loadingText="Refreshing"
+				colorScheme='gray'
+				variant="outline"
+				borderColor={refreshButtonBorderColor} ml={4} size="md"
+			>
+				Refresh link
+			</Button>
 		</Flex>
 	);
 };

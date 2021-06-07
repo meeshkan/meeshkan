@@ -56,24 +56,35 @@ const ClientSecretInput = () => {
         value={clientSecret}
         onClick={onCopy}
         isReadOnly
-      />
-      <ButtonGroup isAttached colorScheme='gray'
+        colorScheme='gray'
         variant="outline"
-        borderColor={refreshButtonBorderColor} ml={4} size="md">
-        <IconButton
-          id="copy-client-secret"
-          icon={<CopyIcon />}
-          aria-label="Copy client secret"
-          onClick={onCopy}
-        />
-        <Button
-          onClick={refreshClientSecret}
-          isLoading={loading}
-          loadingText="Refreshing"
-        >
-          Rotate secret
-        </Button>
-      </ButtonGroup>
+        borderColor={refreshButtonBorderColor}
+        size="md"
+        borderRightRadius="0"
+      />
+      <IconButton
+        id="copy-client-secret"
+        icon={<CopyIcon />}
+        aria-label="Copy client secret"
+        onClick={onCopy}
+        borderLeftRadius="0"
+        colorScheme='gray'
+        variant="outline"
+        borderColor={refreshButtonBorderColor}
+        size="md"
+      />
+      <Button
+        onClick={refreshClientSecret}
+        isLoading={loading}
+        loadingText="Refreshing"
+        ml={4}
+        colorScheme='gray'
+        variant="outline"
+        borderColor={refreshButtonBorderColor}
+        size="md"
+      >
+        Rotate secret
+      </Button>
     </Flex>
   );
 };
