@@ -7,6 +7,7 @@ import {
 	Button,
 	Flex,
 	useColorModeValue,
+	ButtonGroup,
 } from '@chakra-ui/react';
 import { CopyIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
@@ -52,37 +53,30 @@ const InviteLinkInput = () => {
 
 	return (
 		<Flex>
-			<InputGroup mb={4}>
-				<Input
-					id="invite-link-input"
-					value={inviteLink}
-					color="blue.400"
+			<Input
+				id="invite-link-input"
+				value={inviteLink}
+				color="blue.400"
+				onClick={onCopy}
+				isReadOnly
+			/>
+			<ButtonGroup isAttached colorScheme='gray'
+				variant="outline"
+				borderColor={refreshButtonBorderColor} ml={4} size="md">
+				<IconButton
+					id="copy-invite-link"
+					icon={<CopyIcon />}
+					aria-label="Copy invite link"
 					onClick={onCopy}
-					isReadOnly
 				/>
-				<InputRightElement>
-					<IconButton
-						id="copy-invite-link"
-						icon={<CopyIcon color="gray.500" />}
-						aria-label="Copy invite link"
-						onClick={onCopy}
-						size="md"
-						variant="ghost"
-					/>
-				</InputRightElement>
-			</InputGroup>
-			<Button
-				colorScheme="gray"
-				variant="subtle"
-				ml={4}
-				border="1px solid"
-				borderColor={refreshButtonBorderColor}
-				onClick={refreshInviteLink}
-				isLoading={loading}
-				loadingText="Refreshing"
-			>
-				Refresh link
-			</Button>
+				<Button
+					onClick={refreshInviteLink}
+					isLoading={loading}
+					loadingText="Refreshing"
+				>
+					Refresh link
+				</Button>
+			</ButtonGroup>
 		</Flex>
 	);
 };

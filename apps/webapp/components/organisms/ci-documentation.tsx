@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
 	Accordion,
 	AccordionItem,
@@ -11,29 +12,35 @@ import {
 	Stack,
 	Text,
 	Link,
-	useColorModeValue,
 } from '@chakra-ui/react';
 import {
 	GitLabIcon,
 	GitHubIcon,
 	BitbucketIcon,
 } from '@frontend/chakra-theme';
+import { UserContext } from 'apps/webapp/utils/user';
+import ClientSecretInput from '../molecules/client-secret-input';
 
 const CIDocumentation = () => {
-	const linkColor = useColorModeValue('blue.500', 'blue.300')
+	const { project } = useContext(UserContext)
 	return (
 		<>
 			<Box mx={2} mb={4} lineHeight="tall">
 				<Text>
 					Use the{' '}
-					<Link isExternal href="https://hub.docker.com/r/meeshkan/test-trigger" color={linkColor}>
+					<Link isExternal href="https://hub.docker.com/r/meeshkan/test-trigger" >
 						<Code px={2} py={1} borderRadius="md" fontWeight='700'>meeshkan/test-trigger</Code> Docker container
 					</Link>
 					{' '}to trigger Meeshkan test runs for your project within you CI pipeline.
 				</Text>
-				<Text mt={2}>
+				<Heading fontSize="18px" fontWeight="500" mt={4} mb={2}>
+					Client secret
+				</Heading>
+				<ClientSecretInput />
+				<Text mt={4}>
 					Below are working examples for each of the popular CI providers that you can use as a reference:
 				</Text>
+
 			</Box>
 			<Accordion allowMultiple>
 				<AccordionItem border='none'>
@@ -134,8 +141,8 @@ meeshkan-tests:
       -e CI_COMMIT_SHA=$CI_COMMIT_SHA
       -e CI_PROVIDER="gitlab"
       -e MEESHKAN_URL=$(cat preview-deployment-url.txt)
-      -e MEESHKAN_CLIENT_ID=$MEESHKAN_CLIENT_ID
-      -e MEESHKAN_CLIENT_SECRET=$MEESHKAN_CLIENT_SECRET
+      -e MEESHKAN_CLIENT_ID=${project?.id}
+      -e MEESHKAN_CLIENT_SECRET=${project?.configuration?.clientSecret}
       meeshkan/test-trigger:latest`
 								}
 							</Code>
@@ -181,8 +188,8 @@ pipelines:
             variables:
               CI_PROVIDER: "bitbucket"
               MEESHKAN_URL: $(cat preview-deployment-url.txt)
-              MEESHKAN_CLIENT_ID: $MEESHKAN_CLIENT_ID
-              MEESHKAN_CLIENT_SECRET: $MEESHKAN_CLIENT_SECRET`
+              MEESHKAN_CLIENT_ID: "${project?.id}"
+              MEESHKAN_CLIENT_SECRET: "${project?.configuration?.clientSecret}"`
 							}
 						</Code>
 					</AccordionPanel>
