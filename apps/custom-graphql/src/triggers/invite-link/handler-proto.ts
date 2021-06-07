@@ -1,7 +1,13 @@
+const crypto = require('crypto');
+
 type TriggerResult = {
 	data: any;
 	errors: Array<object>;
 };
+
+function makeSecret() {
+	return crypto.randomBytes(64).toString('base64')
+}
 
 function makeid(length) {
 	var result = '';
@@ -27,6 +33,9 @@ export default (create: boolean) => async (
 			...event.data,
 			...(create || event.data.inviteLink
 				? { inviteLink: 'https://app.meeshkan.com/invite/' + makeid(8) }
+				: {}),
+			...(create || event.data.clientSecret
+				? { clientSecret: makeSecret() }
 				: {}),
 		},
 		errors: [],

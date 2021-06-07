@@ -50,6 +50,7 @@ import {
 } from '../../utils/extension';
 import { useToaster } from '../../hooks/use-toaster';
 import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
+import CIDocumentationCard from '../../components/organisms/ci-documentation';
 import Link from 'next/link';
 import { createSlug } from '../../utils/createSlug';
 
@@ -599,6 +600,12 @@ const Settings = () => {
 							/>
 						</Flex>
 					))}
+				</SectionGridCard>
+				<SectionGridCard
+					title="CI Integrations"
+					subtitle="Trigger Meeshkan test runs from within your CI pipeline."
+				>
+					<CIDocumentationCard />
 				</SectionGridCard>
 				<GridCard
 					anchor
