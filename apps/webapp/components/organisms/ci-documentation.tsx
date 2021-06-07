@@ -11,6 +11,7 @@ import {
 	Stack,
 	Text,
 	Link,
+	useColorModeValue,
 } from '@chakra-ui/react';
 import {
 	GitLabIcon,
@@ -19,19 +20,19 @@ import {
 } from '@frontend/chakra-theme';
 
 const CIDocumentation = () => {
+	const linkColor = useColorModeValue('blue.500', 'blue.300')
 	return (
 		<>
 			<Box mx={2} mb={4} lineHeight="tall">
 				<Text>
 					Use the{' '}
-					<Link isExternal href="https://hub.docker.com/r/meeshkan/test-trigger">
-						<em>meeshkan/test-trigger</em> Docker container
+					<Link isExternal href="https://hub.docker.com/r/meeshkan/test-trigger" color={linkColor}>
+						<Code px={2} py={1} borderRadius="md" fontWeight='700'>meeshkan/test-trigger</Code> Docker container
 					</Link>
 					{' '}to trigger Meeshkan test runs for your project within you CI pipeline.
 				</Text>
 				<Text mt={2}>
-					Below are working examples for each of the popular CI providers{' '}
-					that you can use as a reference:
+					Below are working examples for each of the popular CI providers that you can use as a reference:
 				</Text>
 			</Box>
 			<Accordion allowMultiple>
