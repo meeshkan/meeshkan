@@ -149,7 +149,7 @@ const TestRunsPage = () => {
 
 			const response = await fetch(
 				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
-					'https://7cs97h8es9.execute-api.eu-west-1.amazonaws.com/main/test-trigger',
+				'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
 				{
 					method: 'POST',
 					mode: 'no-cors',
@@ -264,7 +264,7 @@ const TestRunsPage = () => {
 												<Text fontSize="40px" fontWeight="700">
 													{Math.round(
 														(latestTestRunStats[label] / totalTestRunOutcomes) *
-															100
+														100
 													)}
 													%
 												</Text>

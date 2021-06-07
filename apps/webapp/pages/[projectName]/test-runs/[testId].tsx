@@ -195,10 +195,9 @@ const TestRun = () => {
 
 										const errorStepIndex: number =
 											requiresAuthentication && hasLogInStory
-												? outcome?.errorDetails?.stepIndex +
-												1 -
+												? outcome?.errorDetails?.stepIndex -
 												stepsInLogInStory
-												: outcome?.errorDetails?.stepIndex + 1;
+												: outcome?.errorDetails?.stepIndex;
 										const errorInLogIn: boolean = errorStepIndex > 0 && !isNaN(errorStepIndex) ? false : true
 
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
@@ -401,7 +400,11 @@ const TestRun = () => {
 																		fontSize="sm"
 																		mr={4}
 																	>
-																		{outcome?.errorDetails?.stepIndex + 1}
+																		{requiresAuthentication && hasLogInStory
+																			? outcome?.errorDetails?.stepIndex +
+																			1 -
+																			stepsInLogInStory
+																			: outcome?.errorDetails?.stepIndex + 1}
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
