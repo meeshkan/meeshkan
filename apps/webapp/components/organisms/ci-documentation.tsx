@@ -35,9 +35,9 @@ const CIDocumentation = () => {
 				</Text>
 			</Box>
 			<Accordion allowMultiple>
-				<AccordionItem rounded="lg">
+				<AccordionItem border='none'>
 					<Heading as="h2">
-						<AccordionButton rounded="lg" py={4}>
+						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
 								<GitHubIcon mr={3} />
 								GitHub Actions
@@ -48,7 +48,7 @@ const CIDocumentation = () => {
 					<AccordionPanel py={4} lineHeight="tall">
 						<Code display="block" whiteSpace="pre" p={5} rounded="lg">
 							{
-`# .github/workflows/meeshkan.yml
+								`# .github/workflows/meeshkan.yml
 name: Run Meeshkan tests
 
 on: pull_request
@@ -78,9 +78,9 @@ jobs:
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem rounded="lg">
+				<AccordionItem border='none'>
 					<Heading as="h2">
-						<AccordionButton rounded="lg" py={4}>
+						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
 								<GitLabIcon mr={3} />
 								GitLab CI/CD
@@ -92,13 +92,13 @@ jobs:
 						<Stack spacing={4}>
 							<Code display="block" whiteSpace="pre" p={5} rounded="lg">
 								{
-`# config.toml
+									`# config.toml
 privileged = true`
 								}
 							</Code>
 							<Code display="block" whiteSpace="pre" p={5} rounded="lg">
 								{
-`# .gitlab-ci.yml
+									`# .gitlab-ci.yml
 stages:
   - deploy
   - test
@@ -142,9 +142,9 @@ meeshkan-tests:
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem rounded="lg">
+				<AccordionItem border='none'>
 					<Heading as="h2">
-						<AccordionButton rounded="lg" py={4}>
+						<AccordionButton py={4} _hover={{ color: 'blue.500' }}>
 							<Flex align="center" flex="1" textAlign="left">
 								<BitbucketIcon mr={3} />
 								Bitbucket Pipelines
@@ -155,7 +155,7 @@ meeshkan-tests:
 					<AccordionPanel py={4} lineHeight="tall">
 						<Code display="block" whiteSpace="pre" p={5} rounded="lg">
 							{
-`# bitbucket-pipelines.yml
+								`# bitbucket-pipelines.yml
 image: node:latest
 
 pipelines:
