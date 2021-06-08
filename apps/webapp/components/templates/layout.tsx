@@ -39,8 +39,32 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		}
 	}, [router.query, user]);
 
+	const RouterComponent = () => {
+		let router = useRouter();
+
+		useEffect(() => {
+			const routerFunc = (newUrl: string) => router.push(newUrl);
+			window.CommandBar.addRouter(routerFunc);
+		}, [])
+
+	}
+
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');
+
+	window.CommandBar.addContext("Projects",
+		user?.projects,
+		{
+			"renderOptions": {
+				"labelKey": "name"
+			},
+			"quickFindOptions": {
+				"quickFind": true,
+				"autoExecute": true
+			}
+		}
+	);
+
 	return (
 		<Analytics
 			appName="Meeshkan-webapp"

@@ -16,6 +16,7 @@ import {
 	MenuOptionGroup,
 	Tooltip,
 	useColorModeValue,
+	Kbd,
 } from '@chakra-ui/react';
 import NavButton from './nav-button';
 import { ChatIcon, PlusIcon, SettingsIcon } from '@frontend/chakra-theme';
@@ -96,6 +97,10 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 				isActive={isSettings}
 			>
 				Settings
+				<Box w="100%" />
+				<Flex fontSize='sm'>
+					<Kbd>S</Kbd>
+				</Flex>
 			</NavButton>
 			<Divider my={4} />
 			<Flex align="center">

@@ -1,6 +1,6 @@
 export interface CommandBar {
   readonly boot: (args: CommandBarBootArgs) => void;
-  readonly addContext: (context: CommandBarContext) => void;
+  readonly addContext: (key: string, initialValue: any, options?: Object) => void;
   readonly removeContext: (key: string) => void;
   readonly setContext: (context: CommandBarContext) => void;
   readonly addCallback: <T = any, K = any>(name: string, callback: CommandBarCallback<T, K>) => void;
@@ -15,6 +15,7 @@ export interface CommandBar {
   readonly onboard: () => void;
   readonly isOpen: () => boolean | undefined;
   readonly updateContextSettings: <T = any>(key: string, settings: CommandBarSearchSettings<T>) => void;
+  readonly shutdown: () => void;
 }
 
 declare global {

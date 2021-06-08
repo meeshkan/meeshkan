@@ -38,7 +38,7 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 			</Head>
 			<Layout>
 				{!isInvitePage && <SideBar />}
-				
+
 				<Component {...pageProps} />
 			</Layout>
 		</>
