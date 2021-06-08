@@ -64,6 +64,8 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		},
 	});
 
+	// window.CommandBar.addCallback("triggerTest", callbackFn);
+
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');
 
