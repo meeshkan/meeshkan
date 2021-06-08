@@ -10,8 +10,9 @@ import {
 	Text,
 	Heading,
 	Code,
+	Kbd,
 } from '@chakra-ui/react';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { ChevronLeftIcon, SearchIcon } from '@chakra-ui/icons';
 import {
 	ActivityIcon,
 	VideoIcon,
@@ -45,6 +46,10 @@ const SideBarBody = () => {
 	const settingsHeadingColor = useColorModeValue('gray.900', 'gray.200');
 	const headerColor = useColorModeValue('gray.400', 'gray.500');
 	const headerBackgroundColor = useColorModeValue('gray.100', 'gray.800');
+	const searchBorderColor = useColorModeValue('gray.200', 'gray.700');
+	const searchTextColor = useColorModeValue('gray.500', 'gray.300');
+	const searchFocusColor = useColorModeValue('blue.500', 'blue.300');
+	const shortcutColor = useColorModeValue('gray.500', 'gray.400');
 
 	if (isSettingsPage) {
 		return (
@@ -203,7 +208,32 @@ const SideBarBody = () => {
 		<Flex direction="column" justify="space-between" h="100%">
 			{hasProjects ? (
 				<>
-					<Stack mt={6} flex="1">
+					<Stack mt={4} flex="1">
+						<Flex
+							h={8}
+							w="full"
+							fontSize="sm"
+							justify="space-between"
+							align="center"
+							border="1px solid"
+							borderColor={searchBorderColor}
+							borderRadius="md"
+							px={3}
+							mb={4}
+							cursor="pointer"
+							transition="all 0.2s"
+							onClick={() => window.CommandBar.open()}
+							_hover={{ borderColor: searchFocusColor }}
+						>
+							<Flex align="center" color={searchTextColor}>
+								<SearchIcon boxSize={3} mr={3} />
+								<Text>Search</Text>
+							</Flex>
+							<Flex color={shortcutColor}>
+								<Kbd>⌘</Kbd> + <Kbd>k</Kbd>
+							</Flex>
+						</Flex>
+
 						<NavButton
 							leftIcon={<ActivityIcon />}
 							href={`/${slugifiedProjectName}`}
@@ -212,6 +242,10 @@ const SideBarBody = () => {
 							}
 						>
 							Health dashboard
+							<Box w="100%" />
+							<Flex fontSize="sm" color={shortcutColor}>
+								<Kbd>d</Kbd>
+							</Flex>
 						</NavButton>
 						<NavButton
 							leftIcon={<VideoIcon />}
@@ -222,6 +256,10 @@ const SideBarBody = () => {
 							}
 						>
 							User stories
+							<Box w="100%" />
+							<Flex fontSize="sm" color={shortcutColor}>
+								<Kbd>u</Kbd>
+							</Flex>
 						</NavButton>
 						<NavButton
 							leftIcon={<CheckSquareIcon />}
@@ -231,10 +269,14 @@ const SideBarBody = () => {
 								router.asPath.includes('/test-runs')
 							}
 						>
-							Test runs <Box w="100%" />
+							Test runs
 							<Code ml={2} p={2} borderRadius="md" colorScheme="cyan">
 								beta
 							</Code>
+							<Box w="100%" />
+							<Flex fontSize="sm" color={shortcutColor}>
+								<Kbd>t</Kbd>
+							</Flex>
 						</NavButton>
 						<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
 							Releases

@@ -14,6 +14,7 @@ import { Analytics } from '@lightspeed/react-mixpanel-script';
 import { UserContext } from '../../utils/user';
 import PlanAndBillingCard from '../organisms/plan-and-billing';
 import { handleExtensionAuthHandshake } from '../../utils/extension';
+import { createSlug } from 'apps/webapp/utils/createSlug';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -39,8 +40,35 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		}
 	}, [router.query, user]);
 
+	useEffect(() => {
+		const routerFunc = (newUrl: string) => router.push(newUrl);
+		window.CommandBar.addRouter(routerFunc);
+	}, []);
+
+	const projectName: string = user?.project?.name;
+	const sluggifiedName: string = createSlug(projectName || '');
+	window.CommandBar.addContext('currentProject', sluggifiedName);
+
+	const commandBarProjects = user?.projects.map((project) => ({
+		name: project.name,
+		sluggified: createSlug(project.name || ''),
+	}));
+
+	window.CommandBar.addContext('projects', commandBarProjects, {
+		renderOptions: {
+			labelKey: 'name',
+		},
+		quickFindOptions: {
+			quickFind: true,
+			autoExecute: true,
+		},
+	});
+
+	// window.CommandBar.addCallback("triggerTest", callbackFn);
+
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');
+
 	return (
 		<Analytics
 			appName="Meeshkan-webapp"
