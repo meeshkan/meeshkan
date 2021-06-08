@@ -149,9 +149,7 @@ export const getConfidenceScore = (
 			.map((story) => ({
 				[story.id + COVERAGE_DATA_POINT]: {
 					score:
-						((story.isTestCase &&
-						typeof story.testCreatedDate === 'string' &&
-						new Date(story.testCreatedDate).getTime() <= howLongAgo
+						((story.isTestCase
 							? 1
 							: 0) *
 							MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
@@ -176,7 +174,7 @@ export const getConfidenceScore = (
 								runTime < howLongAgo - MS_IN_14_DAYS
 									? 0
 									: ((MS_IN_14_DAYS - (howLongAgo - runTime)) / MS_IN_14_DAYS) *
-									  (runTime >= releaseStarted ? 1.0 : 0.5),
+									(runTime >= releaseStarted ? 1.0 : 0.5),
 							status: run.status,
 						};
 					});
@@ -190,8 +188,8 @@ export const getConfidenceScore = (
 							(a.status === 'failing'
 								? 0.0
 								: a.status === 'passing'
-								? 1.0
-								: 0.5)
+									? 1.0
+									: 0.5)
 					)
 					.reduce((a, b) => a + b, 0);
 				const maxPossible =
