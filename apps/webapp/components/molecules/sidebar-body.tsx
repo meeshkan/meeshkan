@@ -49,6 +49,7 @@ const SideBarBody = () => {
 	const searchBorderColor = useColorModeValue('gray.200', 'gray.700');
 	const searchTextColor = useColorModeValue('gray.500', 'gray.300');
 	const searchFocusColor = useColorModeValue('blue.500', 'blue.300');
+	const shortcutColor = useColorModeValue('gray.500', 'gray.400');
 
 	if (isSettingsPage) {
 		return (
@@ -218,8 +219,8 @@ const SideBarBody = () => {
 								<SearchIcon boxSize={3} mr={3} />
 								<Text>Search</Text>
 							</Flex>
-							<Flex>
-								<Kbd>⌘</Kbd> + <Kbd>K</Kbd>
+							<Flex color={shortcutColor}>
+								<Kbd>⌘</Kbd> + <Kbd>k</Kbd>
 							</Flex>
 						</Flex>
 
@@ -232,8 +233,8 @@ const SideBarBody = () => {
 						>
 							Health dashboard
 							<Box w="100%" />
-							<Flex fontSize="sm">
-								<Kbd>D</Kbd>
+							<Flex fontSize="sm" color={shortcutColor}>
+								<Kbd>d</Kbd>
 							</Flex>
 						</NavButton>
 						<NavButton
@@ -246,8 +247,8 @@ const SideBarBody = () => {
 						>
 							User stories
 							<Box w="100%" />
-							<Flex fontSize="sm">
-								<Kbd>U</Kbd>
+							<Flex fontSize="sm" color={shortcutColor}>
+								<Kbd>u</Kbd>
 							</Flex>
 						</NavButton>
 						<NavButton
@@ -263,8 +264,8 @@ const SideBarBody = () => {
 								beta
 							</Code>
 							<Box w="100%" />
-							<Flex fontSize="sm">
-								<Kbd>T</Kbd>
+							<Flex fontSize="sm" color={shortcutColor}>
+								<Kbd>t</Kbd>
 							</Flex>
 						</NavButton>
 						<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>

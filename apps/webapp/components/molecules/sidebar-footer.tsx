@@ -33,7 +33,7 @@ type SelectedProject = {
 	avatar?: {
 		downloadUrl: string;
 	};
-}
+};
 
 type SideBarFooterProps = {
 	isSettings?: boolean;
@@ -64,7 +64,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 	const avatarColor = useColorModeValue('gray.700', 'gray.200');
 	const avatarBackgroundColor = useColorModeValue('gray.200', 'gray.600');
 	const questionIconColor = useColorModeValue('gray.400', 'white');
-	const tooltipColor = useColorModeValue('gray.500', 'gray.400');
+	const shortcutColor = useColorModeValue('gray.500', 'gray.400');
 	const menuButtonFlexColor = useColorModeValue('gray.500', 'gray.300');
 
 	const projectName =
@@ -98,8 +98,8 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 			>
 				Settings
 				<Box w="100%" />
-				<Flex fontSize='sm'>
-					<Kbd>S</Kbd>
+				<Flex fontSize="sm" color={shortcutColor}>
+					<Kbd>s</Kbd>
 				</Flex>
 			</NavButton>
 			<Divider my={4} />
@@ -163,7 +163,10 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 
 										setSelectedProject(project as SelectedProject);
 										setLoadingProject(true);
-										const selectedProject = await getProject(idToken, project.id);
+										const selectedProject = await getProject(
+											idToken,
+											project.id
+										);
 										await setLoadingProject(false);
 										setProject(selectedProject);
 									}}
