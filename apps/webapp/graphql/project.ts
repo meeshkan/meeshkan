@@ -10,10 +10,12 @@ export const PROJECT = gql`
 				shareUrl
 			}
 			configuration {
+				id
 				activeTestRuns
 				productionURL
 				stagingURL
 				inviteLink
+				clientSecret
 				logInFlow {
 					id
 					createdAt
@@ -301,6 +303,19 @@ export const REFRESH_INVITE_LINK = gql`
 		}
 	}
 `;
+
+export const ROTATE_CLIENT_SECRET = gql`
+mutation ROTATE_CLIENT_SECRET($projectID: ID!) {
+  projectUpdate(
+    filter: { id: $projectID }
+    data: { configuration: { update: { clientSecret: "a" } } }
+  ) {
+    configuration {
+      clientSecret
+    }
+  }
+}
+`
 
 export const PROJECT_USER_STORIES = gql`
 	fragment stories on UserStory {

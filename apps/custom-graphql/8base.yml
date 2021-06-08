@@ -1,10 +1,10 @@
 functions:
-  team-create-invite-link-trigger:
+  create-invite-link-or-secret-trigger:
     type: trigger.before
     handler:
       code: src/triggers/invite-link/create-handler.ts
     operation: Configuration.create
-  team-update-invite-link-trigger:
+  update-invite-link-or-secret-trigger:
     type: trigger.before
     handler:
       code: src/triggers/invite-link/update-handler.ts
@@ -27,13 +27,3 @@ functions:
     description: >
       Consuming cancel and delete events from Stripe to update plan details on
       8base.
-  client-secret-create:
-    type: trigger.before
-    handler:
-      code: src/triggers/client-secret/create-handler.ts
-    operation: Configuration.create
-  client-secret-update:
-    type: trigger.before
-    handler:
-      code: src/triggers/client-secret/update-handler.ts
-    operation: Configuration.update

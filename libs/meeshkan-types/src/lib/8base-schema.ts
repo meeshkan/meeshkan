@@ -1158,6 +1158,8 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration update input from authenticationTokens */
@@ -1183,6 +1185,8 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 export type AuthenticationTokenSort = {
@@ -1776,6 +1780,8 @@ export type Configuration = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -1822,6 +1828,7 @@ export type Configuration_PermissionFilter = {
 	subscriptionStatus?: Maybe<StringPredicate>;
 	billingInterval?: Maybe<StringPredicate>;
 	hasScheduledCall?: Maybe<BoolPredicate>;
+	clientSecret?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	project?: Maybe<Project_PermissionFilter>;
@@ -1982,6 +1989,8 @@ export type ConfigurationCreateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration create many input */
@@ -2006,6 +2015,8 @@ export type ConfigurationCreateManyInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration delete input */
@@ -2028,6 +2039,7 @@ export type ConfigurationFieldsPermissions = {
 	subscriptionStatus?: Maybe<Scalars['Boolean']>;
 	billingInterval?: Maybe<Scalars['Boolean']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	clientSecret?: Maybe<Scalars['Boolean']>;
 };
 
 export type ConfigurationFilter = {
@@ -2045,6 +2057,7 @@ export type ConfigurationFilter = {
 	subscriptionStatus?: Maybe<StringPredicate>;
 	billingInterval?: Maybe<StringPredicate>;
 	hasScheduledCall?: Maybe<BoolPredicate>;
+	clientSecret?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	project?: Maybe<ProjectFilter>;
@@ -2077,6 +2090,7 @@ export type ConfigurationGroupByQuery = {
 	subscriptionStatus?: Maybe<Array<GroupByField>>;
 	billingInterval?: Maybe<Array<GroupByField>>;
 	hasScheduledCall?: Maybe<Array<GroupByField>>;
+	clientSecret?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	authenticationTokens?: Maybe<AuthenticationTokenGroupByQuery>;
@@ -2087,6 +2101,7 @@ export type ConfigurationGroupByQuery = {
 export type ConfigurationKeyFilter = {
 	id?: Maybe<Scalars['ID']>;
 	inviteLink?: Maybe<Scalars['String']>;
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** ConfigurationListResponse output */
@@ -2159,6 +2174,8 @@ export enum ConfigurationOrderBy {
 	BillingIntervalDesc = 'billingInterval_DESC',
 	HasScheduledCallAsc = 'hasScheduledCall_ASC',
 	HasScheduledCallDesc = 'hasScheduledCall_DESC',
+	ClientSecretAsc = 'clientSecret_ASC',
+	ClientSecretDesc = 'clientSecret_DESC',
 }
 
 /** Configuration subscription payload */
@@ -2195,6 +2212,7 @@ export type ConfigurationSort = {
 	subscriptionStatus?: Maybe<SortOrder>;
 	billingInterval?: Maybe<SortOrder>;
 	hasScheduledCall?: Maybe<SortOrder>;
+	clientSecret?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
 	logInFlow?: Maybe<UserStorySort>;
@@ -2219,6 +2237,7 @@ export type ConfigurationUpdateByFilterInput = {
 	subscriptionStatus?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	billingInterval?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	hasScheduledCall?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
+	clientSecret?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** Configuration update input */
@@ -2245,6 +2264,8 @@ export type ConfigurationUpdateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Integration create input from continuousIntegration */
@@ -5222,6 +5243,8 @@ export type LogInFlow_ConfigurationCreateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration update input from logInFlow */
@@ -5247,6 +5270,8 @@ export type LogInFlow_ConfigurationUpdateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** LoginResponse */
@@ -9188,6 +9213,8 @@ export type Project_ConfigurationCreateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration update input from project */
@@ -9213,6 +9240,8 @@ export type Project_ConfigurationUpdateInput = {
 	/** The options are 'monthly' or 'yearly'. */
 	billingInterval?: Maybe<Scalars['String']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Integration create input from project */
@@ -9991,6 +10020,7 @@ export type QueryCiCdMigrationsListArgs = {
 export type QueryConfigurationArgs = {
 	id?: Maybe<Scalars['ID']>;
 	inviteLink?: Maybe<Scalars['String']>;
+	clientSecret?: Maybe<Scalars['String']>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
