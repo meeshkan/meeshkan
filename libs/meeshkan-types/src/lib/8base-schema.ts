@@ -38,12 +38,11 @@ export type Activity = {
 	createdBy?: Maybe<User>;
 	/** A headline of what happened/changed. */
 	title?: Maybe<Scalars['String']>;
-	/** Up to 1000 characters of detail about what happened /changed. */
-	description?: Maybe<Scalars['String']>;
 	/** When did this activity happen? */
 	dateTime?: Maybe<Scalars['Date']>;
-	/** The project this activity happened on. */
 	project?: Maybe<Project>;
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -53,8 +52,8 @@ export type Activity_PermissionFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	title?: Maybe<StringPredicate>;
-	description?: Maybe<StringPredicate>;
 	dateTime?: Maybe<DatePredicate>;
+	description?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	project?: Maybe<Project_PermissionFilter>;
@@ -76,16 +75,16 @@ export type Activity_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration: ProjectConfigurationRelationInput;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -97,16 +96,16 @@ export type Activity_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -114,22 +113,22 @@ export type Activity_ProjectUpdateInput = {
 export type ActivityCreateInput = {
 	/** A headline of what happened/changed. */
 	title: Scalars['String'];
-	/** Up to 1000 characters of detail about what happened /changed. */
-	description?: Maybe<Scalars['String']>;
 	/** When did this activity happen? */
 	dateTime: Scalars['Date'];
 	project: ActivityProjectRelationInput;
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
 };
 
 /** Activity create many input */
 export type ActivityCreateManyInput = {
 	/** A headline of what happened/changed. */
 	title: Scalars['String'];
-	/** Up to 1000 characters of detail about what happened /changed. */
-	description?: Maybe<Scalars['String']>;
 	/** When did this activity happen? */
 	dateTime: Scalars['Date'];
 	project: ActivityProjectManyRelationInput;
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
 };
 
 /** Activity delete input */
@@ -143,8 +142,8 @@ export type ActivityFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
 	title?: Maybe<Scalars['Boolean']>;
-	description?: Maybe<Scalars['Boolean']>;
 	dateTime?: Maybe<Scalars['Boolean']>;
+	description?: Maybe<Scalars['Boolean']>;
 };
 
 export type ActivityFilter = {
@@ -153,8 +152,8 @@ export type ActivityFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	title?: Maybe<StringPredicate>;
-	description?: Maybe<StringPredicate>;
 	dateTime?: Maybe<DatePredicate>;
+	description?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	project?: Maybe<ProjectFilter>;
@@ -176,8 +175,8 @@ export type ActivityGroupByQuery = {
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
 	title?: Maybe<Array<GroupByField>>;
-	description?: Maybe<Array<GroupByField>>;
 	dateTime?: Maybe<Array<GroupByField>>;
+	description?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
@@ -219,10 +218,10 @@ export enum ActivityOrderBy {
 	DeletedAtDesc = 'deletedAt_DESC',
 	TitleAsc = 'title_ASC',
 	TitleDesc = 'title_DESC',
-	DescriptionAsc = 'description_ASC',
-	DescriptionDesc = 'description_DESC',
 	DateTimeAsc = 'dateTime_ASC',
 	DateTimeDesc = 'dateTime_DESC',
+	DescriptionAsc = 'description_ASC',
+	DescriptionDesc = 'description_DESC',
 }
 
 /** Activity subscription payload */
@@ -266,8 +265,8 @@ export type ActivitySort = {
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
 	title?: Maybe<SortOrder>;
-	description?: Maybe<SortOrder>;
 	dateTime?: Maybe<SortOrder>;
+	description?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
 };
@@ -282,8 +281,8 @@ export type ActivitySubscriptionFilter = {
 /** Activity update input */
 export type ActivityUpdateByFilterInput = {
 	title?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	description?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	dateTime?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
+	description?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** Activity update input */
@@ -291,11 +290,11 @@ export type ActivityUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
 	/** A headline of what happened/changed. */
 	title?: Maybe<Scalars['String']>;
-	/** Up to 1000 characters of detail about what happened /changed. */
-	description?: Maybe<Scalars['String']>;
 	/** When did this activity happen? */
 	dateTime?: Maybe<Scalars['Date']>;
 	project?: Maybe<ActivityProjectUpdateRelationInput>;
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
 };
 
 export enum AggregationFunctionType {
@@ -1000,7 +999,6 @@ export type AuthenticationToken = {
 	key?: Maybe<Scalars['String']>;
 	/** What is the value of this token? */
 	value?: Maybe<Scalars['String']>;
-	/** Which configuration (and therefore project) does this token belong on? */
 	configuration?: Maybe<Configuration>;
 	_description?: Maybe<Scalars['String']>;
 };
@@ -1185,11 +1183,6 @@ export type AuthenticationTokenRelationFilter = {
 /** Configuration create input from authenticationTokens */
 export type AuthenticationTokens_ConfigurationCreateInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink: Scalars['String'];
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -1203,6 +1196,14 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink: Scalars['String'];
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -1227,19 +1228,13 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration update input from authenticationTokens */
 export type AuthenticationTokens_ConfigurationUpdateInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink?: Maybe<Scalars['String']>;
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -1253,6 +1248,14 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink?: Maybe<Scalars['String']>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -1277,9 +1280,8 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 export type AuthenticationTokenSort = {
@@ -1331,16 +1333,16 @@ export type Avatar_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration: ProjectConfigurationRelationInput;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -1747,11 +1749,6 @@ export type Configuration = {
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink?: Maybe<Scalars['String']>;
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -1765,6 +1762,25 @@ export type Configuration = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink?: Maybe<Scalars['String']>;
+	project?: Maybe<Project>;
+	/**
+	 * A one configuration to many Authentication tokens relation. Authentication
+	 * tokens represent one way to sign into a service to perform authenticated
+	 * actions on their app.
+	 */
+	authenticationTokens?: Maybe<AuthenticationTokenListResponse>;
+	/**
+	 * This is the connection between a single user story and configuration that
+	 * represents the 'logInStory'. Only one can be connected. `logInStory` is for
+	 * the user story showing a user in the action of logging in and is prepended to
+	 * tests requiring authentication, when present.
+	 */
+	logInStory?: Maybe<UserStory>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -1789,21 +1805,8 @@ export type Configuration = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	/** The project these extra settings are for. */
-	project?: Maybe<Project>;
-	/**
-	 * A one configuration to many Authentication tokens relation. Authentication
-	 * tokens represent one way to sign into a service to perform authenticated
-	 * actions on their app.
-	 */
-	authenticationTokens?: Maybe<AuthenticationTokenListResponse>;
-	/**
-	 * This is the connection between a single user story and configuration that
-	 * represents the 'logInStory'. Only one can be connected. `logInStory` is for
-	 * the user story showing a user in the action of logging in and is prepended to
-	 * tests requiring authentication, when present.
-	 */
-	logInStory?: Maybe<UserStory>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -1845,16 +1848,17 @@ export type Configuration_PermissionFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
-	inviteLink?: Maybe<StringPredicate>;
 	productionURL?: Maybe<StringPredicate>;
 	stagingURL?: Maybe<StringPredicate>;
 	stripeCustomerID?: Maybe<StringPredicate>;
+	inviteLink?: Maybe<StringPredicate>;
 	activeTestRuns?: Maybe<BoolPredicate>;
 	plan?: Maybe<StringPredicate>;
 	subscriptionStartedDate?: Maybe<DatePredicate>;
 	subscriptionStatus?: Maybe<StringPredicate>;
 	billingInterval?: Maybe<StringPredicate>;
 	hasScheduledCall?: Maybe<BoolPredicate>;
+	clientSecret?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	project?: Maybe<Project_PermissionFilter>;
@@ -1872,16 +1876,16 @@ export type Configuration_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -1893,16 +1897,16 @@ export type Configuration_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -1929,11 +1933,6 @@ export type ConfigurationAuthenticationTokensUpdateRelationInput = {
 /** Configuration create input */
 export type ConfigurationCreateInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink: Scalars['String'];
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -1947,6 +1946,14 @@ export type ConfigurationCreateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink: Scalars['String'];
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -1971,19 +1978,13 @@ export type ConfigurationCreateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration create many input */
 export type ConfigurationCreateManyInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink: Scalars['String'];
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -1997,6 +1998,13 @@ export type ConfigurationCreateManyInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink: Scalars['String'];
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensManyRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryManyRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -2021,8 +2029,8 @@ export type ConfigurationCreateManyInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensManyRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryManyRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration delete input */
@@ -2035,16 +2043,17 @@ export type ConfigurationDeleteInput = {
 export type ConfigurationFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
-	inviteLink?: Maybe<Scalars['Boolean']>;
 	productionURL?: Maybe<Scalars['Boolean']>;
 	stagingURL?: Maybe<Scalars['Boolean']>;
 	stripeCustomerID?: Maybe<Scalars['Boolean']>;
+	inviteLink?: Maybe<Scalars['Boolean']>;
 	activeTestRuns?: Maybe<Scalars['Boolean']>;
 	plan?: Maybe<Scalars['Boolean']>;
 	subscriptionStartedDate?: Maybe<Scalars['Boolean']>;
 	subscriptionStatus?: Maybe<Scalars['Boolean']>;
 	billingInterval?: Maybe<Scalars['Boolean']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	clientSecret?: Maybe<Scalars['Boolean']>;
 };
 
 export type ConfigurationFilter = {
@@ -2052,16 +2061,17 @@ export type ConfigurationFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
-	inviteLink?: Maybe<StringPredicate>;
 	productionURL?: Maybe<StringPredicate>;
 	stagingURL?: Maybe<StringPredicate>;
 	stripeCustomerID?: Maybe<StringPredicate>;
+	inviteLink?: Maybe<StringPredicate>;
 	activeTestRuns?: Maybe<BoolPredicate>;
 	plan?: Maybe<StringPredicate>;
 	subscriptionStartedDate?: Maybe<DatePredicate>;
 	subscriptionStatus?: Maybe<StringPredicate>;
 	billingInterval?: Maybe<StringPredicate>;
 	hasScheduledCall?: Maybe<BoolPredicate>;
+	clientSecret?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	project?: Maybe<ProjectFilter>;
@@ -2084,16 +2094,17 @@ export type ConfigurationGroupByQuery = {
 	id?: Maybe<Array<GroupByField>>;
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
-	inviteLink?: Maybe<Array<GroupByField>>;
 	productionURL?: Maybe<Array<GroupByField>>;
 	stagingURL?: Maybe<Array<GroupByField>>;
 	stripeCustomerID?: Maybe<Array<GroupByField>>;
+	inviteLink?: Maybe<Array<GroupByField>>;
 	activeTestRuns?: Maybe<Array<GroupByField>>;
 	plan?: Maybe<Array<GroupByField>>;
 	subscriptionStartedDate?: Maybe<Array<GroupByField>>;
 	subscriptionStatus?: Maybe<Array<GroupByField>>;
 	billingInterval?: Maybe<Array<GroupByField>>;
 	hasScheduledCall?: Maybe<Array<GroupByField>>;
+	clientSecret?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	authenticationTokens?: Maybe<AuthenticationTokenGroupByQuery>;
@@ -2104,6 +2115,7 @@ export type ConfigurationGroupByQuery = {
 export type ConfigurationKeyFilter = {
 	id?: Maybe<Scalars['ID']>;
 	inviteLink?: Maybe<Scalars['String']>;
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** ConfigurationListResponse output */
@@ -2156,14 +2168,14 @@ export enum ConfigurationOrderBy {
 	UpdatedAtDesc = 'updatedAt_DESC',
 	DeletedAtAsc = 'deletedAt_ASC',
 	DeletedAtDesc = 'deletedAt_DESC',
-	InviteLinkAsc = 'inviteLink_ASC',
-	InviteLinkDesc = 'inviteLink_DESC',
 	ProductionUrlAsc = 'productionURL_ASC',
 	ProductionUrlDesc = 'productionURL_DESC',
 	StagingUrlAsc = 'stagingURL_ASC',
 	StagingUrlDesc = 'stagingURL_DESC',
 	StripeCustomerIdAsc = 'stripeCustomerID_ASC',
 	StripeCustomerIdDesc = 'stripeCustomerID_DESC',
+	InviteLinkAsc = 'inviteLink_ASC',
+	InviteLinkDesc = 'inviteLink_DESC',
 	ActiveTestRunsAsc = 'activeTestRuns_ASC',
 	ActiveTestRunsDesc = 'activeTestRuns_DESC',
 	PlanAsc = 'plan_ASC',
@@ -2176,6 +2188,8 @@ export enum ConfigurationOrderBy {
 	BillingIntervalDesc = 'billingInterval_DESC',
 	HasScheduledCallAsc = 'hasScheduledCall_ASC',
 	HasScheduledCallDesc = 'hasScheduledCall_DESC',
+	ClientSecretAsc = 'clientSecret_ASC',
+	ClientSecretDesc = 'clientSecret_DESC',
 }
 
 /** Configuration subscription payload */
@@ -2202,16 +2216,17 @@ export type ConfigurationSort = {
 	createdAt?: Maybe<SortOrder>;
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
-	inviteLink?: Maybe<SortOrder>;
 	productionURL?: Maybe<SortOrder>;
 	stagingURL?: Maybe<SortOrder>;
 	stripeCustomerID?: Maybe<SortOrder>;
+	inviteLink?: Maybe<SortOrder>;
 	activeTestRuns?: Maybe<SortOrder>;
 	plan?: Maybe<SortOrder>;
 	subscriptionStartedDate?: Maybe<SortOrder>;
 	subscriptionStatus?: Maybe<SortOrder>;
 	billingInterval?: Maybe<SortOrder>;
 	hasScheduledCall?: Maybe<SortOrder>;
+	clientSecret?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
 	logInStory?: Maybe<UserStorySort>;
@@ -2226,26 +2241,22 @@ export type ConfigurationSubscriptionFilter = {
 
 /** Configuration update input */
 export type ConfigurationUpdateByFilterInput = {
-	inviteLink?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	productionURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	stagingURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	stripeCustomerID?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	inviteLink?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	activeTestRuns?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 	plan?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	subscriptionStartedDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
 	subscriptionStatus?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	billingInterval?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	hasScheduledCall?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
+	clientSecret?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** Configuration update input */
 export type ConfigurationUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
-	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
@@ -2260,6 +2271,14 @@ export type ConfigurationUpdateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink?: Maybe<Scalars['String']>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -2284,9 +2303,8 @@ export type ConfigurationUpdateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Custom Table Field Type */
@@ -2715,8 +2733,8 @@ export type File = {
 	teamMembers_avatar?: Maybe<TeamMemberListResponse>;
 	project_avatar?: Maybe<ProjectListResponse>;
 	testOutcome_video?: Maybe<TestOutcomeListResponse>;
-	flow_video?: Maybe<FlowListResponse>;
 	userStory_video?: Maybe<UserStoryListResponse>;
+	flow_video?: Maybe<FlowListResponse>;
 	previewUrl?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
@@ -2793,18 +2811,6 @@ export type FileTestOutcome_VideoArgs = {
 	groupBy?: Maybe<TestOutcomeGroupBy>;
 };
 
-export type FileFlow_VideoArgs = {
-	filter?: Maybe<FlowFilter>;
-	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
-	sort?: Maybe<Array<FlowSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<FlowGroupBy>;
-};
-
 export type FileUserStory_VideoArgs = {
 	filter?: Maybe<UserStoryFilter>;
 	orderBy?: Maybe<Array<Maybe<UserStoryOrderBy>>>;
@@ -2815,6 +2821,18 @@ export type FileUserStory_VideoArgs = {
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
 	groupBy?: Maybe<UserStoryGroupBy>;
+};
+
+export type FileFlow_VideoArgs = {
+	filter?: Maybe<FlowFilter>;
+	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
+	sort?: Maybe<Array<FlowSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<FlowGroupBy>;
 };
 
 export type File_PermissionFilter = {
@@ -2838,8 +2856,8 @@ export type File_PermissionFilter = {
 	teamMembers_avatar?: Maybe<TeamMember_PermissionRelationFilter>;
 	project_avatar?: Maybe<Project_PermissionRelationFilter>;
 	testOutcome_video?: Maybe<TestOutcome_PermissionRelationFilter>;
-	flow_video?: Maybe<Flow_PermissionRelationFilter>;
 	userStory_video?: Maybe<UserStory_PermissionRelationFilter>;
+	flow_video?: Maybe<Flow_PermissionRelationFilter>;
 	AND?: Maybe<Array<File_PermissionFilter>>;
 	OR?: Maybe<Array<File_PermissionFilter>>;
 };
@@ -2855,8 +2873,8 @@ export type FileCreateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 };
 
 /** Files create many input */
@@ -2870,8 +2888,8 @@ export type FileCreateManyInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarManyRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarManyRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoManyRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoManyRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoManyRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoManyRelationInput>;
 };
 
 /** Files delete input */
@@ -2931,8 +2949,8 @@ export type FileFilter = {
 	teamMembers_avatar?: Maybe<TeamMemberRelationFilter>;
 	project_avatar?: Maybe<ProjectRelationFilter>;
 	testOutcome_video?: Maybe<TestOutcomeRelationFilter>;
-	flow_video?: Maybe<FlowRelationFilter>;
 	userStory_video?: Maybe<UserStoryRelationFilter>;
+	flow_video?: Maybe<FlowRelationFilter>;
 	AND?: Maybe<Array<FileFilter>>;
 	OR?: Maybe<Array<FileFilter>>;
 };
@@ -2968,8 +2986,8 @@ export type FileGroupByQuery = {
 	teamMembers_avatar?: Maybe<TeamMemberGroupByQuery>;
 	project_avatar?: Maybe<ProjectGroupByQuery>;
 	testOutcome_video?: Maybe<TestOutcomeGroupByQuery>;
-	flow_video?: Maybe<FlowGroupByQuery>;
 	userStory_video?: Maybe<UserStoryGroupByQuery>;
+	flow_video?: Maybe<FlowGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -3214,8 +3232,8 @@ export type FileUpdateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 };
 
 export type FileUploadInfoResponse = {
@@ -3270,6 +3288,7 @@ export type Flow = {
 	browserVersion?: Maybe<Scalars['String']>;
 	operatingSystem?: Maybe<Scalars['String']>;
 	language?: Maybe<Scalars['String']>;
+	userStory?: Maybe<UserStory>;
 	/** This is the UUID that correlates to the first event in a video in the backend database. */
 	startEventId?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the last event in a video in the backend database. */
@@ -3279,12 +3298,7 @@ export type Flow = {
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
 	/** The UUID that is the index in the backend flow table. */
-	flowId?: Maybe<Scalars['String']>;
-	/**
-	 * A many Flows to one User story relation. Which flows make up a user story?
-	 * This helps provide context to a generalized representation.
-	 */
-	userStory?: Maybe<UserStory>;
+	flowId?: Maybe<Scalars['Int']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -3301,11 +3315,11 @@ export type Flow_PermissionFilter = {
 	startEventId?: Maybe<StringPredicate>;
 	endEventId?: Maybe<StringPredicate>;
 	videoGenerationVersion?: Maybe<StringPredicate>;
-	flowId?: Maybe<StringPredicate>;
+	flowId?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
-	video?: Maybe<File_PermissionFilter>;
 	userStory?: Maybe<UserStory_PermissionFilter>;
+	video?: Maybe<File_PermissionFilter>;
 	AND?: Maybe<Array<Flow_PermissionFilter>>;
 	OR?: Maybe<Array<Flow_PermissionFilter>>;
 };
@@ -3327,8 +3341,8 @@ export type Flow_Video_FileCreateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 };
 
 /** Files update input from flow_video */
@@ -3342,8 +3356,8 @@ export type Flow_Video_FileUpdateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 };
 
 /** Flow create input */
@@ -3353,6 +3367,7 @@ export type FlowCreateInput = {
 	browserVersion?: Maybe<Scalars['String']>;
 	operatingSystem?: Maybe<Scalars['String']>;
 	language?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryRelationInput>;
 	/** This is the UUID that correlates to the first event in a video in the backend database. */
 	startEventId?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the last event in a video in the backend database. */
@@ -3361,8 +3376,7 @@ export type FlowCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
 	/** The UUID that is the index in the backend flow table. */
-	flowId?: Maybe<Scalars['String']>;
-	userStory?: Maybe<FlowUserStoryRelationInput>;
+	flowId?: Maybe<Scalars['Int']>;
 };
 
 /** Flow create many input */
@@ -3372,6 +3386,7 @@ export type FlowCreateManyInput = {
 	browserVersion?: Maybe<Scalars['String']>;
 	operatingSystem?: Maybe<Scalars['String']>;
 	language?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryManyRelationInput>;
 	/** This is the UUID that correlates to the first event in a video in the backend database. */
 	startEventId?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the last event in a video in the backend database. */
@@ -3380,8 +3395,7 @@ export type FlowCreateManyInput = {
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
 	/** The UUID that is the index in the backend flow table. */
-	flowId?: Maybe<Scalars['String']>;
-	userStory?: Maybe<FlowUserStoryManyRelationInput>;
+	flowId?: Maybe<Scalars['Int']>;
 };
 
 /** Flow delete input */
@@ -3418,11 +3432,11 @@ export type FlowFilter = {
 	startEventId?: Maybe<StringPredicate>;
 	endEventId?: Maybe<StringPredicate>;
 	videoGenerationVersion?: Maybe<StringPredicate>;
-	flowId?: Maybe<StringPredicate>;
+	flowId?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
-	video?: Maybe<FileFilter>;
 	userStory?: Maybe<UserStoryFilter>;
+	video?: Maybe<FileFilter>;
 	AND?: Maybe<Array<FlowFilter>>;
 	OR?: Maybe<Array<FlowFilter>>;
 };
@@ -3450,8 +3464,8 @@ export type FlowGroupByQuery = {
 	videoGenerationVersion?: Maybe<Array<GroupByField>>;
 	flowId?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
-	video?: Maybe<FileGroupByQuery>;
 	userStory?: Maybe<UserStoryGroupByQuery>;
+	video?: Maybe<FileGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -3534,17 +3548,13 @@ export type Flows_UserStoryCreateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -3553,12 +3563,16 @@ export type Flows_UserStoryCreateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 	video?: Maybe<UserStoryVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -3568,11 +3582,7 @@ export type Flows_UserStoryCreateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from flows */
@@ -3585,17 +3595,13 @@ export type Flows_UserStoryUpdateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created?: Maybe<Scalars['String']>;
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -3604,12 +3610,16 @@ export type Flows_UserStoryUpdateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created?: Maybe<Scalars['String']>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 	video?: Maybe<UserStoryVideoUpdateRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -3619,11 +3629,7 @@ export type Flows_UserStoryUpdateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 };
 
 export type FlowSort = {
@@ -3641,8 +3647,8 @@ export type FlowSort = {
 	videoGenerationVersion?: Maybe<SortOrder>;
 	flowId?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
-	video?: Maybe<FileSort>;
 	userStory?: Maybe<UserStorySort>;
+	video?: Maybe<FileSort>;
 };
 
 /** Flow subscription filter */
@@ -3662,7 +3668,7 @@ export type FlowUpdateByFilterInput = {
 	startEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	endEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	videoGenerationVersion?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	flowId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	flowId?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
 };
 
 /** Flow update input */
@@ -3673,6 +3679,7 @@ export type FlowUpdateInput = {
 	browserVersion?: Maybe<Scalars['String']>;
 	operatingSystem?: Maybe<Scalars['String']>;
 	language?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryUpdateRelationInput>;
 	/** This is the UUID that correlates to the first event in a video in the backend database. */
 	startEventId?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the last event in a video in the backend database. */
@@ -3681,8 +3688,7 @@ export type FlowUpdateInput = {
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
 	/** The UUID that is the index in the backend flow table. */
-	flowId?: Maybe<Scalars['String']>;
-	userStory?: Maybe<FlowUserStoryUpdateRelationInput>;
+	flowId?: Maybe<Scalars['Int']>;
 };
 
 /** Flow relation input */
@@ -4347,11 +4353,6 @@ export type LoginResponse = {
 /** Configuration create input from logInStory */
 export type LogInStory_ConfigurationCreateInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink: Scalars['String'];
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -4365,6 +4366,14 @@ export type LogInStory_ConfigurationCreateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink: Scalars['String'];
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -4389,19 +4398,13 @@ export type LogInStory_ConfigurationCreateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration update input from logInStory */
 export type LogInStory_ConfigurationUpdateInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink?: Maybe<Scalars['String']>;
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -4415,6 +4418,14 @@ export type LogInStory_ConfigurationUpdateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink?: Maybe<Scalars['String']>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -4439,9 +4450,8 @@ export type LogInStory_ConfigurationUpdateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** UserStory create input from logInStoryConfig */
@@ -4454,17 +4464,13 @@ export type LogInStoryConfig_UserStoryCreateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -4473,12 +4479,16 @@ export type LogInStoryConfig_UserStoryCreateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 	video?: Maybe<UserStoryVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -4488,11 +4498,7 @@ export type LogInStoryConfig_UserStoryCreateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from logInStoryConfig */
@@ -4505,17 +4511,13 @@ export type LogInStoryConfig_UserStoryUpdateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created?: Maybe<Scalars['String']>;
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -4524,12 +4526,16 @@ export type LogInStoryConfig_UserStoryUpdateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created?: Maybe<Scalars['String']>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 	video?: Maybe<UserStoryVideoUpdateRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -4539,11 +4545,7 @@ export type LogInStoryConfig_UserStoryUpdateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 };
 
 /** Project create input from members */
@@ -4554,16 +4556,16 @@ export type Members_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -4598,7 +4600,6 @@ export type Metric = {
 	updatedFlows?: Maybe<Scalars['Int']>;
 	/** The number of flows that didn't get created or assigned to a user story. */
 	ignoredFlows?: Maybe<Scalars['Int']>;
-	/** The project these metrics are stored for. */
 	project?: Maybe<Project>;
 	/** Metrics are calculated daily, this represents that day. The value for March 4th, 2021 would be "03/04/2021". */
 	calculatedFor?: Maybe<Scalars['Date']>;
@@ -4844,16 +4845,16 @@ export type Metrics_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -4865,16 +4866,16 @@ export type Metrics_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -7015,11 +7016,6 @@ export type Project = {
 	/** This avatar image represents your project such as a logo. */
 	avatar?: Maybe<File>;
 	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
-	/**
 	 * This is a relation to Release (table) that allows many releases to a single
 	 * project. A release is a cadence of time in which a batch of work is worked on
 	 * and then pushed to production.
@@ -7029,16 +7025,17 @@ export type Project = {
 	configuration?: Maybe<Configuration>;
 	/** This is a one Project to many Activity (table) relation. It stores details of updates on a given project. */
 	activity?: Maybe<ActivityListResponse>;
-	/**
-	 * This is a many Project to many User (table) relationship. Users can have
-	 * multiple projects and projects can have multiple members.
-	 */
 	members?: Maybe<UserListResponse>;
 	/**
 	 * A one project to many User story (table) relation. User stories are the
 	 * representation of a series of events that users do in a project's production environment.
 	 */
 	userStories?: Maybe<UserStoryListResponse>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	/**
 	 * A one project to many Metric relation. Metric is an internal table calculating
 	 * performance metrics of user story generation algos.
@@ -7116,11 +7113,11 @@ export type ProjectMetricsArgs = {
 export type Project_ActivityCreateInput = {
 	/** A headline of what happened/changed. */
 	title: Scalars['String'];
-	/** Up to 1000 characters of detail about what happened /changed. */
-	description?: Maybe<Scalars['String']>;
 	/** When did this activity happen? */
 	dateTime: Scalars['Date'];
 	project?: Maybe<ActivityProjectRelationInput>;
+	/** Up to 1000 characters of detail about what happened /changed. */
+	description?: Maybe<Scalars['String']>;
 };
 
 /** Activity update input from project */
@@ -7140,8 +7137,8 @@ export type Project_Avatar_FileCreateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 };
 
 /** Files update input from project_avatar */
@@ -7155,18 +7152,13 @@ export type Project_Avatar_FileUpdateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 };
 
 /** Configuration create input from project */
 export type Project_ConfigurationCreateInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink: Scalars['String'];
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -7180,6 +7172,14 @@ export type Project_ConfigurationCreateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink: Scalars['String'];
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -7204,19 +7204,13 @@ export type Project_ConfigurationCreateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Configuration update input from project */
 export type Project_ConfigurationUpdateInput = {
 	/**
-	 * The invitation link is dynamically generated by 8base custom functions. By
-	 * clicking this, other users and new users can join a project.
-	 */
-	inviteLink?: Maybe<Scalars['String']>;
-	/**
 	 * This represents the URL that clients of the app being tested, use in
 	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
 	 * optional field.
@@ -7230,6 +7224,14 @@ export type Project_ConfigurationUpdateInput = {
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
 	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink?: Maybe<Scalars['String']>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
 	/**
 	 * This defines whether the cron job that triggers test runs, should continue for
 	 * this project. It is represented as test runs 'on'/'off' in the webapp.
@@ -7254,9 +7256,8 @@ export type Project_ConfigurationUpdateInput = {
 	billingInterval?: Maybe<Scalars['String']>;
 	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
-	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
-	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
-	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
 };
 
 /** Metrics create input from project */
@@ -7326,12 +7327,12 @@ export type Project_ReleaseCreateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** The manually defined date preparation for a release begins. */
-	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsRelationInput>;
 	project?: Maybe<ReleaseProjectRelationInput>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 };
 
 /** Release update input from project */
@@ -7350,17 +7351,13 @@ export type Project_UserStoryCreateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -7369,12 +7366,16 @@ export type Project_UserStoryCreateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 	video?: Maybe<UserStoryVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -7384,11 +7385,7 @@ export type Project_UserStoryCreateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from project */
@@ -7455,16 +7452,16 @@ export type ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -7476,15 +7473,15 @@ export type ProjectCreateManyInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarManyRelationInput>;
+	release?: Maybe<ProjectReleaseManyRelationInput>;
+	activity?: Maybe<ProjectActivityManyRelationInput>;
+	members?: Maybe<ProjectMembersManyRelationInput>;
+	userStories?: Maybe<ProjectUserStoriesManyRelationInput>;
 	/**
 	 * Do we have events in Aurora for this project? It's an internal field used for
 	 * suggesting script/extension installation at the right time.
 	 */
 	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
-	release?: Maybe<ProjectReleaseManyRelationInput>;
-	activity?: Maybe<ProjectActivityManyRelationInput>;
-	members?: Maybe<ProjectMembersManyRelationInput>;
-	userStories?: Maybe<ProjectUserStoriesManyRelationInput>;
 	metrics?: Maybe<ProjectMetricsManyRelationInput>;
 };
 
@@ -7719,16 +7716,16 @@ export type ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -7948,6 +7945,7 @@ export type QueryCiCdMigrationsListArgs = {
 export type QueryConfigurationArgs = {
 	id?: Maybe<Scalars['ID']>;
 	inviteLink?: Maybe<Scalars['String']>;
+	clientSecret?: Maybe<Scalars['String']>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
@@ -8323,14 +8321,12 @@ export type Release = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** The manually defined date preparation for a release begins. */
-	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
-	/** Test runs in the context of this release. How is the health of my project in this cadence that we're developing? */
 	testRuns?: Maybe<TestRunListResponse>;
-	/** The project this release belongs to. */
 	project?: Maybe<Project>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -8353,8 +8349,8 @@ export type Release_PermissionFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	name?: Maybe<StringPredicate>;
-	startDate?: Maybe<DatePredicate>;
 	releaseDate?: Maybe<DatePredicate>;
+	startDate?: Maybe<DatePredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	testRuns?: Maybe<TestRun_PermissionRelationFilter>;
@@ -8377,16 +8373,16 @@ export type Release_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration: ProjectConfigurationRelationInput;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -8398,16 +8394,16 @@ export type Release_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -8423,13 +8419,13 @@ export type Release_TestRunCreateInput = {
 	status?: Maybe<Scalars['String']>;
 	/** The optional backlink to a CI/CD run or trigger (commit). */
 	runLink?: Maybe<Scalars['String']>;
+	release?: Maybe<TestRunReleaseRelationInput>;
+	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
 	/**
 	 * How long did this test take? It is optional because test runs are created
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
-	release?: Maybe<TestRunReleaseRelationInput>;
-	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
 };
 
 /** TestRun update input from release */
@@ -8445,12 +8441,12 @@ export type ReleaseCreateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** The manually defined date preparation for a release begins. */
-	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsRelationInput>;
 	project?: Maybe<ReleaseProjectRelationInput>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 };
 
 /** Release create many input */
@@ -8460,12 +8456,12 @@ export type ReleaseCreateManyInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** The manually defined date preparation for a release begins. */
-	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsManyRelationInput>;
 	project: ReleaseProjectManyRelationInput;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 };
 
 /** Release delete input */
@@ -8479,8 +8475,8 @@ export type ReleaseFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
 	name?: Maybe<Scalars['Boolean']>;
-	startDate?: Maybe<Scalars['Boolean']>;
 	releaseDate?: Maybe<Scalars['Boolean']>;
+	startDate?: Maybe<Scalars['Boolean']>;
 };
 
 export type ReleaseFilter = {
@@ -8489,8 +8485,8 @@ export type ReleaseFilter = {
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
 	name?: Maybe<StringPredicate>;
-	startDate?: Maybe<DatePredicate>;
 	releaseDate?: Maybe<DatePredicate>;
+	startDate?: Maybe<DatePredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	testRuns?: Maybe<TestRunRelationFilter>;
@@ -8513,8 +8509,8 @@ export type ReleaseGroupByQuery = {
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
 	name?: Maybe<Array<GroupByField>>;
-	startDate?: Maybe<Array<GroupByField>>;
 	releaseDate?: Maybe<Array<GroupByField>>;
+	startDate?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	testRuns?: Maybe<TestRunGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
@@ -8557,10 +8553,10 @@ export enum ReleaseOrderBy {
 	DeletedAtDesc = 'deletedAt_DESC',
 	NameAsc = 'name_ASC',
 	NameDesc = 'name_DESC',
-	StartDateAsc = 'startDate_ASC',
-	StartDateDesc = 'startDate_DESC',
 	ReleaseDateAsc = 'releaseDate_ASC',
 	ReleaseDateDesc = 'releaseDate_DESC',
+	StartDateAsc = 'startDate_ASC',
+	StartDateDesc = 'startDate_DESC',
 }
 
 /** Release subscription payload */
@@ -8604,8 +8600,8 @@ export type ReleaseSort = {
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
 	name?: Maybe<SortOrder>;
-	startDate?: Maybe<SortOrder>;
 	releaseDate?: Maybe<SortOrder>;
+	startDate?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
 };
@@ -8639,9 +8635,9 @@ export type ReleaseTestRunsUpdateRelationInput = {
 
 /** Release update input */
 export type ReleaseUpdateByFilterInput = {
-	name?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
-	startDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
+	name?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	releaseDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
+	startDate?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
 };
 
 /** Release update input */
@@ -8652,12 +8648,12 @@ export type ReleaseUpdateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** The manually defined date preparation for a release begins. */
-	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsUpdateRelationInput>;
 	project?: Maybe<ReleaseProjectUpdateRelationInput>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 };
 
 export type ReplaceFunctionArguments = {
@@ -9091,9 +9087,8 @@ export type ScriptCommand = {
 	 * 3. `click`
 	 * 4. `type`
 	 * 5. `drag and drop`
-	 * 6. `navigation`
-	 * 7. `scroll`
-	 * 8. `api request`
+	 * 6. `scroll`
+	 * 7. `api request`
 	 */
 	command?: Maybe<Scalars['String']>;
 	/** Which step in the test is this? */
@@ -9221,9 +9216,8 @@ export type ScriptCommandCreateInput = {
 	 * 3. `click`
 	 * 4. `type`
 	 * 5. `drag and drop`
-	 * 6. `navigation`
-	 * 7. `scroll`
-	 * 8. `api request`
+	 * 6. `scroll`
+	 * 7. `api request`
 	 */
 	command: Scalars['String'];
 	/** Which step in the test is this? */
@@ -9308,9 +9302,8 @@ export type ScriptCommandCreateManyInput = {
 	 * 3. `click`
 	 * 4. `type`
 	 * 5. `drag and drop`
-	 * 6. `navigation`
-	 * 7. `scroll`
-	 * 8. `api request`
+	 * 6. `scroll`
+	 * 7. `api request`
 	 */
 	command: Scalars['String'];
 	/** Which step in the test is this? */
@@ -9615,17 +9608,13 @@ export type ScriptCommands_UserStoryCreateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -9634,12 +9623,16 @@ export type ScriptCommands_UserStoryCreateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 	video?: Maybe<UserStoryVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -9649,11 +9642,7 @@ export type ScriptCommands_UserStoryCreateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from scriptCommands */
@@ -9666,17 +9655,13 @@ export type ScriptCommands_UserStoryUpdateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created?: Maybe<Scalars['String']>;
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -9685,12 +9670,16 @@ export type ScriptCommands_UserStoryUpdateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created?: Maybe<Scalars['String']>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 	video?: Maybe<UserStoryVideoUpdateRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -9700,11 +9689,7 @@ export type ScriptCommands_UserStoryUpdateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 };
 
 export type ScriptCommandSort = {
@@ -9809,9 +9794,8 @@ export type ScriptCommandUpdateInput = {
 	 * 3. `click`
 	 * 4. `type`
 	 * 5. `drag and drop`
-	 * 6. `navigation`
-	 * 7. `scroll`
-	 * 8. `api request`
+	 * 6. `scroll`
+	 * 7. `api request`
 	 */
 	command?: Maybe<Scalars['String']>;
 	/** Which step in the test is this? */
@@ -12513,8 +12497,8 @@ export type TeamMembers_Avatar_FileCreateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 };
 
 /** Files update input from teamMembers_avatar */
@@ -12528,8 +12512,8 @@ export type TeamMembers_Avatar_FileUpdateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 };
 
 /** Roles create input from teamMembers */
@@ -12637,30 +12621,29 @@ export type TestOutcome = {
 	updatedAt?: Maybe<Scalars['DateTime']>;
 	deletedAt?: Maybe<Scalars['Int']>;
 	createdBy?: Maybe<User>;
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	/**
-	 * The recorded playback of what happened when replaying a test case during a
-	 * test run. This field is only filled for failing test outcomes.
-	 */
-	video?: Maybe<File>;
+	userStory?: Maybe<UserStory>;
 	/**
 	 * Has the bug been resolved? This is an optional field to represent the
 	 * resolution of an issue by means of a linked bug ticket being merged.
 	 */
 	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
+	 * The status of a test case in an individual test run. Test runs create test
+	 * outcomes for each test case / user story in the run.
+	 */
+	status?: Maybe<Scalars['String']>;
+	/** This is the relation to which test run (table) this outcome was generated from. */
+	testRun?: Maybe<TestRun>;
+	/**
+	 * The recorded playback of what happened when replaying a test case during a
+	 * test run. This field is only filled for failing test outcomes.
+	 */
+	video?: Maybe<File>;
+	/**
 	 * This field should only be filled if the status is `failing`. It's the
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
-	/** This is a relation to the single User story (table) that this outcome represents. */
-	userStory?: Maybe<UserStory>;
-	/** This is the relation to which test run (table) this outcome was generated from. */
-	testRun?: Maybe<TestRun>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -12669,14 +12652,14 @@ export type TestOutcome_PermissionFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
-	status?: Maybe<StringPredicate>;
 	isResolved?: Maybe<BoolPredicate>;
+	status?: Maybe<StringPredicate>;
 	errorStepIndex?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
-	video?: Maybe<File_PermissionFilter>;
 	userStory?: Maybe<UserStory_PermissionFilter>;
 	testRun?: Maybe<TestRun_PermissionFilter>;
+	video?: Maybe<File_PermissionFilter>;
 	AND?: Maybe<Array<TestOutcome_PermissionFilter>>;
 	OR?: Maybe<Array<TestOutcome_PermissionFilter>>;
 };
@@ -12699,13 +12682,13 @@ export type TestOutcome_TestRunCreateInput = {
 	status?: Maybe<Scalars['String']>;
 	/** The optional backlink to a CI/CD run or trigger (commit). */
 	runLink?: Maybe<Scalars['String']>;
+	release?: Maybe<TestRunReleaseRelationInput>;
+	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
 	/**
 	 * How long did this test take? It is optional because test runs are created
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
-	release?: Maybe<TestRunReleaseRelationInput>;
-	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
 };
 
 /** TestRun update input from testOutcome */
@@ -12720,13 +12703,13 @@ export type TestOutcome_TestRunUpdateInput = {
 	status?: Maybe<Scalars['String']>;
 	/** The optional backlink to a CI/CD run or trigger (commit). */
 	runLink?: Maybe<Scalars['String']>;
+	release?: Maybe<TestRunReleaseUpdateRelationInput>;
+	testOutcome?: Maybe<TestRunTestOutcomeUpdateRelationInput>;
 	/**
 	 * How long did this test take? It is optional because test runs are created
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
-	release?: Maybe<TestRunReleaseUpdateRelationInput>;
-	testOutcome?: Maybe<TestRunTestOutcomeUpdateRelationInput>;
 };
 
 /** UserStory create input from testOutcome */
@@ -12739,17 +12722,13 @@ export type TestOutcome_UserStoryCreateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -12758,12 +12737,16 @@ export type TestOutcome_UserStoryCreateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 	video?: Maybe<UserStoryVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -12773,11 +12756,7 @@ export type TestOutcome_UserStoryCreateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from testOutcome */
@@ -12790,17 +12769,13 @@ export type TestOutcome_UserStoryUpdateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created?: Maybe<Scalars['String']>;
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -12809,12 +12784,16 @@ export type TestOutcome_UserStoryUpdateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created?: Maybe<Scalars['String']>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 	video?: Maybe<UserStoryVideoUpdateRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -12824,11 +12803,7 @@ export type TestOutcome_UserStoryUpdateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 };
 
 /** Files create input from testOutcome_video */
@@ -12842,8 +12817,8 @@ export type TestOutcome_Video_FileCreateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 };
 
 /** Files update input from testOutcome_video */
@@ -12857,52 +12832,52 @@ export type TestOutcome_Video_FileUpdateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 };
 
 /** TestOutcome create input */
 export type TestOutcomeCreateInput = {
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	video?: Maybe<TestOutcomeVideoRelationInput>;
+	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
 	/**
 	 * Has the bug been resolved? This is an optional field to represent the
 	 * resolution of an issue by means of a linked bug ticket being merged.
 	 */
 	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
+	 * The status of a test case in an individual test run. Test runs create test
+	 * outcomes for each test case / user story in the run.
+	 */
+	status?: Maybe<Scalars['String']>;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
+	video?: Maybe<TestOutcomeVideoRelationInput>;
+	/**
 	 * This field should only be filled if the status is `failing`. It's the
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome create many input */
 export type TestOutcomeCreateManyInput = {
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	video?: Maybe<TestOutcomeVideoManyRelationInput>;
+	userStory: TestOutcomeUserStoryManyRelationInput;
 	/**
 	 * Has the bug been resolved? This is an optional field to represent the
 	 * resolution of an issue by means of a linked bug ticket being merged.
 	 */
 	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
+	 * The status of a test case in an individual test run. Test runs create test
+	 * outcomes for each test case / user story in the run.
+	 */
+	status?: Maybe<Scalars['String']>;
+	testRun?: Maybe<TestOutcomeTestRunManyRelationInput>;
+	video?: Maybe<TestOutcomeVideoManyRelationInput>;
+	/**
 	 * This field should only be filled if the status is `failing`. It's the
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
-	userStory: TestOutcomeUserStoryManyRelationInput;
-	testRun?: Maybe<TestOutcomeTestRunManyRelationInput>;
 };
 
 /** TestOutcome delete input */
@@ -12915,8 +12890,8 @@ export type TestOutcomeDeleteInput = {
 export type TestOutcomeFieldsPermissions = {
 	createdAt?: Maybe<Scalars['Boolean']>;
 	updatedAt?: Maybe<Scalars['Boolean']>;
-	status?: Maybe<Scalars['Boolean']>;
 	isResolved?: Maybe<Scalars['Boolean']>;
+	status?: Maybe<Scalars['Boolean']>;
 	errorStepIndex?: Maybe<Scalars['Boolean']>;
 };
 
@@ -12925,14 +12900,14 @@ export type TestOutcomeFilter = {
 	createdAt?: Maybe<DateTimePredicate>;
 	updatedAt?: Maybe<DateTimePredicate>;
 	deletedAt?: Maybe<IntPredicate>;
-	status?: Maybe<StringPredicate>;
 	isResolved?: Maybe<BoolPredicate>;
+	status?: Maybe<StringPredicate>;
 	errorStepIndex?: Maybe<IntPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
-	video?: Maybe<FileFilter>;
 	userStory?: Maybe<UserStoryFilter>;
 	testRun?: Maybe<TestRunFilter>;
+	video?: Maybe<FileFilter>;
 	AND?: Maybe<Array<TestOutcomeFilter>>;
 	OR?: Maybe<Array<TestOutcomeFilter>>;
 };
@@ -12950,13 +12925,13 @@ export type TestOutcomeGroupByQuery = {
 	id?: Maybe<Array<GroupByField>>;
 	createdAt?: Maybe<Array<GroupByField>>;
 	updatedAt?: Maybe<Array<GroupByField>>;
-	status?: Maybe<Array<GroupByField>>;
 	isResolved?: Maybe<Array<GroupByField>>;
+	status?: Maybe<Array<GroupByField>>;
 	errorStepIndex?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
-	video?: Maybe<FileGroupByQuery>;
 	userStory?: Maybe<UserStoryGroupByQuery>;
 	testRun?: Maybe<TestRunGroupByQuery>;
+	video?: Maybe<FileGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -12994,10 +12969,10 @@ export enum TestOutcomeOrderBy {
 	UpdatedAtDesc = 'updatedAt_DESC',
 	DeletedAtAsc = 'deletedAt_ASC',
 	DeletedAtDesc = 'deletedAt_DESC',
-	StatusAsc = 'status_ASC',
-	StatusDesc = 'status_DESC',
 	IsResolvedAsc = 'isResolved_ASC',
 	IsResolvedDesc = 'isResolved_DESC',
+	StatusAsc = 'status_ASC',
+	StatusDesc = 'status_DESC',
 	ErrorStepIndexAsc = 'errorStepIndex_ASC',
 	ErrorStepIndexDesc = 'errorStepIndex_DESC',
 }
@@ -13022,13 +12997,13 @@ export type TestOutcomeSort = {
 	createdAt?: Maybe<SortOrder>;
 	updatedAt?: Maybe<SortOrder>;
 	deletedAt?: Maybe<SortOrder>;
-	status?: Maybe<SortOrder>;
 	isResolved?: Maybe<SortOrder>;
+	status?: Maybe<SortOrder>;
 	errorStepIndex?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
-	video?: Maybe<FileSort>;
 	userStory?: Maybe<UserStorySort>;
 	testRun?: Maybe<TestRunSort>;
+	video?: Maybe<FileSort>;
 };
 
 /** TestOutcome subscription filter */
@@ -13060,32 +13035,32 @@ export type TestOutcomeTestRunUpdateRelationInput = {
 
 /** TestOutcome update input */
 export type TestOutcomeUpdateByFilterInput = {
-	status?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	isResolved?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
+	status?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	errorStepIndex?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
 };
 
 /** TestOutcome update input */
 export type TestOutcomeUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	video?: Maybe<TestOutcomeVideoUpdateRelationInput>;
+	userStory?: Maybe<TestOutcomeUserStoryUpdateRelationInput>;
 	/**
 	 * Has the bug been resolved? This is an optional field to represent the
 	 * resolution of an issue by means of a linked bug ticket being merged.
 	 */
 	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
+	 * The status of a test case in an individual test run. Test runs create test
+	 * outcomes for each test case / user story in the run.
+	 */
+	status?: Maybe<Scalars['String']>;
+	testRun?: Maybe<TestOutcomeTestRunUpdateRelationInput>;
+	video?: Maybe<TestOutcomeVideoUpdateRelationInput>;
+	/**
 	 * This field should only be filled if the status is `failing`. It's the
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
-	userStory?: Maybe<TestOutcomeUserStoryUpdateRelationInput>;
-	testRun?: Maybe<TestOutcomeTestRunUpdateRelationInput>;
 };
 
 /** TestOutcome relation input */
@@ -13149,19 +13124,14 @@ export type TestRun = {
 	status?: Maybe<Scalars['String']>;
 	/** The optional backlink to a CI/CD run or trigger (commit). */
 	runLink?: Maybe<Scalars['String']>;
+	/** This is a relation to the release (table) this test run is in context of. */
+	release?: Maybe<Release>;
+	testOutcome?: Maybe<TestOutcomeListResponse>;
 	/**
 	 * How long did this test take? It is optional because test runs are created
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
-	/** This is a relation to the release (table) this test run is in context of. */
-	release?: Maybe<Release>;
-	/**
-	 * Test outcomes represent the result of an individual test case (user story
-	 * marked as `isTestCase=true`) in a particular run. There should be one outcome
-	 * per test run that represents a test case for the project in context.
-	 */
-	testOutcome?: Maybe<TestOutcomeListResponse>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -13205,24 +13175,24 @@ export type TestRun_PermissionRelationFilter = {
 
 /** TestOutcome create input from testRun */
 export type TestRun_TestOutcomeCreateInput = {
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	video?: Maybe<TestOutcomeVideoRelationInput>;
+	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
 	/**
 	 * Has the bug been resolved? This is an optional field to represent the
 	 * resolution of an issue by means of a linked bug ticket being merged.
 	 */
 	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
+	 * The status of a test case in an individual test run. Test runs create test
+	 * outcomes for each test case / user story in the run.
+	 */
+	status?: Maybe<Scalars['String']>;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
+	video?: Maybe<TestOutcomeVideoRelationInput>;
+	/**
 	 * This field should only be filled if the status is `failing`. It's the
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome update input from testRun */
@@ -13243,13 +13213,13 @@ export type TestRunCreateInput = {
 	status?: Maybe<Scalars['String']>;
 	/** The optional backlink to a CI/CD run or trigger (commit). */
 	runLink?: Maybe<Scalars['String']>;
+	release?: Maybe<TestRunReleaseRelationInput>;
+	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
 	/**
 	 * How long did this test take? It is optional because test runs are created
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
-	release?: Maybe<TestRunReleaseRelationInput>;
-	testOutcome?: Maybe<TestRunTestOutcomeRelationInput>;
 };
 
 /** TestRun create many input */
@@ -13264,13 +13234,13 @@ export type TestRunCreateManyInput = {
 	status?: Maybe<Scalars['String']>;
 	/** The optional backlink to a CI/CD run or trigger (commit). */
 	runLink?: Maybe<Scalars['String']>;
+	release: TestRunReleaseManyRelationInput;
+	testOutcome?: Maybe<TestRunTestOutcomeManyRelationInput>;
 	/**
 	 * How long did this test take? It is optional because test runs are created
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
-	release: TestRunReleaseManyRelationInput;
-	testOutcome?: Maybe<TestRunTestOutcomeManyRelationInput>;
 };
 
 /** TestRun delete input */
@@ -13410,12 +13380,12 @@ export type TestRuns_ReleaseCreateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** The manually defined date preparation for a release begins. */
-	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsRelationInput>;
 	project?: Maybe<ReleaseProjectRelationInput>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 };
 
 /** Release update input from testRuns */
@@ -13425,12 +13395,12 @@ export type TestRuns_ReleaseUpdateInput = {
 	 * "echo", "foxtrot", "golf" or "v0.0.1", "v0.3.2".
 	 */
 	name?: Maybe<Scalars['String']>;
-	/** The manually defined date preparation for a release begins. */
-	startDate?: Maybe<Scalars['Date']>;
 	/** The manually defined and planned date of a release merging to production. */
 	releaseDate?: Maybe<Scalars['Date']>;
 	testRuns?: Maybe<ReleaseTestRunsUpdateRelationInput>;
 	project?: Maybe<ReleaseProjectUpdateRelationInput>;
+	/** The manually defined date preparation for a release begins. */
+	startDate?: Maybe<Scalars['Date']>;
 };
 
 export type TestRunSort = {
@@ -13492,13 +13462,13 @@ export type TestRunUpdateInput = {
 	status?: Maybe<Scalars['String']>;
 	/** The optional backlink to a CI/CD run or trigger (commit). */
 	runLink?: Maybe<Scalars['String']>;
+	release?: Maybe<TestRunReleaseUpdateRelationInput>;
+	testOutcome?: Maybe<TestRunTestOutcomeUpdateRelationInput>;
 	/**
 	 * How long did this test take? It is optional because test runs are created
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
-	release?: Maybe<TestRunReleaseUpdateRelationInput>;
-	testOutcome?: Maybe<TestRunTestOutcomeUpdateRelationInput>;
 };
 
 /** Text Field Attributes */
@@ -13939,8 +13909,8 @@ export type Users_Avatar_FileCreateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 };
 
 /** Files update input from users_avatar */
@@ -13954,8 +13924,8 @@ export type Users_Avatar_FileUpdateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 };
 
 /** Roles create input from users */
@@ -14061,16 +14031,16 @@ export type UserStories_ProjectCreateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseRelationInput>;
 	configuration?: Maybe<ProjectConfigurationRelationInput>;
 	activity?: Maybe<ProjectActivityRelationInput>;
 	members?: Maybe<ProjectMembersRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsRelationInput>;
 };
 
@@ -14082,16 +14052,16 @@ export type UserStories_ProjectUpdateInput = {
 	 */
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<ProjectAvatarUpdateRelationInput>;
-	/**
-	 * Do we have events in Aurora for this project? It's an internal field used for
-	 * suggesting script/extension installation at the right time.
-	 */
-	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	release?: Maybe<ProjectReleaseUpdateRelationInput>;
 	configuration?: Maybe<ProjectConfigurationUpdateRelationInput>;
 	activity?: Maybe<ProjectActivityUpdateRelationInput>;
 	members?: Maybe<ProjectMembersUpdateRelationInput>;
 	userStories?: Maybe<ProjectUserStoriesUpdateRelationInput>;
+	/**
+	 * Do we have events in Aurora for this project? It's an internal field used for
+	 * suggesting script/extension installation at the right time.
+	 */
+	hasReceivedEvents?: Maybe<Scalars['Boolean']>;
 	metrics?: Maybe<ProjectMetricsUpdateRelationInput>;
 };
 
@@ -14106,9 +14076,8 @@ export type UserStories_ScriptCommandCreateInput = {
 	 * 3. `click`
 	 * 4. `type`
 	 * 5. `drag and drop`
-	 * 6. `navigation`
-	 * 7. `scroll`
-	 * 8. `api request`
+	 * 6. `scroll`
+	 * 7. `api request`
 	 */
 	command: Scalars['String'];
 	/** Which step in the test is this? */
@@ -14204,17 +14173,13 @@ export type UserStory = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created?: Maybe<Scalars['String']>;
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -14224,11 +14189,19 @@ export type UserStory = {
 	 */
 	significance?: Maybe<Scalars['String']>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * Each time this user story is included in a test run, it produces a test
+	 * outcome that explains its current state of being able to pass.
 	 */
-	created?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<TestOutcomeListResponse>;
+	project?: Maybe<Project>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<Configuration>;
+	scriptCommands?: Maybe<ScriptCommandListResponse>;
 	/** A video representation of the user story recreated out of the DOM/s the events were generated from. */
 	video?: Maybe<File>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
@@ -14240,27 +14213,11 @@ export type UserStory = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	/**
-	 * Each time this user story is included in a test run, it produces a test
-	 * outcome that explains its current state of being able to pass.
-	 */
-	testOutcome?: Maybe<TestOutcomeListResponse>;
-	/**
 	 * Information about an individual flows that make up this user story such as the
 	 * user agent, video, and flow id. The count of `flows` will also answer the
 	 * question "How many of my users are doing this?".
 	 */
 	flows?: Maybe<FlowListResponse>;
-	/** The application (project) this user story represents. */
-	project?: Maybe<Project>;
-	/**
-	 * This is the one user story to one configuration relation that represents a
-	 * single user story being the log in story. The log in story is a single user
-	 * story that records redacted fields like password to be replayed infront of
-	 * other user stories to authenticate a session.
-	 */
-	logInStoryConfig?: Maybe<Configuration>;
-	/** A one user story to many script commands relation. This represents which events make up a user story. */
-	scriptCommands?: Maybe<ScriptCommandListResponse>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -14278,19 +14235,6 @@ export type UserStoryTestOutcomeArgs = {
 };
 
 /** User stories are the representation of what users do in a project's production environment. */
-export type UserStoryFlowsArgs = {
-	filter?: Maybe<FlowFilter>;
-	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
-	sort?: Maybe<Array<FlowSort>>;
-	skip?: Maybe<Scalars['Int']>;
-	after?: Maybe<Scalars['String']>;
-	before?: Maybe<Scalars['String']>;
-	first?: Maybe<Scalars['Int']>;
-	last?: Maybe<Scalars['Int']>;
-	groupBy?: Maybe<FlowGroupBy>;
-};
-
-/** User stories are the representation of what users do in a project's production environment. */
 export type UserStoryScriptCommandsArgs = {
 	filter?: Maybe<ScriptCommandFilter>;
 	orderBy?: Maybe<Array<Maybe<ScriptCommandOrderBy>>>;
@@ -14303,6 +14247,19 @@ export type UserStoryScriptCommandsArgs = {
 	groupBy?: Maybe<ScriptCommandGroupBy>;
 };
 
+/** User stories are the representation of what users do in a project's production environment. */
+export type UserStoryFlowsArgs = {
+	filter?: Maybe<FlowFilter>;
+	orderBy?: Maybe<Array<Maybe<FlowOrderBy>>>;
+	sort?: Maybe<Array<FlowSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<FlowGroupBy>;
+};
+
 /** Flow create input from userStory */
 export type UserStory_FlowCreateInput = {
 	ipAddress?: Maybe<Scalars['String']>;
@@ -14310,6 +14267,7 @@ export type UserStory_FlowCreateInput = {
 	browserVersion?: Maybe<Scalars['String']>;
 	operatingSystem?: Maybe<Scalars['String']>;
 	language?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryRelationInput>;
 	/** This is the UUID that correlates to the first event in a video in the backend database. */
 	startEventId?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the last event in a video in the backend database. */
@@ -14318,8 +14276,7 @@ export type UserStory_FlowCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
 	/** The UUID that is the index in the backend flow table. */
-	flowId?: Maybe<Scalars['String']>;
-	userStory?: Maybe<FlowUserStoryRelationInput>;
+	flowId?: Maybe<Scalars['Int']>;
 };
 
 /** Flow update input from userStory */
@@ -14337,22 +14294,22 @@ export type UserStory_PermissionFilter = {
 	description?: Maybe<StringPredicate>;
 	isTestCase?: Maybe<BoolPredicate>;
 	testCreatedDate?: Maybe<DateTimePredicate>;
-	isExpected?: Maybe<BoolPredicate>;
-	requiresAuthentication?: Maybe<BoolPredicate>;
-	significance?: Maybe<StringPredicate>;
 	created?: Maybe<StringPredicate>;
+	isExpected?: Maybe<BoolPredicate>;
+	significance?: Maybe<StringPredicate>;
+	requiresAuthentication?: Maybe<BoolPredicate>;
 	videoGenerationVersion?: Maybe<StringPredicate>;
 	startEventId?: Maybe<StringPredicate>;
 	endEventId?: Maybe<StringPredicate>;
 	scriptVersion?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
-	video?: Maybe<File_PermissionFilter>;
 	testOutcome?: Maybe<TestOutcome_PermissionRelationFilter>;
-	flows?: Maybe<Flow_PermissionRelationFilter>;
 	project?: Maybe<Project_PermissionFilter>;
 	logInStoryConfig?: Maybe<Configuration_PermissionFilter>;
 	scriptCommands?: Maybe<ScriptCommand_PermissionRelationFilter>;
+	video?: Maybe<File_PermissionFilter>;
+	flows?: Maybe<Flow_PermissionRelationFilter>;
 	AND?: Maybe<Array<UserStory_PermissionFilter>>;
 	OR?: Maybe<Array<UserStory_PermissionFilter>>;
 };
@@ -14365,24 +14322,24 @@ export type UserStory_PermissionRelationFilter = {
 
 /** TestOutcome create input from userStory */
 export type UserStory_TestOutcomeCreateInput = {
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	video?: Maybe<TestOutcomeVideoRelationInput>;
+	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
 	/**
 	 * Has the bug been resolved? This is an optional field to represent the
 	 * resolution of an issue by means of a linked bug ticket being merged.
 	 */
 	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
+	 * The status of a test case in an individual test run. Test runs create test
+	 * outcomes for each test case / user story in the run.
+	 */
+	status?: Maybe<Scalars['String']>;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
+	video?: Maybe<TestOutcomeVideoRelationInput>;
+	/**
 	 * This field should only be filled if the status is `failing`. It's the
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
-	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome update input from userStory */
@@ -14402,8 +14359,8 @@ export type UserStory_Video_FileCreateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoRelationInput>;
 };
 
 /** Files update input from userStory_video */
@@ -14417,8 +14374,8 @@ export type UserStory_Video_FileUpdateInput = {
 	teamMembers_avatar?: Maybe<FilesTeamMembers_AvatarUpdateRelationInput>;
 	project_avatar?: Maybe<FilesProject_AvatarUpdateRelationInput>;
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
-	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
+	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
 };
 
 /** UserStory create input */
@@ -14431,17 +14388,13 @@ export type UserStoryCreateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -14450,12 +14403,16 @@ export type UserStoryCreateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 	video?: Maybe<UserStoryVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -14465,11 +14422,7 @@ export type UserStoryCreateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory create many input */
@@ -14482,17 +14435,13 @@ export type UserStoryCreateManyInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -14501,12 +14450,16 @@ export type UserStoryCreateManyInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeManyRelationInput>;
+	project: UserStoryProjectManyRelationInput;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigManyRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsManyRelationInput>;
 	video?: Maybe<UserStoryVideoManyRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -14516,11 +14469,7 @@ export type UserStoryCreateManyInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeManyRelationInput>;
 	flows?: Maybe<UserStoryFlowsManyRelationInput>;
-	project: UserStoryProjectManyRelationInput;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigManyRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsManyRelationInput>;
 };
 
 /** UserStory delete input */
@@ -14537,10 +14486,10 @@ export type UserStoryFieldsPermissions = {
 	description?: Maybe<Scalars['Boolean']>;
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	testCreatedDate?: Maybe<Scalars['Boolean']>;
-	isExpected?: Maybe<Scalars['Boolean']>;
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
-	significance?: Maybe<Scalars['Boolean']>;
 	created?: Maybe<Scalars['Boolean']>;
+	isExpected?: Maybe<Scalars['Boolean']>;
+	significance?: Maybe<Scalars['Boolean']>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	videoGenerationVersion?: Maybe<Scalars['Boolean']>;
 	startEventId?: Maybe<Scalars['Boolean']>;
 	endEventId?: Maybe<Scalars['Boolean']>;
@@ -14556,22 +14505,22 @@ export type UserStoryFilter = {
 	description?: Maybe<StringPredicate>;
 	isTestCase?: Maybe<BoolPredicate>;
 	testCreatedDate?: Maybe<DateTimePredicate>;
-	isExpected?: Maybe<BoolPredicate>;
-	requiresAuthentication?: Maybe<BoolPredicate>;
-	significance?: Maybe<StringPredicate>;
 	created?: Maybe<StringPredicate>;
+	isExpected?: Maybe<BoolPredicate>;
+	significance?: Maybe<StringPredicate>;
+	requiresAuthentication?: Maybe<BoolPredicate>;
 	videoGenerationVersion?: Maybe<StringPredicate>;
 	startEventId?: Maybe<StringPredicate>;
 	endEventId?: Maybe<StringPredicate>;
 	scriptVersion?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
-	video?: Maybe<FileFilter>;
 	testOutcome?: Maybe<TestOutcomeRelationFilter>;
-	flows?: Maybe<FlowRelationFilter>;
 	project?: Maybe<ProjectFilter>;
 	logInStoryConfig?: Maybe<ConfigurationFilter>;
 	scriptCommands?: Maybe<ScriptCommandRelationFilter>;
+	video?: Maybe<FileFilter>;
+	flows?: Maybe<FlowRelationFilter>;
 	AND?: Maybe<Array<UserStoryFilter>>;
 	OR?: Maybe<Array<UserStoryFilter>>;
 };
@@ -14613,21 +14562,21 @@ export type UserStoryGroupByQuery = {
 	description?: Maybe<Array<GroupByField>>;
 	isTestCase?: Maybe<Array<GroupByField>>;
 	testCreatedDate?: Maybe<Array<GroupByField>>;
-	isExpected?: Maybe<Array<GroupByField>>;
-	requiresAuthentication?: Maybe<Array<GroupByField>>;
-	significance?: Maybe<Array<GroupByField>>;
 	created?: Maybe<Array<GroupByField>>;
+	isExpected?: Maybe<Array<GroupByField>>;
+	significance?: Maybe<Array<GroupByField>>;
+	requiresAuthentication?: Maybe<Array<GroupByField>>;
 	videoGenerationVersion?: Maybe<Array<GroupByField>>;
 	startEventId?: Maybe<Array<GroupByField>>;
 	endEventId?: Maybe<Array<GroupByField>>;
 	scriptVersion?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
-	video?: Maybe<FileGroupByQuery>;
 	testOutcome?: Maybe<TestOutcomeGroupByQuery>;
-	flows?: Maybe<FlowGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	logInStoryConfig?: Maybe<ConfigurationGroupByQuery>;
 	scriptCommands?: Maybe<ScriptCommandGroupByQuery>;
+	video?: Maybe<FileGroupByQuery>;
+	flows?: Maybe<FlowGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -14693,14 +14642,14 @@ export enum UserStoryOrderBy {
 	IsTestCaseDesc = 'isTestCase_DESC',
 	TestCreatedDateAsc = 'testCreatedDate_ASC',
 	TestCreatedDateDesc = 'testCreatedDate_DESC',
-	IsExpectedAsc = 'isExpected_ASC',
-	IsExpectedDesc = 'isExpected_DESC',
-	RequiresAuthenticationAsc = 'requiresAuthentication_ASC',
-	RequiresAuthenticationDesc = 'requiresAuthentication_DESC',
-	SignificanceAsc = 'significance_ASC',
-	SignificanceDesc = 'significance_DESC',
 	CreatedAsc = 'created_ASC',
 	CreatedDesc = 'created_DESC',
+	IsExpectedAsc = 'isExpected_ASC',
+	IsExpectedDesc = 'isExpected_DESC',
+	SignificanceAsc = 'significance_ASC',
+	SignificanceDesc = 'significance_DESC',
+	RequiresAuthenticationAsc = 'requiresAuthentication_ASC',
+	RequiresAuthenticationDesc = 'requiresAuthentication_DESC',
 	VideoGenerationVersionAsc = 'videoGenerationVersion_ASC',
 	VideoGenerationVersionDesc = 'videoGenerationVersion_DESC',
 	StartEventIdAsc = 'startEventId_ASC',
@@ -14775,18 +14724,18 @@ export type UserStorySort = {
 	description?: Maybe<SortOrder>;
 	isTestCase?: Maybe<SortOrder>;
 	testCreatedDate?: Maybe<SortOrder>;
-	isExpected?: Maybe<SortOrder>;
-	requiresAuthentication?: Maybe<SortOrder>;
-	significance?: Maybe<SortOrder>;
 	created?: Maybe<SortOrder>;
+	isExpected?: Maybe<SortOrder>;
+	significance?: Maybe<SortOrder>;
+	requiresAuthentication?: Maybe<SortOrder>;
 	videoGenerationVersion?: Maybe<SortOrder>;
 	startEventId?: Maybe<SortOrder>;
 	endEventId?: Maybe<SortOrder>;
 	scriptVersion?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
-	video?: Maybe<FileSort>;
 	project?: Maybe<ProjectSort>;
 	logInStoryConfig?: Maybe<ConfigurationSort>;
+	video?: Maybe<FileSort>;
 };
 
 /** UserStory subscription filter */
@@ -14822,12 +14771,12 @@ export type UserStoryUpdateByFilterInput = {
 	description?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	isTestCase?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 	testCreatedDate?: Maybe<Array<Maybe<UpdateByFilterDateTimeInput>>>;
+	created?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	isExpected?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
+	significance?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	requiresAuthentication?: Maybe<
 		Array<Maybe<UpdateByFilterBooleanSwitchInput>>
 	>;
-	significance?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
-	created?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	videoGenerationVersion?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	startEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	endEventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
@@ -14845,17 +14794,13 @@ export type UserStoryUpdateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created?: Maybe<Scalars['String']>;
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -14864,12 +14809,16 @@ export type UserStoryUpdateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
+	project?: Maybe<UserStoryProjectUpdateRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created?: Maybe<Scalars['String']>;
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 	video?: Maybe<UserStoryVideoUpdateRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -14879,11 +14828,7 @@ export type UserStoryUpdateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeUpdateRelationInput>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
-	project?: Maybe<UserStoryProjectUpdateRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigUpdateRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsUpdateRelationInput>;
 };
 
 /** UserStory relation input */
@@ -14962,6 +14907,7 @@ export type Video_FlowCreateInput = {
 	browserVersion?: Maybe<Scalars['String']>;
 	operatingSystem?: Maybe<Scalars['String']>;
 	language?: Maybe<Scalars['String']>;
+	userStory?: Maybe<FlowUserStoryRelationInput>;
 	/** This is the UUID that correlates to the first event in a video in the backend database. */
 	startEventId?: Maybe<Scalars['String']>;
 	/** This is the UUID that correlates to the last event in a video in the backend database. */
@@ -14970,8 +14916,7 @@ export type Video_FlowCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
 	/** The UUID that is the index in the backend flow table. */
-	flowId?: Maybe<Scalars['String']>;
-	userStory?: Maybe<FlowUserStoryRelationInput>;
+	flowId?: Maybe<Scalars['Int']>;
 };
 
 /** Flow update input from video */
@@ -14982,24 +14927,24 @@ export type Video_FlowUpdateInput = {
 
 /** TestOutcome create input from video */
 export type Video_TestOutcomeCreateInput = {
-	/**
-	 * The status of a test case in an individual test run. Test runs create test
-	 * outcomes for each test case / user story in the run.
-	 */
-	status?: Maybe<Scalars['String']>;
-	video?: Maybe<TestOutcomeVideoRelationInput>;
+	userStory?: Maybe<TestOutcomeUserStoryRelationInput>;
 	/**
 	 * Has the bug been resolved? This is an optional field to represent the
 	 * resolution of an issue by means of a linked bug ticket being merged.
 	 */
 	isResolved?: Maybe<Scalars['Boolean']>;
 	/**
+	 * The status of a test case in an individual test run. Test runs create test
+	 * outcomes for each test case / user story in the run.
+	 */
+	status?: Maybe<Scalars['String']>;
+	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
+	video?: Maybe<TestOutcomeVideoRelationInput>;
+	/**
 	 * This field should only be filled if the status is `failing`. It's the
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
-	userStory: TestOutcomeUserStoryRelationInput;
-	testRun?: Maybe<TestOutcomeTestRunRelationInput>;
 };
 
 /** TestOutcome update input from video */
@@ -15018,17 +14963,13 @@ export type Video_UserStoryCreateInput = {
 	isTestCase?: Maybe<Scalars['Boolean']>;
 	/** When was this recording marked as a test case? */
 	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
 	/**
 	 * The initial inference/calculated guess if a User Story should become a test or
 	 * not. Guesses the answer to the question: "Is the application behaving as expected"
 	 */
 	isExpected?: Maybe<Scalars['Boolean']>;
-	/**
-	 * A boolean field to distinguish between non-authenticated and authenticated
-	 * user stories. `requiresAuthentication` is marking a test as needing to be
-	 * logged in to complete the set of actions in the user story.
-	 */
-	requiresAuthentication?: Maybe<Scalars['Boolean']>;
 	/**
 	 * Marks the significance of a user story for calculation of the confidence score
 	 * and weight of choices. A user story will default as `low`. Options are:
@@ -15037,12 +14978,16 @@ export type Video_UserStoryCreateInput = {
 	 * 3. `high`
 	 */
 	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
 	/**
-	 * Is the answer to "Who created this user story?", a user or a product manager
-	 * via the chrome extension. Options are `user` and `manual`. This is a mandatory
-	 * field that has no default value so it needs to be specified in a create mutation.
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
 	 */
-	created: Scalars['String'];
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 	video?: Maybe<UserStoryVideoRelationInput>;
 	/** This version allows us to peg what data and strategy was used to generate a video. */
 	videoGenerationVersion?: Maybe<Scalars['String']>;
@@ -15052,11 +14997,7 @@ export type Video_UserStoryCreateInput = {
 	endEventId?: Maybe<Scalars['String']>;
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
-	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
-	project?: Maybe<UserStoryProjectRelationInput>;
-	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
-	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
 };
 
 /** UserStory update input from video */
