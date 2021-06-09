@@ -8,6 +8,7 @@ export default async function logout(
 	try {
 		const auth0 = initAuth0(req);
 		await auth0.handleLogout(req, res);
+		await window.CommandBar.shutdown();
 	} catch (error) {
 		console.error(error);
 		res.status(error.status || 500).end(error.message);
