@@ -131,7 +131,8 @@ const TestRunsPage = () => {
 			toggle: true,
 		});
 
-		const updatedTestRunnerToggle = response.projectUpdate.configuration.activeTestRuns;
+		const updatedTestRunnerToggle =
+			response.projectUpdate.configuration.activeTestRuns;
 		setProject({
 			...project,
 			configuration: {
@@ -149,25 +150,31 @@ const TestRunsPage = () => {
 
 			const response = await fetch(
 				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
-				'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
+					'https://7cs97h8es9.execute-api.eu-west-1.amazonaws.com/main/test-trigger',
 				{
 					method: 'POST',
-					mode: 'no-cors',
+					// mode: 'no-cors',
 					headers: {
 						'Content-Type': 'application/json',
+						'meeshkan-client-secret': project?.configuration?.clientSecret,
 					},
 					body: JSON.stringify({
 						clientId: project?.id,
 						url: stagingURL,
 					}),
 				}
-			);
+			).then((res) => {
+				return res.json();
+			});
 
 			await toaster({
 				title: 'Test run triggered',
 				description: 'The run should show up shortly.',
 				status: 'success',
 			});
+
+			console.log(response);
+			return response;
 		} catch (error) {
 			console.error(error.message);
 			toaster({
@@ -264,7 +271,7 @@ const TestRunsPage = () => {
 												<Text fontSize="40px" fontWeight="700">
 													{Math.round(
 														(latestTestRunStats[label] / totalTestRunOutcomes) *
-														100
+															100
 													)}
 													%
 												</Text>
@@ -436,7 +443,7 @@ const TestRunsPage = () => {
 								return (
 									<TestRunCard
 										id={id}
-										key={id}
+										key={testRuns.length - index}
 										status={status}
 										runNumber={testRuns.length - index}
 										date={new Date(createdAt)}

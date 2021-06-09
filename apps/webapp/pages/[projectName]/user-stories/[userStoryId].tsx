@@ -174,11 +174,13 @@ const UserStoryPage = (props: UserStoryProps) => {
 
 		const updatedUserStories = [...response.userStoryUpdateByFilter.items];
 
-		updatedUserStories.find(userStory => userStory.id === userStoryId).isAuthenticated = isAuthenticated;
+		updatedUserStories.find(
+			(userStory) => userStory.id === userStoryId
+		).isAuthenticated = isAuthenticated;
 
 		setProject({
 			...project,
-			userStories: { ...project.userStories, items: updatedUserStories }
+			userStories: { ...project.userStories, items: updatedUserStories },
 		});
 	};
 
@@ -252,7 +254,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 		setLoading(true);
 
 		fetch(
-			'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
+			process.env.NEXT_PUBLIC_MAKE_VIDEO_ENDPOINT ||
+				'https://ouiozc4d8a.execute-api.eu-west-1.amazonaws.com/main/make-video',
 			{
 				method: 'POST',
 				mode: 'no-cors',
@@ -381,7 +384,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								{data.userStory.created}
 							</Code>
 							{data.userStory.isTestCase === true ? null : data.userStory
-								.isExpected ? (
+									.isExpected ? (
 								<Code
 									colorScheme="cyan"
 									fontWeight="700"
@@ -412,7 +415,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								</Code>
 							)}
 							{data.userStory.configuration !== null &&
-								data.userStory.configuration.logInFlow.id === userStoryId ? (
+							data.userStory.configuration.logInFlow.id === userStoryId ? (
 								<Tooltip label="This is the 'Log in flow'" placement="right">
 									<Badge
 										colorScheme="amber"
@@ -476,13 +479,19 @@ const UserStoryPage = (props: UserStoryProps) => {
 										Copy link
 									</MenuItem>
 									<MenuItem>
-										<Checkbox onChange={() => { updateRequiresAuthentication(!data?.userStory?.isAuthenticated) }} defaultChecked={data?.userStory?.isAuthenticated}>Requires authentication</Checkbox>
+										<Checkbox
+											onChange={() => {
+												updateRequiresAuthentication(
+													!data?.userStory?.isAuthenticated
+												);
+											}}
+											defaultChecked={data?.userStory?.isAuthenticated}
+										>
+											Requires authentication
+										</Checkbox>
 									</MenuItem>
 									<MenuDivider />
-									<MenuItem
-										isDisabled={deleting}
-										onClick={onDelete}
-									>
+									<MenuItem isDisabled={deleting} onClick={onDelete}>
 										<TrashIcon mr={3} />
 										Delete
 									</MenuItem>
