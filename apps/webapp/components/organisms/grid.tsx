@@ -212,7 +212,7 @@ const Grid = (props: StackProps) => {
 			.map((dataPoint) => dataPoint.score)
 			.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0) *
 			100) /
-		30).toFixed(2)
+			30).toFixed(2)
 	);
 
 	const selectedTimePeriodInDays: number = timePeriodsInDays[timePeriod];
@@ -279,7 +279,7 @@ const Grid = (props: StackProps) => {
 		hasMembers: selectedProject?.members?.items?.length > 1,
 		hasUserStories: userStories?.length > 0,
 		hasManualUserStories: !!userStories.find(
-			(userStory) => userStory.created[0] === 'manual'
+			(userStory) => userStory.created === 'manual'
 		),
 		hasTestCases: !!userStories.find((userStory) => userStory.isTestCase),
 		hasTestRuns: !!versions.find(
@@ -540,8 +540,8 @@ const Grid = (props: StackProps) => {
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
-													? `Caution`
-													: `Not ready`}
+														? `Caution`
+														: `Not ready`}
 											</Text>
 											<Text
 												color={overviewColor}
