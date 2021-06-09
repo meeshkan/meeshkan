@@ -7,6 +7,13 @@ import Layout from '../components/templates/layout';
 import SideBar from '../components/organisms/sidebar';
 import withAuth from '../hocs/with-auth';
 import withChakra from '../hocs/with-chakra';
+import {
+	Alert,
+	AlertDescription,
+	AlertIcon,
+	AlertTitle,
+	Box,
+} from '@chakra-ui/react';
 
 const CustomApp = ({ Component, pageProps }: AppProps) => {
 	const router = useRouter();
@@ -39,7 +46,21 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 			<Layout>
 				{!isInvitePage && <SideBar />}
 
-				<Component {...pageProps} />
+				<Box w="full">
+					{/* Alert */}
+					<Alert status="info" mb={4} p={3}>
+						<AlertIcon />
+						<AlertTitle mb={0} mr={3}>
+							Maintenance mode
+						</AlertTitle>
+						<AlertDescription>
+							We're currently doing a migration of our backend systems some
+							things might work slow or not at all.
+						</AlertDescription>
+					</Alert>
+
+					<Component {...pageProps} />
+				</Box>
 			</Layout>
 		</>
 	);
