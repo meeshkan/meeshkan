@@ -31,10 +31,7 @@ import {
 } from '@chakra-ui/react';
 import { saveAs } from 'file-saver';
 import { UserContext } from '../../../utils/user';
-import {
-	ScriptCommandListResponse,
-	UserStory,
-} from '@frontend/meeshkan-types';
+import { ScriptCommandListResponse, UserStory } from '@frontend/meeshkan-types';
 import { eightBaseClient } from '../../../utils/graphql';
 import {
 	USER_STORY,
@@ -173,11 +170,13 @@ const UserStoryPage = (props: UserStoryProps) => {
 
 		const updatedUserStories = [...response.userStoryUpdateByFilter.items];
 
-		updatedUserStories.find(userStory => userStory.id === userStoryId).isAuthenticated = isAuthenticated;
+		updatedUserStories.find(
+			(userStory) => userStory.id === userStoryId
+		).isAuthenticated = isAuthenticated;
 
 		setProject({
 			...project,
-			userStories: { ...project.userStories, items: updatedUserStories }
+			userStories: { ...project.userStories, items: updatedUserStories },
 		});
 	};
 
@@ -251,7 +250,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 		setLoading(true);
 
 		fetch(
-			'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
+			process.env.NEXT_PUBLIC_MAKE_VIDEO_ENDPOINT ||
+				'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
 			{
 				method: 'POST',
 				mode: 'no-cors',
@@ -282,7 +282,8 @@ const UserStoryPage = (props: UserStoryProps) => {
 		return <Text color="red.500">{error}</Text>;
 	}
 
-	const steps: ScriptCommandListResponse['items'] = data.userStory.scriptCommands.items
+	const steps: ScriptCommandListResponse['items'] =
+		data.userStory.scriptCommands.items;
 
 	const handleDownload = () => {
 		try {
@@ -375,7 +376,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								{data.userStory.created}
 							</Code>
 							{data.userStory.isTestCase === true ? null : data.userStory
-								.isExpected ? (
+									.isExpected ? (
 								<Code
 									colorScheme="cyan"
 									fontWeight="700"
@@ -406,7 +407,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 								</Code>
 							)}
 							{data.userStory.logInStoryConfig !== null &&
-								data.userStory.logInStoryConfig.logInStory.id === userStoryId ? (
+							data.userStory.logInStoryConfig.logInStory.id === userStoryId ? (
 								<Tooltip label="This is the 'Log in flow'" placement="right">
 									<Badge
 										colorScheme="amber"
@@ -470,13 +471,19 @@ const UserStoryPage = (props: UserStoryProps) => {
 										Copy link
 									</MenuItem>
 									<MenuItem>
-										<Checkbox onChange={() => { updateRequiresAuthentication(!data?.userStory?.requiresAuthentication) }} defaultChecked={data?.userStory?.requiresAuthentication}>Requires authentication</Checkbox>
+										<Checkbox
+											onChange={() => {
+												updateRequiresAuthentication(
+													!data?.userStory?.requiresAuthentication
+												);
+											}}
+											defaultChecked={data?.userStory?.requiresAuthentication}
+										>
+											Requires authentication
+										</Checkbox>
 									</MenuItem>
 									<MenuDivider />
-									<MenuItem
-										isDisabled={deleting}
-										onClick={onDelete}
-									>
+									<MenuItem isDisabled={deleting} onClick={onDelete}>
 										<TrashIcon mr={3} />
 										Delete
 									</MenuItem>
