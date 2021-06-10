@@ -131,7 +131,8 @@ const TestRunsPage = () => {
 			toggle: true,
 		});
 
-		const updatedTestRunnerToggle = response.projectUpdate.configuration.activeTestRuns;
+		const updatedTestRunnerToggle =
+			response.projectUpdate.configuration.activeTestRuns;
 		setProject({
 			...project,
 			configuration: {
@@ -149,7 +150,7 @@ const TestRunsPage = () => {
 
 			const response = await fetch(
 				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
-				'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
+					'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
 				{
 					method: 'POST',
 					mode: 'no-cors',
@@ -159,6 +160,7 @@ const TestRunsPage = () => {
 					body: JSON.stringify({
 						clientId: project?.id,
 						url: stagingURL,
+						clientSecret: project?.configuration?.clientSecret,
 					}),
 				}
 			);
@@ -264,7 +266,7 @@ const TestRunsPage = () => {
 												<Text fontSize="40px" fontWeight="700">
 													{Math.round(
 														(latestTestRunStats[label] / totalTestRunOutcomes) *
-														100
+															100
 													)}
 													%
 												</Text>
