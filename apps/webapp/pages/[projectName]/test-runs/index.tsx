@@ -153,14 +153,14 @@ const TestRunsPage = () => {
 					'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
 				{
 					method: 'POST',
-					// mode: 'no-cors',
+					mode: 'no-cors',
 					headers: {
 						'Content-Type': 'application/json',
-						'meeshkan-client-secret': project?.configuration?.clientSecret,
 					},
 					body: JSON.stringify({
 						clientId: project?.id,
 						url: stagingURL,
+						clientSecret: project?.configuration?.clientSecret,
 					}),
 				}
 			);
