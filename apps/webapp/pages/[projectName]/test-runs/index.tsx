@@ -131,7 +131,8 @@ const TestRunsPage = () => {
 			toggle: true,
 		});
 
-		const updatedTestRunnerToggle = response.projectUpdate.configuration.activeTestRuns;
+		const updatedTestRunnerToggle =
+			response.projectUpdate.configuration.activeTestRuns;
 		setProject({
 			...project,
 			configuration: {
@@ -149,12 +150,13 @@ const TestRunsPage = () => {
 
 			const response = await fetch(
 				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
-				'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
+					'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
 				{
 					method: 'POST',
-					mode: 'no-cors',
+					// mode: 'no-cors',
 					headers: {
 						'Content-Type': 'application/json',
+						'meeshkan-client-secret': project?.configuration?.clientSecret,
 					},
 					body: JSON.stringify({
 						clientId: project?.id,
@@ -264,7 +266,7 @@ const TestRunsPage = () => {
 												<Text fontSize="40px" fontWeight="700">
 													{Math.round(
 														(latestTestRunStats[label] / totalTestRunOutcomes) *
-														100
+															100
 													)}
 													%
 												</Text>
