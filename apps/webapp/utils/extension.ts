@@ -62,6 +62,9 @@ export const handleExtensionAuthHandshake = (
 			id: project.id,
 			name: project.name,
 			avatar: project.avatar?.downloadUrl,
+			configuration: {
+				id: project.configuration?.id,
+			},
 		};
 	};
 
