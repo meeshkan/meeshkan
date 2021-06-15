@@ -7,7 +7,14 @@ import { getProject } from '../utils/project';
 export const useValidateSelectedProject = () => {
 	const [loading, setLoading] = useState(true);
 	const [found, setFound] = useState(true);
-	const { idToken, projects, project, setProject, loadingProject, setLoadingProject } = useContext(UserContext);
+	const {
+		idToken,
+		projects,
+		project,
+		setProject,
+		loadingProject,
+		setLoadingProject,
+	} = useContext(UserContext);
 	const router = useRouter();
 	const { projectName } = router.query;
 
