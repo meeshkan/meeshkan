@@ -148,7 +148,6 @@ const TestRunsPage = () => {
 			}
 
 			const response = await fetch(
-				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
 				'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
 				{
 					method: 'POST',
