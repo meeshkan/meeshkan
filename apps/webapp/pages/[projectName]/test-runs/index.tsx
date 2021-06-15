@@ -131,7 +131,8 @@ const TestRunsPage = () => {
 			toggle: true,
 		});
 
-		const updatedTestRunnerToggle = response.projectUpdate.configuration.activeTestRuns;
+		const updatedTestRunnerToggle =
+			response.projectUpdate.configuration.activeTestRuns;
 		setProject({
 			...project,
 			configuration: {
@@ -158,6 +159,7 @@ const TestRunsPage = () => {
 					body: JSON.stringify({
 						clientId: project?.id,
 						url: stagingURL,
+						clientSecret: project?.configuration?.clientSecret,
 					}),
 				}
 			);
@@ -263,7 +265,7 @@ const TestRunsPage = () => {
 												<Text fontSize="40px" fontWeight="700">
 													{Math.round(
 														(latestTestRunStats[label] / totalTestRunOutcomes) *
-														100
+															100
 													)}
 													%
 												</Text>
