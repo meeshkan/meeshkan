@@ -1,95 +1,87 @@
-import React from 'react';
-import {
-	Box,
-	Flex,
-	Text,
-	List,
-	ListItem,
-	useColorModeValue,
-} from '@chakra-ui/react';
+import React, { useState, PointerEvent } from 'react';
+import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { MotionFlex } from './motion';
+import { DragHandleIcon } from '@frontend/chakra-theme';
+import { useDragControls } from 'framer-motion';
+// import { Position, useMeasurePosition } from '../../utils/use-measure-position';
 
 type StoryStepProps = {
 	stepNumber: number;
 	stepName: string;
-	subSteps?: [{ text: string; sIndex: number }];
+	selected: boolean;
 };
 
 export const SideStep = ({
 	stepNumber,
 	stepName,
-	subSteps,
+	selected,
 }: StoryStepProps) => {
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
-	return (
-		<Box
-			px={[8, 4]}
-			pt={stepNumber === 1 ? 4 : 0}
-			borderRadius="lg"
-			_hover={{
-				backgroundColor: hoverBackgroundColor,
-			}}
-		>
-			<Flex>
-				<Box>
-					{stepNumber === 1 ? null : (
-						<Box
-							borderLeft="1px solid"
-							borderColor="gray.300"
-							h={4}
-							ml="11.5px"
-						/>
-					)}
+	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
+	const [isDragging, setDragging] = useState(false);
+	const dragControls = useDragControls();
+	function startDrag(event: PointerEvent<HTMLDivElement>) {
+		dragControls.start(event, { snapToCursor: true });
+		setDragging(true);
+	}
 
-					<Flex
-						justify="center"
-						align="center"
-						borderRadius="full"
-						h={6}
-						w={6}
-						border="1px solid"
-						borderColor="gray.500"
-						fontWeight="500"
-						fontSize="sm"
-						mr={4}
-					>
-						{stepNumber}
-					</Flex>
-					<Box
-						borderLeft="1px solid"
-						borderColor="gray.300"
-						h="calc(100% - 24px)"
-						ml="11.5px"
-					/>
-				</Box>
-				<Text
-					flex="1"
-					fontWeight="500"
-					lineHeight="1.4"
-					fontSize="md"
-					py={stepNumber === 1 ? null : 4}
-					pb={stepNumber === 1 ? 4 : null}
-				>
+	return (
+		<MotionFlex
+			layout
+			initial={{ y: 100, opacity: 0 }}
+			animate={{ y: 0, opacity: 1 }}
+			m={2}
+			drag="y"
+			dragListener={false}
+			onDragEnd={() => {
+				setDragging(false);
+			}}
+			zIndex={isDragging ? 3 : 1}
+			dragControls={dragControls}
+		>
+			<Flex
+				justify="center"
+				align="center"
+				borderRadius="full"
+				h={6}
+				w={6}
+				fontWeight="600"
+				fontSize="sm"
+				mt={2}
+				mr={4}
+				backgroundColor={isDragging ? selectedBlue : 'transparent'}
+				color={isDragging ? hoverBackgroundColor : 'inherit'}
+			>
+				{stepNumber}
+			</Flex>
+			<Flex
+				p={3}
+				borderRadius="lg"
+				w="full"
+				border="1px solid"
+				borderColor={isDragging ? selectedBlue : 'transparent'}
+				backgroundColor={isDragging ? hoverBackgroundColor : 'transparent'}
+				_hover={{
+					backgroundColor: hoverBackgroundColor,
+				}}
+				sx={{
+					':hover #drag-handle': {
+						display: 'inline-flex',
+					},
+				}}
+			>
+				<Text flex="1" fontWeight="400" lineHeight="1.4" fontSize="md">
 					{stepName}
 				</Text>
-			</Flex>
-			{subSteps && (
-				<List
-					styleType="disc"
-					stylePosition="inside"
-					pl={6}
-					pb={4}
-					spacing={2}
-					ml="11.5px"
-					borderLeft="1px solid"
-					borderColor="gray.300"
+				<Box
+					onPointerDown={startDrag}
+					onPointerUp={() => {
+						setDragging(false);
+					}}
 				>
-					{subSteps.map((step) => (
-						<ListItem key={step.sIndex} lineHeight="1.6">
-							{step.text}
-						</ListItem>
-					))}
-				</List>
-			)}
-		</Box>
+					<DragHandleIcon id="drag-handle" display="none" color="gray.300" />
+				</Box>
+			</Flex>
+		</MotionFlex>
 	);
 };

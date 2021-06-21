@@ -12,7 +12,7 @@ import {
 	BoxProps,
 } from '@chakra-ui/react';
 import { AnimateSharedLayout } from 'framer-motion';
-import MotionBox from '../atoms/motion-box';
+import { MotionBox } from '../atoms/motion';
 
 type SegmentedControlTabProps = {
 	children?: ReactNode;

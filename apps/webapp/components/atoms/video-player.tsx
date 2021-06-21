@@ -27,10 +27,6 @@ const VideoPlayer = ({
 	]);
 	const borderColor = useColorModeValue(gray200, gray700);
 	const backgroundColor = useColorModeValue(gray100, gray800);
-	const maxHeight = useBreakpointValue({
-		base: '75vw',
-		md: '15vw',
-	});
 
 	return (
 		<ReactPlayer
@@ -40,9 +36,9 @@ const VideoPlayer = ({
 			onStart={onStart}
 			onEnded={onEnded}
 			url={src}
+			width="100%"
 			style={{
 				maxWidth: 'fit-content',
-				maxHeight,
 				borderRadius: 8,
 				border: '1px solid',
 				borderColor,
