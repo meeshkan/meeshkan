@@ -303,6 +303,12 @@ const Settings = () => {
 
 	const handleScriptVerification = () => {
 		if (!project?.configuration?.productionURL) {
+			toaster({
+				title: 'Missing production URL.',
+				description: 'You need to specify your production URL to verify your script installation.',
+				status: 'error',
+			});
+
 			return;
 		}
 
