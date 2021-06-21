@@ -39,6 +39,7 @@ import {
 	REMOVE_AUTH_TOKEN,
 	ADD_SUPPORT,
 	TOGGLE_TEST_RUNS,
+	UPDATE_HAS_RECEIVED_EVENTS,
 } from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 import {
@@ -83,6 +84,8 @@ const Settings = () => {
 	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
 		project?.configuration.authenticationTokens?.items || []
 	);
+	const [projectId, setProjectId] = useState<string>(project?.id);
+	const [scriptResponded, setScriptResponded] = useState<boolean>(false);
 
 	const listItemHoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
 	const avatarColor = useColorModeValue('gray.700', 'gray.200');
@@ -90,17 +93,21 @@ const Settings = () => {
 
 	useEffect(() => {
 		setProductUpdates(productNotifications);
+	}, [productNotifications]);
+
+	useEffect(() => {
+		setProjectId(project?.id);
 		setMembers(project?.members?.items);
 		setTokens(project?.configuration.authenticationTokens?.items);
 		setToggleTestRunnerIndex(
 			project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null
 		);
-	}, [project, productNotifications]);
+	}, [project]);
 
 	useEffect(() => {
 		const handleTestRunnerToggle = async (): Promise<void> => {
 			const response = await client.request(TOGGLE_TEST_RUNS, {
-				projectId: project.id,
+				projectId,
 				toggle: !toggleTestRunnerIndex,
 			});
 
@@ -125,6 +132,59 @@ const Settings = () => {
 		handleTestRunnerToggle();
 	}, [toggleTestRunnerIndex]);
 
+	useEffect(() => {
+		const handleMessageEvent = async (event: MessageEvent) => {
+			if (!(event.source instanceof Window)) {
+				return;
+			}
+
+			if (event.data.type === 'scriptReady') {
+				setScriptResponded(true);
+				event.source.postMessage({ type: 'verifyScript' }, '*');
+			}
+
+			if (event.data.type === 'verifyScript') {
+				const { version, clientId } = event.data;
+				if (clientId !== projectId) {
+					toaster({
+						title: 'Incorrect project ID in script.',
+						description: 'The client ID in the script does not match the expected project ID.',
+						status: 'error',
+					});
+
+					event.source.close();
+					return;
+				}
+
+				const response = await client.request(UPDATE_HAS_RECEIVED_EVENTS, {
+					projectId,
+					hasReceivedEvents: true,
+				});
+
+				const updatedHasReceivedEvents = response.projectUpdate.hasReceivedEvents;
+				if (updatedHasReceivedEvents) {
+					toaster({
+						title: 'Script verified.',
+						description: 'You have successfully installed the Meeshkan Recorder Script!',
+						status: 'success',
+					});
+				}
+
+				setProject({
+					...project,
+					hasReceivedEvents: updatedHasReceivedEvents,
+				});
+
+				event.source.close();
+			}
+		};
+
+		window.addEventListener('message', handleMessageEvent);
+		return () => {
+			window.removeEventListener('message', handleMessageEvent);
+		};
+	}, []);
+
 	const client = eightBaseClient(idToken);
 
 	if (loading) {
@@ -148,7 +208,7 @@ const Settings = () => {
 
 	const removeTeamMember = async (memberEmail: string): Promise<void> => {
 		const response = await client.request(REMOVE_TEAM_MEMBER, {
-			projectId: project.id,
+			projectId,
 			memberEmail,
 		});
 
@@ -165,7 +225,7 @@ const Settings = () => {
 
 	const deleteToken = async (tokenID: string): Promise<void> => {
 		const response = await client.request(REMOVE_AUTH_TOKEN, {
-			projectID: project.id,
+			projectID: projectId,
 			tokenID: tokenID,
 		});
 
@@ -227,7 +287,7 @@ const Settings = () => {
 
 	const inviteSupport = async (): Promise<void> => {
 		const response = await client.request(ADD_SUPPORT, {
-			projectID: project.id,
+			projectID: projectId,
 		});
 
 		const updatedMembers = response.projectUpdate.members.items;
@@ -239,6 +299,28 @@ const Settings = () => {
 				items: updatedMembers,
 			},
 		});
+	};
+
+	const handleScriptVerification = () => {
+		if (!project?.configuration?.productionURL) {
+			return;
+		}
+
+		const childWindow = window.open(`${project.configuration.productionURL}?meeshkanVerifyScript=${project.id}`);
+		const interval = setTimeout(() => {
+			clearInterval(interval);
+			if (scriptResponded || childWindow.closed) {
+				return;
+			}
+
+			toaster({
+				title: 'Script verification failed.',
+				description: 'We could not find the Meeshkan Recorder Script in your webapp.',
+				status: 'error',
+			});
+
+			childWindow.close();
+		}, 5000);
 	};
 
 	return (
@@ -398,7 +480,17 @@ const Settings = () => {
 					<Heading fontSize="18px" fontWeight="500" mb={3}>
 						Script tag
 					</Heading>
-					<ScriptTagInput />
+					<Flex align="center" justify="space-between">
+						<ScriptTagInput />
+						<Button
+							onClick={handleScriptVerification}
+							isDisabled={project?.hasReceivedEvents || !project?.configuration?.productionURL}
+							bg={project?.hasReceivedEvents ? 'green.500' : 'blue.500'}
+							ml={4}
+						>
+							{project?.hasReceivedEvents ? 'Script Verified' : 'Verify Installation'}
+						</Button>
+					</Flex>
 
 					<Spacer h={8} />
 
