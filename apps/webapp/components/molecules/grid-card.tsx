@@ -9,6 +9,7 @@ export type GridCardProps = {
 	subtitle?: string;
 	children?: ReactNode;
 	leftIconSrc?: string;
+	leftAction?: ReactNode;
 } & BoxProps;
 
 const GridCard = ({
@@ -17,6 +18,7 @@ const GridCard = ({
 	subtitle,
 	children,
 	leftIconSrc,
+	leftAction,
 	...props
 }: GridCardProps) => {
 	const slugifiedTitle = useMemo(() => createSlug(title), [title]);
@@ -31,6 +33,7 @@ const GridCard = ({
 				fontWeight="800"
 				lineHeight="short"
 			>
+				{leftAction && leftAction}
 				{leftIconSrc && (
 					<Image src={leftIconSrc} boxSize="16px" alt={title} mr={3} />
 				)}

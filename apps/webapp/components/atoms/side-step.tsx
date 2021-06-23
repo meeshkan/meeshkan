@@ -1,43 +1,49 @@
-import React, { useState, PointerEvent } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { MotionFlex } from './motion';
 import { DragHandleIcon } from '@frontend/chakra-theme';
 import { useDragControls } from 'framer-motion';
+import { ScriptCommand } from '@frontend/meeshkan-types';
 // import { Position, useMeasurePosition } from '../../utils/use-measure-position';
 
 type StoryStepProps = {
 	stepNumber: number;
 	stepName: string;
-	selected: boolean;
+	scriptCommand: ScriptCommand;
+	selectedStep: Number;
+	setSelectedStep: Dispatch<SetStateAction<Number>>;
 };
 
 export const SideStep = ({
 	stepNumber,
 	stepName,
-	selected,
+	scriptCommand,
+	selectedStep,
+	setSelectedStep,
 }: StoryStepProps) => {
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
-	const [isDragging, setDragging] = useState(false);
-	const dragControls = useDragControls();
-	function startDrag(event: PointerEvent<HTMLDivElement>) {
-		dragControls.start(event, { snapToCursor: true });
-		setDragging(true);
-	}
+	const formLabelColor = useColorModeValue('gray.500', 'gray.400');
+	// const [isDragging, setDragging] = useState(false);
+	// const dragControls = useDragControls();
+	// function startDrag(event: PointerEvent<HTMLDivElement>) {
+	// 	dragControls.start(event, { snapToCursor: true });
+	// 	setDragging(true);
+	// }
 
 	return (
 		<MotionFlex
-			layout
 			initial={{ y: 100, opacity: 0 }}
 			animate={{ y: 0, opacity: 1 }}
 			m={2}
-			drag="y"
-			dragListener={false}
-			onDragEnd={() => {
-				setDragging(false);
-			}}
-			zIndex={isDragging ? 3 : 1}
-			dragControls={dragControls}
+			onClick={() => setSelectedStep(scriptCommand.sIndex)}
+			// drag="y"
+			// dragListener={false}
+			// onDragEnd={() => {
+			// 	setDragging(false);
+			// }}
+			// zIndex={isDragging ? 3 : 1}
+			// dragControls={dragControls}
 		>
 			<Flex
 				justify="center"
@@ -45,43 +51,62 @@ export const SideStep = ({
 				borderRadius="full"
 				h={6}
 				w={6}
+				minW={6}
 				fontWeight="600"
 				fontSize="sm"
 				mt={2}
 				mr={4}
-				backgroundColor={isDragging ? selectedBlue : 'transparent'}
-				color={isDragging ? hoverBackgroundColor : 'inherit'}
+				backgroundColor={
+					selectedStep === scriptCommand?.sIndex ? selectedBlue : 'transparent'
+				}
+				color={
+					selectedStep === scriptCommand?.sIndex
+						? hoverBackgroundColor
+						: 'inherit'
+				}
 			>
 				{stepNumber}
 			</Flex>
-			<Flex
+			<Box
 				p={3}
 				borderRadius="lg"
 				w="full"
 				border="1px solid"
-				borderColor={isDragging ? selectedBlue : 'transparent'}
-				backgroundColor={isDragging ? hoverBackgroundColor : 'transparent'}
+				borderColor={
+					selectedStep === scriptCommand?.sIndex ? selectedBlue : 'transparent'
+				}
+				backgroundColor={
+					selectedStep === scriptCommand?.sIndex
+						? hoverBackgroundColor
+						: 'transparent'
+				}
 				_hover={{
 					backgroundColor: hoverBackgroundColor,
 				}}
-				sx={{
-					':hover #drag-handle': {
-						display: 'inline-flex',
-					},
-				}}
+				// sx={{
+				// 	':hover #drag-handle': {
+				// 		display: 'inline-flex',
+				// 	},
+				// }}
 			>
-				<Text flex="1" fontWeight="400" lineHeight="1.4" fontSize="md">
+				<Text
+					flex="1"
+					fontWeight="400"
+					lineHeight="1.4"
+					fontSize="md"
+					wordBreak="break-all"
+				>
 					{stepName}
 				</Text>
 				<Box
-					onPointerDown={startDrag}
-					onPointerUp={() => {
-						setDragging(false);
-					}}
+				// onPointerDown={startDrag}
+				// onPointerUp={() => {
+				// 	setDragging(false);
+				// }}
 				>
 					<DragHandleIcon id="drag-handle" display="none" color="gray.300" />
 				</Box>
-			</Flex>
+			</Box>
 		</MotionFlex>
 	);
 };

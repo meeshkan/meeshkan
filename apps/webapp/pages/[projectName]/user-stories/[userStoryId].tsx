@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import Card from '../../../components/atoms/card';
 import {
 	Text,
@@ -10,6 +10,8 @@ import {
 	Spacer,
 	Divider,
 	Heading,
+	Input,
+	Button,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { ScriptCommandListResponse, UserStory } from '@frontend/meeshkan-types';
@@ -27,7 +29,8 @@ import Link from 'next/link';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { UserStoryVideo } from '../../../components/molecules/user-stories/video';
 import GridCard from '../../../components/molecules/grid-card';
-import { DetailsForm } from 'apps/webapp/components/molecules/user-stories/details-form';
+import { DetailsForm } from '../../../components/molecules/user-stories/details-form';
+import { StepForm } from '../../../components/molecules/user-stories/step-form';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -40,15 +43,15 @@ const UserStoryPage = (props: UserStoryProps) => {
 		loading: validatingProject,
 	} = useValidateSelectedProject();
 	const router = useRouter();
+	const [selectedStep, setSelectedStep] = useState<Number | null>(null);
+	console.log(selectedStep);
+	const { userStoryId } = router.query;
 
-	const stepNumberColor = useColorModeValue('cyan.500', 'cyan.300');
 	const backLinkColor = useColorModeValue('gray.900', 'gray.200');
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
-
-	const { userStoryId } = router.query;
 
 	const client = eightBaseClient(idToken);
 
@@ -75,17 +78,15 @@ const UserStoryPage = (props: UserStoryProps) => {
 	) {
 		return <LoadingScreen as={Card} />;
 	}
-
 	if (!foundProject || data?.userStory === null) {
 		return <NotFoundError />;
 	}
-
 	if (error) {
 		return <Text color="red.500">{error}</Text>;
 	}
 
 	const steps: ScriptCommandListResponse['items'] =
-		data.userStory.scriptCommands.items;
+		data?.userStory?.scriptCommands?.items;
 
 	return (
 		<ValidatedBillingPlan>
@@ -116,18 +117,47 @@ const UserStoryPage = (props: UserStoryProps) => {
 
 					<Spacer h={6} />
 
-					<StepList steps={steps} />
+					<StepList
+						steps={steps}
+						selectedStep={selectedStep}
+						setSelectedStep={setSelectedStep}
+					/>
 				</GridItem>
 
 				<GridItem
 					as={GridCard}
-					title="User story details"
+					leftAction={
+						typeof selectedStep == 'number' ? (
+							<ChevronLeftIcon
+								cursor="pointer"
+								mr={3}
+								onClick={() => setSelectedStep(null)}
+							/>
+						) : null
+					}
+					title={
+						typeof selectedStep == 'number'
+							? `Step #${selectedStep + 1} details`
+							: 'User story details'
+					}
 					h="100%"
 					maxH="none"
 					colSpan={1}
 				>
-					<DetailsForm userStory={data?.userStory} />
-					<Stack mt={8}>
+					{typeof selectedStep == 'number' ? (
+						<>
+							<StepForm
+								userStory={data?.userStory}
+								selectedStep={selectedStep}
+							/>
+						</>
+					) : (
+						<DetailsForm userStory={data?.userStory} />
+					)}
+
+					{/*<Spacer h={8} />
+
+					 <Stack>
 						<Heading
 							as="h2"
 							d="flex"
@@ -139,7 +169,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							Recent activity
 						</Heading>
 						<Divider mt={1} mb={4} />
-					</Stack>
+					</Stack> */}
 				</GridItem>
 			</SimpleGrid>
 		</ValidatedBillingPlan>

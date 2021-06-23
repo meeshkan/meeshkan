@@ -1,5 +1,8 @@
 import React from 'react';
-import { ScriptCommandListResponse } from '@frontend/meeshkan-types';
+import {
+	ScriptCommand,
+	ScriptCommandListResponse,
+} from '@frontend/meeshkan-types';
 
 export const HumanTag = (tag: string): string => {
 	return tag === ('A' || 'a')
@@ -36,6 +39,8 @@ export const HumanTag = (tag: string): string => {
 		? 'Code block'
 		: tag === 'VIDEO'
 		? 'Video'
+		: tag === 'HTML'
+		? 'Page'
 		: tag;
 };
 
@@ -48,7 +53,13 @@ export const commandsToSteps = (
 ) => {
 	// @ts-expect-error want to type this, but not set a default value
 	const subSteps: [
-		{ text: string; sIndex: number; command: string; tagName?: string }
+		{
+			text: string;
+			sIndex: number;
+			command: string;
+			tagName?: string;
+			scriptCommand: ScriptCommand;
+		}
 	] = [];
 	commands.forEach((commandData) => {
 		if (commandData.command === 'open') {
@@ -56,6 +67,7 @@ export const commandsToSteps = (
 				text: `Open ${commandData.value}.`,
 				sIndex: commandData.sIndex,
 				command: 'open',
+				scriptCommand: commandData,
 			});
 		}
 		if (commandData.command === 'set viewport size') {
@@ -63,6 +75,7 @@ export const commandsToSteps = (
 				text: `Set viewport size to ${commandData.xCoordinate}px by ${commandData.yCoordinate}px.`,
 				sIndex: commandData.sIndex,
 				command: 'setViewportSize',
+				scriptCommand: commandData,
 			});
 		}
 		if (commandData.command === 'click') {
@@ -73,6 +86,7 @@ export const commandsToSteps = (
 				sIndex: commandData.sIndex,
 				command: 'click',
 				tagName: HumanTag(commandData.tagName),
+				scriptCommand: commandData,
 			});
 		}
 		if (commandData.command === 'type') {
@@ -83,6 +97,7 @@ export const commandsToSteps = (
 				sIndex: commandData.sIndex,
 				command: 'type',
 				tagName: HumanTag(commandData.tagName),
+				scriptCommand: commandData,
 			});
 		}
 
@@ -110,6 +125,7 @@ export const commandsToSteps = (
 				}.`,
 				sIndex: commandData.sIndex,
 				command: 'scroll',
+				scriptCommand: commandData,
 			});
 		}
 
@@ -134,6 +150,7 @@ export const commandsToSteps = (
 				sIndex: commandData.sIndex,
 				command: 'dragndrop',
 				tagName: HumanTag(commandData.tagName),
+				scriptCommand: commandData,
 			});
 		} else if (commandData.command === 'drag and drop' && isYSame && isXSame) {
 			subSteps.push({
@@ -143,6 +160,7 @@ export const commandsToSteps = (
 				sIndex: commandData.sIndex,
 				command: 'dragndrop',
 				tagName: HumanTag(commandData.tagName),
+				scriptCommand: commandData,
 			});
 		}
 	});

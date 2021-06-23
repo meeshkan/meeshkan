@@ -58,6 +58,7 @@ export const USER_STORY = gql`
 					altOrAriaText
 					scrollTop
 					scrollLeft
+					documentURL
 					destinationXCoordinate
 					destinationYCoordinate
 					destinationTagName
