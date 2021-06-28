@@ -29,6 +29,10 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 
 	const project = user?.project;
 	useEffect(() => {
+		const projectName: string = user?.project?.name;
+		const sluggifiedName: string = createSlug(projectName || '');
+		window.CommandBar.addContext('currentProject', sluggifiedName);
+
 		if (project && !project.configuration?.plan) {
 			onOpen();
 		}
@@ -45,26 +49,24 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		window.CommandBar.addRouter(routerFunc);
 	}, []);
 
-	const projectName: string = user?.project?.name;
-	const sluggifiedName: string = createSlug(projectName || '');
-	window.CommandBar.addContext('currentProject', sluggifiedName);
+	useEffect(() => {
+		const commandBarProjects = user?.projects.map((project) => ({
+			name: project.name,
+			sluggified: createSlug(project.name || ''),
+		}));
 
-	const commandBarProjects = user?.projects.map((project) => ({
-		name: project.name,
-		sluggified: createSlug(project.name || ''),
-	}));
+		window.CommandBar.addContext('projects', commandBarProjects, {
+			renderOptions: {
+				labelKey: 'name',
+			},
+			quickFindOptions: {
+				quickFind: true,
+				autoExecute: true,
+			},
+		});
 
-	window.CommandBar.addContext('projects', commandBarProjects, {
-		renderOptions: {
-			labelKey: 'name',
-		},
-		quickFindOptions: {
-			quickFind: true,
-			autoExecute: true,
-		},
-	});
-
-	// window.CommandBar.addCallback("triggerTest", callbackFn);
+		// window.CommandBar.addCallback("triggerTest", callbackFn);
+	}, [user?.projects]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');
