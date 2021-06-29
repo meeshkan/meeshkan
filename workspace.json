@@ -1,280 +1,209 @@
 {
-  "version": 1,
-  "projects": {
-    "custom-graphql": {
-      "root": "apps/custom-graphql",
-      "sourceRoot": "apps/custom-graphql",
-      "projectType": "application",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/webapp/**/*.{ts,tsx}"
-            ]
-          }
-        }
-      }
-    },
-    "webapp": {
-      "root": "apps/webapp",
-      "sourceRoot": "apps/webapp",
-      "projectType": "application",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/next:build",
-          "options": {
-            "root": "apps/webapp",
-            "outputPath": "dist/apps/webapp"
-          },
-          "configurations": {
-            "production": {}
-          },
-          "outputs": [
-            "{options.outputPath}"
-          ]
-        },
-        "serve": {
-          "builder": "@nrwl/next:server",
-          "options": {
-            "buildTarget": "webapp:build",
-            "dev": true
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "webapp:build:production",
-              "dev": false
-            }
-          }
-        },
-        "export": {
-          "builder": "@nrwl/next:export",
-          "options": {
-            "buildTarget": "webapp:build:production"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/webapp/**/*.{ts,tsx}"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/webapp/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": [
-            "coverage/apps/webapp"
-          ]
-        }
-      }
-    },
-    "website": {
-      "root": "apps/website",
-      "sourceRoot": "apps/website/src",
-      "projectType": "application",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/gatsby:build",
-          "options": {
-            "outputPath": "apps/website/public",
-            "uglify": true,
-            "color": true,
-            "profile": false
-          },
-          "configurations": {
-            "production": {}
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/gatsby:server",
-          "options": {
-            "buildTarget": "website:build"
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "website:build:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {}
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/website/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": [
-            "coverage/apps/website"
-          ]
-        }
-      }
-    },
-    "chakra-theme": {
-      "root": "libs/chakra-theme",
-      "sourceRoot": "libs/chakra-theme/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/chakra-theme/**/*.{ts,tsx,js,jsx}"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/chakra-theme/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": [
-            "coverage/libs/chakra-theme"
-          ]
-        }
-      }
-    },
-    "og-cards": {
-      "root": "apps/og-cards",
-      "sourceRoot": "apps/og-cards",
-      "projectType": "application",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@nrwl/next:build",
-          "options": {
-            "root": "apps/og-cards",
-            "outputPath": "dist/apps/og-cards"
-          },
-          "configurations": {
-            "production": {}
-          },
-          "outputs": [
-            "{options.outputPath}"
-          ]
-        },
-        "serve": {
-          "builder": "@nrwl/next:server",
-          "options": {
-            "buildTarget": "og-cards:build",
-            "dev": true
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "og-cards:build:production",
-              "dev": false
-            }
-          }
-        },
-        "export": {
-          "builder": "@nrwl/next:export",
-          "options": {
-            "buildTarget": "og-cards:build:production"
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/og-cards/**/*.{ts,tsx}"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/og-cards/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": [
-            "coverage/apps/og-cards"
-          ]
-        }
-      }
-    },
-    "meeshkan-types": {
-      "root": "libs/meeshkan-types",
-      "sourceRoot": "libs/meeshkan-types/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/meeshkan-types/**/*.{ts,tsx,js,jsx}"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/meeshkan-types/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": [
-            "coverage/libs/meeshkan-types"
-          ]
-        }
-      }
-    },
-    "downloadable-script": {
-      "root": "libs/downloadable-script",
-      "sourceRoot": "libs/downloadable-script/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/downloadable-script/**/*.ts"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/downloadable-script/jest.config.js",
-            "passWithNoTests": true
-          },
-          "outputs": [
-            "coverage/libs/downloadable-script"
-          ]
-        }
-      }
-    }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/next"
-  },
-  "schematics": {
-    "@nrwl/react": {
-      "application": {
-        "babel": true
-      }
-    },
-    "@nrwl/next": {
-      "application": {
-        "style": "css",
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/gatsby": {
-      "application": {}
-    }
-  },
-  "defaultProject": "webapp"
+	"version": 1,
+	"projects": {
+		"custom-graphql": {
+			"root": "apps/custom-graphql",
+			"sourceRoot": "apps/custom-graphql",
+			"projectType": "application",
+			"schematics": {},
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["apps/webapp/**/*.{ts,tsx}"]
+					}
+				}
+			}
+		},
+		"webapp": {
+			"root": "apps/webapp",
+			"sourceRoot": "apps/webapp",
+			"projectType": "application",
+			"schematics": {},
+			"architect": {
+				"build": {
+					"builder": "@nrwl/next:build",
+					"options": {
+						"root": "apps/webapp",
+						"outputPath": "dist/apps/webapp"
+					},
+					"configurations": {
+						"production": {}
+					},
+					"outputs": ["{options.outputPath}"]
+				},
+				"serve": {
+					"builder": "@nrwl/next:server",
+					"options": {
+						"buildTarget": "webapp:build",
+						"dev": true
+					},
+					"configurations": {
+						"production": {
+							"buildTarget": "webapp:build:production",
+							"dev": false
+						}
+					}
+				},
+				"export": {
+					"builder": "@nrwl/next:export",
+					"options": {
+						"buildTarget": "webapp:build:production"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["apps/webapp/**/*.{ts,tsx}"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "apps/webapp/jest.config.js",
+						"passWithNoTests": true
+					},
+					"outputs": ["coverage/apps/webapp"]
+				}
+			}
+		},
+		"chakra-theme": {
+			"root": "libs/chakra-theme",
+			"sourceRoot": "libs/chakra-theme/src",
+			"projectType": "library",
+			"schematics": {},
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["libs/chakra-theme/**/*.{ts,tsx,js,jsx}"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "libs/chakra-theme/jest.config.js",
+						"passWithNoTests": true
+					},
+					"outputs": ["coverage/libs/chakra-theme"]
+				}
+			}
+		},
+		"og-cards": {
+			"root": "apps/og-cards",
+			"sourceRoot": "apps/og-cards",
+			"projectType": "application",
+			"schematics": {},
+			"architect": {
+				"build": {
+					"builder": "@nrwl/next:build",
+					"options": {
+						"root": "apps/og-cards",
+						"outputPath": "dist/apps/og-cards"
+					},
+					"configurations": {
+						"production": {}
+					},
+					"outputs": ["{options.outputPath}"]
+				},
+				"serve": {
+					"builder": "@nrwl/next:server",
+					"options": {
+						"buildTarget": "og-cards:build",
+						"dev": true
+					},
+					"configurations": {
+						"production": {
+							"buildTarget": "og-cards:build:production",
+							"dev": false
+						}
+					}
+				},
+				"export": {
+					"builder": "@nrwl/next:export",
+					"options": {
+						"buildTarget": "og-cards:build:production"
+					}
+				},
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["apps/og-cards/**/*.{ts,tsx}"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "apps/og-cards/jest.config.js",
+						"passWithNoTests": true
+					},
+					"outputs": ["coverage/apps/og-cards"]
+				}
+			}
+		},
+		"meeshkan-types": {
+			"root": "libs/meeshkan-types",
+			"sourceRoot": "libs/meeshkan-types/src",
+			"projectType": "library",
+			"schematics": {},
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["libs/meeshkan-types/**/*.{ts,tsx,js,jsx}"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "libs/meeshkan-types/jest.config.js",
+						"passWithNoTests": true
+					},
+					"outputs": ["coverage/libs/meeshkan-types"]
+				}
+			}
+		},
+		"downloadable-script": {
+			"root": "libs/downloadable-script",
+			"sourceRoot": "libs/downloadable-script/src",
+			"projectType": "library",
+			"schematics": {},
+			"architect": {
+				"lint": {
+					"builder": "@nrwl/linter:eslint",
+					"options": {
+						"lintFilePatterns": ["libs/downloadable-script/**/*.ts"]
+					}
+				},
+				"test": {
+					"builder": "@nrwl/jest:jest",
+					"options": {
+						"jestConfig": "libs/downloadable-script/jest.config.js",
+						"passWithNoTests": true
+					},
+					"outputs": ["coverage/libs/downloadable-script"]
+				}
+			}
+		}
+	},
+	"cli": {
+		"defaultCollection": "@nrwl/next"
+	},
+	"schematics": {
+		"@nrwl/react": {
+			"application": {
+				"babel": true
+			}
+		},
+		"@nrwl/next": {
+			"application": {
+				"style": "css",
+				"linter": "eslint"
+			}
+		},
+		"@nrwl/gatsby": {
+			"application": {}
+		}
+	},
+	"defaultProject": "webapp"
 }
