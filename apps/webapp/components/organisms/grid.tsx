@@ -52,7 +52,7 @@ import {
 	deltaChange,
 } from '../../utils/metrics';
 import { lastNDays } from '../../utils/date';
-import { startTour } from '../../utils/intercom';
+import { startTour } from '../../utils/product-tours';
 import { ChartOptions, ChartData } from 'chart.js';
 
 const barData: ChartData = {
@@ -445,27 +445,27 @@ const Grid = (props: StackProps) => {
 									<GridCard title="Getting started">
 										<List spacing={5} color={listColor} fontSize="md" mt={5}>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasMembers}>
-												<Link onClick={() => startTour(239291)}>
+												<Link onClick={() => startTour('invite-link')}>
 													Invite your team.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasUserStories}>
-												<Link onClick={() => startTour(239430)}>
+												<Link onClick={() => startTour('install-script')}>
 													Install the script in the head of your webapp.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasManualUserStories}>
-												<Link onClick={() => startTour(239432)}>
+												<Link onClick={() => startTour('create-user-story')}>
 													Create a User Story.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestCases}>
-												<Link onClick={() => startTour(239433)}>
+												<Link onClick={() => startTour('create-test-case')}>
 													Promote a User Story to a Test Case.
 												</Link>
 											</GettingStartedListItem>
 											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestRuns}>
-												<Link onClick={() => startTour(239435)}>
+												<Link onClick={() => startTour('trigger-test-run')}>
 													Trigger a Test Run.
 												</Link>
 											</GettingStartedListItem>

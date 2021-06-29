@@ -18,6 +18,10 @@ declare global {
 		__user?: IUser;
 		Intercom?: Intercom;
 		chrome?: any;
+		ProductTours: {
+			startTour: (id: string) => void;
+			setTourOptions: (options: object) => void;
+		};
 	}
 }
 
