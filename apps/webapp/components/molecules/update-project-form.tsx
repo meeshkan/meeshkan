@@ -32,7 +32,7 @@ type UpdateProjectFormProps = {
 const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 	const [error, setError] = useState('');
 	const user = useContext(UserContext);
-	const { projects, project, idToken, mutate: mutateUser } = user;
+	const { project, setProject, idToken, mutate: mutateUser } = user;
 	const [name, setName] = useState(project.name);
 	const { configuration } = project;
 	const [productionURL, setProductionURL] = useState(
@@ -64,17 +64,13 @@ const UpdateProjectForm = ({ setLoading }: UpdateProjectFormProps) => {
 			return;
 		}
 
-		const selectedProjectIndex = _.findIndex(
-			projects,
-			(currentProject) => currentProject.id === project.id
-		);
+		setProject({
+			...project,
+			name: formData.name,
+			avatar: data.projectUpdate.avatar,
+			configuration: data.projectUpdate.configuration,
+		});
 
-		projects[selectedProjectIndex].name = formData.name;
-		projects[selectedProjectIndex].avatar = data.projectUpdate.avatar;
-		projects[selectedProjectIndex].configuration =
-			data.projectUpdate.configuration;
-
-		await mutateUser({ ...user, projects }, false);
 		Router.push(`/${createSlug(formData.name)}/settings`);
 		setLoading(false);
 	};
