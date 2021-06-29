@@ -134,13 +134,10 @@ const Settings = () => {
 
 	useEffect(() => {
 		const handleMessageEvent = async (event: MessageEvent) => {
-			if (!(event.source instanceof Window)) {
-				return;
-			}
-
+			const eventSource = event.source as Window;
 			if (event.data.type === 'scriptReady') {
 				setScriptResponded(true);
-				event.source.postMessage({ type: 'verifyScript' }, '*');
+				eventSource.postMessage({ type: 'verifyScript' }, '*');
 			}
 
 			if (event.data.type === 'verifyScript') {
@@ -152,7 +149,7 @@ const Settings = () => {
 						status: 'error',
 					});
 
-					event.source.close();
+					eventSource.close();
 					return;
 				}
 
@@ -175,7 +172,7 @@ const Settings = () => {
 					hasReceivedEvents: updatedHasReceivedEvents,
 				});
 
-				event.source.close();
+				eventSource.close();
 			}
 		};
 
