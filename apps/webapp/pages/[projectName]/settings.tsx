@@ -96,11 +96,15 @@ const Settings = () => {
 	}, [productNotifications]);
 
 	useEffect(() => {
-		setProjectId(project?.id);
-		setMembers(project?.members?.items);
-		setTokens(project?.configuration.authenticationTokens?.items);
+		if (!project) {
+			return;
+		}
+
+		setProjectId(project.id);
+		setMembers(project.members.items);
+		setTokens(project.configuration.authenticationTokens.items);
 		setToggleTestRunnerIndex(
-			project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null
+			project.configuration.activeTestRuns ? 0 : 1
 		);
 	}, [project]);
 
@@ -133,6 +137,10 @@ const Settings = () => {
 	}, [toggleTestRunnerIndex]);
 
 	useEffect(() => {
+		if (!projectId) {
+			return;
+		}
+
 		const handleMessageEvent = async (event: MessageEvent) => {
 			const eventSource = event.source as Window;
 			if (event.data.type === 'scriptReady') {
@@ -180,7 +188,7 @@ const Settings = () => {
 		return () => {
 			window.removeEventListener('message', handleMessageEvent);
 		};
-	}, []);
+	}, [projectId]);
 
 	const client = eightBaseClient(idToken);
 
