@@ -23,7 +23,6 @@ export const SideStep = ({
 }: StoryStepProps) => {
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
-	const formLabelColor = useColorModeValue('gray.500', 'gray.400');
 	// const [isDragging, setDragging] = useState(false);
 	// const dragControls = useDragControls();
 	// function startDrag(event: PointerEvent<HTMLDivElement>) {
@@ -69,6 +68,7 @@ export const SideStep = ({
 				{stepNumber}
 			</Flex>
 			<Box
+				d='flex'
 				p={3}
 				borderRadius="lg"
 				w="full"
@@ -78,13 +78,13 @@ export const SideStep = ({
 				}
 				backgroundColor={hoverBackgroundColor}
 				_hover={{
-					backgroundColor: hoverBackgroundColor,
+					boxShadow: 'sm'
 				}}
-			// sx={{
-			// 	':hover #drag-handle': {
-			// 		display: 'inline-flex',
-			// 	},
-			// }}
+				sx={{
+					':hover #drag-handle': {
+						display: 'inline-flex',
+					}
+				}}
 			>
 				<Text
 					flex="1"
@@ -96,6 +96,8 @@ export const SideStep = ({
 					{stepName}
 				</Text>
 				<Box
+					cursor="grab"
+					_active={{ cursor: 'grabbing' }}
 				// onPointerDown={startDrag}
 				// onPointerUp={() => {
 				// 	setDragging(false);
