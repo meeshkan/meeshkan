@@ -18,7 +18,6 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 		window.ProductTours.setTourOptions({
 			header: 'Ben from Meeshkan',
 			headerAvatarUrl: 'https://meeshkan.com/favicon-32x32.png',
-			spotlightBorderColor: 'black',
 		});
 	}
 
