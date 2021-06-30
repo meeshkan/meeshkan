@@ -41,6 +41,15 @@ export const USER_STORY = gql`
 					id
 				}
 			}
+			testOutcome(sort: { createdAt: DESC }) {
+				items {
+					createdAt
+					status
+					testRun {
+						id
+					}
+				}
+			}
 			scriptCommands {
 				count
 				items {

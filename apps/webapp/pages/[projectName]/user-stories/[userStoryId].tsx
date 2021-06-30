@@ -4,14 +4,9 @@ import {
 	Text,
 	useColorModeValue,
 	Link as ChakraLink,
-	Stack,
 	SimpleGrid,
 	GridItem,
 	Spacer,
-	Divider,
-	Heading,
-	Input,
-	Button,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { ScriptCommandListResponse, UserStory } from '@frontend/meeshkan-types';

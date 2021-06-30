@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Stack, Wrap, Code, WrapItem, Flex } from '@chakra-ui/layout';
@@ -41,6 +41,7 @@ import { UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import { useToaster } from '../../../hooks/use-toaster';
+import RecentActivityCard from '../recent-activity';
 
 type DetailsFormProps = {
 	userStory: UserStory;
@@ -48,6 +49,9 @@ type DetailsFormProps = {
 
 export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 	const { project, idToken } = useContext(UserContext);
+	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
+		project?.name,
+	]);
 	const [deleting, setDeleting] = useState(false);
 	const toaster = useToaster();
 
@@ -60,7 +64,6 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 	);
 	const deleteText = useColorModeValue('red.800', 'red.200');
 
-	const slugifiedProjectName = createSlug(userStory?.title);
 	const slugifiedStoryName = createSlug(userStory?.title);
 
 	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
@@ -77,7 +80,7 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 
 	return (
 		<>
-			<Flex justify='space-between'>
+			<Flex justify="space-between">
 				<Heading
 					as="h2"
 					d="flex"
@@ -91,14 +94,16 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 				<Menu placement="bottom-end">
 					<MenuButton
 						as={Button}
-						size='sm'
+						size="sm"
 						variant="outline"
 						rightIcon={<ChevronDownIcon />}
 					>
 						Actions
 					</MenuButton>
 					<MenuList backgroundColor={menuBackground}>
-						<MenuItem icon={<PlayIcon />} isDisabled>Trigger single test</MenuItem>
+						<MenuItem icon={<PlayIcon />} isDisabled>
+							Trigger single test
+						</MenuItem>
 
 						<MenuDivider />
 
@@ -118,7 +123,9 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 						>
 							Download manual script
 						</MenuItem>
-						<MenuItem icon={<CrumpledPaperIcon />} isDisabled>Merge test case</MenuItem>
+						<MenuItem icon={<CrumpledPaperIcon />} isDisabled>
+							Merge test case
+						</MenuItem>
 
 						<MenuDivider />
 
@@ -308,9 +315,31 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 					>
 						Recent activity
 					</Heading>
-					<Divider mt={1} mb={4} />
-				</Box>
+					<Divider mt={1} />
+					<Box overflow='auto' maxH="278px">
+						{userStory?.testOutcome?.items.map((outcome, index) => (
+							<RecentActivityCard
+								type={outcome.status == 'passing' ? 'success' : (outcome.status == 'did not run' || outcome.status == 'failing') ? 'error' : 'info'}
+								title={`${outcome.status == 'passing' ? 'Passing' : (outcome.status == 'did not run' || outcome.status == 'failing') ? 'Failing' : 'In progress'} run`}
+								date={outcome.createdAt}
+								link={`/${slugifiedProjectName}/test-runs/${outcome.testRun.id}`}
+							/>
+						))}
 
+						<RecentActivityCard
+							type="info"
+							title={`Case created by ${userStory?.createdBy?.firstName}`}
+							date={userStory?.createdAt}
+							icon={
+								<Avatar
+									src={userStory?.createdBy?.avatar?.downloadUrl}
+									borderRadius="md"
+									boxSize={4}
+								/>
+							}
+						/>
+					</Box>
+				</Box>
 			</Stack>
 		</>
 	);

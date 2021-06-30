@@ -35,9 +35,9 @@ export const SideStep = ({
 		<MotionFlex
 			initial={{ y: 100, opacity: 0 }}
 			animate={{ y: 0, opacity: 1 }}
-			m={2}
+			my={3}
 			onClick={() => setSelectedStep(scriptCommand.sIndex)}
-			cursor='pointer'
+			cursor="pointer"
 		// drag="y"
 		// dragListener={false}
 		// onDragEnd={() => {
@@ -76,11 +76,7 @@ export const SideStep = ({
 				borderColor={
 					selectedStep === scriptCommand?.sIndex ? selectedBlue : 'transparent'
 				}
-				backgroundColor={
-					selectedStep === scriptCommand?.sIndex
-						? hoverBackgroundColor
-						: 'transparent'
-				}
+				backgroundColor={hoverBackgroundColor}
 				_hover={{
 					backgroundColor: hoverBackgroundColor,
 				}}
