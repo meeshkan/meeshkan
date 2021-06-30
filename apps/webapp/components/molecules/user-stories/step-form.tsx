@@ -54,8 +54,6 @@ export const StepForm = ({ userStory, selectedStep }: DetailsFormProps) => {
 		(scriptCommand) => scriptCommand.sIndex === selectedStep
 	);
 
-	console.log(scriptCommand);
-
 	return (
 		<Stack spacing={6}>
 			<Flex align="center">
@@ -74,7 +72,8 @@ export const StepForm = ({ userStory, selectedStep }: DetailsFormProps) => {
 						<option>type</option>
 						<option>drag and drop</option>
 						<option>scroll</option>
-						<option disabled>focus</option>
+						<option>execute javascript</option>
+						<option>mouse over</option>
 						<option disabled>api request</option>
 					</optgroup>
 					<optgroup label="Assertions"></optgroup>
@@ -83,7 +82,7 @@ export const StepForm = ({ userStory, selectedStep }: DetailsFormProps) => {
 			<Flex align="center">
 				<Label text="Xpath" />
 				<Input
-					defaultValue={scriptCommand?.xpath}
+					value={scriptCommand?.xpath}
 					size="sm"
 					borderRadius="md"
 					fontFamily="mono"
@@ -92,7 +91,7 @@ export const StepForm = ({ userStory, selectedStep }: DetailsFormProps) => {
 			<Flex align="center">
 				<Label text="selector" />
 				<Input
-					defaultValue={scriptCommand?.selector}
+					value={scriptCommand?.selector}
 					size="sm"
 					borderRadius="md"
 					fontFamily="mono"

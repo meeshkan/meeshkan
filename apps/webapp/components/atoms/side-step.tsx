@@ -37,13 +37,14 @@ export const SideStep = ({
 			animate={{ y: 0, opacity: 1 }}
 			m={2}
 			onClick={() => setSelectedStep(scriptCommand.sIndex)}
-			// drag="y"
-			// dragListener={false}
-			// onDragEnd={() => {
-			// 	setDragging(false);
-			// }}
-			// zIndex={isDragging ? 3 : 1}
-			// dragControls={dragControls}
+			cursor='pointer'
+		// drag="y"
+		// dragListener={false}
+		// onDragEnd={() => {
+		// 	setDragging(false);
+		// }}
+		// zIndex={isDragging ? 3 : 1}
+		// dragControls={dragControls}
 		>
 			<Flex
 				justify="center"
@@ -83,11 +84,11 @@ export const SideStep = ({
 				_hover={{
 					backgroundColor: hoverBackgroundColor,
 				}}
-				// sx={{
-				// 	':hover #drag-handle': {
-				// 		display: 'inline-flex',
-				// 	},
-				// }}
+			// sx={{
+			// 	':hover #drag-handle': {
+			// 		display: 'inline-flex',
+			// 	},
+			// }}
 			>
 				<Text
 					flex="1"

@@ -44,7 +44,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 	} = useValidateSelectedProject();
 	const router = useRouter();
 	const [selectedStep, setSelectedStep] = useState<Number | null>(null);
-	console.log(selectedStep);
 	const { userStoryId } = router.query;
 
 	const backLinkColor = useColorModeValue('gray.900', 'gray.200');
@@ -138,7 +137,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					title={
 						typeof selectedStep == 'number'
 							? `Step #${selectedStep + 1} details`
-							: 'User story details'
+							: null
 					}
 					h="100%"
 					maxH="none"
@@ -154,22 +153,6 @@ const UserStoryPage = (props: UserStoryProps) => {
 					) : (
 						<DetailsForm userStory={data?.userStory} />
 					)}
-
-					{/*<Spacer h={8} />
-
-					 <Stack>
-						<Heading
-							as="h2"
-							d="flex"
-							alignItems="center"
-							fontSize="lg"
-							fontWeight="800"
-							lineHeight="short"
-						>
-							Recent activity
-						</Heading>
-						<Divider mt={1} mb={4} />
-					</Stack> */}
 				</GridItem>
 			</SimpleGrid>
 		</ValidatedBillingPlan>
