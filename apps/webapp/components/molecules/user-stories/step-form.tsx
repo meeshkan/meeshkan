@@ -15,6 +15,7 @@ import {
 	Box,
 	FormLabelProps,
 	Checkbox,
+	FormControl,
 } from '@chakra-ui/react';
 import { UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
@@ -38,7 +39,8 @@ const Label = ({
 			textTransform="uppercase"
 			color={formLabelColor}
 			fontSize="10px"
-			minW={short ? 'fit-content' : '96px'}
+			minW={short ? 'fit-content' : '80px'}
+			lineHeight="1.4"
 		>
 			{text}
 		</FormLabel>
@@ -56,7 +58,7 @@ export const StepForm = ({ userStory, selectedStep }: DetailsFormProps) => {
 
 	return (
 		<Stack spacing={6}>
-			<Flex align="center">
+			<FormControl>
 				<Label text="Command" />
 				<Select
 					value={scriptCommand?.command}
@@ -78,142 +80,157 @@ export const StepForm = ({ userStory, selectedStep }: DetailsFormProps) => {
 					</optgroup>
 					<optgroup label="Assertions"></optgroup>
 				</Select>
-			</Flex>
-			<Flex align="center">
-				<Label text="Xpath" />
-				<Input
-					value={scriptCommand?.xpath}
-					size="sm"
-					borderRadius="md"
-					fontFamily="mono"
-				/>
-			</Flex>
-			<Flex align="center">
-				<Label text="selector" />
-				<Input
-					value={scriptCommand?.selector}
-					size="sm"
-					borderRadius="md"
-					fontFamily="mono"
-				/>
-			</Flex>
+			</FormControl>
 
-			<Box>
-				<Box mb="-8px" ml={3}>
-					<Label text="Coordinates" />
-				</Box>
-				<Flex
-					borderLeft="1px solid"
-					borderRight="1px solid"
-					borderBottom="1px solid"
-					borderColor={groupBorderColor}
-					borderRadius="md"
-					p={4}
-				>
-					<Flex align="center" mr={4}>
-						<Label text="X" short />
-						<NumberInput
-							defaultValue={scriptCommand?.xCoordinate}
+			{scriptCommand?.command !== 'open' &&
+				scriptCommand?.command !== 'set viewport size' &&
+				scriptCommand?.command !== 'execute javascript' && (
+					<>
+						<FormControl>
+							<Label text="Xpath" />
+							<Input
+								value={scriptCommand?.xpath}
+								size="sm"
+								borderRadius="md"
+								fontFamily="mono"
+							/>
+						</FormControl>
+						<FormControl>
+							<Label text="selector" />
+							<Input
+								value={scriptCommand?.selector}
+								size="sm"
+								borderRadius="md"
+								fontFamily="mono"
+							/>
+						</FormControl>
+					</>
+				)}
+
+			{(scriptCommand?.command === 'click' || scriptCommand?.command === 'set viewport size') && (
+				<FormControl>
+					<Box mb="-8px" ml={3}>
+						<Label text="Coordinates" />
+					</Box>
+					<Flex
+						borderLeft="1px solid"
+						borderRight="1px solid"
+						borderBottom="1px solid"
+						borderColor={groupBorderColor}
+						borderRadius="md"
+						p={4}
+					>
+						<Flex align="center" mr={4}>
+							<Label text="X" short />
+							<NumberInput
+								defaultValue={scriptCommand?.xCoordinate}
+								size="sm"
+								borderRadius="md"
+								fontFamily="mono"
+							>
+								<NumberInputField borderRadius="md" />
+								<NumberInputStepper>
+									<NumberIncrementStepper />
+									<NumberDecrementStepper />
+								</NumberInputStepper>
+							</NumberInput>
+						</Flex>
+
+						<Flex align="center">
+							<Label text="Y" short />
+							<NumberInput
+								defaultValue={scriptCommand?.yCoordinate}
+								size="sm"
+								borderRadius="md"
+								fontFamily="mono"
+							>
+								<NumberInputField borderRadius="md" />
+								<NumberInputStepper>
+									<NumberIncrementStepper />
+									<NumberDecrementStepper />
+								</NumberInputStepper>
+							</NumberInput>
+						</Flex>
+					</Flex>
+				</FormControl>
+			)}
+
+			{scriptCommand?.command === 'scroll' && (
+				<FormControl>
+					<Box mb="-8px" ml={3}>
+						<Label text="Scroll" short />
+					</Box>
+					<Flex
+						borderLeft="1px solid"
+						borderRight="1px solid"
+						borderBottom="1px solid"
+						borderColor={groupBorderColor}
+						borderRadius="md"
+						p={4}
+					>
+						<Flex align="center" mr={4}>
+							<Label text="Top" short />
+							<NumberInput
+								defaultValue={scriptCommand?.scrollTop}
+								size="sm"
+								borderRadius="md"
+								fontFamily="mono"
+							>
+								<NumberInputField borderRadius="md" />
+								<NumberInputStepper>
+									<NumberIncrementStepper />
+									<NumberDecrementStepper />
+								</NumberInputStepper>
+							</NumberInput>
+						</Flex>
+
+						<Flex align="center">
+							<Label text="Left" short />
+							<NumberInput
+								defaultValue={scriptCommand?.scrollLeft}
+								size="sm"
+								borderRadius="md"
+								fontFamily="mono"
+							>
+								<NumberInputField borderRadius="md" />
+								<NumberInputStepper>
+									<NumberIncrementStepper />
+									<NumberDecrementStepper />
+								</NumberInputStepper>
+							</NumberInput>
+						</Flex>
+					</Flex>
+				</FormControl>
+			)}
+
+			{/* Value is only specified for open, and type events */}
+			{(scriptCommand?.command === 'open' ||
+				scriptCommand?.command === 'type') && (
+					<FormControl>
+						<Label text="Value" />
+						<Input
+							fontFamily="mono"
+							defaultValue={scriptCommand?.value}
 							size="sm"
 							borderRadius="md"
-							fontFamily="mono"
-						>
-							<NumberInputField borderRadius="md" />
-							<NumberInputStepper>
-								<NumberIncrementStepper />
-								<NumberDecrementStepper />
-							</NumberInputStepper>
-						</NumberInput>
-					</Flex>
-
-					<Flex align="center">
-						<Label text="Y" short />
-						<NumberInput
-							defaultValue={scriptCommand?.yCoordinate}
-							size="sm"
-							borderRadius="md"
-							fontFamily="mono"
-						>
-							<NumberInputField borderRadius="md" />
-							<NumberInputStepper>
-								<NumberIncrementStepper />
-								<NumberDecrementStepper />
-							</NumberInputStepper>
-						</NumberInput>
-					</Flex>
-				</Flex>
-			</Box>
-
-			<Box>
-				<Box mb="-8px" ml={3}>
-					<Label text="Scroll" short />
-				</Box>
-				<Flex
-					borderLeft="1px solid"
-					borderRight="1px solid"
-					borderBottom="1px solid"
-					borderColor={groupBorderColor}
-					borderRadius="md"
-					p={4}
-				>
-					<Flex align="center" mr={4}>
-						<Label text="Top" short />
-						<NumberInput
-							defaultValue={scriptCommand?.scrollTop}
-							size="sm"
-							borderRadius="md"
-							fontFamily="mono"
-						>
-							<NumberInputField borderRadius="md" />
-							<NumberInputStepper>
-								<NumberIncrementStepper />
-								<NumberDecrementStepper />
-							</NumberInputStepper>
-						</NumberInput>
-					</Flex>
-
-					<Flex align="center">
-						<Label text="Left" short />
-						<NumberInput
-							defaultValue={scriptCommand?.scrollLeft}
-							size="sm"
-							borderRadius="md"
-							fontFamily="mono"
-						>
-							<NumberInputField borderRadius="md" />
-							<NumberInputStepper>
-								<NumberIncrementStepper />
-								<NumberDecrementStepper />
-							</NumberInputStepper>
-						</NumberInput>
-					</Flex>
-				</Flex>
-			</Box>
-
-			<Flex align="center">
-				<Label text="Value" />
-				<Input
-					fontFamily="mono"
-					defaultValue={scriptCommand?.value}
-					size="sm"
-					borderRadius="md"
-				/>
-			</Flex>
-			<Flex align="center">
-				<Label text="Document url" />
+						/>
+					</FormControl>
+				)}
+			<FormControl>
+				<Label text="Page" />
 				<Input
 					fontFamily="mono"
 					defaultValue={scriptCommand?.documentURL}
 					size="sm"
 					borderRadius="md"
 				/>
-			</Flex>
+			</FormControl>
 
-			<Flex align="center">
-				<Checkbox defaultIsChecked isReadOnly>
+			<FormControl>
+				<Checkbox defaultIsChecked isDisabled>
 					<Label text="Required step" />
 				</Checkbox>
-			</Flex>
+			</FormControl>
 
 			<Spacer size={6} />
 
