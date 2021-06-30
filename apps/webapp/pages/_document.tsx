@@ -63,6 +63,10 @@ class MyDocument extends Document<DocumentProps> {
 						nonce={`456DE3C3-1598-4D76-BA71-DE9A6EDBFB3B`}
 						mixpanelApiKey={process.env.MIXPANEL_TOKEN || ''}
 					/>
+					<script
+						src="https://meeshkan-product-tours.vercel.app/tours.js"
+						id="meeshkan-product-tours"
+					/>
 				</Head>
 				<Main />
 				<NextScript />
