@@ -575,3 +575,14 @@ export const PLAN_UPDATE = gql`
 		}
 	}
 `;
+
+export const UPDATE_HAS_RECEIVED_EVENTS = gql`
+	mutation UPDATE_HAS_RECEIVED_EVENTS($projectId: ID!, $hasReceivedEvents: Boolean!) {
+		projectUpdate(
+			filter: { id: $projectId }
+			data: { hasReceivedEvents: $hasReceivedEvents }
+		) {
+			hasReceivedEvents
+		}
+	}
+`;

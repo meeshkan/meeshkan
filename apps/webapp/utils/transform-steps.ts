@@ -100,7 +100,16 @@ export const commandsToSteps = (
 				scriptCommand: commandData,
 			});
 		}
-
+		if (commandData.command === 'mouse over') {
+			subSteps.push({
+				text: `Hover ${HumanTag(commandData.tagName)} at x: ${
+					commandData?.xCoordinate
+				} and y: ${commandData?.yCoordinate}.`,
+				sIndex: commandData.sIndex,
+				command: 'mouse over',
+				tagName: HumanTag(commandData.tagName),
+			});
+		}
 		if (commandData.command === 'scroll') {
 			subSteps.push({
 				text: `Scroll ${
