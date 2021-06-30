@@ -3,6 +3,7 @@ import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { CheckmarkIcon, XmarkIcon } from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
 import Link from 'next/link';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
 
 type RecentActivityProps = {
   type: 'info' | 'success' | 'error';
@@ -55,7 +56,7 @@ const Card = ({ type, title, date, icon }: RecentActivityProps) => {
         ) : type == 'error' ? (
           <XmarkIcon boxSize={3} />
         ) : (
-          icon
+          icon || <InfoOutlineIcon />
         )}
       </Box>
       <Box>

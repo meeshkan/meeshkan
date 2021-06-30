@@ -55,7 +55,6 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 	const [deleting, setDeleting] = useState(false);
 	const toaster = useToaster();
 
-	const date = new Date().toISOString().replace('Z', '') + '+00:00';
 	const menuBackground = useColorModeValue('white', 'gray.900');
 	const formLabelColor = useColorModeValue('gray.500', 'gray.400');
 	const deleteBackground = useColorModeValue(
