@@ -286,7 +286,7 @@ const Settings = () => {
 				return;
 			}
 
-			handleExtensionAuthHandshake(null, user, false);
+			handleExtensionAuthHandshake(user, false);
 			startRecording({
 				url: project.configuration.productionURL,
 				isAuthFlow: true,
