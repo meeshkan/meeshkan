@@ -1,10 +1,10 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { MotionFlex } from './motion';
 import { DragHandleIcon } from '@frontend/chakra-theme';
 import { useDragControls } from 'framer-motion';
 import { ScriptCommand } from '@frontend/meeshkan-types';
-// import { Position, useMeasurePosition } from '../../utils/use-measure-position';
+import { Position, useMeasurePosition } from '../../utils/use-measure-position';
 
 type StoryStepProps = {
 	stepNumber: number;
@@ -23,12 +23,20 @@ export const SideStep = ({
 }: StoryStepProps) => {
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
-	// const [isDragging, setDragging] = useState(false);
-	// const dragControls = useDragControls();
-	// function startDrag(event: PointerEvent<HTMLDivElement>) {
-	// 	dragControls.start(event, { snapToCursor: true });
-	// 	setDragging(true);
-	// }
+	const [isDragging, setDragging] = useState(false);
+	const dragControls = useDragControls();
+	function startDrag(
+		event:
+			| MouseEvent
+			| React.MouseEvent<Element, MouseEvent>
+			| React.TouchEvent<Element>
+			| React.PointerEvent<Element>
+			| TouchEvent
+			| PointerEvent
+	) {
+		dragControls.start(event, { snapToCursor: true });
+		setDragging(true);
+	}
 
 	return (
 		<MotionFlex
@@ -37,13 +45,13 @@ export const SideStep = ({
 			my={3}
 			onClick={() => setSelectedStep(scriptCommand.sIndex)}
 			cursor="pointer"
-		// drag="y"
-		// dragListener={false}
-		// onDragEnd={() => {
-		// 	setDragging(false);
-		// }}
-		// zIndex={isDragging ? 3 : 1}
-		// dragControls={dragControls}
+			drag="y"
+			dragListener={false}
+			onDragEnd={() => {
+				setDragging(false);
+			}}
+			zIndex={isDragging ? 100 : 1}
+			dragControls={dragControls}
 		>
 			<Flex
 				justify="center"
@@ -68,7 +76,7 @@ export const SideStep = ({
 				{stepNumber}
 			</Flex>
 			<Box
-				d='flex'
+				d="flex"
 				p={3}
 				borderRadius="lg"
 				w="full"
@@ -78,12 +86,13 @@ export const SideStep = ({
 				}
 				backgroundColor={hoverBackgroundColor}
 				_hover={{
-					boxShadow: 'sm'
+					boxShadow: 'sm',
 				}}
+				_active={{ transform: 'rotate(-1deg)' }}
 				sx={{
 					':hover #drag-handle': {
 						display: 'inline-flex',
-					}
+					},
 				}}
 			>
 				<Text
@@ -98,10 +107,10 @@ export const SideStep = ({
 				<Box
 					cursor="grab"
 					_active={{ cursor: 'grabbing' }}
-				// onPointerDown={startDrag}
-				// onPointerUp={() => {
-				// 	setDragging(false);
-				// }}
+					onPointerDown={startDrag}
+					onPointerUp={() => {
+						setDragging(false);
+					}}
 				>
 					<DragHandleIcon id="drag-handle" display="none" color="gray.300" />
 				</Box>
