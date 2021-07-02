@@ -554,6 +554,24 @@ export const FilterIcon = createIcon({
 		'M 2.133 4.8 C 2.133 4.505 2.372 4.267 2.667 4.267 L 13.333 4.267 C 13.628 4.267 13.867 4.505 13.867 4.8 C 13.867 5.095 13.628 5.333 13.333 5.333 L 2.667 5.333 C 2.372 5.333 2.133 5.095 2.133 4.8 Z M 4.267 8 C 4.267 7.705 4.505 7.467 4.8 7.467 L 11.2 7.467 C 11.495 7.467 11.733 7.705 11.733 8 C 11.733 8.295 11.495 8.533 11.2 8.533 L 4.8 8.533 C 4.505 8.533 4.267 8.295 4.267 8 Z M 5.867 11.2 C 5.867 10.905 6.105 10.667 6.4 10.667 L 9.6 10.667 C 9.895 10.667 10.133 10.905 10.133 11.2 C 10.133 11.495 9.895 11.733 9.6 11.733 L 6.4 11.733 C 6.105 11.733 5.867 11.495 5.867 11.2 Z',
 });
 
+export const SaveIcon = createIcon({
+	displayName: 'SaveIcon',
+	viewBox: '0 0 24 24',
+	path: (
+		<g
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		>
+			<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+			<polyline points="17 21 17 13 7 13 7 21" />
+			<polyline points="7 3 7 8 15 8" />
+		</g>
+	),
+});
+
 export const HamburgerIcon = createIcon({
 	displayName: 'HamburgerIcon',
 	viewBox: '0 0 18 14',

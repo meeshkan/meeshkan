@@ -119,31 +119,13 @@ const UserStoryPage = (props: UserStoryProps) => {
 					/>
 				</GridItem>
 
-				<GridItem
-					as={GridCard}
-					leftAction={
-						typeof selectedStep == 'number' ? (
-							<ChevronLeftIcon
-								cursor="pointer"
-								mr={3}
-								onClick={() => setSelectedStep(null)}
-							/>
-						) : null
-					}
-					title={
-						typeof selectedStep == 'number'
-							? `Step #${selectedStep + 1} details`
-							: null
-					}
-					h="100%"
-					maxH="none"
-					colSpan={1}
-				>
+				<GridItem as={GridCard} h="100%" maxH="none" colSpan={1}>
 					{typeof selectedStep == 'number' ? (
 						<>
 							<StepForm
 								userStory={data?.userStory}
 								selectedStep={selectedStep}
+								setSelectedStep={setSelectedStep}
 							/>
 						</>
 					) : (

@@ -207,12 +207,19 @@ export const onDelete = async ({
 	setDeleting(false);
 };
 
-export const handleDownload = (
-	scriptCommands: ScriptCommandListResponse,
-	authenticationTokens: AuthenticationTokenListResponse['items'],
-	stagingURL: string,
-	slugifiedStoryName: string
-) => {
+type DownloadProps = {
+	scriptCommands: ScriptCommandListResponse;
+	authenticationTokens: AuthenticationTokenListResponse['items'];
+	stagingURL: string;
+	slugifiedStoryName: string;
+};
+
+export const handleDownload = ({
+	scriptCommands,
+	authenticationTokens,
+	stagingURL,
+	slugifiedStoryName,
+}: DownloadProps) => {
 	const toaster = useToaster();
 	const mixpanel = useAnalytics();
 	try {
@@ -230,6 +237,7 @@ export const handleDownload = (
 		});
 		saveAs(blob, `${slugifiedStoryName}.js`);
 	} catch (err) {
+		console.error;
 		toaster({
 			status: 'error',
 			title: 'Your test case could not be generated.',

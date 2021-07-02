@@ -112,12 +112,13 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 						<MenuItem
 							icon={<DownloadIcon />}
 							onClick={() =>
-								handleDownload(
-									userStory?.scriptCommands,
-									project?.configuration?.authenticationTokens?.items,
-									project?.configuration?.stagingURL,
-									slugifiedStoryName
-								)
+								handleDownload({
+									scriptCommands: userStory?.scriptCommands,
+									authenticationTokens:
+										project?.configuration?.authenticationTokens?.items,
+									stagingURL: project?.configuration?.stagingURL,
+									slugifiedStoryName,
+								})
 							}
 						>
 							Download manual script
@@ -315,11 +316,25 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 						Recent activity
 					</Heading>
 					<Divider mt={1} />
-					<Box overflow='auto' maxH="278px">
+					<Box overflow="auto" maxH="278px">
 						{userStory?.testOutcome?.items.map((outcome, index) => (
 							<RecentActivityCard
-								type={outcome.status == 'passing' ? 'success' : (outcome.status == 'did not run' || outcome.status == 'failing') ? 'error' : 'info'}
-								title={`${outcome.status == 'passing' ? 'Passing' : (outcome.status == 'did not run' || outcome.status == 'failing') ? 'Failing' : 'In progress'} run`}
+								type={
+									outcome.status == 'passing'
+										? 'success'
+										: outcome.status == 'did not run' ||
+										  outcome.status == 'failing'
+										? 'error'
+										: 'info'
+								}
+								title={`${
+									outcome.status == 'passing'
+										? 'Passing'
+										: outcome.status == 'did not run' ||
+										  outcome.status == 'failing'
+										? 'Failing'
+										: 'In progress'
+								} run`}
 								date={outcome.createdAt}
 								link={`/${slugifiedProjectName}/test-runs/${outcome.testRun.id}`}
 							/>
