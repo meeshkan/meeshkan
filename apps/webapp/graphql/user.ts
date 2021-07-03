@@ -66,6 +66,8 @@ export const USER = gql`
 					name
 					configuration {
 						id
+						stagingURL
+						clientSecret
 					}
 					avatar {
 						downloadUrl
