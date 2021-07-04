@@ -91,7 +91,7 @@ export const SideStep = ({
 				_active={{ transform: 'rotate(-1deg)' }}
 				sx={{
 					':hover #drag-handle': {
-						display: 'inline-flex',
+						visibility: 'visible',
 					},
 				}}
 			>
@@ -112,7 +112,11 @@ export const SideStep = ({
 						setDragging(false);
 					}}
 				>
-					<DragHandleIcon id="drag-handle" display="none" color="gray.300" />
+					<DragHandleIcon
+						id="drag-handle"
+						visibility="hidden"
+						color="gray.300"
+					/>
 				</Box>
 			</Box>
 		</MotionFlex>

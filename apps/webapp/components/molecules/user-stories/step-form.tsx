@@ -68,6 +68,7 @@ export const StepForm = ({
 	const toaster = useToaster();
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
 	const { register, handleSubmit } = useForm<ScriptCommand>();
+	const [saving, setSaving] = useState(false);
 
 	const scriptCommand = userStory.scriptCommands.items.find(
 		(scriptCommand) => scriptCommand.sIndex === selectedStep
@@ -111,10 +112,15 @@ export const StepForm = ({
 		setDocumentURL(scriptCommand?.documentURL);
 	}, [selectedStep]);
 
-	const onSubmit = async (formData: ScriptCommand): Promise<void> => {
-		console.log(commandID, formData);
-		updateStep(commandID, formData, idToken)
+	const onSubmit = async (formData: ScriptCommand) => {
+		await setSaving(true);
+		await updateStep(commandID, formData, idToken);
+		await setSaving(false);
 	};
+
+	// const onDelete = async (commandID: ScriptCommand['id']) => {
+	// 	deleteStep(commandID, idToken)
+	// };
 
 	return (
 		<Stack justify="space-between" h="100%">
@@ -138,12 +144,18 @@ export const StepForm = ({
 				</Flex>
 				<Divider mt={1} mb={4} />
 
-				<Stack as="form" id="step-form" onSubmit={handleSubmit(onSubmit)} spacing={6}>
+				<Stack
+					as="form"
+					id="step-form"
+					onSubmit={handleSubmit(onSubmit)}
+					spacing={6}
+				>
 					<FormControl>
 						<Label text="Command" />
 						<Select
 							name="command"
-							defaultValue={command}
+							value={command}
+							onChange={(e) => setCommand(e.target.value)}
 							ref={register}
 							size="sm"
 							borderRadius="md"
@@ -171,6 +183,7 @@ export const StepForm = ({
 
 					{scriptCommand?.command !== 'open' &&
 						scriptCommand?.command !== 'set viewport size' &&
+						scriptCommand?.command !== 'scroll' &&
 						scriptCommand?.command !== 'execute javascript' && (
 							<>
 								<FormControl>
@@ -305,24 +318,24 @@ export const StepForm = ({
 					{/* Value is only specified for open, and type events */}
 					{(scriptCommand?.command === 'open' ||
 						scriptCommand?.command === 'type') && (
-							<FormControl>
-								<Label text="Value" />
-								<Input
-									fontFamily="mono"
-									name="value"
-									defaultValue={value}
-									ref={register}
-									size="sm"
-									borderRadius="md"
-								/>
-							</FormControl>
-						)}
+						<FormControl>
+							<Label text="Value" />
+							<Input
+								fontFamily="mono"
+								name="value"
+								defaultValue={value}
+								ref={register}
+								size="sm"
+								borderRadius="md"
+							/>
+						</FormControl>
+					)}
 
 					{scriptCommand?.command === 'type' ||
-						scriptCommand?.command === 'click' ||
-						scriptCommand?.command === 'scroll' ||
-						scriptCommand?.command === 'drag and drop' ||
-						scriptCommand?.command === 'mouse over' ? (
+					scriptCommand?.command === 'click' ||
+					scriptCommand?.command === 'scroll' ||
+					scriptCommand?.command === 'drag and drop' ||
+					scriptCommand?.command === 'mouse over' ? (
 						<FormControl>
 							<Label text="Page" />
 							<Input
@@ -351,6 +364,8 @@ export const StepForm = ({
 					colorScheme="blue"
 					variant="subtle"
 					leftIcon={<SaveIcon />}
+					isLoading={saving}
+					loadingText="Saving changes"
 				>
 					Save changes
 				</Button>
