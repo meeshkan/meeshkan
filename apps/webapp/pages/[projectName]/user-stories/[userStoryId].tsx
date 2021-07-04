@@ -7,6 +7,8 @@ import {
 	SimpleGrid,
 	GridItem,
 	Spacer,
+	Spinner,
+	Center,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { ScriptCommandListResponse, UserStory } from '@frontend/meeshkan-types';
@@ -70,7 +72,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		(validatingQuery && (!data || data?.userStory?.id !== userStoryId)) ||
 		validatingProject
 	) {
-		return <LoadingScreen as={Card} />;
+		return <Center h='full'><Spinner /></Center>;
 	}
 	if (!foundProject || data?.userStory === null) {
 		return <NotFoundError />;

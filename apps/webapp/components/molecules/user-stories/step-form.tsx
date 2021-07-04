@@ -30,6 +30,7 @@ import { useToaster } from '../../../hooks/use-toaster';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
+import { updateStep } from 'apps/webapp/utils/user-story-helpers';
 
 type DetailsFormProps = {
 	userStory: UserStory;
@@ -63,7 +64,7 @@ export const StepForm = ({
 	selectedStep,
 	setSelectedStep,
 }: DetailsFormProps) => {
-	const { project, idToken } = useContext(UserContext);
+	const { idToken } = useContext(UserContext);
 	const toaster = useToaster();
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
 	const { register, handleSubmit } = useForm<ScriptCommand>();
@@ -73,6 +74,7 @@ export const StepForm = ({
 	);
 
 	// Command field valeus
+	const [commandID, setCommandID] = useState<string | null>(scriptCommand?.id);
 	const [command, setCommand] = useState<string | null>(scriptCommand?.command);
 	const [xpath, setXpath] = useState<string | null>(scriptCommand?.xpath);
 	const [selector, setSelector] = useState<string | null>(
@@ -97,6 +99,7 @@ export const StepForm = ({
 
 	// Keep the values up to date when selecting a new step
 	useEffect(() => {
+		setCommandID(scriptCommand?.id);
 		setCommand(scriptCommand?.command);
 		setXpath(scriptCommand?.xpath);
 		setSelector(scriptCommand?.selector);
@@ -109,7 +112,8 @@ export const StepForm = ({
 	}, [selectedStep]);
 
 	const onSubmit = async (formData: ScriptCommand): Promise<void> => {
-		console.log(formData);
+		console.log(commandID, formData);
+		updateStep(commandID, formData, idToken)
 	};
 
 	return (
@@ -134,12 +138,12 @@ export const StepForm = ({
 				</Flex>
 				<Divider mt={1} mb={4} />
 
-				<Stack as="form" onSubmit={handleSubmit(onSubmit)} spacing={6}>
+				<Stack as="form" id="step-form" onSubmit={handleSubmit(onSubmit)} spacing={6}>
 					<FormControl>
 						<Label text="Command" />
 						<Select
 							name="command"
-							value={command}
+							defaultValue={command}
 							ref={register}
 							size="sm"
 							borderRadius="md"
@@ -173,7 +177,7 @@ export const StepForm = ({
 									<Label text="Xpath" />
 									<Input
 										name="xpath"
-										value={xpath}
+										defaultValue={xpath}
 										ref={register}
 										size="sm"
 										borderRadius="md"
@@ -184,7 +188,7 @@ export const StepForm = ({
 									<Label text="selector" />
 									<Input
 										name="selector"
-										value={selector}
+										defaultValue={selector}
 										ref={register}
 										size="sm"
 										borderRadius="md"
@@ -211,7 +215,7 @@ export const StepForm = ({
 									<Label text="X" short />
 									<NumberInput
 										name="xCoordinate"
-										value={xCoordinate}
+										defaultValue={xCoordinate}
 										ref={register}
 										size="sm"
 										borderRadius="md"
@@ -229,7 +233,7 @@ export const StepForm = ({
 									<Label text="Y" short />
 									<NumberInput
 										name="yCoordinate"
-										value={yCoordinate}
+										defaultValue={yCoordinate}
 										ref={register}
 										size="sm"
 										borderRadius="md"
@@ -263,7 +267,7 @@ export const StepForm = ({
 									<Label text="Top" short />
 									<NumberInput
 										name="scrollTop"
-										value={scrollTop}
+										defaultValue={scrollTop}
 										ref={register}
 										size="sm"
 										borderRadius="md"
@@ -281,7 +285,7 @@ export const StepForm = ({
 									<Label text="Left" short />
 									<NumberInput
 										name="scrollLeft"
-										value={scrollLeft}
+										defaultValue={scrollLeft}
 										ref={register}
 										size="sm"
 										borderRadius="md"
@@ -301,30 +305,30 @@ export const StepForm = ({
 					{/* Value is only specified for open, and type events */}
 					{(scriptCommand?.command === 'open' ||
 						scriptCommand?.command === 'type') && (
-						<FormControl>
-							<Label text="Value" />
-							<Input
-								fontFamily="mono"
-								name="value"
-								value={value}
-								ref={register}
-								size="sm"
-								borderRadius="md"
-							/>
-						</FormControl>
-					)}
+							<FormControl>
+								<Label text="Value" />
+								<Input
+									fontFamily="mono"
+									name="value"
+									defaultValue={value}
+									ref={register}
+									size="sm"
+									borderRadius="md"
+								/>
+							</FormControl>
+						)}
 
 					{scriptCommand?.command === 'type' ||
-					scriptCommand?.command === 'click' ||
-					scriptCommand?.command === 'scroll' ||
-					scriptCommand?.command === 'drag and drop' ||
-					scriptCommand?.command === 'mouse over' ? (
+						scriptCommand?.command === 'click' ||
+						scriptCommand?.command === 'scroll' ||
+						scriptCommand?.command === 'drag and drop' ||
+						scriptCommand?.command === 'mouse over' ? (
 						<FormControl>
 							<Label text="Page" />
 							<Input
 								fontFamily="mono"
 								name="documentURL"
-								value={documentURL}
+								defaultValue={documentURL}
 								ref={register}
 								size="sm"
 								borderRadius="md"
@@ -343,7 +347,7 @@ export const StepForm = ({
 			<Stack spacing={4}>
 				<Button
 					type="submit"
-					size="sm"
+					form="step-form"
 					colorScheme="blue"
 					variant="subtle"
 					leftIcon={<SaveIcon />}
@@ -351,7 +355,6 @@ export const StepForm = ({
 					Save changes
 				</Button>
 				<Button
-					size="sm"
 					colorScheme="red"
 					variant="subtle"
 					leftIcon={<TrashIcon />}

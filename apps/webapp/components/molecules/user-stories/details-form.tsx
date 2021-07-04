@@ -319,22 +319,22 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 					<Box overflow="auto" maxH="278px">
 						{userStory?.testOutcome?.items.map((outcome, index) => (
 							<RecentActivityCard
+								key={index}
 								type={
 									outcome.status == 'passing'
 										? 'success'
 										: outcome.status == 'did not run' ||
-										  outcome.status == 'failing'
-										? 'error'
-										: 'info'
+											outcome.status == 'failing'
+											? 'error'
+											: 'info'
 								}
-								title={`${
-									outcome.status == 'passing'
+								title={`${outcome.status == 'passing'
 										? 'Passing'
 										: outcome.status == 'did not run' ||
-										  outcome.status == 'failing'
-										? 'Failing'
-										: 'In progress'
-								} run`}
+											outcome.status == 'failing'
+											? 'Failing'
+											: 'In progress'
+									} run`}
 								date={outcome.createdAt}
 								link={`/${slugifiedProjectName}/test-runs/${outcome.testRun.id}`}
 							/>

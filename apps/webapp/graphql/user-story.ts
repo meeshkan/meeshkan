@@ -53,6 +53,7 @@ export const USER_STORY = gql`
 			scriptCommands {
 				count
 				items {
+					id
 					command
 					sIndex
 					value
@@ -292,6 +293,7 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 		}
 	}
 `;
+
 export const UPDATE_REQUIRES_AUTHENTICATION = gql`
 	mutation UPDATE_REQUIRES_AUTHENTICATION(
 		$userStoryId: ID!
@@ -341,6 +343,17 @@ export const UPDATE_REQUIRES_AUTHENTICATION = gql`
 					}
 				}
 			}
+		}
+	}
+`;
+
+export const UPDATE_STEP = gql`
+	mutation UPDATE_STEP(
+		$commandID: ID!
+		$scriptCommand: ScriptCommandUpdateInput!
+	) {
+		scriptCommandUpdate(filter: { id: $commandID }, data: $scriptCommand) {
+			updatedAt
 		}
 	}
 `;

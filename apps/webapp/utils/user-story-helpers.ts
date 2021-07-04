@@ -1,8 +1,9 @@
+import React, { Dispatch, SetStateAction } from 'react';
 import {
 	ScriptCommandListResponse,
 	AuthenticationTokenListResponse,
+	ScriptCommand,
 } from './../../../libs/meeshkan-types/src/lib/8base-schema';
-import React, { Dispatch, SetStateAction } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import {
@@ -12,6 +13,7 @@ import {
 	UPDATE_STORY_DESCRIPTION,
 	UPDATE_STORY_SIGNIFICANCE,
 	UPDATE_STORY_TITLE,
+	UPDATE_STEP,
 } from '../graphql/user-story';
 import { useToaster } from '../hooks/use-toaster';
 import { eightBaseClient } from './graphql';
@@ -245,4 +247,17 @@ export const handleDownload = ({
 		});
 	}
 	mixpanel.track('Puppeteer script downloaded');
+};
+
+export const updateStep = (
+	commandID: string,
+	scriptCommand: ScriptCommand,
+	idToken: string
+) => {
+	const client = eightBaseClient(idToken);
+
+	client.request(UPDATE_STEP, {
+		commandID,
+		scriptCommand,
+	});
 };
