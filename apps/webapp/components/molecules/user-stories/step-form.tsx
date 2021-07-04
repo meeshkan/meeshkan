@@ -17,7 +17,6 @@ import {
 	NumberIncrementStepper,
 	NumberInputField,
 	NumberInputStepper,
-	Spacer,
 	Box,
 	FormLabelProps,
 	Checkbox,
@@ -25,11 +24,12 @@ import {
 	Heading,
 	Divider,
 } from '@chakra-ui/react';
-import { UserStory } from '@frontend/meeshkan-types';
+import { ScriptCommand, UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
 import { useToaster } from '../../../hooks/use-toaster';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
+import { useForm } from 'react-hook-form';
 
 type DetailsFormProps = {
 	userStory: UserStory;
@@ -66,6 +66,7 @@ export const StepForm = ({
 	const { project, idToken } = useContext(UserContext);
 	const toaster = useToaster();
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
+	const { register, handleSubmit } = useForm<ScriptCommand>();
 
 	const scriptCommand = userStory.scriptCommands.items.find(
 		(scriptCommand) => scriptCommand.sIndex === selectedStep
@@ -107,6 +108,10 @@ export const StepForm = ({
 		setDocumentURL(scriptCommand?.documentURL);
 	}, [selectedStep]);
 
+	const onSubmit = async (formData: ScriptCommand): Promise<void> => {
+		console.log(formData);
+	};
+
 	return (
 		<Stack justify="space-between" h="100%">
 			<Box>
@@ -129,17 +134,20 @@ export const StepForm = ({
 				</Flex>
 				<Divider mt={1} mb={4} />
 
-				<Stack as="form" spacing={6}>
+				<Stack as="form" onSubmit={handleSubmit(onSubmit)} spacing={6}>
 					<FormControl>
 						<Label text="Command" />
 						<Select
+							name="command"
 							value={command}
-							onChange={(e) => setCommand(e.target.value)}
+							ref={register}
 							size="sm"
 							borderRadius="md"
 							fontFamily="mono"
 							isDisabled={
-								selectedStep === 0 && scriptCommand?.command === 'open'
+								(selectedStep === 0 && scriptCommand?.command === 'open') ||
+								(selectedStep === 1 &&
+									scriptCommand?.command === 'set viewport size')
 							}
 						>
 							<optgroup label="Events">
@@ -164,8 +172,9 @@ export const StepForm = ({
 								<FormControl>
 									<Label text="Xpath" />
 									<Input
+										name="xpath"
 										value={xpath}
-										onChange={(e) => setXpath(e.target.value)}
+										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
@@ -174,8 +183,9 @@ export const StepForm = ({
 								<FormControl>
 									<Label text="selector" />
 									<Input
+										name="selector"
 										value={selector}
-										onChange={(e) => setSelector(e.target.value)}
+										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
@@ -200,8 +210,9 @@ export const StepForm = ({
 								<Flex align="center" mr={4}>
 									<Label text="X" short />
 									<NumberInput
+										name="xCoordinate"
 										value={xCoordinate}
-										onChange={(e) => setXCoordinate(parseInt(e))}
+										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
@@ -217,8 +228,9 @@ export const StepForm = ({
 								<Flex align="center">
 									<Label text="Y" short />
 									<NumberInput
+										name="yCoordinate"
 										value={yCoordinate}
-										onChange={(e) => setYCoordinate(parseInt(e))}
+										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
@@ -250,8 +262,9 @@ export const StepForm = ({
 								<Flex align="center" mr={4}>
 									<Label text="Top" short />
 									<NumberInput
+										name="scrollTop"
 										value={scrollTop}
-										onChange={(e) => setScrollTop(parseInt(e))}
+										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
@@ -267,8 +280,9 @@ export const StepForm = ({
 								<Flex align="center">
 									<Label text="Left" short />
 									<NumberInput
+										name="scrollLeft"
 										value={scrollLeft}
-										onChange={(e) => setScrollLeft(parseInt(e))}
+										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
@@ -291,8 +305,9 @@ export const StepForm = ({
 							<Label text="Value" />
 							<Input
 								fontFamily="mono"
+								name="value"
 								value={value}
-								onChange={(e) => setValue(e.target.value)}
+								ref={register}
 								size="sm"
 								borderRadius="md"
 							/>
@@ -308,8 +323,9 @@ export const StepForm = ({
 							<Label text="Page" />
 							<Input
 								fontFamily="mono"
+								name="documentURL"
 								value={documentURL}
-								onChange={(e) => setDocumentURL(e.target.value)}
+								ref={register}
 								size="sm"
 								borderRadius="md"
 							/>
@@ -326,6 +342,7 @@ export const StepForm = ({
 
 			<Stack spacing={4}>
 				<Button
+					type="submit"
 					size="sm"
 					colorScheme="blue"
 					variant="subtle"
@@ -338,6 +355,11 @@ export const StepForm = ({
 					colorScheme="red"
 					variant="subtle"
 					leftIcon={<TrashIcon />}
+					isDisabled={
+						(selectedStep === 0 && scriptCommand?.command === 'open') ||
+						(selectedStep === 1 &&
+							scriptCommand?.command === 'set viewport size')
+					}
 				>
 					Delete step
 				</Button>
