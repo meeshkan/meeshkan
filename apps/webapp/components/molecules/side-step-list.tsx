@@ -49,10 +49,21 @@ import Link from 'next/link';
 import { KeyIcon } from '@frontend/chakra-theme';
 import { InfoOutlineIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import { UserStory } from '@frontend/meeshkan-types';
+import { createStep } from 'apps/webapp/utils/user-story-helpers';
+import { mutateCallback } from 'swr/dist/types';
+
+type UserStoryResponse = {
+	userStory: UserStory;
+};
+
+type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined> 
 
 type StepListProps = {
+	userStoryId: string;
 	steps: ScriptCommandListResponse['items'];
 	selectedStep: Number;
+	mutateUserStory: MutateUserStory;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 	requiresAuthentication: boolean;
 };
@@ -102,7 +113,22 @@ const Label = ({
 	);
 };
 
-const AddStep = () => {
+type AddStepProps = {
+	userStoryId: string;
+	steps: ScriptCommandListResponse['items'];
+	selectedStep: Number;
+	mutateUserStory: MutateUserStory;
+	setSelectedStep: Dispatch<SetStateAction<Number>>;
+};
+
+const AddStep = ({
+	steps,
+	userStoryId,
+	mutateUserStory,
+	selectedStep,
+	setSelectedStep,
+}: AddStepProps) => {
+	const { idToken } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { register, handleSubmit } = useForm<ScriptCommand>();
 	const [command, setCommand] = useState('click');
@@ -111,6 +137,39 @@ const AddStep = () => {
 	const modalBackground = useColorModeValue('white', 'gray.800');
 	const modalHeaderColor = useColorModeValue('gray.900', 'white');
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
+
+  const onSubmit = async (formData: ScriptCommand): Promise<void> => {
+    console.log("FORM DATA", formData);
+		const userStory = await createStep(userStoryId, {
+			sIndex: steps.length + 1,
+			command: formData.command,
+			value: formData.value,
+			xCoordinate: formData.xCoordinate,
+			yCoordinate: formData.yCoordinate,
+			xpath: formData.xpath,
+			selector: formData.selector,
+			className: formData.className,
+			tagName: formData.tagName,
+			tagId: formData.tagId,
+			innerText: formData.innerText,
+			altOrAriaText: formData.altOrAriaText,
+			documentURL: formData.documentURL,
+			scrollTop: formData.scrollTop,
+			scrollLeft: formData.scrollLeft,
+			destinationXCoordinate: formData.destinationXCoordinate,
+			destinationYCoordinate: formData.destinationYCoordinate,
+			destinationXpath: formData.destinationXpath,
+			destinationSelector: formData.destinationSelector,
+			destinationClassName: formData.destinationClassName,
+			destinationTagName: formData.destinationTagName,
+			destinationTagId: formData.destinationTagId,
+			destinationInnerText: formData.destinationInnerText,
+			destinationAltOrAriaText: formData.destinationAltOrAriaText,
+			request: formData.request,
+			response: formData.response }, idToken);
+		mutateUserStory({ userStory })
+		setSelectedStep(null);
+	}
 
 	return (
 		<>
@@ -160,7 +219,7 @@ const AddStep = () => {
 					backgroundColor={modalBackground}
 					borderRadius="lg"
 					as="form"
-				// onSubmit={handleSubmit(handleStagingURLForm)}
+				  onSubmit={handleSubmit(onSubmit)}
 				>
 					<ModalHeader px={6} pt={4}>
 						<Heading
@@ -414,7 +473,9 @@ const AddStep = () => {
 
 export const StepList = ({
 	steps,
+	userStoryId,
 	selectedStep,
+	mutateUserStory,
 	setSelectedStep,
 	requiresAuthentication,
 }: StepListProps) => {
@@ -478,7 +539,7 @@ export const StepList = ({
 						setSelectedStep={setSelectedStep}
 					/>
 				))}
-				<AddStep />
+				<AddStep mutateUserStory={mutateUserStory} steps={steps} userStoryId={userStoryId} selectedStep={selectedStep} setSelectedStep={setSelectedStep} />
 			</AnimatePresence>
 			<Flex
 				align="center"

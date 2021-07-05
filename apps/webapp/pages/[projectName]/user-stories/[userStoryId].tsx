@@ -116,7 +116,9 @@ const UserStoryPage = (props: UserStoryProps) => {
 					<Spacer h={6} />
 
 					<StepList
+					  userStoryId={data?.userStory?.id}
 						steps={steps}
+						mutateUserStory={mutate}
 						selectedStep={selectedStep}
 						setSelectedStep={setSelectedStep}
 						requiresAuthentication={data?.userStory?.requiresAuthentication}

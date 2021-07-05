@@ -366,9 +366,59 @@ export const DELETE_SINGLE_COMMAND = gql`
 	}
 `
 
+export const CREATE_STEP = gql`
+  mutation CREATE_STEP($id: ID!, $create: UserStories_ScriptCommandCreateInput) {
+    userStoryUpdate(filter : {
+        id: $id
+    }
+    data: {
+        scriptCommands: {
+            create: [$create]
+        }
+    }) {
+			id
+			title
+			description
+			isTestCase
+			flows {
+				count
+			}
+			created
+			isExpected
+			significance
+			video {
+				downloadUrl
+				shareUrl
+			}
+			startEventId
+			endEventId
+			scriptCommands {
+				items {
+					command
+					sIndex
+					value
+					xCoordinate
+					yCoordinate
+					xpath
+					selector
+					className
+					tagName
+					tagId
+					innerText
+					altOrAriaText
+					scrollTop
+					scrollLeft
+					destinationXCoordinate
+					destinationYCoordinate
+					destinationTagName
+				}
+			}
+		}
+}
+`
+
 export const UPDATE_MANY_STEPS = gql`
 	mutation UPDATE_MANY_STEPS($id: ID!, $updates: [UserStories_ScriptCommandUpdateInput!]!) {
-			# throw new MeeshkanError('elements do not have same text');
 			userStoryUpdate(filter : {
 					id: $id
 			}
