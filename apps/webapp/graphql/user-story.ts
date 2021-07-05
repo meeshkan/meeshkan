@@ -357,3 +357,43 @@ export const UPDATE_STEP = gql`
 		}
 	}
 `;
+
+export const UPDATE_MANY_STEPS = gql`
+	mutation($id: ID!, $updates: [UserStories_ScriptCommandUpdateInput!]!) {
+			# throw new MeeshkanError('elements do not have same text');
+			userStoryUpdate(filter : {
+					id: $id
+			}
+			data: {
+					scriptCommands: {
+							update: $updates
+					}
+			}) {
+					id
+					scriptCommands {
+						count
+						items {
+							id
+							command
+							sIndex
+							value
+							xCoordinate
+							yCoordinate
+							xpath
+							selector
+							className
+							tagName
+							tagId
+							innerText
+							altOrAriaText
+							scrollTop
+							scrollLeft
+							documentURL
+							destinationXCoordinate
+							destinationYCoordinate
+							destinationTagName
+						}
+					}
+			}
+	}
+`

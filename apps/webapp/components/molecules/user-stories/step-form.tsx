@@ -31,11 +31,19 @@ import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
 import { updateStep } from 'apps/webapp/utils/user-story-helpers';
+import { mutateCallback } from 'swr/dist/types';
+
+type UserStoryResponse = {
+	userStory: UserStory;
+};
+
+type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined> 
 
 type DetailsFormProps = {
 	userStory: UserStory;
 	selectedStep: number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
+	mutateUserStory: MutateUserStory
 };
 
 const Label = ({
@@ -61,6 +69,7 @@ const Label = ({
 
 export const StepForm = ({
 	userStory,
+	mutateUserStory,
 	selectedStep,
 	setSelectedStep,
 }: DetailsFormProps) => {
@@ -118,9 +127,11 @@ export const StepForm = ({
 		await setSaving(false);
 	};
 
-	// const onDelete = async (commandID: ScriptCommand['id']) => {
-	// 	deleteStep(commandID, idToken)
-	// };
+	const onDelete =  async () => {
+		console.log("has deleting")
+		setSelectedStep(null)
+		//deleteStep(commandID, idToken)
+	};
 
 	return (
 		<Stack justify="space-between" h="100%">
@@ -370,6 +381,7 @@ export const StepForm = ({
 				</Button>
 				<Button
 					colorScheme="red"
+					onClick={onDelete}
 					variant="subtle"
 					leftIcon={<TrashIcon />}
 					isDisabled={
