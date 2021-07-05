@@ -14,7 +14,7 @@ type StoryStepProps = {
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 	updatePosition: (index: number, pos: Position) => void;
 	updateOrder: (index: number, dragOffset: number) => void;
-	index: number
+	index: number;
 };
 
 export const SideStep = ({
@@ -25,7 +25,7 @@ export const SideStep = ({
 	setSelectedStep,
 	updatePosition,
 	updateOrder,
-	index
+	index,
 }: StoryStepProps) => {
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
@@ -52,7 +52,7 @@ export const SideStep = ({
 			layout
 			initial={false}
 			whileTap={{
-				transform: 'rotate(-1deg)'
+				transform: 'rotate(-1deg)',
 			}}
 			zIndex={isDragging ? 3 : 1}
 			drag="y"
@@ -67,7 +67,7 @@ export const SideStep = ({
 			cursor="pointer"
 			my={3}
 			onClick={() => setSelectedStep(scriptCommand.sIndex)}
-			transition={{ type: "tween", duration: 0.1 }}
+			transition={{ type: 'tween', duration: 0.1 }}
 		>
 			<Flex
 				justify="center"
@@ -81,10 +81,12 @@ export const SideStep = ({
 				mt={2}
 				mr={4}
 				backgroundColor={
-					selectedStep === scriptCommand?.sIndex ? selectedBlue : 'transparent'
+					selectedStep === scriptCommand?.sIndex || isDragging
+						? selectedBlue
+						: 'transparent'
 				}
 				color={
-					selectedStep === scriptCommand?.sIndex
+					selectedStep === scriptCommand?.sIndex || isDragging
 						? hoverBackgroundColor
 						: 'inherit'
 				}
@@ -98,7 +100,9 @@ export const SideStep = ({
 				w="full"
 				border="1px solid"
 				borderColor={
-					selectedStep === scriptCommand?.sIndex ? selectedBlue : 'transparent'
+					selectedStep === scriptCommand?.sIndex || isDragging
+						? selectedBlue
+						: 'transparent'
 				}
 				backgroundColor={hoverBackgroundColor}
 				_hover={{
