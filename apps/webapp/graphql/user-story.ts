@@ -358,8 +358,16 @@ export const UPDATE_STEP = gql`
 	}
 `;
 
+export const DELETE_SINGLE_COMMAND = gql`
+	mutation DELETE_SINGLE_COMMAND($id: ID!) {
+		scriptCommandDelete(data: {}
+		filter: {id: $id}
+		force:true) { success }
+	}
+`
+
 export const UPDATE_MANY_STEPS = gql`
-	mutation($id: ID!, $updates: [UserStories_ScriptCommandUpdateInput!]!) {
+	mutation UPDATE_MANY_STEPS($id: ID!, $updates: [UserStories_ScriptCommandUpdateInput!]!) {
 			# throw new MeeshkanError('elements do not have same text');
 			userStoryUpdate(filter : {
 					id: $id

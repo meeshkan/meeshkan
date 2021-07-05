@@ -16,6 +16,7 @@ import {
 	UPDATE_STORY_TITLE,
 	UPDATE_STEP,
 	UPDATE_MANY_STEPS,
+	DELETE_SINGLE_COMMAND,
 } from '../graphql/user-story';
 import { useToaster } from '../hooks/use-toaster';
 import { eightBaseClient } from './graphql';
@@ -266,7 +267,7 @@ export const updateStep = (
 
 export const updateManySteps = (
 	id: string,
-	updates: UserStories_ScriptCommandUpdateInput,
+	updates: UserStories_ScriptCommandUpdateInput[],
 	idToken: string
 ) => {
 	const client = eightBaseClient(idToken);
@@ -274,5 +275,16 @@ export const updateManySteps = (
 	client.request(UPDATE_MANY_STEPS, {
 		id,
 		updates,
+	});
+};
+
+export const deleteSingleCommand = (
+	id: string,
+	idToken: string
+) => {
+	const client = eightBaseClient(idToken);
+
+	client.request(DELETE_SINGLE_COMMAND, {
+		id,
 	});
 };

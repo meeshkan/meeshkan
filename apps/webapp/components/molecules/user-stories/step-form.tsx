@@ -30,8 +30,9 @@ import { useToaster } from '../../../hooks/use-toaster';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
-import { updateStep } from 'apps/webapp/utils/user-story-helpers';
+import { deleteSingleCommand, updateManySteps, updateStep } from 'apps/webapp/utils/user-story-helpers';
 import { mutateCallback } from 'swr/dist/types';
+import { filter } from 'lodash';
 
 type UserStoryResponse = {
 	userStory: UserStory;
@@ -128,9 +129,16 @@ export const StepForm = ({
 	};
 
 	const onDelete =  async () => {
-		console.log("has deleting")
-		setSelectedStep(null)
-		//deleteStep(commandID, idToken)
+		await deleteSingleCommand(commandID, idToken);
+		await updateManySteps(userStory.id, userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({
+			filter: {id: item?.id || "no-id-found"},
+			data: { sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null }
+		})) || [], idToken);
+		mutateUserStory({ userStory: {
+			...userStory,
+			scriptCommands: { groups: userStory?.scriptCommands?.groups, count: userStory?.scriptCommands?.count ? userStory.scriptCommands.count - 1 : null, items: userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({ ...item, sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null })) }
+		}})
+		setSelectedStep(null);
 	};
 
 	return (
