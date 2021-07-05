@@ -28,6 +28,7 @@ import { UserStoryVideo } from '../../../components/molecules/user-stories/video
 import GridCard from '../../../components/molecules/grid-card';
 import { DetailsForm } from '../../../components/molecules/user-stories/details-form';
 import { StepForm } from '../../../components/molecules/user-stories/step-form';
+import { mutateCallback } from 'swr/dist/types';
 
 type UserStoryProps = {
 	cookies: string | undefined;
@@ -65,6 +66,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 	const {
 		data,
 		error,
+		mutate,
 		isValidating: validatingQuery,
 	} = useSWR<UserStoryResponse>(USER_STORY, fetcher);
 
@@ -114,11 +116,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 					<Spacer h={6} />
 
 					<StepList
+						userStoryId={data?.userStory?.id}
 						steps={steps}
+						mutateUserStory={mutate}
 						selectedStep={selectedStep}
 						setSelectedStep={setSelectedStep}
 						requiresAuthentication={data?.userStory?.requiresAuthentication}
-						userStoryId={data?.userStory?.id}
 					/>
 				</GridItem>
 
@@ -126,9 +129,10 @@ const UserStoryPage = (props: UserStoryProps) => {
 					{typeof selectedStep == 'number' ? (
 						<>
 							<StepForm
+								mutateUserStory={mutate}
+								setSelectedStep={setSelectedStep}
 								userStory={data?.userStory}
 								selectedStep={selectedStep}
-								setSelectedStep={setSelectedStep}
 							/>
 						</>
 					) : (

@@ -3,6 +3,10 @@ import {
 	ScriptCommandListResponse,
 	AuthenticationTokenListResponse,
 	ScriptCommand,
+	UserStories_ScriptCommandUpdateInput,
+	UserStories_ScriptCommandCreateInput,
+	UserStoryCreateInput,
+	UserStory,
 } from './../../../libs/meeshkan-types/src/lib/8base-schema';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
@@ -14,6 +18,9 @@ import {
 	UPDATE_STORY_SIGNIFICANCE,
 	UPDATE_STORY_TITLE,
 	UPDATE_STEP,
+	UPDATE_MANY_STEPS,
+	DELETE_SINGLE_COMMAND,
+	CREATE_SINGLE_STEP,
 } from '../graphql/user-story';
 import { useToaster } from '../hooks/use-toaster';
 import { eightBaseClient } from './graphql';
@@ -259,5 +266,38 @@ export const updateStep = (
 	client.request(UPDATE_STEP, {
 		commandID,
 		scriptCommand,
+	});
+};
+
+export const createStep = (id: string, create: UserStories_ScriptCommandCreateInput, idToken: string): Promise<UserStory> => {
+	const client = eightBaseClient(idToken);
+
+	return client.request(CREATE_SINGLE_STEP, {
+		id,
+		create,
+	}).then(({ userStoryUpdate }) => userStoryUpdate);
+}
+
+export const updateManySteps = (
+	id: string,
+	updates: UserStories_ScriptCommandUpdateInput[],
+	idToken: string
+) => {
+	const client = eightBaseClient(idToken);
+
+	client.request(UPDATE_MANY_STEPS, {
+		id,
+		updates,
+	});
+};
+
+export const deleteSingleCommand = (
+	id: string,
+	idToken: string
+) => {
+	const client = eightBaseClient(idToken);
+
+	client.request(DELETE_SINGLE_COMMAND, {
+		id,
 	});
 };

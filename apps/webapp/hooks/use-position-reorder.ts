@@ -37,7 +37,7 @@ export const findIndex = (
 	return clamp(0, positions.length, target);
 };
 
-type step = {
+export type step = {
 	text: string;
 	sIndex: number;
 	command: string;
@@ -47,7 +47,11 @@ type step = {
 
 export function usePositionReorder(initialState: step[]) {
 	const [order, setOrder] = useState(initialState);
-
+  const [orderTransformed, setOrderTransformed] = useState(false);
+	if (!orderTransformed) {
+		setOrderTransformed(true);
+		setOrder(order.sort((a,b) => a.sIndex - b.sIndex));
+	}
 	// We need to collect an array of height and position data for all of this component's
 	// `Item` children, so we can later us that in calculations to decide when a dragging
 	// `Item` should swap places with its siblings.
@@ -58,10 +62,15 @@ export function usePositionReorder(initialState: step[]) {
 	// Find the ideal index for a dragging item based on its position in the array, and its
 	// current drag offset. If it's different to its current index, we swap this item with that
 	// sibling.
-	const updateOrder = (i: number, dragOffset: number) => {
+	const updateOrder = (i: number, dragOffset: number): step[] | null => {
 		const targetIndex = findIndex(i, dragOffset, positions);
-		if (targetIndex !== i) setOrder(move(order, i, targetIndex));
+		const newOrder = move(order, i, targetIndex);
+		if (targetIndex !== i) {
+			setOrder(newOrder);
+			return newOrder;
+		}
+		return null;
 	};
 
-	return { order, updatePosition, updateOrder };
+	return { order, updatePosition, updateOrder, setOrder };
 }

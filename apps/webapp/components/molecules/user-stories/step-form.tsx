@@ -29,12 +29,21 @@ import { UserContext } from '../../../utils/user';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
-import { updateStep } from '../../../utils/user-story-helpers';
+import { deleteSingleCommand, updateManySteps, updateStep } from '../../../utils/user-story-helpers';
+import { mutateCallback } from 'swr/dist/types';
+import { filter } from 'lodash';
+
+type UserStoryResponse = {
+	userStory: UserStory;
+};
+
+type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined>
 
 type DetailsFormProps = {
 	userStory: UserStory;
 	selectedStep: number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
+	mutateUserStory: MutateUserStory
 };
 
 const Label = ({
@@ -60,6 +69,7 @@ const Label = ({
 
 export const StepForm = ({
 	userStory,
+	mutateUserStory,
 	selectedStep,
 	setSelectedStep,
 }: DetailsFormProps) => {
@@ -116,9 +126,20 @@ export const StepForm = ({
 		await setSaving(false);
 	};
 
-	// const onDelete = async (commandID: ScriptCommand['id']) => {
-	// 	deleteStep(commandID, idToken)
-	// };
+	const onDelete = async () => {
+		await deleteSingleCommand(commandID, idToken);
+		await updateManySteps(userStory.id, userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({
+			filter: { id: item?.id || "no-id-found" },
+			data: { sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null }
+		})) || [], idToken);
+		mutateUserStory({
+			userStory: {
+				...userStory,
+				scriptCommands: { groups: userStory?.scriptCommands?.groups, count: userStory?.scriptCommands?.count ? userStory.scriptCommands.count - 1 : null, items: userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({ ...item, sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null })) }
+			}
+		})
+		setSelectedStep(null);
+	};
 
 	return (
 		<Stack justify="space-between" h="100%">
@@ -369,6 +390,7 @@ export const StepForm = ({
 				</Button>
 				<Button
 					colorScheme="red"
+					onClick={onDelete}
 					variant="subtle"
 					size="sm"
 					leftIcon={<TrashIcon />}

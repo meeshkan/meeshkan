@@ -358,6 +358,103 @@ export const UPDATE_STEP = gql`
 	}
 `;
 
+export const DELETE_SINGLE_COMMAND = gql`
+	mutation DELETE_SINGLE_COMMAND($id: ID!) {
+		scriptCommandDelete(data: {}, filter: { id: $id }, force: true) {
+			success
+		}
+	}
+`;
+
+export const CREATE_SINGLE_STEP = gql`
+  mutation CREATE_SINGLE_STEP($id: ID!, $create: UserStories_ScriptCommandCreateInput) {
+    userStoryUpdate(filter : {
+        id: $id
+    }
+    data: {
+        scriptCommands: {
+            create: [$create]
+        }
+    }) {
+			id
+			title
+			description
+			isTestCase
+			flows {
+				count
+			}
+			created
+			isExpected
+			significance
+			video {
+				downloadUrl
+				shareUrl
+			}
+			startEventId
+			endEventId
+			scriptCommands {
+				items {
+					command
+					sIndex
+					value
+					xCoordinate
+					yCoordinate
+					xpath
+					selector
+					className
+					tagName
+					tagId
+					innerText
+					altOrAriaText
+					scrollTop
+					scrollLeft
+					destinationXCoordinate
+					destinationYCoordinate
+					destinationTagName
+				}
+			}
+		}
+}
+`
+
+export const UPDATE_MANY_STEPS = gql`
+	mutation UPDATE_MANY_STEPS(
+		$id: ID!
+		$updates: [UserStories_ScriptCommandUpdateInput!]!
+	) {
+		# throw new MeeshkanError('elements do not have same text');
+		userStoryUpdate(
+			filter: { id: $id }
+			data: { scriptCommands: { update: $updates } }
+		) {
+			id
+			scriptCommands {
+				count
+				items {
+					id
+					command
+					sIndex
+					value
+					xCoordinate
+					yCoordinate
+					xpath
+					selector
+					className
+					tagName
+					tagId
+					innerText
+					altOrAriaText
+					scrollTop
+					scrollLeft
+					documentURL
+					destinationXCoordinate
+					destinationYCoordinate
+					destinationTagName
+				}
+			}
+		}
+	}
+`;
 export const CREATE_STEP = gql`
 	mutation CREATE_STEP(
 		$userStoryId: ID!

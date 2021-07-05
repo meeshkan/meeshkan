@@ -1,32 +1,43 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { MotionListItem } from './motion';
 import { DragHandleIcon } from '@frontend/chakra-theme';
 import { AxisBox2D, BoxDelta, useDragControls } from 'framer-motion';
 import { ScriptCommand } from '@frontend/meeshkan-types';
 import { Position, useMeasurePosition } from '../../hooks/use-measure-position';
+import { step } from '../../hooks/use-position-reorder';
+
+import { UserContext } from 'apps/webapp/utils/user';
+import { updateManySteps } from 'apps/webapp/utils/user-story-helpers';
 
 type StoryStepProps = {
 	stepNumber: number;
 	stepName: string;
+	userStoryId: string;
 	scriptCommand: ScriptCommand;
 	selectedStep: Number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 	updatePosition: (index: number, pos: Position) => void;
-	updateOrder: (index: number, dragOffset: number) => void;
+	order: step[],
+	setOrder: Dispatch<SetStateAction<step[]>>;
+	updateOrder: (index: number, dragOffset: number) => step[];
 	index: number;
 };
 
 export const SideStep = ({
 	stepNumber,
 	stepName,
+	userStoryId,
 	scriptCommand,
 	selectedStep,
 	setSelectedStep,
 	updatePosition,
 	updateOrder,
+	setOrder,
+	order,
 	index,
 }: StoryStepProps) => {
+	const { project, idToken } = useContext(UserContext);
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
 	const [isDragging, setDragging] = useState(false);
@@ -59,10 +70,22 @@ export const SideStep = ({
 			dragListener={false}
 			onDragEnd={() => {
 				setDragging(false);
+				setSelectedStep(null);
+				const newOrder = order.map((i, j) => ({...i, sIndex: j, scriptCommand: { ...i.scriptCommand, sIndex: j}}));
+				setOrder(newOrder);
+				updateManySteps(userStoryId, newOrder.map(i => ({
+					data: {
+						sIndex: i.sIndex
+					},
+					filter: { id: i.scriptCommand.id }
+				})) , idToken);
+
 			}}
 			dragControls={dragControls}
 			onViewportBoxUpdate={(_viewportBox: AxisBox2D, delta: BoxDelta) => {
-				return isDragging && updateOrder(index, delta.y.translate);
+				if (isDragging) {
+					updateOrder(index, delta.y.translate);	
+				}
 			}}
 			cursor="pointer"
 			my={3}

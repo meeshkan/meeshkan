@@ -9,6 +9,7 @@ import { SideStep } from '../atoms/side-step';
 import {
 	ScriptCommand,
 	ScriptCommandListResponse,
+	UserStories_ScriptCommandCreateInput,
 } from '@frontend/meeshkan-types';
 import { commandsToSteps } from '../../utils/transform-steps';
 import {
@@ -51,16 +52,27 @@ import Link from 'next/link';
 import { KeyIcon } from '@frontend/chakra-theme';
 import { InfoOutlineIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import { UserStory } from '@frontend/meeshkan-types';
+import { createStep } from 'apps/webapp/utils/user-story-helpers';
+import { mutateCallback } from 'swr/dist/types';
+
+type UserStoryResponse = {
+	userStory: UserStory;
+};
+
+type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined> 
 import { eightBaseClient } from '../../utils/graphql';
-import { CREATE_STEP } from '../../graphql/user-story';
 import { usePositionReorder } from '../../hooks/use-position-reorder';
+import { CREATE_SINGLE_STEP } from '../../graphql/user-story';
+
 
 type StepListProps = {
 	steps: ScriptCommandListResponse['items'];
 	selectedStep: Number;
+	mutateUserStory: MutateUserStory;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 	requiresAuthentication: boolean;
-	userStoryId: string
+	userStoryId: string;
 };
 
 const Label = ({
@@ -108,17 +120,24 @@ const Label = ({
 	);
 };
 
-const AddStep = ({
-	idToken,
-	sIndex,
-	userStoryId,
-}: {
-	idToken: string;
-	sIndex: number;
+type AddStepProps = {
 	userStoryId: string;
-}) => {
+	steps: ScriptCommandListResponse['items'];
+	selectedStep: Number;
+	mutateUserStory: MutateUserStory;
+	setSelectedStep: Dispatch<SetStateAction<Number>>;
+};
+
+const AddStep = ({
+	steps,
+	userStoryId,
+	mutateUserStory,
+	selectedStep,
+	setSelectedStep,
+}: AddStepProps) => {
+	const { idToken } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { register, handleSubmit } = useForm<ScriptCommand>();
+	const { register, handleSubmit } = useForm<UserStories_ScriptCommandCreateInput>();
 	const [command, setCommand] = useState('click');
 	const client = eightBaseClient(idToken);
 
@@ -128,10 +147,14 @@ const AddStep = ({
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
 	const cardBackground = useColorModeValue('white', 'gray.900');
 
-	const handleAddStep = async (formData: ScriptCommand) => {
-		console.log(userStoryId, sIndex, formData);
-		await client.request(CREATE_STEP, { userStoryId, scriptCommand: { sIndex, formData } });
-	};
+  const onSubmit = async (formData: UserStories_ScriptCommandCreateInput): Promise<void> => {
+		const userStory = await createStep(userStoryId, {
+			...formData,
+			sIndex: steps.length + 1,
+		}, idToken);
+		mutateUserStory({ userStory })
+		setSelectedStep(null);
+	}
 
 	return (
 		<>
@@ -195,7 +218,7 @@ const AddStep = ({
 					backgroundColor={modalBackground}
 					borderRadius="lg"
 					as="form"
-					onSubmit={handleSubmit(handleAddStep)}
+				  onSubmit={handleSubmit(onSubmit)}
 				>
 					<ModalHeader px={6} pt={4}>
 						<Heading
@@ -565,17 +588,18 @@ const AddStep = ({
 
 export const StepList = ({
 	steps,
+	userStoryId,
 	selectedStep,
+	mutateUserStory,
 	setSelectedStep,
 	requiresAuthentication,
-	userStoryId
 }: StepListProps) => {
 	const formattedSteps = commandsToSteps(steps);
 	const { idToken, project } = useContext(UserContext);
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
-	const { order, updatePosition, updateOrder } = usePositionReorder(formattedSteps);
+	const { order, updatePosition, updateOrder, setOrder } = usePositionReorder(formattedSteps);
 	const secondaryCardColor = useColorModeValue('gray.200', 'gray.700');
 
 	return (
@@ -624,6 +648,9 @@ export const StepList = ({
 				{order.map((step, index) => (
 					<SideStep
 						key={step.sIndex}
+						setOrder={setOrder}
+						order={order}
+						userStoryId={userStoryId}
 						stepName={step.text}
 						stepNumber={step.sIndex + 1}
 						scriptCommand={step.scriptCommand}
@@ -634,7 +661,7 @@ export const StepList = ({
 						index={index}
 					/>
 				))}
-				<AddStep idToken={idToken} sIndex={formattedSteps.length} userStoryId={userStoryId} />
+				<AddStep mutateUserStory={mutateUserStory} steps={steps} userStoryId={userStoryId} selectedStep={selectedStep} setSelectedStep={setSelectedStep} />
 			</List>
 			<Flex
 				align="center"
