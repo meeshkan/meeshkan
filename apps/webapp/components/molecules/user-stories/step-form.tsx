@@ -360,6 +360,7 @@ export const StepForm = ({
 					type="submit"
 					form="step-form"
 					colorScheme="blue"
+					size="sm"
 					leftIcon={<SaveIcon />}
 					isLoading={saving}
 					loadingText="Saving changes"
@@ -369,6 +370,7 @@ export const StepForm = ({
 				<Button
 					colorScheme="red"
 					variant="subtle"
+					size="sm"
 					leftIcon={<TrashIcon />}
 					isDisabled={
 						(selectedStep === 0 && scriptCommand?.command === 'open') ||
