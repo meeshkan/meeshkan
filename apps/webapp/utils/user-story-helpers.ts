@@ -20,7 +20,7 @@ import {
 	UPDATE_STEP,
 	UPDATE_MANY_STEPS,
 	DELETE_SINGLE_COMMAND,
-	CREATE_STEP,
+	CREATE_SINGLE_STEP,
 } from '../graphql/user-story';
 import { useToaster } from '../hooks/use-toaster';
 import { eightBaseClient } from './graphql';
@@ -272,7 +272,7 @@ export const updateStep = (
 export const createStep = (id: string, create: UserStories_ScriptCommandCreateInput, idToken: string): Promise<UserStory> => {
 	const client = eightBaseClient(idToken);
 
-	return client.request(CREATE_STEP, {
+	return client.request(CREATE_SINGLE_STEP, {
 		id,
 		create,
 	}).then(({ userStoryUpdate }) => userStoryUpdate);

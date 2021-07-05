@@ -26,11 +26,10 @@ import {
 } from '@chakra-ui/react';
 import { ScriptCommand, UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
-import { useToaster } from '../../../hooks/use-toaster';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
-import { deleteSingleCommand, updateManySteps, updateStep } from 'apps/webapp/utils/user-story-helpers';
+import { deleteSingleCommand, updateManySteps, updateStep } from '../../../utils/user-story-helpers';
 import { mutateCallback } from 'swr/dist/types';
 import { filter } from 'lodash';
 
@@ -38,7 +37,7 @@ type UserStoryResponse = {
 	userStory: UserStory;
 };
 
-type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined> 
+type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined>
 
 type DetailsFormProps = {
 	userStory: UserStory;
@@ -75,7 +74,6 @@ export const StepForm = ({
 	setSelectedStep,
 }: DetailsFormProps) => {
 	const { idToken } = useContext(UserContext);
-	const toaster = useToaster();
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
 	const { register, handleSubmit } = useForm<ScriptCommand>();
 	const [saving, setSaving] = useState(false);
@@ -128,16 +126,18 @@ export const StepForm = ({
 		await setSaving(false);
 	};
 
-	const onDelete =  async () => {
+	const onDelete = async () => {
 		await deleteSingleCommand(commandID, idToken);
 		await updateManySteps(userStory.id, userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({
-			filter: {id: item?.id || "no-id-found"},
+			filter: { id: item?.id || "no-id-found" },
 			data: { sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null }
 		})) || [], idToken);
-		mutateUserStory({ userStory: {
-			...userStory,
-			scriptCommands: { groups: userStory?.scriptCommands?.groups, count: userStory?.scriptCommands?.count ? userStory.scriptCommands.count - 1 : null, items: userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({ ...item, sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null })) }
-		}})
+		mutateUserStory({
+			userStory: {
+				...userStory,
+				scriptCommands: { groups: userStory?.scriptCommands?.groups, count: userStory?.scriptCommands?.count ? userStory.scriptCommands.count - 1 : null, items: userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({ ...item, sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null })) }
+			}
+		})
 		setSelectedStep(null);
 	};
 
@@ -337,24 +337,24 @@ export const StepForm = ({
 					{/* Value is only specified for open, and type events */}
 					{(scriptCommand?.command === 'open' ||
 						scriptCommand?.command === 'type') && (
-						<FormControl>
-							<Label text="Value" />
-							<Input
-								fontFamily="mono"
-								name="value"
-								defaultValue={value}
-								ref={register}
-								size="sm"
-								borderRadius="md"
-							/>
-						</FormControl>
-					)}
+							<FormControl>
+								<Label text="Value" />
+								<Input
+									fontFamily="mono"
+									name="value"
+									defaultValue={value}
+									ref={register}
+									size="sm"
+									borderRadius="md"
+								/>
+							</FormControl>
+						)}
 
 					{scriptCommand?.command === 'type' ||
-					scriptCommand?.command === 'click' ||
-					scriptCommand?.command === 'scroll' ||
-					scriptCommand?.command === 'drag and drop' ||
-					scriptCommand?.command === 'mouse over' ? (
+						scriptCommand?.command === 'click' ||
+						scriptCommand?.command === 'scroll' ||
+						scriptCommand?.command === 'drag and drop' ||
+						scriptCommand?.command === 'mouse over' ? (
 						<FormControl>
 							<Label text="Page" />
 							<Input
