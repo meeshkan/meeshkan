@@ -44,18 +44,21 @@ import {
 	Textarea,
 } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
-import { UserContext } from 'apps/webapp/utils/user';
-import { createSlug } from 'apps/webapp/utils/createSlug';
+import { UserContext } from '../../utils/user';
+import { createSlug } from '../../utils/createSlug';
 import Link from 'next/link';
 import { KeyIcon } from '@frontend/chakra-theme';
 import { InfoOutlineIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import { eightBaseClient } from '../../utils/graphql';
+import { CREATE_STEP } from '../../graphql/user-story';
 
 type StepListProps = {
 	steps: ScriptCommandListResponse['items'];
 	selectedStep: Number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 	requiresAuthentication: boolean;
+	userStoryId: string
 };
 
 const Label = ({
@@ -103,16 +106,30 @@ const Label = ({
 	);
 };
 
-const AddStep = () => {
+const AddStep = ({
+	idToken,
+	sIndex,
+	userStoryId,
+}: {
+	idToken: string;
+	sIndex: number;
+	userStoryId: string;
+}) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { register, handleSubmit } = useForm<ScriptCommand>();
 	const [command, setCommand] = useState('click');
+	const client = eightBaseClient(idToken);
 
 	const borderColor = useColorModeValue('gray.300', 'gray.700');
 	const modalBackground = useColorModeValue('white', 'gray.800');
 	const modalHeaderColor = useColorModeValue('gray.900', 'white');
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
 	const cardBackground = useColorModeValue('white', 'gray.900');
+
+	const handleAddStep = async (formData: ScriptCommand) => {
+		console.log(userStoryId, sIndex, formData);
+		await client.request(CREATE_STEP, { userStoryId, scriptCommand: { sIndex, formData } });
+	};
 
 	return (
 		<>
@@ -162,6 +179,7 @@ const AddStep = () => {
 					</Text>
 				</Box>
 			</Flex>
+
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
@@ -175,7 +193,7 @@ const AddStep = () => {
 					backgroundColor={modalBackground}
 					borderRadius="lg"
 					as="form"
-				// onSubmit={handleSubmit(handleStagingURLForm)}
+					onSubmit={handleSubmit(handleAddStep)}
 				>
 					<ModalHeader px={6} pt={4}>
 						<Heading
@@ -346,7 +364,11 @@ const AddStep = () => {
 									p={4}
 								>
 									<Flex align="center" mr={4}>
-										<Label text="Top" short tooltip='How far from the top should be scrolled?' />
+										<Label
+											text="Top"
+											short
+											tooltip="How far from the top should be scrolled?"
+										/>
 										<NumberInput
 											name="scrollTop"
 											ref={register}
@@ -363,7 +385,11 @@ const AddStep = () => {
 									</Flex>
 
 									<Flex align="center">
-										<Label text="Left" short tooltip='How far from the left should be scrolled?' />
+										<Label
+											text="Left"
+											short
+											tooltip="How far from the left should be scrolled?"
+										/>
 										<NumberInput
 											name="scrollLeft"
 											ref={register}
@@ -540,9 +566,10 @@ export const StepList = ({
 	selectedStep,
 	setSelectedStep,
 	requiresAuthentication,
+	userStoryId
 }: StepListProps) => {
 	const formattedSteps = commandsToSteps(steps);
-	const { project } = useContext(UserContext);
+	const { idToken, project } = useContext(UserContext);
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
@@ -601,7 +628,7 @@ export const StepList = ({
 						setSelectedStep={setSelectedStep}
 					/>
 				))}
-				<AddStep />
+				<AddStep idToken={idToken} sIndex={formattedSteps.length} userStoryId={userStoryId} />
 			</AnimatePresence>
 			<Flex
 				align="center"

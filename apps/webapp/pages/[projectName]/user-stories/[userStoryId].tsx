@@ -118,6 +118,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						selectedStep={selectedStep}
 						setSelectedStep={setSelectedStep}
 						requiresAuthentication={data?.userStory?.requiresAuthentication}
+						userStoryId={data?.userStory?.id}
 					/>
 				</GridItem>
 

@@ -357,3 +357,17 @@ export const UPDATE_STEP = gql`
 		}
 	}
 `;
+
+export const CREATE_STEP = gql`
+	mutation CREATE_STEP(
+		$userStoryId: ID!
+		$scriptCommand: UserStories_ScriptCommandCreateInput!
+	) {
+		userStoryUpdate(
+			filter: { id: $userStoryId }
+			data: { scriptCommands: { create: [$scriptCommand] } }
+		) {
+			updatedAt
+		}
+	}
+`;

@@ -26,11 +26,10 @@ import {
 } from '@chakra-ui/react';
 import { ScriptCommand, UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
-import { useToaster } from '../../../hooks/use-toaster';
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
-import { updateStep } from 'apps/webapp/utils/user-story-helpers';
+import { updateStep } from '../../../utils/user-story-helpers';
 
 type DetailsFormProps = {
 	userStory: UserStory;
@@ -65,7 +64,6 @@ export const StepForm = ({
 	setSelectedStep,
 }: DetailsFormProps) => {
 	const { idToken } = useContext(UserContext);
-	const toaster = useToaster();
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
 	const { register, handleSubmit } = useForm<ScriptCommand>();
 	const [saving, setSaving] = useState(false);
@@ -318,24 +316,24 @@ export const StepForm = ({
 					{/* Value is only specified for open, and type events */}
 					{(scriptCommand?.command === 'open' ||
 						scriptCommand?.command === 'type') && (
-						<FormControl>
-							<Label text="Value" />
-							<Input
-								fontFamily="mono"
-								name="value"
-								defaultValue={value}
-								ref={register}
-								size="sm"
-								borderRadius="md"
-							/>
-						</FormControl>
-					)}
+							<FormControl>
+								<Label text="Value" />
+								<Input
+									fontFamily="mono"
+									name="value"
+									defaultValue={value}
+									ref={register}
+									size="sm"
+									borderRadius="md"
+								/>
+							</FormControl>
+						)}
 
 					{scriptCommand?.command === 'type' ||
-					scriptCommand?.command === 'click' ||
-					scriptCommand?.command === 'scroll' ||
-					scriptCommand?.command === 'drag and drop' ||
-					scriptCommand?.command === 'mouse over' ? (
+						scriptCommand?.command === 'click' ||
+						scriptCommand?.command === 'scroll' ||
+						scriptCommand?.command === 'drag and drop' ||
+						scriptCommand?.command === 'mouse over' ? (
 						<FormControl>
 							<Label text="Page" />
 							<Input
