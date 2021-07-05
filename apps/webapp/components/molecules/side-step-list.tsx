@@ -42,6 +42,7 @@ import {
 	Checkbox,
 	Tooltip,
 	Textarea,
+	List,
 } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import { UserContext } from '../../utils/user';
@@ -52,6 +53,7 @@ import { InfoOutlineIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import { eightBaseClient } from '../../utils/graphql';
 import { CREATE_STEP } from '../../graphql/user-story';
+import { usePositionReorder } from '../../hooks/use-position-reorder';
 
 type StepListProps = {
 	steps: ScriptCommandListResponse['items'];
@@ -573,6 +575,7 @@ export const StepList = ({
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
+	const { order, updatePosition, updateOrder } = usePositionReorder(formattedSteps);
 	const secondaryCardColor = useColorModeValue('gray.200', 'gray.700');
 
 	return (
@@ -617,8 +620,8 @@ export const StepList = ({
 				)
 			) : null}
 
-			<AnimatePresence>
-				{formattedSteps.map((step, index) => (
+			<List>
+				{order.map((step, index) => (
 					<SideStep
 						key={step.sIndex}
 						stepName={step.text}
@@ -626,10 +629,13 @@ export const StepList = ({
 						scriptCommand={step.scriptCommand}
 						selectedStep={selectedStep}
 						setSelectedStep={setSelectedStep}
+						updateOrder={updateOrder}
+						updatePosition={updatePosition}
+						index={index}
 					/>
 				))}
 				<AddStep idToken={idToken} sIndex={formattedSteps.length} userStoryId={userStoryId} />
-			</AnimatePresence>
+			</List>
 			<Flex
 				align="center"
 				justify="center"
