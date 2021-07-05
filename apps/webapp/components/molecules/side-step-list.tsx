@@ -597,7 +597,7 @@ export const StepList = ({
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
-	const { order, updatePosition, updateOrder } = usePositionReorder(formattedSteps);
+	const { order, updatePosition, updateOrder, setOrder } = usePositionReorder(formattedSteps);
 	const secondaryCardColor = useColorModeValue('gray.200', 'gray.700');
 
 	return (
@@ -646,6 +646,9 @@ export const StepList = ({
 				{order.map((step, index) => (
 					<SideStep
 						key={step.sIndex}
+						setOrder={setOrder}
+						order={order}
+						userStoryId={userStoryId}
 						stepName={step.text}
 						stepNumber={step.sIndex + 1}
 						scriptCommand={step.scriptCommand}
@@ -657,6 +660,7 @@ export const StepList = ({
 					/>
 				))}
 				<AddStep mutateUserStory={mutateUserStory} steps={steps} userStoryId={userStoryId} selectedStep={selectedStep} setSelectedStep={setSelectedStep} />
+			</List>
 			<Flex
 				align="center"
 				justify="center"
