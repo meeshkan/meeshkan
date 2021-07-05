@@ -63,6 +63,8 @@ type UserStoryResponse = {
 type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined> 
 import { eightBaseClient } from '../../utils/graphql';
 import { usePositionReorder } from '../../hooks/use-position-reorder';
+import { CREATE_SINGLE_STEP } from '../../graphql/user-story';
+
 
 type StepListProps = {
 	steps: ScriptCommandListResponse['items'];
