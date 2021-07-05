@@ -104,10 +104,12 @@ export const SideStep = ({
 				mt={2}
 				mr={4}
 				backgroundColor={
-					selectedStep === scriptCommand?.sIndex ? selectedBlue : 'transparent'
+					selectedStep === scriptCommand?.sIndex || isDragging
+						? selectedBlue
+						: 'transparent'
 				}
 				color={
-					selectedStep === scriptCommand?.sIndex
+					selectedStep === scriptCommand?.sIndex || isDragging
 						? hoverBackgroundColor
 						: 'inherit'
 				}
@@ -121,7 +123,9 @@ export const SideStep = ({
 				w="full"
 				border="1px solid"
 				borderColor={
-					selectedStep === scriptCommand?.sIndex ? selectedBlue : 'transparent'
+					selectedStep === scriptCommand?.sIndex || isDragging
+						? selectedBlue
+						: 'transparent'
 				}
 				backgroundColor={hoverBackgroundColor}
 				_hover={{
