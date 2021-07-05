@@ -9,6 +9,7 @@ import { SideStep } from '../atoms/side-step';
 import {
 	ScriptCommand,
 	ScriptCommandListResponse,
+	UserStories_ScriptCommandCreateInput,
 } from '@frontend/meeshkan-types';
 import { commandsToSteps } from '../../utils/transform-steps';
 import {
@@ -133,7 +134,7 @@ const AddStep = ({
 }: AddStepProps) => {
 	const { idToken } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { register, handleSubmit } = useForm<ScriptCommand>();
+	const { register, handleSubmit } = useForm<UserStories_ScriptCommandCreateInput>();
 	const [command, setCommand] = useState('click');
 	const client = eightBaseClient(idToken);
 
@@ -143,35 +144,11 @@ const AddStep = ({
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
 	const cardBackground = useColorModeValue('white', 'gray.900');
 
-  const onSubmit = async (formData: ScriptCommand): Promise<void> => {
-    console.log("FORM DATA", formData);
+  const onSubmit = async (formData: UserStories_ScriptCommandCreateInput): Promise<void> => {
 		const userStory = await createStep(userStoryId, {
+			...formData,
 			sIndex: steps.length + 1,
-			command: formData.command,
-			value: formData.value,
-			xCoordinate: formData.xCoordinate,
-			yCoordinate: formData.yCoordinate,
-			xpath: formData.xpath,
-			selector: formData.selector,
-			className: formData.className,
-			tagName: formData.tagName,
-			tagId: formData.tagId,
-			innerText: formData.innerText,
-			altOrAriaText: formData.altOrAriaText,
-			documentURL: formData.documentURL,
-			scrollTop: formData.scrollTop,
-			scrollLeft: formData.scrollLeft,
-			destinationXCoordinate: formData.destinationXCoordinate,
-			destinationYCoordinate: formData.destinationYCoordinate,
-			destinationXpath: formData.destinationXpath,
-			destinationSelector: formData.destinationSelector,
-			destinationClassName: formData.destinationClassName,
-			destinationTagName: formData.destinationTagName,
-			destinationTagId: formData.destinationTagId,
-			destinationInnerText: formData.destinationInnerText,
-			destinationAltOrAriaText: formData.destinationAltOrAriaText,
-			request: formData.request,
-			response: formData.response }, idToken);
+		}, idToken);
 		mutateUserStory({ userStory })
 		setSelectedStep(null);
 	}
