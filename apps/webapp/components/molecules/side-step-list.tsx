@@ -657,7 +657,6 @@ export const StepList = ({
 					/>
 				))}
 				<AddStep mutateUserStory={mutateUserStory} steps={steps} userStoryId={userStoryId} selectedStep={selectedStep} setSelectedStep={setSelectedStep} />
-			</AnimatePresence>
 			<Flex
 				align="center"
 				justify="center"
