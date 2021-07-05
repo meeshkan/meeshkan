@@ -41,20 +41,24 @@ import {
 	NumberInputStepper,
 	Checkbox,
 	Tooltip,
+	Textarea,
 } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
-import { UserContext } from 'apps/webapp/utils/user';
-import { createSlug } from 'apps/webapp/utils/createSlug';
+import { UserContext } from '../../utils/user';
+import { createSlug } from '../../utils/createSlug';
 import Link from 'next/link';
 import { KeyIcon } from '@frontend/chakra-theme';
 import { InfoOutlineIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
+import { eightBaseClient } from '../../utils/graphql';
+import { CREATE_STEP } from '../../graphql/user-story';
 
 type StepListProps = {
 	steps: ScriptCommandListResponse['items'];
 	selectedStep: Number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 	requiresAuthentication: boolean;
+	userStoryId: string
 };
 
 const Label = ({
@@ -102,19 +106,45 @@ const Label = ({
 	);
 };
 
-const AddStep = () => {
+const AddStep = ({
+	idToken,
+	sIndex,
+	userStoryId,
+}: {
+	idToken: string;
+	sIndex: number;
+	userStoryId: string;
+}) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { register, handleSubmit } = useForm<ScriptCommand>();
 	const [command, setCommand] = useState('click');
+	const client = eightBaseClient(idToken);
 
 	const borderColor = useColorModeValue('gray.300', 'gray.700');
 	const modalBackground = useColorModeValue('white', 'gray.800');
 	const modalHeaderColor = useColorModeValue('gray.900', 'white');
 	const groupBorderColor = useColorModeValue('gray.100', 'gray.800');
+	const cardBackground = useColorModeValue('white', 'gray.900');
+
+	const handleAddStep = async (formData: ScriptCommand) => {
+		console.log(userStoryId, sIndex, formData);
+		await client.request(CREATE_STEP, { userStoryId, scriptCommand: { sIndex, formData } });
+	};
 
 	return (
 		<>
-			<Flex align="center" onClick={onOpen}>
+			<Flex
+				cursor="pointer"
+				align="center"
+				onClick={onOpen}
+				sx={{
+					':hover #add-step': {
+						backgroundColor: cardBackground,
+						boxShadow: 'sm',
+						borderColor: 'transparent',
+					},
+				}}
+			>
 				<Flex
 					justify="center"
 					align="center"
@@ -125,6 +155,7 @@ const AddStep = () => {
 					fontSize="sm"
 					mt={2}
 					mr={4}
+					id="add-step"
 				>
 					<PlusSquareIcon boxSize={3} />
 				</Flex>
@@ -135,6 +166,7 @@ const AddStep = () => {
 					w="full"
 					border="1px dashed"
 					borderColor={borderColor}
+					id="add-step"
 				>
 					<Text
 						flex="1"
@@ -147,6 +179,7 @@ const AddStep = () => {
 					</Text>
 				</Box>
 			</Flex>
+
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}
@@ -160,7 +193,7 @@ const AddStep = () => {
 					backgroundColor={modalBackground}
 					borderRadius="lg"
 					as="form"
-				// onSubmit={handleSubmit(handleStagingURLForm)}
+					onSubmit={handleSubmit(handleAddStep)}
 				>
 					<ModalHeader px={6} pt={4}>
 						<Heading
@@ -212,7 +245,10 @@ const AddStep = () => {
 							command === 'mouse over' ||
 							command === 'drag and drop') && (
 								<FormControl isRequired>
-									<Label text="Xpath" />
+									<Label
+										text="Xpath"
+										tooltip="We recommend using the full xpath rather than the short as it's more specific."
+									/>
 									<Input
 										name="xpath"
 										ref={register}
@@ -226,8 +262,7 @@ const AddStep = () => {
 
 						{(command === 'click' ||
 							command === 'type' ||
-							command === 'mouse over' ||
-							command === 'drag and drop') && (
+							command === 'mouse over') && (
 								<FormControl>
 									<Label text="selector" optional />
 									<Input
@@ -241,57 +276,79 @@ const AddStep = () => {
 								</FormControl>
 							)}
 
-						{(command === 'set viewport size' || command === 'mouse over') && (
-							<FormControl isRequired>
-								<Box mb="-8px" ml={3}>
-									<Label
-										text={command === 'set viewport size' ? "Size" : 'Coordinates'}
-									/>
-								</Box>
-								<Flex
-									borderLeft="1px solid"
-									borderRight="1px solid"
-									borderBottom="1px solid"
-									borderColor={groupBorderColor}
+						{(command === 'click' || command === 'mouse over') && (
+							<FormControl>
+								<Label
+									text="Inner content"
+									tooltip="What text does this item have in it? This will be used for context when reading through your steps."
+									optional
+								/>
+								<Input
+									name="innerText"
+									ref={register}
+									size="sm"
 									borderRadius="md"
-									p={4}
-								>
-									<Flex align="center" mr={4}>
-										<Label text="X" short />
-										<NumberInput
-											name="xCoordinate"
-											ref={register}
-											size="sm"
-											borderRadius="md"
-											fontFamily="mono"
-										>
-											<NumberInputField borderRadius="md" />
-											<NumberInputStepper>
-												<NumberIncrementStepper />
-												<NumberDecrementStepper />
-											</NumberInputStepper>
-										</NumberInput>
-									</Flex>
-
-									<Flex align="center">
-										<Label text="Y" short />
-										<NumberInput
-											name="yCoordinate"
-											ref={register}
-											size="sm"
-											borderRadius="md"
-											fontFamily="mono"
-										>
-											<NumberInputField borderRadius="md" />
-											<NumberInputStepper>
-												<NumberIncrementStepper />
-												<NumberDecrementStepper />
-											</NumberInputStepper>
-										</NumberInput>
-									</Flex>
-								</Flex>
+									fontFamily="mono"
+									placeholder="Click me"
+								/>
 							</FormControl>
 						)}
+
+						{(command === 'set viewport size' ||
+							command === 'mouse over' ||
+							command === 'drag and drop') && (
+								<FormControl isRequired>
+									<Box mb="-8px" ml={3}>
+										<Label
+											text={
+												command === 'set viewport size' ? 'Size' : 'Coordinates'
+											}
+										/>
+									</Box>
+									<Flex
+										borderLeft="1px solid"
+										borderRight="1px solid"
+										borderBottom="1px solid"
+										borderColor={groupBorderColor}
+										borderRadius="md"
+										p={4}
+									>
+										<Flex align="center" mr={4}>
+											<Label text="X" short />
+											<NumberInput
+												name="xCoordinate"
+												ref={register}
+												size="sm"
+												borderRadius="md"
+												fontFamily="mono"
+											>
+												<NumberInputField borderRadius="md" />
+												<NumberInputStepper>
+													<NumberIncrementStepper />
+													<NumberDecrementStepper />
+												</NumberInputStepper>
+											</NumberInput>
+										</Flex>
+
+										<Flex align="center">
+											<Label text="Y" short />
+											<NumberInput
+												name="yCoordinate"
+												ref={register}
+												size="sm"
+												borderRadius="md"
+												fontFamily="mono"
+											>
+												<NumberInputField borderRadius="md" />
+												<NumberInputStepper>
+													<NumberIncrementStepper />
+													<NumberDecrementStepper />
+												</NumberInputStepper>
+											</NumberInput>
+										</Flex>
+									</Flex>
+								</FormControl>
+							)}
 
 						{command === 'scroll' && (
 							<FormControl isRequired>
@@ -307,7 +364,11 @@ const AddStep = () => {
 									p={4}
 								>
 									<Flex align="center" mr={4}>
-										<Label text="Top" short />
+										<Label
+											text="Top"
+											short
+											tooltip="How far from the top should be scrolled?"
+										/>
 										<NumberInput
 											name="scrollTop"
 											ref={register}
@@ -324,7 +385,11 @@ const AddStep = () => {
 									</Flex>
 
 									<Flex align="center">
-										<Label text="Left" short />
+										<Label
+											text="Left"
+											short
+											tooltip="How far from the left should be scrolled?"
+										/>
 										<NumberInput
 											name="scrollLeft"
 											ref={register}
@@ -343,29 +408,112 @@ const AddStep = () => {
 							</FormControl>
 						)}
 
-						{(command === 'open' ||
-							command === 'execute javascript' ||
-							command === 'type') && (
+						{(command === 'open' || command === 'type') && (
+							<FormControl isRequired>
+								<Label
+									text={command === 'open' ? 'URL' : 'Value'}
+									tooltip={command === 'type' ? 'What is typed?' : null}
+								/>
+								<Input
+									fontFamily="mono"
+									name="value"
+									ref={register}
+									size="sm"
+									borderRadius="md"
+									placeholder={
+										command === 'open'
+											? 'https://example.com'
+											: command === 'type'
+												? 'contact@meeshkan.com'
+												: null
+									}
+								/>
+							</FormControl>
+						)}
+
+						{command === 'drag and drop' && (
+							<>
 								<FormControl isRequired>
 									<Label
-										text={
-											command === 'open'
-												? 'URL'
-												: command === 'execute javascript'
-													? 'JavaScript'
-													: 'Value'
-										}
-										tooltip={command === 'type' ? "What is typed?" : null}
+										text="Destination xpath"
+										tooltip="What is the structure when the element is dropped"
 									/>
 									<Input
-										fontFamily="mono"
-										name="value"
+										name="destinationXpath"
 										ref={register}
 										size="sm"
 										borderRadius="md"
+										fontFamily="mono"
+										placeholder="/html/body/div[1]/div/nav/div/div[2]/div/div[2]/a[2]"
 									/>
 								</FormControl>
-							)}
+
+								<FormControl isRequired>
+									<Box mb="-8px" ml={3}>
+										<Label text="Destination coordinates" />
+									</Box>
+									<Flex
+										borderLeft="1px solid"
+										borderRight="1px solid"
+										borderBottom="1px solid"
+										borderColor={groupBorderColor}
+										borderRadius="md"
+										p={4}
+									>
+										<Flex align="center" mr={4}>
+											<Label text="X" short />
+											<NumberInput
+												name="xCoordinate"
+												ref={register}
+												size="sm"
+												borderRadius="md"
+												fontFamily="mono"
+											>
+												<NumberInputField borderRadius="md" />
+												<NumberInputStepper>
+													<NumberIncrementStepper />
+													<NumberDecrementStepper />
+												</NumberInputStepper>
+											</NumberInput>
+										</Flex>
+
+										<Flex align="center">
+											<Label text="Y" short />
+											<NumberInput
+												name="yCoordinate"
+												ref={register}
+												size="sm"
+												borderRadius="md"
+												fontFamily="mono"
+											>
+												<NumberInputField borderRadius="md" />
+												<NumberInputStepper>
+													<NumberIncrementStepper />
+													<NumberDecrementStepper />
+												</NumberInputStepper>
+											</NumberInput>
+										</Flex>
+									</Flex>
+								</FormControl>
+							</>
+						)}
+
+						{command === 'execute javascript' && (
+							<FormControl isRequired>
+								<Label
+									text="JavaScript"
+									tooltip="Any valid JavaScript saved in this field will be executed during a test run."
+								/>
+								<Textarea
+									fontFamily="mono"
+									name="value"
+									ref={register}
+									size="sm"
+									borderRadius="md"
+									placeholder="MeeshkanError('The text did not match as expected')"
+								/>
+							</FormControl>
+						)}
 
 						{(command === 'click' ||
 							command === 'type' ||
@@ -382,6 +530,7 @@ const AddStep = () => {
 										ref={register}
 										size="sm"
 										borderRadius="md"
+										placeholder="https://example.com/page-2"
 									/>
 								</FormControl>
 							)}
@@ -417,9 +566,10 @@ export const StepList = ({
 	selectedStep,
 	setSelectedStep,
 	requiresAuthentication,
+	userStoryId
 }: StepListProps) => {
 	const formattedSteps = commandsToSteps(steps);
-	const { project } = useContext(UserContext);
+	const { idToken, project } = useContext(UserContext);
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
@@ -478,7 +628,7 @@ export const StepList = ({
 						setSelectedStep={setSelectedStep}
 					/>
 				))}
-				<AddStep />
+				<AddStep idToken={idToken} sIndex={formattedSteps.length} userStoryId={userStoryId} />
 			</AnimatePresence>
 			<Flex
 				align="center"

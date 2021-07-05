@@ -360,48 +360,60 @@ export const UPDATE_STEP = gql`
 
 export const DELETE_SINGLE_COMMAND = gql`
 	mutation DELETE_SINGLE_COMMAND($id: ID!) {
-		scriptCommandDelete(data: {}
-		filter: {id: $id}
-		force:true) { success }
+		scriptCommandDelete(data: {}, filter: { id: $id }, force: true) {
+			success
+		}
 	}
-`
+`;
 
 export const UPDATE_MANY_STEPS = gql`
-	mutation UPDATE_MANY_STEPS($id: ID!, $updates: [UserStories_ScriptCommandUpdateInput!]!) {
-			# throw new MeeshkanError('elements do not have same text');
-			userStoryUpdate(filter : {
-					id: $id
-			}
-			data: {
-					scriptCommands: {
-							update: $updates
-					}
-			}) {
+	mutation UPDATE_MANY_STEPS(
+		$id: ID!
+		$updates: [UserStories_ScriptCommandUpdateInput!]!
+	) {
+		# throw new MeeshkanError('elements do not have same text');
+		userStoryUpdate(
+			filter: { id: $id }
+			data: { scriptCommands: { update: $updates } }
+		) {
+			id
+			scriptCommands {
+				count
+				items {
 					id
-					scriptCommands {
-						count
-						items {
-							id
-							command
-							sIndex
-							value
-							xCoordinate
-							yCoordinate
-							xpath
-							selector
-							className
-							tagName
-							tagId
-							innerText
-							altOrAriaText
-							scrollTop
-							scrollLeft
-							documentURL
-							destinationXCoordinate
-							destinationYCoordinate
-							destinationTagName
-						}
-					}
+					command
+					sIndex
+					value
+					xCoordinate
+					yCoordinate
+					xpath
+					selector
+					className
+					tagName
+					tagId
+					innerText
+					altOrAriaText
+					scrollTop
+					scrollLeft
+					documentURL
+					destinationXCoordinate
+					destinationYCoordinate
+					destinationTagName
+				}
 			}
+		}
 	}
-`
+`;
+export const CREATE_STEP = gql`
+	mutation CREATE_STEP(
+		$userStoryId: ID!
+		$scriptCommand: UserStories_ScriptCommandCreateInput!
+	) {
+		userStoryUpdate(
+			filter: { id: $userStoryId }
+			data: { scriptCommands: { create: [$scriptCommand] } }
+		) {
+			updatedAt
+		}
+	}
+`;

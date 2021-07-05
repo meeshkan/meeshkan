@@ -74,7 +74,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		(validatingQuery && (!data || data?.userStory?.id !== userStoryId)) ||
 		validatingProject
 	) {
-		return <Center h='full'><Spinner /></Center>;
+		return <LoadingScreen as={Card} />;
 	}
 	if (!foundProject || data?.userStory === null) {
 		return <NotFoundError />;
@@ -120,6 +120,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 						selectedStep={selectedStep}
 						setSelectedStep={setSelectedStep}
 						requiresAuthentication={data?.userStory?.requiresAuthentication}
+						userStoryId={data?.userStory?.id}
 					/>
 				</GridItem>
 
