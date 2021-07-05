@@ -160,7 +160,7 @@ const AddStep = () => {
 					backgroundColor={modalBackground}
 					borderRadius="lg"
 					as="form"
-					// onSubmit={handleSubmit(handleStagingURLForm)}
+				// onSubmit={handleSubmit(handleStagingURLForm)}
 				>
 					<ModalHeader px={6} pt={4}>
 						<Heading
@@ -179,7 +179,7 @@ const AddStep = () => {
 					<Divider />
 					<ModalCloseButton mt={2} />
 					<ModalBody as={Stack} spacing={4} p={6}>
-						<FormControl>
+						<FormControl isRequired>
 							<Label
 								text="Command"
 								tooltip="What action will this step be doing?"
@@ -207,150 +207,191 @@ const AddStep = () => {
 								<optgroup label="Assertions"></optgroup>
 							</Select>
 						</FormControl>
-						<FormControl>
-							<Label text="Xpath" />
-							<Input
-								name="xpath"
-								ref={register}
-								size="sm"
-								borderRadius="md"
-								fontFamily="mono"
-								placeholder="/html/body/div[1]/div/nav/div/div[2]/div/div[2]/a[2]"
-							/>
-						</FormControl>
-						<FormControl>
-							<Label text="selector" optional />
-							<Input
-								name="selector"
-								ref={register}
-								size="sm"
-								borderRadius="md"
-								fontFamily="mono"
-								placeholder=".css-94mt2v:nth-child(2)"
-							/>
-						</FormControl>
-
-						<FormControl>
-							<Box mb="-8px" ml={3}>
-								<Label text="Coordinates" />
-							</Box>
-							<Flex
-								borderLeft="1px solid"
-								borderRight="1px solid"
-								borderBottom="1px solid"
-								borderColor={groupBorderColor}
-								borderRadius="md"
-								p={4}
-							>
-								<Flex align="center" mr={4}>
-									<Label text="X" short />
-									<NumberInput
-										name="xCoordinate"
+						{(command === 'click' ||
+							command === 'type' ||
+							command === 'mouse over' ||
+							command === 'drag and drop') && (
+								<FormControl isRequired>
+									<Label text="Xpath" />
+									<Input
+										name="xpath"
 										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
-									>
-										<NumberInputField borderRadius="md" />
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
-								</Flex>
+										placeholder="/html/body/div[1]/div/nav/div/div[2]/div/div[2]/a[2]"
+									/>
+								</FormControl>
+							)}
 
-								<Flex align="center">
-									<Label text="Y" short />
-									<NumberInput
-										name="yCoordinate"
+						{(command === 'click' ||
+							command === 'type' ||
+							command === 'mouse over' ||
+							command === 'drag and drop') && (
+								<FormControl>
+									<Label text="selector" optional />
+									<Input
+										name="selector"
 										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
-									>
-										<NumberInputField borderRadius="md" />
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
-								</Flex>
-							</Flex>
-						</FormControl>
+										placeholder=".css-94mt2v:nth-child(2)"
+									/>
+								</FormControl>
+							)}
 
-						<FormControl>
-							<Box mb="-8px" ml={3}>
-								<Label text="Scroll" short />
-							</Box>
-							<Flex
-								borderLeft="1px solid"
-								borderRight="1px solid"
-								borderBottom="1px solid"
-								borderColor={groupBorderColor}
-								borderRadius="md"
-								p={4}
-							>
-								<Flex align="center" mr={4}>
-									<Label text="Top" short />
-									<NumberInput
-										name="scrollTop"
+						{(command === 'set viewport size' || command === 'mouse over') && (
+							<FormControl isRequired>
+								<Box mb="-8px" ml={3}>
+									<Label
+										text={command === 'set viewport size' ? "Size" : 'Coordinates'}
+									/>
+								</Box>
+								<Flex
+									borderLeft="1px solid"
+									borderRight="1px solid"
+									borderBottom="1px solid"
+									borderColor={groupBorderColor}
+									borderRadius="md"
+									p={4}
+								>
+									<Flex align="center" mr={4}>
+										<Label text="X" short />
+										<NumberInput
+											name="xCoordinate"
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+
+									<Flex align="center">
+										<Label text="Y" short />
+										<NumberInput
+											name="yCoordinate"
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+								</Flex>
+							</FormControl>
+						)}
+
+						{command === 'scroll' && (
+							<FormControl isRequired>
+								<Box mb="-8px" ml={3}>
+									<Label text="Scroll" short />
+								</Box>
+								<Flex
+									borderLeft="1px solid"
+									borderRight="1px solid"
+									borderBottom="1px solid"
+									borderColor={groupBorderColor}
+									borderRadius="md"
+									p={4}
+								>
+									<Flex align="center" mr={4}>
+										<Label text="Top" short />
+										<NumberInput
+											name="scrollTop"
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+
+									<Flex align="center">
+										<Label text="Left" short />
+										<NumberInput
+											name="scrollLeft"
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+								</Flex>
+							</FormControl>
+						)}
+
+						{(command === 'open' ||
+							command === 'execute javascript' ||
+							command === 'type') && (
+								<FormControl isRequired>
+									<Label
+										text={
+											command === 'open'
+												? 'URL'
+												: command === 'execute javascript'
+													? 'JavaScript'
+													: 'Value'
+										}
+										tooltip={command === 'type' ? "What is typed?" : null}
+									/>
+									<Input
+										fontFamily="mono"
+										name="value"
 										ref={register}
 										size="sm"
 										borderRadius="md"
-										fontFamily="mono"
-									>
-										<NumberInputField borderRadius="md" />
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
-								</Flex>
+									/>
+								</FormControl>
+							)}
 
-								<Flex align="center">
-									<Label text="Left" short />
-									<NumberInput
-										name="scrollLeft"
+						{(command === 'click' ||
+							command === 'type' ||
+							command === 'mouse over') && (
+								<FormControl>
+									<Label
+										text="Page"
+										tooltip="Which page does this happen on?"
+										optional
+									/>
+									<Input
+										fontFamily="mono"
+										name="documentURL"
 										ref={register}
 										size="sm"
 										borderRadius="md"
-										fontFamily="mono"
-									>
-										<NumberInputField borderRadius="md" />
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
-								</Flex>
-							</Flex>
-						</FormControl>
-
-						<FormControl>
-							<Label text="Value" />
-							<Input
-								fontFamily="mono"
-								name="value"
-								ref={register}
-								size="sm"
-								borderRadius="md"
-							/>
-						</FormControl>
-
-						<FormControl>
-							<Label text="Page" />
-							<Input
-								fontFamily="mono"
-								name="documentURL"
-								ref={register}
-								size="sm"
-								borderRadius="md"
-							/>
-						</FormControl>
+									/>
+								</FormControl>
+							)}
 
 						<FormControl>
 							<Checkbox defaultIsChecked isDisabled>
-								<Label text="Required step" />
+								<Label
+									text="Required step"
+									tooltip="Does this step need to pass for the test to continue?"
+								/>
 							</Checkbox>
 						</FormControl>
 					</ModalBody>
