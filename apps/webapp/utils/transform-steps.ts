@@ -139,6 +139,16 @@ export const commandsToSteps = (
 			});
 		}
 
+		if (commandData.command === 'execute javascript') {
+			subSteps.push({
+				text: `Execute custom JavaScript.`,
+				sIndex: commandData.sIndex,
+				command: 'execute javascript',
+				tagName: null,
+				scriptCommand: commandData,
+			});
+		}
+
 		// Is the source target and destination target the same? return a boolean
 		const isXSame =
 			commandData.command === 'drag and drop' &&
