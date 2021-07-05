@@ -108,6 +108,7 @@ export const commandsToSteps = (
 				sIndex: commandData.sIndex,
 				command: 'mouse over',
 				tagName: HumanTag(commandData.tagName),
+				scriptCommand: commandData,
 			});
 		}
 		if (commandData.command === 'scroll') {
