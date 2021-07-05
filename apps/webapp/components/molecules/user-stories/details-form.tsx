@@ -154,40 +154,6 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 			<Stack spacing={6}>
 				<FormControl>
 					<FormLabel
-						textTransform="uppercase"
-						color={formLabelColor}
-						fontSize="sm"
-					>
-						Created by
-					</FormLabel>
-					<Flex align="center" justify="space-between">
-						<Flex align="center">
-							<Avatar
-								src={userStory?.createdBy?.avatar?.downloadUrl}
-								borderRadius="md"
-								mr={3}
-								boxSize={4}
-							/>
-							<Text fontSize="sm" fontWeight="500" lineHeight="base">
-								{userStory?.createdBy?.firstName +
-									' ' +
-									userStory?.createdBy?.lastName}
-							</Text>
-						</Flex>
-						<Text fontSize="sm" color={formLabelColor} lineHeight="base">
-							{new Date(userStory?.createdAt).toLocaleDateString('en-US', {
-								hour: 'numeric',
-								minute: 'numeric',
-								second: 'numeric',
-								hour12: false,
-								day: 'numeric',
-								month: 'short',
-							})}
-						</Text>
-					</Flex>
-				</FormControl>
-				<FormControl>
-					<FormLabel
 						htmlFor="title"
 						textTransform="uppercase"
 						color={formLabelColor}
@@ -304,6 +270,18 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 					</Select>
 				</FormControl>
 
+				<Button
+					type="submit"
+					form="step-form"
+					size="sm"
+					colorScheme="blue"
+					leftIcon={<PlayIcon />}
+					// isLoading={saving}
+					loadingText="Saving changes"
+				>
+					Trigger single test
+				</Button>
+
 				<Box>
 					<Heading
 						as="h2"
@@ -324,17 +302,18 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 									outcome.status == 'passing'
 										? 'success'
 										: outcome.status == 'did not run' ||
-											outcome.status == 'failing'
-											? 'error'
-											: 'info'
+										  outcome.status == 'failing'
+										? 'error'
+										: 'info'
 								}
-								title={`${outcome.status == 'passing'
+								title={`${
+									outcome.status == 'passing'
 										? 'Passing'
 										: outcome.status == 'did not run' ||
-											outcome.status == 'failing'
-											? 'Failing'
-											: 'In progress'
-									} run`}
+										  outcome.status == 'failing'
+										? 'Failing'
+										: 'In progress'
+								} run`}
 								date={outcome.createdAt}
 								link={`/${slugifiedProjectName}/test-runs/${outcome.testRun.id}`}
 							/>

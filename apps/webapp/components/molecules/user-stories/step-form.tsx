@@ -362,7 +362,6 @@ export const StepForm = ({
 					type="submit"
 					form="step-form"
 					colorScheme="blue"
-					variant="subtle"
 					leftIcon={<SaveIcon />}
 					isLoading={saving}
 					loadingText="Saving changes"

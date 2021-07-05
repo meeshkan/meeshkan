@@ -211,6 +211,7 @@ const TestRunsPage = () => {
 	const emptyDoughnutColor = useColorModeValue('gray.100', 'gray.800');
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
 	const modalHeaderColor = useColorModeValue('gray.900', 'white');
+	const modalBackground = useColorModeValue('white', 'gray.800');
 
 	if (loading) {
 		return <LoadingScreen as={Card} />;
@@ -351,6 +352,7 @@ const TestRunsPage = () => {
 					>
 						<ModalOverlay />
 						<ModalContent
+							backgroundColor={modalBackground}
 							borderRadius="lg"
 							as="form"
 							onSubmit={handleSubmit(handleStagingURLForm)}
