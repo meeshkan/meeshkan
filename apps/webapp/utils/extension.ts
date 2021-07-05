@@ -53,7 +53,6 @@ export const getVersion = () => {
 };
 
 export const handleExtensionAuthHandshake = (
-	event: Event,
 	user: IUserContext,
 	close: boolean = true
 ): void => {
