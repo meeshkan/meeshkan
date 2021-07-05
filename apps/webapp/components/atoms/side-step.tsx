@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import { MotionFlex } from './motion';
+import { MotionListItem } from './motion';
 import { DragHandleIcon } from '@frontend/chakra-theme';
-import { useDragControls } from 'framer-motion';
+import { AxisBox2D, BoxDelta, useDragControls } from 'framer-motion';
 import { ScriptCommand } from '@frontend/meeshkan-types';
-import { Position, useMeasurePosition } from '../../utils/use-measure-position';
+import { Position, useMeasurePosition } from '../../hooks/use-measure-position';
 
 type StoryStepProps = {
 	stepNumber: number;
@@ -12,6 +12,9 @@ type StoryStepProps = {
 	scriptCommand: ScriptCommand;
 	selectedStep: Number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
+	updatePosition: (index: number, pos: Position) => void;
+	updateOrder: (index: number, dragOffset: number) => void;
+	index: number
 };
 
 export const SideStep = ({
@@ -20,10 +23,14 @@ export const SideStep = ({
 	scriptCommand,
 	selectedStep,
 	setSelectedStep,
+	updatePosition,
+	updateOrder,
+	index
 }: StoryStepProps) => {
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
 	const [isDragging, setDragging] = useState(false);
+	const ref = useMeasurePosition((pos: Position) => updatePosition(index, pos));
 	const dragControls = useDragControls();
 	function startDrag(
 		event:
@@ -39,19 +46,28 @@ export const SideStep = ({
 	}
 
 	return (
-		<MotionFlex
-			initial={{ y: 100, opacity: 0 }}
-			animate={{ y: 0, opacity: 1 }}
-			my={3}
-			onClick={() => setSelectedStep(scriptCommand.sIndex)}
-			cursor="pointer"
+		<MotionListItem
+			as={Flex}
+			ref={ref}
+			layout
+			initial={false}
+			whileTap={{
+				transform: 'rotate(-1deg)'
+			}}
+			zIndex={isDragging ? 3 : 1}
 			drag="y"
 			dragListener={false}
 			onDragEnd={() => {
 				setDragging(false);
 			}}
-			zIndex={isDragging ? 100 : 1}
 			dragControls={dragControls}
+			onViewportBoxUpdate={(_viewportBox: AxisBox2D, delta: BoxDelta) => {
+				return isDragging && updateOrder(index, delta.y.translate);
+			}}
+			cursor="pointer"
+			my={3}
+			onClick={() => setSelectedStep(scriptCommand.sIndex)}
+			transition={{ type: "tween", duration: 0.1 }}
 		>
 			<Flex
 				justify="center"
@@ -88,7 +104,7 @@ export const SideStep = ({
 				_hover={{
 					boxShadow: 'sm',
 				}}
-				_active={{ transform: 'rotate(-1deg)' }}
+				// _active={{ transform: 'rotate(-1deg)' }}
 				sx={{
 					':hover #drag-handle': {
 						visibility: 'visible',
@@ -119,6 +135,6 @@ export const SideStep = ({
 					/>
 				</Box>
 			</Box>
-		</MotionFlex>
+		</MotionListItem>
 	);
 };
