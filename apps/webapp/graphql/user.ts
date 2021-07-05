@@ -64,6 +64,9 @@ export const USER = gql`
 				items {
 					id
 					name
+					userStories {
+						count
+					}
 					configuration {
 						id
 						stagingURL
