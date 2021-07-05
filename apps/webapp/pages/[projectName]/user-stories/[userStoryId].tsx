@@ -116,13 +116,12 @@ const UserStoryPage = (props: UserStoryProps) => {
 					<Spacer h={6} />
 
 					<StepList
-					  userStoryId={data?.userStory?.id}
+						userStoryId={data?.userStory?.id}
 						steps={steps}
 						mutateUserStory={mutate}
 						selectedStep={selectedStep}
 						setSelectedStep={setSelectedStep}
 						requiresAuthentication={data?.userStory?.requiresAuthentication}
-						userStoryId={data?.userStory?.id}
 					/>
 				</GridItem>
 
@@ -130,7 +129,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 					{typeof selectedStep == 'number' ? (
 						<>
 							<StepForm
-							  mutateUserStory={mutate}
+								mutateUserStory={mutate}
 								setSelectedStep={setSelectedStep}
 								userStory={data?.userStory}
 								selectedStep={selectedStep}
