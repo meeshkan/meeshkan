@@ -124,45 +124,6 @@ type CreateTestCaseProps = {
 	idToken: string;
 };
 
-export const onCreateTestCase = async ({
-	creatingTestCase,
-	setCreatingTestCase,
-	slugifiedProjectName,
-	date,
-	userStoryId,
-	idToken,
-}: CreateTestCaseProps) => {
-	const toaster = useToaster();
-	const router = useRouter();
-	const mixpanel = useAnalytics();
-
-	if (creatingTestCase) {
-		return;
-	}
-
-	setCreatingTestCase(true);
-	mixpanel.track('Create a test case');
-	const toasterId = 'creatingTestCase';
-	toaster({
-		status: 'info',
-		title: 'Creating test case...',
-		id: toasterId,
-	});
-
-	await updateExpectedTest(date, userStoryId, idToken);
-	await mutate('/api/session');
-	toaster.close(toasterId);
-	toaster({
-		status: 'success',
-		title: 'A test case was created!',
-		description:
-			'The user story has been marked as a test case. It can now be found in the test cases tab.',
-	});
-
-	router.push(`/${slugifiedProjectName}/user-stories`);
-	setCreatingTestCase(false);
-};
-
 const deleteRejectedRecording = (userStoryId: string, idToken: string) => {
 	const client = eightBaseClient(idToken);
 	return client.request(DELETE_REJECTED_RECORDING, {
@@ -173,7 +134,6 @@ const deleteRejectedRecording = (userStoryId: string, idToken: string) => {
 type DeleteTestCaseProps = {
 	deleting: boolean;
 	setDeleting: Dispatch<SetStateAction<boolean>>;
-	slugifiedProjectName: string;
 	userStoryId: string;
 	idToken: string;
 };
@@ -181,39 +141,23 @@ type DeleteTestCaseProps = {
 export const onDelete = async ({
 	deleting,
 	setDeleting,
-	slugifiedProjectName,
 	userStoryId,
 	idToken,
 }: DeleteTestCaseProps) => {
-	const toaster = useToaster();
-	const router = useRouter();
-	const mixpanel = useAnalytics();
-
 	if (deleting) {
 		return;
 	}
 
-	setDeleting(true);
-	mixpanel.track('Delete a user story');
-	const toasterId = 'deleting';
-	toaster({
-		status: 'info',
-		title: 'Deleting this user story...',
-		id: toasterId,
-	});
-
-	await deleteRejectedRecording(userStoryId, idToken);
-	await mutate('/api/session');
-	toaster.close(toasterId);
-	toaster({
-		status: 'success',
-		title: 'A recording has been rejected.',
-		description:
-			'Rejecting a recording will delete the series of steps as a user story.',
-	});
-
-	router.push(`/${slugifiedProjectName}/user-stories`);
-	setDeleting(false);
+	try {
+		setDeleting(true);
+		await deleteRejectedRecording(userStoryId, idToken);
+		await mutate('/api/session');
+		setDeleting(false);
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+	return;
 };
 
 type DownloadProps = {
@@ -229,8 +173,6 @@ export const handleDownload = ({
 	stagingURL,
 	slugifiedStoryName,
 }: DownloadProps) => {
-	const toaster = useToaster();
-	const mixpanel = useAnalytics();
 	try {
 		const pptrScript = eightBaseToPptr(
 			scriptCommands,
@@ -245,15 +187,11 @@ export const handleDownload = ({
 			type: 'text/javascript;charset=utf-8',
 		});
 		saveAs(blob, `${slugifiedStoryName}.js`);
-	} catch (err) {
-		console.error;
-		toaster({
-			status: 'error',
-			title: 'Your test case could not be generated.',
-			description: 'Please try again in a few seconds.',
-		});
+	} catch (error) {
+		console.error(error);
+		return 'error';
 	}
-	mixpanel.track('Puppeteer script downloaded');
+	return;
 };
 
 export const updateStep = (
@@ -269,14 +207,20 @@ export const updateStep = (
 	});
 };
 
-export const createStep = (id: string, create: UserStories_ScriptCommandCreateInput, idToken: string): Promise<UserStory> => {
+export const createStep = (
+	id: string,
+	create: UserStories_ScriptCommandCreateInput,
+	idToken: string
+): Promise<UserStory> => {
 	const client = eightBaseClient(idToken);
 
-	return client.request(CREATE_SINGLE_STEP, {
-		id,
-		create,
-	}).then(({ userStoryUpdate }) => userStoryUpdate);
-}
+	return client
+		.request(CREATE_SINGLE_STEP, {
+			id,
+			create,
+		})
+		.then(({ userStoryUpdate }) => userStoryUpdate);
+};
 
 export const updateManySteps = (
 	id: string,
@@ -291,10 +235,7 @@ export const updateManySteps = (
 	});
 };
 
-export const deleteSingleCommand = (
-	id: string,
-	idToken: string
-) => {
+export const deleteSingleCommand = (id: string, idToken: string) => {
 	const client = eightBaseClient(idToken);
 
 	client.request(DELETE_SINGLE_COMMAND, {

@@ -41,6 +41,8 @@ import { createSlug } from '../../../utils/createSlug';
 import { useToaster } from '../../../hooks/use-toaster';
 import RecentActivityCard from '../recent-activity';
 import { TriggerTestRun } from 'apps/webapp/utils/test-triggers';
+import { useRouter } from 'next/router';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 type DetailsFormProps = {
 	userStory: UserStory;
@@ -53,6 +55,8 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 	]);
 	const [deleting, setDeleting] = useState(false);
 	const toaster = useToaster();
+	const router = useRouter();
+	const mixpanel = useAnalytics();
 
 	const menuBackground = useColorModeValue('white', 'gray.900');
 	const formLabelColor = useColorModeValue('gray.500', 'gray.400');
@@ -75,8 +79,6 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 			});
 		}
 	}, [hasCopied, toaster]);
-
-	// trigger single test case run
 
 	return (
 		<>
@@ -101,26 +103,28 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 						Actions
 					</MenuButton>
 					<MenuList backgroundColor={menuBackground}>
-						<MenuItem icon={<PlayIcon />} isDisabled>
-							Trigger single test
-						</MenuItem>
-
-						<MenuDivider />
-
 						<MenuItem icon={<CopyIcon />} onClick={() => handleCopy()}>
 							Copy share link
 						</MenuItem>
 						<MenuItem
 							icon={<DownloadIcon />}
-							onClick={() =>
-								handleDownload({
+							onClick={async () => {
+								const download = await handleDownload({
 									scriptCommands: userStory?.scriptCommands,
 									authenticationTokens:
 										project?.configuration?.authenticationTokens?.items,
 									stagingURL: project?.configuration?.stagingURL,
 									slugifiedStoryName,
-								})
-							}
+								});
+								download === 'error'
+									? toaster({
+											status: 'error',
+											title: 'Your test case could not be generated.',
+											description: 'Please try again in a few seconds.',
+									  })
+									: null;
+								mixpanel.track('Puppeteer script downloaded');
+							}}
 						>
 							Download manual script
 						</MenuItem>
@@ -135,13 +139,27 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 							id="delete-recording"
 							_hover={{ backgroundColor: deleteBackground, color: deleteText }}
 							onClick={() => {
+								mixpanel.track('Delete a user story');
+								const toasterId = 'deleting';
+								toaster({
+									status: 'info',
+									title: 'Deleting this test case...',
+									id: toasterId,
+								});
 								onDelete({
 									deleting,
 									setDeleting,
-									slugifiedProjectName,
 									userStoryId: userStory?.id,
 									idToken,
 								});
+								toaster.close(toasterId);
+								toaster({
+									status: 'success',
+									title: 'A test case has been deleted.',
+									description: 'This test case is no longer accessible.',
+								});
+
+								router.push(`/${slugifiedProjectName}/user-stories`);
 							}}
 							isLoading={deleting}
 						>
@@ -271,18 +289,6 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 					</Select>
 				</FormControl>
 
-				{/* <Button
-					type="submit"
-					form="step-form"
-					size="sm"
-					colorScheme="blue"
-
-					// isLoading={saving}
-					loadingText="Triggering test run"
-					// onClick={handleTriggerTest}
-				>
-					Trigger single test
-				</Button> */}
 				<TriggerTestRun
 					buttonText="Trigger single test"
 					singleOrAll="single"

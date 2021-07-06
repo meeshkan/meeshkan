@@ -27,9 +27,10 @@ import { eightBaseClient } from './graphql';
 import { UserContext } from './user';
 import { useToaster } from '../hooks/use-toaster';
 import { useForm } from 'react-hook-form';
+import { PlayIcon } from '@frontend/chakra-theme';
 
 type TriggerTestRunProps = {
-	/** Defaults to 'Trigger test run' if not defined. */
+	/** Defaults to 'Trigger all tests' if not defined. */
 	buttonText?: string;
 	/** Defaults to running all tests if not defined. */
 	singleOrAll?: 'single' | 'all';
@@ -38,7 +39,7 @@ type TriggerTestRunProps = {
 };
 
 export const TriggerTestRun = ({
-	buttonText = 'Trigger test run',
+	buttonText = 'Trigger all tests',
 	singleOrAll = 'all',
 	userStoryId,
 }: TriggerTestRunProps) => {
@@ -192,6 +193,7 @@ export const TriggerTestRun = ({
 	return (
 		<>
 			<Button
+				leftIcon={<PlayIcon />}
 				onClick={handleTriggerTestRun}
 				id="trigger-test-run"
 				isLoading={testTriggering}
