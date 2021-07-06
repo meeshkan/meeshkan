@@ -127,7 +127,6 @@ export const TriggerTestRun = ({
 						clientId: project?.id,
 						url: stagingURL,
 						limitToUserStory: userStoryId,
-						pathToFFMpeg: 'ffmpeg',
 						clientSecret: project?.configuration?.clientSecret,
 					}),
 				}
