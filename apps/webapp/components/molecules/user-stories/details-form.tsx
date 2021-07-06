@@ -24,7 +24,6 @@ import {
 	CopyIcon,
 	CrumpledPaperIcon,
 	DownloadIcon,
-	PlayIcon,
 	TrashIcon,
 } from '@frontend/chakra-theme';
 import {

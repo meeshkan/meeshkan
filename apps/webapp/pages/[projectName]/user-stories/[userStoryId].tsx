@@ -7,8 +7,6 @@ import {
 	SimpleGrid,
 	GridItem,
 	Spacer,
-	Spinner,
-	Center,
 } from '@chakra-ui/react';
 import { UserContext } from '../../../utils/user';
 import { ScriptCommandListResponse, UserStory } from '@frontend/meeshkan-types';
@@ -28,7 +26,6 @@ import { UserStoryVideo } from '../../../components/molecules/user-stories/video
 import GridCard from '../../../components/molecules/grid-card';
 import { DetailsForm } from '../../../components/molecules/user-stories/details-form';
 import { StepForm } from '../../../components/molecules/user-stories/step-form';
-import { mutateCallback } from 'swr/dist/types';
 
 type UserStoryProps = {
 	cookies: string | undefined;

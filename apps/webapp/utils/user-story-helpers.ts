@@ -1,14 +1,12 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import {
 	ScriptCommandListResponse,
 	AuthenticationTokenListResponse,
 	ScriptCommand,
 	UserStories_ScriptCommandUpdateInput,
 	UserStories_ScriptCommandCreateInput,
-	UserStoryCreateInput,
 	UserStory,
 } from './../../../libs/meeshkan-types/src/lib/8base-schema';
-import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import {
 	DELETE_REJECTED_RECORDING,
@@ -22,9 +20,7 @@ import {
 	DELETE_SINGLE_COMMAND,
 	CREATE_SINGLE_STEP,
 } from '../graphql/user-story';
-import { useToaster } from '../hooks/use-toaster';
 import { eightBaseClient } from './graphql';
-import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { eightBaseToPptr } from '@frontend/downloadable-script';
 import { saveAs } from 'file-saver';
 

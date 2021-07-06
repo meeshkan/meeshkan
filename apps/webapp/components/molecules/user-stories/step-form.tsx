@@ -37,7 +37,6 @@ import {
 	updateStep,
 } from '../../../utils/user-story-helpers';
 import { mutateCallback } from 'swr/dist/types';
-import { filter } from 'lodash';
 
 type UserStoryResponse = {
 	userStory: UserStory;

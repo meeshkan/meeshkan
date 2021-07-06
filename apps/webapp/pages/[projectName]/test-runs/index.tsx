@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import {
 	Flex,
 	Stack,
@@ -30,7 +30,6 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { capitalize } from '../../../utils/capitalize';
-import { eightBaseClient } from '../../../utils/graphql';
 import { TriggerTestRun } from 'apps/webapp/utils/test-triggers';
 
 const doughnutDefaultDataValues = [80, 8, 12];
@@ -54,7 +53,7 @@ const doughnutData = {
 const TestRunsPage = () => {
 	const { found, loading } = useValidateSelectedProject();
 	const user = useContext(UserContext);
-	const { idToken, project } = user;
+	const { project } = user;
 	const { colorMode } = useColorMode();
 
 	const testRuns = project?.release.items[0]?.testRuns?.items;
