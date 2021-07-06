@@ -15,11 +15,11 @@ import {
 import { ChevronLeftIcon, SearchIcon } from '@chakra-ui/icons';
 import {
 	ActivityIcon,
-	VideoIcon,
 	CheckSquareIcon,
 	PackageIcon,
 	SuitcaseIcon,
 	ProfileIcon,
+	PlayIcon,
 } from '@frontend/chakra-theme';
 import NavButton from '../molecules/nav-button';
 import { UserContext } from '../../utils/user';
@@ -248,21 +248,21 @@ const SideBarBody = () => {
 							</Flex>
 						</NavButton>
 						<NavButton
-							leftIcon={<VideoIcon />}
+							leftIcon={<CheckSquareIcon />}
 							href={userStoriesHref}
 							isActive={
 								router.pathname.split('/').slice(-1)[0] === 'user-stories' ||
 								router.asPath.includes('/user-stories')
 							}
 						>
-							User stories
+							Test cases
 							<Box w="100%" />
 							<Flex fontSize="sm" color={shortcutColor}>
 								<Kbd>u</Kbd>
 							</Flex>
 						</NavButton>
 						<NavButton
-							leftIcon={<CheckSquareIcon />}
+							leftIcon={<PlayIcon />}
 							href={testRunsHref}
 							isActive={
 								router.pathname.split('/').slice(-1)[0] === 'test-runs' ||
