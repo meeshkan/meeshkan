@@ -18,7 +18,7 @@ type StoryStepProps = {
 	selectedStep: Number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 	updatePosition: (index: number, pos: Position) => void;
-	order: step[],
+	order: step[];
 	setOrder: Dispatch<SetStateAction<step[]>>;
 	updateOrder: (index: number, dragOffset: number) => step[];
 	index: number;
@@ -37,7 +37,7 @@ export const SideStep = ({
 	order,
 	index,
 }: StoryStepProps) => {
-	const { project, idToken } = useContext(UserContext);
+	const { idToken } = useContext(UserContext);
 	const hoverBackgroundColor = useColorModeValue('white', 'gray.900');
 	const selectedBlue = useColorModeValue('blue.500', 'blue.300');
 	const [isDragging, setDragging] = useState(false);
@@ -71,20 +71,27 @@ export const SideStep = ({
 			onDragEnd={() => {
 				setDragging(false);
 				setSelectedStep(null);
-				const newOrder = order.map((i, j) => ({...i, sIndex: j, scriptCommand: { ...i.scriptCommand, sIndex: j}}));
+				const newOrder = order.map((i, j) => ({
+					...i,
+					sIndex: j,
+					scriptCommand: { ...i.scriptCommand, sIndex: j },
+				}));
 				setOrder(newOrder);
-				updateManySteps(userStoryId, newOrder.map(i => ({
-					data: {
-						sIndex: i.sIndex
-					},
-					filter: { id: i.scriptCommand.id }
-				})) , idToken);
-
+				updateManySteps(
+					userStoryId,
+					newOrder.map((i) => ({
+						data: {
+							sIndex: i.sIndex,
+						},
+						filter: { id: i.scriptCommand.id },
+					})),
+					idToken
+				);
 			}}
 			dragControls={dragControls}
 			onViewportBoxUpdate={(_viewportBox: AxisBox2D, delta: BoxDelta) => {
 				if (isDragging) {
-					updateOrder(index, delta.y.translate);	
+					updateOrder(index, delta.y.translate);
 				}
 			}}
 			cursor="pointer"

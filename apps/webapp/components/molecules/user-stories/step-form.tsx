@@ -23,13 +23,19 @@ import {
 	FormControl,
 	Heading,
 	Divider,
+	Textarea,
+	Tooltip,
 } from '@chakra-ui/react';
 import { ScriptCommand, UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
-import { ChevronLeftIcon } from '@chakra-ui/icons';
+import { ChevronLeftIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import { SaveIcon, TrashIcon } from '@frontend/chakra-theme';
 import { useForm } from 'react-hook-form';
-import { deleteSingleCommand, updateManySteps, updateStep } from '../../../utils/user-story-helpers';
+import {
+	deleteSingleCommand,
+	updateManySteps,
+	updateStep,
+} from '../../../utils/user-story-helpers';
 import { mutateCallback } from 'swr/dist/types';
 import { filter } from 'lodash';
 
@@ -37,20 +43,28 @@ type UserStoryResponse = {
 	userStory: UserStory;
 };
 
-type MutateUserStory = (data?: UserStoryResponse | Promise<UserStoryResponse> | mutateCallback<UserStoryResponse>, shouldRevalidate?: boolean) => Promise<UserStoryResponse | undefined>
+type MutateUserStory = (
+	data?:
+		| UserStoryResponse
+		| Promise<UserStoryResponse>
+		| mutateCallback<UserStoryResponse>,
+	shouldRevalidate?: boolean
+) => Promise<UserStoryResponse | undefined>;
 
 type DetailsFormProps = {
 	userStory: UserStory;
 	selectedStep: number;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
-	mutateUserStory: MutateUserStory
+	mutateUserStory: MutateUserStory;
 };
 
 const Label = ({
 	text,
 	short,
-}: { text: string; short?: boolean } & FormLabelProps) => {
+	tooltip,
+}: { text: string; short?: boolean; tooltip?: string } & FormLabelProps) => {
 	const formLabelColor = useColorModeValue('gray.500', 'gray.400');
+	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
 
 	return (
 		<FormLabel
@@ -63,6 +77,11 @@ const Label = ({
 			lineHeight="1.4"
 		>
 			{text}
+			{tooltip && (
+				<Tooltip label={tooltip} placement="bottom-start">
+					<InfoOutlineIcon ml={2} lineHeight="short" color={tooltipIconColor} />
+				</Tooltip>
+			)}
 		</FormLabel>
 	);
 };
@@ -128,16 +147,45 @@ export const StepForm = ({
 
 	const onDelete = async () => {
 		await deleteSingleCommand(commandID, idToken);
-		await updateManySteps(userStory.id, userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({
-			filter: { id: item?.id || "no-id-found" },
-			data: { sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null }
-		})) || [], idToken);
+		await updateManySteps(
+			userStory.id,
+			userStory?.scriptCommands?.items
+				.filter((item) => item.sIndex !== selectedStep)
+				.map((item) => ({
+					filter: { id: item?.id || 'no-id-found' },
+					data: {
+						sIndex:
+							item?.sIndex !== null
+								? item.sIndex > selectedStep
+									? item.sIndex - 1
+									: item.sIndex
+								: null,
+					},
+				})) || [],
+			idToken
+		);
 		mutateUserStory({
 			userStory: {
 				...userStory,
-				scriptCommands: { groups: userStory?.scriptCommands?.groups, count: userStory?.scriptCommands?.count ? userStory.scriptCommands.count - 1 : null, items: userStory?.scriptCommands?.items.filter((item) => item.sIndex !== selectedStep).map((item) => ({ ...item, sIndex: item?.sIndex !== null ? (item.sIndex > selectedStep ? item.sIndex - 1 : item.sIndex) : null })) }
-			}
-		})
+				scriptCommands: {
+					groups: userStory?.scriptCommands?.groups,
+					count: userStory?.scriptCommands?.count
+						? userStory.scriptCommands.count - 1
+						: null,
+					items: userStory?.scriptCommands?.items
+						.filter((item) => item.sIndex !== selectedStep)
+						.map((item) => ({
+							...item,
+							sIndex:
+								item?.sIndex !== null
+									? item.sIndex > selectedStep
+										? item.sIndex - 1
+										: item.sIndex
+									: null,
+						})),
+				},
+			},
+		});
 		setSelectedStep(null);
 	};
 
@@ -337,24 +385,24 @@ export const StepForm = ({
 					{/* Value is only specified for open, and type events */}
 					{(scriptCommand?.command === 'open' ||
 						scriptCommand?.command === 'type') && (
-							<FormControl>
-								<Label text="Value" />
-								<Input
-									fontFamily="mono"
-									name="value"
-									defaultValue={value}
-									ref={register}
-									size="sm"
-									borderRadius="md"
-								/>
-							</FormControl>
-						)}
+						<FormControl>
+							<Label text="Value" />
+							<Input
+								fontFamily="mono"
+								name="value"
+								defaultValue={value}
+								ref={register}
+								size="sm"
+								borderRadius="md"
+							/>
+						</FormControl>
+					)}
 
 					{scriptCommand?.command === 'type' ||
-						scriptCommand?.command === 'click' ||
-						scriptCommand?.command === 'scroll' ||
-						scriptCommand?.command === 'drag and drop' ||
-						scriptCommand?.command === 'mouse over' ? (
+					scriptCommand?.command === 'click' ||
+					scriptCommand?.command === 'scroll' ||
+					scriptCommand?.command === 'drag and drop' ||
+					scriptCommand?.command === 'mouse over' ? (
 						<FormControl>
 							<Label text="Page" />
 							<Input
@@ -367,6 +415,24 @@ export const StepForm = ({
 							/>
 						</FormControl>
 					) : null}
+
+					{scriptCommand?.command === 'execute javascript' && (
+						<FormControl isRequired>
+							<Label
+								text="JavaScript"
+								tooltip="Any valid JavaScript saved in this field will be executed during a test run."
+							/>
+							<Textarea
+								fontFamily="mono"
+								name="value"
+								defaultValue={value}
+								ref={register}
+								size="sm"
+								borderRadius="md"
+								placeholder="MeeshkanError('The text did not match as expected')"
+							/>
+						</FormControl>
+					)}
 
 					<FormControl>
 						<Checkbox defaultIsChecked isDisabled>

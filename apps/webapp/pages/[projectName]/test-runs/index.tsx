@@ -184,7 +184,7 @@ const TestRunsPage = () => {
 		setTestTriggering(true);
 		if (project?.configuration?.stagingURL) {
 			await triggerTestRun(project?.configuration?.stagingURL);
-			setTimeout(() => setTestTriggering(false), 2000);
+			setTestTriggering(false);
 		} else {
 			onOpen();
 		}

@@ -52,7 +52,6 @@ import {
 import GridCard from '../../../components/molecules/grid-card';
 import Card from '../../../components/atoms/card';
 import { useValidateSelectedProject } from '../../../hooks/use-validate-selected-project';
-import SegmentedControl from '../../../components/molecules/segmented-control';
 import ValidatedBillingPlan from '../../../components/molecules/validated-billing-plan';
 import Table from '../../../components/organisms/table';
 import LoadingScreen from '../../../components/organisms/loading-screen';
@@ -108,14 +107,6 @@ interface UserStoriesAliased {
 		count: UserStoryListResponse['count'];
 		items: UserStoryListResponse['items'];
 	};
-	recordings: {
-		count: UserStoryListResponse['count'];
-		items: UserStoryListResponse['items'];
-	};
-	testCases: {
-		count: UserStoryListResponse['count'];
-		items: UserStoryListResponse['items'];
-	};
 }
 
 const UserStoriesPage = ({ cookies }: UserStoryProps) => {
@@ -124,7 +115,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const mixpanel = useAnalytics();
 	const { colorMode } = useColorMode();
 
-	const [toggleIndex, setToggleIndex] = useState(0);
 	const [tableLoading, setTableLoading] = useState(false);
 	const [pageSize, setPageSize] = React.useState(10);
 	const [tableData, setTableData] = useState<UserStoriesAliased>({
@@ -132,16 +122,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			count: 0,
 			items: [],
 		},
-		recordings: {
-			count: 0,
-			items: [],
-		},
-		testCases: {
-			count: 0,
-			items: [],
-		},
 	});
-	const recordCount = toggleIndex === 0 ? tableData.all.count : toggleIndex === 1 ? tableData.recordings.count : tableData.testCases.count
+	const recordCount = tableData.all.count;
 
 	const gettingStartedGreenColor = useColorModeValue('cyan.500', 'cyan.300');
 	const gettingStartedGrayColor = useColorModeValue('gray.500', 'gray.400');
@@ -157,10 +139,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Test',
 				accessor: (originalRow, rowIndex) => {
-					return (
-						<Checkbox isDisabled isChecked={originalRow.isTestCase} />
-					)
-				}
+					return <Checkbox isDisabled isChecked={originalRow.isTestCase} />;
+				},
 			},
 			{
 				Header: 'Created at',
@@ -179,7 +159,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: '# repeated',
 				accessor: (originalRow, rowIndex) => {
-					return originalRow.flows.count
+					return originalRow.flows.count;
 				},
 			},
 			{
@@ -201,8 +181,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								created === 'user'
 									? 'cyan'
 									: created === 'manual'
-										? 'blue'
-										: 'gray'
+									? 'blue'
+									: 'gray'
 							}
 						>
 							{created === 'user' ? (
@@ -231,10 +211,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								significance === 'low'
 									? 'gray'
 									: significance === 'medium'
-										? 'amber'
-										: significance === 'high'
-											? 'cyan'
-											: null
+									? 'amber'
+									: significance === 'high'
+									? 'cyan'
+									: null
 							}
 						>
 							{significance}
@@ -245,7 +225,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 			{
 				Header: 'Steps',
 				accessor: (originalRow, rowIndex) => {
-					return originalRow.scriptCommands.count
+					return originalRow.scriptCommands.count;
 				},
 			},
 		],
@@ -301,7 +281,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				})
 				.then((res) => {
 					setTableData(res);
-					setPageSize(pageSize)
+					setPageSize(pageSize);
 					setTableLoading(false);
 				});
 			return request;
@@ -479,13 +459,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				</Modal>
 
 				<Box overflowX="auto" flex="1">
-					<Flex justify="space-between" align="center">
-						<SegmentedControl
-							attached={true}
-							values={["All", 'Recordings', 'Test cases']}
-							selectedIndex={toggleIndex}
-							setSelectedIndex={setToggleIndex}
-						/>
+					<Flex justify="flex-end" align="center">
 						<Flex align="center">
 							<Menu>
 								<MenuButton
@@ -534,7 +508,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 										mixBlendMode: colorMode === 'light' ? 'multiply' : 'normal',
 									}}
 									fontWeight="400"
-									mr={toggleIndex === 0 ? 4 : 0}
+									mr={0}
 									leftIcon={<FilterIcon />}
 								>
 									Filter
@@ -565,24 +539,17 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 									</MenuGroup>
 								</MenuList>
 							</Menu>
-							{toggleIndex === 1 ? (
-								<Button size="sm" isDisabled>
-									Review recordings
-								</Button>
-							) : null}
 						</Flex>
 					</Flex>
 
 					<Table
 						columns={columns}
-						data={
-							toggleIndex === 0
-								? tableData.all.items : toggleIndex === 1 ? tableData.recordings.items
-									: tableData.testCases.items
-						}
+						data={tableData.all.items}
 						fetchData={fetchData}
 						loading={tableLoading}
-						pageCount={Math.ceil((recordCount === 0 ? 1 : recordCount) / pageSize)}
+						pageCount={Math.ceil(
+							(recordCount === 0 ? 1 : recordCount) / pageSize
+						)}
 					/>
 				</Box>
 			</Stack>
