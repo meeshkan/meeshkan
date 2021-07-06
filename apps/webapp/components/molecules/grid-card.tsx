@@ -4,11 +4,12 @@ import Card from '../atoms/card';
 import { createSlug } from '../../utils/createSlug';
 
 export type GridCardProps = {
-	title: string;
+	title?: string;
 	anchor?: boolean;
 	subtitle?: string;
 	children?: ReactNode;
 	leftIconSrc?: string;
+	leftAction?: ReactNode;
 } & BoxProps;
 
 const GridCard = ({
@@ -17,9 +18,10 @@ const GridCard = ({
 	subtitle,
 	children,
 	leftIconSrc,
+	leftAction,
 	...props
 }: GridCardProps) => {
-	const slugifiedTitle = useMemo(() => createSlug(title), [title]);
+	const slugifiedTitle = title && useMemo(() => createSlug(title), [title]);
 	return (
 		<Card overflowY="auto" maxH="80vh" id={slugifiedTitle} {...props}>
 			<Heading
@@ -31,6 +33,7 @@ const GridCard = ({
 				fontWeight="800"
 				lineHeight="short"
 			>
+				{leftAction && leftAction}
 				{leftIconSrc && (
 					<Image src={leftIconSrc} boxSize="16px" alt={title} mr={3} />
 				)}
@@ -50,7 +53,7 @@ const GridCard = ({
 				</Heading>
 			)}
 
-			<Divider mt={1} mb={4} />
+			{title && <Divider mt={1} mb={4} />}
 			{children}
 		</Card>
 	);
