@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { SideStep } from '../atoms/side-step';
 import {
-	ScriptCommand,
 	ScriptCommandListResponse,
 	UserStories_ScriptCommandCreateInput,
 } from '@frontend/meeshkan-types';
@@ -45,7 +44,6 @@ import {
 	Textarea,
 	List,
 } from '@chakra-ui/react';
-import { AnimatePresence } from 'framer-motion';
 import { UserContext } from '../../utils/user';
 import { createSlug } from '../../utils/createSlug';
 import Link from 'next/link';
@@ -53,8 +51,9 @@ import { KeyIcon } from '@frontend/chakra-theme';
 import { InfoOutlineIcon, PlusSquareIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import { UserStory } from '@frontend/meeshkan-types';
-import { createStep } from 'apps/webapp/utils/user-story-helpers';
+import { createStep } from '../../utils/user-story-helpers';
 import { mutateCallback } from 'swr/dist/types';
+import { usePositionReorder } from '../../hooks/use-position-reorder';
 
 type UserStoryResponse = {
 	userStory: UserStory;
@@ -67,9 +66,6 @@ type MutateUserStory = (
 		| mutateCallback<UserStoryResponse>,
 	shouldRevalidate?: boolean
 ) => Promise<UserStoryResponse | undefined>;
-import { eightBaseClient } from '../../utils/graphql';
-import { usePositionReorder } from '../../hooks/use-position-reorder';
-import { CREATE_SINGLE_STEP } from '../../graphql/user-story';
 
 type StepListProps = {
 	steps: ScriptCommandListResponse['items'];
@@ -128,7 +124,6 @@ const Label = ({
 type AddStepProps = {
 	userStoryId: string;
 	steps: ScriptCommandListResponse['items'];
-	selectedStep: Number;
 	mutateUserStory: MutateUserStory;
 	setSelectedStep: Dispatch<SetStateAction<Number>>;
 };
@@ -137,17 +132,16 @@ const AddStep = ({
 	steps,
 	userStoryId,
 	mutateUserStory,
-	selectedStep,
 	setSelectedStep,
 }: AddStepProps) => {
 	const { idToken } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [saving, setSaving] = useState(false);
 	const {
 		register,
 		handleSubmit,
 	} = useForm<UserStories_ScriptCommandCreateInput>();
 	const [command, setCommand] = useState('click');
-	const client = eightBaseClient(idToken);
 
 	const borderColor = useColorModeValue('gray.300', 'gray.700');
 	const modalBackground = useColorModeValue('white', 'gray.800');
@@ -158,6 +152,7 @@ const AddStep = ({
 	const onSubmit = async (
 		formData: UserStories_ScriptCommandCreateInput
 	): Promise<void> => {
+		setSaving(true);
 		const userStory = await createStep(
 			userStoryId,
 			{
@@ -168,6 +163,8 @@ const AddStep = ({
 		);
 		mutateUserStory({ userStory });
 		setSelectedStep(null);
+		setSaving(false);
+		onClose();
 	};
 
 	return (
@@ -589,7 +586,12 @@ const AddStep = ({
 							cancel
 						</Button>
 						<LightMode>
-							<Button colorScheme="blue" type="submit">
+							<Button
+								colorScheme="blue"
+								type="submit"
+								isLoading={saving}
+								loadingText="Saving step"
+							>
 								Add step
 							</Button>
 						</LightMode>
@@ -609,7 +611,7 @@ export const StepList = ({
 	requiresAuthentication,
 }: StepListProps) => {
 	const formattedSteps = commandsToSteps(steps);
-	const { idToken, project } = useContext(UserContext);
+	const { project } = useContext(UserContext);
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
@@ -681,7 +683,6 @@ export const StepList = ({
 					mutateUserStory={mutateUserStory}
 					steps={steps}
 					userStoryId={userStoryId}
-					selectedStep={selectedStep}
 					setSelectedStep={setSelectedStep}
 				/>
 			</List>
