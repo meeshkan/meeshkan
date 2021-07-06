@@ -8,7 +8,6 @@ import {
 	Checkbox,
 	Select,
 	Avatar,
-	Text,
 	Button,
 	useColorModeValue,
 	useClipboard,
@@ -33,7 +32,6 @@ import {
 	updateDescription,
 	updateSignificance,
 	updateRequiresAuthentication,
-	onCreateTestCase,
 	onDelete,
 	handleDownload,
 } from '../../../utils/user-story-helpers';
@@ -42,6 +40,7 @@ import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import { useToaster } from '../../../hooks/use-toaster';
 import RecentActivityCard from '../recent-activity';
+import { TriggerTestRun } from 'apps/webapp/utils/test-triggers';
 
 type DetailsFormProps = {
 	userStory: UserStory;
@@ -76,6 +75,8 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 			});
 		}
 	}, [hasCopied, toaster]);
+
+	// trigger single test case run
 
 	return (
 		<>
@@ -270,17 +271,23 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 					</Select>
 				</FormControl>
 
-				<Button
+				{/* <Button
 					type="submit"
 					form="step-form"
 					size="sm"
 					colorScheme="blue"
-					leftIcon={<PlayIcon />}
+
 					// isLoading={saving}
-					loadingText="Saving changes"
+					loadingText="Triggering test run"
+					// onClick={handleTriggerTest}
 				>
 					Trigger single test
-				</Button>
+				</Button> */}
+				<TriggerTestRun
+					buttonText="Trigger single test"
+					singleOrAll="single"
+					userStoryId={userStory?.id}
+				/>
 
 				<Box>
 					<Heading
