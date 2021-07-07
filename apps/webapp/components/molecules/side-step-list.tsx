@@ -618,6 +618,10 @@ export const StepList = ({
 	const { order, updatePosition, updateOrder, setOrder } = usePositionReorder(
 		formattedSteps
 	);
+	if (order.length !== formattedSteps.length) {
+		// invoke the hook on add/remove
+		setOrder(formattedSteps);
+	}
 	const secondaryCardColor = useColorModeValue('gray.200', 'gray.700');
 
 	return (
