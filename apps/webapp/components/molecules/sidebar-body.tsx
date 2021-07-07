@@ -258,7 +258,7 @@ const SideBarBody = () => {
 							Test cases
 							<Box w="100%" />
 							<Flex fontSize="sm" color={shortcutColor}>
-								<Kbd>u</Kbd>
+								<Kbd>c</Kbd>
 							</Flex>
 						</NavButton>
 						<NavButton
@@ -275,7 +275,7 @@ const SideBarBody = () => {
 							</Code>
 							<Box w="100%" />
 							<Flex fontSize="sm" color={shortcutColor}>
-								<Kbd>t</Kbd>
+								<Kbd>r</Kbd>
 							</Flex>
 						</NavButton>
 						<NavButton leftIcon={<PackageIcon />} href="/releases" disabled>
