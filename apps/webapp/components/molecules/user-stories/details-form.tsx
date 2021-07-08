@@ -67,7 +67,7 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 
 	const slugifiedStoryName = createSlug(userStory?.title);
 
-	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
+	const { hasCopied, onCopy: handleCopy } = useClipboard(window?.location.href);
 	useEffect(() => {
 		if (hasCopied) {
 			toaster({
@@ -117,10 +117,10 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 								});
 								download === 'error'
 									? toaster({
-											status: 'error',
-											title: 'Your test case could not be generated.',
-											description: 'Please try again in a few seconds.',
-									  })
+										status: 'error',
+										title: 'Your test case could not be generated.',
+										description: 'Please try again in a few seconds.',
+									})
 									: null;
 								mixpanel.track('Puppeteer script downloaded');
 							}}
@@ -314,18 +314,17 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 									outcome.status == 'passing'
 										? 'success'
 										: outcome.status == 'did not run' ||
-										  outcome.status == 'failing'
-										? 'error'
-										: 'info'
+											outcome.status == 'failing'
+											? 'error'
+											: 'info'
 								}
-								title={`${
-									outcome.status == 'passing'
+								title={`${outcome.status == 'passing'
 										? 'Passing'
 										: outcome.status == 'did not run' ||
-										  outcome.status == 'failing'
-										? 'Failing'
-										: 'In progress'
-								} run`}
+											outcome.status == 'failing'
+											? 'Failing'
+											: 'In progress'
+									} run`}
 								date={outcome.createdAt}
 								link={`/${slugifiedProjectName}/test-runs/${outcome.testRun.id}`}
 							/>

@@ -193,9 +193,9 @@ const Settings = () => {
 			}
 		};
 
-		window.addEventListener('message', handleMessageEvent);
+		window?.addEventListener('message', handleMessageEvent);
 		return () => {
-			window.removeEventListener('message', handleMessageEvent);
+			window?.removeEventListener('message', handleMessageEvent);
 		};
 	}, [projectId]);
 
@@ -333,7 +333,7 @@ const Settings = () => {
 			return;
 		}
 
-		const childWindow = window.open(
+		const childWindow = window?.open(
 			`${project.configuration.productionURL}?meeshkanVerifyScript=${project.id}`
 		);
 		const interval = setTimeout(() => {
@@ -432,9 +432,8 @@ const Settings = () => {
 					</Heading>
 					<InviteLinkInput />
 					{members?.map((member: User) => {
-						const memberName = `${member.firstName || ''} ${
-							member.lastName || ''
-						}`;
+						const memberName = `${member.firstName || ''} ${member.lastName || ''
+							}`;
 						const memberAvatar = member?.avatar?.downloadUrl;
 						return (
 							<Flex
@@ -635,9 +634,8 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/user-stories/${
-								project?.configuration?.logInStory?.id
-							}`}
+							href={`/${createSlug(project?.name)}/user-stories/${project?.configuration?.logInStory?.id
+								}`}
 						>
 							<Flex
 								as="a"

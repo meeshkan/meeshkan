@@ -129,16 +129,16 @@ const Table = ({
 			.then((res) =>
 				res?.userStoryDelete?.success
 					? toaster({
-							status: 'success',
-							title: 'The user story has been deleted.',
-							description:
-								'Rejecting a recording will delete the series of steps as a user story.',
-					  })
+						status: 'success',
+						title: 'The user story has been deleted.',
+						description:
+							'Rejecting a recording will delete the series of steps as a user story.',
+					})
 					: toaster({
-							status: 'error',
-							title: 'The user story was not deleted.',
-							description: 'Something went wrong, try again later.',
-					  })
+						status: 'error',
+						title: 'The user story was not deleted.',
+						description: 'Something went wrong, try again later.',
+					})
 			);
 		await setDeleting(false);
 	};
@@ -199,7 +199,7 @@ const Table = ({
 							{headerGroup.headers.map((column) => (
 								<Th
 									{
-										...column.getHeaderProps(/*column.getSortByToggleProps()*/)
+									...column.getHeaderProps(/*column.getSortByToggleProps()*/)
 									}
 									fontSize="10px"
 								>
@@ -350,7 +350,7 @@ const Table = ({
 											aria-label="Open in a new tab"
 											icon={<ExternalLinkIcon />}
 											onClick={() => {
-												window.open(
+												window?.open(
 													// @ts-expect-error
 													`/${slugifiedProjectName}/user-stories/${row.original.id}`
 												);
