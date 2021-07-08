@@ -66,14 +66,12 @@ export const Plans = {
 	},
 
 	business: {
-		monthlyPrice: '75€',
-		yearlyPrice: '720€',
+		monthlyPrice: '99€',
+		yearlyPrice: '950€',
 		description:
 			'This is the perfect plan if you’re a team looking to get some serious UI-testing done.',
-		// 29.99
-		monthlyPriceId: `price_1IfZ2jA2WCpbIMtYL4iWIbvg`,
-		// 20% discount 288.00
-		yearlyPriceId: `price_1IfZ2yA2WCpbIMtYJludWHEh`,
+		monthlyPriceId: `price_1JAs16A2WCpbIMtYblbsqYHl`,
+		yearlyPriceId: `price_1JAs1nA2WCpbIMtY88WBMHeM`,
 		features: [
 			'User generated tests',
 			'100+ test runs per month',
