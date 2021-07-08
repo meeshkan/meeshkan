@@ -1,4 +1,0 @@
-{
-	"presets": ["@nrwl/gatsby/babel"],
-	"plugins": []
-}

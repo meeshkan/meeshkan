@@ -183,8 +183,7 @@ const Table = ({
 				id="user-stories-table"
 				variant="simple"
 				backgroundColor={backgroundColor}
-				borderTopRightRadius="lg"
-				borderBottomRadius="lg"
+				borderRadius="lg"
 				size="sm"
 				width="100%"
 			>

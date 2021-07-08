@@ -18,8 +18,15 @@ import {
 	Code,
 	Divider,
 	Tooltip,
+	Link as ChakraLink,
 } from '@chakra-ui/react';
-import { KeyIcon, RecordIcon, TrashIcon } from '@frontend/chakra-theme';
+import {
+	CheckmarkIcon,
+	ExternalLinkIcon,
+	KeyIcon,
+	RecordIcon,
+	TrashIcon,
+} from '@frontend/chakra-theme';
 import _ from 'lodash';
 import { useValidateSelectedProject } from '../../hooks/use-validate-selected-project';
 import LoadingScreen from '../../components/organisms/loading-screen';
@@ -39,12 +46,12 @@ import {
 	REMOVE_AUTH_TOKEN,
 	ADD_SUPPORT,
 	TOGGLE_TEST_RUNS,
+	UPDATE_HAS_RECEIVED_EVENTS,
 } from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 import {
 	isChrome,
 	getVersion as getExtensionVersion,
-	latestVersion as latestExtensionVersion,
 	startRecording,
 	handleExtensionAuthHandshake,
 } from '../../utils/extension';
@@ -83,28 +90,38 @@ const Settings = () => {
 	const [tokens, setTokens] = useState<Array<AuthenticationToken>>(
 		project?.configuration.authenticationTokens?.items || []
 	);
+	const [projectId, setProjectId] = useState<string>(project?.id);
+	const [scriptResponded, setScriptResponded] = useState<boolean>(false);
 
 	const listItemHoverBackgroundColor = useColorModeValue('gray.50', 'gray.800');
 	const avatarColor = useColorModeValue('gray.700', 'gray.200');
 	const avatarBackgroundColor = useColorModeValue('gray.200', 'gray.600');
+	const linkColor = useColorModeValue('blue.500', 'blue.300');
 
 	useEffect(() => {
 		setProductUpdates(productNotifications);
-		setMembers(project?.members?.items);
-		setTokens(project?.configuration.authenticationTokens?.items);
-		setToggleTestRunnerIndex(
-			project ? (project?.configuration?.activeTestRuns ? 0 : 1) : null
-		);
-	}, [project, productNotifications]);
+	}, [productNotifications]);
+
+	useEffect(() => {
+		if (!project) {
+			return;
+		}
+
+		setProjectId(project.id);
+		setMembers(project.members.items);
+		setTokens(project.configuration.authenticationTokens.items);
+		setToggleTestRunnerIndex(project.configuration.activeTestRuns ? 0 : 1);
+	}, [project]);
 
 	useEffect(() => {
 		const handleTestRunnerToggle = async (): Promise<void> => {
 			const response = await client.request(TOGGLE_TEST_RUNS, {
-				projectId: project.id,
+				projectId,
 				toggle: !toggleTestRunnerIndex,
 			});
 
-			const updatedTestRunnerToggle = response.projectUpdate.configuration.activeTestRuns;
+			const updatedTestRunnerToggle =
+				response.projectUpdate.configuration.activeTestRuns;
 			setProject({
 				...project,
 				configuration: {
@@ -125,6 +142,63 @@ const Settings = () => {
 		handleTestRunnerToggle();
 	}, [toggleTestRunnerIndex]);
 
+	useEffect(() => {
+		if (!projectId) {
+			return;
+		}
+
+		const handleMessageEvent = async (event: MessageEvent) => {
+			const eventSource = event.source as Window;
+			if (event.data.type === 'scriptReady') {
+				setScriptResponded(true);
+				eventSource.postMessage({ type: 'verifyScript' }, '*');
+			}
+
+			if (event.data.type === 'verifyScript') {
+				const { version, clientId } = event.data;
+				if (clientId !== projectId) {
+					toaster({
+						title: 'Incorrect project ID in script.',
+						description:
+							'The client ID in the script does not match the expected project ID.',
+						status: 'error',
+					});
+
+					eventSource.close();
+					return;
+				}
+
+				const response = await client.request(UPDATE_HAS_RECEIVED_EVENTS, {
+					projectId,
+					hasReceivedEvents: true,
+				});
+
+				const updatedHasReceivedEvents =
+					response.projectUpdate.hasReceivedEvents;
+				if (updatedHasReceivedEvents) {
+					toaster({
+						title: 'Script verified.',
+						description:
+							'You have successfully installed the Meeshkan Recorder Script!',
+						status: 'success',
+					});
+				}
+
+				setProject({
+					...project,
+					hasReceivedEvents: updatedHasReceivedEvents,
+				});
+
+				eventSource.close();
+			}
+		};
+
+		window.addEventListener('message', handleMessageEvent);
+		return () => {
+			window.removeEventListener('message', handleMessageEvent);
+		};
+	}, [projectId]);
+
 	const client = eightBaseClient(idToken);
 
 	if (loading) {
@@ -135,7 +209,9 @@ const Settings = () => {
 		return <NotFoundError />;
 	}
 
-	const handleSwitchToggle = async (event: ChangeEvent<HTMLInputElement>): Promise<void> => {
+	const handleSwitchToggle = async (
+		event: ChangeEvent<HTMLInputElement>
+	): Promise<void> => {
 		const { checked } = event.target;
 		setProductUpdates(checked);
 
@@ -143,12 +219,15 @@ const Settings = () => {
 			productNotifications: checked,
 		});
 
-		await mutateUser({ ...user, productNotifications: response.userUpdate.productNotifications });
+		await mutateUser({
+			...user,
+			productNotifications: response.userUpdate.productNotifications,
+		});
 	};
 
 	const removeTeamMember = async (memberEmail: string): Promise<void> => {
 		const response = await client.request(REMOVE_TEAM_MEMBER, {
-			projectId: project.id,
+			projectId,
 			memberEmail,
 		});
 
@@ -165,11 +244,12 @@ const Settings = () => {
 
 	const deleteToken = async (tokenID: string): Promise<void> => {
 		const response = await client.request(REMOVE_AUTH_TOKEN, {
-			projectID: project.id,
+			projectID: projectId,
 			tokenID: tokenID,
 		});
 
-		const updatedAuthenticationTokens = response.projectUpdate.configuration.authenticationTokens.items;
+		const updatedAuthenticationTokens =
+			response.projectUpdate.configuration.authenticationTokens.items;
 		setTokens(updatedAuthenticationTokens);
 		setProject({
 			...project,
@@ -206,7 +286,7 @@ const Settings = () => {
 				return;
 			}
 
-			handleExtensionAuthHandshake(null, user, false);
+			handleExtensionAuthHandshake(user, false);
 			startRecording({
 				url: project.configuration.productionURL,
 				isAuthFlow: true,
@@ -227,7 +307,7 @@ const Settings = () => {
 
 	const inviteSupport = async (): Promise<void> => {
 		const response = await client.request(ADD_SUPPORT, {
-			projectID: project.id,
+			projectID: projectId,
 		});
 
 		const updatedMembers = response.projectUpdate.members.items;
@@ -239,6 +319,38 @@ const Settings = () => {
 				items: updatedMembers,
 			},
 		});
+	};
+
+	const handleScriptVerification = () => {
+		if (!project?.configuration?.productionURL) {
+			toaster({
+				title: 'Missing production URL.',
+				description:
+					'You need to specify your production URL to verify your script installation.',
+				status: 'error',
+			});
+
+			return;
+		}
+
+		const childWindow = window.open(
+			`${project.configuration.productionURL}?meeshkanVerifyScript=${project.id}`
+		);
+		const interval = setTimeout(() => {
+			clearInterval(interval);
+			if (scriptResponded || childWindow.closed) {
+				return;
+			}
+
+			toaster({
+				title: 'Script verification failed.',
+				description:
+					'We could not find the Meeshkan Recorder Script in your webapp.',
+				status: 'error',
+			});
+
+			childWindow.close();
+		}, 5000);
 	};
 
 	return (
@@ -320,8 +432,9 @@ const Settings = () => {
 					</Heading>
 					<InviteLinkInput />
 					{members?.map((member: User) => {
-						const memberName = `${member.firstName || ''} ${member.lastName || ''
-							}`;
+						const memberName = `${member.firstName || ''} ${
+							member.lastName || ''
+						}`;
 						const memberAvatar = member?.avatar?.downloadUrl;
 						return (
 							<Flex
@@ -396,9 +509,47 @@ const Settings = () => {
 					subtitle="Detailed configuration for your project."
 				>
 					<Heading fontSize="18px" fontWeight="500" mb={3}>
-						Script tag
+						Script tag{' '}
+						<Box
+							as={project?.hasReceivedEvents ? 'span' : ChakraLink}
+							// _hover={{ textDecoration: 'underline' }}
+							// cursor="pointer"
+							fontSize="md"
+							ml={4}
+							fontWeight="normal"
+							color={linkColor}
+							onClick={
+								project?.hasReceivedEvents ? null : handleScriptVerification
+							}
+						>
+							{project?.hasReceivedEvents ? (
+								<CheckmarkIcon boxSize={3} mr={3} />
+							) : null}
+							{project?.hasReceivedEvents
+								? 'Installation Verified'
+								: 'Verify Installation'}
+							{project?.hasReceivedEvents ? null : (
+								<ExternalLinkIcon boxSize={3} ml={2} />
+							)}
+						</Box>
 					</Heading>
-					<ScriptTagInput />
+					<Flex align="center" justify="space-between">
+						<ScriptTagInput />
+						{/* <Button
+							onClick={handleScriptVerification}
+							isDisabled={
+								project?.hasReceivedEvents ||
+								!project?.configuration?.productionURL
+							}
+							variant="subtle"
+							colorScheme={project?.hasReceivedEvents ? 'cyan' : 'blue'}
+							ml={4}
+						>
+							{project?.hasReceivedEvents
+								? 'Script Verified'
+								: 'Verify Installation'}
+						</Button> */}
+					</Flex>
 
 					<Spacer h={8} />
 
@@ -484,8 +635,9 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/user-stories/${project?.configuration?.logInStory?.id
-								}`}
+							href={`/${createSlug(project?.name)}/user-stories/${
+								project?.configuration?.logInStory?.id
+							}`}
 						>
 							<Flex
 								as="a"

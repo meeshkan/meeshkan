@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCycle } from 'framer-motion';
-import MotionStack from '../atoms/motion-stack';
+import { MotionStack } from '../atoms/motion';
 import SideBarHeader from '../molecules/sidebar-header';
 import SideBarBody from '../molecules/sidebar-body';
 
@@ -46,12 +46,7 @@ const SideBar = (props: StackProps) => {
 			initial={false}
 			{...props}
 		>
-			<Flex
-				direction="column"
-				h="full"
-				overflowY="auto"
-				p={2}
-			>
+			<Flex direction="column" h="full" overflowY="auto" p={2}>
 				<SideBarHeader toggle={() => toggleOpen()} />
 				{(isOpen || !isSmallScreen) && (
 					<Box flex="1">
