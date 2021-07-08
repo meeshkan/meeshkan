@@ -222,7 +222,7 @@ const SideBarBody = () => {
 							mb={4}
 							cursor="pointer"
 							transition="all 0.2s"
-							onClick={() => window.CommandBar.open()}
+							onClick={() => window?.CommandBar?.open()}
 							_hover={{ borderColor: searchFocusColor }}
 						>
 							<Flex align="center" color={searchTextColor}>
