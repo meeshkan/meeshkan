@@ -55,9 +55,9 @@ class MyDocument extends Document<DocumentProps> {
 						}}
 					/>
 					{/* Commandbar */}
-					<script dangerouslySetInnerHTML={{
+					{/* <script dangerouslySetInnerHTML={{
 						__html: '(function(){var org="a552aa00";var w = window; var d = document; var cb = []; cb.q = []; window.CommandBar = new Proxy(cb, { get: function (f, n) { if (n in f) { return f[n] } return function () { var a = Array.prototype.slice.call(arguments); a.unshift(n); cb.q.push(a) } }, }); var load = function () { var a = "h"; var t = "s"; var r = null; try { r = localStorage.getItem("commandbar.lc"); } catch (e) { }; var e = "https://api.commandbar.com"; var o = "o"; var c = "l"; var n = "t"; var l = "c"; if (r && r.includes("local")) { var v = "a"; var s = ":8"; var i = "p:/"; e = "htt" + i + "/" + c + o + l + v + c + a + o + t + n + s + "000" } var m = d.createElement("script"); var h = e + "/latest/" + org; h = r ? h + "?lc=" + r : h; m.type = "text/javascript"; m.async = true; m.src = h; d.head.appendChild(m) }; if(w.attachEvent){w.attachEvent("onload", load)}else{w.addEventListener("load", load, false)}})();'
-					}} />
+					}} /> */}
 					<MixpanelScript
 						// random UUID generated as a secret
 						nonce={`456DE3C3-1598-4D76-BA71-DE9A6EDBFB3B`}
