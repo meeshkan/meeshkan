@@ -29,7 +29,7 @@ export const startRecording = ({
 	url: string;
 	isAuthFlow: boolean;
 }) => {
-	window?.chrome.runtime.sendMessage(extensionId, {
+	window?.chrome?.runtime?.sendMessage(extensionId, {
 		message: 'startRecording',
 		url,
 		isAuthFlow,
@@ -38,7 +38,7 @@ export const startRecording = ({
 
 export const getVersion = () => {
 	return new Promise((resolve, reject) => {
-		window?.chrome.runtime.sendMessage(
+		window?.chrome?.runtime?.sendMessage(
 			extensionId,
 			{ message: 'version' },
 			(reply: { version: number } | null) => {
@@ -86,7 +86,7 @@ export const handleExtensionAuthHandshake = (
 			: null,
 	};
 
-	const chromeRuntime = window.chrome.runtime;
+	const chromeRuntime = window?.chrome?.runtime;
 	if (!chromeRuntime) {
 		return;
 	}
