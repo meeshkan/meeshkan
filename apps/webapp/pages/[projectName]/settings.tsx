@@ -698,7 +698,7 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/user-stories/${
+							href={`/${createSlug(project?.name)}/test-cases/${
 								project?.configuration?.logInStory?.id
 							}`}
 						>
