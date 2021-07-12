@@ -62,7 +62,7 @@ export const handleExtensionAuthHandshake = (
 			name: project.name,
 			avatar: project.avatar?.downloadUrl,
 			userStories: {
-				count: project.userStories.count,
+				count: project?.userStories?.count,
 			},
 			configuration: {
 				id: project.configuration?.id,
