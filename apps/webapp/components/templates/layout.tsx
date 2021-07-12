@@ -31,42 +31,42 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 	useEffect(() => {
 		const projectName: string = user?.project?.name;
 		const sluggifiedName: string = createSlug(projectName || '');
-		// window?.CommandBar?.addContext('currentProject', sluggifiedName);
+		window?.CommandBar?.addContext('currentProject', sluggifiedName);
 
 		if (project && !project.configuration?.plan) {
 			onOpen();
 		}
 	}, [project]);
 
-	// useEffect(() => {
-	// 	if (router.query?.extensionAuth === '1' && user && project) {
-	// 		handleExtensionAuthHandshake(user);
-	// 	}
-	// }, [router.query, user]);
+	useEffect(() => {
+		if (router.query?.extensionAuth === '1' && user && project) {
+			handleExtensionAuthHandshake(user);
+		}
+	}, [router.query, user]);
 
-	// useEffect(() => {
-	// 	const routerFunc = (newUrl: string) => router.push(newUrl);
-	// 	window?.CommandBar?.addRouter(routerFunc);
-	// }, []);
+	useEffect(() => {
+		const routerFunc = (newUrl: string) => router.push(newUrl);
+		window?.CommandBar?.addRouter(routerFunc);
+	}, []);
 
-	// useEffect(() => {
-	// 	const commandBarProjects = user?.projects.map((project) => ({
-	// 		name: project.name,
-	// 		sluggified: createSlug(project.name || ''),
-	// 	}));
+	useEffect(() => {
+		const commandBarProjects = user?.projects.map((project) => ({
+			name: project.name,
+			sluggified: createSlug(project.name || ''),
+		}));
 
-	// 	window?.CommandBar?.addContext('projects', commandBarProjects, {
-	// 		renderOptions: {
-	// 			labelKey: 'name',
-	// 		},
-	// 		quickFindOptions: {
-	// 			quickFind: true,
-	// 			autoExecute: true,
-	// 		},
-	// 	});
+		window?.CommandBar?.addContext('projects', commandBarProjects, {
+			renderOptions: {
+				labelKey: 'name',
+			},
+			quickFindOptions: {
+				quickFind: true,
+				autoExecute: true,
+			},
+		});
 
-	// 	// window.CommandBar.addCallback("triggerTest", callbackFn);
-	// }, [user?.projects]);
+		// window.CommandBar.addCallback("triggerTest", callbackFn);
+	}, [user?.projects]);
 
 	const backgroundColor = useColorModeValue('gray.100', 'gray.800');
 	const modalBackground = useColorModeValue('white', 'gray.900');
