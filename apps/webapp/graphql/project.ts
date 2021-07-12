@@ -1,160 +1,161 @@
 import { gql } from 'graphql-request';
 
 export const PROJECT = gql`
-query PROJECT($projectId: ID!) {
-  project(id: $projectId) {
-    id
-    name
-    avatar {
-      downloadUrl
-      shareUrl
-    }
-    configuration {
-      activeTestRuns
-      productionURL
-      stagingURL
-      inviteLink
-			clientSecret
-      logInStory {
-        id
-        createdAt
-        title
-        scriptCommands {
-					count
-          items {
-            command
-            sIndex
-            value
-            xCoordinate
-            yCoordinate
-            xpath
-            selector
-            className
-            tagName
-            tagId
-            innerText
-            altOrAriaText
-            scrollTop
-            scrollLeft
-            destinationXCoordinate
-            destinationYCoordinate
-            destinationTagName
-          }
-        }
-      }
-      plan
-      stripeCustomerID
-      billingInterval
-      subscriptionStatus
-      subscriptionStartedDate
-      authenticationTokens {
-        items {
-          id
-          createdAt
-          type
-          key
-          value
-        }
-      }
-    }
-    hasReceivedEvents
-    members {
-      count
-      items {
-        firstName
-        lastName
-        email
-        avatar {
-          downloadUrl
-        }
-      }
-    }
-    userStories {
-      count
-      items {
-        id
-        testOutcome {
-          items {
-            id
-            status
-            isResolved
-            errorStepIndex
-            createdAt
-            video {
-              downloadUrl
-              shareUrl
-            }
-          }
-        }
-        title
-        testCreatedDate
-        isTestCase
-        requiresAuthentication
-        createdAt
-        created
-      }
-    }
-    release {
-      count
-      items {
-        id
-        name
-        releaseDate
-        testRuns {
-          count
-          items {
-            id
-            status
-            runLink
-            createdAt
-            testLength
-            testOutcome {
-              count
-              items {
-                id
-                status
-                isResolved
-                errorStepIndex
-                createdAt
-                video {
-                  downloadUrl
-                  shareUrl
-                }
-                userStory {
-                  id
-                  title
-                  created
-                  requiresAuthentication
-                  scriptCommands {
-                    items {
-                      command
-                      sIndex
-                      value
-                      xCoordinate
-                      yCoordinate
-                      xpath
-                      selector
-                      className
-                      tagName
-                      tagId
-                      innerText
-                      altOrAriaText
-                      scrollTop
-                      scrollLeft
-                      destinationXCoordinate
-                      destinationYCoordinate
-                      destinationTagName
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
+	query PROJECT($projectId: ID!) {
+		project(id: $projectId) {
+			id
+			name
+			avatar {
+				downloadUrl
+				shareUrl
+			}
+			configuration {
+				activeTestRuns
+				runTestsConcurrently
+				productionURL
+				stagingURL
+				inviteLink
+				clientSecret
+				logInStory {
+					id
+					createdAt
+					title
+					scriptCommands {
+						count
+						items {
+							command
+							sIndex
+							value
+							xCoordinate
+							yCoordinate
+							xpath
+							selector
+							className
+							tagName
+							tagId
+							innerText
+							altOrAriaText
+							scrollTop
+							scrollLeft
+							destinationXCoordinate
+							destinationYCoordinate
+							destinationTagName
+						}
+					}
+				}
+				plan
+				stripeCustomerID
+				billingInterval
+				subscriptionStatus
+				subscriptionStartedDate
+				authenticationTokens {
+					items {
+						id
+						createdAt
+						type
+						key
+						value
+					}
+				}
+			}
+			hasReceivedEvents
+			members {
+				count
+				items {
+					firstName
+					lastName
+					email
+					avatar {
+						downloadUrl
+					}
+				}
+			}
+			userStories {
+				count
+				items {
+					id
+					testOutcome {
+						items {
+							id
+							status
+							isResolved
+							errorStepIndex
+							createdAt
+							video {
+								downloadUrl
+								shareUrl
+							}
+						}
+					}
+					title
+					testCreatedDate
+					isTestCase
+					requiresAuthentication
+					createdAt
+					created
+				}
+			}
+			release {
+				count
+				items {
+					id
+					name
+					releaseDate
+					testRuns {
+						count
+						items {
+							id
+							status
+							runLink
+							createdAt
+							testLength
+							testOutcome {
+								count
+								items {
+									id
+									status
+									isResolved
+									errorStepIndex
+									createdAt
+									video {
+										downloadUrl
+										shareUrl
+									}
+									userStory {
+										id
+										title
+										created
+										requiresAuthentication
+										scriptCommands {
+											items {
+												command
+												sIndex
+												value
+												xCoordinate
+												yCoordinate
+												xpath
+												selector
+												className
+												tagName
+												tagId
+												innerText
+												altOrAriaText
+												scrollTop
+												scrollLeft
+												destinationXCoordinate
+												destinationYCoordinate
+												destinationTagName
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 `;
 
 export const CREATE_PROJECT = gql`
@@ -335,120 +336,120 @@ export const REFRESH_INVITE_LINK = gql`
 `;
 
 export const ROTATE_CLIENT_SECRET = gql`
-mutation ROTATE_CLIENT_SECRET($projectID: ID!) {
-  projectUpdate(
-    filter: { id: $projectID }
-    data: { configuration: { update: { clientSecret: "a" } } }
-  ) {
-    configuration {
-      clientSecret
-    }
-  }
-}
-`
+	mutation ROTATE_CLIENT_SECRET($projectID: ID!) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: { configuration: { update: { clientSecret: "a" } } }
+		) {
+			configuration {
+				clientSecret
+			}
+		}
+	}
+`;
 
 export const PROJECT_USER_STORIES = gql`
-fragment stories on UserStory {
-  id
-  createdAt
-  title
-  flows {
-    count
-  }
-  created
-  significance
-	isTestCase
-  video {
-    downloadUrl
-  }
-  scriptCommands {
-		count
-    items {
-      command
-      sIndex
-      value
-      xCoordinate
-      yCoordinate
-      xpath
-      selector
-      className
-      tagName
-      tagId
-      innerText
-      altOrAriaText
-      scrollTop
-      scrollLeft
-      destinationXCoordinate
-      destinationYCoordinate
-      destinationTagName
-    }
-  }
-  project {
-    configuration {
-      authenticationTokens {
-        items {
-          type
-          key
-          value
-        }
-      }
-    }
-  }
-}
+	fragment stories on UserStory {
+		id
+		createdAt
+		title
+		flows {
+			count
+		}
+		created
+		significance
+		isTestCase
+		video {
+			downloadUrl
+		}
+		scriptCommands {
+			count
+			items {
+				command
+				sIndex
+				value
+				xCoordinate
+				yCoordinate
+				xpath
+				selector
+				className
+				tagName
+				tagId
+				innerText
+				altOrAriaText
+				scrollTop
+				scrollLeft
+				destinationXCoordinate
+				destinationYCoordinate
+				destinationTagName
+			}
+		}
+		project {
+			configuration {
+				authenticationTokens {
+					items {
+						type
+						key
+						value
+					}
+				}
+			}
+		}
+	}
 
-query PROJECT_USER_STORIES(
-  $projectId: ID!
-  $first: Int!
-  $skip: Int!
-  $significanceFilters: [UserStoryFilter!]
-  $sort: UserStoryOrderBy
-) {
-  all: userStoriesList(
-    filter: {
-      project: { id: { equals: $projectId } }
-      OR: $significanceFilters
-    }
-    orderBy: [$sort]
-    first: $first
-    skip: $skip
-  ) {
-    count
-    items {
-      ...stories
-    }
-  }
-  recordings: userStoriesList(
-    filter: {
-      project: { id: { equals: $projectId } }
-      isTestCase: { equals: false }
-      OR: $significanceFilters
-    }
-    orderBy: [$sort]
-    first: $first
-    skip: $skip
-  ) {
-    count
-    items {
-      ...stories
-    }
-  }
-  testCases: userStoriesList(
-    filter: {
-      project: { id: { equals: $projectId } }
-      isTestCase: { equals: true }
-      OR: $significanceFilters
-    }
-    orderBy: [$sort]
-    first: $first
-    skip: $skip
-  ) {
-    count
-    items {
-      testCreatedDate
-      ...stories
-    }
-  }
-}
+	query PROJECT_USER_STORIES(
+		$projectId: ID!
+		$first: Int!
+		$skip: Int!
+		$significanceFilters: [UserStoryFilter!]
+		$sort: UserStoryOrderBy
+	) {
+		all: userStoriesList(
+			filter: {
+				project: { id: { equals: $projectId } }
+				OR: $significanceFilters
+			}
+			orderBy: [$sort]
+			first: $first
+			skip: $skip
+		) {
+			count
+			items {
+				...stories
+			}
+		}
+		recordings: userStoriesList(
+			filter: {
+				project: { id: { equals: $projectId } }
+				isTestCase: { equals: false }
+				OR: $significanceFilters
+			}
+			orderBy: [$sort]
+			first: $first
+			skip: $skip
+		) {
+			count
+			items {
+				...stories
+			}
+		}
+		testCases: userStoriesList(
+			filter: {
+				project: { id: { equals: $projectId } }
+				isTestCase: { equals: true }
+				OR: $significanceFilters
+			}
+			orderBy: [$sort]
+			first: $first
+			skip: $skip
+		) {
+			count
+			items {
+				testCreatedDate
+				...stories
+			}
+		}
+	}
 `;
 
 export const TOGGLE_TEST_RUNS = gql`
@@ -459,6 +460,19 @@ export const TOGGLE_TEST_RUNS = gql`
 		) {
 			configuration {
 				activeTestRuns
+			}
+		}
+	}
+`;
+
+export const TOGGLE_RUN_STRATEGY = gql`
+	mutation TOGGLE_RUN_STRATEGY($projectId: ID!, $toggle: Boolean!) {
+		projectUpdate(
+			filter: { id: $projectId }
+			data: { configuration: { update: { runTestsConcurrently: $toggle } } }
+		) {
+			configuration {
+				runTestsConcurrently
 			}
 		}
 	}
@@ -577,7 +591,10 @@ export const PLAN_UPDATE = gql`
 `;
 
 export const UPDATE_HAS_RECEIVED_EVENTS = gql`
-	mutation UPDATE_HAS_RECEIVED_EVENTS($projectId: ID!, $hasReceivedEvents: Boolean!) {
+	mutation UPDATE_HAS_RECEIVED_EVENTS(
+		$projectId: ID!
+		$hasReceivedEvents: Boolean!
+	) {
 		projectUpdate(
 			filter: { id: $projectId }
 			data: { hasReceivedEvents: $hasReceivedEvents }

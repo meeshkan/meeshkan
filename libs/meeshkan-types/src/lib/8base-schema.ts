@@ -1184,14 +1184,14 @@ export type AuthenticationTokenRelationFilter = {
 export type AuthenticationTokens_ConfigurationCreateInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -1219,9 +1219,9 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -1230,20 +1230,26 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration update input from authenticationTokens */
 export type AuthenticationTokens_ConfigurationUpdateInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -1271,9 +1277,9 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -1282,6 +1288,12 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 export type AuthenticationTokenSort = {
@@ -1442,6 +1454,7 @@ export type BillingInvoiceItemPlanInfo = {
 	__typename?: 'BillingInvoiceItemPlanInfo';
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
+	displayName?: Maybe<Scalars['String']>;
 };
 
 export type BillingInvoiceItemWorkspaceInfo = {
@@ -1750,14 +1763,14 @@ export type Configuration = {
 	createdBy?: Maybe<User>;
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -1796,9 +1809,9 @@ export type Configuration = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -1807,6 +1820,12 @@ export type Configuration = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -1859,6 +1878,7 @@ export type Configuration_PermissionFilter = {
 	billingInterval?: Maybe<StringPredicate>;
 	hasScheduledCall?: Maybe<BoolPredicate>;
 	clientSecret?: Maybe<StringPredicate>;
+	runTestsConcurrently?: Maybe<BoolPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	project?: Maybe<Project_PermissionFilter>;
@@ -1934,14 +1954,14 @@ export type ConfigurationAuthenticationTokensUpdateRelationInput = {
 export type ConfigurationCreateInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -1969,9 +1989,9 @@ export type ConfigurationCreateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -1980,20 +2000,26 @@ export type ConfigurationCreateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration create many input */
 export type ConfigurationCreateManyInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -2020,9 +2046,9 @@ export type ConfigurationCreateManyInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -2031,6 +2057,12 @@ export type ConfigurationCreateManyInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration delete input */
@@ -2054,6 +2086,7 @@ export type ConfigurationFieldsPermissions = {
 	billingInterval?: Maybe<Scalars['Boolean']>;
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	clientSecret?: Maybe<Scalars['Boolean']>;
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 export type ConfigurationFilter = {
@@ -2072,6 +2105,7 @@ export type ConfigurationFilter = {
 	billingInterval?: Maybe<StringPredicate>;
 	hasScheduledCall?: Maybe<BoolPredicate>;
 	clientSecret?: Maybe<StringPredicate>;
+	runTestsConcurrently?: Maybe<BoolPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	project?: Maybe<ProjectFilter>;
@@ -2105,6 +2139,7 @@ export type ConfigurationGroupByQuery = {
 	billingInterval?: Maybe<Array<GroupByField>>;
 	hasScheduledCall?: Maybe<Array<GroupByField>>;
 	clientSecret?: Maybe<Array<GroupByField>>;
+	runTestsConcurrently?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	project?: Maybe<ProjectGroupByQuery>;
 	authenticationTokens?: Maybe<AuthenticationTokenGroupByQuery>;
@@ -2190,6 +2225,8 @@ export enum ConfigurationOrderBy {
 	HasScheduledCallDesc = 'hasScheduledCall_DESC',
 	ClientSecretAsc = 'clientSecret_ASC',
 	ClientSecretDesc = 'clientSecret_DESC',
+	RunTestsConcurrentlyAsc = 'runTestsConcurrently_ASC',
+	RunTestsConcurrentlyDesc = 'runTestsConcurrently_DESC',
 }
 
 /** Configuration subscription payload */
@@ -2227,6 +2264,7 @@ export type ConfigurationSort = {
 	billingInterval?: Maybe<SortOrder>;
 	hasScheduledCall?: Maybe<SortOrder>;
 	clientSecret?: Maybe<SortOrder>;
+	runTestsConcurrently?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	project?: Maybe<ProjectSort>;
 	logInStory?: Maybe<UserStorySort>;
@@ -2252,6 +2290,7 @@ export type ConfigurationUpdateByFilterInput = {
 	billingInterval?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	hasScheduledCall?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 	clientSecret?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	runTestsConcurrently?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 };
 
 /** Configuration update input */
@@ -2259,14 +2298,14 @@ export type ConfigurationUpdateInput = {
 	id?: Maybe<Scalars['ID']>;
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -2294,9 +2333,9 @@ export type ConfigurationUpdateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -2305,6 +2344,12 @@ export type ConfigurationUpdateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** Custom Table Field Type */
@@ -2736,6 +2781,7 @@ export type File = {
 	userStory_video?: Maybe<UserStoryListResponse>;
 	flow_video?: Maybe<FlowListResponse>;
 	previewUrl?: Maybe<Scalars['String']>;
+	downloadStorageUrl?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -4354,14 +4400,14 @@ export type LoginResponse = {
 export type LogInStory_ConfigurationCreateInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -4389,9 +4435,9 @@ export type LogInStory_ConfigurationCreateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -4400,20 +4446,26 @@ export type LogInStory_ConfigurationCreateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration update input from logInStory */
 export type LogInStory_ConfigurationUpdateInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -4441,9 +4493,9 @@ export type LogInStory_ConfigurationUpdateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -4452,6 +4504,12 @@ export type LogInStory_ConfigurationUpdateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** UserStory create input from logInStoryConfig */
@@ -7160,14 +7218,14 @@ export type Project_Avatar_FileUpdateInput = {
 export type Project_ConfigurationCreateInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -7195,9 +7253,9 @@ export type Project_ConfigurationCreateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -7206,20 +7264,26 @@ export type Project_ConfigurationCreateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** Configuration update input from project */
 export type Project_ConfigurationUpdateInput = {
 	/**
 	 * This represents the URL that clients of the app being tested, use in
-	 * production. For Meeshkan as an example — https://app.meeshkan.com. It is an
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
 	 * optional field.
 	 */
 	productionURL?: Maybe<Scalars['String']>;
 	/**
 	 * This represents the URL where a working version of an app is hosted. For
-	 * Meeshkan as an example — https://webapp-git-staging-meeshkanml.vercel.app.
-	 * This is an optional field however test runs will not work with out it.
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
 	 */
 	stagingURL?: Maybe<Scalars['String']>;
 	/** This is an internal field storing the ID of a customer in Stripe's DB. */
@@ -7247,9 +7311,9 @@ export type Project_ConfigurationUpdateInput = {
 	subscriptionStartedDate?: Maybe<Scalars['Date']>;
 	/**
 	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
-	 * 1. `active`  — fully started a subscription.
-	 * 2. `trialing` — started a subscription but isn't paying
-	 * 3. `cancelled` — project used to have a subscription but no longer does.
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
 	 */
 	subscriptionStatus?: Maybe<Scalars['String']>;
 	/** The cadence of billing, options are 'monthly' or 'yearly'. */
@@ -7258,6 +7322,12 @@ export type Project_ConfigurationUpdateInput = {
 	hasScheduledCall?: Maybe<Scalars['Boolean']>;
 	/** Used for integrations. */
 	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
 };
 
 /** Metrics create input from project */
@@ -9089,6 +9159,8 @@ export type ScriptCommand = {
 	 * 5. `drag and drop`
 	 * 6. `scroll`
 	 * 7. `api request`
+	 * 8. `mouse over`
+	 * 9.`execute javascript`
 	 */
 	command?: Maybe<Scalars['String']>;
 	/** Which step in the test is this? */
@@ -9160,6 +9232,8 @@ export type ScriptCommand = {
 	destinationAltOrAriaText?: Maybe<Scalars['String']>;
 	request?: Maybe<Scalars['JSON']>;
 	response?: Maybe<Scalars['JSON']>;
+	/** The id of the corresponding raw event in Aurora. */
+	eventId?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -9192,6 +9266,7 @@ export type ScriptCommand_PermissionFilter = {
 	destinationTagId?: Maybe<StringPredicate>;
 	destinationInnerText?: Maybe<StringPredicate>;
 	destinationAltOrAriaText?: Maybe<StringPredicate>;
+	eventId?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	userStories?: Maybe<UserStory_PermissionFilter>;
@@ -9218,6 +9293,8 @@ export type ScriptCommandCreateInput = {
 	 * 5. `drag and drop`
 	 * 6. `scroll`
 	 * 7. `api request`
+	 * 8. `mouse over`
+	 * 9.`execute javascript`
 	 */
 	command: Scalars['String'];
 	/** Which step in the test is this? */
@@ -9289,6 +9366,8 @@ export type ScriptCommandCreateInput = {
 	destinationAltOrAriaText?: Maybe<Scalars['String']>;
 	request?: Maybe<Scalars['JSON']>;
 	response?: Maybe<Scalars['JSON']>;
+	/** The id of the corresponding raw event in Aurora. */
+	eventId?: Maybe<Scalars['String']>;
 };
 
 /** ScriptCommands create many input */
@@ -9304,6 +9383,8 @@ export type ScriptCommandCreateManyInput = {
 	 * 5. `drag and drop`
 	 * 6. `scroll`
 	 * 7. `api request`
+	 * 8. `mouse over`
+	 * 9.`execute javascript`
 	 */
 	command: Scalars['String'];
 	/** Which step in the test is this? */
@@ -9375,6 +9456,8 @@ export type ScriptCommandCreateManyInput = {
 	destinationAltOrAriaText?: Maybe<Scalars['String']>;
 	request?: Maybe<Scalars['JSON']>;
 	response?: Maybe<Scalars['JSON']>;
+	/** The id of the corresponding raw event in Aurora. */
+	eventId?: Maybe<Scalars['String']>;
 };
 
 /** ScriptCommands delete input */
@@ -9413,6 +9496,7 @@ export type ScriptCommandFieldsPermissions = {
 	destinationAltOrAriaText?: Maybe<Scalars['Boolean']>;
 	request?: Maybe<Scalars['Boolean']>;
 	response?: Maybe<Scalars['Boolean']>;
+	eventId?: Maybe<Scalars['Boolean']>;
 };
 
 export type ScriptCommandFilter = {
@@ -9444,6 +9528,7 @@ export type ScriptCommandFilter = {
 	destinationTagId?: Maybe<StringPredicate>;
 	destinationInnerText?: Maybe<StringPredicate>;
 	destinationAltOrAriaText?: Maybe<StringPredicate>;
+	eventId?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	userStories?: Maybe<UserStoryFilter>;
@@ -9490,6 +9575,7 @@ export type ScriptCommandGroupByQuery = {
 	destinationAltOrAriaText?: Maybe<Array<GroupByField>>;
 	request?: Maybe<Array<GroupByField>>;
 	response?: Maybe<Array<GroupByField>>;
+	eventId?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	userStories?: Maybe<UserStoryGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
@@ -9581,6 +9667,8 @@ export enum ScriptCommandOrderBy {
 	RequestDesc = 'request_DESC',
 	ResponseAsc = 'response_ASC',
 	ResponseDesc = 'response_DESC',
+	EventIdAsc = 'eventId_ASC',
+	EventIdDesc = 'eventId_DESC',
 }
 
 /** ScriptCommands subscription payload */
@@ -9721,6 +9809,7 @@ export type ScriptCommandSort = {
 	destinationTagId?: Maybe<SortOrder>;
 	destinationInnerText?: Maybe<SortOrder>;
 	destinationAltOrAriaText?: Maybe<SortOrder>;
+	eventId?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	userStories?: Maybe<UserStorySort>;
 };
@@ -9780,6 +9869,7 @@ export type ScriptCommandUpdateByFilterInput = {
 	destinationAltOrAriaText?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	request?: Maybe<Array<Maybe<UpdateByFilterJsonInput>>>;
 	response?: Maybe<Array<Maybe<UpdateByFilterJsonInput>>>;
+	eventId?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** ScriptCommands update input */
@@ -9796,6 +9886,8 @@ export type ScriptCommandUpdateInput = {
 	 * 5. `drag and drop`
 	 * 6. `scroll`
 	 * 7. `api request`
+	 * 8. `mouse over`
+	 * 9.`execute javascript`
 	 */
 	command?: Maybe<Scalars['String']>;
 	/** Which step in the test is this? */
@@ -9867,6 +9959,8 @@ export type ScriptCommandUpdateInput = {
 	destinationAltOrAriaText?: Maybe<Scalars['String']>;
 	request?: Maybe<Scalars['JSON']>;
 	response?: Maybe<Scalars['JSON']>;
+	/** The id of the corresponding raw event in Aurora. */
+	eventId?: Maybe<Scalars['String']>;
 };
 
 export type Setting = {
@@ -10448,6 +10542,7 @@ export type SystemBillingInvoiceItemPlanInfo = {
 	__typename?: 'SystemBillingInvoiceItemPlanInfo';
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
+	displayName?: Maybe<Scalars['String']>;
 };
 
 export type SystemBillingInvoiceItemWorkspaceInfo = {
@@ -10867,6 +10962,78 @@ export type SystemGeoFieldTypeAttributes = {
 	__typename?: 'SystemGeoFieldTypeAttributes';
 	format: Scalars['String'];
 	srid?: Maybe<Scalars['Int']>;
+};
+
+export type SystemInboxEventDetailsUnion =
+	| SystemInboxEventEnvironmentInvitationDetails
+	| SystemInboxEventOrganizationInvitationDetails;
+
+export type SystemInboxEventEnvironmentInvitationDetails = {
+	__typename?: 'SystemInboxEventEnvironmentInvitationDetails';
+	uuid?: Maybe<Scalars['String']>;
+	status?: Maybe<SystemInboxEventStatusEnum>;
+	invitedBy?: Maybe<SystemInboxEventInvitedBy>;
+	workspace?: Maybe<SystemInboxEventWorkspace>;
+	environmentName?: Maybe<Scalars['String']>;
+};
+
+export type SystemInboxEventInvitedBy = {
+	__typename?: 'SystemInboxEventInvitedBy';
+	email?: Maybe<Scalars['String']>;
+	firstName?: Maybe<Scalars['String']>;
+	lastName?: Maybe<Scalars['String']>;
+	avatar?: Maybe<GraphQlFileItemResponse>;
+};
+
+export type SystemInboxEventItem = {
+	__typename?: 'SystemInboxEventItem';
+	id: Scalars['ID'];
+	createdAt: Scalars['DateTime'];
+	type?: Maybe<SystemInboxEventTypeEnum>;
+	isCompleted?: Maybe<Scalars['Boolean']>;
+	details?: Maybe<SystemInboxEventDetailsUnion>;
+};
+
+export type SystemInboxEventOrganization = {
+	__typename?: 'SystemInboxEventOrganization';
+	id: Scalars['ID'];
+	name?: Maybe<Scalars['String']>;
+	avatar?: Maybe<GraphQlFileItemResponse>;
+};
+
+export type SystemInboxEventOrganizationInvitationDetails = {
+	__typename?: 'SystemInboxEventOrganizationInvitationDetails';
+	uuid?: Maybe<Scalars['String']>;
+	status?: Maybe<SystemInboxEventStatusEnum>;
+	invitedBy?: Maybe<SystemInboxEventInvitedBy>;
+	organization?: Maybe<SystemInboxEventOrganization>;
+};
+
+/** SystemInboxEventsListResponse output */
+export type SystemInboxEventsListResponse = {
+	__typename?: 'SystemInboxEventsListResponse';
+	/** List items */
+	items: Array<SystemInboxEventItem>;
+	/** List items count */
+	count: Scalars['Int'];
+};
+
+export enum SystemInboxEventStatusEnum {
+	Sent = 'sent',
+	Accepted = 'accepted',
+	Declined = 'declined',
+}
+
+export enum SystemInboxEventTypeEnum {
+	OrganizationInvitation = 'OrganizationInvitation',
+	EnvironmentInvitation = 'EnvironmentInvitation',
+}
+
+export type SystemInboxEventWorkspace = {
+	__typename?: 'SystemInboxEventWorkspace';
+	id: Scalars['ID'];
+	name?: Maybe<Scalars['String']>;
+	avatar?: Maybe<GraphQlFileItemResponse>;
 };
 
 /** Table Create Index Input */
@@ -11310,6 +11477,7 @@ export type SystemQuery = {
 	functionsList?: Maybe<SystemFunctionListResponse>;
 	getEnvironmentRoles?: Maybe<Array<Maybe<SystemEnvironmentRoleList>>>;
 	getWorkspaceTransferInfo?: Maybe<WorkspaceTransferItem>;
+	inboxEventsList?: Maybe<SystemInboxEventsListResponse>;
 	introspection?: Maybe<IntrospectionQueryResponse>;
 	/** @deprecated No longer supported. Use `system.logsList` instead. */
 	logs?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -11375,6 +11543,11 @@ export type SystemQueryGetEnvironmentRolesArgs = {
 
 export type SystemQueryGetWorkspaceTransferInfoArgs = {
 	workspaceId: Scalars['String'];
+};
+
+export type SystemQueryInboxEventsListArgs = {
+	first?: Maybe<Scalars['Int']>;
+	skip?: Maybe<Scalars['Int']>;
 };
 
 export type SystemQueryLogsArgs = {
@@ -12644,6 +12817,10 @@ export type TestOutcome = {
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** An error message thrown from assertions. */
+	assertionError?: Maybe<Scalars['String']>;
+	/** Error message thrown from the inset JavaScript. */
+	errorMessage?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -12655,6 +12832,8 @@ export type TestOutcome_PermissionFilter = {
 	isResolved?: Maybe<BoolPredicate>;
 	status?: Maybe<StringPredicate>;
 	errorStepIndex?: Maybe<IntPredicate>;
+	assertionError?: Maybe<StringPredicate>;
+	errorMessage?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	userStory?: Maybe<UserStory_PermissionFilter>;
@@ -12856,6 +13035,10 @@ export type TestOutcomeCreateInput = {
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** An error message thrown from assertions. */
+	assertionError?: Maybe<Scalars['String']>;
+	/** Error message thrown from the inset JavaScript. */
+	errorMessage?: Maybe<Scalars['String']>;
 };
 
 /** TestOutcome create many input */
@@ -12878,6 +13061,10 @@ export type TestOutcomeCreateManyInput = {
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** An error message thrown from assertions. */
+	assertionError?: Maybe<Scalars['String']>;
+	/** Error message thrown from the inset JavaScript. */
+	errorMessage?: Maybe<Scalars['String']>;
 };
 
 /** TestOutcome delete input */
@@ -12893,6 +13080,8 @@ export type TestOutcomeFieldsPermissions = {
 	isResolved?: Maybe<Scalars['Boolean']>;
 	status?: Maybe<Scalars['Boolean']>;
 	errorStepIndex?: Maybe<Scalars['Boolean']>;
+	assertionError?: Maybe<Scalars['Boolean']>;
+	errorMessage?: Maybe<Scalars['Boolean']>;
 };
 
 export type TestOutcomeFilter = {
@@ -12903,6 +13092,8 @@ export type TestOutcomeFilter = {
 	isResolved?: Maybe<BoolPredicate>;
 	status?: Maybe<StringPredicate>;
 	errorStepIndex?: Maybe<IntPredicate>;
+	assertionError?: Maybe<StringPredicate>;
+	errorMessage?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	userStory?: Maybe<UserStoryFilter>;
@@ -12928,6 +13119,8 @@ export type TestOutcomeGroupByQuery = {
 	isResolved?: Maybe<Array<GroupByField>>;
 	status?: Maybe<Array<GroupByField>>;
 	errorStepIndex?: Maybe<Array<GroupByField>>;
+	assertionError?: Maybe<Array<GroupByField>>;
+	errorMessage?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	userStory?: Maybe<UserStoryGroupByQuery>;
 	testRun?: Maybe<TestRunGroupByQuery>;
@@ -12975,6 +13168,10 @@ export enum TestOutcomeOrderBy {
 	StatusDesc = 'status_DESC',
 	ErrorStepIndexAsc = 'errorStepIndex_ASC',
 	ErrorStepIndexDesc = 'errorStepIndex_DESC',
+	AssertionErrorAsc = 'assertionError_ASC',
+	AssertionErrorDesc = 'assertionError_DESC',
+	ErrorMessageAsc = 'errorMessage_ASC',
+	ErrorMessageDesc = 'errorMessage_DESC',
 }
 
 /** TestOutcome subscription payload */
@@ -13000,6 +13197,8 @@ export type TestOutcomeSort = {
 	isResolved?: Maybe<SortOrder>;
 	status?: Maybe<SortOrder>;
 	errorStepIndex?: Maybe<SortOrder>;
+	assertionError?: Maybe<SortOrder>;
+	errorMessage?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	userStory?: Maybe<UserStorySort>;
 	testRun?: Maybe<TestRunSort>;
@@ -13038,6 +13237,8 @@ export type TestOutcomeUpdateByFilterInput = {
 	isResolved?: Maybe<Array<Maybe<UpdateByFilterBooleanSwitchInput>>>;
 	status?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	errorStepIndex?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	assertionError?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	errorMessage?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** TestOutcome update input */
@@ -13061,6 +13262,10 @@ export type TestOutcomeUpdateInput = {
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** An error message thrown from assertions. */
+	assertionError?: Maybe<Scalars['String']>;
+	/** Error message thrown from the inset JavaScript. */
+	errorMessage?: Maybe<Scalars['String']>;
 };
 
 /** TestOutcome relation input */
@@ -13193,6 +13398,10 @@ export type TestRun_TestOutcomeCreateInput = {
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** An error message thrown from assertions. */
+	assertionError?: Maybe<Scalars['String']>;
+	/** Error message thrown from the inset JavaScript. */
+	errorMessage?: Maybe<Scalars['String']>;
 };
 
 /** TestOutcome update input from testRun */
@@ -14078,6 +14287,8 @@ export type UserStories_ScriptCommandCreateInput = {
 	 * 5. `drag and drop`
 	 * 6. `scroll`
 	 * 7. `api request`
+	 * 8. `mouse over`
+	 * 9.`execute javascript`
 	 */
 	command: Scalars['String'];
 	/** Which step in the test is this? */
@@ -14149,6 +14360,8 @@ export type UserStories_ScriptCommandCreateInput = {
 	destinationAltOrAriaText?: Maybe<Scalars['String']>;
 	request?: Maybe<Scalars['JSON']>;
 	response?: Maybe<Scalars['JSON']>;
+	/** The id of the corresponding raw event in Aurora. */
+	eventId?: Maybe<Scalars['String']>;
 };
 
 /** ScriptCommands update input from userStories */
@@ -14340,6 +14553,10 @@ export type UserStory_TestOutcomeCreateInput = {
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** An error message thrown from assertions. */
+	assertionError?: Maybe<Scalars['String']>;
+	/** Error message thrown from the inset JavaScript. */
+	errorMessage?: Maybe<Scalars['String']>;
 };
 
 /** TestOutcome update input from userStory */
@@ -14945,6 +15162,10 @@ export type Video_TestOutcomeCreateInput = {
 	 * step-index where a test case failed to complete an event.
 	 */
 	errorStepIndex?: Maybe<Scalars['Int']>;
+	/** An error message thrown from assertions. */
+	assertionError?: Maybe<Scalars['String']>;
+	/** Error message thrown from the inset JavaScript. */
+	errorMessage?: Maybe<Scalars['String']>;
 };
 
 /** TestOutcome update input from video */
