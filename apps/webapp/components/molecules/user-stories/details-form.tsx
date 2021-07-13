@@ -117,10 +117,10 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 								});
 								download === 'error'
 									? toaster({
-										status: 'error',
-										title: 'Your test case could not be generated.',
-										description: 'Please try again in a few seconds.',
-									})
+											status: 'error',
+											title: 'Your test case could not be generated.',
+											description: 'Please try again in a few seconds.',
+									  })
 									: null;
 								mixpanel.track('Puppeteer script downloaded');
 							}}
@@ -314,17 +314,18 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 									outcome.status == 'passing'
 										? 'success'
 										: outcome.status == 'did not run' ||
-											outcome.status == 'failing'
-											? 'error'
-											: 'info'
+										  outcome.status == 'failing'
+										? 'error'
+										: 'info'
 								}
-								title={`${outcome.status == 'passing'
+								title={`${
+									outcome.status == 'passing'
 										? 'Passing'
 										: outcome.status == 'did not run' ||
-											outcome.status == 'failing'
-											? 'Failing'
-											: 'In progress'
-									} run`}
+										  outcome.status == 'failing'
+										? 'Failing'
+										: 'In progress'
+								} run`}
 								date={outcome.createdAt}
 								link={`/${slugifiedProjectName}/test-runs/${outcome.testRun.id}`}
 							/>
@@ -332,11 +333,19 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 
 						<RecentActivityCard
 							type="info"
-							title={`Case created by ${userStory?.createdBy?.firstName}`}
+							title={`Case created by ${
+								userStory?.createdBy?.firstName === 'Makenna'
+									? 'Meeshkan'
+									: userStory?.createdBy?.firstName
+							}`}
 							date={userStory?.createdAt}
 							icon={
 								<Avatar
-									src={userStory?.createdBy?.avatar?.downloadUrl}
+									src={
+										userStory?.createdBy?.firstName === 'Makenna'
+											? 'https://media.graphcms.com/Sf3Hxc3gQP6ylXt8d3EX'
+											: userStory?.createdBy?.avatar?.downloadUrl
+									}
 									borderRadius="md"
 									boxSize={4}
 								/>
