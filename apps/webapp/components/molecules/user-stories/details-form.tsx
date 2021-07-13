@@ -34,7 +34,7 @@ import {
 	onDelete,
 	handleDownload,
 } from '../../../utils/user-story-helpers';
-import { UserStory } from '@frontend/meeshkan-types';
+import { User, UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import { useToaster } from '../../../hooks/use-toaster';
@@ -334,7 +334,9 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 						<RecentActivityCard
 							type="info"
 							title={`Case created by ${
-								userStory?.createdBy?.firstName === 'Makenna'
+								userStory?.author
+									? userStory.author.firstName
+									: userStory?.createdBy?.firstName === 'Makenna'
 									? 'Meeshkan'
 									: userStory?.createdBy?.firstName
 							}`}
@@ -342,7 +344,9 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 							icon={
 								<Avatar
 									src={
-										userStory?.createdBy?.firstName === 'Makenna'
+										userStory?.author
+											? userStory.author?.avatar?.downloadUrl
+											: userStory?.createdBy?.firstName === 'Makenna'
 											? 'https://media.graphcms.com/Sf3Hxc3gQP6ylXt8d3EX'
 											: userStory?.createdBy?.avatar?.downloadUrl
 									}

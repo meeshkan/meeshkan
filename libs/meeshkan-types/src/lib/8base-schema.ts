@@ -1337,6 +1337,60 @@ export type AuthenticationTokenUpdateInput = {
 	configuration?: Maybe<AuthenticationTokenConfigurationUpdateRelationInput>;
 };
 
+/** UserStory create input from author */
+export type Author_UserStoryCreateInput = {
+	/** The human readable title of a user story describes what the story does. */
+	title?: Maybe<Scalars['String']>;
+	/** This is an optional field that allows you to describe what to expect from the test. */
+	description?: Maybe<Scalars['String']>;
+	/** The indication of whether a user story has been marked as expected application behavior, or not. */
+	isTestCase?: Maybe<Scalars['Boolean']>;
+	/** When was this recording marked as a test case? */
+	testCreatedDate?: Maybe<Scalars['DateTime']>;
+	/** Is the answer to "Who created this user story?", a user or a product manager via the chrome extension */
+	created: Scalars['String'];
+	/**
+	 * The initial inference/calculated guess if a User Story should become a test or
+	 * not. Guesses the answer to the question: "Is the application behaving as expected"
+	 */
+	isExpected?: Maybe<Scalars['Boolean']>;
+	/**
+	 * Marks the significance of a user story for calculation of the confidence score
+	 * and weight of choices. A user story will default as `low`. Options are:
+	 * 1. `low`
+	 * 2. `medium`
+	 * 3. `high`
+	 */
+	significance?: Maybe<Scalars['String']>;
+	testOutcome?: Maybe<UserStoryTestOutcomeRelationInput>;
+	project?: Maybe<UserStoryProjectRelationInput>;
+	/**
+	 * A boolean field to distinguish between non-authenticated and authenticated
+	 * user stories. `requiresAuthentication` is marking a test as needing to be
+	 * logged in to complete the set of actions in the user story.
+	 */
+	requiresAuthentication?: Maybe<Scalars['Boolean']>;
+	logInStoryConfig?: Maybe<UserStoryLogInStoryConfigRelationInput>;
+	scriptCommands?: Maybe<UserStoryScriptCommandsRelationInput>;
+	video?: Maybe<UserStoryVideoRelationInput>;
+	/** This version allows us to peg what data and strategy was used to generate a video. */
+	videoGenerationVersion?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the first event in a video in the backend database. */
+	startEventId?: Maybe<Scalars['String']>;
+	/** This is the UUID that correlates to the last event in a video in the backend database. */
+	endEventId?: Maybe<Scalars['String']>;
+	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
+	scriptVersion?: Maybe<Scalars['String']>;
+	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
+};
+
+/** UserStory update input from author */
+export type Author_UserStoryUpdateInput = {
+	filter?: Maybe<UserStoryKeyFilter>;
+	data: UserStoryUpdateInput;
+};
+
 /** Project create input from avatar */
 export type Avatar_ProjectCreateInput = {
 	/**
@@ -1384,6 +1438,7 @@ export type Avatar_UserCreateInput = {
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryRelationInput>;
 };
 
 /** Users update input from avatar */
@@ -3629,6 +3684,7 @@ export type Flows_UserStoryCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
 };
 
 /** UserStory update input from flows */
@@ -3676,6 +3732,7 @@ export type Flows_UserStoryUpdateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	author?: Maybe<UserStoryAuthorUpdateRelationInput>;
 };
 
 export type FlowSort = {
@@ -4557,6 +4614,7 @@ export type LogInStoryConfig_UserStoryCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
 };
 
 /** UserStory update input from logInStoryConfig */
@@ -4604,6 +4662,7 @@ export type LogInStoryConfig_UserStoryUpdateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	author?: Maybe<UserStoryAuthorUpdateRelationInput>;
 };
 
 /** Project create input from members */
@@ -7456,6 +7515,7 @@ export type Project_UserStoryCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
 };
 
 /** UserStory update input from project */
@@ -7744,6 +7804,7 @@ export type Projects_UserCreateInput = {
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryRelationInput>;
 };
 
 /** Users update input from projects */
@@ -9006,6 +9067,7 @@ export type Roles_UserCreateInput = {
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryRelationInput>;
 };
 
 /** Users update input from roles */
@@ -9731,6 +9793,7 @@ export type ScriptCommands_UserStoryCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
 };
 
 /** UserStory update input from scriptCommands */
@@ -9778,6 +9841,7 @@ export type ScriptCommands_UserStoryUpdateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	author?: Maybe<UserStoryAuthorUpdateRelationInput>;
 };
 
 export type ScriptCommandSort = {
@@ -12936,6 +13000,7 @@ export type TestOutcome_UserStoryCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
 };
 
 /** UserStory update input from testOutcome */
@@ -12983,6 +13048,7 @@ export type TestOutcome_UserStoryUpdateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	author?: Maybe<UserStoryAuthorUpdateRelationInput>;
 };
 
 /** Files create input from testOutcome_video */
@@ -13816,6 +13882,7 @@ export type User = {
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UserStoryListResponse>;
 	learningMode?: Maybe<Scalars['Boolean']>;
 	permissions?: Maybe<UserPermissionList>;
 	_description?: Maybe<Scalars['String']>;
@@ -13845,6 +13912,18 @@ export type UserProjectsArgs = {
 	groupBy?: Maybe<ProjectGroupBy>;
 };
 
+export type UserUserStoryArgs = {
+	filter?: Maybe<UserStoryFilter>;
+	orderBy?: Maybe<Array<Maybe<UserStoryOrderBy>>>;
+	sort?: Maybe<Array<UserStorySort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<UserStoryGroupBy>;
+};
+
 export type UserPermissionsArgs = {
 	filter?: Maybe<PermissionInputFilter>;
 };
@@ -13870,6 +13949,7 @@ export type User_PermissionFilter = {
 	avatar?: Maybe<File_PermissionFilter>;
 	roles?: Maybe<Role_PermissionRelationFilter>;
 	projects?: Maybe<Project_PermissionRelationFilter>;
+	userStory?: Maybe<UserStory_PermissionRelationFilter>;
 	AND?: Maybe<Array<User_PermissionFilter>>;
 	OR?: Maybe<Array<User_PermissionFilter>>;
 };
@@ -13901,6 +13981,7 @@ export type UserCreateInput = {
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryRelationInput>;
 };
 
 /** Users create many input */
@@ -13917,6 +13998,7 @@ export type UserCreateManyInput = {
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryManyRelationInput>;
 };
 
 /** Users delete input */
@@ -13961,6 +14043,7 @@ export type UserFilter = {
 	avatar?: Maybe<FileFilter>;
 	roles?: Maybe<RoleRelationFilter>;
 	projects?: Maybe<ProjectRelationFilter>;
+	userStory?: Maybe<UserStoryRelationFilter>;
 	AND?: Maybe<Array<UserFilter>>;
 	OR?: Maybe<Array<UserFilter>>;
 };
@@ -13991,6 +14074,7 @@ export type UserGroupByQuery = {
 	avatar?: Maybe<FileGroupByQuery>;
 	roles?: Maybe<RoleGroupByQuery>;
 	projects?: Maybe<ProjectGroupByQuery>;
+	userStory?: Maybe<UserStoryGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -14431,6 +14515,8 @@ export type UserStory = {
 	 * question "How many of my users are doing this?".
 	 */
 	flows?: Maybe<FlowListResponse>;
+	/** Who created this test case? */
+	author?: Maybe<User>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -14523,6 +14609,7 @@ export type UserStory_PermissionFilter = {
 	scriptCommands?: Maybe<ScriptCommand_PermissionRelationFilter>;
 	video?: Maybe<File_PermissionFilter>;
 	flows?: Maybe<Flow_PermissionRelationFilter>;
+	author?: Maybe<User_PermissionFilter>;
 	AND?: Maybe<Array<UserStory_PermissionFilter>>;
 	OR?: Maybe<Array<UserStory_PermissionFilter>>;
 };
@@ -14565,6 +14652,40 @@ export type UserStory_TestOutcomeUpdateInput = {
 	data: TestOutcomeUpdateInput;
 };
 
+/** Users create input from userStory */
+export type UserStory_UserCreateInput = {
+	email: Scalars['String'];
+	status?: Maybe<Scalars['String']>;
+	firstName?: Maybe<Scalars['String']>;
+	lastName?: Maybe<Scalars['String']>;
+	timezone?: Maybe<Scalars['String']>;
+	avatar?: Maybe<UsersAvatarRelationInput>;
+	roles?: Maybe<UsersRolesRelationInput>;
+	projects?: Maybe<UsersProjectsRelationInput>;
+	/** What is the job title of this individual? */
+	jobTitle?: Maybe<Scalars['String']>;
+	/** User setting to allow product updates to be sent to their email. */
+	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryRelationInput>;
+};
+
+/** Users update input from userStory */
+export type UserStory_UserUpdateInput = {
+	email?: Maybe<Scalars['String']>;
+	status?: Maybe<Scalars['String']>;
+	firstName?: Maybe<Scalars['String']>;
+	lastName?: Maybe<Scalars['String']>;
+	timezone?: Maybe<Scalars['String']>;
+	avatar?: Maybe<UsersAvatarUpdateRelationInput>;
+	roles?: Maybe<UsersRolesUpdateRelationInput>;
+	projects?: Maybe<UsersProjectsUpdateRelationInput>;
+	/** What is the job title of this individual? */
+	jobTitle?: Maybe<Scalars['String']>;
+	/** User setting to allow product updates to be sent to their email. */
+	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryUpdateRelationInput>;
+};
+
 /** Files create input from userStory_video */
 export type UserStory_Video_FileCreateInput = {
 	fileId?: Maybe<Scalars['String']>;
@@ -14593,6 +14714,26 @@ export type UserStory_Video_FileUpdateInput = {
 	testOutcome_video?: Maybe<FilesTestOutcome_VideoUpdateRelationInput>;
 	userStory_video?: Maybe<FilesUserStory_VideoUpdateRelationInput>;
 	flow_video?: Maybe<FilesFlow_VideoUpdateRelationInput>;
+};
+
+/** UserStory relation input */
+export type UserStoryAuthorManyRelationInput = {
+	connect?: Maybe<UserKeyFilter>;
+};
+
+/** UserStory relation input */
+export type UserStoryAuthorRelationInput = {
+	connect?: Maybe<UserKeyFilter>;
+	create?: Maybe<UserStory_UserCreateInput>;
+};
+
+/** UserStory relation input */
+export type UserStoryAuthorUpdateRelationInput = {
+	connect?: Maybe<UserKeyFilter>;
+	disconnect?: Maybe<UserKeyFilter>;
+	reconnect?: Maybe<UserKeyFilter>;
+	create?: Maybe<UserStory_UserCreateInput>;
+	update?: Maybe<UserStory_UserUpdateInput>;
 };
 
 /** UserStory create input */
@@ -14640,6 +14781,7 @@ export type UserStoryCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
 };
 
 /** UserStory create many input */
@@ -14687,6 +14829,7 @@ export type UserStoryCreateManyInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsManyRelationInput>;
+	author?: Maybe<UserStoryAuthorManyRelationInput>;
 };
 
 /** UserStory delete input */
@@ -14738,6 +14881,7 @@ export type UserStoryFilter = {
 	scriptCommands?: Maybe<ScriptCommandRelationFilter>;
 	video?: Maybe<FileFilter>;
 	flows?: Maybe<FlowRelationFilter>;
+	author?: Maybe<UserFilter>;
 	AND?: Maybe<Array<UserStoryFilter>>;
 	OR?: Maybe<Array<UserStoryFilter>>;
 };
@@ -14794,6 +14938,7 @@ export type UserStoryGroupByQuery = {
 	scriptCommands?: Maybe<ScriptCommandGroupByQuery>;
 	video?: Maybe<FileGroupByQuery>;
 	flows?: Maybe<FlowGroupByQuery>;
+	author?: Maybe<UserGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -14953,6 +15098,7 @@ export type UserStorySort = {
 	project?: Maybe<ProjectSort>;
 	logInStoryConfig?: Maybe<ConfigurationSort>;
 	video?: Maybe<FileSort>;
+	author?: Maybe<UserSort>;
 };
 
 /** UserStory subscription filter */
@@ -15046,6 +15192,7 @@ export type UserStoryUpdateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
+	author?: Maybe<UserStoryAuthorUpdateRelationInput>;
 };
 
 /** UserStory relation input */
@@ -15073,6 +15220,26 @@ export type UserSubscriptionFilter = {
 	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
 	node?: Maybe<UserFilter>;
 	updatedFields?: Maybe<UpdatedFieldsFilter>;
+};
+
+/** Users relation input */
+export type UsersUserStoryManyRelationInput = {
+	connect?: Maybe<Array<UserStoryKeyFilter>>;
+};
+
+/** Users relation input */
+export type UsersUserStoryRelationInput = {
+	connect?: Maybe<Array<UserStoryKeyFilter>>;
+	create?: Maybe<Array<Maybe<Author_UserStoryCreateInput>>>;
+};
+
+/** Users relation input */
+export type UsersUserStoryUpdateRelationInput = {
+	connect?: Maybe<Array<UserStoryKeyFilter>>;
+	disconnect?: Maybe<Array<UserStoryKeyFilter>>;
+	reconnect?: Maybe<Array<UserStoryKeyFilter>>;
+	create?: Maybe<Array<Maybe<Author_UserStoryCreateInput>>>;
+	update?: Maybe<Array<Maybe<Author_UserStoryUpdateInput>>>;
 };
 
 /** Users update input */
@@ -15104,6 +15271,7 @@ export type UserUpdateInput = {
 	jobTitle?: Maybe<Scalars['String']>;
 	/** User setting to allow product updates to be sent to their email. */
 	productNotifications?: Maybe<Scalars['Boolean']>;
+	userStory?: Maybe<UsersUserStoryUpdateRelationInput>;
 };
 
 /** UUID Field Attributes */
@@ -15219,6 +15387,7 @@ export type Video_UserStoryCreateInput = {
 	/** This version allows us to peg what data and strategy was used to generate this script and is mandatory. */
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsRelationInput>;
+	author?: Maybe<UserStoryAuthorRelationInput>;
 };
 
 /** UserStory update input from video */
