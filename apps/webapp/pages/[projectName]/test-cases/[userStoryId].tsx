@@ -87,7 +87,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 		<ValidatedBillingPlan>
 			<SimpleGrid columns={3} spacing={8} w="full">
 				<GridItem colSpan={2} overflowY="auto">
-					<Link href={`/${slugifiedProjectName}/user-stories`} passHref>
+					<Link href={`/${slugifiedProjectName}/test-cases`} passHref>
 						<ChakraLink
 							d="flex"
 							alignItems="center"

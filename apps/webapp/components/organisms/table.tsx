@@ -313,7 +313,7 @@ const Table = ({
 											onClick={() => {
 												router.push(
 													// @ts-expect-error
-													`/${slugifiedProjectName}/user-stories/${row.original.id}`
+													`/${slugifiedProjectName}/test-cases/${row.original.id}`
 												);
 											}}
 											border={0}
@@ -352,7 +352,7 @@ const Table = ({
 											onClick={() => {
 												window?.open(
 													// @ts-expect-error
-													`/${slugifiedProjectName}/user-stories/${row.original.id}`
+													`/${slugifiedProjectName}/test-cases/${row.original.id}`
 												);
 											}}
 										/>

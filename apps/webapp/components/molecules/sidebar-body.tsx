@@ -39,7 +39,7 @@ const SideBarBody = () => {
 		[projectName]
 	);
 
-	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
+	const userStoriesHref = `/${slugifiedProjectName}/test-cases`;
 	const testRunsHref = `/${slugifiedProjectName}/test-runs`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
@@ -251,8 +251,8 @@ const SideBarBody = () => {
 							leftIcon={<CheckSquareIcon />}
 							href={userStoriesHref}
 							isActive={
-								router.pathname.split('/').slice(-1)[0] === 'user-stories' ||
-								router.asPath.includes('/user-stories')
+								router.pathname.split('/').slice(-1)[0] === 'test-cases' ||
+								router.asPath.includes('/test-cases')
 							}
 						>
 							Test cases
