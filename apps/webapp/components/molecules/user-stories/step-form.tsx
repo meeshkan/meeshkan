@@ -123,6 +123,15 @@ export const StepForm = ({
 	const [documentURL, setDocumentURL] = useState<string | null>(
 		scriptCommand?.documentURL
 	);
+	const [destinationXpath, setDestinationXpath] = useState<string | null>(
+		scriptCommand?.destinationXpath
+	);
+	const [destinationXCoordinate, setDestinationXCoordinate] = useState<
+		number | null
+	>(scriptCommand?.destinationXCoordinate);
+	const [destinationYCoordinate, setDestinationYCoordinate] = useState<
+		number | null
+	>(scriptCommand?.destinationYCoordinate);
 
 	// Keep the values up to date when selecting a new step
 	useEffect(() => {
@@ -136,6 +145,9 @@ export const StepForm = ({
 		setScrollLeft(scriptCommand?.scrollLeft || 0);
 		setValue(scriptCommand?.value);
 		setDocumentURL(scriptCommand?.documentURL);
+		setDestinationXpath(scriptCommand?.destinationXpath);
+		setDestinationXCoordinate(scriptCommand?.destinationXCoordinate);
+		setDestinationYCoordinate(scriptCommand?.destinationYCoordinate);
 	}, [selectedStep]);
 
 	const onSubmit = async (formData: ScriptCommand) => {
@@ -277,57 +289,58 @@ export const StepForm = ({
 							</>
 						)}
 
-					{scriptCommand?.command === 'set viewport size' && (
-						<FormControl>
-							<Box mb="-8px" ml={3}>
-								<Label text="Coordinates" />
-							</Box>
-							<Flex
-								borderLeft="1px solid"
-								borderRight="1px solid"
-								borderBottom="1px solid"
-								borderColor={groupBorderColor}
-								borderRadius="md"
-								p={4}
-							>
-								<Flex align="center" mr={4}>
-									<Label text="X" short />
-									<NumberInput
-										name="xCoordinate"
-										defaultValue={xCoordinate}
-										ref={register}
-										size="sm"
-										borderRadius="md"
-										fontFamily="mono"
-									>
-										<NumberInputField borderRadius="md" />
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
-								</Flex>
+					{scriptCommand?.command === 'set viewport size' ||
+						(scriptCommand?.command === 'drag and drop' && (
+							<FormControl isRequired>
+								<Box mb="-8px" ml={3}>
+									<Label text="Coordinates" />
+								</Box>
+								<Flex
+									borderLeft="1px solid"
+									borderRight="1px solid"
+									borderBottom="1px solid"
+									borderColor={groupBorderColor}
+									borderRadius="md"
+									p={4}
+								>
+									<Flex align="center" mr={4}>
+										<Label text="X" short />
+										<NumberInput
+											name="xCoordinate"
+											defaultValue={xCoordinate}
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
 
-								<Flex align="center">
-									<Label text="Y" short />
-									<NumberInput
-										name="yCoordinate"
-										defaultValue={yCoordinate}
-										ref={register}
-										size="sm"
-										borderRadius="md"
-										fontFamily="mono"
-									>
-										<NumberInputField borderRadius="md" />
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
+									<Flex align="center">
+										<Label text="Y" short />
+										<NumberInput
+											name="yCoordinate"
+											defaultValue={yCoordinate}
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
 								</Flex>
-							</Flex>
-						</FormControl>
-					)}
+							</FormControl>
+						))}
 
 					{scriptCommand?.command === 'scroll' && (
 						<FormControl>
@@ -396,6 +409,76 @@ export const StepForm = ({
 							/>
 						</FormControl>
 					)}
+
+					{scriptCommand?.command === 'drag and drop' ? (
+						<>
+							<FormControl isRequired>
+								<Label
+									text="Destination xpath"
+									tooltip="What is the structure when the element is dropped"
+								/>
+								<Input
+									name="destinationXpath"
+									defaultValue={destinationXpath}
+									ref={register}
+									size="sm"
+									borderRadius="md"
+									fontFamily="mono"
+									placeholder="/html/body/div[1]/div/nav/div/div[2]/div/div[2]/a[2]"
+								/>
+							</FormControl>
+
+							<FormControl isRequired>
+								<Box mb="-8px" ml={3}>
+									<Label text="Destination coordinates" />
+								</Box>
+								<Flex
+									borderLeft="1px solid"
+									borderRight="1px solid"
+									borderBottom="1px solid"
+									borderColor={groupBorderColor}
+									borderRadius="md"
+									p={4}
+								>
+									<Flex align="center" mr={4}>
+										<Label text="X" short />
+										<NumberInput
+											name="destinationXCoordinate"
+											defaultValue={destinationXCoordinate}
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+
+									<Flex align="center">
+										<Label text="Y" short />
+										<NumberInput
+											name="destinationYCoordinate"
+											defaultValue={destinationYCoordinate}
+											ref={register}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+										>
+											<NumberInputField borderRadius="md" />
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+								</Flex>
+							</FormControl>
+						</>
+					) : null}
 
 					{scriptCommand?.command === 'type' ||
 					scriptCommand?.command === 'click' ||

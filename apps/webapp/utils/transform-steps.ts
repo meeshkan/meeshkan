@@ -154,8 +154,8 @@ export const commandsToSteps = (
 					commandData.innerText
 				)} from x:${commandData.xCoordinate}, y:${
 					commandData.yCoordinate
-				}. Then drop at x:${commandData.destinationYCoordinate}, y:${
-					commandData.yCoordinate
+				}. Then drop at x:${commandData.destinationXCoordinate}, y:${
+					commandData.destinationYCoordinate
 				}.`,
 				sIndex: commandData.sIndex,
 				command: 'dragndrop',
