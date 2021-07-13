@@ -130,13 +130,13 @@ const Table = ({
 				res?.userStoryDelete?.success
 					? toaster({
 							status: 'success',
-							title: 'The user story has been deleted.',
+							title: 'The test case has been deleted.',
 							description:
-								'Rejecting a recording will delete the series of steps as a user story.',
+								'Rejecting a recording will delete the series of steps as a test case.',
 					  })
 					: toaster({
 							status: 'error',
-							title: 'The user story was not deleted.',
+							title: 'The test case was not deleted.',
 							description: 'Something went wrong, try again later.',
 					  })
 			);
@@ -274,7 +274,7 @@ const Table = ({
 													mixBlendMode:
 														colorMode === 'light' ? 'multiply' : 'normal',
 												}}
-												aria-label="Play the video associated with this user story"
+												aria-label="Play the video associated with this test case"
 												leftIcon={<PlayIcon strokeWidth="2px" />}
 												onClick={() => {
 													setVideo(data[rowId].video.downloadUrl);
@@ -296,7 +296,7 @@ const Table = ({
 												size="xs"
 												variant="subtle"
 												colorScheme="gray"
-												aria-label="Play the video associated with this user story"
+												aria-label="Play the video associated with this test case"
 												leftIcon={<PlayIcon strokeWidth="2px" />}
 												isDisabled
 											>
@@ -428,7 +428,7 @@ const Table = ({
 						) : (
 							<Tr _hover={undefined}>
 								<Td textAlign="center" py={3} rowSpan={pageSize} colSpan={8}>
-									<Text fontSize="md">No User Stories</Text>
+									<Text fontSize="md">No Test Cases</Text>
 								</Td>
 							</Tr>
 						))}
