@@ -333,11 +333,23 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 
 						<RecentActivityCard
 							type="info"
-							title={`Case created by ${userStory?.createdBy?.firstName}`}
+							title={`Case created by ${
+								userStory?.author
+									? userStory.author.firstName
+									: userStory?.createdBy?.firstName === 'Makenna'
+									? 'Meeshkan'
+									: userStory?.createdBy?.firstName
+							}`}
 							date={userStory?.createdAt}
 							icon={
 								<Avatar
-									src={userStory?.createdBy?.avatar?.downloadUrl}
+									src={
+										userStory?.author
+											? userStory.author?.avatar?.downloadUrl
+											: userStory?.createdBy?.firstName === 'Makenna'
+											? 'https://media.graphcms.com/Sf3Hxc3gQP6ylXt8d3EX'
+											: userStory?.createdBy?.avatar?.downloadUrl
+									}
 									borderRadius="md"
 									boxSize={4}
 								/>
