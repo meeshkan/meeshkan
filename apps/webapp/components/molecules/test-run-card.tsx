@@ -1,6 +1,12 @@
+import React from 'react';
 import { Flex, Center, Box, Text, Button, Badge } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
-import { CheckmarkIcon, XmarkIcon, MinusIcon } from '@frontend/chakra-theme';
+import {
+	CheckmarkIcon,
+	XmarkIcon,
+	MinusIcon,
+	CircleArrowsIcon,
+} from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Card from '../atoms/card';
 import { TestRun } from '@frontend/meeshkan-types';
@@ -14,6 +20,8 @@ type TestRunCardProps = {
 		passing?: number;
 		failing?: number;
 		'did not run'?: number;
+		queued?: number;
+		'in progress'?: number;
 	};
 };
 
@@ -99,6 +107,12 @@ const TestRunCard = ({
 						<XmarkIcon width={2} height={2} color="red.500" />
 						<Text fontSize="sm" ml={2}>
 							{stats.failing || 0}
+						</Text>
+					</Center>
+					<Center>
+						<CircleArrowsIcon width={2} height={2} color="yellow.500" />
+						<Text fontSize="sm" ml={2}>
+							{(stats['queued'] || 0) + (stats['in progress'] || 0)}
 						</Text>
 					</Center>
 					<Center>
