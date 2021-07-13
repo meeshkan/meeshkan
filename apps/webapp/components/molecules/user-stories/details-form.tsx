@@ -34,7 +34,7 @@ import {
 	onDelete,
 	handleDownload,
 } from '../../../utils/user-story-helpers';
-import { User, UserStory } from '@frontend/meeshkan-types';
+import { UserStory } from '@frontend/meeshkan-types';
 import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import { useToaster } from '../../../hooks/use-toaster';
