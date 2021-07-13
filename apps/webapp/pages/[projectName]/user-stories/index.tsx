@@ -360,7 +360,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								color={gettingStartedGrayColor}
 								strokeWidth="2.5"
 							/>
-							<Text ml={4}>Create a new user story</Text>
+							<Text ml={4}>Create a new test case</Text>
 						</Box>
 					</Stack>
 				</GridCard>
@@ -383,10 +383,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								mb={2}
 								color={modalHeaderColor}
 							>
-								How to create a new User Story
+								How to create a new Test case
 							</Heading>
 							<Text fontWeight="400" fontSize="md">
-								There are two ways to create user stories for your project.
+								There are two ways to create test cases for your project.
 							</Text>
 						</ModalHeader>
 						<Divider />
