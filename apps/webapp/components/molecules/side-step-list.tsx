@@ -629,7 +629,7 @@ export const StepList = ({
 			{requiresAuthentication ? (
 				project?.configuration?.logInStory ? (
 					<Link
-						href={`/${slugifiedProjectName}/user-stories/${project?.configuration?.logInStory?.id}`}
+						href={`/${slugifiedProjectName}/test-cases/${project?.configuration?.logInStory?.id}`}
 					>
 						<a>
 							<Flex

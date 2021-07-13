@@ -23,7 +23,7 @@ export const useFetchUser = (): IUseFetchUser => {
 			email: user.email,
 		});
 
-		window.CommandBar.boot({
+		window?.CommandBar?.boot({
 			id: user.id,
 			eventData: { email: user.email },
 		});

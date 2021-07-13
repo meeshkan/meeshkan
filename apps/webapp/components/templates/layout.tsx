@@ -31,7 +31,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 	useEffect(() => {
 		const projectName: string = user?.project?.name;
 		const sluggifiedName: string = createSlug(projectName || '');
-		window.CommandBar.addContext('currentProject', sluggifiedName);
+		window?.CommandBar?.addContext('currentProject', sluggifiedName);
 
 		if (project && !project.configuration?.plan) {
 			onOpen();
@@ -46,7 +46,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 
 	useEffect(() => {
 		const routerFunc = (newUrl: string) => router.push(newUrl);
-		window.CommandBar.addRouter(routerFunc);
+		window?.CommandBar?.addRouter(routerFunc);
 	}, []);
 
 	useEffect(() => {
@@ -55,7 +55,7 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 			sluggified: createSlug(project.name || ''),
 		}));
 
-		window.CommandBar.addContext('projects', commandBarProjects, {
+		window?.CommandBar?.addContext('projects', commandBarProjects, {
 			renderOptions: {
 				labelKey: 'name',
 			},

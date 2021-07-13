@@ -67,7 +67,7 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 
 	const slugifiedStoryName = createSlug(userStory?.title);
 
-	const { hasCopied, onCopy: handleCopy } = useClipboard(window.location.href);
+	const { hasCopied, onCopy: handleCopy } = useClipboard(window?.location.href);
 	useEffect(() => {
 		if (hasCopied) {
 			toaster({
@@ -158,7 +158,7 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 									description: 'This test case is no longer accessible.',
 								});
 
-								router.push(`/${slugifiedProjectName}/user-stories`);
+								router.push(`/${slugifiedProjectName}/test-cases`);
 							}}
 							isLoading={deleting}
 						>
@@ -333,11 +333,23 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 
 						<RecentActivityCard
 							type="info"
-							title={`Case created by ${userStory?.createdBy?.firstName}`}
+							title={`Case created by ${
+								userStory?.author
+									? userStory.author.firstName
+									: userStory?.createdBy?.firstName === 'Makenna'
+									? 'Meeshkan'
+									: userStory?.createdBy?.firstName
+							}`}
 							date={userStory?.createdAt}
 							icon={
 								<Avatar
-									src={userStory?.createdBy?.avatar?.downloadUrl}
+									src={
+										userStory?.author
+											? userStory.author?.avatar?.downloadUrl
+											: userStory?.createdBy?.firstName === 'Makenna'
+											? 'https://media.graphcms.com/Sf3Hxc3gQP6ylXt8d3EX'
+											: userStory?.createdBy?.avatar?.downloadUrl
+									}
 									borderRadius="md"
 									boxSize={4}
 								/>

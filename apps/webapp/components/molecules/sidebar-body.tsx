@@ -39,7 +39,7 @@ const SideBarBody = () => {
 		[projectName]
 	);
 
-	const userStoriesHref = `/${slugifiedProjectName}/user-stories`;
+	const userStoriesHref = `/${slugifiedProjectName}/test-cases`;
 	const testRunsHref = `/${slugifiedProjectName}/test-runs`;
 	const isSettingsPage = router.pathname.endsWith('settings');
 
@@ -222,7 +222,7 @@ const SideBarBody = () => {
 							mb={4}
 							cursor="pointer"
 							transition="all 0.2s"
-							onClick={() => window.CommandBar.open()}
+							onClick={() => window?.CommandBar?.open()}
 							_hover={{ borderColor: searchFocusColor }}
 						>
 							<Flex align="center" color={searchTextColor}>
@@ -251,8 +251,8 @@ const SideBarBody = () => {
 							leftIcon={<CheckSquareIcon />}
 							href={userStoriesHref}
 							isActive={
-								router.pathname.split('/').slice(-1)[0] === 'user-stories' ||
-								router.asPath.includes('/user-stories')
+								router.pathname.split('/').slice(-1)[0] === 'test-cases' ||
+								router.asPath.includes('/test-cases')
 							}
 						>
 							Test cases

@@ -47,6 +47,7 @@ import {
 	ADD_SUPPORT,
 	TOGGLE_TEST_RUNS,
 	UPDATE_HAS_RECEIVED_EVENTS,
+	TOGGLE_RUN_STRATEGY,
 } from '../../graphql/project';
 import AuthenticationTokenForm from '../../components/molecules/authentication-token-form';
 import {
@@ -75,7 +76,6 @@ const Settings = () => {
 		idToken,
 		project,
 		setProject,
-		projects,
 		mutate: mutateUser,
 	} = user;
 	const [profileLoading, setProfileLoading] = useState(false);
@@ -84,6 +84,7 @@ const Settings = () => {
 	const [toggleTestRunnerIndex, setToggleTestRunnerIndex] = useState<
 		0 | 1 | null
 	>(null);
+	const [runStrategy, setRunStrategy] = useState<0 | 1 | null>(null);
 	const [members, setMembers] = useState<Array<User>>(
 		project?.members?.items || []
 	);
@@ -111,6 +112,7 @@ const Settings = () => {
 		setMembers(project.members.items);
 		setTokens(project.configuration.authenticationTokens.items);
 		setToggleTestRunnerIndex(project.configuration.activeTestRuns ? 0 : 1);
+		setRunStrategy(project.configuration.runTestsConcurrently ? 0 : 1);
 	}, [project]);
 
 	useEffect(() => {
@@ -141,6 +143,35 @@ const Settings = () => {
 
 		handleTestRunnerToggle();
 	}, [toggleTestRunnerIndex]);
+
+	useEffect(() => {
+		const handleRunStrategyToggle = async (): Promise<void> => {
+			const response = await client.request(TOGGLE_RUN_STRATEGY, {
+				projectId,
+				toggle: !runStrategy,
+			});
+
+			const updatedRunStrategyToggle =
+				response.projectUpdate.configuration.runTestsConcurrently;
+			setProject({
+				...project,
+				configuration: {
+					...project.configuration,
+					runTestsConcurrently: updatedRunStrategyToggle,
+				},
+			});
+		};
+
+		if (
+			!project ||
+			runStrategy === null ||
+			!runStrategy === project.configuration.runTestsConcurrently
+		) {
+			return;
+		}
+
+		handleRunStrategyToggle();
+	}, [runStrategy]);
 
 	useEffect(() => {
 		if (!projectId) {
@@ -193,9 +224,9 @@ const Settings = () => {
 			}
 		};
 
-		window.addEventListener('message', handleMessageEvent);
+		window?.addEventListener('message', handleMessageEvent);
 		return () => {
-			window.removeEventListener('message', handleMessageEvent);
+			window?.removeEventListener('message', handleMessageEvent);
 		};
 	}, [projectId]);
 
@@ -333,7 +364,7 @@ const Settings = () => {
 			return;
 		}
 
-		const childWindow = window.open(
+		const childWindow = window?.open(
 			`${project.configuration.productionURL}?meeshkanVerifyScript=${project.id}`
 		);
 		const interval = setTimeout(() => {
@@ -553,7 +584,11 @@ const Settings = () => {
 
 					<Spacer h={8} />
 
-					<FormControl display="flex" alignItems="center">
+					<FormControl
+						display="flex"
+						alignItems="center"
+						justifyContent="space-between"
+					>
 						<Stack mr={5}>
 							<Heading fontSize="18px" fontWeight="500">
 								Test runner
@@ -571,6 +606,34 @@ const Settings = () => {
 							values={['on', 'off']}
 							selectedIndex={toggleTestRunnerIndex}
 							setSelectedIndex={setToggleTestRunnerIndex}
+						/>
+					</FormControl>
+
+					<Spacer h={8} />
+
+					<FormControl
+						display="flex"
+						alignItems="center"
+						justifyContent="space-between"
+					>
+						<Stack mr={5}>
+							<Heading fontSize="18px" fontWeight="500">
+								Run strategy
+							</Heading>
+							<Text
+								fontSize="sm"
+								fontWeight="400"
+								lineHeight="short"
+								color="gray.500"
+							>
+								How would you like to run your tests? Concurrent = at the same
+								time. Sequential = one after another.
+							</Text>
+						</Stack>
+						<SegmentedControl
+							values={['Concurrent', 'Sequential']}
+							selectedIndex={runStrategy}
+							setSelectedIndex={setRunStrategy}
 						/>
 					</FormControl>
 
@@ -635,7 +698,7 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/user-stories/${
+							href={`/${createSlug(project?.name)}/test-cases/${
 								project?.configuration?.logInStory?.id
 							}`}
 						>

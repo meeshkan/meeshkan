@@ -94,8 +94,11 @@ const TestRun = () => {
 		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
 	);
 
-	const testsNeedAuthentication: boolean = project?.userStories?.items.some((story) => story.requiresAuthentication)
-	const stepsInLogInStory: number = project?.configuration?.logInStory?.scriptCommands?.count
+	const testsNeedAuthentication: boolean = project?.userStories?.items.some(
+		(story) => story.requiresAuthentication
+	);
+	const stepsInLogInStory: number =
+		project?.configuration?.logInStory?.scriptCommands?.count;
 	const hasLogInStory: boolean = !!project?.configuration?.logInStory;
 
 	const hasAuthTokens: boolean =
@@ -174,12 +177,25 @@ const TestRun = () => {
 								</Box>
 							</Flex>
 							<Stack spacing={4}>
-								{testsNeedAuthentication && !hasLogInStory && !hasAuthTokens ? (<Alert status="error" p={3} mt={3} flex="1">
-									<AlertIcon />
-									<AlertDescription>
-										At least one of your tests requires authentication. <Link href={`/${slugifiedProjectName}/settings#authentication`} passHref><ChakraLink color={alertLinkColor} textDecor="underline">Authentication settings</ChakraLink></Link>
-									</AlertDescription>
-								</Alert>) : null}
+								{testsNeedAuthentication && !hasLogInStory && !hasAuthTokens ? (
+									<Alert status="error" p={3} mt={3} flex="1">
+										<AlertIcon />
+										<AlertDescription>
+											At least one of your tests requires authentication.{' '}
+											<Link
+												href={`/${slugifiedProjectName}/settings#authentication`}
+												passHref
+											>
+												<ChakraLink
+													color={alertLinkColor}
+													textDecor="underline"
+												>
+													Authentication settings
+												</ChakraLink>
+											</Link>
+										</AlertDescription>
+									</Alert>
+								) : null}
 								<Accordion defaultIndex={[0]} allowMultiple>
 									{sortedTestOutcomes.map((outcome) => {
 										const testCase = outcome?.userStory;
@@ -188,15 +204,22 @@ const TestRun = () => {
 										const requiresAuthentication: boolean =
 											testCase?.requiresAuthentication;
 
-										const outcomeCommands: ScriptCommandListResponse['items'] = testCase?.scriptCommands?.items
+										const outcomeCommands: ScriptCommandListResponse['items'] =
+											testCase?.scriptCommands?.items;
 
-										const contextualErrorStepIndex: number = requiresAuthentication && hasLogInStory ? outcome?.errorStepIndex - stepsInLogInStory : outcome?.errorStepIndex;
-										const errorInLogIn: boolean = contextualErrorStepIndex > 0 && !isNaN(contextualErrorStepIndex) ? false : true
+										const contextualErrorStepIndex: number =
+											requiresAuthentication && hasLogInStory
+												? outcome?.errorStepIndex - stepsInLogInStory
+												: outcome?.errorStepIndex;
+										const errorInLogIn: boolean =
+											contextualErrorStepIndex > 0 &&
+											!isNaN(contextualErrorStepIndex)
+												? false
+												: true;
 
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
 											contextualErrorStepIndex
 										];
-
 
 										const outcomeError = (
 											outcomeCommand: string,
@@ -292,7 +315,7 @@ const TestRun = () => {
 																{icon}
 															</Tooltip>
 															<Link
-																href={`/${slugifiedProjectName}/user-stories/${testCase.id}`}
+																href={`/${slugifiedProjectName}/test-cases/${testCase.id}`}
 																passHref
 															>
 																<ChakraLink fontSize="15px" ml={4}>
@@ -341,7 +364,7 @@ const TestRun = () => {
 																</Tooltip>
 															) : null}
 															{isFailing &&
-																project?.configuration?.logInStory?.id ===
+															project?.configuration?.logInStory?.id ===
 																testCase?.id ? (
 																<Tooltip
 																	label="This is the path your users take to sign in."
@@ -393,15 +416,26 @@ const TestRun = () => {
 																		fontSize="sm"
 																		mr={4}
 																	>
-																		{requiresAuthentication && hasLogInStory ? outcome?.errorStepIndex + 1 - stepsInLogInStory : outcome?.errorStepIndex + 1}
+																		{requiresAuthentication && hasLogInStory
+																			? outcome?.errorStepIndex +
+																			  1 -
+																			  stepsInLogInStory
+																			: outcome?.errorStepIndex + 1}
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
-																		<Alert status="error" p={3} mt={errorInLogIn ? 0 : 3} flex="1">
+																		<Alert
+																			status="error"
+																			p={3}
+																			mt={errorInLogIn ? 0 : 3}
+																			flex="1"
+																		>
 																			<AlertIcon />
 																			<AlertDescription>
 																				{outcomeError(
-																					errorInLogIn ? "auth" : outcomeDetails?.command,
+																					errorInLogIn
+																						? 'auth'
+																						: outcomeDetails?.command,
 																					outcomeDetails?.tagName
 																				)}
 																			</AlertDescription>

@@ -12,6 +12,14 @@ export const USER_STORY = gql`
 					downloadUrl
 				}
 			}
+			author {
+				email
+				firstName
+				lastName
+				avatar {
+					downloadUrl
+				}
+			}
 			id
 			title
 			description
@@ -367,15 +375,14 @@ export const DELETE_SINGLE_COMMAND = gql`
 `;
 
 export const CREATE_SINGLE_STEP = gql`
-  mutation CREATE_SINGLE_STEP($id: ID!, $create: UserStories_ScriptCommandCreateInput) {
-    userStoryUpdate(filter : {
-        id: $id
-    }
-    data: {
-        scriptCommands: {
-            create: [$create]
-        }
-    }) {
+	mutation CREATE_SINGLE_STEP(
+		$id: ID!
+		$create: UserStories_ScriptCommandCreateInput
+	) {
+		userStoryUpdate(
+			filter: { id: $id }
+			data: { scriptCommands: { create: [$create] } }
+		) {
 			id
 			title
 			description
@@ -414,8 +421,8 @@ export const CREATE_SINGLE_STEP = gql`
 				}
 			}
 		}
-}
-`
+	}
+`;
 
 export const UPDATE_MANY_STEPS = gql`
 	mutation UPDATE_MANY_STEPS(

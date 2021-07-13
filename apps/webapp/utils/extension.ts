@@ -20,7 +20,7 @@ export interface IAuth {
 
 export const latestVersion = '0.4.4';
 
-export const isChrome = (): boolean => !!window.chrome;
+export const isChrome = (): boolean => !!window?.chrome;
 
 export const startRecording = ({
 	url,
@@ -29,7 +29,7 @@ export const startRecording = ({
 	url: string;
 	isAuthFlow: boolean;
 }) => {
-	window.chrome.runtime.sendMessage(extensionId, {
+	window?.chrome?.runtime?.sendMessage(extensionId, {
 		message: 'startRecording',
 		url,
 		isAuthFlow,
@@ -38,7 +38,7 @@ export const startRecording = ({
 
 export const getVersion = () => {
 	return new Promise((resolve, reject) => {
-		window.chrome.runtime.sendMessage(
+		window?.chrome?.runtime?.sendMessage(
 			extensionId,
 			{ message: 'version' },
 			(reply: { version: number } | null) => {
@@ -62,7 +62,7 @@ export const handleExtensionAuthHandshake = (
 			name: project.name,
 			avatar: project.avatar?.downloadUrl,
 			userStories: {
-				count: project.userStories.count,
+				count: project?.userStories?.count,
 			},
 			configuration: {
 				id: project.configuration?.id,
@@ -82,11 +82,11 @@ export const handleExtensionAuthHandshake = (
 		project: project
 			? parseProject(project)
 			: user.projects.length > 0
-				? parseProject(user.projects[0])
-				: null,
+			? parseProject(user.projects[0])
+			: null,
 	};
 
-	const chromeRuntime = window.chrome.runtime;
+	const chromeRuntime = window?.chrome?.runtime;
 	if (!chromeRuntime) {
 		return;
 	}
@@ -97,6 +97,6 @@ export const handleExtensionAuthHandshake = (
 	});
 
 	if (close) {
-		window.close();
+		window?.close();
 	}
 };

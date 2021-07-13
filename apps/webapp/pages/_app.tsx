@@ -13,13 +13,15 @@ const CustomApp = ({ Component, pageProps }: AppProps) => {
 	const isInvitePage = router.pathname === '/invite/[inviteId]';
 	const mixpanel = useAnalytics();
 
-	// Configure Product Tours
-	if (window?.ProductTours) {
-		window.ProductTours.setTourOptions({
-			header: 'Ben from Meeshkan',
-			headerAvatarUrl: 'https://meeshkan.com/favicon-32x32.png',
-		});
-	}
+	useEffect(() => {
+		// Configure Product Tours
+		if (window?.ProductTours) {
+			window?.ProductTours?.setTourOptions({
+				header: 'Ben from Meeshkan',
+				headerAvatarUrl: 'https://meeshkan.com/favicon-32x32.png',
+			});
+		}
+	}, []);
 
 	useEffect(() => {
 		const handleRouteChange = (url: string) => {

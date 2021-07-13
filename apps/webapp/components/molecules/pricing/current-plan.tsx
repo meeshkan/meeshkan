@@ -38,7 +38,7 @@ export const CurrentPlanCard = ({ plan }: CurrentPlanProps) => {
 		if (error) {
 			return alert(error.message);
 		}
-		window.location.assign(url);
+		window?.location.assign(url);
 		setPortalSessionLoading(false);
 	};
 
@@ -66,10 +66,10 @@ export const CurrentPlanCard = ({ plan }: CurrentPlanProps) => {
 								plan.subscriptionStatus === 'cancelled'
 									? 'red'
 									: plan.subscriptionStatus === 'active'
-									? 'cyan'
-									: plan.subscriptionStatus === 'trialing'
-									? 'blue'
-									: 'gray'
+										? 'cyan'
+										: plan.subscriptionStatus === 'trialing'
+											? 'blue'
+											: 'gray'
 							}
 							p={2}
 							borderRadius="md"
@@ -84,23 +84,23 @@ export const CurrentPlanCard = ({ plan }: CurrentPlanProps) => {
 					<Text fontWeight="800" fontSize="24px" mb={2}>
 						{plan.name === 'Free'
 							? free[
-									plan.billingInterval === 'yearly'
-										? 'yearlyPrice'
-										: 'monthlyPrice'
-							  ]
+							plan.billingInterval === 'yearly'
+								? 'yearlyPrice'
+								: 'monthlyPrice'
+							]
 							: plan.name === 'Feedback'
-							? feedback[
+								? feedback[
+								plan.billingInterval === 'yearly'
+									? 'yearlyPrice'
+									: 'monthlyPrice'
+								]
+								: plan.name === 'Business'
+									? business[
 									plan.billingInterval === 'yearly'
 										? 'yearlyPrice'
 										: 'monthlyPrice'
-							  ]
-							: plan.name === 'Business'
-							? business[
-									plan.billingInterval === 'yearly'
-										? 'yearlyPrice'
-										: 'monthlyPrice'
-							  ]
-							: null}
+									]
+									: null}
 					</Text>
 					<Button
 						colorScheme="gray"
