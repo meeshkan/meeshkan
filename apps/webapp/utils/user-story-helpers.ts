@@ -190,17 +190,19 @@ export const handleDownload = ({
 	return;
 };
 
-export const updateStep = (
+export const updateStep = async (
 	commandID: string,
 	scriptCommand: ScriptCommand,
 	idToken: string
 ) => {
 	const client = eightBaseClient(idToken);
 
-	client.request(UPDATE_STEP, {
+	const request = await client.request(UPDATE_STEP, {
 		commandID,
 		scriptCommand,
 	});
+
+	return request;
 };
 
 export const createStep = (

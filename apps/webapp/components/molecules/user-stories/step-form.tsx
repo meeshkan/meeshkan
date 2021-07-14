@@ -146,12 +146,11 @@ export const StepForm = ({
 		setValue(scriptCommand?.value);
 		setDocumentURL(scriptCommand?.documentURL);
 		setDestinationXpath(scriptCommand?.destinationXpath);
-		setDestinationXCoordinate(scriptCommand?.destinationXCoordinate);
-		setDestinationYCoordinate(scriptCommand?.destinationYCoordinate);
-	}, [selectedStep]);
+		setDestinationXCoordinate(scriptCommand?.destinationXCoordinate || 0);
+		setDestinationYCoordinate(scriptCommand?.destinationYCoordinate || 0);
+	}, [selectedStep, userStory, mutateUserStory]);
 
 	const onSubmit = async (formData: ScriptCommand) => {
-		console.log(formData);
 		await setSaving(true);
 		await updateStep(
 			commandID,
