@@ -60,7 +60,7 @@ export const commandsToSteps = (
 			scriptCommand: ScriptCommand;
 		}
 	] = [];
-	commands.forEach((commandData) => {
+	commands?.forEach((commandData) => {
 		if (commandData.command === 'open') {
 			subSteps.push({
 				text: `Open ${commandData.value}.`,
@@ -148,34 +148,15 @@ export const commandsToSteps = (
 			});
 		}
 
-		// Is the source target and destination target the same? return a boolean
-		const isXSame =
-			commandData.command === 'drag and drop' &&
-			commandData.xCoordinate === commandData.destinationXCoordinate;
-
-		const isYSame =
-			commandData.command === 'drag and drop' &&
-			commandData.yCoordinate === commandData.destinationYCoordinate;
-
-		if (commandData.command === 'drag and drop' && !isYSame && !isXSame) {
+		if (commandData.command === 'drag and drop') {
 			subSteps.push({
 				text: `Drag ${HumanTag(commandData.tagName)}${NotNullText(
 					commandData.innerText
-				)} from ${commandData.xCoordinate}, ${
+				)} from x:${commandData.xCoordinate}, y:${
 					commandData.yCoordinate
-				}. Then drop at ${commandData.destinationYCoordinate}, ${
-					commandData.yCoordinate
+				}. Then drop at x:${commandData.destinationXCoordinate}, y:${
+					commandData.destinationYCoordinate
 				}.`,
-				sIndex: commandData.sIndex,
-				command: 'dragndrop',
-				tagName: HumanTag(commandData.tagName),
-				scriptCommand: commandData,
-			});
-		} else if (commandData.command === 'drag and drop' && isYSame && isXSame) {
-			subSteps.push({
-				text: `Click ${HumanTag(commandData.tagName)}${NotNullText(
-					commandData.innerText
-				)}.`,
 				sIndex: commandData.sIndex,
 				command: 'dragndrop',
 				tagName: HumanTag(commandData.tagName),
