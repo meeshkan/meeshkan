@@ -96,7 +96,7 @@ export const StepForm = ({
 	const { register, handleSubmit } = useForm<ScriptCommand>();
 	const [saving, setSaving] = useState(false);
 
-	const scriptCommand = userStory.scriptCommands.items.find(
+	const scriptCommand = userStory?.scriptCommands?.items?.find(
 		(scriptCommand) => scriptCommand.sIndex === selectedStep
 	);
 
@@ -148,11 +148,12 @@ export const StepForm = ({
 		setDestinationXpath(scriptCommand?.destinationXpath);
 		setDestinationXCoordinate(scriptCommand?.destinationXCoordinate || 0);
 		setDestinationYCoordinate(scriptCommand?.destinationYCoordinate || 0);
-	}, [selectedStep, userStory, mutateUserStory]);
+	}, [selectedStep, userStory]);
 
 	const onSubmit = async (formData: ScriptCommand) => {
 		await setSaving(true);
-		await updateStep(
+		const updatedUserStory = await updateStep(
+			userStory?.id,
 			commandID,
 			{
 				command: formData?.command,
@@ -189,6 +190,7 @@ export const StepForm = ({
 			},
 			idToken
 		);
+		mutateUserStory({ userStory: updatedUserStory });
 		await setSaving(false);
 	};
 

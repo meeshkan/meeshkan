@@ -191,6 +191,7 @@ export const handleDownload = ({
 };
 
 export const updateStep = async (
+	userStoryID: string,
 	commandID: string,
 	scriptCommand: ScriptCommand,
 	idToken: string
@@ -198,6 +199,7 @@ export const updateStep = async (
 	const client = eightBaseClient(idToken);
 
 	const request = await client.request(UPDATE_STEP, {
+		userStoryID,
 		commandID,
 		scriptCommand,
 	});

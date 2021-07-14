@@ -60,7 +60,7 @@ export const commandsToSteps = (
 			scriptCommand: ScriptCommand;
 		}
 	] = [];
-	commands.forEach((commandData) => {
+	commands?.forEach((commandData) => {
 		if (commandData.command === 'open') {
 			subSteps.push({
 				text: `Open ${commandData.value}.`,

@@ -357,11 +357,55 @@ export const UPDATE_REQUIRES_AUTHENTICATION = gql`
 
 export const UPDATE_STEP = gql`
 	mutation UPDATE_STEP(
+		$userStoryID: ID!
 		$commandID: ID!
 		$scriptCommand: ScriptCommandUpdateInput!
 	) {
-		scriptCommandUpdate(filter: { id: $commandID }, data: $scriptCommand) {
-			updatedAt
+		userStoryUpdate(
+			filter: { id: $userStoryID }
+			data: {
+				scriptCommands: {
+					update: { filter: { id: $commandID }, data: $scriptCommand }
+				}
+			}
+		) {
+			id
+			title
+			description
+			isTestCase
+			flows {
+				count
+			}
+			created
+			isExpected
+			significance
+			video {
+				downloadUrl
+				shareUrl
+			}
+			startEventId
+			endEventId
+			scriptCommands {
+				items {
+					command
+					sIndex
+					value
+					xCoordinate
+					yCoordinate
+					xpath
+					selector
+					className
+					tagName
+					tagId
+					innerText
+					altOrAriaText
+					scrollTop
+					scrollLeft
+					destinationXCoordinate
+					destinationYCoordinate
+					destinationTagName
+				}
+			}
 		}
 	}
 `;
