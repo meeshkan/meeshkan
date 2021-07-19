@@ -329,64 +329,64 @@ export const StepForm = ({
 
 					{(scriptCommand?.command === 'set viewport size' ||
 						scriptCommand?.command === 'drag and drop') && (
-						<FormControl isRequired>
-							<Box mb="-8px" ml={3}>
-								<Label text="Coordinates" />
-							</Box>
-							<Flex
-								borderLeft="1px solid"
-								borderRight="1px solid"
-								borderBottom="1px solid"
-								borderColor={groupBorderColor}
-								borderRadius="md"
-								p={4}
-							>
-								<Flex align="center" mr={4}>
-									<Label text="X" short />
-									<NumberInput
-										defaultValue={xCoordinate}
-										size="sm"
-										borderRadius="md"
-										fontFamily="mono"
-										inputMode="numeric"
-									>
-										<NumberInputField
-											type="number"
+							<FormControl isRequired>
+								<Box mb="-8px" ml={3}>
+									<Label text="Coordinates" />
+								</Box>
+								<Flex
+									borderLeft="1px solid"
+									borderRight="1px solid"
+									borderBottom="1px solid"
+									borderColor={groupBorderColor}
+									borderRadius="md"
+									p={4}
+								>
+									<Flex align="center" mr={4}>
+										<Label text="X" short />
+										<NumberInput
+											defaultValue={xCoordinate}
+											size="sm"
 											borderRadius="md"
-											name="xCoordinate"
-											ref={register}
-										/>
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
-								</Flex>
+											fontFamily="mono"
+											inputMode="numeric"
+										>
+											<NumberInputField
+												type="number"
+												borderRadius="md"
+												name="xCoordinate"
+												ref={register}
+											/>
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
 
-								<Flex align="center">
-									<Label text="Y" short />
-									<NumberInput
-										defaultValue={yCoordinate}
-										size="sm"
-										borderRadius="md"
-										fontFamily="mono"
-										inputMode="numeric"
-									>
-										<NumberInputField
-											type="number"
+									<Flex align="center">
+										<Label text="Y" short />
+										<NumberInput
+											defaultValue={yCoordinate}
+											size="sm"
 											borderRadius="md"
-											name="yCoordinate"
-											ref={register}
-										/>
-										<NumberInputStepper>
-											<NumberIncrementStepper />
-											<NumberDecrementStepper />
-										</NumberInputStepper>
-									</NumberInput>
+											fontFamily="mono"
+											inputMode="numeric"
+										>
+											<NumberInputField
+												type="number"
+												borderRadius="md"
+												name="yCoordinate"
+												ref={register}
+											/>
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
 								</Flex>
-							</Flex>
-						</FormControl>
-					)}
+							</FormControl>
+						)}
 
 					{scriptCommand?.command === 'scroll' && (
 						<FormControl>
@@ -449,18 +449,18 @@ export const StepForm = ({
 					{/* Value is only specified for open, and type events */}
 					{(scriptCommand?.command === 'open' ||
 						scriptCommand?.command === 'type') && (
-						<FormControl>
-							<Label text="Value" />
-							<Input
-								fontFamily="mono"
-								name="value"
-								defaultValue={value}
-								ref={register}
-								size="sm"
-								borderRadius="md"
-							/>
-						</FormControl>
-					)}
+							<FormControl>
+								<Label text="Value" />
+								<Input
+									fontFamily="mono"
+									name="value"
+									defaultValue={value}
+									ref={register}
+									size="sm"
+									borderRadius="md"
+								/>
+							</FormControl>
+						)}
 
 					{scriptCommand?.command === 'drag and drop' && (
 						<>
@@ -539,10 +539,10 @@ export const StepForm = ({
 					)}
 
 					{scriptCommand?.command === 'type' ||
-					scriptCommand?.command === 'click' ||
-					scriptCommand?.command === 'scroll' ||
-					scriptCommand?.command === 'drag and drop' ||
-					scriptCommand?.command === 'mouse over' ? (
+						scriptCommand?.command === 'click' ||
+						scriptCommand?.command === 'scroll' ||
+						scriptCommand?.command === 'drag and drop' ||
+						scriptCommand?.command === 'mouse over' ? (
 						<FormControl>
 							<Label text="Page" />
 							<Input

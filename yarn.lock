@@ -11389,6 +11389,11 @@ jake@^10.6.1:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
+javascript-playgrounds@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/javascript-playgrounds/-/javascript-playgrounds-1.1.4.tgz#f2d424229b8f40c9d8197e6128d97080dacc47e6"
+  integrity sha512-j4l6ywaVfTOnu+VJ2a47hNhOgCRsfNMZdEJ2OZ1Cvby59bDdVz5cZmwSN830oRI/zsT7IW4v0W8OC74lillbeg==
+
 jest-changed-files@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-26.6.2.tgz#f6198479e1cc66f22f9ae1e22acaa0b429c042d0"

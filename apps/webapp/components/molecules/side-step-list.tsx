@@ -54,6 +54,7 @@ import { UserStory } from '@frontend/meeshkan-types';
 import { createStep } from '../../utils/user-story-helpers';
 import { mutateCallback } from 'swr/dist/types';
 import { usePositionReorder } from '../../hooks/use-position-reorder';
+import Playground from 'javascript-playgrounds';
 
 type UserStoryResponse = {
 	userStory: UserStory;
@@ -280,37 +281,37 @@ const AddStep = ({
 							command === 'type' ||
 							command === 'mouse over' ||
 							command === 'drag and drop') && (
-							<FormControl isRequired>
-								<Label
-									text="Xpath"
-									tooltip="We recommend using the full xpath rather than the short as it's more specific."
-								/>
-								<Input
-									name="xpath"
-									ref={register}
-									size="sm"
-									borderRadius="md"
-									fontFamily="mono"
-									placeholder="/html/body/div[1]/div/nav/div/div[2]/div/div[2]/a[2]"
-								/>
-							</FormControl>
-						)}
+								<FormControl isRequired>
+									<Label
+										text="Xpath"
+										tooltip="We recommend using the full xpath rather than the short as it's more specific."
+									/>
+									<Input
+										name="xpath"
+										ref={register}
+										size="sm"
+										borderRadius="md"
+										fontFamily="mono"
+										placeholder="/html/body/div[1]/div/nav/div/div[2]/div/div[2]/a[2]"
+									/>
+								</FormControl>
+							)}
 
 						{(command === 'click' ||
 							command === 'type' ||
 							command === 'mouse over') && (
-							<FormControl>
-								<Label text="selector" optional />
-								<Input
-									name="selector"
-									ref={register}
-									size="sm"
-									borderRadius="md"
-									fontFamily="mono"
-									placeholder=".css-94mt2v:nth-child(2)"
-								/>
-							</FormControl>
-						)}
+								<FormControl>
+									<Label text="selector" optional />
+									<Input
+										name="selector"
+										ref={register}
+										size="sm"
+										borderRadius="md"
+										fontFamily="mono"
+										placeholder=".css-94mt2v:nth-child(2)"
+									/>
+								</FormControl>
+							)}
 
 						{(command === 'click' || command === 'mouse over') && (
 							<FormControl>
@@ -333,58 +334,58 @@ const AddStep = ({
 						{(command === 'set viewport size' ||
 							command === 'mouse over' ||
 							command === 'drag and drop') && (
-							<FormControl isRequired>
-								<Box mb="-8px" ml={3}>
-									<Label
-										text={
-											command === 'set viewport size' ? 'Size' : 'Coordinates'
-										}
-									/>
-								</Box>
-								<Flex
-									borderLeft="1px solid"
-									borderRight="1px solid"
-									borderBottom="1px solid"
-									borderColor={groupBorderColor}
-									borderRadius="md"
-									p={4}
-								>
-									<Flex align="center" mr={4}>
-										<Label text="X" short />
-										<NumberInput
-											name="xCoordinate"
-											ref={register}
-											size="sm"
-											borderRadius="md"
-											fontFamily="mono"
-										>
-											<NumberInputField borderRadius="md" />
-											<NumberInputStepper>
-												<NumberIncrementStepper />
-												<NumberDecrementStepper />
-											</NumberInputStepper>
-										</NumberInput>
-									</Flex>
+								<FormControl isRequired>
+									<Box mb="-8px" ml={3}>
+										<Label
+											text={
+												command === 'set viewport size' ? 'Size' : 'Coordinates'
+											}
+										/>
+									</Box>
+									<Flex
+										borderLeft="1px solid"
+										borderRight="1px solid"
+										borderBottom="1px solid"
+										borderColor={groupBorderColor}
+										borderRadius="md"
+										p={4}
+									>
+										<Flex align="center" mr={4}>
+											<Label text="X" short />
+											<NumberInput
+												name="xCoordinate"
+												ref={register}
+												size="sm"
+												borderRadius="md"
+												fontFamily="mono"
+											>
+												<NumberInputField borderRadius="md" />
+												<NumberInputStepper>
+													<NumberIncrementStepper />
+													<NumberDecrementStepper />
+												</NumberInputStepper>
+											</NumberInput>
+										</Flex>
 
-									<Flex align="center">
-										<Label text="Y" short />
-										<NumberInput
-											name="yCoordinate"
-											ref={register}
-											size="sm"
-											borderRadius="md"
-											fontFamily="mono"
-										>
-											<NumberInputField borderRadius="md" />
-											<NumberInputStepper>
-												<NumberIncrementStepper />
-												<NumberDecrementStepper />
-											</NumberInputStepper>
-										</NumberInput>
+										<Flex align="center">
+											<Label text="Y" short />
+											<NumberInput
+												name="yCoordinate"
+												ref={register}
+												size="sm"
+												borderRadius="md"
+												fontFamily="mono"
+											>
+												<NumberInputField borderRadius="md" />
+												<NumberInputStepper>
+													<NumberIncrementStepper />
+													<NumberDecrementStepper />
+												</NumberInputStepper>
+											</NumberInput>
+										</Flex>
 									</Flex>
-								</Flex>
-							</FormControl>
-						)}
+								</FormControl>
+							)}
 
 						{command === 'scroll' && (
 							<FormControl isRequired>
@@ -460,8 +461,8 @@ const AddStep = ({
 										command === 'open'
 											? 'https://example.com'
 											: command === 'type'
-											? 'contact@meeshkan.com'
-											: null
+												? 'contact@meeshkan.com'
+												: null
 									}
 								/>
 							</FormControl>
@@ -540,6 +541,7 @@ const AddStep = ({
 									text="JavaScript"
 									tooltip="Any valid JavaScript saved in this field will be executed during a test run."
 								/>
+								<Playground style={{ width: 608, height: '100%' }} />
 								<Textarea
 									fontFamily="mono"
 									name="value"
@@ -554,22 +556,22 @@ const AddStep = ({
 						{(command === 'click' ||
 							command === 'type' ||
 							command === 'mouse over') && (
-							<FormControl>
-								<Label
-									text="Page"
-									tooltip="Which page does this happen on?"
-									optional
-								/>
-								<Input
-									fontFamily="mono"
-									name="documentURL"
-									ref={register}
-									size="sm"
-									borderRadius="md"
-									placeholder="https://example.com/page-2"
-								/>
-							</FormControl>
-						)}
+								<FormControl>
+									<Label
+										text="Page"
+										tooltip="Which page does this happen on?"
+										optional
+									/>
+									<Input
+										fontFamily="mono"
+										name="documentURL"
+										ref={register}
+										size="sm"
+										borderRadius="md"
+										placeholder="https://example.com/page-2"
+									/>
+								</FormControl>
+							)}
 
 						<FormControl>
 							<Checkbox defaultIsChecked isDisabled>
@@ -583,7 +585,7 @@ const AddStep = ({
 
 					<ModalFooter px={6} pb={6} mt={8}>
 						<Button colorScheme="gray" mr={6} onClick={onClose}>
-							cancel
+							Cancel
 						</Button>
 						<LightMode>
 							<Button
