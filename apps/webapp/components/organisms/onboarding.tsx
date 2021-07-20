@@ -1,22 +1,24 @@
-import { useState } from 'react';
-import {
-	Heading,
-	Text,
-	Box,
-	Flex,
-	Button,
-} from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Heading, Text, Box, Flex, Button } from '@chakra-ui/react';
 import CreateProjectForm from '../molecules/create-project-form';
 import UpdateProfileForm from '../molecules/update-profile-form';
+import { CreateTestCases } from '../molecules/create-test-cases';
 
 const Onboarding = () => {
-	const [step, setStep] = useState<1 | 2>(1);
+	const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 	const [loading, setLoading] = useState(false);
+	const [projectName, setProjectName] = useState(null);
 
 	const isFirstStep = step === 1;
-	const title = isFirstStep ? 'Set up your profile' : 'Create your first project';
+	const title = isFirstStep
+		? 'Set up your profile'
+		: step === 2
+		? 'Create your first project'
+		: step === 3
+		? 'How would you like to create Test Cases?'
+		: 'At what cadence would you like test runs to happen?';
 	const backButtonVisibility = isFirstStep ? 'hidden' : 'visible';
-	const submitButtonText = isFirstStep ? 'Next step' : 'Create project'
+	const submitButtonText = isFirstStep ? 'Next step' : 'Create project';
 
 	return (
 		<Flex
@@ -36,9 +38,19 @@ const Onboarding = () => {
 						<UpdateProfileForm
 							setLoading={setLoading}
 							setStep={setStep}
+							step={step}
 						/>
+					) : step === 2 ? (
+						<CreateProjectForm
+							setLoading={setLoading}
+							setProjectName={setProjectName}
+							setStep={setStep}
+							step={step}
+						/>
+					) : step === 3 ? (
+						<CreateTestCases />
 					) : (
-						<CreateProjectForm setLoading={setLoading} />
+						<Box>Test run cadence</Box>
 					)}
 				</Box>
 				<Flex justify="space-between" align="center" w="100%">

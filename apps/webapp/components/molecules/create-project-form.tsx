@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import {
 	FormControl,
 	FormLabel,
@@ -25,12 +24,17 @@ type ProjectFormInputs = {
 
 type CreateProjectFormProps = {
 	setLoading: (value: boolean) => void;
+	setProjectName: (value: string) => void;
 	setStep?: (step: 1 | 2 | 3) => void;
 	step?: 1 | 2 | 3;
 };
 
-const CreateProjectForm = ({ setLoading, setStep, step }: CreateProjectFormProps) => {
-	const router = useRouter();
+const CreateProjectForm = ({
+	setLoading,
+	setProjectName,
+	setStep,
+	step,
+}: CreateProjectFormProps) => {
 	const user = useContext(UserContext);
 	const { idToken, mutate: mutateUser, projects } = user;
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
@@ -54,6 +58,7 @@ const CreateProjectForm = ({ setLoading, setStep, step }: CreateProjectFormProps
 		}
 
 		if (setStep) {
+			// @ts-ignore
 			setStep(step + 1);
 		}
 
@@ -63,7 +68,7 @@ const CreateProjectForm = ({ setLoading, setStep, step }: CreateProjectFormProps
 		await mutateUser({ ...user, projects });
 		setLoading(false);
 
-		router.push(`/${createSlug(formData.name)}`);
+		setProjectName(createSlug(formData.name));
 	};
 
 	return (

@@ -26,13 +26,15 @@ const jobTitles = ['Product manager', 'CTO', 'Other'];
 
 type UpdateProfileFormProps = {
 	setLoading: (value: boolean) => void;
-	setStep?: (step: 1 | 2) => void;
+	setStep?: (step: 1 | 2 | 3) => void;
+	step?: 1 | 2 | 3;
 	formId?: string;
 };
 
 const UpdateProfileForm = ({
 	setLoading,
 	setStep,
+	step,
 	formId = 'form',
 }: UpdateProfileFormProps) => {
 	const [error, setError] = useState('');
@@ -65,7 +67,8 @@ const UpdateProfileForm = ({
 		}
 
 		if (setStep) {
-			setStep(2);
+			// @ts-ignore
+			setStep(step + 1);
 		}
 
 		const { firstName, lastName, avatar: newAvatar } = data.userUpdate;
