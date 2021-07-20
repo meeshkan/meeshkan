@@ -10,7 +10,7 @@ import { CopyIcon } from '@frontend/chakra-theme';
 import { UserContext } from '../../utils/user';
 import { useClipboard } from '../../hooks/use-clipboard';
 
-const ScriptTagInput = () => {
+const ScriptTagInput = ({ projectID }: { projectID?: string }) => {
 	const { project } = useContext(UserContext);
 	const inputBackgroundColor = useColorModeValue('gray.100', 'gray.800');
 
@@ -18,9 +18,12 @@ const ScriptTagInput = () => {
 	if (project) {
 		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?client_id=${project.id}"></script>`;
 	}
+	if (projectID) {
+		scriptTag = `<script async src="https://recorder.meeshkan.com/record.js?client_id=${projectID}"></script>`;
+	}
 
 	const { onCopy } = useClipboard({
-		toastTitle: 'This project\'s script was copied to clipboard.',
+		toastTitle: "This project's script was copied to clipboard.",
 		toastMessage: 'Paste it within the `head` of your app.',
 		text: scriptTag,
 		status: 'info',

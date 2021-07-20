@@ -96,7 +96,7 @@ export const StepForm = ({
 	const { register, handleSubmit } = useForm<ScriptCommand>();
 	const [saving, setSaving] = useState(false);
 
-	const scriptCommand = userStory.scriptCommands.items.find(
+	const scriptCommand = userStory?.scriptCommands?.items?.find(
 		(scriptCommand) => scriptCommand.sIndex === selectedStep
 	);
 
@@ -123,6 +123,15 @@ export const StepForm = ({
 	const [documentURL, setDocumentURL] = useState<string | null>(
 		scriptCommand?.documentURL
 	);
+	const [destinationXpath, setDestinationXpath] = useState<string | null>(
+		scriptCommand?.destinationXpath
+	);
+	const [destinationXCoordinate, setDestinationXCoordinate] = useState<
+		number | null
+	>(scriptCommand?.destinationXCoordinate);
+	const [destinationYCoordinate, setDestinationYCoordinate] = useState<
+		number | null
+	>(scriptCommand?.destinationYCoordinate);
 
 	// Keep the values up to date when selecting a new step
 	useEffect(() => {
@@ -136,11 +145,52 @@ export const StepForm = ({
 		setScrollLeft(scriptCommand?.scrollLeft || 0);
 		setValue(scriptCommand?.value);
 		setDocumentURL(scriptCommand?.documentURL);
-	}, [selectedStep]);
+		setDestinationXpath(scriptCommand?.destinationXpath);
+		setDestinationXCoordinate(scriptCommand?.destinationXCoordinate || 0);
+		setDestinationYCoordinate(scriptCommand?.destinationYCoordinate || 0);
+	}, [selectedStep, userStory]);
 
 	const onSubmit = async (formData: ScriptCommand) => {
 		await setSaving(true);
-		await updateStep(commandID, formData, idToken);
+		const updatedUserStory = await updateStep(
+			userStory?.id,
+			commandID,
+			{
+				command: formData?.command,
+				xpath: formData?.xpath,
+				selector: formData?.selector,
+				xCoordinate:
+					typeof formData?.xCoordinate === 'string'
+						? parseInt(formData.xCoordinate)
+						: formData?.xCoordinate,
+				yCoordinate:
+					typeof formData?.yCoordinate === 'string'
+						? parseInt(formData.yCoordinate)
+						: formData?.yCoordinate,
+				documentURL: formData?.documentURL,
+				value: formData?.value,
+				scrollTop:
+					typeof formData?.scrollTop === 'string'
+						? parseInt(formData.scrollTop)
+						: formData?.scrollTop,
+				scrollLeft:
+					typeof formData?.scrollLeft === 'string'
+						? parseInt(formData.scrollLeft)
+						: formData?.scrollLeft,
+				destinationXpath: formData?.destinationXpath,
+				destinationXCoordinate:
+					typeof formData?.destinationXCoordinate === 'string'
+						? parseInt(formData.destinationXCoordinate)
+						: formData?.destinationXCoordinate,
+				destinationYCoordinate:
+					typeof formData?.destinationYCoordinate === 'string'
+						? parseInt(formData?.destinationYCoordinate)
+						: formData?.destinationYCoordinate,
+				innerText: formData?.innerText,
+			},
+			idToken
+		);
+		mutateUserStory({ userStory: updatedUserStory });
 		await setSaving(false);
 	};
 
@@ -277,8 +327,9 @@ export const StepForm = ({
 							</>
 						)}
 
-					{scriptCommand?.command === 'set viewport size' && (
-						<FormControl>
+					{(scriptCommand?.command === 'set viewport size' ||
+						scriptCommand?.command === 'drag and drop') && (
+						<FormControl isRequired>
 							<Box mb="-8px" ml={3}>
 								<Label text="Coordinates" />
 							</Box>
@@ -293,14 +344,18 @@ export const StepForm = ({
 								<Flex align="center" mr={4}>
 									<Label text="X" short />
 									<NumberInput
-										name="xCoordinate"
 										defaultValue={xCoordinate}
-										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
+										inputMode="numeric"
 									>
-										<NumberInputField borderRadius="md" />
+										<NumberInputField
+											type="number"
+											borderRadius="md"
+											name="xCoordinate"
+											ref={register}
+										/>
 										<NumberInputStepper>
 											<NumberIncrementStepper />
 											<NumberDecrementStepper />
@@ -311,14 +366,18 @@ export const StepForm = ({
 								<Flex align="center">
 									<Label text="Y" short />
 									<NumberInput
-										name="yCoordinate"
 										defaultValue={yCoordinate}
-										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
+										inputMode="numeric"
 									>
-										<NumberInputField borderRadius="md" />
+										<NumberInputField
+											type="number"
+											borderRadius="md"
+											name="yCoordinate"
+											ref={register}
+										/>
 										<NumberInputStepper>
 											<NumberIncrementStepper />
 											<NumberDecrementStepper />
@@ -345,14 +404,17 @@ export const StepForm = ({
 								<Flex align="center" mr={4}>
 									<Label text="Top" short />
 									<NumberInput
-										name="scrollTop"
 										defaultValue={scrollTop}
-										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
+										inputMode="numeric"
 									>
-										<NumberInputField borderRadius="md" />
+										<NumberInputField
+											borderRadius="md"
+											name="scrollTop"
+											ref={register}
+										/>
 										<NumberInputStepper>
 											<NumberIncrementStepper />
 											<NumberDecrementStepper />
@@ -363,14 +425,17 @@ export const StepForm = ({
 								<Flex align="center">
 									<Label text="Left" short />
 									<NumberInput
-										name="scrollLeft"
 										defaultValue={scrollLeft}
-										ref={register}
 										size="sm"
 										borderRadius="md"
 										fontFamily="mono"
+										inputMode="numeric"
 									>
-										<NumberInputField borderRadius="md" />
+										<NumberInputField
+											borderRadius="md"
+											name="scrollLeft"
+											ref={register}
+										/>
 										<NumberInputStepper>
 											<NumberIncrementStepper />
 											<NumberDecrementStepper />
@@ -395,6 +460,82 @@ export const StepForm = ({
 								borderRadius="md"
 							/>
 						</FormControl>
+					)}
+
+					{scriptCommand?.command === 'drag and drop' && (
+						<>
+							<FormControl>
+								<Label
+									text="Destination xpath"
+									tooltip="What is the structure when the element is dropped"
+								/>
+								<Input
+									name="destinationXpath"
+									defaultValue={destinationXpath}
+									ref={register}
+									size="sm"
+									borderRadius="md"
+									fontFamily="mono"
+									placeholder="/html/body/div[1]/div/nav/div/div[2]/div/div[2]/a[2]"
+								/>
+							</FormControl>
+
+							<FormControl isRequired>
+								<Box mb="-8px" ml={3}>
+									<Label text="Destination coordinates" />
+								</Box>
+								<Flex
+									borderLeft="1px solid"
+									borderRight="1px solid"
+									borderBottom="1px solid"
+									borderColor={groupBorderColor}
+									borderRadius="md"
+									p={4}
+								>
+									<Flex align="center" mr={4}>
+										<Label text="X" short />
+										<NumberInput
+											defaultValue={destinationXCoordinate}
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+											inputMode="numeric"
+										>
+											<NumberInputField
+												borderRadius="md"
+												name="destinationXCoordinate"
+												ref={register}
+											/>
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+
+									<Flex align="center">
+										<Label text="Y" short />
+										<NumberInput
+											size="sm"
+											borderRadius="md"
+											fontFamily="mono"
+											defaultValue={destinationYCoordinate}
+											inputMode="numeric"
+										>
+											<NumberInputField
+												name="destinationYCoordinate"
+												ref={register}
+												borderRadius="md"
+											/>
+											<NumberInputStepper>
+												<NumberIncrementStepper />
+												<NumberDecrementStepper />
+											</NumberInputStepper>
+										</NumberInput>
+									</Flex>
+								</Flex>
+							</FormControl>
+						</>
 					)}
 
 					{scriptCommand?.command === 'type' ||
