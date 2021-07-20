@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import { useRouter } from 'next/router';
 import {
 	FormControl,
 	FormLabel,
@@ -25,10 +24,21 @@ type ProjectFormInputs = {
 
 type CreateProjectFormProps = {
 	setLoading: (value: boolean) => void;
+	setProjectName: (value: string) => void;
+	setProjectID: (value: string) => void;
+	setClientSecret: (value: string) => void;
+	setStep?: (step: 1 | 2 | 3) => void;
+	step?: 1 | 2 | 3;
 };
 
-const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
-	const router = useRouter();
+const CreateProjectForm = ({
+	setLoading,
+	setProjectName,
+	setProjectID,
+	setClientSecret,
+	setStep,
+	step,
+}: CreateProjectFormProps) => {
 	const user = useContext(UserContext);
 	const { idToken, mutate: mutateUser, projects } = user;
 	const { register, handleSubmit } = useForm<ProjectFormInputs>();
@@ -51,13 +61,23 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 			return;
 		}
 
+		setProjectID(data?.userUpdate?.projects?.items[0]?.id);
+		setClientSecret(
+			data?.userUpdate?.projects?.items[0]?.configuration?.clientSecret
+		);
+
+		if (setStep) {
+			// @ts-ignore
+			setStep(step + 1);
+		}
+
 		const [newProject] = data.userUpdate.projects.items;
 		projects.push(newProject);
 		mixpanel.track('Create new project', { projectName: newProject.name });
 		await mutateUser({ ...user, projects });
 		setLoading(false);
 
-		router.push(`/${createSlug(formData.name)}`);
+		setProjectName(createSlug(formData.name));
 	};
 
 	return (
