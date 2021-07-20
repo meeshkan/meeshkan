@@ -56,6 +56,7 @@ const CreateProject = () => {
 				<Button
 					mt={4}
 					colorScheme="gray"
+					// @ts-ignore
 					onClick={() => (step === 1 ? Router.back() : setStep(step - 1))}
 				>
 					Back

@@ -1,12 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {
-	Box,
-	Text,
-	Heading,
-	useColorModeValue,
-	FormControl,
-	Stack,
-} from '@chakra-ui/react';
+import { Box, Text, Heading, FormControl, Stack } from '@chakra-ui/react';
 import { RadioGroup } from '../atoms/radio-card';
 import CIDocumentationCard from '../../components/organisms/ci-documentation';
 import SegmentedControl from './segmented-control';

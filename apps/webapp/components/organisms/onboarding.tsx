@@ -3,11 +3,14 @@ import { Heading, Text, Box, Flex, Button } from '@chakra-ui/react';
 import CreateProjectForm from '../molecules/create-project-form';
 import UpdateProfileForm from '../molecules/update-profile-form';
 import { CreateTestCases } from '../molecules/create-test-cases';
+import { TestRunCadence } from '../molecules/test-run-cadence';
 
 const Onboarding = () => {
 	const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 	const [loading, setLoading] = useState(false);
 	const [projectName, setProjectName] = useState(null);
+	const [projectID, setProjectID] = useState(null);
+	const [clientSecret, setClientSecret] = useState(null);
 
 	const isFirstStep = step === 1;
 	const title = isFirstStep
@@ -18,7 +21,7 @@ const Onboarding = () => {
 		? 'How would you like to create Test Cases?'
 		: 'At what cadence would you like test runs to happen?';
 	const backButtonVisibility = isFirstStep ? 'hidden' : 'visible';
-	const submitButtonText = isFirstStep ? 'Next step' : 'Create project';
+	const submitButtonText = step === 4 ? 'Finish' : 'Next step';
 
 	return (
 		<Flex
@@ -46,11 +49,13 @@ const Onboarding = () => {
 							setProjectName={setProjectName}
 							setStep={setStep}
 							step={step}
+							setProjectID={setProjectID}
+							setClientSecret={setClientSecret}
 						/>
 					) : step === 3 ? (
-						<CreateTestCases />
+						<CreateTestCases projectID={projectID} />
 					) : (
-						<Box>Test run cadence</Box>
+						<TestRunCadence projectID={projectID} clientSecret={clientSecret} />
 					)}
 				</Box>
 				<Flex justify="space-between" align="center" w="100%">
@@ -62,10 +67,21 @@ const Onboarding = () => {
 					>
 						Back
 					</Button>
-					<Text color="gray.500">Step {step} of 2</Text>
-					<Button mt={4} type="submit" isLoading={loading} form="form">
-						{submitButtonText}
-					</Button>
+					<Text color="gray.500">Step {step} of 4</Text>
+					{step === 1 ? (
+						<Button mt={4} type="submit" isLoading={loading} form="form">
+							{submitButtonText}
+						</Button>
+					) : (
+						<Button
+							onClick={() =>
+								// @ts-ignore
+								step === 4 ? router.push(projectName) : setStep(step + 1)
+							}
+						>
+							{submitButtonText}
+						</Button>
+					)}
 				</Flex>
 			</>
 		</Flex>
