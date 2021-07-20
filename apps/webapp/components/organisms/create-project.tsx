@@ -9,6 +9,7 @@ const CreateProject = () => {
 	const [step, setStep] = useState<1 | 2 | 3>(1);
 	const [loading, setLoading] = useState(false);
 	const [projectName, setProjectName] = useState(null);
+	const [projectID, setProjectID] = useState(null);
 
 	const router = useRouter();
 
@@ -40,9 +41,10 @@ const CreateProject = () => {
 						setProjectName={setProjectName}
 						setStep={setStep}
 						step={step}
+						setProjectID={setProjectID}
 					/>
 				) : step === 2 ? (
-					<CreateTestCases />
+					<CreateTestCases projectID={projectID} />
 				) : (
 					<Box>Test run cadence</Box>
 				)}

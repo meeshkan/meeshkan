@@ -25,6 +25,7 @@ type ProjectFormInputs = {
 type CreateProjectFormProps = {
 	setLoading: (value: boolean) => void;
 	setProjectName: (value: string) => void;
+	setProjectID: (value: string) => void;
 	setStep?: (step: 1 | 2 | 3) => void;
 	step?: 1 | 2 | 3;
 };
@@ -32,6 +33,7 @@ type CreateProjectFormProps = {
 const CreateProjectForm = ({
 	setLoading,
 	setProjectName,
+	setProjectID,
 	setStep,
 	step,
 }: CreateProjectFormProps) => {
@@ -56,6 +58,9 @@ const CreateProjectForm = ({
 			setLoading(false);
 			return;
 		}
+
+		console.log(data, data?.userUpdate?.projects?.items[0]?.id);
+		setProjectID(data?.userUpdate?.projects?.items[0]?.id);
 
 		if (setStep) {
 			// @ts-ignore

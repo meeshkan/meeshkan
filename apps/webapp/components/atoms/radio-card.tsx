@@ -19,7 +19,7 @@ const RadioCard = (props: RadioProps) => {
 	const transparentBlue = transparentize('blue.200', 0.12);
 	const blueAccent = useColorModeValue('blue.600', 'blue.400');
 
-	console.log(props);
+	// console.log(props);
 
 	return (
 		<Box as="label" w="full">
@@ -39,7 +39,7 @@ const RadioCard = (props: RadioProps) => {
 					borderColor: blueAccent,
 				}}
 				p={4}
-				h="144px"
+				h="150px"
 				w="full"
 			>
 				{props.children}
@@ -65,15 +65,16 @@ const RadioCard = (props: RadioProps) => {
 
 type RadioGroupProps = {
 	options: string[];
+	setRadio: (value: undefined) => void;
 };
 
-export const RadioGroup = ({ options }: RadioGroupProps) => {
+export const RadioGroup = ({ options, setRadio }: RadioGroupProps) => {
 	const headingColor = useColorModeValue('gray.900', 'white');
 
 	const { getRootProps, getRadioProps } = useRadioGroup({
 		name: 'radioGroup',
 		defaultValue: options[0],
-		onChange: console.log,
+		onChange: setRadio,
 	});
 
 	const group = getRootProps();
@@ -100,11 +101,6 @@ export const RadioGroup = ({ options }: RadioGroupProps) => {
 							<Text fontSize="xl" fontWeight="800" color={headingColor}>
 								{value}
 							</Text>
-							{/* {subTitle && (
-								<Text color={subTextColor} textAlign="center">
-									{subTitle}
-								</Text>
-							)} */}
 						</>
 					</RadioCard>
 				);
