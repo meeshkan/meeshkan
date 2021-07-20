@@ -195,6 +195,9 @@ export const CREATE_PROJECT = gql`
 						downloadUrl
 						shareUrl
 					}
+					configuration {
+						clientSecret
+					}
 				}
 			}
 		}

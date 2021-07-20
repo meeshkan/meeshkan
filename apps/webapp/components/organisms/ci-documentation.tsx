@@ -13,37 +13,44 @@ import {
 	Text,
 	Link,
 } from '@chakra-ui/react';
-import {
-	GitLabIcon,
-	GitHubIcon,
-	BitbucketIcon,
-} from '@frontend/chakra-theme';
+import { GitLabIcon, GitHubIcon, BitbucketIcon } from '@frontend/chakra-theme';
 import { UserContext } from 'apps/webapp/utils/user';
 import ClientSecretInput from '../molecules/client-secret-input';
 
-const CIDocumentation = () => {
-	const { project } = useContext(UserContext)
+const CIDocumentation = ({
+	manualClientSecret,
+}: {
+	manualClientSecret?: string;
+}) => {
+	const { project } = useContext(UserContext);
 	return (
 		<>
 			<Box mx={2} mb={4} lineHeight="tall">
 				<Text>
 					Use the{' '}
-					<Link isExternal href="https://hub.docker.com/r/meeshkan/test-trigger" >
-						<Code px={2} py={1} borderRadius="md" fontWeight='700'>meeshkan/test-trigger</Code> Docker container
-					</Link>
-					{' '}to trigger Meeshkan test runs for your project within you CI pipeline.
+					<Link
+						isExternal
+						href="https://hub.docker.com/r/meeshkan/test-trigger"
+					>
+						<Code px={2} py={1} borderRadius="md" fontWeight="700">
+							meeshkan/test-trigger
+						</Code>{' '}
+						Docker container
+					</Link>{' '}
+					to trigger Meeshkan test runs for your project within your CI
+					pipeline.
 				</Text>
 				<Heading fontSize="18px" fontWeight="500" mt={4} mb={2}>
 					Client secret
 				</Heading>
-				<ClientSecretInput />
+				<ClientSecretInput manualClientSecret={manualClientSecret} />
 				<Text mt={4}>
-					Below are working examples for each of the popular CI providers that you can use as a reference:
+					Below are working examples for each of the popular CI providers that
+					you can use as a reference:
 				</Text>
-
 			</Box>
 			<Accordion allowMultiple>
-				<AccordionItem border='none'>
+				<AccordionItem border="none">
 					<Heading as="h2">
 						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -55,8 +62,7 @@ const CIDocumentation = () => {
 					</Heading>
 					<AccordionPanel py={4} lineHeight="tall">
 						<Code display="block" whiteSpace="pre" p={5} rounded="lg">
-							{
-								`# .github/workflows/meeshkan.yml
+							{`# .github/workflows/meeshkan.yml
 name: Run Meeshkan tests
 
 on: pull_request
@@ -80,13 +86,12 @@ jobs:
         with:
           client_id: \${{ secrets.MEESHKAN_CLIENT_ID }}
           client_secret: \${{ secrets.MEESHKAN_CLIENT_SECRET }}
-          url: \${{ steps.wait-for-preview.outputs.url }}`
-							}
+          url: \${{ steps.wait-for-preview.outputs.url }}`}
 						</Code>
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem border='none'>
+				<AccordionItem border="none">
 					<Heading as="h2">
 						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -99,14 +104,11 @@ jobs:
 					<AccordionPanel py={4} lineHeight="tall">
 						<Stack spacing={4}>
 							<Code display="block" whiteSpace="pre" p={5} rounded="lg">
-								{
-									`# config.toml
-privileged = true`
-								}
+								{`# config.toml
+privileged = true`}
 							</Code>
 							<Code display="block" whiteSpace="pre" p={5} rounded="lg">
-								{
-									`# .gitlab-ci.yml
+								{`# .gitlab-ci.yml
 stages:
   - deploy
   - test
@@ -142,15 +144,16 @@ meeshkan-tests:
       -e CI_PROVIDER="gitlab"
       -e MEESHKAN_URL=$(cat preview-deployment-url.txt)
       -e MEESHKAN_CLIENT_ID="${project?.id || `$MEESHKAN_CLIENT_ID`}"
-      -e MEESHKAN_CLIENT_SECRET="${project?.configuration?.clientSecret || `$MEESHKAN_CLIENT_SECRET`}"
-      meeshkan/test-trigger:latest`
-								}
+      -e MEESHKAN_CLIENT_SECRET="${
+				project?.configuration?.clientSecret || `$MEESHKAN_CLIENT_SECRET`
+			}"
+      meeshkan/test-trigger:latest`}
 							</Code>
 						</Stack>
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem border='none'>
+				<AccordionItem border="none">
 					<Heading as="h2">
 						<AccordionButton py={4} _hover={{ color: 'blue.500' }}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -162,8 +165,7 @@ meeshkan-tests:
 					</Heading>
 					<AccordionPanel py={4} lineHeight="tall">
 						<Code display="block" whiteSpace="pre" p={5} rounded="lg">
-							{
-								`# bitbucket-pipelines.yml
+							{`# bitbucket-pipelines.yml
 image: node:latest
 
 pipelines:
@@ -189,8 +191,10 @@ pipelines:
               CI_PROVIDER: "bitbucket"
               MEESHKAN_URL: $(cat preview-deployment-url.txt)
               MEESHKAN_CLIENT_ID: "${project?.id || `$MEESHKAN_CLIENT_ID`}"
-              MEESHKAN_CLIENT_SECRET: "${project?.configuration?.clientSecret || `$MEESHKAN_CLIENT_SECRET`}"`
-							}
+              MEESHKAN_CLIENT_SECRET: "${
+								project?.configuration?.clientSecret ||
+								`$MEESHKAN_CLIENT_SECRET`
+							}"`}
 						</Code>
 					</AccordionPanel>
 				</AccordionItem>

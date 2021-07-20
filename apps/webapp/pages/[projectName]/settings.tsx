@@ -543,8 +543,6 @@ const Settings = () => {
 						Script tag{' '}
 						<Box
 							as={project?.hasReceivedEvents ? 'span' : ChakraLink}
-							// _hover={{ textDecoration: 'underline' }}
-							// cursor="pointer"
 							fontSize="md"
 							ml={4}
 							fontWeight="normal"
@@ -566,20 +564,6 @@ const Settings = () => {
 					</Heading>
 					<Flex align="center" justify="space-between">
 						<ScriptTagInput />
-						{/* <Button
-							onClick={handleScriptVerification}
-							isDisabled={
-								project?.hasReceivedEvents ||
-								!project?.configuration?.productionURL
-							}
-							variant="subtle"
-							colorScheme={project?.hasReceivedEvents ? 'cyan' : 'blue'}
-							ml={4}
-						>
-							{project?.hasReceivedEvents
-								? 'Script Verified'
-								: 'Verify Installation'}
-						</Button> */}
 					</Flex>
 
 					<Spacer h={8} />

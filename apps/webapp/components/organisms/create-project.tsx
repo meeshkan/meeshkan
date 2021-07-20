@@ -4,12 +4,14 @@ import { Heading, Box, Flex, Button, Text } from '@chakra-ui/react';
 import Card from '../atoms/card';
 import CreateProjectForm from '../molecules/create-project-form';
 import { CreateTestCases } from '../molecules/create-test-cases';
+import { TestRunCadence } from '../molecules/test-run-cadence';
 
 const CreateProject = () => {
 	const [step, setStep] = useState<1 | 2 | 3>(1);
 	const [loading, setLoading] = useState(false);
 	const [projectName, setProjectName] = useState(null);
 	const [projectID, setProjectID] = useState(null);
+	const [clientSecret, setClientSecret] = useState(null);
 
 	const router = useRouter();
 
@@ -42,15 +44,20 @@ const CreateProject = () => {
 						setStep={setStep}
 						step={step}
 						setProjectID={setProjectID}
+						setClientSecret={setClientSecret}
 					/>
 				) : step === 2 ? (
 					<CreateTestCases projectID={projectID} />
 				) : (
-					<Box>Test run cadence</Box>
+					<TestRunCadence projectID={projectID} clientSecret={clientSecret} />
 				)}
 			</Box>
 			<Flex justify="space-between" align="center" w="100%">
-				<Button mt={4} colorScheme="gray" onClick={() => Router.back()}>
+				<Button
+					mt={4}
+					colorScheme="gray"
+					onClick={() => (step === 1 ? Router.back() : setStep(step - 1))}
+				>
 					Back
 				</Button>
 				<Text color="gray.500">Step {step} of 3</Text>

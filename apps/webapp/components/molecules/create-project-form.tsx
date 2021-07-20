@@ -26,6 +26,7 @@ type CreateProjectFormProps = {
 	setLoading: (value: boolean) => void;
 	setProjectName: (value: string) => void;
 	setProjectID: (value: string) => void;
+	setClientSecret: (value: string) => void;
 	setStep?: (step: 1 | 2 | 3) => void;
 	step?: 1 | 2 | 3;
 };
@@ -34,6 +35,7 @@ const CreateProjectForm = ({
 	setLoading,
 	setProjectName,
 	setProjectID,
+	setClientSecret,
 	setStep,
 	step,
 }: CreateProjectFormProps) => {
@@ -59,8 +61,10 @@ const CreateProjectForm = ({
 			return;
 		}
 
-		console.log(data, data?.userUpdate?.projects?.items[0]?.id);
 		setProjectID(data?.userUpdate?.projects?.items[0]?.id);
+		setClientSecret(
+			data?.userUpdate?.projects?.items[0]?.configuration?.clientSecret
+		);
 
 		if (setStep) {
 			// @ts-ignore

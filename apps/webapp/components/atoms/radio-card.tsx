@@ -9,7 +9,14 @@ import {
 	useRadioGroup,
 	useColorModeValue,
 } from '@chakra-ui/react';
-import { ChromeLogoIcon, MeeshkanIcon } from '@frontend/chakra-theme';
+import {
+	BitbucketIcon,
+	ChromeLogoIcon,
+	CircleArrowsIcon,
+	GitHubIcon,
+	GitLabIcon,
+	MeeshkanIcon,
+} from '@frontend/chakra-theme';
 import { transparentize } from '@chakra-ui/theme-tools';
 
 const RadioCard = (props: RadioProps) => {
@@ -90,7 +97,17 @@ export const RadioGroup = ({ options, setRadio }: RadioGroupProps) => {
 							{value === 'Manually' ? (
 								<ChromeLogoIcon mb={4} boxSize={8} />
 							) : value === 'Automatically' ? (
-								<MeeshkanIcon mb={4} boxSize={8} color="red.500" />
+								<MeeshkanIcon mb={4} boxSize={6} color="red.500" />
+							) : value === 'Daily' ? (
+								<CircleArrowsIcon mb={4} boxSize={8} />
+							) : value === 'CI/CD' ? (
+								<Flex align="center" mb={4}>
+									<GitHubIcon boxSize={6} />
+									<Text> / </Text>
+									<GitLabIcon boxSize={6} />
+									<Text> / </Text>
+									<BitbucketIcon boxSize={6} />
+								</Flex>
 							) : value === 'Both' ? (
 								<Flex align="center" mb={4}>
 									<ChromeLogoIcon boxSize={8} />
