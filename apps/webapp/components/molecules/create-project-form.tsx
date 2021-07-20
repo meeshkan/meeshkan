@@ -25,9 +25,11 @@ type ProjectFormInputs = {
 
 type CreateProjectFormProps = {
 	setLoading: (value: boolean) => void;
+	setStep?: (step: 1 | 2 | 3) => void;
+	step?: 1 | 2 | 3;
 };
 
-const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
+const CreateProjectForm = ({ setLoading, setStep, step }: CreateProjectFormProps) => {
 	const router = useRouter();
 	const user = useContext(UserContext);
 	const { idToken, mutate: mutateUser, projects } = user;
@@ -49,6 +51,10 @@ const CreateProjectForm = ({ setLoading }: CreateProjectFormProps) => {
 			setError(data.error);
 			setLoading(false);
 			return;
+		}
+
+		if (setStep) {
+			setStep(step + 1);
 		}
 
 		const [newProject] = data.userUpdate.projects.items;

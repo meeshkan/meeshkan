@@ -31,7 +31,7 @@ const CreateProject = () => {
 					Onboarding — {title}
 				</Heading>
 				{step === 1 ? (
-					<CreateProjectForm setLoading={setLoading} /*setStep*/ />
+					<CreateProjectForm setLoading={setLoading} setStep={setStep} step={step} />
 				) : step === 2 ? (
 					<Box>Create test cases</Box>
 				) : (
