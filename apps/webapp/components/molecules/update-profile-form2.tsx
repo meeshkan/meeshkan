@@ -17,7 +17,6 @@ import AvatarField from '../molecules/avatar-field';
 import OnboardingFormWrapper from '../molecules/onboarding-form-wrapper';
 import { UserContext, updateProfile } from '../../utils/user';
 import { UploadedFile } from '@frontend/meeshkan-types';
-import CreateProjectWrapper from './create-project-wrapper';
 
 type ProfileFormInputs = {
 	name: string;
@@ -26,30 +25,15 @@ type ProfileFormInputs = {
 
 const jobTitles = ['Product manager', 'CTO', 'Other'];
 
-type UpdateProfileFormProps = {
+type UpdateProfileForm2Props = {
 	formId?: string;
-	isOnboarding: boolean;
-	//////////////////////
-	step: number;
-	setStep: React.Dispatch<React.SetStateAction<number>>;
-	loading: boolean;
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	//projectName: string | null;
-	//setProjectName: React.Dispatch<React.SetStateAction<string | null>>;
-	//projectID: string | null;
-	//setProjectID: React.Dispatch<React.SetStateAction<string | null>>;
-	//clientSecret: string | null;
-	//setClientSecret: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const UpdateProfileForm = ({
+const UpdateProfileForm2 = ({
 	setLoading,
-	setStep,
-	loading,
-	isOnboarding,
-	step,
 	formId = 'form',
-}: UpdateProfileFormProps) => {
+}: UpdateProfileForm2Props) => {
 	const [error, setError] = useState('');
 	const user = useContext(UserContext);
 	const {
@@ -79,11 +63,6 @@ const UpdateProfileForm = ({
 			return;
 		}
 
-		if (setStep) {
-			// @ts-ignore
-			setStep(step + 1);
-		}
-
 		const { firstName, lastName, avatar: newAvatar } = data.userUpdate;
 		await mutateUser({
 			...user,
@@ -98,20 +77,8 @@ const UpdateProfileForm = ({
 		setName(event.target.value);
 	};
 
-	const Wrapper: React.FC<{}> = ({ children }) =>
-		isOnboarding ? (
-			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
-				{children}
-			</OnboardingFormWrapper>
-		) : (
-			<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
-				{children}
-			</CreateProjectWrapper>
-		);
-
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
-			<Wrapper>
 				<AvatarField onUpload={setAvatarFile} existingImageUrl={avatar} />
 				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 					<FormLabel>What's your name?</FormLabel>
@@ -151,9 +118,8 @@ const UpdateProfileForm = ({
 					</Menu>
 					<FormErrorMessage>Error: {error}</FormErrorMessage>
 				</FormControl>
-			</Wrapper>
 		</form>
 	);
 };
 
-export default UpdateProfileForm;
+export default UpdateProfileForm2;

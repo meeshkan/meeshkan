@@ -28,7 +28,7 @@ const Index = (props: IndexProps) => {
 
 		setDefaultProject();
 	}, [idToken, projects, setLoadingProject, setProject, hasProjects]);
-
+ 
 	if (idToken && !hasProjects) {
 		return (
 			<Stack
