@@ -5,16 +5,19 @@ import ScriptTagInput from './script-tag-input';
 import OnboardingFormWrapper from './onboarding-form-wrapper';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import CreateProjectWrapper from './create-project-wrapper';
 export const CreateTestCases = ({
 	projectID,
 	step,
 	setStep,
 	projectName,
+	isOnboarding,
 	loading,
 }: {
 	projectName: string;
 	projectID: string;
 	step: number;
+	isOnboarding: boolean;
 	setStep: React.Dispatch<React.SetStateAction<number>>;
 	loading: boolean;
 }) => {
@@ -23,11 +26,22 @@ export const CreateTestCases = ({
 	const linkBlueColor = useColorModeValue('blue.500', 'blue.300');
 	const { handleSubmit } = useForm<{}>();
 	const onSubmit = async (): Promise<void> => {
-		setStep(4);
+		setStep(step + 1);
 	};
+	const Wrapper: React.FC<{}> = ({ children }) =>
+	isOnboarding ? (
+		<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+			{children}
+		</OnboardingFormWrapper>
+	) : (
+		<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
+			{children}
+		</CreateProjectWrapper>
+	);
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="form">
-			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+			<Wrapper>
 				<Box>
 					<RadioGroup
 						options={['Manually', 'Automatically', 'Both']}
@@ -103,7 +117,7 @@ export const CreateTestCases = ({
 						</>
 					)}
 				</Box>
-			</OnboardingFormWrapper>
+			</Wrapper>
 		</form>
 	);
 };

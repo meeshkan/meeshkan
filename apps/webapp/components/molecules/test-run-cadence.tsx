@@ -9,6 +9,7 @@ import { eightBaseClient } from 'apps/webapp/utils/graphql';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import OnboardingFormWrapper from './onboarding-form-wrapper';
+import CreateProjectWrapper from './create-project-wrapper';
 /**
  * 
  * onClick={() =>
@@ -21,15 +22,17 @@ export const TestRunCadence = ({
 	projectID,
 	clientSecret,
 	projectName,
+	isOnboarding,
 	step,
 	setStep,
 	loading,
-	setLoading
+	setLoading,
 }: {
 	step: number;
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	setStep: React.Dispatch<React.SetStateAction<number>>;
 	loading: boolean;
+	isOnboarding: boolean;
 	projectID: string;
 	clientSecret: string;
 	projectName: string;
@@ -57,10 +60,19 @@ export const TestRunCadence = ({
 
 		handleTestRunnerToggle();
 	}, [toggleTestRunnerIndex]);
-
+	const Wrapper: React.FC<{}> = ({ children }) =>
+		isOnboarding ? (
+			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</OnboardingFormWrapper>
+		) : (
+			<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</CreateProjectWrapper>
+		);
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="form">
-			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+			<Wrapper>
 				<Box>
 					<RadioGroup options={['CI/CD', 'Daily']} setRadio={setRadio} />
 
@@ -108,7 +120,7 @@ export const TestRunCadence = ({
 						</Box>
 					)}
 				</Box>
-			</OnboardingFormWrapper>
+			</Wrapper>
 		</form>
 	);
 };

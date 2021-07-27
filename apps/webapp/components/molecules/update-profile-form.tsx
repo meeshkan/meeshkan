@@ -17,6 +17,7 @@ import AvatarField from '../molecules/avatar-field';
 import OnboardingFormWrapper from '../molecules/onboarding-form-wrapper';
 import { UserContext, updateProfile } from '../../utils/user';
 import { UploadedFile } from '@frontend/meeshkan-types';
+import CreateProjectWrapper from './create-project-wrapper';
 
 type ProfileFormInputs = {
 	name: string;
@@ -27,7 +28,7 @@ const jobTitles = ['Product manager', 'CTO', 'Other'];
 
 type UpdateProfileFormProps = {
 	formId?: string;
-
+	isOnboarding: boolean;
 	//////////////////////
 	step: number;
 	setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -45,6 +46,7 @@ const UpdateProfileForm = ({
 	setLoading,
 	setStep,
 	loading,
+	isOnboarding,
 	step,
 	formId = 'form',
 }: UpdateProfileFormProps) => {
@@ -96,9 +98,20 @@ const UpdateProfileForm = ({
 		setName(event.target.value);
 	};
 
+	const Wrapper: React.FC<{}> = ({ children }) =>
+		isOnboarding ? (
+			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</OnboardingFormWrapper>
+		) : (
+			<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</CreateProjectWrapper>
+		);
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
-			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+			<Wrapper>
 				<AvatarField onUpload={setAvatarFile} existingImageUrl={avatar} />
 				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 					<FormLabel>What's your name?</FormLabel>
@@ -138,7 +151,7 @@ const UpdateProfileForm = ({
 					</Menu>
 					<FormErrorMessage>Error: {error}</FormErrorMessage>
 				</FormControl>
-			</OnboardingFormWrapper>
+			</Wrapper>
 		</form>
 	);
 };

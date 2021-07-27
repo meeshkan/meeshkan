@@ -16,6 +16,7 @@ import { UploadedFile } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import OnboardingFormWrapper from './onboarding-form-wrapper';
+import CreateProjectWrapper from './create-project-wrapper';
 
 type ProjectFormInputs = {
 	name: string;
@@ -31,6 +32,7 @@ type CreateProjectFormProps = {
 	//setStep?: (step: 1 | 2 | 3) => void;
 	//step?: 1 | 2 | 3;
 	////////////////////
+	isOnboarding: boolean;
 	step: number;
 	setStep: React.Dispatch<React.SetStateAction<number>>;
 	loading: boolean;
@@ -49,6 +51,7 @@ const CreateProjectForm = ({
 	setProjectID,
 	setClientSecret,
 	setStep,
+	isOnboarding,
 	step,
 	loading,
 }: CreateProjectFormProps) => {
@@ -92,10 +95,19 @@ const CreateProjectForm = ({
 
 		setProjectName(createSlug(formData.name));
 	};
-
+	const Wrapper: React.FC<{}> = ({ children }) =>
+		isOnboarding ? (
+			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</OnboardingFormWrapper>
+		) : (
+			<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</CreateProjectWrapper>
+		);
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="form">
-			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+			<Wrapper>
 				<AvatarField location="a project" onUpload={setAvatarFile} />
 				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 					<FormLabel>Name your project</FormLabel>
@@ -139,7 +151,7 @@ const CreateProjectForm = ({
 					/>
 					<FormErrorMessage>Error: {error}</FormErrorMessage>
 				</FormControl>
-			</OnboardingFormWrapper>
+			</Wrapper>
 		</form>
 	);
 };

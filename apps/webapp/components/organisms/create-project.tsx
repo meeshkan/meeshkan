@@ -23,67 +23,37 @@ const CreateProject = () => {
 		: 'At what cadence would you like test runs to happen?';
 	const submitButtonText = step === 3 ? 'Finish' : 'Next step';
 
-	return (
-		<Flex
-			as={Card}
-			align="center"
-			justify="space-between"
-			direction="column"
-			h="100%"
-			w="100%"
-			p={8}
-		>
-			<Box>
-				<Heading as="h1" fontSize="3xl" mb={8} textAlign="center">
-					{title}
-				</Heading>
-				{step === 1 ? (
-					<CreateProjectForm
-						setLoading={setLoading}
-						setProjectName={setProjectName}
-						setStep={setStep}
-						step={step}
-						setProjectID={setProjectID}
-						setClientSecret={setClientSecret}
-					/>
-				) : step === 2 ? (
-					<CreateTestCases projectID={projectID} />
-				) : (
-					<TestRunCadence projectID={projectID} clientSecret={clientSecret} />
-				)}
-			</Box>
-			<Flex justify="space-between" align="center" w="100%">
-				<Button
-					mt={4}
-					colorScheme="gray"
-					// @ts-ignore
-					onClick={() => (step === 1 ? Router.back() : setStep(step - 1))}
-				>
-					Back
-				</Button>
-				<Text color="gray.500">Step {step} of 3</Text>
-				{step === 1 ? (
-					<Button
-						mt={4}
-						type="submit"
-						isLoading={loading}
-						loadingText="Creating project"
-						form="form"
-					>
-						{submitButtonText}
-					</Button>
-				) : (
-					<Button
-						onClick={() =>
-							// @ts-ignore
-							step === 3 ? router.push(projectName) : setStep(step + 1)
-						}
-					>
-						{submitButtonText}
-					</Button>
-				)}
-			</Flex>
-		</Flex>
+	return step === 1 ? (
+		<CreateProjectForm
+			isOnboarding={false}
+			loading={loading}
+			setLoading={setLoading}
+			setProjectName={setProjectName}
+			setStep={setStep}
+			step={step}
+			setProjectID={setProjectID}
+			setClientSecret={setClientSecret}
+		/>
+	) : step === 2 ? (
+		<CreateTestCases
+			isOnboarding={false}
+			projectName={projectName}
+			step={step}
+			loading={loading}
+			setStep={setStep}
+			projectID={projectID}
+		/>
+	) : (
+		<TestRunCadence
+			projectID={projectID}
+			isOnboarding={false}
+			step={step}
+			setLoading={setLoading}
+			projectName={projectName}
+			loading={loading}
+			setStep={setStep}
+			clientSecret={clientSecret}
+		/>
 	);
 };
 

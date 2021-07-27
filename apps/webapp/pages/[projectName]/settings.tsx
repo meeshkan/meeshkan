@@ -32,6 +32,7 @@ import { useValidateSelectedProject } from '../../hooks/use-validate-selected-pr
 import LoadingScreen from '../../components/organisms/loading-screen';
 import GridCard, { GridCardProps } from '../../components/molecules/grid-card';
 import UpdateProfileForm from '../../components/molecules/update-profile-form';
+import UpdateProfileForm2 from '../../components/molecules/update-profile-form2';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
 import NotFoundError from '../404';
@@ -393,8 +394,8 @@ const Settings = () => {
 				<SectionGridCard
 					title="Profile"
 					subtitle="Manage your Meeshkan Profile"
-				>
-					<UpdateProfileForm
+				> 
+					<UpdateProfileForm2
 						setLoading={setProfileLoading}
 						formId="profileUpdateForm"
 					/>

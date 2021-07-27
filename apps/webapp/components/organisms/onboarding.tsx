@@ -22,17 +22,9 @@ const Onboarding = () => {
 		: 'At what cadence would you like test runs to happen?';
 	const backButtonVisibility = isFirstStep ? 'hidden' : 'visible';
 	const submitButtonText = step === 4 ? 'Finish' : 'Next step';
-	return (
-		<Flex
-			align="center"
-			justify="space-between"
-			direction="column"
-			h="100%"
-			w="100%"
-			p={8}
-		>
-			{step === 1 ? (
+	return step === 1 ? (
 				<UpdateProfileForm
+				  isOnboarding={true}
 					setLoading={setLoading}
 					setStep={setStep}
 					loading={loading}
@@ -41,6 +33,7 @@ const Onboarding = () => {
 			) : step === 2 ? (
 				<CreateProjectForm
 					setLoading={setLoading}
+				  isOnboarding={true}
 					setProjectName={setProjectName}
 					setStep={setStep}
 					loading={loading}
@@ -50,6 +43,7 @@ const Onboarding = () => {
 				/>
 			) : step === 3 ? (
 				<CreateTestCases
+				  isOnboarding={true}
 					projectName={projectName}
 					step={step}
 					loading={loading}
@@ -61,14 +55,13 @@ const Onboarding = () => {
 				  setLoading={setLoading}
 					projectName={projectName}
 					projectID={projectID}
+				  isOnboarding={true}
 					clientSecret={clientSecret}
 					step={step}
 					loading={loading}
 					setStep={setStep}
 				/>
-			)}
-		</Flex>
-	);
+			)
 };
 
 export default Onboarding;
