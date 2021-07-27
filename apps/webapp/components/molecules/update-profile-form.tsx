@@ -14,8 +14,10 @@ import {
 import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
+import OnboardingFormWrapper from '../molecules/onboarding-form-wrapper';
 import { UserContext, updateProfile } from '../../utils/user';
 import { UploadedFile } from '@frontend/meeshkan-types';
+import CreateProjectWrapper from './create-project-wrapper';
 
 type ProfileFormInputs = {
 	name: string;
@@ -25,15 +27,26 @@ type ProfileFormInputs = {
 const jobTitles = ['Product manager', 'CTO', 'Other'];
 
 type UpdateProfileFormProps = {
-	setLoading: (value: boolean) => void;
-	setStep?: (step: 1 | 2 | 3) => void;
-	step?: 1 | 2 | 3;
 	formId?: string;
+	isOnboarding: boolean;
+	//////////////////////
+	step: number;
+	setStep: React.Dispatch<React.SetStateAction<number>>;
+	loading: boolean;
+	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+	//projectName: string | null;
+	//setProjectName: React.Dispatch<React.SetStateAction<string | null>>;
+	//projectID: string | null;
+	//setProjectID: React.Dispatch<React.SetStateAction<string | null>>;
+	//clientSecret: string | null;
+	//setClientSecret: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const UpdateProfileForm = ({
 	setLoading,
 	setStep,
+	loading,
+	isOnboarding,
 	step,
 	formId = 'form',
 }: UpdateProfileFormProps) => {
@@ -85,47 +98,60 @@ const UpdateProfileForm = ({
 		setName(event.target.value);
 	};
 
+	const Wrapper: React.FC<{}> = ({ children }) =>
+		isOnboarding ? (
+			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</OnboardingFormWrapper>
+		) : (
+			<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</CreateProjectWrapper>
+		);
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id={formId}>
-			<AvatarField onUpload={setAvatarFile} existingImageUrl={avatar} />
-			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
-				<FormLabel>What's your name?</FormLabel>
-				<Input
-					name="name"
-					value={name}
-					onChange={handleChange}
-					type="text"
-					ref={register}
-				/>
-			</FormControl>
-			<FormControl id="title" isRequired isInvalid={!!error}>
-				<FormLabel>What's your job title?</FormLabel>
-				<Menu>
-					<MenuButton
-						as={Button}
-						colorScheme="gray"
-						rightIcon={<ArrowUpDownIcon />}
-						w="100%"
-						textAlign="left"
-					>
-						{title}
-					</MenuButton>
-					<MenuList>
-						<MenuOptionGroup defaultValue={title} type="radio">
-							{jobTitles.map((title) => (
-								<MenuItemOption
-									key={title}
-									value={title}
-									onClick={() => setTitle(title)}
-								>
-									{title}
-								</MenuItemOption>
-							))}
-						</MenuOptionGroup>
-					</MenuList>
-				</Menu>
-				<FormErrorMessage>Error: {error}</FormErrorMessage>
-			</FormControl>
+			<Wrapper>
+				<AvatarField onUpload={setAvatarFile} existingImageUrl={avatar} />
+				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
+					<FormLabel>What's your name?</FormLabel>
+					<Input
+						name="name"
+						value={name}
+						onChange={handleChange}
+						type="text"
+						ref={register}
+					/>
+				</FormControl>
+				<FormControl id="title" isRequired isInvalid={!!error}>
+					<FormLabel>What's your job title?</FormLabel>
+					<Menu>
+						<MenuButton
+							as={Button}
+							colorScheme="gray"
+							rightIcon={<ArrowUpDownIcon />}
+							w="100%"
+							textAlign="left"
+						>
+							{title}
+						</MenuButton>
+						<MenuList>
+							<MenuOptionGroup defaultValue={title} type="radio">
+								{jobTitles.map((title) => (
+									<MenuItemOption
+										key={title}
+										value={title}
+										onClick={() => setTitle(title)}
+									>
+										{title}
+									</MenuItemOption>
+								))}
+							</MenuOptionGroup>
+						</MenuList>
+					</Menu>
+					<FormErrorMessage>Error: {error}</FormErrorMessage>
+				</FormControl>
+			</Wrapper>
 		</form>
 	);
 };
