@@ -23,10 +23,12 @@ export const useFetchUser = (): IUseFetchUser => {
 			email: user.email,
 		});
 
-		window?.CommandBar?.boot({
-			id: user.id,
-			eventData: { email: user.email },
-		});
+		if (user?.email !== 'test@meeshkan.com') {
+			window?.CommandBar?.boot({
+				id: user.id,
+				eventData: { email: user.email },
+			});
+		}
 
 		handleExtensionAuthHandshake(user, false);
 	}, [user]);
