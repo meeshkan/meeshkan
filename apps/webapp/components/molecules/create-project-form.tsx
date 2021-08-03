@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, Dispatch, SetStateAction, FC } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -25,24 +25,14 @@ type ProjectFormInputs = {
 };
 
 type CreateProjectFormProps = {
-	//setLoading: (value: boolean) => void;
-	//setProjectName: (value: string) => void;
-	//setProjectID: (value: string) => void;
-	//setClientSecret: (value: string) => void;
-	//setStep?: (step: 1 | 2 | 3) => void;
-	//step?: 1 | 2 | 3;
-	////////////////////
 	isOnboarding: boolean;
 	step: number;
-	setStep: React.Dispatch<React.SetStateAction<number>>;
+	setStep: Dispatch<SetStateAction<number>>;
 	loading: boolean;
-	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	//projectName: string | null;
-	setProjectName: React.Dispatch<React.SetStateAction<string | null>>;
-	//projectID: string | null;
-	setProjectID: React.Dispatch<React.SetStateAction<string | null>>;
-	//clientSecret: string | null;
-	setClientSecret: React.Dispatch<React.SetStateAction<string | null>>;
+	setLoading: Dispatch<SetStateAction<boolean>>;
+	setProjectName: Dispatch<SetStateAction<string | null>>;
+	setProjectID: Dispatch<SetStateAction<string | null>>;
+	setClientSecret: Dispatch<SetStateAction<string | null>>;
 };
 
 const CreateProjectForm = ({
@@ -83,7 +73,6 @@ const CreateProjectForm = ({
 		);
 
 		if (setStep) {
-			// @ts-ignore
 			setStep(step + 1);
 		}
 
@@ -95,7 +84,7 @@ const CreateProjectForm = ({
 
 		setProjectName(createSlug(formData.name));
 	};
-	const Wrapper: React.FC<{}> = ({ children }) =>
+	const Wrapper: FC<{}> = ({ children }) =>
 		isOnboarding ? (
 			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
 				{children}
