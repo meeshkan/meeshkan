@@ -1,22 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+	Dispatch,
+	SetStateAction,
+	useContext,
+	useEffect,
+	useState,
+} from 'react';
 import { Box, Text, Heading, FormControl, Stack } from '@chakra-ui/react';
 import { RadioGroup } from '../atoms/radio-card';
 import CIDocumentationCard from '../../components/organisms/ci-documentation';
 import SegmentedControl from './segmented-control';
 import { TOGGLE_TEST_RUNS } from '../../graphql/project';
 import { UserContext } from '../../utils/user';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+import { eightBaseClient } from '../../utils/graphql';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import OnboardingFormWrapper from './onboarding-form-wrapper';
 import CreateProjectWrapper from './create-project-wrapper';
-/**
- * 
- * onClick={() =>
-								// @ts-ignore
-								step === 4 ? router.push(projectName) : setStep(step + 1)
-							} 
- */
 
 export const TestRunCadence = ({
 	projectID,
@@ -29,8 +28,8 @@ export const TestRunCadence = ({
 	setLoading,
 }: {
 	step: number;
-	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	setStep: React.Dispatch<React.SetStateAction<number>>;
+	setLoading: Dispatch<SetStateAction<boolean>>;
+	setStep: Dispatch<SetStateAction<number>>;
 	loading: boolean;
 	isOnboarding: boolean;
 	projectID: string;

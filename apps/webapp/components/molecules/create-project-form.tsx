@@ -1,4 +1,10 @@
-import { useState, useContext, Dispatch, SetStateAction, FC } from 'react';
+import React, {
+	useState,
+	useContext,
+	Dispatch,
+	SetStateAction,
+	FC,
+} from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -6,6 +12,7 @@ import {
 	Input,
 	Tooltip,
 	useColorModeValue,
+	Box,
 } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
@@ -95,7 +102,7 @@ const CreateProjectForm = ({
 			</CreateProjectWrapper>
 		);
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} id="form">
+		<Box as="form" onSubmit={handleSubmit(onSubmit)} id="form" w="full">
 			<Wrapper>
 				<AvatarField location="a project" onUpload={setAvatarFile} />
 				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
@@ -141,7 +148,7 @@ const CreateProjectForm = ({
 					<FormErrorMessage>Error: {error}</FormErrorMessage>
 				</FormControl>
 			</Wrapper>
-		</form>
+		</Box>
 	);
 };
 

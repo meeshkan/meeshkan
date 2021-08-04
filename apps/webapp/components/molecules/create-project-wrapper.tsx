@@ -72,7 +72,7 @@ const CreateProjectWrapper: React.FC<CreateProjectWrapperProps> = ({
 				)}
 			</Flex>
 		</Flex>
-	)
+	);
 };
 
 export default CreateProjectWrapper;

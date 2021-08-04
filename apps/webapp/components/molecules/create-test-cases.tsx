@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Box, Text, Heading, Link, useColorModeValue } from '@chakra-ui/react';
 import { RadioGroup } from '../atoms/radio-card';
 import ScriptTagInput from './script-tag-input';
 import OnboardingFormWrapper from './onboarding-form-wrapper';
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
 import CreateProjectWrapper from './create-project-wrapper';
 export const CreateTestCases = ({
 	projectID,
 	step,
 	setStep,
-	projectName,
 	isOnboarding,
 	loading,
 }: {
@@ -18,10 +16,9 @@ export const CreateTestCases = ({
 	projectID: string;
 	step: number;
 	isOnboarding: boolean;
-	setStep: React.Dispatch<React.SetStateAction<number>>;
+	setStep: Dispatch<SetStateAction<number>>;
 	loading: boolean;
 }) => {
-	const router = useRouter();
 	const [radio, setRadio] = useState('Manually');
 	const linkBlueColor = useColorModeValue('blue.500', 'blue.300');
 	const { handleSubmit } = useForm<{}>();
@@ -29,15 +26,15 @@ export const CreateTestCases = ({
 		setStep(step + 1);
 	};
 	const Wrapper: React.FC<{}> = ({ children }) =>
-	isOnboarding ? (
-		<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
-			{children}
-		</OnboardingFormWrapper>
-	) : (
-		<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
-			{children}
-		</CreateProjectWrapper>
-	);
+		isOnboarding ? (
+			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</OnboardingFormWrapper>
+		) : (
+			<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
+				{children}
+			</CreateProjectWrapper>
+		);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} id="form">

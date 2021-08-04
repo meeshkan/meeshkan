@@ -1,4 +1,10 @@
-import { useState, useContext, ChangeEvent } from 'react';
+import {
+	useState,
+	useContext,
+	ChangeEvent,
+	Dispatch,
+	SetStateAction,
+} from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -29,17 +35,10 @@ const jobTitles = ['Product manager', 'CTO', 'Other'];
 type UpdateProfileFormProps = {
 	formId?: string;
 	isOnboarding: boolean;
-	//////////////////////
 	step: number;
-	setStep: React.Dispatch<React.SetStateAction<number>>;
+	setStep: Dispatch<SetStateAction<number>>;
 	loading: boolean;
-	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	//projectName: string | null;
-	//setProjectName: React.Dispatch<React.SetStateAction<string | null>>;
-	//projectID: string | null;
-	//setProjectID: React.Dispatch<React.SetStateAction<string | null>>;
-	//clientSecret: string | null;
-	//setClientSecret: React.Dispatch<React.SetStateAction<string | null>>;
+	setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
 const UpdateProfileForm = ({
@@ -80,7 +79,6 @@ const UpdateProfileForm = ({
 		}
 
 		if (setStep) {
-			// @ts-ignore
 			setStep(step + 1);
 		}
 
