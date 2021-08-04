@@ -6,9 +6,9 @@ export default async function logout(
 	res: NextApiResponse
 ): Promise<void> {
 	try {
+		await window?.CommandBar?.shutdown();
 		const auth0 = initAuth0(req);
 		await auth0.handleLogout(req, res);
-		await window?.CommandBar?.shutdown();
 	} catch (error) {
 		console.error(error);
 		res.status(error.status || 500).end(error.message);

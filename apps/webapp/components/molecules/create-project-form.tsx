@@ -1,10 +1,4 @@
-import React, {
-	useState,
-	useContext,
-	Dispatch,
-	SetStateAction,
-	FC,
-} from 'react';
+import React, { useState, useContext } from 'react';
 import {
 	FormControl,
 	FormLabel,
@@ -22,8 +16,6 @@ import { createProject } from '../../utils/project';
 import { UploadedFile } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
-import OnboardingFormWrapper from './onboarding-form-wrapper';
-import CreateProjectWrapper from './create-project-wrapper';
 
 type ProjectFormInputs = {
 	name: string;
@@ -32,14 +24,12 @@ type ProjectFormInputs = {
 };
 
 type CreateProjectFormProps = {
-	isOnboarding: boolean;
-	step: number;
-	setStep: Dispatch<SetStateAction<number>>;
-	loading: boolean;
-	setLoading: Dispatch<SetStateAction<boolean>>;
-	setProjectName: Dispatch<SetStateAction<string | null>>;
-	setProjectID: Dispatch<SetStateAction<string | null>>;
-	setClientSecret: Dispatch<SetStateAction<string | null>>;
+	setLoading: (value: boolean) => void;
+	setProjectName: (value: string) => void;
+	setProjectID: (value: string) => void;
+	setClientSecret: (value: string) => void;
+	setStep?: (step: number) => void;
+	step?: number;
 };
 
 const CreateProjectForm = ({
@@ -48,9 +38,7 @@ const CreateProjectForm = ({
 	setProjectID,
 	setClientSecret,
 	setStep,
-	isOnboarding,
 	step,
-	loading,
 }: CreateProjectFormProps) => {
 	const user = useContext(UserContext);
 	const { idToken, mutate: mutateUser, projects } = user;
@@ -74,8 +62,8 @@ const CreateProjectForm = ({
 			return;
 		}
 
-		setProjectID(data?.userUpdate?.projects?.items[0]?.id);
-		setClientSecret(
+		await setProjectID(data?.userUpdate?.projects?.items[0]?.id);
+		await setClientSecret(
 			data?.userUpdate?.projects?.items[0]?.configuration?.clientSecret
 		);
 
@@ -91,63 +79,52 @@ const CreateProjectForm = ({
 
 		setProjectName(createSlug(formData.name));
 	};
-	const Wrapper: FC<{}> = ({ children }) =>
-		isOnboarding ? (
-			<OnboardingFormWrapper step={step} setStep={setStep} loading={loading}>
-				{children}
-			</OnboardingFormWrapper>
-		) : (
-			<CreateProjectWrapper step={step} setStep={setStep} loading={loading}>
-				{children}
-			</CreateProjectWrapper>
-		);
+
 	return (
 		<Box as="form" onSubmit={handleSubmit(onSubmit)} id="form" w="full">
-			<Wrapper>
-				<AvatarField location="a project" onUpload={setAvatarFile} />
-				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
-					<FormLabel>Name your project</FormLabel>
-					<Input
-						name="name"
-						type="text"
-						placeholder="Acme Industries"
-						ref={register}
-					/>
-				</FormControl>
-				<FormControl id="productionURL" isInvalid={!!error} mb={8}>
-					<FormLabel>Production URL</FormLabel>
-					<Input
-						name="productionURL"
-						type="url"
-						placeholder="https://acme-industries.com"
-						pattern="^http(s)?:\/\/.+$"
-						ref={register}
-					/>
-				</FormControl>
-				<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
-					<FormLabel d="flex" alignItems="center">
-						Staging URL
-						<Tooltip
-							label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
-							placement="right-start"
-						>
-							<InfoOutlineIcon
-								ml={2}
-								lineHeight="short"
-								color={tooltipIconColor}
-							/>
-						</Tooltip>
-					</FormLabel>
-					<Input
-						name="stagingURL"
-						type="url"
-						placeholder="https://staging.acme-industries.com"
-						pattern="^http(s)?:\/\/.+$"
-						ref={register}
-					/>
-					<FormErrorMessage>Error: {error}</FormErrorMessage>
-				</FormControl>
-			</Wrapper>
+			<AvatarField location="a project" onUpload={setAvatarFile} />
+			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
+				<FormLabel>Name your project</FormLabel>
+				<Input
+					name="name"
+					type="text"
+					placeholder="Acme Industries"
+					ref={register}
+				/>
+			</FormControl>
+			<FormControl id="productionURL" isInvalid={!!error} mb={8}>
+				<FormLabel>Production URL</FormLabel>
+				<Input
+					name="productionURL"
+					type="url"
+					placeholder="https://acme-industries.com"
+					pattern="^http(s)?:\/\/.+$"
+					ref={register}
+				/>
+			</FormControl>
+			<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
+				<FormLabel d="flex" alignItems="center">
+					Staging URL
+					<Tooltip
+						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
+						placement="right-start"
+					>
+						<InfoOutlineIcon
+							ml={2}
+							lineHeight="short"
+							color={tooltipIconColor}
+						/>
+					</Tooltip>
+				</FormLabel>
+				<Input
+					name="stagingURL"
+					type="url"
+					placeholder="https://staging.acme-industries.com"
+					pattern="^http(s)?:\/\/.+$"
+					ref={register}
+				/>
+				<FormErrorMessage>Error: {error}</FormErrorMessage>
+			</FormControl>
 		</Box>
 	);
 };
