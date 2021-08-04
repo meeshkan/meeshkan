@@ -127,6 +127,7 @@ const TestRun = () => {
 					<TestRunCard
 						id={testId as string}
 						status={testRun?.status}
+						runLink={testRun?.runLink}
 						date={new Date(testRun?.createdAt)}
 						stats={_.countBy(
 							testRun?.testOutcome.items.map((outcome) => outcome.status)
@@ -213,7 +214,7 @@ const TestRun = () => {
 												: outcome?.errorStepIndex;
 										const errorInLogIn: boolean =
 											contextualErrorStepIndex > 0 &&
-											!isNaN(contextualErrorStepIndex)
+												!isNaN(contextualErrorStepIndex)
 												? false
 												: true;
 
@@ -364,7 +365,7 @@ const TestRun = () => {
 																</Tooltip>
 															) : null}
 															{isFailing &&
-															project?.configuration?.logInStory?.id ===
+																project?.configuration?.logInStory?.id ===
 																testCase?.id ? (
 																<Tooltip
 																	label="This is the path your users take to sign in."
@@ -418,8 +419,8 @@ const TestRun = () => {
 																	>
 																		{requiresAuthentication && hasLogInStory
 																			? outcome?.errorStepIndex +
-																			  1 -
-																			  stepsInLogInStory
+																			1 -
+																			stepsInLogInStory
 																			: outcome?.errorStepIndex + 1}
 																	</Flex>
 																	<Box w="full">
