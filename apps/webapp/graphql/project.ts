@@ -404,14 +404,11 @@ export const PROJECT_USER_STORIES = gql`
 		$projectId: ID!
 		$first: Int!
 		$skip: Int!
-		$significanceFilters: [UserStoryFilter!]
+		$testCaseFilters: [UserStoryFilter!]
 		$sort: UserStoryOrderBy
 	) {
 		all: userStoriesList(
-			filter: {
-				project: { id: { equals: $projectId } }
-				OR: $significanceFilters
-			}
+			filter: { project: { id: { equals: $projectId } }, OR: $testCaseFilters }
 			orderBy: [$sort]
 			first: $first
 			skip: $skip
@@ -425,7 +422,7 @@ export const PROJECT_USER_STORIES = gql`
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: false }
-				OR: $significanceFilters
+				OR: $testCaseFilters
 			}
 			orderBy: [$sort]
 			first: $first
@@ -440,7 +437,7 @@ export const PROJECT_USER_STORIES = gql`
 			filter: {
 				project: { id: { equals: $projectId } }
 				isTestCase: { equals: true }
-				OR: $significanceFilters
+				OR: $testCaseFilters
 			}
 			orderBy: [$sort]
 			first: $first

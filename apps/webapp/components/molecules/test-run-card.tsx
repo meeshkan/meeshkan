@@ -1,11 +1,14 @@
 import React from 'react';
-import { Flex, Center, Box, Text, Button, Badge } from '@chakra-ui/react';
+import { Flex, Center, Box, Text, Button, Badge, Code } from '@chakra-ui/react';
 import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
 	CheckmarkIcon,
 	XmarkIcon,
 	MinusIcon,
 	CircleArrowsIcon,
+	BitbucketIcon,
+	GitHubIcon,
+	GitLabIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Card from '../atoms/card';
@@ -15,6 +18,7 @@ type TestRunCardProps = {
 	id?: string;
 	status: TestRun['status'];
 	runNumber?: number;
+	runLink?: string;
 	date: Date;
 	stats: {
 		passing?: number;
@@ -31,18 +35,20 @@ const TestRunCard = ({
 	runNumber,
 	date,
 	stats,
+	runLink,
 }: TestRunCardProps) => {
 	const router = useRouter();
 	const isIndividualTestRunPage = router.pathname.endsWith('[testId]');
+	const triggerURL = runLink && new URL(runLink).host;
 
 	const statusColor =
 		status === 'queued'
 			? 'gray'
 			: status === 'running'
-			? 'yellow'
-			: status === 'completed'
-			? 'cyan'
-			: 'red';
+				? 'yellow'
+				: status === 'completed'
+					? 'cyan'
+					: 'red';
 
 	const cardProps = {
 		cursor: isIndividualTestRunPage ? undefined : 'pointer',
@@ -67,7 +73,7 @@ const TestRunCard = ({
 					align={['flex-start', 'flex-start', 'center', 'center']}
 					flex="1"
 					justify="space-between"
-					maxW="2xs"
+					maxW={runLink ? "sm" : "2xs"}
 					direction={['column', 'column', 'row', 'row']}
 				>
 					<Box flex="1">
@@ -81,14 +87,43 @@ const TestRunCard = ({
 							{status}
 						</Badge>
 					</Box>
+
 					{!isIndividualTestRunPage && (
 						<Text fontSize="sm" fontWeight="700" flex="1">
 							Run #{runNumber}
 						</Text>
 					)}
-					<Text fontSize="sm" fontWeight="300" flex="1" whiteSpace="nowrap">
-						{formattedDate}
-					</Text>
+
+					<Flex align='center'>
+						<Text fontSize="sm" fontWeight="300" flex="1" whiteSpace="nowrap">
+							{formattedDate}
+						</Text>
+						{runLink && (
+							<Text
+								as="a"
+								href={runLink}
+								target='_blank'
+								rel="noopener"
+								fontFamily='mono'
+								fontSize="sm"
+								fontWeight="700"
+								_hover={{ textDecoration: 'underline' }}
+								lineHeight="base"
+								flex="1"
+								whiteSpace="nowrap"
+								ml={10}
+							>
+								{triggerURL === 'bitbucket.org' ? (
+									<BitbucketIcon mr={2} />
+								) : triggerURL === 'github.com' ? (
+									<GitHubIcon mr={2} />
+								) : triggerURL === 'gitlab.com' ? (
+									<GitLabIcon mr={2} />
+								) : null}
+								triggered
+							</Text>
+						)}
+					</Flex>
 				</Flex>
 				<Flex
 					align="center"
@@ -112,7 +147,7 @@ const TestRunCard = ({
 					<Center>
 						<CircleArrowsIcon width={2} height={2} color="yellow.500" />
 						<Text fontSize="sm" ml={2}>
-							{(stats['queued'] || 0) + (stats['in progress'] || 0)}
+							{(stats.queued || 0) + (stats['in progress'] || 0)}
 						</Text>
 					</Center>
 					<Center>
@@ -128,7 +163,7 @@ const TestRunCard = ({
 					)}
 				</Flex>
 			</Flex>
-		</Card>
+		</Card >
 	);
 };
 

@@ -102,9 +102,13 @@ const GettingStartedCheckbox = ({ isChecked, ...props }: CheckboxProps) => {
 
 type GettingStartedListItemProps = ListItemProps & {
 	isComplete: boolean;
-}
+};
 
-const GettingStartedListItem = ({ children, isComplete, ...props }: GettingStartedListItemProps) => {
+const GettingStartedListItem = ({
+	children,
+	isComplete,
+	...props
+}: GettingStartedListItemProps) => {
 	return (
 		<ListItem textDecoration={isComplete ? 'line-through' : null} {...props}>
 			<GettingStartedCheckbox isChecked={isComplete} />
@@ -202,17 +206,22 @@ const Grid = (props: StackProps) => {
 		userStories
 	);
 
-	const confidenceScore = Number(Object.values(confidenceDataPoints)
-		.map((dataPoint) => dataPoint.score)
-		.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0).toFixed(2));
+	const confidenceScore = Number(
+		Object.values(confidenceDataPoints)
+			.map((dataPoint) => dataPoint.score)
+			.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0)
+			.toFixed(2)
+	);
 
 	const testCoverageScore = Number(
-		((Object.values(confidenceDataPoints)
-			.filter((dataPoint) => dataPoint.tag === DataPointTag.TEST_COVERAGE)
-			.map((dataPoint) => dataPoint.score)
-			.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0) *
-			100) /
-			30).toFixed(2)
+		(
+			(Object.values(confidenceDataPoints)
+				.filter((dataPoint) => dataPoint.tag === DataPointTag.TEST_COVERAGE)
+				.map((dataPoint) => dataPoint.score)
+				.reduce((dataPointA, dataPointB) => dataPointA + dataPointB, 0.0) *
+				100) /
+			30
+		).toFixed(2)
 	);
 
 	const selectedTimePeriodInDays: number = timePeriodsInDays[timePeriod];
@@ -235,14 +244,19 @@ const Grid = (props: StackProps) => {
 			100) /
 		30;
 
-	const confidenceChange = Object.entries(confidenceDataPoints).map(
-		([key, dataPoint]: [string, DataPoint]) => {
-			dataPoint.percentageChange = calculatePercentageChange(key, confidenceDataPointsNDaysAgo, dataPoint);
+	const confidenceChange = Object.entries(confidenceDataPoints)
+		.map(([key, dataPoint]: [string, DataPoint]) => {
+			dataPoint.percentageChange = calculatePercentageChange(
+				key,
+				confidenceDataPointsNDaysAgo,
+				dataPoint
+			);
 			return [key, dataPoint];
-		}
-	).filter(
-		([key, dataPoint]: [string, DataPoint]) => dataPoint.percentageChange !== 0
-	);
+		})
+		.filter(
+			([key, dataPoint]: [string, DataPoint]) =>
+				dataPoint.percentageChange !== 0
+		);
 
 	const confidenceScorePercentageChange = deltaChange(
 		confidenceScoreNDaysAgo,
@@ -267,9 +281,13 @@ const Grid = (props: StackProps) => {
 
 	barData.datasets[0].data = Object.values(recordingsByDay);
 	barData.datasets[1].data = Object.values(testsByDay);
-	const barDataLabels = useMemo(() => lastNDays(selectedTimePeriodInDays).map((date: Date) =>
-		date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
-	), [selectedTimePeriodInDays, new Date().toLocaleDateString()]);
+	const barDataLabels = useMemo(
+		() =>
+			lastNDays(selectedTimePeriodInDays).map((date: Date) =>
+				date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
+			),
+		[selectedTimePeriodInDays, new Date().toLocaleDateString()]
+	);
 	barData.labels = barDataLabels;
 
 	const totalRecordings = sumOfObjectValues(recordingsByDay);
@@ -444,27 +462,30 @@ const Grid = (props: StackProps) => {
 								) : (
 									<GridCard title="Getting started">
 										<List spacing={5} color={listColor} fontSize="md" mt={5}>
-											<GettingStartedListItem isComplete={gettingStartedTodoList.hasMembers}>
+											<GettingStartedListItem
+												isComplete={gettingStartedTodoList.hasMembers}
+											>
 												<Link onClick={() => startTour('invite-link')}>
 													Invite your team.
 												</Link>
 											</GettingStartedListItem>
-											<GettingStartedListItem isComplete={gettingStartedTodoList.hasUserStories}>
+											<GettingStartedListItem
+												isComplete={gettingStartedTodoList.hasUserStories}
+											>
 												<Link onClick={() => startTour('install-script')}>
 													Install the script in the head of your webapp.
 												</Link>
 											</GettingStartedListItem>
-											<GettingStartedListItem isComplete={gettingStartedTodoList.hasManualUserStories}>
+											<GettingStartedListItem
+												isComplete={gettingStartedTodoList.hasManualUserStories}
+											>
 												<Link onClick={() => startTour('create-user-story')}>
-													Create a User Story.
+													Create a Test case.
 												</Link>
 											</GettingStartedListItem>
-											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestCases}>
-												<Link onClick={() => startTour('create-test-case')}>
-													Promote a User Story to a Test Case.
-												</Link>
-											</GettingStartedListItem>
-											<GettingStartedListItem isComplete={gettingStartedTodoList.hasTestRuns}>
+											<GettingStartedListItem
+												isComplete={gettingStartedTodoList.hasTestRuns}
+											>
 												<Link onClick={() => startTour('trigger-test-run')}>
 													Trigger a Test Run.
 												</Link>
@@ -540,8 +561,8 @@ const Grid = (props: StackProps) => {
 												{confidenceScore >= 90
 													? `Ready`
 													: confidenceScore >= 50
-														? `Caution`
-														: `Not ready`}
+													? `Caution`
+													: `Not ready`}
 											</Text>
 											<Text
 												color={overviewColor}

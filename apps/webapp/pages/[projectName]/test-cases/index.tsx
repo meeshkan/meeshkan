@@ -237,25 +237,44 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
-	const significanceFilters: UserStoryFilter['OR'] = [];
+	const [user, setUser] = useState(false);
+	const [manual, setManual] = useState(false);
+
+	const testCaseFilters: UserStoryFilter['OR'] = [];
 	if (low) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			significance: {
 				equals: 'low',
 			},
 		});
 	}
 	if (medium) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			significance: {
 				equals: 'medium',
 			},
 		});
 	}
 	if (high) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			significance: {
 				equals: 'high',
+			},
+		});
+	}
+
+	if (user) {
+		testCaseFilters.push({
+			created: {
+				equals: 'user',
+			},
+		});
+	}
+
+	if (manual) {
+		testCaseFilters.push({
+			created: {
+				equals: 'manual',
 			},
 		});
 	}
@@ -276,7 +295,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					projectId,
 					first: pageSize,
 					skip: pageSize * pageIndex,
-					significanceFilters,
+					testCaseFilters,
 					sort,
 				})
 				.then((res) => {
@@ -286,7 +305,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[idToken, projectId, low, medium, high, sort]
+		[idToken, projectId, low, medium, high, user, manual, sort]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
@@ -534,6 +553,25 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 										<MenuItem>
 											<Checkbox isChecked={low} onChange={() => setLow(!low)}>
 												Low significance
+											</Checkbox>
+										</MenuItem>
+									</MenuGroup>
+
+									<MenuGroup title="Origin">
+										<MenuItem>
+											<Checkbox
+												isChecked={user}
+												onChange={() => setUser(!user)}
+											>
+												User generated
+											</Checkbox>
+										</MenuItem>
+										<MenuItem>
+											<Checkbox
+												isChecked={manual}
+												onChange={() => setManual(!manual)}
+											>
+												Manually generated
 											</Checkbox>
 										</MenuItem>
 									</MenuGroup>

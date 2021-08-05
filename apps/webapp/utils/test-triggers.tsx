@@ -75,7 +75,7 @@ export const TriggerTestRun = ({
 
 			const response = await fetch(
 				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
-					'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
+					'https://api.meeshkan.io/test-runner-staging/test-trigger',
 				{
 					method: 'POST',
 					mode: 'no-cors',
@@ -116,7 +116,7 @@ export const TriggerTestRun = ({
 
 			const response = await fetch(
 				process.env.NEXT_PUBLIC_TEST_TRIGGER_ENDPOINT ||
-					'https://t9ky8625ne.execute-api.eu-west-1.amazonaws.com/staging/test-trigger',
+					'https://api.meeshkan.io/test-runner-staging/test-trigger',
 				{
 					method: 'POST',
 					mode: 'no-cors',

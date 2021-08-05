@@ -34,7 +34,7 @@ export const generateVideo = (
 
 	fetch(
 		process.env.NEXT_PUBLIC_MAKE_VIDEO_ENDPOINT ||
-			'https://sfcyq4tmok.execute-api.eu-west-1.amazonaws.com/staging/make-video',
+			'https://api.meeshkan.io/vidgen-staging/make-video',
 		{
 			method: 'POST',
 			mode: 'no-cors',

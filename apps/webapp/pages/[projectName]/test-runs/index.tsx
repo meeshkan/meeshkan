@@ -152,7 +152,7 @@ const TestRunsPage = () => {
 												<Text fontSize="40px" fontWeight="700">
 													{Math.round(
 														(latestTestRunStats[label] / totalTestRunOutcomes) *
-															100
+														100
 													)}
 													%
 												</Text>
@@ -222,13 +222,14 @@ const TestRunsPage = () => {
 					{sortedTestRuns.length > 0 ? (
 						<Stack spacing={6}>
 							{sortedTestRuns.map((testRun, index) => {
-								const { id, status, createdAt } = testRun;
+								const { id, status, runLink, createdAt } = testRun;
 								return (
 									<TestRunCard
 										id={id}
 										key={id}
 										status={status}
 										runNumber={testRuns.length - index}
+										runLink={runLink}
 										date={new Date(createdAt)}
 										stats={_.countBy(
 											testRun.testOutcome.items.map((outcome) => outcome.status)

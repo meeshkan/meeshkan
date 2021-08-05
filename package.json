@@ -1,6 +1,6 @@
 {
 	"name": "meeshkan",
-	"version": "0.5.7",
+	"version": "1.0.3",
 	"license": "MIT",
 	"scripts": {
 		"nx": "nx",
