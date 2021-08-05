@@ -240,23 +240,23 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [user, setUser] = useState(false);
 	const [manual, setManual] = useState(false);
 
-	const significanceFilters: UserStoryFilter['OR'] = [];
+	const testCaseFilters: UserStoryFilter['OR'] = [];
 	if (low) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			significance: {
 				equals: 'low',
 			},
 		});
 	}
 	if (medium) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			significance: {
 				equals: 'medium',
 			},
 		});
 	}
 	if (high) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			significance: {
 				equals: 'high',
 			},
@@ -264,7 +264,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	}
 
 	if (user) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			created: {
 				equals: 'user',
 			},
@@ -272,7 +272,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	}
 
 	if (manual) {
-		significanceFilters.push({
+		testCaseFilters.push({
 			created: {
 				equals: 'manual',
 			},
@@ -295,7 +295,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 					projectId,
 					first: pageSize,
 					skip: pageSize * pageIndex,
-					significanceFilters,
+					testCaseFilters,
 					sort,
 				})
 				.then((res) => {
