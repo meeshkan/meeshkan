@@ -74,7 +74,8 @@ const CreateProjectForm = ({
 		const [newProject] = data.userUpdate.projects.items;
 		projects.push(newProject);
 		mixpanel.track('Create new project', { projectName: newProject.name });
-		await mutateUser({ ...user, projects });
+		// Removed because this causes a user to get kicked out of the onboarding process
+		// await mutateUser({ ...user, projects });
 		setLoading(false);
 
 		setProjectName(createSlug(formData.name));
