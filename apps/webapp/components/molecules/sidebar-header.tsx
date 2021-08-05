@@ -45,8 +45,9 @@ const SideBarHeader = ({ toggle }: SideBarHeaderProps) => {
 		project,
 	]);
 
-	const handleLogoutClick = () => {
+	const handleLogoutClick = async () => {
 		mixpanel.track('Log out');
+		await window?.CommandBar?.shutdown();
 		Router.push('/api/logout');
 		shutdownIntercom();
 	};
