@@ -72,9 +72,9 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 		if (hasCopied) {
 			toaster({
 				status: 'success',
-				title: 'User story link copied!',
+				title: 'Test case link copied!',
 				description:
-					'The URL of this user story has been copied to your clipboard.',
+					'The URL of this test case has been copied to your clipboard.',
 			});
 		}
 	}, [hasCopied, toaster]);
@@ -186,7 +186,7 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 						size="sm"
 						borderRadius="md"
 						id="title"
-						placeholder="User story default title"
+						placeholder="Test case default title"
 					/>
 				</FormControl>
 
