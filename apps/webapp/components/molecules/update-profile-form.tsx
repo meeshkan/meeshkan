@@ -33,8 +33,8 @@ const jobTitles = ['Product manager', 'CTO', 'Other'];
 
 type UpdateProfileFormProps = {
 	formId?: string;
-	step: number;
-	setStep: Dispatch<SetStateAction<number>>;
+	step?: number;
+	setStep?: Dispatch<SetStateAction<number>>;
 	setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
