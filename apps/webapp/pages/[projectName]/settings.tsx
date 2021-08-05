@@ -32,7 +32,6 @@ import { useValidateSelectedProject } from '../../hooks/use-validate-selected-pr
 import LoadingScreen from '../../components/organisms/loading-screen';
 import GridCard, { GridCardProps } from '../../components/molecules/grid-card';
 import UpdateProfileForm from '../../components/molecules/update-profile-form';
-import UpdateProfileForm2 from '../../components/molecules/update-profile-form2';
 import UpdateProjectForm from '../../components/molecules/update-project-form';
 import Card from '../../components/atoms/card';
 import NotFoundError from '../404';
@@ -394,8 +393,8 @@ const Settings = () => {
 				<SectionGridCard
 					title="Profile"
 					subtitle="Manage your Meeshkan Profile"
-				> 
-					<UpdateProfileForm2
+				>
+					<UpdateProfileForm
 						setLoading={setProfileLoading}
 						formId="profileUpdateForm"
 					/>
@@ -464,9 +463,8 @@ const Settings = () => {
 					</Heading>
 					<InviteLinkInput />
 					{members?.map((member: User) => {
-						const memberName = `${member.firstName || ''} ${
-							member.lastName || ''
-						}`;
+						const memberName = `${member.firstName || ''} ${member.lastName || ''
+							}`;
 						const memberAvatar = member?.avatar?.downloadUrl;
 						return (
 							<Flex
@@ -683,9 +681,8 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/test-cases/${
-								project?.configuration?.logInStory?.id
-							}`}
+							href={`/${createSlug(project?.name)}/test-cases/${project?.configuration?.logInStory?.id
+								}`}
 						>
 							<Flex
 								as="a"
