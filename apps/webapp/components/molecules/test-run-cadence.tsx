@@ -14,6 +14,7 @@ import { UserContext } from '../../utils/user';
 import { eightBaseClient } from '../../utils/graphql';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 export const TestRunCadence = ({
 	projectID,
@@ -35,8 +36,11 @@ export const TestRunCadence = ({
 	const [toggleTestRunnerIndex, setToggleTestRunnerIndex] = useState<
 		0 | 1 | null
 	>(1);
+	const mixpanel = useAnalytics();
+
 	const onSubmit = async (): Promise<void> => {
 		setLoading(true);
+		mixpanel.track('Set up test run cadence');
 		router.push(projectName);
 	};
 	useEffect(() => {

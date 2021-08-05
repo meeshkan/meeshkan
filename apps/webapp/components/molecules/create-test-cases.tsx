@@ -3,6 +3,7 @@ import { Box, Text, Heading, Link, useColorModeValue } from '@chakra-ui/react';
 import { RadioGroup } from '../atoms/radio-card';
 import ScriptTagInput from './script-tag-input';
 import { useForm } from 'react-hook-form';
+import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 
 export const CreateTestCases = ({
 	projectID,
@@ -16,13 +17,15 @@ export const CreateTestCases = ({
 	const [radio, setRadio] = useState('Manually');
 	const linkBlueColor = useColorModeValue('blue.500', 'blue.300');
 	const { handleSubmit } = useForm();
+	const mixpanel = useAnalytics();
 
 	const onSubmit = async (): Promise<void> => {
+		mixpanel.track('Set up test cases');
 		setStep(step + 1);
 	};
 
 	return (
-		<Box as='form' w='full' onSubmit={handleSubmit(onSubmit)} id="form">
+		<Box as="form" w="full" onSubmit={handleSubmit(onSubmit)} id="form">
 			<Box>
 				<RadioGroup
 					options={['Manually', 'Automatically', 'Both']}
@@ -42,9 +45,9 @@ export const CreateTestCases = ({
 							>
 								Install the chrome extension.
 							</Link>{' '}
-							This is is great if you are a developer or product manager
-							testing a new feature where user behavior is still unknown but
-							you'd like to test it as further development continues.
+							This is is great if you are a developer or product manager testing
+							a new feature where user behavior is still unknown but you'd like
+							to test it as further development continues.
 						</Text>
 					</Box>
 				)}
@@ -57,8 +60,8 @@ export const CreateTestCases = ({
 						<Text mb={4}>
 							This is the preferred method of recording as it's the best
 							indication of meaningful test coverage. Once a day our Data
-							Processing Pipeline will determine viable test cases based on
-							your production user behavior and create cases automatically.
+							Processing Pipeline will determine viable test cases based on your
+							production user behavior and create cases automatically.
 						</Text>
 						<ScriptTagInput projectID={projectID} />
 					</Box>
