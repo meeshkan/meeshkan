@@ -237,6 +237,9 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	const [low, setLow] = useState(false);
 	const [medium, setMedium] = useState(false);
 	const [high, setHigh] = useState(false);
+	const [user, setUser] = useState(false);
+	const [manual, setManual] = useState(false);
+
 	const significanceFilters: UserStoryFilter['OR'] = [];
 	if (low) {
 		significanceFilters.push({
@@ -256,6 +259,22 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 		significanceFilters.push({
 			significance: {
 				equals: 'high',
+			},
+		});
+	}
+
+	if (user) {
+		significanceFilters.push({
+			created: {
+				equals: 'user',
+			},
+		});
+	}
+
+	if (manual) {
+		significanceFilters.push({
+			created: {
+				equals: 'manual',
 			},
 		});
 	}
@@ -286,7 +305,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				});
 			return request;
 		},
-		[idToken, projectId, low, medium, high, sort]
+		[idToken, projectId, low, medium, high, user, manual, sort]
 	);
 
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
@@ -534,6 +553,25 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 										<MenuItem>
 											<Checkbox isChecked={low} onChange={() => setLow(!low)}>
 												Low significance
+											</Checkbox>
+										</MenuItem>
+									</MenuGroup>
+
+									<MenuGroup title="Origin">
+										<MenuItem>
+											<Checkbox
+												isChecked={user}
+												onChange={() => setUser(!user)}
+											>
+												User generated
+											</Checkbox>
+										</MenuItem>
+										<MenuItem>
+											<Checkbox
+												isChecked={manual}
+												onChange={() => setManual(!manual)}
+											>
+												Manually generated
 											</Checkbox>
 										</MenuItem>
 									</MenuGroup>
