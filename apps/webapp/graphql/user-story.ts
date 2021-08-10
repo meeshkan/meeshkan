@@ -173,7 +173,6 @@ export const UPDATE_STORY_TITLE = gql`
 			significance
 			video {
 				downloadUrl
-				shareUrl
 			}
 			startEventId
 			endEventId
@@ -223,7 +222,6 @@ export const UPDATE_STORY_DESCRIPTION = gql`
 			significance
 			video {
 				downloadUrl
-				shareUrl
 			}
 			startEventId
 			endEventId
@@ -273,7 +271,6 @@ export const UPDATE_STORY_SIGNIFICANCE = gql`
 			significance
 			video {
 				downloadUrl
-				shareUrl
 			}
 			startEventId
 			endEventId
@@ -325,7 +322,6 @@ export const UPDATE_REQUIRES_AUTHENTICATION = gql`
 				significance
 				video {
 					downloadUrl
-					shareUrl
 				}
 				startEventId
 				endEventId
@@ -381,7 +377,6 @@ export const UPDATE_STEP = gql`
 			significance
 			video {
 				downloadUrl
-				shareUrl
 			}
 			startEventId
 			endEventId
@@ -439,7 +434,6 @@ export const CREATE_SINGLE_STEP = gql`
 			significance
 			video {
 				downloadUrl
-				shareUrl
 			}
 			startEventId
 			endEventId

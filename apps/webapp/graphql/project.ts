@@ -7,7 +7,6 @@ export const PROJECT = gql`
 			name
 			avatar {
 				downloadUrl
-				shareUrl
 			}
 			configuration {
 				activeTestRuns
@@ -83,7 +82,6 @@ export const PROJECT = gql`
 							createdAt
 							video {
 								downloadUrl
-								shareUrl
 							}
 						}
 					}
@@ -119,7 +117,6 @@ export const PROJECT = gql`
 									createdAt
 									video {
 										downloadUrl
-										shareUrl
 									}
 									userStory {
 										id
@@ -193,7 +190,6 @@ export const CREATE_PROJECT = gql`
 					name
 					avatar {
 						downloadUrl
-						shareUrl
 					}
 					configuration {
 						clientSecret
@@ -276,7 +272,6 @@ export const JOIN_PROJECT = gql`
 				name
 				avatar {
 					downloadUrl
-					shareUrl
 				}
 			}
 		}
