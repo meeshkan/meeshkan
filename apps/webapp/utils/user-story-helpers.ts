@@ -25,9 +25,9 @@ import { eightBaseToPptr } from '@frontend/downloadable-script';
 import { saveAs } from 'file-saver';
 
 export const generateVideo = (
-	startEventID: string,
-	endEventID: string,
-	userStoryID: string,
+	startEventId: string,
+	endEventId: string,
+	userStoryId: string,
 	setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
 	setLoading(true);
@@ -42,9 +42,9 @@ export const generateVideo = (
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				startEventID,
-				endEventID,
-				userStoryID,
+				startEventId,
+				endEventId,
+				userStoryId,
 			}),
 		}
 	).then(() => setTimeout(() => setLoading(false), 30000));
