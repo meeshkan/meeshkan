@@ -541,5 +541,25 @@ export const GET_USER_STORIES_FOR_METRICS = gql`
 				created
 			}
 		}
+		releasesList(filter: { project: { id: { equals: $projectId } } }) {
+			count
+			items {
+				id
+				name
+				releaseDate
+				testRuns {
+					count
+					items {
+						id
+						status
+						testOutcome {
+							items {
+								status
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 `;

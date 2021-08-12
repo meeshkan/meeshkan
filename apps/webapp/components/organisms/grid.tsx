@@ -122,6 +122,7 @@ const Grid = (props: StackProps) => {
 	const { project: selectedProject, idToken } = useContext(UserContext);
 	const [loading, setLoading] = useState(false);
 	const [testCases, setTestCases] = useState([]);
+	const [releases, setReleases] = useState([]);
 
 	const client = eightBaseClient(idToken);
 
@@ -131,7 +132,11 @@ const Grid = (props: StackProps) => {
 			.request(GET_USER_STORIES_FOR_METRICS, {
 				projectId: selectedProject.id,
 			})
-			.then((res) => setTestCases(res?.userStoriesList?.items));
+			.then((res) => {
+				console.log(res);
+				setTestCases(res?.userStoriesList?.items);
+				setReleases(res?.releasesList?.items);
+			});
 		setLoading(false);
 	}, [selectedProject]);
 
@@ -196,7 +201,7 @@ const Grid = (props: StackProps) => {
 		},
 	};
 
-	const versions = selectedProject.release.items;
+	const versions = releases;
 
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
@@ -208,11 +213,10 @@ const Grid = (props: StackProps) => {
 	]);
 
 	const userStories: UserStoryListResponse['items'] = testCases;
-	// const userStories: UserStoryListResponse['items'] = selectedProject.userStories.items;
 
 	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	const bugs = getBugs(version.testRuns.items);
+	const bugs = getBugs(version?.testRuns?.items);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
 	const confidenceDataPoints = getConfidenceScore(
@@ -283,7 +287,7 @@ const Grid = (props: StackProps) => {
 		testCoverageScore
 	);
 
-	const latestTestStates = getLatestTestStates(version.testRuns.items);
+	const latestTestStates = getLatestTestStates(version?.testRuns?.items);
 	const doughnutDataValues = Object.values(latestTestStates);
 	const doughnutDataLabels = Object.keys(latestTestStates).map(capitalize);
 	doughnutData.datasets[0].data = doughnutDataValues;
@@ -383,15 +387,15 @@ const Grid = (props: StackProps) => {
 							w="100%"
 							textAlign="left"
 						>
-							{version.name}
+							{version?.name}
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={version.id}
+								defaultValue={version?.id}
 								title="Versions"
 								type="radio"
 							>
-								{versions.map((version, index) => (
+								{versions?.map((version, index) => (
 									<MenuItemOption
 										key={version.id}
 										value={version.id}
