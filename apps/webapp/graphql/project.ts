@@ -69,64 +69,6 @@ export const PROJECT = gql`
 					}
 				}
 			}
-			release {
-				count
-				items {
-					id
-					name
-					releaseDate
-					testRuns {
-						count
-						items {
-							id
-							status
-							runLink
-							createdAt
-							testLength
-							testOutcome {
-								count
-								items {
-									id
-									status
-									isResolved
-									errorStepIndex
-									createdAt
-									video {
-										downloadUrl
-									}
-									userStory {
-										id
-										title
-										created
-										requiresAuthentication
-										scriptCommands {
-											items {
-												command
-												sIndex
-												value
-												xCoordinate
-												yCoordinate
-												xpath
-												selector
-												className
-												tagName
-												tagId
-												innerText
-												altOrAriaText
-												scrollTop
-												scrollLeft
-												destinationXCoordinate
-												destinationYCoordinate
-												destinationTagName
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 `;

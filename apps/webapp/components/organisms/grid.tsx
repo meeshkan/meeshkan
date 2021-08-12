@@ -133,7 +133,6 @@ const Grid = (props: StackProps) => {
 				projectId: selectedProject.id,
 			})
 			.then((res) => {
-				console.log(res);
 				setTestCases(res?.userStoriesList?.items);
 				setReleases(res?.releasesList?.items);
 			});
@@ -215,7 +214,7 @@ const Grid = (props: StackProps) => {
 	const userStories: UserStoryListResponse['items'] = testCases;
 
 	const testRuns = getTestRuns(versions);
-	const daysUntilRelease = getDaysUntilRelease(selectedProject);
+	const daysUntilRelease = getDaysUntilRelease(version?.releaseDate);
 	const bugs = getBugs(version?.testRuns?.items);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
