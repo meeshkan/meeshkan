@@ -36,7 +36,6 @@ import {
 	UserStoryListResponse,
 	DataPointTag,
 	DataPoint,
-	Project,
 } from '@frontend/meeshkan-types';
 import { capitalize } from '../../utils/capitalize';
 import {
@@ -54,6 +53,8 @@ import {
 import { lastNDays } from '../../utils/date';
 import { startTour } from '../../utils/product-tours';
 import { ChartOptions, ChartData } from 'chart.js';
+import { eightBaseClient } from '../../utils/graphql';
+import { GET_USER_STORIES_FOR_METRICS } from '../../graphql/user-story';
 
 const barData: ChartData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -118,7 +119,21 @@ const GettingStartedListItem = ({
 };
 
 const Grid = (props: StackProps) => {
-	const { project: selectedProject } = useContext(UserContext);
+	const { project: selectedProject, idToken } = useContext(UserContext);
+	const [loading, setLoading] = useState(false);
+	const [testCases, setTestCases] = useState([]);
+
+	const client = eightBaseClient(idToken);
+
+	useEffect(() => {
+		setLoading(true);
+		client
+			.request(GET_USER_STORIES_FOR_METRICS, {
+				projectId: selectedProject.id,
+			})
+			.then((res) => setTestCases(res?.userStoriesList?.items));
+		setLoading(false);
+	}, [selectedProject]);
 
 	const listColor = useColorModeValue('gray.600', 'gray.400');
 	const overviewColor = useColorModeValue('gray.700', 'gray.100');
@@ -192,8 +207,8 @@ const Grid = (props: StackProps) => {
 		selectedProject,
 	]);
 
-	const userStories: UserStoryListResponse['items'] =
-		selectedProject.userStories.items;
+	const userStories: UserStoryListResponse['items'] = testCases;
+	// const userStories: UserStoryListResponse['items'] = selectedProject.userStories.items;
 
 	const testRuns = getTestRuns(versions);
 	const daysUntilRelease = getDaysUntilRelease(selectedProject);

@@ -69,30 +69,6 @@ export const PROJECT = gql`
 					}
 				}
 			}
-			userStories {
-				count
-				items {
-					id
-					testOutcome {
-						items {
-							id
-							status
-							isResolved
-							errorStepIndex
-							createdAt
-							video {
-								downloadUrl
-							}
-						}
-					}
-					title
-					testCreatedDate
-					isTestCase
-					requiresAuthentication
-					createdAt
-					created
-				}
-			}
 			release {
 				count
 				items {

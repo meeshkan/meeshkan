@@ -513,3 +513,33 @@ export const CREATE_STEP = gql`
 		}
 	}
 `;
+
+export const GET_USER_STORIES_FOR_METRICS = gql`
+	query GET_USER_STORIES_FOR_METRICS($projectId: ID!) {
+		userStoriesList(filter: { project: { id: { equals: $projectId } } }) {
+			count
+			items {
+				id
+				testOutcome {
+					items {
+						id
+						status
+						isResolved
+						errorStepIndex
+						createdAt
+						video {
+							downloadUrl
+							shareUrl
+						}
+					}
+				}
+				title
+				testCreatedDate
+				isTestCase
+				requiresAuthentication
+				createdAt
+				created
+			}
+		}
+	}
+`;
