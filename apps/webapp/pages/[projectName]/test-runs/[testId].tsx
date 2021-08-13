@@ -67,7 +67,6 @@ const TestRunPage = () => {
 		project?.name,
 	]);
 
-	// Example test case to work with on meeshkan-webapp cks8lwvkt001208lbe8x6hquj
 	const { testId } = router.query;
 
 	const client = eightBaseClient(idToken);
