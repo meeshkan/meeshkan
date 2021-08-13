@@ -55,12 +55,7 @@ export const TEST_RUN = gql`
 export const TEST_RUNS = gql`
 	query TEST_RUN($projectId: ID!) {
 		testRunsList(
-			filter: {
-				release: {
-					name: { equals: "default" }
-					project: { id: { equals: $projectId } }
-				}
-			}
+			filter: { release: { project: { id: { equals: $projectId } } } }
 		) {
 			items {
 				id
