@@ -99,7 +99,7 @@ const UserStoryPage = (props: UserStoryProps) => {
 							maxW="fit-content"
 						>
 							<ChevronLeftIcon w={4} h={4} color="gray.500" mr={3} />
-							Back to user stories
+							Back to test cases
 						</ChakraLink>
 					</Link>
 
