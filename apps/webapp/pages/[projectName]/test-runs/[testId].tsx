@@ -49,13 +49,17 @@ import ValidatedBillingPlan from '../../../components/molecules/validated-billin
 import {
 	ScriptCommandListResponse,
 	TestOutcomeListResponse,
+	TestRun,
 } from '@frontend/meeshkan-types';
-import { commandsToSteps } from 'apps/webapp/utils/transform-steps';
+import { commandsToSteps } from '../../../utils/transform-steps';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
+import { eightBaseClient } from '../../../utils/graphql';
+import useSWR from 'swr';
+import { TEST_RUN } from '../../../graphql/test-run';
 
-const TestRun = () => {
+const TestRunPage = () => {
 	const { found, loading } = useValidateSelectedProject();
-	const { project } = useContext(UserContext);
+	const { project, idToken } = useContext(UserContext);
 	const router = useRouter();
 	const mixpanel = useAnalytics();
 
@@ -63,24 +67,41 @@ const TestRun = () => {
 		project?.name,
 	]);
 
+	// Example test case to work with on meeshkan-webapp cks8lwvkt001208lbe8x6hquj
+	const { testId } = router.query;
+
+	const client = eightBaseClient(idToken);
+	// Initial data fetch
+	const fetcher = (query: string) =>
+		client.request(query, {
+			projectId: project?.id,
+			testRunId: testId,
+		});
+
+	type TestRunResponse = {
+		testRun: TestRun;
+	};
+
+	const { data, error, mutate, isValidating } = useSWR<TestRunResponse>(
+		TEST_RUN,
+		fetcher
+	);
+	if (
+		loading ||
+		(isValidating && (!data || data?.testRun?.id !== testId)) ||
+		isValidating
+	) {
+		return <LoadingScreen as={Card} />;
+	}
+	if (error || !found || !data) {
+		return <NotFoundError />;
+	}
+
+	const testRun = data.testRun;
+
 	const headingColor = useColorModeValue('gray.900', 'gray.200');
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
 	const alertLinkColor = useColorModeValue('red.700', 'red.300');
-
-	if (loading) {
-		return <LoadingScreen as={Card} />;
-	}
-
-	const { testId } = router.query;
-
-	const testRun = _.find(
-		project?.release.items[0]?.testRuns?.items,
-		(item) => item.id === testId
-	);
-
-	if (!found || !testRun) {
-		return <NotFoundError />;
-	}
 
 	const testCasesRan: number = testRun.testOutcome.count;
 	const outcomeOrder = [
@@ -93,14 +114,12 @@ const TestRun = () => {
 	const sortedTestOutcomes: TestOutcomeListResponse['items'] = testRun.testOutcome.items.sort(
 		(a, b) => outcomeOrder.indexOf(a.status) - outcomeOrder.indexOf(b.status)
 	);
-
 	const testsNeedAuthentication: boolean = project?.userStories?.items.some(
 		(story) => story.requiresAuthentication
 	);
 	const stepsInLogInStory: number =
 		project?.configuration?.logInStory?.scriptCommands?.count;
 	const hasLogInStory: boolean = !!project?.configuration?.logInStory;
-
 	const hasAuthTokens: boolean =
 		(project?.configuration?.authenticationTokens?.items?.length || 0) >= 1;
 
@@ -214,7 +233,7 @@ const TestRun = () => {
 												: outcome?.errorStepIndex;
 										const errorInLogIn: boolean =
 											contextualErrorStepIndex > 0 &&
-												!isNaN(contextualErrorStepIndex)
+											!isNaN(contextualErrorStepIndex)
 												? false
 												: true;
 
@@ -365,7 +384,7 @@ const TestRun = () => {
 																</Tooltip>
 															) : null}
 															{isFailing &&
-																project?.configuration?.logInStory?.id ===
+															project?.configuration?.logInStory?.id ===
 																testCase?.id ? (
 																<Tooltip
 																	label="This is the path your users take to sign in."
@@ -419,8 +438,8 @@ const TestRun = () => {
 																	>
 																		{requiresAuthentication && hasLogInStory
 																			? outcome?.errorStepIndex +
-																			1 -
-																			stepsInLogInStory
+																			  1 -
+																			  stepsInLogInStory
 																			: outcome?.errorStepIndex + 1}
 																	</Flex>
 																	<Box w="full">
@@ -513,4 +532,4 @@ const TestRun = () => {
 	);
 };
 
-export default TestRun;
+export default TestRunPage;
