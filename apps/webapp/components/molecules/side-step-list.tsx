@@ -157,7 +157,7 @@ const AddStep = ({
 			userStoryId,
 			{
 				...formData,
-				sIndex: steps.length + 1,
+				sIndex: steps.length,
 			},
 			idToken
 		);
