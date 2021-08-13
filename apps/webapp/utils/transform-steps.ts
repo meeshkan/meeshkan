@@ -42,6 +42,8 @@ export const HumanTag = (tag: string): string => {
 		? 'Video'
 		: tag === 'HTML'
 		? 'Page'
+		: tag === null
+		? "element"
 		: tag;
 };
 
