@@ -40,7 +40,6 @@ export const UPDATE_AVATAR = gql`
 			avatar {
 				id
 				downloadUrl
-				shareUrl
 			}
 		}
 	}
@@ -58,7 +57,6 @@ export const USER = gql`
 			productNotifications
 			avatar {
 				downloadUrl
-				shareUrl
 			}
 			projects {
 				items {
@@ -74,7 +72,6 @@ export const USER = gql`
 					}
 					avatar {
 						downloadUrl
-						shareUrl
 					}
 				}
 			}

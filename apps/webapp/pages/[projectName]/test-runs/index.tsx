@@ -30,7 +30,11 @@ import LoadingScreen from '../../../components/organisms/loading-screen';
 import NotFoundError from '../../404';
 import { UserContext } from '../../../utils/user';
 import { capitalize } from '../../../utils/capitalize';
-import { TriggerTestRun } from 'apps/webapp/utils/test-triggers';
+import { TriggerTestRun } from '../../../utils/test-triggers';
+import { eightBaseClient } from '../../../utils/graphql';
+import useSWR from 'swr';
+import { TEST_RUNS } from '../../../graphql/test-run';
+import { TestRunListResponse } from '@frontend/meeshkan-types';
 
 const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutBackgroundColors = [
@@ -53,10 +57,33 @@ const doughnutData = {
 const TestRunsPage = () => {
 	const { found, loading } = useValidateSelectedProject();
 	const user = useContext(UserContext);
-	const { project } = user;
+	const { project, idToken } = user;
 	const { colorMode } = useColorMode();
 
-	const testRuns = project?.release.items[0]?.testRuns?.items;
+	const client = eightBaseClient(idToken);
+	// Initial data fetch
+	const fetcher = (query: string) =>
+		client.request(query, {
+			projectId: project?.id,
+		});
+
+	type TestRunsResponse = {
+		testRunsList: TestRunListResponse;
+	};
+
+	const { data, error, isValidating } = useSWR<TestRunsResponse>(
+		TEST_RUNS,
+		fetcher
+	);
+	if (loading || isValidating) {
+		return <LoadingScreen as={Card} />;
+	}
+	if (error || !found || !data) {
+		return <NotFoundError />;
+	}
+
+	// const testRuns = project?.release.items[0]?.testRuns?.items;
+	const testRuns = data.testRunsList.items;
 	const sortedTestRuns = testRuns?.sort(
 		(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
 	);
@@ -97,14 +124,6 @@ const TestRunsPage = () => {
 	const borderColor = useColorModeValue('gray.300', 'gray.600');
 	const backgroundColor = useColorModeValue('gray.200', 'gray.700');
 	const emptyDoughnutColor = useColorModeValue('gray.100', 'gray.800');
-
-	if (loading) {
-		return <LoadingScreen as={Card} />;
-	}
-
-	if (!found) {
-		return <NotFoundError />;
-	}
 
 	return (
 		<ValidatedBillingPlan>
@@ -152,7 +171,7 @@ const TestRunsPage = () => {
 												<Text fontSize="40px" fontWeight="700">
 													{Math.round(
 														(latestTestRunStats[label] / totalTestRunOutcomes) *
-														100
+															100
 													)}
 													%
 												</Text>
