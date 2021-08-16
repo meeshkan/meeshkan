@@ -7,7 +7,6 @@ export const PROJECT = gql`
 			name
 			avatar {
 				downloadUrl
-				shareUrl
 			}
 			configuration {
 				activeTestRuns
@@ -70,90 +69,6 @@ export const PROJECT = gql`
 					}
 				}
 			}
-			userStories {
-				count
-				items {
-					id
-					testOutcome {
-						items {
-							id
-							status
-							isResolved
-							errorStepIndex
-							createdAt
-							video {
-								downloadUrl
-								shareUrl
-							}
-						}
-					}
-					title
-					testCreatedDate
-					isTestCase
-					requiresAuthentication
-					createdAt
-					created
-				}
-			}
-			release {
-				count
-				items {
-					id
-					name
-					releaseDate
-					testRuns {
-						count
-						items {
-							id
-							status
-							runLink
-							createdAt
-							testLength
-							testOutcome {
-								count
-								items {
-									id
-									status
-									isResolved
-									errorStepIndex
-									createdAt
-									video {
-										downloadUrl
-										shareUrl
-									}
-									userStory {
-										id
-										title
-										created
-										requiresAuthentication
-										scriptCommands {
-											items {
-												command
-												sIndex
-												value
-												xCoordinate
-												yCoordinate
-												xpath
-												selector
-												className
-												tagName
-												tagId
-												innerText
-												altOrAriaText
-												scrollTop
-												scrollLeft
-												destinationXCoordinate
-												destinationYCoordinate
-												destinationTagName
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 `;
@@ -193,7 +108,6 @@ export const CREATE_PROJECT = gql`
 					name
 					avatar {
 						downloadUrl
-						shareUrl
 					}
 					configuration {
 						clientSecret
@@ -276,7 +190,6 @@ export const JOIN_PROJECT = gql`
 				name
 				avatar {
 					downloadUrl
-					shareUrl
 				}
 			}
 		}

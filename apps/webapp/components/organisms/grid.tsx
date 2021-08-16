@@ -36,7 +36,6 @@ import {
 	UserStoryListResponse,
 	DataPointTag,
 	DataPoint,
-	Project,
 } from '@frontend/meeshkan-types';
 import { capitalize } from '../../utils/capitalize';
 import {
@@ -54,6 +53,8 @@ import {
 import { lastNDays } from '../../utils/date';
 import { startTour } from '../../utils/product-tours';
 import { ChartOptions, ChartData } from 'chart.js';
+import { eightBaseClient } from '../../utils/graphql';
+import { GET_USER_STORIES_FOR_METRICS } from '../../graphql/user-story';
 
 const barData: ChartData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -118,7 +119,25 @@ const GettingStartedListItem = ({
 };
 
 const Grid = (props: StackProps) => {
-	const { project: selectedProject } = useContext(UserContext);
+	const { project: selectedProject, idToken } = useContext(UserContext);
+	const [loading, setLoading] = useState(false);
+	const [testCases, setTestCases] = useState([]);
+	const [releases, setReleases] = useState([]);
+
+	const client = eightBaseClient(idToken);
+
+	useEffect(() => {
+		setLoading(true);
+		client
+			.request(GET_USER_STORIES_FOR_METRICS, {
+				projectId: selectedProject.id,
+			})
+			.then((res) => {
+				setTestCases(res?.userStoriesList?.items);
+				setReleases(res?.releasesList?.items);
+			});
+		setLoading(false);
+	}, [selectedProject]);
 
 	const listColor = useColorModeValue('gray.600', 'gray.400');
 	const overviewColor = useColorModeValue('gray.700', 'gray.100');
@@ -181,7 +200,7 @@ const Grid = (props: StackProps) => {
 		},
 	};
 
-	const versions = selectedProject.release.items;
+	const versions = releases;
 
 	const [version, setVersion] = useState(versions[0]);
 	const [timePeriod, setTimePeriod] = useState('7 days');
@@ -192,12 +211,11 @@ const Grid = (props: StackProps) => {
 		selectedProject,
 	]);
 
-	const userStories: UserStoryListResponse['items'] =
-		selectedProject.userStories.items;
+	const userStories: UserStoryListResponse['items'] = testCases;
 
 	const testRuns = getTestRuns(versions);
-	const daysUntilRelease = getDaysUntilRelease(selectedProject);
-	const bugs = getBugs(version.testRuns.items);
+	const daysUntilRelease = getDaysUntilRelease(version?.releaseDate);
+	const bugs = getBugs(version?.testRuns?.items);
 	const releaseStart = getReleaseStartFromProject(selectedProject);
 
 	const confidenceDataPoints = getConfidenceScore(
@@ -268,7 +286,7 @@ const Grid = (props: StackProps) => {
 		testCoverageScore
 	);
 
-	const latestTestStates = getLatestTestStates(version.testRuns.items);
+	const latestTestStates = getLatestTestStates(version?.testRuns?.items);
 	const doughnutDataValues = Object.values(latestTestStates);
 	const doughnutDataLabels = Object.keys(latestTestStates).map(capitalize);
 	doughnutData.datasets[0].data = doughnutDataValues;
@@ -368,15 +386,15 @@ const Grid = (props: StackProps) => {
 							w="100%"
 							textAlign="left"
 						>
-							{version.name}
+							{version?.name}
 						</MenuButton>
 						<MenuList>
 							<MenuOptionGroup
-								defaultValue={version.id}
+								defaultValue={version?.id}
 								title="Versions"
 								type="radio"
 							>
-								{versions.map((version, index) => (
+								{versions?.map((version, index) => (
 									<MenuItemOption
 										key={version.id}
 										value={version.id}

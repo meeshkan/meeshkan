@@ -9,16 +9,9 @@ import {
 	FormControl,
 	FormLabel,
 	FormErrorMessage,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuOptionGroup,
-	MenuItemOption,
 	Input,
-	Button,
 	Box,
 } from '@chakra-ui/react';
-import { ArrowUpDownIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
 import AvatarField from '../molecules/avatar-field';
 import { UserContext, updateProfile } from '../../utils/user';
@@ -29,7 +22,13 @@ type ProfileFormInputs = {
 	jobTitle: string;
 };
 
-const jobTitles = ['Product manager', 'CTO', 'Other'];
+const jobTitles = [
+	'Product manager',
+	'CTO',
+	'User experience',
+	'QA engineer',
+	'Other',
+];
 
 type UpdateProfileFormProps = {
 	formId?: string;
@@ -54,7 +53,6 @@ const UpdateProfileForm = ({
 		mutate: mutateUser,
 	} = user;
 	const [name, setName] = useState<string>(currentName);
-	const [title, setTitle] = useState(jobTitle || jobTitles[0]);
 	const [avatarFile, setAvatarFile] = useState<UploadedFile | null>(null);
 	const { register, handleSubmit } = useForm<ProfileFormInputs>();
 
@@ -63,7 +61,7 @@ const UpdateProfileForm = ({
 		setError('');
 		const data = await updateProfile(idToken, {
 			name: formData.name,
-			jobTitle: title,
+			jobTitle: formData.jobTitle,
 			avatar: avatarFile,
 		});
 
@@ -106,30 +104,19 @@ const UpdateProfileForm = ({
 			</FormControl>
 			<FormControl id="title" isRequired isInvalid={!!error}>
 				<FormLabel>What's your job title?</FormLabel>
-				<Menu>
-					<MenuButton
-						as={Button}
-						colorScheme="gray"
-						rightIcon={<ArrowUpDownIcon />}
-						w="100%"
-						textAlign="left"
-					>
-						{title}
-					</MenuButton>
-					<MenuList>
-						<MenuOptionGroup defaultValue={title} type="radio">
-							{jobTitles.map((title) => (
-								<MenuItemOption
-									key={title}
-									value={title}
-									onClick={() => setTitle(title)}
-								>
-									{title}
-								</MenuItemOption>
-							))}
-						</MenuOptionGroup>
-					</MenuList>
-				</Menu>
+				<Input
+					name="jobTitle"
+					ref={register}
+					id="jobTitle"
+					type="text"
+					list="suggestions"
+					defaultValue={jobTitle}
+				/>
+				<datalist id="suggestions">
+					{jobTitles.map((title) => (
+						<option key={title} value={title} />
+					))}
+				</datalist>
 				<FormErrorMessage>Error: {error}</FormErrorMessage>
 			</FormControl>
 		</Box>

@@ -8,6 +8,7 @@ import {
 	ReleaseListResponse,
 	DataPoint,
 	DataPointTag,
+	Release,
 } from '@frontend/meeshkan-types';
 
 export const getTestRuns = (releases: ReleaseListResponse['items']) => {
@@ -33,9 +34,7 @@ export const getTestRuns = (releases: ReleaseListResponse['items']) => {
 	};
 };
 
-export const getDaysUntilRelease = (project: Project) => {
-	const [release] = project.release.items;
-	const releaseDate = release.releaseDate;
+export const getDaysUntilRelease = (releaseDate: Release['releaseDate']) => {
 	return releaseDate ? daysUntilDate(new Date(releaseDate)) : null;
 };
 
@@ -125,7 +124,11 @@ export const calculatePercentageChange = (
 		: dataPoint.score;
 
 export const deltaChange = (oldValue: number, newValue: number) =>
-	oldValue === 0 ? (newValue === 0 ? 0 : 100) : ((oldValue - newValue) * 100) / oldValue;
+	oldValue === 0
+		? newValue === 0
+			? 0
+			: 100
+		: ((oldValue - newValue) * 100) / oldValue;
 
 export const COVERAGE_DATA_POINT = 'COVERAGE_DATA_POINT';
 export const MAX_POSSIBLE_TEST_COVERAGE_SCORE = 30;
@@ -149,10 +152,7 @@ export const getConfidenceScore = (
 			.map((story) => ({
 				[story.id + COVERAGE_DATA_POINT]: {
 					score:
-						((story.isTestCase
-							? 1
-							: 0) *
-							MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
+						((story.isTestCase ? 1 : 0) * MAX_POSSIBLE_TEST_COVERAGE_SCORE) /
 						userStories.length,
 					tag: DataPointTag.TEST_COVERAGE,
 					title: 'Test coverage for ' + story.title,
@@ -174,7 +174,7 @@ export const getConfidenceScore = (
 								runTime < howLongAgo - MS_IN_14_DAYS
 									? 0
 									: ((MS_IN_14_DAYS - (howLongAgo - runTime)) / MS_IN_14_DAYS) *
-									(runTime >= releaseStarted ? 1.0 : 0.5),
+									  (runTime >= releaseStarted ? 1.0 : 0.5),
 							status: run.status,
 						};
 					});
@@ -188,8 +188,8 @@ export const getConfidenceScore = (
 							(a.status === 'failing'
 								? 0.0
 								: a.status === 'passing'
-									? 1.0
-									: 0.5)
+								? 1.0
+								: 0.5)
 					)
 					.reduce((a, b) => a + b, 0);
 				const maxPossible =

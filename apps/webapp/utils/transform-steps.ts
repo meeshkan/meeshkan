@@ -24,6 +24,8 @@ export const HumanTag = (tag: string): string => {
 		? 'Button'
 		: tag === 'P'
 		? 'Text'
+		: tag === 'STRONG'
+		? 'Bold text'
 		: tag === 'DIV'
 		? 'Div'
 		: tag === 'IMG'
@@ -40,6 +42,8 @@ export const HumanTag = (tag: string): string => {
 		? 'Video'
 		: tag === 'HTML'
 		? 'Page'
+		: tag === null
+		? "element"
 		: tag;
 };
 
