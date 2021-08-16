@@ -14,7 +14,8 @@ import { Analytics } from '@lightspeed/react-mixpanel-script';
 import { UserContext } from '../../utils/user';
 import PlanAndBillingCard from '../organisms/plan-and-billing';
 import { handleExtensionAuthHandshake } from '../../utils/extension';
-import { createSlug } from 'apps/webapp/utils/createSlug';
+import { createSlug } from '../../utils/createSlug';
+import { update } from '../../utils/intercom';
 
 type LayoutProps = {
 	children: ReactNode;
@@ -32,6 +33,16 @@ const Layout = ({ children, ...props }: LayoutProps) => {
 		const projectName: string = user?.project?.name;
 		const sluggifiedName: string = createSlug(projectName || '');
 		window?.CommandBar?.addContext('currentProject', sluggifiedName);
+
+		update({
+			company: {
+				company_id: project?.id,
+				name: project?.name,
+				plan: project?.configuration?.plan,
+				website: project?.configuration?.productionURL,
+				upgraded_at: project?.configuration?.subscriptionStartedDate,
+			},
+		});
 
 		if (project && !project.configuration?.plan) {
 			onOpen();

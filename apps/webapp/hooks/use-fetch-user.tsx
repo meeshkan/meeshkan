@@ -21,6 +21,10 @@ export const useFetchUser = (): IUseFetchUser => {
 		bootIntercom({
 			id: user.id,
 			email: user.email,
+			projectID: user?.project?.id,
+			projectName: user?.project?.name,
+			projectPlan: user?.project?.configuration?.plan,
+			projectWebsite: user?.project?.configuration?.productionURL,
 		});
 
 		if (user?.email !== 'test@meeshkan.com') {

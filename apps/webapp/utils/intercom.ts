@@ -4,6 +4,14 @@ interface IntercomSettings {
 	name?: string;
 	user_id?: string;
 	hide_default_launcher?: boolean;
+	company?: {
+		company_id: string;
+		name: string;
+		website?: string;
+		plan?: string;
+		upgraded_at?: Date;
+		monthly_spend?: number;
+	};
 }
 
 export interface Intercom {
@@ -18,11 +26,31 @@ export interface Intercom {
 	(command: 'startTour', id: number): void;
 }
 
-export const boot = ({ email, id }: { email: string; id: string }) => {
+export const boot = ({
+	email,
+	id,
+	projectID,
+	projectName,
+	projectPlan,
+	projectWebsite,
+}: {
+	email: string;
+	id: string;
+	projectID?: string;
+	projectName?: string;
+	projectPlan?: string;
+	projectWebsite?: string;
+}) => {
 	const intercomSettings = {
 		app_id: 'nou4ik17',
 		email,
 		user_id: id,
+		company: {
+			company_id: projectID,
+			name: projectName,
+			plan: projectPlan,
+			website: projectWebsite,
+		},
 		hide_default_launcher: true,
 	};
 
