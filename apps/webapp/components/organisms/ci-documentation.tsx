@@ -19,8 +19,10 @@ import ClientSecretInput from '../molecules/client-secret-input';
 
 const CIDocumentation = ({
 	manualClientSecret,
+	onDemoPlan
 }: {
 	manualClientSecret?: string;
+	onDemoPlan: boolean
 }) => {
 	const { project } = useContext(UserContext);
 	return (
@@ -49,6 +51,7 @@ const CIDocumentation = ({
 					you can use as a reference:
 				</Text>
 			</Box>
+			{!onDemoPlan && 
 			<Accordion allowMultiple>
 				<AccordionItem border="none">
 					<Heading as="h2">
@@ -198,7 +201,7 @@ pipelines:
 						</Code>
 					</AccordionPanel>
 				</AccordionItem>
-			</Accordion>
+			</Accordion>}
 		</>
 	);
 };

@@ -98,7 +98,7 @@ export const TestRunCadence = ({
 
 				{radio === 'CI/CD' && (
 					<Box maxW="800px" mt={8} maxH="350px" overflow="auto">
-						<CIDocumentationCard manualClientSecret={clientSecret} />
+						<CIDocumentationCard onDemoPlan={false} manualClientSecret={clientSecret} />
 					</Box>
 				)}
 			</Box>

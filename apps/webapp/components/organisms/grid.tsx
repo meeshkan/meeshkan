@@ -55,6 +55,7 @@ import { startTour } from '../../utils/product-tours';
 import { ChartOptions, ChartData } from 'chart.js';
 import { eightBaseClient } from '../../utils/graphql';
 import { GET_USER_STORIES_FOR_METRICS } from '../../graphql/user-story';
+import DemoPlan from '../molecules/demo-plan';
 
 const barData: ChartData = {
 	labels: ['Nov 22', 'Nov 23', 'Nov 24', 'Nov 25', 'Nov 26', 'Nov 27'],
@@ -125,7 +126,9 @@ const Grid = (props: StackProps) => {
 	const [releases, setReleases] = useState([]);
 
 	const client = eightBaseClient(idToken);
-
+	
+	const onDemoPlan = selectedProject?.configuration?.plan === 'Demo';
+	
 	useEffect(() => {
 		setLoading(true);
 		client
@@ -408,6 +411,7 @@ const Grid = (props: StackProps) => {
 					</Menu>
 				</Flex>
 			</Flex>
+			{onDemoPlan && <DemoPlan></DemoPlan>}
 			<Box overflowY="scroll">
 				<Flex
 					direction={['column', 'column', 'column', 'column', 'row']}

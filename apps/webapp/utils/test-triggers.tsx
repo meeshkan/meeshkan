@@ -36,12 +36,15 @@ type TriggerTestRunProps = {
 	singleOrAll?: 'single' | 'all';
 	/** If triggering a single test, which user story? */
 	userStoryId?: string;
+	/** Are we on a demo plan? */
+	onDemoPlan: boolean;
 };
 
 export const TriggerTestRun = ({
 	buttonText = 'Trigger all tests',
 	singleOrAll = 'all',
 	userStoryId,
+	onDemoPlan,
 }: TriggerTestRunProps) => {
 	const { idToken, setProject, project } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -188,20 +191,28 @@ export const TriggerTestRun = ({
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
 	const modalHeaderColor = useColorModeValue('gray.900', 'white');
 	const modalBackground = useColorModeValue('white', 'gray.800');
+	const button = (
+		<Button
+			leftIcon={<PlayIcon />}
+			onClick={onDemoPlan ? () => {} : handleTriggerTestRun}
+			id="trigger-test-run"
+			isActive={!onDemoPlan}
+			isDisabled={onDemoPlan}
+			isLoading={testTriggering}
+			loadingText="Starting test run"
+			size="sm"
+		>
+			{buttonText}
+		</Button>
+	);
 
 	return (
 		<>
-			<Button
-				leftIcon={<PlayIcon />}
-				onClick={handleTriggerTestRun}
-				id="trigger-test-run"
-				isLoading={testTriggering}
-				loadingText="Starting test run"
-				size="sm"
-			>
-				{buttonText}
-			</Button>
-
+			(onDemoPlan ?
+			<Tooltip hasArrow label="Test runs cannot be triggered on a demo plan" bg="gray.300" color="black">
+				{button}
+			</Tooltip>
+			: {button})
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

@@ -52,6 +52,8 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
+	const onDemoPlan = project?.configuration?.plan === 'Demo';
+
 	const [deleting, setDeleting] = useState(false);
 	const toaster = useToaster();
 	const router = useRouter();
@@ -290,6 +292,7 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 
 				<TriggerTestRun
 					buttonText="Trigger single test"
+					onDemoPlan={onDemoPlan}
 					singleOrAll="single"
 					userStoryId={userStory?.id}
 				/>
