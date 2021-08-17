@@ -102,19 +102,19 @@ export const CurrentPlanCard = ({ plan }: CurrentPlanProps) => {
 							  ]
 							: null}
 					</Text>
-					{plan.name !== 'Demo' && (
-						<Button
-							colorScheme="gray"
-							variant="subtle"
-							border="1px solid"
-							borderColor={subtleButtonBorderColor}
-							loadingText="Loading stripe"
-							isLoading={portalSessionLoading}
-							onClick={redirectToCustomerPortal}
-						>
-							Manage
-						</Button>
-					)}
+
+					<Button
+						colorScheme="gray"
+						variant="subtle"
+						border="1px solid"
+						isDisabled={plan?.name === 'Demo'}
+						borderColor={subtleButtonBorderColor}
+						loadingText="Loading stripe"
+						isLoading={portalSessionLoading}
+						onClick={redirectToCustomerPortal}
+					>
+						Manage
+					</Button>
 				</Box>
 			</Flex>
 

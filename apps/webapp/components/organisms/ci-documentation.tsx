@@ -19,10 +19,10 @@ import ClientSecretInput from '../molecules/client-secret-input';
 
 const CIDocumentation = ({
 	manualClientSecret,
-	onDemoPlan
+	onDemoPlan,
 }: {
 	manualClientSecret?: string;
-	onDemoPlan: boolean
+	onDemoPlan: boolean;
 }) => {
 	const { project } = useContext(UserContext);
 	return (
@@ -51,9 +51,9 @@ const CIDocumentation = ({
 					you can use as a reference:
 				</Text>
 			</Box>
-			{!onDemoPlan && 
+
 			<Accordion allowMultiple>
-				<AccordionItem border="none">
+				<AccordionItem border="none" isDisabled={onDemoPlan}>
 					<Heading as="h2">
 						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -94,7 +94,7 @@ jobs:
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem border="none">
+				<AccordionItem border="none" isDisabled={onDemoPlan}>
 					<Heading as="h2">
 						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -156,7 +156,7 @@ meeshkan-tests:
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem border="none">
+				<AccordionItem border="none" isDisabled={onDemoPlan}>
 					<Heading as="h2">
 						<AccordionButton py={4} _hover={{ color: 'blue.500' }}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -201,7 +201,7 @@ pipelines:
 						</Code>
 					</AccordionPanel>
 				</AccordionItem>
-			</Accordion>}
+			</Accordion>
 		</>
 	);
 };

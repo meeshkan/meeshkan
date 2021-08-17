@@ -191,28 +191,32 @@ export const TriggerTestRun = ({
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
 	const modalHeaderColor = useColorModeValue('gray.900', 'white');
 	const modalBackground = useColorModeValue('white', 'gray.800');
-	const button = (
-		<Button
-			leftIcon={<PlayIcon />}
-			onClick={onDemoPlan ? () => {} : handleTriggerTestRun}
-			id="trigger-test-run"
-			isActive={!onDemoPlan}
-			isDisabled={onDemoPlan}
-			isLoading={testTriggering}
-			loadingText="Starting test run"
-			size="sm"
-		>
-			{buttonText}
-		</Button>
-	);
 
 	return (
 		<>
-			(onDemoPlan ?
-			<Tooltip hasArrow label="Test runs cannot be triggered on a demo plan" bg="gray.300" color="black">
-				{button}
-			</Tooltip>
-			: {button})
+			{onDemoPlan ? (
+				<Tooltip
+					hasArrow
+					label="Test runs cannot be triggered on a demo plan"
+					bg="gray.300"
+					color="black"
+				>
+					<Button leftIcon={<PlayIcon />} isDisabled size="sm">
+						{buttonText}
+					</Button>
+				</Tooltip>
+			) : (
+				<Button
+					leftIcon={<PlayIcon />}
+					onClick={handleTriggerTestRun}
+					id="trigger-test-run"
+					isLoading={testTriggering}
+					loadingText="Starting test run"
+					size="sm"
+				>
+					{buttonText}
+				</Button>
+			)}
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

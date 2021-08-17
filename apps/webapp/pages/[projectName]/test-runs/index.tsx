@@ -137,7 +137,7 @@ const TestRunsPage = () => {
 						Test runs are experimental at this time.
 					</AlertDescription>
 				</Alert>
-				{onDemoPlan && <DemoPlan></DemoPlan>}
+				{onDemoPlan && <DemoPlan />}
 				<Box overflowY="auto">
 					<GridCard
 						title="Latest complete test case status"

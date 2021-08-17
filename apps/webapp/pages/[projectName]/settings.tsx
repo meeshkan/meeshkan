@@ -414,30 +414,29 @@ const Settings = () => {
 						</LightMode>
 					</Flex>
 				</SectionGridCard>{' '}
-				{!onDemoPlan && (
-					<SectionGridCard
-						title="Notifications"
-						subtitle="Manage the notifications you receive from Meeshkan."
-					>
-						<FormControl display="flex" alignItems="center">
-							<Box>
-								<Heading fontSize="18px" fontWeight="500">
-									Product updates
-								</Heading>
-								<Text fontSize="14px" color="gray.500">
-									Receive emails when we have important Meeshkan updates to
-									share.
-								</Text>
-							</Box>
-							<Switch
-								id="product-updates"
-								ml={5}
-								onChange={handleSwitchToggle}
-								isChecked={productUpdates}
-							/>
-						</FormControl>
-					</SectionGridCard>
-				)}
+				<SectionGridCard
+					title="Notifications"
+					subtitle="Manage the notifications you receive from Meeshkan."
+				>
+					<FormControl display="flex" alignItems="center">
+						<Box>
+							<Heading fontSize="18px" fontWeight="500">
+								Product updates
+							</Heading>
+							<Text fontSize="14px" color="gray.500">
+								Receive emails when we have important Meeshkan updates to share.
+							</Text>
+						</Box>
+						<Switch
+							id="product-updates"
+							ml={5}
+							isDisabled={onDemoPlan}
+							onChange={handleSwitchToggle}
+							isChecked={productUpdates}
+						/>
+					</FormControl>
+				</SectionGridCard>
+				)
 				<Heading fontSize="20px" color="gray.500" lineHeight="short" pt={5}>
 					Project
 				</Heading>
@@ -539,277 +538,277 @@ const Settings = () => {
 						</Button>
 					)}
 				</SectionGridCard>
-				{!onDemoPlan && (
-					<SectionGridCard
-						title="Details"
-						subtitle="Detailed configuration for your project."
+				<SectionGridCard
+					title="Details"
+					subtitle="Detailed configuration for your project."
+				>
+					<Heading fontSize="18px" fontWeight="500" mb={3}>
+						Script tag{' '}
+						<Box
+							as={project?.hasReceivedEvents ? 'span' : ChakraLink}
+							fontSize="md"
+							ml={4}
+							fontWeight="normal"
+							color={linkColor}
+							onClick={
+								project?.hasReceivedEvents ? null : handleScriptVerification
+							}
+						>
+							{project?.hasReceivedEvents ? (
+								<CheckmarkIcon boxSize={3} mr={3} />
+							) : null}
+							{project?.hasReceivedEvents
+								? 'Installation Verified'
+								: 'Verify Installation'}
+							{project?.hasReceivedEvents ? null : (
+								<ExternalLinkIcon boxSize={3} ml={2} />
+							)}
+						</Box>
+					</Heading>
+					<Flex align="center" justify="space-between">
+						<ScriptTagInput />
+					</Flex>
+
+					<Spacer h={8} />
+
+					<FormControl
+						display="flex"
+						alignItems="center"
+						justifyContent="space-between"
 					>
-						<Heading fontSize="18px" fontWeight="500" mb={3}>
-							Script tag{' '}
-							<Box
-								as={project?.hasReceivedEvents ? 'span' : ChakraLink}
-								fontSize="md"
-								ml={4}
-								fontWeight="normal"
-								color={linkColor}
-								onClick={
-									project?.hasReceivedEvents ? null : handleScriptVerification
-								}
+						<Stack mr={5}>
+							<Heading fontSize="18px" fontWeight="500">
+								Test runner
+							</Heading>
+							<Text
+								fontSize="sm"
+								fontWeight="400"
+								lineHeight="short"
+								color="gray.500"
 							>
-								{project?.hasReceivedEvents ? (
-									<CheckmarkIcon boxSize={3} mr={3} />
-								) : null}
-								{project?.hasReceivedEvents
-									? 'Installation Verified'
-									: 'Verify Installation'}
-								{project?.hasReceivedEvents ? null : (
-									<ExternalLinkIcon boxSize={3} ml={2} />
-								)}
-							</Box>
-						</Heading>
-						<Flex align="center" justify="space-between">
-							<ScriptTagInput />
-						</Flex>
-
-						<Spacer h={8} />
-
-						<FormControl
-							display="flex"
-							alignItems="center"
-							justifyContent="space-between"
-						>
-							<Stack mr={5}>
-								<Heading fontSize="18px" fontWeight="500">
-									Test runner
-								</Heading>
-								<Text
-									fontSize="sm"
-									fontWeight="400"
-									lineHeight="short"
-									color="gray.500"
-								>
-									Enable the Meeshkan test runner.
-								</Text>
-							</Stack>
-							<SegmentedControl
-								values={['on', 'off']}
-								selectedIndex={toggleTestRunnerIndex}
-								setSelectedIndex={setToggleTestRunnerIndex}
-							/>
-						</FormControl>
-
-						<Spacer h={8} />
-
-						<FormControl
-							display="flex"
-							alignItems="center"
-							justifyContent="space-between"
-						>
-							<Stack mr={5}>
-								<Heading fontSize="18px" fontWeight="500">
-									Run strategy
-								</Heading>
-								<Text
-									fontSize="sm"
-									fontWeight="400"
-									lineHeight="short"
-									color="gray.500"
-								>
-									How would you like to run your tests? Concurrent = at the same
-									time. Sequential = one after another.
-								</Text>
-							</Stack>
-							<SegmentedControl
-								values={['Concurrent', 'Sequential']}
-								selectedIndex={runStrategy}
-								setSelectedIndex={setRunStrategy}
-							/>
-						</FormControl>
-
-						<Spacer h={8} />
-
-						<Heading fontSize="18px" fontWeight="500" mb={2}>
-							Privacy
-						</Heading>
-						<Text
-							fontSize="sm"
-							fontWeight="400"
-							lineHeight="short"
-							color="gray.500"
-							mb={4}
-						>
-							Meeshkan ignores specific inputs by default. Customization will be
-							possible in the future. The following data is excluded from
-							Meeshkan recordings.
-						</Text>
-						<Stack>
-							<Checkbox defaultIsChecked isDisabled>
-								<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
-									[autocomplete=cc-*]
-								</Code>{' '}
-								(Credit card fields)
-							</Checkbox>
-							<Checkbox defaultIsChecked isDisabled>
-								<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
-									input[type=hidden]
-								</Code>{' '}
-								(Hidden fields)
-							</Checkbox>
-							<Checkbox defaultIsChecked isDisabled>
-								<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
-									input[type=password]
-								</Code>{' '}
-								(Password fields)
-							</Checkbox>
+								Enable the Meeshkan test runner.
+							</Text>
 						</Stack>
-					</SectionGridCard>
-				)}
-				{!onDemoPlan && (
-					<SectionGridCard
-						title="Authentication"
-						subtitle="This is the user your tests will be run off of. Be sure that any of
+						<SegmentedControl
+							values={['on', 'off']}
+							selectedIndex={toggleTestRunnerIndex}
+							setSelectedIndex={setToggleTestRunnerIndex}
+							disabled={onDemoPlan}
+						/>
+					</FormControl>
+
+					<Spacer h={8} />
+
+					<FormControl
+						display="flex"
+						alignItems="center"
+						justifyContent="space-between"
+					>
+						<Stack mr={5}>
+							<Heading fontSize="18px" fontWeight="500">
+								Run strategy
+							</Heading>
+							<Text
+								fontSize="sm"
+								fontWeight="400"
+								lineHeight="short"
+								color="gray.500"
+							>
+								How would you like to run your tests? Concurrent = at the same
+								time. Sequential = one after another.
+							</Text>
+						</Stack>
+						<SegmentedControl
+							values={['Concurrent', 'Sequential']}
+							selectedIndex={runStrategy}
+							setSelectedIndex={setRunStrategy}
+							disabled={onDemoPlan}
+						/>
+					</FormControl>
+
+					<Spacer h={8} />
+
+					<Heading fontSize="18px" fontWeight="500" mb={2}>
+						Privacy
+					</Heading>
+					<Text
+						fontSize="sm"
+						fontWeight="400"
+						lineHeight="short"
+						color="gray.500"
+						mb={4}
+					>
+						Meeshkan ignores specific inputs by default. Customization will be
+						possible in the future. The following data is excluded from Meeshkan
+						recordings.
+					</Text>
+					<Stack>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								[autocomplete=cc-*]
+							</Code>{' '}
+							(Credit card fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								input[type=hidden]
+							</Code>{' '}
+							(Hidden fields)
+						</Checkbox>
+						<Checkbox defaultIsChecked isDisabled>
+							<Code fontSize="md" colorScheme="cyan" p={2} borderRadius="md">
+								input[type=password]
+							</Code>{' '}
+							(Password fields)
+						</Checkbox>
+					</Stack>
+				</SectionGridCard>
+				)
+				<SectionGridCard
+					title="Authentication"
+					subtitle="This is the user your tests will be run off of. Be sure that any of
 								the tokens, or log in details you're supplying are not your own,
 								or a customer's."
-					>
-						<Heading fontSize="18px" fontWeight="500" mb={4}>
-							1. Method: Record the path your users take to log in.
-						</Heading>
-						<Flex alignItems="flex-end" justifyContent="space-between">
-							<Button
-								size="sm"
-								colorScheme="red"
-								variant="subtle"
-								leftIcon={<RecordIcon />}
-								onClick={handleRecordLoginFlow}
-								ml={2}
-							>
-								Record log in flow
-							</Button>
-						</Flex>
-						{project?.configuration?.logInStory ? (
-							<Link
-								href={`/${createSlug(project?.name)}/test-cases/${
-									project?.configuration?.logInStory?.id
-								}`}
-							>
-								<Flex
-									as="a"
-									w="100%"
-									mt={4}
-									p={3}
-									borderRadius="md"
-									justify="space-between"
-									align="center"
-									cursor="pointer"
-									_hover={{
-										backgroundColor: listItemHoverBackgroundColor,
-									}}
-								>
-									<Flex>
-										<Text>{project?.configuration?.logInStory?.title}</Text>
-										<Tooltip
-											label="This is the 'Log in flow'"
-											placement="right"
-										>
-											<Badge
-												colorScheme="amber"
-												fontWeight="700"
-												fontSize="md"
-												borderRadius="md"
-												p={2}
-												ml={4}
-											>
-												<KeyIcon />
-											</Badge>
-										</Tooltip>
-									</Flex>
-
-									<Text>
-										{new Date(
-											project?.configuration?.logInStory?.createdAt
-										).toLocaleString()}
-									</Text>
-								</Flex>
-							</Link>
-						) : null}
-
-						<Divider my={6} />
-
-						<Heading fontSize="18px" fontWeight="500" mb={4}>
-							2. Method: Add the tokens we should inject.
-						</Heading>
-
-						<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
-						{tokens?.length >= 1 ? (
-							<Heading fontSize="14px" fontWeight="500" mt={6}>
-								Active tokens
-							</Heading>
-						) : null}
-						{tokens?.map((token) => (
+				>
+					<Heading fontSize="18px" fontWeight="500" mb={4}>
+						1. Method: Record the path your users take to log in.
+					</Heading>
+					<Flex alignItems="flex-end" justifyContent="space-between">
+						<Button
+							isDisabled={onDemoPlan}
+							size="sm"
+							colorScheme="red"
+							variant="subtle"
+							leftIcon={<RecordIcon />}
+							onClick={handleRecordLoginFlow}
+							ml={2}
+						>
+							Record log in flow
+						</Button>
+					</Flex>
+					{project?.configuration?.logInStory ? (
+						<Link
+							href={`/${createSlug(project?.name)}/test-cases/${
+								project?.configuration?.logInStory?.id
+							}`}
+						>
 							<Flex
-								key={token.key}
+								as="a"
 								w="100%"
-								p={2}
+								mt={4}
+								p={3}
 								borderRadius="md"
 								justify="space-between"
 								align="center"
+								cursor="pointer"
 								_hover={{
 									backgroundColor: listItemHoverBackgroundColor,
 								}}
 							>
-								<Flex align="center">
-									<Flex align="center" w={['96px', '96px', '128px', '250px']}>
+								<Flex>
+									<Text>{project?.configuration?.logInStory?.title}</Text>
+									<Tooltip label="This is the 'Log in flow'" placement="right">
 										<Badge
-											mr={4}
+											colorScheme="amber"
+											fontWeight="700"
+											fontSize="md"
 											borderRadius="md"
 											p={2}
-											fontSize="sm"
-											colorScheme="cyan"
-											textTransform="capitalize"
+											ml={4}
 										>
-											{token.type}
+											<KeyIcon />
 										</Badge>
-										<Text>
-											{new Date(token.createdAt).toLocaleDateString()}
-										</Text>
-									</Flex>
-									<Text
-										mr={[4, 16, 24]}
-										w={['64px', '80px', '128px']}
-										whiteSpace="nowrap"
-										overflow="hidden"
-										textOverflow="ellipsis"
-									>
-										{token.key}
-									</Text>
-									<Text
-										w={['64px', '80px', '128px']}
-										whiteSpace="nowrap"
-										overflow="hidden"
-										textOverflow="ellipsis"
-									>
-										{token.value}
-									</Text>
+									</Tooltip>
 								</Flex>
-								<IconButton
-									aria-label={`Remove`}
-									icon={<TrashIcon w={4} h={4} />}
-									size="sm"
-									variant="ghost"
-									colorScheme="red"
-									onClick={() => {
-										deleteToken(token.id);
-										toaster({
-											title: `Successfully removed token ${token.key}.`,
-											description: `The token will no longer be used to authenticate for test runs on ${project.name}.`,
-											status: 'success',
-										});
-									}}
-								/>
+
+								<Text>
+									{new Date(
+										project?.configuration?.logInStory?.createdAt
+									).toLocaleString()}
+								</Text>
 							</Flex>
-						))}
-					</SectionGridCard>
-				)}
+						</Link>
+					) : null}
+
+					<Divider my={6} />
+
+					<Heading fontSize="18px" fontWeight="500" mb={4}>
+						2. Method: Add the tokens we should inject.
+					</Heading>
+
+					<AuthenticationTokenForm
+						tokens={tokens}
+						setTokens={setTokens}
+						onDemoPlan={onDemoPlan}
+					/>
+					{tokens?.length >= 1 ? (
+						<Heading fontSize="14px" fontWeight="500" mt={6}>
+							Active tokens
+						</Heading>
+					) : null}
+					{tokens?.map((token) => (
+						<Flex
+							key={token.key}
+							w="100%"
+							p={2}
+							borderRadius="md"
+							justify="space-between"
+							align="center"
+							_hover={{
+								backgroundColor: listItemHoverBackgroundColor,
+							}}
+						>
+							<Flex align="center">
+								<Flex align="center" w={['96px', '96px', '128px', '250px']}>
+									<Badge
+										mr={4}
+										borderRadius="md"
+										p={2}
+										fontSize="sm"
+										colorScheme="cyan"
+										textTransform="capitalize"
+									>
+										{token.type}
+									</Badge>
+									<Text>{new Date(token.createdAt).toLocaleDateString()}</Text>
+								</Flex>
+								<Text
+									mr={[4, 16, 24]}
+									w={['64px', '80px', '128px']}
+									whiteSpace="nowrap"
+									overflow="hidden"
+									textOverflow="ellipsis"
+								>
+									{token.key}
+								</Text>
+								<Text
+									w={['64px', '80px', '128px']}
+									whiteSpace="nowrap"
+									overflow="hidden"
+									textOverflow="ellipsis"
+								>
+									{token.value}
+								</Text>
+							</Flex>
+							<IconButton
+								aria-label={`Remove`}
+								icon={<TrashIcon w={4} h={4} />}
+								size="sm"
+								variant="ghost"
+								colorScheme="red"
+								onClick={() => {
+									deleteToken(token.id);
+									toaster({
+										title: `Successfully removed token ${token.key}.`,
+										description: `The token will no longer be used to authenticate for test runs on ${project.name}.`,
+										status: 'success',
+									});
+								}}
+							/>
+						</Flex>
+					))}
+				</SectionGridCard>
+				)
 				<SectionGridCard
 					title="CI Integrations"
 					subtitle="Trigger Meeshkan test runs from within your CI pipeline."
