@@ -15,6 +15,7 @@ export const TEST_RUN = gql`
 					status
 					isResolved
 					errorStepIndex
+					errorMessage
 					createdAt
 					video {
 						downloadUrl

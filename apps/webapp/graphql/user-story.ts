@@ -526,6 +526,7 @@ export const GET_USER_STORIES_FOR_METRICS = gql`
 						status
 						isResolved
 						errorStepIndex
+						errorMessage
 						createdAt
 						video {
 							downloadUrl

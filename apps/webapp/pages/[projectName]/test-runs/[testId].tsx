@@ -242,20 +242,17 @@ const TestRunPage = () => {
 
 										const outcomeError = (
 											outcomeCommand: string,
-											outcomeTag?: string
-										) => {
-											let errorMessage;
-											if (outcomeCommand == 'auth') {
-												errorMessage = `This test failed while the fake user was logging in.`;
-											} else if (outcomeCommand == 'open') {
-												errorMessage = `The page your test trys to open, doesn't exist.`;
-											} else if (outcomeCommand == 'setViewportSize') {
-												errorMessage = `This test case has an unsupported screen size.`;
-											} else {
-												errorMessage = `${outcomeTag} doesn't exist. Did your app's structure change since this test case was created?`;
-											}
-											return errorMessage;
-										};
+											outcomeTag?: string,
+										) =>
+											outcomeCommand == 'auth'
+												? `This test failed while the fake user was logging in.`
+												: outcomeCommand == 'open'
+												? `The page your test trys to open, doesn't exist.`
+												: outcomeCommand == 'setViewportSize'
+												? `This test case has an unsupported screen size.`
+												: outcome?.errorMessage
+												? outcome.errorMessage
+												: `${outcomeTag} doesn't exist. Did your app's structure change since this test case was created?`;
 
 										const isFailing = status === 'failing';
 										const icon =
