@@ -246,9 +246,9 @@ const TestRunPage = () => {
 										) => {
 											let errorMessage;
 											if (outcomeCommand == 'auth') {
-												errorMessage = `This test failed while the fake user was logging in.`;
+												errorMessage = `This test failed while the test user was logging in.`;
 											} else if (outcomeCommand == 'open') {
-												errorMessage = `The page your test trys to open, doesn't exist.`;
+												errorMessage = `Your test attempts to navigate to a page that doesn't exist.`;
 											} else if (outcomeCommand == 'setViewportSize') {
 												errorMessage = `This test case has an unsupported screen size.`;
 											} else {
