@@ -245,9 +245,9 @@ const TestRunPage = () => {
 											outcomeTag?: string,
 										) =>
 											outcomeCommand == 'auth'
-												? `This test failed while the fake user was logging in.`
+												? `This test failed while the test user was logging in.`
 												: outcomeCommand == 'open'
-												? `The page your test trys to open, doesn't exist.`
+												? `This test attempts to navigate to a page that doesn't exist.`
 												: outcomeCommand == 'setViewportSize'
 												? `This test case has an unsupported screen size.`
 												: outcome?.errorMessage
