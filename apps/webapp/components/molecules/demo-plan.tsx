@@ -1,28 +1,23 @@
-import { ReactNode, useMemo } from 'react';
-import { BoxProps, Heading, Divider, Image } from '@chakra-ui/react';
-import Card from '../atoms/card';
-import { createSlug } from '../../utils/createSlug';
+import React, { ReactNode, useMemo } from 'react';
+import { BoxProps, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react';
 
-export type DemoPlanProps = {
+export type DemoPlanProps = {} & BoxProps;
 
-} & BoxProps;
-
-const DemoPlan = ({
-  ...props
-}: DemoPlanProps) => {
+const DemoPlan = ({ ...props }: DemoPlanProps) => {
 	return (
-		<Card overflowY="auto" maxH="80vh" id={"demoPlanCard"} {...props}>
-			<Heading
-				as="h2"
-				d="flex"
-				alignItems="center"
-				fontSize="lg"
-				fontWeight="800"
-				lineHeight="short"
-			>
-			  So, um, this is a demo plan and stuff.
-				</Heading>
-			</Card>
+		<Alert
+			status="info"
+			colorScheme="blue"
+			mb={4}
+			p={3}
+			flex="none"
+			id="demoPlanCard"
+		>
+			<AlertIcon />
+			<AlertDescription>
+				So, um, this is a demo plan and stuff.
+			</AlertDescription>
+		</Alert>
 	);
 };
 
