@@ -27,7 +27,7 @@ const customComponents = {
 				fontStyle: 'italic',
 				color: mode(
 					`${props.colorScheme}.700`,
-					`${props.colorScheme}.200`
+					`${props.colorScheme}.50`
 				)(props),
 			},
 			icon: {
