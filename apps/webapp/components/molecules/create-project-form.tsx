@@ -7,6 +7,11 @@ import {
 	Tooltip,
 	useColorModeValue,
 	Box,
+	Divider,
+	Button,
+	Center,
+	Flex,
+	Text,
 } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
@@ -82,51 +87,64 @@ const CreateProjectForm = ({
 	};
 
 	return (
-		<Box as="form" onSubmit={handleSubmit(onSubmit)} id="form" w="full">
-			<AvatarField location="a project" onUpload={setAvatarFile} />
-			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
-				<FormLabel>Name your project</FormLabel>
-				<Input
-					name="name"
-					type="text"
-					placeholder="Acme Industries"
-					ref={register}
-				/>
-			</FormControl>
-			<FormControl id="productionURL" isInvalid={!!error} mb={8}>
-				<FormLabel>Production URL</FormLabel>
-				<Input
-					name="productionURL"
-					type="url"
-					placeholder="https://acme-industries.com"
-					pattern="^http(s)?:\/\/.+$"
-					ref={register}
-				/>
-			</FormControl>
-			<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
-				<FormLabel d="flex" alignItems="center">
-					Staging URL
-					<Tooltip
-						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
-						placement="right-start"
-					>
-						<InfoOutlineIcon
-							ml={2}
-							lineHeight="short"
-							color={tooltipIconColor}
-						/>
-					</Tooltip>
-				</FormLabel>
-				<Input
-					name="stagingURL"
-					type="url"
-					placeholder="https://staging.acme-industries.com"
-					pattern="^http(s)?:\/\/.+$"
-					ref={register}
-				/>
-				<FormErrorMessage>Error: {error}</FormErrorMessage>
-			</FormControl>
-		</Box>
+		<>
+			<Box as="form" onSubmit={handleSubmit(onSubmit)} id="form" w="full">
+				<AvatarField location="a project" onUpload={setAvatarFile} />
+				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
+					<FormLabel>Name your project</FormLabel>
+					<Input
+						name="name"
+						type="text"
+						placeholder="Acme Industries"
+						ref={register}
+					/>
+				</FormControl>
+				<FormControl id="productionURL" isInvalid={!!error} mb={8}>
+					<FormLabel>Production URL</FormLabel>
+					<Input
+						name="productionURL"
+						type="url"
+						placeholder="https://acme-industries.com"
+						pattern="^http(s)?:\/\/.+$"
+						ref={register}
+					/>
+				</FormControl>
+				<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
+					<FormLabel d="flex" alignItems="center">
+						Staging URL
+						<Tooltip
+							label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
+							placement="right-start"
+						>
+							<InfoOutlineIcon
+								ml={2}
+								lineHeight="short"
+								color={tooltipIconColor}
+							/>
+						</Tooltip>
+					</FormLabel>
+					<Input
+						name="stagingURL"
+						type="url"
+						placeholder="https://staging.acme-industries.com"
+						pattern="^http(s)?:\/\/.+$"
+						ref={register}
+					/>
+					<FormErrorMessage>Error: {error}</FormErrorMessage>
+				</FormControl>
+			</Box>
+			<Flex w="full" align="center" mb={4}>
+				<Divider my={4} />
+				<Text fontFamily="mono" lineHeight="base" mx={4}>
+					OR
+				</Text>
+				<Divider my={4} />
+			</Flex>
+
+			<Center>
+				<Button>Generate a demo</Button>
+			</Center>
+		</>
 	);
 };
 
