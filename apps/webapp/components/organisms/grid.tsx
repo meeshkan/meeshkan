@@ -126,9 +126,9 @@ const Grid = (props: StackProps) => {
 	const [releases, setReleases] = useState([]);
 
 	const client = eightBaseClient(idToken);
-	
+
 	const onDemoPlan = selectedProject?.configuration?.plan === 'Demo';
-	
+
 	useEffect(() => {
 		setLoading(true);
 		client
@@ -328,6 +328,7 @@ const Grid = (props: StackProps) => {
 
 	return (
 		<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6} {...props}>
+			{onDemoPlan && <DemoPlan />}
 			<Flex align="center" justify="space-between">
 				<Flex align="center">
 					<Heading
@@ -411,7 +412,6 @@ const Grid = (props: StackProps) => {
 					</Menu>
 				</Flex>
 			</Flex>
-			{onDemoPlan && <DemoPlan></DemoPlan>}
 			<Box overflowY="scroll">
 				<Flex
 					direction={['column', 'column', 'column', 'column', 'row']}

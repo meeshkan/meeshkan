@@ -330,7 +330,7 @@ export const DetailsForm = ({ userStory }: DetailsFormProps) => {
 										: 'In progress'
 								} run`}
 								date={outcome.createdAt}
-								link={`/${slugifiedProjectName}/test-runs/${outcome.testRun.id}`}
+								link={`/${slugifiedProjectName}/test-runs/${outcome?.testRun?.id}`}
 							/>
 						))}
 

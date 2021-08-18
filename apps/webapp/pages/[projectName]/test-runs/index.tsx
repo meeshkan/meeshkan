@@ -131,13 +131,19 @@ const TestRunsPage = () => {
 	return (
 		<ValidatedBillingPlan>
 			<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
-				<Alert status="warning" mb={4} p={3} flex="none">
+				{onDemoPlan && <DemoPlan />}
+				<Alert
+					status="warning"
+					mb={4}
+					mt={onDemoPlan ? 4 : 0}
+					p={3}
+					flex="none"
+				>
 					<AlertIcon />
 					<AlertDescription>
 						Test runs are experimental at this time.
 					</AlertDescription>
 				</Alert>
-				{onDemoPlan && <DemoPlan />}
 				<Box overflowY="auto">
 					<GridCard
 						title="Latest complete test case status"

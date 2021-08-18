@@ -325,8 +325,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 
 	return (
 		<ValidatedBillingPlan>
-			{onDemoPlan && <DemoPlan></DemoPlan>}
 			<Stack p={[6, 0, 0, 0]} w="100%" spacing={6}>
+				{onDemoPlan && <DemoPlan></DemoPlan>}
 				<GridCard
 					title="Getting started"
 					subtitle="User stories are flows that your users take in your production application. They are called recordings when first made, and test cases once you approve the application behavior."

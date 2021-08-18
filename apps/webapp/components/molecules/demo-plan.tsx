@@ -19,7 +19,7 @@ const DemoPlan = ({ ...props }: DemoPlanProps) => {
 		<Alert
 			status="info"
 			colorScheme="blue"
-			mb={4}
+			mb={0}
 			p={3}
 			flex="none"
 			id="demoPlanCard"
