@@ -1,5 +1,16 @@
 import { gql } from 'graphql-request';
 
+export const CONFIGURATION_UPDATE_LOGIN_FLOW = gql`
+	mutation CONFIGURATION_UPDATE_LOGIN_FLOW(
+		$id: ID!
+		$flow: ID!
+	) {
+		configurationUpdate(filter: { id: $id }, data: { logInStory: { connect: { id: $flow } }} ) {
+			id
+		}
+	}
+`;
+
 export const LINK_DEMO_PROJECT_TO_TEST_RUNS = gql`
 	mutation LINK_DEMO_PROJECT_TO_TEST_RUNS(
 		$id: ID!
@@ -17,8 +28,11 @@ export const CREATE_DEMO_PROJECT = gql`
 			data: {
         members: { connect: { id: $id }}
 				name: $name
+				avatar: { connect: { fileId: "rouqioXhQk25T22mdpzr" }}
 				configuration: {
 					create: {
+						subscriptionStatus: "active"
+            billingInterval: "monthly"
 						stagingURL: "https://www.lego.com"
 						productionURL: "https://www.lego.com"
 						plan: "Demo"
@@ -144,7 +158,8 @@ export const CREATE_DEMO_PROJECT = gql`
 						{
 							title: "Check out whats new and filter by set"
 							isTestCase: true
-							requiresAuthentication: true
+							requiresAuthentication: true							
+							video: { connect: { fileId: "V4lGtgRPamJ76JsuBhcQ" } }
 							flows: {
 								create: [
 									{
@@ -156,9 +171,9 @@ export const CREATE_DEMO_PROJECT = gql`
 									}
 								]
 							}
-							created: "manual"
+							created: "user"
 							isExpected: true
-							significance: "low"
+							significance: "medium"
 							scriptCommands: {
 								create: [
 									{
@@ -261,6 +276,7 @@ export const CREATE_DEMO_PROJECT = gql`
 							title: "Navigate to cart"
 							isTestCase: true
 							requiresAuthentication: true
+							video: { connect: { fileId: "9v8cNYaiR4iGKW36XfZ3" } }
 							flows: {
 								create: [
 									{
@@ -274,7 +290,7 @@ export const CREATE_DEMO_PROJECT = gql`
 							}
 							created: "manual"
 							isExpected: true
-							significance: "low"
+							significance: "high"
 							scriptCommands: {
 								create: [
 									{
@@ -335,9 +351,9 @@ export const CREATE_DEMO_PROJECT = gql`
 									}
 								]
 							}
-							created: "manual"
+							created: "user"
 							isExpected: true
-							significance: "low"
+							significance: "high"
 							video: { connect: { fileId: "QPkXr5YyR4DRitiy0i1M" } }
 							scriptCommands: {
 								create: [
@@ -384,6 +400,7 @@ export const CREATE_DEMO_PROJECT = gql`
 							title: "Lego Super Mario!"
 							isTestCase: true
 							requiresAuthentication: true
+							video: { connect: { fileId: "1YYIZkAKQDuGZNSL5tiv"} }
 							flows: {
 								create: [
 									{
@@ -397,7 +414,7 @@ export const CREATE_DEMO_PROJECT = gql`
 							}
 							created: "manual"
 							isExpected: true
-							significance: "low"
+							significance: "medium"
 							scriptCommands: {
 								create: [
 									{
@@ -558,7 +575,7 @@ export const CREATE_DEMO_PROJECT = gql`
 									}
 								]
 							}
-							created: "manual"
+							created: "user"
 							isExpected: true
 							significance: "low"
 							video: { connect: { fileId: "xhTHHHwS9uQYHXVzOwMQ" } }
@@ -659,7 +676,7 @@ export const CREATE_DEMO_PROJECT = gql`
 									}
 								]
 							}
-							created: "manual"
+							created: "user"
 							isExpected: true
 							significance: "low"
 							video: { connect: { fileId: "OoPS0IzGSUejtcVpsFGm" } }
@@ -764,9 +781,9 @@ export const CREATE_DEMO_PROJECT = gql`
 									}
 								]
 							}
-							created: "manual"
+							created: "user"
 							isExpected: true
-							significance: "low"
+							significance: "high"
 							video: { connect: { fileId: "fMTNEuNJQ0iQOh9quHgs" } }
 							scriptCommands: {
 								create: [
@@ -873,9 +890,9 @@ export const CREATE_DEMO_PROJECT = gql`
 									}
 								]
 							}
-							created: "manual"
+							created: "user"
 							isExpected: true
-							significance: "low"
+							significance: "high"
 							video: { connect: { fileId: "jmlc9lkTaOdUVhbHFsSA" } }
 							scriptCommands: {
 								create: [
@@ -979,7 +996,7 @@ export const CREATE_DEMO_PROJECT = gql`
 							}
 							created: "manual"
 							isExpected: true
-							significance: "low"
+							significance: "medium"
 							video: { connect: { fileId: "Ks3HBHy3RoGY3szsOvyS" } }
 							scriptCommands: {
 								create: [
@@ -1037,6 +1054,7 @@ export const CREATE_DEMO_PROJECT = gql`
 				downloadUrl
 			}
 			configuration {
+				id
 				clientSecret
 			}
 			userStories {

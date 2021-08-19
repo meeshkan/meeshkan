@@ -1,5 +1,6 @@
 import { ProjectUpdateInput } from '@frontend/meeshkan-types';
 import {
+	CONFIGURATION_UPDATE_LOGIN_FLOW,
 	CREATE_DEMO_PROJECT,
 	LINK_DEMO_PROJECT_TO_TEST_RUNS,
 } from 'apps/webapp/graphql/demo';
@@ -74,7 +75,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		},
 	};
 	await client.request(LINK_DEMO_PROJECT_TO_TEST_RUNS, { id: projectId, data });
-
+	const flowId = userStories.filter(({ title }) => title === "Log in flow")[0].id;
+  await client.request(CONFIGURATION_UPDATE_LOGIN_FLOW, { id: response.projectCreate.configuration.id, flow: flowId});
 	res.json({ project: response.projectCreate });
 };
 
