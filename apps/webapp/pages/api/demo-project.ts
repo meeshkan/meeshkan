@@ -12,7 +12,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const response = await client.request(CREATE_DEMO_PROJECT, { id: userId, name: `My ${choose(POSITIVE_ADJECTIVES)} Lego Demo Project` });
 
 	const projectId = response.projectCreate.id;
-	const projectName = response.projectCreate.id;
 	const userStories: Array<{ id: string; title: string }> =
 		response.projectCreate.userStories.items;
 	const data: ProjectUpdateInput = {
@@ -76,7 +75,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 	};
 	await client.request(LINK_DEMO_PROJECT_TO_TEST_RUNS, { id: projectId, data });
 
-	res.json({ projectId, projectName });
+	res.json({ project: response.projectCreate });
 };
 
 const POSITIVE_ADJECTIVES = [

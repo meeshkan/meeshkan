@@ -1033,6 +1033,12 @@ export const CREATE_DEMO_PROJECT = gql`
 		) {
 			id
 			name
+			avatar {
+				downloadUrl
+			}
+			configuration {
+				clientSecret
+			}
 			userStories {
 				items {
 					id

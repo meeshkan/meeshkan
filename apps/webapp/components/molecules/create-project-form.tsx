@@ -31,7 +31,7 @@ type ProjectFormInputs = {
 };
 
 type CreateProjectFormProps = {
-	loading: boolean,
+	loading: boolean;
 	setLoading: (value: boolean) => void;
 	setProjectName: (value: string) => void;
 	setProjectID: (value: string) => void;
@@ -58,20 +58,26 @@ const CreateProjectForm = ({
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
 	const router = useRouter();
 
-  const doOnSubmitDemo = async () => {
-		setLoading(true);
-		const res = await postData({
-			url: '/api/demo-project',
-			data: {
-				idToken: user?.idToken,
-				userId: user?.id,
-			},
-		});
-		await router.push(createSlug(res.projectName));
-		setLoading(false);
-	}
+	const doOnSubmitDemo = async () => {
+		try {
+			setLoading(true);
+			const res = await postData({
+				url: '/api/demo-project',
+				data: {
+					idToken: user?.idToken,
+					userId: user?.id,
+				},
+			});
+			projects.push(res.project);
+			router.push(createSlug(res.project.name));
+		} catch {
+			setLoading(false);
+		}
+	};
 
-	const onSubmit = (isDemo: boolean) => async (formData: ProjectFormInputs): Promise<void> => {
+	const onSubmit = (isDemo: boolean) => async (
+		formData: ProjectFormInputs
+	): Promise<void> => {
 		if (isDemo) {
 			doOnSubmitDemo();
 			return;
@@ -110,7 +116,12 @@ const CreateProjectForm = ({
 
 	return (
 		<>
-			<Box as="form" onSubmit={handleSubmit(onSubmit(false))} id="form" w="full">
+			<Box
+				as="form"
+				onSubmit={handleSubmit(onSubmit(false))}
+				id="form"
+				w="full"
+			>
 				<AvatarField location="a project" onUpload={setAvatarFile} />
 				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 					<FormLabel>Name your project</FormLabel>
@@ -164,7 +175,14 @@ const CreateProjectForm = ({
 			</Flex>
 
 			<Center>
-				<Button onClick={handleSubmit(onSubmit(true))} isLoading={loading} form="form" loadingText="Loading">Generate a demo</Button>
+				<Button
+					onClick={handleSubmit(onSubmit(true))}
+					isLoading={loading}
+					form="form"
+					loadingText="Loading"
+				>
+					Generate a demo
+				</Button>
 			</Center>
 		</>
 	);
