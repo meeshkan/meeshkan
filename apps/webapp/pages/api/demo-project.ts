@@ -48,7 +48,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 													isResolved: false,
 													status: 'failing',
 													video: {
-														connect: { fileId: 'OjrwQOWySUKSAkMcxvfN' },
+														connect: { fileId: 'QmlFdzDnQHacmxrQ03ob' },
 													},
 													errorStepIndex: 14,
 													errorMessage:
