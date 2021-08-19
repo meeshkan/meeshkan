@@ -1,3 +1,4 @@
+import React, { useContext, useState } from 'react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
 	Button,
@@ -20,7 +21,6 @@ import {
 	useColorModeValue,
 	useDisclosure,
 } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
 import { mutate } from 'swr';
 import { TOGGLE_TEST_RUNS, UPDATE_STAGING_URL } from '../graphql/project';
 import { eightBaseClient } from './graphql';
@@ -194,29 +194,17 @@ export const TriggerTestRun = ({
 
 	return (
 		<>
-			{onDemoPlan ? (
-				<Tooltip
-					hasArrow
-					label="Test runs cannot be triggered on a demo plan"
-					bg="gray.300"
-					color="black"
-				>
-					<Button leftIcon={<PlayIcon />} isDisabled size="sm">
-						{buttonText}
-					</Button>
-				</Tooltip>
-			) : (
-				<Button
-					leftIcon={<PlayIcon />}
-					onClick={handleTriggerTestRun}
-					id="trigger-test-run"
-					isLoading={testTriggering}
-					loadingText="Starting test run"
-					size="sm"
-				>
-					{buttonText}
-				</Button>
-			)}
+			<Button
+				isDisabled={onDemoPlan}
+				leftIcon={<PlayIcon />}
+				onClick={handleTriggerTestRun}
+				id="trigger-test-run"
+				isLoading={testTriggering}
+				loadingText="Starting test run"
+				size="sm"
+			>
+				{buttonText}
+			</Button>
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

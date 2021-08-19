@@ -14,7 +14,7 @@ import {
 	Link,
 } from '@chakra-ui/react';
 import { GitLabIcon, GitHubIcon, BitbucketIcon } from '@frontend/chakra-theme';
-import { UserContext } from 'apps/webapp/utils/user';
+import { UserContext } from '../../utils/user';
 import ClientSecretInput from '../molecules/client-secret-input';
 
 const CIDocumentation = ({

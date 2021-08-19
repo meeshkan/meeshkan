@@ -39,7 +39,7 @@ import { UserContext } from '../../../utils/user';
 import { createSlug } from '../../../utils/createSlug';
 import { useToaster } from '../../../hooks/use-toaster';
 import RecentActivityCard from '../recent-activity';
-import { TriggerTestRun } from 'apps/webapp/utils/test-triggers';
+import { TriggerTestRun } from '../../../utils/test-triggers';
 import { useRouter } from 'next/router';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 

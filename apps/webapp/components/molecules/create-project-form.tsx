@@ -21,7 +21,7 @@ import { createProject } from '../../utils/project';
 import { UploadedFile } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
-import { postData } from 'apps/webapp/utils/stripe-client';
+import { postData } from '../../utils/stripe-client';
 import { useRouter } from 'next/router';
 
 type ProjectFormInputs = {

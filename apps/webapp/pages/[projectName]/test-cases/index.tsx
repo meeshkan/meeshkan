@@ -68,7 +68,7 @@ import { PROJECT_USER_STORIES } from '../../../graphql/project';
 import { createSlug } from '../../../utils/createSlug';
 import Link from 'next/link';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
-import DemoPlan from 'apps/webapp/components/molecules/demo-plan';
+import DemoPlan from '../../../components/molecules/demo-plan';
 
 type StartButtonProps = {
 	icon: ReactElement;
@@ -326,7 +326,7 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 	return (
 		<ValidatedBillingPlan>
 			<Stack p={[6, 0, 0, 0]} w="100%" spacing={6}>
-				{onDemoPlan && <DemoPlan></DemoPlan>}
+				{onDemoPlan && <DemoPlan />}
 				<GridCard
 					title="Getting started"
 					subtitle="User stories are flows that your users take in your production application. They are called recordings when first made, and test cases once you approve the application behavior."
