@@ -12,11 +12,11 @@ export const LINK_DEMO_PROJECT_TO_TEST_RUNS = gql`
 `;
 
 export const CREATE_DEMO_PROJECT = gql`
-	mutation CREATE_DEMO_PROJECT($id: ID!) {
+	mutation CREATE_DEMO_PROJECT($id: ID!, $name: String!) {
 		projectCreate(
 			data: {
         members: { connect: { id: $id }}
-				name: "Lego Demo Project"
+				name: $name
 				configuration: {
 					create: {
 						stagingURL: "https://www.lego.com"
@@ -1032,6 +1032,7 @@ export const CREATE_DEMO_PROJECT = gql`
 			}
 		) {
 			id
+			name
 			userStories {
 				items {
 					id

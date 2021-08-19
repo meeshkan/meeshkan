@@ -21,6 +21,8 @@ import { createProject } from '../../utils/project';
 import { UploadedFile } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
+import { postData } from 'apps/webapp/utils/stripe-client';
+import { useRouter } from 'next/router';
 
 type ProjectFormInputs = {
 	name: string;
@@ -29,6 +31,7 @@ type ProjectFormInputs = {
 };
 
 type CreateProjectFormProps = {
+	loading: boolean,
 	setLoading: (value: boolean) => void;
 	setProjectName: (value: string) => void;
 	setProjectID: (value: string) => void;
@@ -39,6 +42,7 @@ type CreateProjectFormProps = {
 
 const CreateProjectForm = ({
 	setLoading,
+	loading,
 	setProjectName,
 	setProjectID,
 	setClientSecret,
@@ -52,8 +56,26 @@ const CreateProjectForm = ({
 	const [error, setError] = useState('');
 	const mixpanel = useAnalytics();
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
+	const router = useRouter();
 
-	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
+  const doOnSubmitDemo = async () => {
+		setLoading(true);
+		const res = await postData({
+			url: '/api/demo-project',
+			data: {
+				idToken: user?.idToken,
+				userId: user?.id,
+			},
+		});
+		await router.push(createSlug(res.projectName));
+		setLoading(false);
+	}
+
+	const onSubmit = (isDemo: boolean) => async (formData: ProjectFormInputs): Promise<void> => {
+		if (isDemo) {
+			doOnSubmitDemo();
+			return;
+		}
 		setLoading(true);
 		setError('');
 		const data = await createProject(idToken, {
@@ -88,7 +110,7 @@ const CreateProjectForm = ({
 
 	return (
 		<>
-			<Box as="form" onSubmit={handleSubmit(onSubmit)} id="form" w="full">
+			<Box as="form" onSubmit={handleSubmit(onSubmit(false))} id="form" w="full">
 				<AvatarField location="a project" onUpload={setAvatarFile} />
 				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
 					<FormLabel>Name your project</FormLabel>
@@ -142,7 +164,7 @@ const CreateProjectForm = ({
 			</Flex>
 
 			<Center>
-				<Button>Generate a demo</Button>
+				<Button onClick={handleSubmit(onSubmit(true))} isLoading={loading} form="form" loadingText="Loading">Generate a demo</Button>
 			</Center>
 		</>
 	);
