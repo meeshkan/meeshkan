@@ -413,7 +413,7 @@ const Settings = () => {
 							</Button>
 						</LightMode>
 					</Flex>
-				</SectionGridCard>{' '}
+				</SectionGridCard>
 				<SectionGridCard
 					title="Notifications"
 					subtitle="Manage the notifications you receive from Meeshkan."

@@ -114,7 +114,7 @@ const AuthenticationTokenForm = ({
 					type="submit"
 					isLoading={loading}
 					loadingText="Saving token"
-					isDisabled={onDemoPlan || loading}
+					isDisabled={loading || onDemoPlan}
 				>
 					Save token
 				</Button>

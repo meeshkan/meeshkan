@@ -35,7 +35,7 @@ import { eightBaseClient } from '../../../utils/graphql';
 import useSWR from 'swr';
 import { TEST_RUNS } from '../../../graphql/test-run';
 import { TestRunListResponse } from '@frontend/meeshkan-types';
-import DemoPlan from 'apps/webapp/components/molecules/demo-plan';
+import DemoPlan from '../../../components/molecules/demo-plan';
 
 const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutBackgroundColors = [

@@ -1,11 +1,11 @@
 import { gql } from 'graphql-request';
 
 export const CONFIGURATION_UPDATE_LOGIN_FLOW = gql`
-	mutation CONFIGURATION_UPDATE_LOGIN_FLOW(
-		$id: ID!
-		$flow: ID!
-	) {
-		configurationUpdate(filter: { id: $id }, data: { logInStory: { connect: { id: $flow } }} ) {
+	mutation CONFIGURATION_UPDATE_LOGIN_FLOW($id: ID!, $flow: ID!) {
+		configurationUpdate(
+			filter: { id: $id }
+			data: { logInStory: { connect: { id: $flow } } }
+		) {
 			id
 		}
 	}
@@ -26,15 +26,15 @@ export const CREATE_DEMO_PROJECT = gql`
 	mutation CREATE_DEMO_PROJECT($id: ID!, $name: String!) {
 		projectCreate(
 			data: {
-        members: { connect: { id: $id }}
+				members: { connect: { id: $id } }
 				name: $name
-				avatar: { connect: { fileId: "rouqioXhQk25T22mdpzr" }}
+				avatar: { connect: { fileId: "rouqioXhQk25T22mdpzr" } }
 				configuration: {
 					create: {
 						subscriptionStatus: "active"
-            billingInterval: "monthly"
-						stagingURL: "https://www.lego.com"
-						productionURL: "https://www.lego.com"
+						billingInterval: "monthly"
+						stagingURL: "https://www.staging.lego.com/"
+						productionURL: "https://www.lego.com/"
 						plan: "Demo"
 						inviteLink: ""
 					}
@@ -158,7 +158,7 @@ export const CREATE_DEMO_PROJECT = gql`
 						{
 							title: "Check out whats new and filter by set"
 							isTestCase: true
-							requiresAuthentication: true							
+							requiresAuthentication: true
 							video: { connect: { fileId: "V4lGtgRPamJ76JsuBhcQ" } }
 							flows: {
 								create: [
@@ -400,7 +400,7 @@ export const CREATE_DEMO_PROJECT = gql`
 							title: "Lego Super Mario!"
 							isTestCase: true
 							requiresAuthentication: true
-							video: { connect: { fileId: "1YYIZkAKQDuGZNSL5tiv"} }
+							video: { connect: { fileId: "1YYIZkAKQDuGZNSL5tiv" } }
 							flows: {
 								create: [
 									{

@@ -10,7 +10,10 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const { idToken, userId } = req.body;
 	const client = eightBaseClient(idToken);
-	const response = await client.request(CREATE_DEMO_PROJECT, { id: userId, name: `My ${choose(POSITIVE_ADJECTIVES)} Lego Demo Project` });
+	const response = await client.request(CREATE_DEMO_PROJECT, {
+		id: userId,
+		name: `My ${choose(POSITIVE_ADJECTIVES)} Lego Demo Project`,
+	});
 
 	const projectId = response.projectCreate.id;
 	const userStories: Array<{ id: string; title: string }> =
@@ -23,7 +26,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 						create: [
 							{
 								status: 'completed',
-								testLength: '00:23:01',
+								testLength: '00:03:01',
 								testOutcome: {
 									create: userStories.map(({ title, id }) =>
 										title === 'Get help'
@@ -47,7 +50,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 													video: {
 														connect: { fileId: 'OjrwQOWySUKSAkMcxvfN' },
 													},
-													errorStepIndex: 15,
+													errorStepIndex: 14,
 													errorMessage:
 														'Assertion error: User should have retained VIP status.',
 													userStory: {
@@ -75,8 +78,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 		},
 	};
 	await client.request(LINK_DEMO_PROJECT_TO_TEST_RUNS, { id: projectId, data });
-	const flowId = userStories.filter(({ title }) => title === "Log in flow")[0].id;
-  await client.request(CONFIGURATION_UPDATE_LOGIN_FLOW, { id: response.projectCreate.configuration.id, flow: flowId});
+	const flowId = userStories.filter(({ title }) => title === 'Log in flow')[0]
+		.id;
+	await client.request(CONFIGURATION_UPDATE_LOGIN_FLOW, {
+		id: response.projectCreate.configuration.id,
+		flow: flowId,
+	});
 	res.json({ project: response.projectCreate });
 };
 
@@ -802,4 +809,5 @@ const POSITIVE_ADJECTIVES = [
 	'Wonderful',
 	'Worthy',
 ];
-const choose = <T>(choices: Array<T>) => choices[Math.floor(Math.random() * choices.length)];
+const choose = <T>(choices: Array<T>) =>
+	choices[Math.floor(Math.random() * choices.length)];

@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
 	BoxProps,
 	Alert,
@@ -7,9 +7,7 @@ import {
 	CloseButton,
 } from '@chakra-ui/react';
 
-export type DemoPlanProps = {} & BoxProps;
-
-const DemoPlan = ({ ...props }: DemoPlanProps) => {
+const DemoPlan = (props: BoxProps) => {
 	const [open, setOpen] = useState(true);
 	if (open === false) {
 		return null;
@@ -23,6 +21,7 @@ const DemoPlan = ({ ...props }: DemoPlanProps) => {
 			p={3}
 			flex="none"
 			id="demoPlanCard"
+			{...props}
 		>
 			<AlertIcon />
 			<AlertDescription>
