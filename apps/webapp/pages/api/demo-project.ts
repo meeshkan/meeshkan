@@ -50,8 +50,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 													video: {
 														connect: { fileId: 'QmlFdzDnQHacmxrQ03ob' },
 													},
-													errorStepIndex: 14,
-													errorMessage:
+													errorStepIndex: 15,
+													assertionError:
 														'Assertion error: User should have retained VIP status.',
 													userStory: {
 														connect: {

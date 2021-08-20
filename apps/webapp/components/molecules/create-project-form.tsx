@@ -180,7 +180,7 @@ const CreateProjectForm = ({
 					onClick={handleSubmit(onSubmit(true))}
 					isLoading={loading}
 					form="form"
-					loadingText="Loading"
+					loadingText="Generating a demo"
 					leftIcon={<MagicWandIcon />}
 				>
 					Generate a demo

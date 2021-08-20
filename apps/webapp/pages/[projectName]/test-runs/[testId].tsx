@@ -239,6 +239,7 @@ const TestRunPage = () => {
 												? false
 												: true;
 
+										// TODO: Fix this as it assumes commands are in order of their sIndex which isn't true.
 										const outcomeDetails = commandsToSteps(outcomeCommands)[
 											contextualErrorStepIndex
 										];
@@ -446,22 +447,51 @@ const TestRunPage = () => {
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
-																		<Alert
-																			status="error"
-																			p={3}
-																			mt={errorInLogIn ? 0 : 3}
-																			flex="1"
-																		>
-																			<AlertIcon />
-																			<AlertDescription>
-																				{outcomeError(
-																					errorInLogIn
-																						? 'auth'
-																						: outcomeDetails?.command,
-																					outcomeDetails?.tagName
-																				)}
-																			</AlertDescription>
-																		</Alert>
+																		{outcomeDetails.command !==
+																			'execute javascript' && (
+																			<Alert
+																				status="error"
+																				p={3}
+																				mt={errorInLogIn ? 0 : 3}
+																				flex="1"
+																			>
+																				<AlertIcon />
+																				<AlertDescription>
+																					{outcomeError(
+																						errorInLogIn
+																							? 'auth'
+																							: outcomeDetails?.command,
+																						outcomeDetails?.tagName
+																					)}
+																				</AlertDescription>
+																			</Alert>
+																		)}
+																		{outcome?.errorMessage && (
+																			<Alert
+																				status="error"
+																				p={3}
+																				mt={errorInLogIn ? 0 : 3}
+																				flex="1"
+																			>
+																				<AlertIcon />
+																				<AlertDescription>
+																					{outcome?.errorMessage}
+																				</AlertDescription>
+																			</Alert>
+																		)}
+																		{outcome?.assertionError && (
+																			<Alert
+																				status="error"
+																				p={3}
+																				mt={errorInLogIn ? 0 : 3}
+																				flex="1"
+																			>
+																				<AlertIcon />
+																				<AlertDescription>
+																					{outcome?.assertionError}
+																				</AlertDescription>
+																			</Alert>
+																		)}
 																	</Box>
 																</Flex>
 															</>
