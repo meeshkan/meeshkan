@@ -239,10 +239,9 @@ const TestRunPage = () => {
 												? false
 												: true;
 
-										// TODO: Fix this as it assumes commands are in order of their sIndex which isn't true.
-										const outcomeDetails = commandsToSteps(outcomeCommands)[
-											contextualErrorStepIndex
-										];
+										const outcomeDetails = commandsToSteps(
+											outcomeCommands
+										).find((step) => step.sIndex === contextualErrorStepIndex);
 
 										const outcomeError = (
 											outcomeCommand: string,
