@@ -1,3 +1,4 @@
+import React, { useContext, useState } from 'react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import {
 	Button,
@@ -20,7 +21,6 @@ import {
 	useColorModeValue,
 	useDisclosure,
 } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
 import { mutate } from 'swr';
 import { TOGGLE_TEST_RUNS, UPDATE_STAGING_URL } from '../graphql/project';
 import { eightBaseClient } from './graphql';
@@ -36,12 +36,15 @@ type TriggerTestRunProps = {
 	singleOrAll?: 'single' | 'all';
 	/** If triggering a single test, which user story? */
 	userStoryId?: string;
+	/** Are we on a demo plan? */
+	onDemoPlan: boolean;
 };
 
 export const TriggerTestRun = ({
 	buttonText = 'Trigger all tests',
 	singleOrAll = 'all',
 	userStoryId,
+	onDemoPlan,
 }: TriggerTestRunProps) => {
 	const { idToken, setProject, project } = useContext(UserContext);
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -192,6 +195,7 @@ export const TriggerTestRun = ({
 	return (
 		<>
 			<Button
+				isDisabled={onDemoPlan}
 				leftIcon={<PlayIcon />}
 				onClick={handleTriggerTestRun}
 				id="trigger-test-run"
@@ -201,7 +205,6 @@ export const TriggerTestRun = ({
 			>
 				{buttonText}
 			</Button>
-
 			<Modal
 				isOpen={isOpen}
 				onClose={onClose}

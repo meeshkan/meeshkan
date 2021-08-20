@@ -66,10 +66,10 @@ export const CurrentPlanCard = ({ plan }: CurrentPlanProps) => {
 								plan.subscriptionStatus === 'cancelled'
 									? 'red'
 									: plan.subscriptionStatus === 'active'
-										? 'cyan'
-										: plan.subscriptionStatus === 'trialing'
-											? 'blue'
-											: 'gray'
+									? 'cyan'
+									: plan.subscriptionStatus === 'trialing'
+									? 'blue'
+									: 'gray'
 							}
 							p={2}
 							borderRadius="md"
@@ -84,28 +84,30 @@ export const CurrentPlanCard = ({ plan }: CurrentPlanProps) => {
 					<Text fontWeight="800" fontSize="24px" mb={2}>
 						{plan.name === 'Free'
 							? free[
-							plan.billingInterval === 'yearly'
-								? 'yearlyPrice'
-								: 'monthlyPrice'
-							]
-							: plan.name === 'Feedback'
-								? feedback[
-								plan.billingInterval === 'yearly'
-									? 'yearlyPrice'
-									: 'monthlyPrice'
-								]
-								: plan.name === 'Business'
-									? business[
 									plan.billingInterval === 'yearly'
 										? 'yearlyPrice'
 										: 'monthlyPrice'
-									]
-									: null}
+							  ]
+							: plan.name === 'Feedback'
+							? feedback[
+									plan.billingInterval === 'yearly'
+										? 'yearlyPrice'
+										: 'monthlyPrice'
+							  ]
+							: plan.name === 'Business'
+							? business[
+									plan.billingInterval === 'yearly'
+										? 'yearlyPrice'
+										: 'monthlyPrice'
+							  ]
+							: null}
 					</Text>
+
 					<Button
 						colorScheme="gray"
 						variant="subtle"
 						border="1px solid"
+						isDisabled={plan?.name === 'Demo'}
 						borderColor={subtleButtonBorderColor}
 						loadingText="Loading stripe"
 						isLoading={portalSessionLoading}

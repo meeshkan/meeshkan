@@ -14,13 +14,15 @@ import {
 	Link,
 } from '@chakra-ui/react';
 import { GitLabIcon, GitHubIcon, BitbucketIcon } from '@frontend/chakra-theme';
-import { UserContext } from 'apps/webapp/utils/user';
+import { UserContext } from '../../utils/user';
 import ClientSecretInput from '../molecules/client-secret-input';
 
 const CIDocumentation = ({
 	manualClientSecret,
+	onDemoPlan,
 }: {
 	manualClientSecret?: string;
+	onDemoPlan: boolean;
 }) => {
 	const { project } = useContext(UserContext);
 	return (
@@ -49,8 +51,9 @@ const CIDocumentation = ({
 					you can use as a reference:
 				</Text>
 			</Box>
+
 			<Accordion allowMultiple>
-				<AccordionItem border="none">
+				<AccordionItem border="none" isDisabled={onDemoPlan}>
 					<Heading as="h2">
 						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -91,7 +94,7 @@ jobs:
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem border="none">
+				<AccordionItem border="none" isDisabled={onDemoPlan}>
 					<Heading as="h2">
 						<AccordionButton _hover={{ color: 'blue.500' }} py={4}>
 							<Flex align="center" flex="1" textAlign="left">
@@ -153,7 +156,7 @@ meeshkan-tests:
 					</AccordionPanel>
 				</AccordionItem>
 
-				<AccordionItem border="none">
+				<AccordionItem border="none" isDisabled={onDemoPlan}>
 					<Heading as="h2">
 						<AccordionButton py={4} _hover={{ color: 'blue.500' }}>
 							<Flex align="center" flex="1" textAlign="left">

@@ -2,32 +2,52 @@ import { transparentize, mode, GlobalStyleProps } from '@chakra-ui/theme-tools';
 
 const customComponents = {
 	Alert: {
-		baseStyle: {
+		baseStyle: (props: GlobalStyleProps) => ({
 			container: {
-				py: 4,
-				pl: 4,
-				pr: 6,
+				p: 4,
 				rounded: 'lg',
 				fontSize: '14px',
+				border: '1px solid',
+				borderColor: mode(
+					`${props.colorScheme}.200`,
+					`${props.colorScheme}.300`
+				)(props),
 			},
 			title: {
 				fontWeight: 'bold',
 				lineHeight: 'base',
 				mb: 3,
+				color: mode(
+					`${props.colorScheme}.700`,
+					`${props.colorScheme}.200`
+				)(props),
 			},
 			description: {
 				lineHeight: 'tall',
 				fontStyle: 'italic',
+				color: mode(
+					`${props.colorScheme}.700`,
+					`${props.colorScheme}.50`
+				)(props),
 			},
 			icon: {
 				mr: 4,
 				w: 4,
 				h: 4,
 			},
-		},
+		}),
 		variants: {
 			clean: (props: GlobalStyleProps) => ({
-				container: { backgroundColor: mode(`white`, `gray.900`)(props) },
+				container: {
+					backgroundColor: mode(`white`, `gray.900`)(props),
+					pr: 6,
+				},
+				title: {
+					color: mode(`gray.900`, `white`)(props),
+				},
+				description: {
+					color: mode(`gray.700`, `gray.200`)(props),
+				},
 				icon: {
 					color: mode(
 						`${props.colorScheme}.500`,

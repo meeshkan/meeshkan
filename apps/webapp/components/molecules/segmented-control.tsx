@@ -35,7 +35,7 @@ function SegmentedControlTab({
 			justify="center"
 			backgroundColor="transparent"
 			zIndex={0}
-			cursor="pointer"
+			cursor={disabled ? 'not-allowed' : 'pointer'}
 			userSelect="none"
 			role="button"
 			onClick={!disabled ? onSelect : undefined}
@@ -72,6 +72,8 @@ const SegmentedControl = ({
 				direction="row"
 				align="center"
 				backgroundColor={stackBackgroundColor}
+				opacity={disabled ? 0.5 : 1}
+				cursor={disabled ? 'not-allowed' : 'pointer'}
 				p={1}
 				borderTopRadius="lg"
 				borderBottomRadius={attached === true ? 0 : 'lg'}

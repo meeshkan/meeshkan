@@ -20,33 +20,26 @@ const ScriptCard = ({ handleClose }: ScriptCardProps) => {
 	const { project } = useContext(UserContext);
 
 	const alertBackgroundColor = useColorModeValue('white', 'gray.900');
+	const textColor = useColorModeValue('gray.700', 'gray.100');
 
 	if (!project) {
 		return null;
 	}
 
 	return (
-		<Alert
-			rounded="lg"
-			bg={alertBackgroundColor}
-			py={5}
-			p={4}
-		>
+		<Alert rounded="lg" bg={alertBackgroundColor} border="none" py={5} p={4}>
 			<Box flex="1" overflow="auto">
 				<Flex justify="space-between">
-					<AlertTitle mb={2} fontStyle="normal">
+					<AlertTitle mb={2} fontStyle="normal" color={textColor}>
 						Install this script in the{' '}
 						<Code fontSize="inherit" lineHeight="1">
 							head
 						</Code>{' '}
 						of your application:
 					</AlertTitle>
-					<CloseButton
-						size="sm"
-						onClick={handleClose}
-					/>
+					<CloseButton size="sm" onClick={handleClose} />
 				</Flex>
-				<AlertDescription>
+				<AlertDescription color={textColor}>
 					<ScriptTagInput />
 				</AlertDescription>
 			</Box>
