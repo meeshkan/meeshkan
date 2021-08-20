@@ -56,6 +56,7 @@ import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { eightBaseClient } from '../../../utils/graphql';
 import useSWR from 'swr';
 import { TEST_RUN } from '../../../graphql/test-run';
+import DemoPlan from '../../../components/molecules/demo-plan';
 
 const TestRunPage = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -66,6 +67,7 @@ const TestRunPage = () => {
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
+	const onDemoPlan = project?.configuration?.plan === 'Demo';
 
 	const { testId } = router.query;
 
@@ -125,6 +127,7 @@ const TestRunPage = () => {
 	return (
 		<ValidatedBillingPlan>
 			<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
+				{onDemoPlan && <DemoPlan />}
 				<Stack spacing={3}>
 					<Link href={`/${slugifiedProjectName}/test-runs`} passHref>
 						<a>

@@ -29,12 +29,12 @@ const DemoPlan = (props: BoxProps) => {
 				project, create a new one to run tests and create new test cases.
 			</AlertDescription>
 			<CloseButton
-				mixBlendMode="multiply"
 				onClick={() => setOpen(false)}
 				size="sm"
 				position="absolute"
 				right="4px"
 				top="6px"
+				sx={{ mixBlendMode: 'multiply' }}
 			/>
 		</Alert>
 	);
