@@ -3,12 +3,29 @@ import {
 	CONFIGURATION_UPDATE_LOGIN_FLOW,
 	CREATE_DEMO_PROJECT,
 	LINK_DEMO_PROJECT_TO_TEST_RUNS,
-} from 'apps/webapp/graphql/demo';
-import { eightBaseClient } from 'apps/webapp/utils/graphql';
+} from '../../graphql/demo';
+import { eightBaseClient } from '../../utils/graphql';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { responseBuilder } from './../../../custom-graphql/src/components/response-builder';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 	const { idToken, userId } = req.body;
+
+	if (
+		idToken === null ||
+		idToken === undefined ||
+		userId === null ||
+		userId === undefined
+	) {
+		console.error(
+			`You must provide an idToken and userId to this endpoint. idToken:${idToken} - userId: ${userId}`
+		);
+		return responseBuilder(
+			422,
+			`You must provide an idToken and userId to this endpoint. idToken:${idToken} - userId: ${userId}`
+		);
+	}
+
 	const client = eightBaseClient(idToken);
 	const response = await client.request(CREATE_DEMO_PROJECT, {
 		id: userId,
