@@ -65,8 +65,8 @@ const CreateProjectForm = ({
 			const res = await postData({
 				url: '/api/demo-project',
 				data: {
-					idToken: user?.idToken,
-					userId: user?.id,
+					idToken: user.idToken,
+					userId: user.id,
 				},
 			});
 			projects.push(res.project);
