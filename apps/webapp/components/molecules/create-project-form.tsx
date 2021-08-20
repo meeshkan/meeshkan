@@ -23,6 +23,7 @@ import { createSlug } from '../../utils/createSlug';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { postData } from '../../utils/stripe-client';
 import { useRouter } from 'next/router';
+import { MagicWandIcon } from '@frontend/chakra-theme';
 
 type ProjectFormInputs = {
 	name: string;
@@ -180,6 +181,7 @@ const CreateProjectForm = ({
 					isLoading={loading}
 					form="form"
 					loadingText="Loading"
+					leftIcon={<MagicWandIcon />}
 				>
 					Generate a demo
 				</Button>
