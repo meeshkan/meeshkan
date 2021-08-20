@@ -8,12 +8,12 @@ type ErrorProps = {
 
 const Error: NextPage<ErrorProps> = ({ status }: ErrorProps) => {
 	return (
-			<Flex as={Card} align="center" justify="center" w="100%">
-				<Heading as="h1">{status}</Heading>
-				{status !== 404 && (
-					<Text fontSize="md">An unexpected error has occured.</Text>
-				)}
-			</Flex>
+		<Flex as={Card} align="center" justify="center" w="100%">
+			<Heading as="h1">{status}</Heading>
+			{status !== 404 && (
+				<Text fontSize="md">An unexpected error has occurred</Text>
+			)}
+		</Flex>
 	);
 };
 
