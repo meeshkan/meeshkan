@@ -446,7 +446,7 @@ const TestRunPage = () => {
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
-																		{outcomeDetails.command !==
+																		{outcomeDetails?.command !==
 																			'execute javascript' && (
 																			<Alert
 																				status="error"
