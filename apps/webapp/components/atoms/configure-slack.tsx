@@ -28,7 +28,7 @@ export const SlackIntegration = () => {
 					variant="outline"
 					as="a"
 					href={`https://slack.com/oauth/v2/authorize?scope=incoming-webhook&client_id=${
-						process.env.SLACK_CLIENT_ID
+						process.env.NEXT_PUBLIC_SLACK_CLIENT_ID
 					}&redirect_uri=${
 						window?.location?.host /*+ window?.location?.pathname*/
 					}`}
