@@ -61,6 +61,7 @@ import PlanAndBillingCard from '../../components/organisms/plan-and-billing';
 import CIDocumentationCard from '../../components/organisms/ci-documentation';
 import Link from 'next/link';
 import { createSlug } from '../../utils/createSlug';
+import { SlackIntegration } from '../../components/atoms/configure-slack';
 
 type SectionGridCardProps = Omit<GridCardProps, 'anchor' | 'overflowY'>;
 const SectionGridCard = (props: SectionGridCardProps) => {
@@ -809,12 +810,6 @@ const Settings = () => {
 					))}
 				</SectionGridCard>
 				)
-				<SectionGridCard
-					title="CI Integrations"
-					subtitle="Trigger Meeshkan test runs from within your CI pipeline."
-				>
-					<CIDocumentationCard onDemoPlan={onDemoPlan} />
-				</SectionGridCard>
 				<GridCard
 					anchor
 					title="Plan and Billing"
@@ -822,6 +817,14 @@ const Settings = () => {
 				>
 					<PlanAndBillingCard />
 				</GridCard>
+				<SectionGridCard
+					title="Integrations"
+					subtitle="Configure integrations with third party services like Slack, GitHub and more."
+				>
+					<SlackIntegration />
+					<Spacer h={8} />
+					<CIDocumentationCard onDemoPlan={onDemoPlan} />
+				</SectionGridCard>
 			</Stack>
 		</Box>
 	);

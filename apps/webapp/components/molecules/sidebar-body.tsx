@@ -166,16 +166,6 @@ const SideBarBody = () => {
 								</NavButton>
 								<NavButton
 									fontSize="14px"
-									href={`/${slugifiedProjectName}/settings#ci-integrations`}
-									isActive={
-										router.asPath ===
-										`/${slugifiedProjectName}/settings#ci-integrations`
-									}
-								>
-									CI Integrations
-								</NavButton>
-								<NavButton
-									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#plan-and-billing`}
 									isActive={
 										router.asPath ===
@@ -185,7 +175,6 @@ const SideBarBody = () => {
 									Plan and Billing
 								</NavButton>
 								<NavButton
-									disabled={true}
 									fontSize="14px"
 									href={`/${slugifiedProjectName}/settings#integrations`}
 									isActive={
