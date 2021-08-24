@@ -35,6 +35,7 @@ import { eightBaseClient } from '../../../utils/graphql';
 import useSWR from 'swr';
 import { TEST_RUNS } from '../../../graphql/test-run';
 import { TestRunListResponse } from '@frontend/meeshkan-types';
+import DemoPlan from '../../../components/molecules/demo-plan';
 
 const doughnutDefaultDataValues = [80, 8, 12];
 const doughnutBackgroundColors = [
@@ -61,6 +62,8 @@ const TestRunsPage = () => {
 	const { colorMode } = useColorMode();
 
 	const client = eightBaseClient(idToken);
+	const onDemoPlan = project?.configuration?.plan === 'Demo';
+
 	// Initial data fetch
 	const fetcher = (query: string) =>
 		client.request(query, {
@@ -128,7 +131,14 @@ const TestRunsPage = () => {
 	return (
 		<ValidatedBillingPlan>
 			<Flex direction="column" w="100%" p={[6, 0, 0, 0]}>
-				<Alert status="warning" mb={4} p={3} flex="none">
+				{onDemoPlan && <DemoPlan />}
+				<Alert
+					status="warning"
+					mb={4}
+					mt={onDemoPlan ? 4 : 0}
+					p={3}
+					flex="none"
+				>
 					<AlertIcon />
 					<AlertDescription>
 						Test runs are experimental at this time.
@@ -234,7 +244,7 @@ const TestRunsPage = () => {
 							Filter
 						</Button>
 						<LightMode>
-							<TriggerTestRun singleOrAll="all" />
+							<TriggerTestRun onDemoPlan={onDemoPlan} singleOrAll="all" />
 						</LightMode>
 					</Flex>
 

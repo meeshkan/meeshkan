@@ -7,6 +7,11 @@ import {
 	Tooltip,
 	useColorModeValue,
 	Box,
+	Divider,
+	Button,
+	Center,
+	Flex,
+	Text,
 } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { useForm } from 'react-hook-form';
@@ -16,6 +21,9 @@ import { createProject } from '../../utils/project';
 import { UploadedFile } from '@frontend/meeshkan-types';
 import { createSlug } from '../../utils/createSlug';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
+import { postData } from '../../utils/stripe-client';
+import { useRouter } from 'next/router';
+import { MagicWandIcon } from '@frontend/chakra-theme';
 
 type ProjectFormInputs = {
 	name: string;
@@ -24,6 +32,7 @@ type ProjectFormInputs = {
 };
 
 type CreateProjectFormProps = {
+	loading: boolean;
 	setLoading: (value: boolean) => void;
 	setProjectName: (value: string) => void;
 	setProjectID: (value: string) => void;
@@ -34,6 +43,7 @@ type CreateProjectFormProps = {
 
 const CreateProjectForm = ({
 	setLoading,
+	loading,
 	setProjectName,
 	setProjectID,
 	setClientSecret,
@@ -47,8 +57,32 @@ const CreateProjectForm = ({
 	const [error, setError] = useState('');
 	const mixpanel = useAnalytics();
 	const tooltipIconColor = useColorModeValue('gray.400', 'gray.500');
+	const router = useRouter();
 
-	const onSubmit = async (formData: ProjectFormInputs): Promise<void> => {
+	const doOnSubmitDemo = async () => {
+		try {
+			setLoading(true);
+			const res = await postData({
+				url: '/api/demo-project',
+				data: {
+					idToken: user.idToken,
+					userId: user.id,
+				},
+			});
+			projects.push(res.project);
+			router.push(createSlug(res.project.name));
+		} catch {
+			setLoading(false);
+		}
+	};
+
+	const onSubmit = (isDemo: boolean) => async (
+		formData: ProjectFormInputs
+	): Promise<void> => {
+		if (isDemo) {
+			doOnSubmitDemo();
+			return;
+		}
 		setLoading(true);
 		setError('');
 		const data = await createProject(idToken, {
@@ -82,51 +116,77 @@ const CreateProjectForm = ({
 	};
 
 	return (
-		<Box as="form" onSubmit={handleSubmit(onSubmit)} id="form" w="full">
-			<AvatarField location="a project" onUpload={setAvatarFile} />
-			<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
-				<FormLabel>Name your project</FormLabel>
-				<Input
-					name="name"
-					type="text"
-					placeholder="Acme Industries"
-					ref={register}
-				/>
-			</FormControl>
-			<FormControl id="productionURL" isInvalid={!!error} mb={8}>
-				<FormLabel>Production URL</FormLabel>
-				<Input
-					name="productionURL"
-					type="url"
-					placeholder="https://acme-industries.com"
-					pattern="^http(s)?:\/\/.+$"
-					ref={register}
-				/>
-			</FormControl>
-			<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
-				<FormLabel d="flex" alignItems="center">
-					Staging URL
-					<Tooltip
-						label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
-						placement="right-start"
-					>
-						<InfoOutlineIcon
-							ml={2}
-							lineHeight="short"
-							color={tooltipIconColor}
-						/>
-					</Tooltip>
-				</FormLabel>
-				<Input
-					name="stagingURL"
-					type="url"
-					placeholder="https://staging.acme-industries.com"
-					pattern="^http(s)?:\/\/.+$"
-					ref={register}
-				/>
-				<FormErrorMessage>Error: {error}</FormErrorMessage>
-			</FormControl>
-		</Box>
+		<>
+			<Box
+				as="form"
+				onSubmit={handleSubmit(onSubmit(false))}
+				id="form"
+				w="full"
+			>
+				<AvatarField location="a project" onUpload={setAvatarFile} />
+				<FormControl id="name" isRequired isInvalid={!!error} mb={8}>
+					<FormLabel>Name your project</FormLabel>
+					<Input
+						name="name"
+						type="text"
+						placeholder="Acme Industries"
+						ref={register}
+					/>
+				</FormControl>
+				<FormControl id="productionURL" isInvalid={!!error} mb={8}>
+					<FormLabel>Production URL</FormLabel>
+					<Input
+						name="productionURL"
+						type="url"
+						placeholder="https://acme-industries.com"
+						pattern="^http(s)?:\/\/.+$"
+						ref={register}
+					/>
+				</FormControl>
+				<FormControl id="stagingURL" isInvalid={!!error} mb={8}>
+					<FormLabel d="flex" alignItems="center">
+						Staging URL
+						<Tooltip
+							label="This is the URL that Meeshkan will run tests against. The default test-run interval is daily."
+							placement="right-start"
+						>
+							<InfoOutlineIcon
+								ml={2}
+								lineHeight="short"
+								color={tooltipIconColor}
+							/>
+						</Tooltip>
+					</FormLabel>
+					<Input
+						name="stagingURL"
+						type="url"
+						placeholder="https://staging.acme-industries.com"
+						pattern="^http(s)?:\/\/.+$"
+						ref={register}
+					/>
+					<FormErrorMessage>Error: {error}</FormErrorMessage>
+				</FormControl>
+			</Box>
+			<Flex w="full" align="center" mb={4}>
+				<Divider my={4} />
+				<Text fontFamily="mono" lineHeight="base" mx={4}>
+					OR
+				</Text>
+				<Divider my={4} />
+			</Flex>
+
+			<Center>
+				<Button
+					onClick={handleSubmit(onSubmit(true))}
+					isLoading={loading}
+					form="form"
+					loadingText="Generating a demo"
+					leftIcon={<MagicWandIcon />}
+				>
+					Generate a demo
+				</Button>
+			</Center>
+		</>
 	);
 };
 

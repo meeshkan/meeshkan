@@ -17,10 +17,12 @@ import { AuthenticationToken } from '@frontend/meeshkan-types';
 type CreateAuthenticationFormProps = {
 	tokens: AuthenticationToken[];
 	setTokens: Dispatch<SetStateAction<AuthenticationToken[]>>;
+	onDemoPlan: boolean;
 };
 
 const AuthenticationTokenForm = ({
 	setTokens,
+	onDemoPlan,
 }: CreateAuthenticationFormProps) => {
 	const [toggleIndex, setToggleIndex] = useState(0);
 	const [loading, setLoading] = useState(false);
@@ -32,20 +34,20 @@ const AuthenticationTokenForm = ({
 
 	const onSubmit = async (formData: AuthenticationToken): Promise<void> => {
 		setLoading(true);
-		const response = await client
-			.request(ADD_AUTH_TOKEN, {
-				projectID: project.id,
-				type:
-					toggleIndex === 0
-						? 'cookie'
-						: toggleIndex === 1
-						? 'local storage'
-						: undefined,
-				key: formData.key,
-				value: formData.value,
-			});
+		const response = await client.request(ADD_AUTH_TOKEN, {
+			projectID: project.id,
+			type:
+				toggleIndex === 0
+					? 'cookie'
+					: toggleIndex === 1
+					? 'local storage'
+					: undefined,
+			key: formData.key,
+			value: formData.value,
+		});
 
-		const updatedAuthenticationTokens = response.projectUpdate.configuration.authenticationTokens.items;
+		const updatedAuthenticationTokens =
+			response.projectUpdate.configuration.authenticationTokens.items;
 		setTokens(updatedAuthenticationTokens);
 		setLoading(false);
 		setProject({
@@ -81,12 +83,13 @@ const AuthenticationTokenForm = ({
 					values={['Cookie', 'Local storage']}
 					selectedIndex={toggleIndex}
 					setSelectedIndex={setToggleIndex}
+					disabled={onDemoPlan}
 				/>
 			</FormControl>
 			<FormControl id="key" isRequired mr={[0, 0, 4, 4, 8]} mb={[4, 4, 0]}>
 				<FormLabel>Key</FormLabel>
 				<Input
-					isDisabled={loading}
+					isDisabled={loading || onDemoPlan}
 					name="key"
 					type="text"
 					ref={register({
@@ -97,7 +100,7 @@ const AuthenticationTokenForm = ({
 			<FormControl id="value" mr={[0, 0, 8, 8, 16]} mb={[8, 8, 0]} isRequired>
 				<FormLabel>Value</FormLabel>
 				<Input
-					isDisabled={loading}
+					isDisabled={loading || onDemoPlan}
 					name="value"
 					type="text"
 					ref={register({
@@ -111,7 +114,7 @@ const AuthenticationTokenForm = ({
 					type="submit"
 					isLoading={loading}
 					loadingText="Saving token"
-					isDisabled={loading}
+					isDisabled={loading || onDemoPlan}
 				>
 					Save token
 				</Button>

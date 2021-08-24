@@ -78,6 +78,7 @@ const Settings = () => {
 		setProject,
 		mutate: mutateUser,
 	} = user;
+
 	const [profileLoading, setProfileLoading] = useState(false);
 	const [projectLoading, setProjectLoading] = useState(false);
 	const [productUpdates, setProductUpdates] = useState(productNotifications);
@@ -98,6 +99,7 @@ const Settings = () => {
 	const avatarColor = useColorModeValue('gray.700', 'gray.200');
 	const avatarBackgroundColor = useColorModeValue('gray.200', 'gray.600');
 	const linkColor = useColorModeValue('blue.500', 'blue.300');
+	const onDemoPlan = project?.configuration?.plan === 'Demo';
 
 	useEffect(() => {
 		setProductUpdates(productNotifications);
@@ -428,11 +430,13 @@ const Settings = () => {
 						<Switch
 							id="product-updates"
 							ml={5}
+							isDisabled={onDemoPlan}
 							onChange={handleSwitchToggle}
 							isChecked={productUpdates}
 						/>
 					</FormControl>
 				</SectionGridCard>
+				)
 				<Heading fontSize="20px" color="gray.500" lineHeight="short" pt={5}>
 					Project
 				</Heading>
@@ -463,8 +467,9 @@ const Settings = () => {
 					</Heading>
 					<InviteLinkInput />
 					{members?.map((member: User) => {
-						const memberName = `${member.firstName || ''} ${member.lastName || ''
-							}`;
+						const memberName = `${member.firstName || ''} ${
+							member.lastName || ''
+						}`;
 						const memberAvatar = member?.avatar?.downloadUrl;
 						return (
 							<Flex
@@ -533,7 +538,6 @@ const Settings = () => {
 						</Button>
 					)}
 				</SectionGridCard>
-
 				<SectionGridCard
 					title="Details"
 					subtitle="Detailed configuration for your project."
@@ -589,6 +593,7 @@ const Settings = () => {
 							values={['on', 'off']}
 							selectedIndex={toggleTestRunnerIndex}
 							setSelectedIndex={setToggleTestRunnerIndex}
+							disabled={onDemoPlan}
 						/>
 					</FormControl>
 
@@ -617,6 +622,7 @@ const Settings = () => {
 							values={['Concurrent', 'Sequential']}
 							selectedIndex={runStrategy}
 							setSelectedIndex={setRunStrategy}
+							disabled={onDemoPlan}
 						/>
 					</FormControl>
 
@@ -657,7 +663,7 @@ const Settings = () => {
 						</Checkbox>
 					</Stack>
 				</SectionGridCard>
-
+				)
 				<SectionGridCard
 					title="Authentication"
 					subtitle="This is the user your tests will be run off of. Be sure that any of
@@ -669,6 +675,7 @@ const Settings = () => {
 					</Heading>
 					<Flex alignItems="flex-end" justifyContent="space-between">
 						<Button
+							isDisabled={onDemoPlan}
 							size="sm"
 							colorScheme="red"
 							variant="subtle"
@@ -681,8 +688,9 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/test-cases/${project?.configuration?.logInStory?.id
-								}`}
+							href={`/${createSlug(project?.name)}/test-cases/${
+								project?.configuration?.logInStory?.id
+							}`}
 						>
 							<Flex
 								as="a"
@@ -728,7 +736,11 @@ const Settings = () => {
 						2. Method: Add the tokens we should inject.
 					</Heading>
 
-					<AuthenticationTokenForm tokens={tokens} setTokens={setTokens} />
+					<AuthenticationTokenForm
+						tokens={tokens}
+						setTokens={setTokens}
+						onDemoPlan={onDemoPlan}
+					/>
 					{tokens?.length >= 1 ? (
 						<Heading fontSize="14px" fontWeight="500" mt={6}>
 							Active tokens
@@ -796,11 +808,12 @@ const Settings = () => {
 						</Flex>
 					))}
 				</SectionGridCard>
+				)
 				<SectionGridCard
 					title="CI Integrations"
 					subtitle="Trigger Meeshkan test runs from within your CI pipeline."
 				>
-					<CIDocumentationCard />
+					<CIDocumentationCard onDemoPlan={onDemoPlan} />
 				</SectionGridCard>
 				<GridCard
 					anchor

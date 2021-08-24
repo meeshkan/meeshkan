@@ -43,7 +43,7 @@ export const HumanTag = (tag: string): string => {
 		: tag === 'HTML'
 		? 'Page'
 		: tag === null
-		? "element"
+		? 'element'
 		: tag;
 };
 
@@ -72,6 +72,7 @@ export const commandsToSteps = (
 				command: 'open',
 				scriptCommand: commandData,
 			});
+			return;
 		}
 		if (commandData.command === 'set viewport size') {
 			subSteps.push({
@@ -80,6 +81,17 @@ export const commandsToSteps = (
 				command: 'setViewportSize',
 				scriptCommand: commandData,
 			});
+			return;
+		}
+		if (commandData.command === 'execute javascript') {
+			subSteps.push({
+				text: `Execute custom JavaScript.`,
+				sIndex: commandData.sIndex,
+				command: 'execute javascript',
+				tagName: null,
+				scriptCommand: commandData,
+			});
+			return;
 		}
 		if (commandData.command === 'click') {
 			subSteps.push({
@@ -91,6 +103,7 @@ export const commandsToSteps = (
 				tagName: HumanTag(commandData.tagName),
 				scriptCommand: commandData,
 			});
+			return;
 		}
 		if (commandData.command === 'type') {
 			subSteps.push({
@@ -102,6 +115,7 @@ export const commandsToSteps = (
 				tagName: HumanTag(commandData.tagName),
 				scriptCommand: commandData,
 			});
+			return;
 		}
 		if (commandData.command === 'mouse over') {
 			subSteps.push({
@@ -113,6 +127,7 @@ export const commandsToSteps = (
 				tagName: HumanTag(commandData.tagName),
 				scriptCommand: commandData,
 			});
+			return;
 		}
 		if (commandData.command === 'scroll') {
 			subSteps.push({
@@ -140,16 +155,7 @@ export const commandsToSteps = (
 				command: 'scroll',
 				scriptCommand: commandData,
 			});
-		}
-
-		if (commandData.command === 'execute javascript') {
-			subSteps.push({
-				text: `Execute custom JavaScript.`,
-				sIndex: commandData.sIndex,
-				command: 'execute javascript',
-				tagName: null,
-				scriptCommand: commandData,
-			});
+			return;
 		}
 
 		if (commandData.command === 'drag and drop') {
@@ -166,6 +172,7 @@ export const commandsToSteps = (
 				tagName: HumanTag(commandData.tagName),
 				scriptCommand: commandData,
 			});
+			return;
 		}
 	});
 

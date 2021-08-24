@@ -56,6 +56,7 @@ import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { eightBaseClient } from '../../../utils/graphql';
 import useSWR from 'swr';
 import { TEST_RUN } from '../../../graphql/test-run';
+import DemoPlan from '../../../components/molecules/demo-plan';
 
 const TestRunPage = () => {
 	const { found, loading } = useValidateSelectedProject();
@@ -66,6 +67,7 @@ const TestRunPage = () => {
 	const slugifiedProjectName = useMemo(() => createSlug(project?.name || ''), [
 		project?.name,
 	]);
+	const onDemoPlan = project?.configuration?.plan === 'Demo';
 
 	const { testId } = router.query;
 
@@ -125,6 +127,7 @@ const TestRunPage = () => {
 	return (
 		<ValidatedBillingPlan>
 			<Stack p={[4, 0, 0, 0]} w="100%" rounded="lg" spacing={6}>
+				{onDemoPlan && <DemoPlan />}
 				<Stack spacing={3}>
 					<Link href={`/${slugifiedProjectName}/test-runs`} passHref>
 						<a>
@@ -236,9 +239,9 @@ const TestRunPage = () => {
 												? false
 												: true;
 
-										const outcomeDetails = commandsToSteps(outcomeCommands)[
-											contextualErrorStepIndex
-										];
+										const outcomeDetails = commandsToSteps(
+											outcomeCommands
+										).find((step) => step.sIndex === contextualErrorStepIndex);
 
 										const outcomeError = (
 											outcomeCommand: string,
@@ -246,9 +249,9 @@ const TestRunPage = () => {
 										) => {
 											let errorMessage;
 											if (outcomeCommand == 'auth') {
-												errorMessage = `This test failed while the fake user was logging in.`;
+												errorMessage = `This test failed while the test user was logging in.`;
 											} else if (outcomeCommand == 'open') {
-												errorMessage = `The page your test trys to open, doesn't exist.`;
+												errorMessage = `Your test attempts to navigate to a page that doesn't exist.`;
 											} else if (outcomeCommand == 'setViewportSize') {
 												errorMessage = `This test case has an unsupported screen size.`;
 											} else {
@@ -443,22 +446,51 @@ const TestRunPage = () => {
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
-																		<Alert
-																			status="error"
-																			p={3}
-																			mt={errorInLogIn ? 0 : 3}
-																			flex="1"
-																		>
-																			<AlertIcon />
-																			<AlertDescription>
-																				{outcomeError(
-																					errorInLogIn
-																						? 'auth'
-																						: outcomeDetails?.command,
-																					outcomeDetails?.tagName
-																				)}
-																			</AlertDescription>
-																		</Alert>
+																		{outcomeDetails?.command !==
+																			'execute javascript' && (
+																			<Alert
+																				status="error"
+																				p={3}
+																				mt={errorInLogIn ? 0 : 3}
+																				flex="1"
+																			>
+																				<AlertIcon />
+																				<AlertDescription>
+																					{outcomeError(
+																						errorInLogIn
+																							? 'auth'
+																							: outcomeDetails?.command,
+																						outcomeDetails?.tagName
+																					)}
+																				</AlertDescription>
+																			</Alert>
+																		)}
+																		{outcome?.errorMessage && (
+																			<Alert
+																				status="error"
+																				p={3}
+																				mt={errorInLogIn ? 0 : 3}
+																				flex="1"
+																			>
+																				<AlertIcon />
+																				<AlertDescription>
+																					{outcome?.errorMessage}
+																				</AlertDescription>
+																			</Alert>
+																		)}
+																		{outcome?.assertionError && (
+																			<Alert
+																				status="error"
+																				p={3}
+																				mt={errorInLogIn ? 0 : 3}
+																				flex="1"
+																			>
+																				<AlertIcon />
+																				<AlertDescription>
+																					{outcome?.assertionError}
+																				</AlertDescription>
+																			</Alert>
+																		)}
 																	</Box>
 																</Flex>
 															</>

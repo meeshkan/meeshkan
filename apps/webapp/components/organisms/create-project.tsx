@@ -37,6 +37,7 @@ const CreateProject = () => {
 				</Heading>
 				{step === 1 ? (
 					<CreateProjectForm
+					  loading={loading}
 						setLoading={setLoading}
 						setProjectName={setProjectName}
 						setStep={setStep}

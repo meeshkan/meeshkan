@@ -46,6 +46,7 @@ const Onboarding = () => {
 						/>
 					) : step === 2 ? (
 						<CreateProjectForm
+						  loading={loading}
 							setLoading={setLoading}
 							setProjectName={setProjectName}
 							setStep={setStep}
