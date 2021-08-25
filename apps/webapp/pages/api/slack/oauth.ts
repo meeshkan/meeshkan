@@ -1,6 +1,8 @@
 import React from 'react';
 // import {App} from "@slack/bolt"
 
+// Next router - query: Object - The query string parsed to an object. It will be an empty object during prerendering if the page doesn't have data fetching requirements. Defaults to {}
+
 // Example response after Oauth handshake
 /*{
     "ok": true,
