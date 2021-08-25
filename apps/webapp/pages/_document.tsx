@@ -21,6 +21,9 @@ class MyDocument extends Document<DocumentProps> {
 		return (
 			<Html lang="en">
 				<Head>
+					{/* Suggest installing the slack app when sharing Meeshkan links in Slack */}
+					<meta name="slack-app-id" content="A02CRCCE7PS" />
+
 					{process.env.VERCEL_ENV === 'preview' ||
 					process.env.VERCEL_ENV === 'development' ||
 					process.env.NODE_ENV === 'development' ? (

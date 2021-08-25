@@ -27,7 +27,7 @@ export const SlackIntegration = () => {
 					colorScheme="gray"
 					variant="outline"
 					as="a"
-					href={`https://slack.com/oauth/v2/authorize?scope=incoming-webhook&client_id=${process.env.NEXT_PUBLIC_SLACK_CLIENT_ID}&redirect_uri=${window?.location?.origin}`}
+					href={`https://slack.com/oauth/v2/authorize?scope=incoming-webhook&client_id=${process.env.NEXT_PUBLIC_SLACK_CLIENT_ID}&redirect_uri=${window?.location?.origin}/api/slack/oauth`}
 				>
 					Configure
 				</Button>
