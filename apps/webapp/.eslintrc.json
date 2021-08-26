@@ -2,8 +2,7 @@
 	"extends": [
 		"plugin:@nrwl/nx/react-typescript",
 		"../../.eslintrc.json",
-		"next",
-		"next/core-web-vitals"
+		"next"
 	],
 	"ignorePatterns": ["!**/*"],
 	"env": {
