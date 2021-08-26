@@ -19,8 +19,10 @@
 		"baseUrl": ".",
 		"paths": {
 			"@frontend/chakra-theme": ["libs/chakra-theme/src/index.ts"],
-			"@frontend/meeshkan-types": ["libs/meeshkan-types/src/index.ts"],
-			"@frontend/downloadable-script": ["libs/downloadable-script/src/index.ts"]
+			"@frontend/downloadable-script": [
+				"libs/downloadable-script/src/index.ts"
+			],
+			"@frontend/meeshkan-types": ["libs/meeshkan-types/src/index.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

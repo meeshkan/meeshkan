@@ -1,9 +1,14 @@
 {
 	"npmScope": "frontend",
-	"affected": { "defaultBase": "master" },
+	"affected": {
+		"defaultBase": "master"
+	},
 	"implicitDependencies": {
 		"workspace.json": "*",
-		"package.json": { "dependencies": "*", "devDependencies": "*" },
+		"package.json": {
+			"dependencies": "*",
+			"devDependencies": "*"
+		},
 		"tsconfig.base.json": "*",
 		"tslint.json": "*",
 		".eslintrc.json": "*",
@@ -21,11 +26,31 @@
 		}
 	},
 	"projects": {
-		"custom-graphql": { "tags": [] },
-		"webapp": { "tags": [] },
-		"chakra-theme": { "tags": [] },
-		"og-cards": { "tags": [] },
-		"meeshkan-types": { "tags": [] },
-		"downloadable-script": { "tags": [] }
+		"chakra-theme": {
+			"tags": []
+		},
+		"custom-graphql": {
+			"tags": []
+		},
+		"downloadable-script": {
+			"tags": []
+		},
+		"meeshkan-types": {
+			"tags": []
+		},
+		"og-cards": {
+			"tags": []
+		},
+		"webapp": {
+			"tags": []
+		}
+	},
+	"targetDependencies": {
+		"build": [
+			{
+				"target": "build",
+				"projects": "dependencies"
+			}
+		]
 	}
 }
