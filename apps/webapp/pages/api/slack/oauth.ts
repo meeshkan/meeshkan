@@ -10,14 +10,14 @@ export default async function slackOauthHook(
 ): Promise<void> {
 	const verificationCode = req?.query?.code as string;
 	const projectID = req?.query?.state as string;
-	const response = await fetch('/api/session');
+	// const response = await fetch('/api/session');
 
 	console.log(
 		`Variables in Slack oauth`,
 		{ verificationCode },
 		{ projectID },
-		{ req },
-		{ response: response.json() }
+		{ req }
+		// { response: response.json() }
 	);
 	// const client = eightBaseClient(idToken);
 
