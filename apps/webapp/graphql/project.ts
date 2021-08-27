@@ -516,3 +516,47 @@ export const UPDATE_HAS_RECEIVED_EVENTS = gql`
 		}
 	}
 `;
+
+export const CREATE_SLACK_CONFIGURATION = gql`
+	mutation CREATE_SLACK_CONFIGURATION(
+		$projectID: ID!
+		$accessToken: String!
+		$webhookChannel: String!
+		$webhookChannelID: String!
+		$webhookURL: String!
+		$webhookConfigurationURL: String!
+	) {
+		projectUpdate(
+			filter: { id: $projectID }
+			data: {
+				configuration: {
+					update: {
+						slackIntegration: {
+							create: {
+								accessToken: $accessToken
+								webhookChannel: $webhookChannel
+								webhookChannelID: $webhookChannelID
+								webhookURL: $webhookURL
+								webhookConfigurationURL: $webhookConfigurationURL
+							}
+						}
+					}
+				}
+			}
+		) {
+			name
+			configuration {
+				slackIntegration {
+					count
+					items {
+						accessToken
+						webhookChannel
+						webhookChannelID
+						webhookURL
+						webhookConfigurationURL
+					}
+				}
+			}
+		}
+	}
+`;

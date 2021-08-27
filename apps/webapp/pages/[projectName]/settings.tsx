@@ -468,9 +468,8 @@ const Settings = () => {
 					</Heading>
 					<InviteLinkInput />
 					{members?.map((member: User) => {
-						const memberName = `${member.firstName || ''} ${
-							member.lastName || ''
-						}`;
+						const memberName = `${member.firstName || ''} ${member.lastName || ''
+							}`;
 						const memberAvatar = member?.avatar?.downloadUrl;
 						return (
 							<Flex
@@ -689,9 +688,8 @@ const Settings = () => {
 					</Flex>
 					{project?.configuration?.logInStory ? (
 						<Link
-							href={`/${createSlug(project?.name)}/test-cases/${
-								project?.configuration?.logInStory?.id
-							}`}
+							href={`/${createSlug(project?.name)}/test-cases/${project?.configuration?.logInStory?.id
+								}`}
 						>
 							<Flex
 								as="a"
@@ -821,7 +819,7 @@ const Settings = () => {
 					title="Integrations"
 					subtitle="Configure integrations with third party services like Slack, GitHub and more."
 				>
-					<SlackIntegration />
+					<SlackIntegration projectID={projectId} />
 					<Spacer h={8} />
 					<CIDocumentationCard onDemoPlan={onDemoPlan} />
 				</SectionGridCard>

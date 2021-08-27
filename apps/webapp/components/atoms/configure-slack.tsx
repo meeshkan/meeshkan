@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Flex, Heading, Stack, Text } from '@chakra-ui/react';
 import { SlackLogoIcon } from '@frontend/chakra-theme';
 
-export const SlackIntegration = () => {
+export const SlackIntegration = ({ projectID }: { projectID: string }) => {
 	return (
 		<>
 			<Flex alignItems="center" justifyContent="space-between">
@@ -27,7 +27,7 @@ export const SlackIntegration = () => {
 					colorScheme="gray"
 					variant="outline"
 					as="a"
-					href={`https://slack.com/oauth/v2/authorize?scope=incoming-webhook&client_id=${process.env.NEXT_PUBLIC_SLACK_CLIENT_ID}&redirect_uri=${window?.location?.origin}/api/slack/oauth`}
+					href={`https://slack.com/oauth/v2/authorize?scope=incoming-webhook&client_id=${process.env.NEXT_PUBLIC_SLACK_CLIENT_ID}&redirect_uri=${window?.location?.origin}/api/slack/oauth&state=${projectID}`}
 				>
 					Configure
 				</Button>
