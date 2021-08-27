@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { eightBaseClient } from '../../../utils/graphql';
-import { UserContext } from '../../../utils/user';
 import { CREATE_SLACK_CONFIGURATION } from '../../../graphql/project';
 import slugify from 'slugify';
+import { initAuth0 } from '@auth0/nextjs-auth0';
 
 export default async function slackOauthHook(
 	req: NextApiRequest,
@@ -11,7 +10,10 @@ export default async function slackOauthHook(
 ): Promise<void> {
 	const verificationCode = req?.query?.code as string;
 	const projectID = req?.query?.state as string;
-	const { idToken } = useContext(UserContext);
+	// @ts-ignore
+	const auth0 = initAuth0(req);
+	const session = await auth0.getSession(req);
+	const idToken = session?.idToken;
 	console.log(
 		`Variables in Slack oauth`,
 		{ verificationCode },
