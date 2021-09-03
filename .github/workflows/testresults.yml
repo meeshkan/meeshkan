@@ -1,0 +1,12 @@
+name: Update with test results
+
+on:
+  repository_dispatch:
+    types: complete-testrun
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        id: say-hello
+        run: echo hello
