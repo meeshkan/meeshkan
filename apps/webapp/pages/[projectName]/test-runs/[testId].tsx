@@ -32,6 +32,7 @@ import {
 	CrosshairIcon,
 	ShieldIcon,
 	KeyIcon,
+	ExternalLinkIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -55,7 +56,7 @@ import { commandsToSteps } from '../../../utils/transform-steps';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { eightBaseClient } from '../../../utils/graphql';
 import useSWR from 'swr';
-import { TEST_RUN } from '../../../graphql/test-run';
+import { TEST_RUN_QUERY } from '../../../graphql/test-run';
 import DemoPlan from '../../../components/molecules/demo-plan';
 
 const TestRunPage = () => {
@@ -84,7 +85,7 @@ const TestRunPage = () => {
 	};
 
 	const { data, error, mutate, isValidating } = useSWR<TestRunResponse>(
-		TEST_RUN,
+		TEST_RUN_QUERY,
 		fetcher
 	);
 	if (
@@ -166,7 +167,11 @@ const TestRunPage = () => {
 									color={headingColor}
 									lineHeight="short"
 								>
-									{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
+									{testCasesRan} test case{testCasesRan !== 1 && 's'}{' '}
+									{testRun?.status === 'running' ? 'are running' : 'ran '}
+									{testRun?.baseURL &&
+										`on ${new URL(testRun?.baseURL).hostname}`}
+									.
 									<Tooltip
 										label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
 										placement="right-start"
@@ -235,7 +240,7 @@ const TestRunPage = () => {
 												: outcome?.errorStepIndex;
 										const errorInLogIn: boolean =
 											contextualErrorStepIndex > 0 &&
-											!isNaN(contextualErrorStepIndex)
+												!isNaN(contextualErrorStepIndex)
 												? false
 												: true;
 
@@ -336,14 +341,7 @@ const TestRunPage = () => {
 															>
 																{icon}
 															</Tooltip>
-															<Link
-																href={`/${slugifiedProjectName}/test-cases/${testCase.id}`}
-																passHref
-															>
-																<ChakraLink fontSize="15px" ml={4}>
-																	{testCase?.title}
-																</ChakraLink>
-															</Link>
+															<Text ml={4}>{testCase?.title}</Text>
 															{isFailing && (
 																<Code
 																	display="flex"
@@ -386,7 +384,7 @@ const TestRunPage = () => {
 																</Tooltip>
 															) : null}
 															{isFailing &&
-															project?.configuration?.logInStory?.id ===
+																project?.configuration?.logInStory?.id ===
 																testCase?.id ? (
 																<Tooltip
 																	label="This is the path your users take to sign in."
@@ -410,21 +408,37 @@ const TestRunPage = () => {
 													<AccordionPanel py={4}>
 														{isFailing && (
 															<>
-																{outcome?.video && (
-																	<VideoPlayer
-																		src={outcome?.video.downloadUrl}
-																		onStart={() =>
-																			mixpanel.track(
-																				'Test outcome video play started'
-																			)
-																		}
-																		onEnded={() =>
-																			mixpanel.track(
-																				'Test outcome video play finished'
-																			)
-																		}
-																	/>
-																)}
+																<Flex justify="space-between">
+																	{outcome?.video && (
+																		<VideoPlayer
+																			src={outcome?.video.downloadUrl}
+																			onStart={() =>
+																				mixpanel.track(
+																					'Test outcome video play started'
+																				)
+																			}
+																			onEnded={() =>
+																				mixpanel.track(
+																					'Test outcome video play finished'
+																				)
+																			}
+																		/>
+																	)}
+																	<Link
+																		href={`/${slugifiedProjectName}/test-cases/${testCase.id}`}
+																		passHref
+																	>
+																		<Button
+																			as="a"
+																			size="sm"
+																			colorScheme="gray"
+																			rightIcon={<ExternalLinkIcon />}
+																		>
+																			Visit test case
+																		</Button>
+																	</Link>
+																</Flex>
+
 																<Flex mt={4}>
 																	<Flex
 																		justify="center"
@@ -440,31 +454,31 @@ const TestRunPage = () => {
 																	>
 																		{requiresAuthentication && hasLogInStory
 																			? outcome?.errorStepIndex +
-																			  1 -
-																			  stepsInLogInStory
+																			1 -
+																			stepsInLogInStory
 																			: outcome?.errorStepIndex + 1}
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
 																		{outcomeDetails?.command !==
 																			'execute javascript' && (
-																			<Alert
-																				status="error"
-																				p={3}
-																				mt={errorInLogIn ? 0 : 3}
-																				flex="1"
-																			>
-																				<AlertIcon />
-																				<AlertDescription>
-																					{outcomeError(
-																						errorInLogIn
-																							? 'auth'
-																							: outcomeDetails?.command,
-																						outcomeDetails?.tagName
-																					)}
-																				</AlertDescription>
-																			</Alert>
-																		)}
+																				<Alert
+																					status="error"
+																					p={3}
+																					mt={errorInLogIn ? 0 : 3}
+																					flex="1"
+																				>
+																					<AlertIcon />
+																					<AlertDescription>
+																						{outcomeError(
+																							errorInLogIn
+																								? 'auth'
+																								: outcomeDetails?.command,
+																							outcomeDetails?.tagName
+																						)}
+																					</AlertDescription>
+																				</Alert>
+																			)}
 																		{outcome?.errorMessage && (
 																			<Alert
 																				status="error"

@@ -140,12 +140,6 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 				accessor: 'title',
 			},
 			{
-				Header: 'Test',
-				accessor: (originalRow, rowIndex) => {
-					return <Checkbox isDisabled isChecked={originalRow.isTestCase} />;
-				},
-			},
-			{
 				Header: 'Created at',
 				accessor: (originalRow, rowIndex) => {
 					const humanDate = new Date(originalRow.createdAt);
@@ -184,8 +178,8 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								created === 'user'
 									? 'cyan'
 									: created === 'manual'
-									? 'blue'
-									: 'gray'
+										? 'blue'
+										: 'gray'
 							}
 						>
 							{created === 'user' ? (
@@ -214,10 +208,10 @@ const UserStoriesPage = ({ cookies }: UserStoryProps) => {
 								significance === 'low'
 									? 'gray'
 									: significance === 'medium'
-									? 'amber'
-									: significance === 'high'
-									? 'cyan'
-									: null
+										? 'amber'
+										: significance === 'high'
+											? 'cyan'
+											: null
 							}
 						>
 							{significance}

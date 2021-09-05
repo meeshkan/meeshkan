@@ -150,7 +150,7 @@ const SideBarFooter = ({ isSettings = false }: SideBarFooterProps) => {
 							<ArrowUpDownIcon mx={3} />
 						</Flex>
 					</MenuButton>
-					<MenuList>
+					<MenuList maxH='85vh' overflow='auto'>
 						<MenuOptionGroup value={project?.id} title="Projects" type="radio">
 							{projects.map((project) => (
 								<MenuItemOption
