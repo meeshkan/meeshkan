@@ -32,6 +32,7 @@ import {
 	CrosshairIcon,
 	ShieldIcon,
 	KeyIcon,
+	ExternalLinkIcon,
 } from '@frontend/chakra-theme';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -166,7 +167,11 @@ const TestRunPage = () => {
 									color={headingColor}
 									lineHeight="short"
 								>
-									{testCasesRan} test case{testCasesRan !== 1 && 's'} {testRun?.status === 'running' ? 'are running' : 'ran '}{testRun?.baseURL && `on ${new URL(testRun?.baseURL).hostname}`}.
+									{testCasesRan} test case{testCasesRan !== 1 && 's'}{' '}
+									{testRun?.status === 'running' ? 'are running' : 'ran '}
+									{testRun?.baseURL &&
+										`on ${new URL(testRun?.baseURL).hostname}`}
+									.
 									<Tooltip
 										label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
 										placement="right-start"
@@ -336,14 +341,7 @@ const TestRunPage = () => {
 															>
 																{icon}
 															</Tooltip>
-															<Link
-																href={`/${slugifiedProjectName}/test-cases/${testCase.id}`}
-																passHref
-															>
-																<ChakraLink fontSize="15px" ml={4}>
-																	{testCase?.title}
-																</ChakraLink>
-															</Link>
+															<Text ml={4}>{testCase?.title}</Text>
 															{isFailing && (
 																<Code
 																	display="flex"
@@ -410,21 +408,37 @@ const TestRunPage = () => {
 													<AccordionPanel py={4}>
 														{isFailing && (
 															<>
-																{outcome?.video && (
-																	<VideoPlayer
-																		src={outcome?.video.downloadUrl}
-																		onStart={() =>
-																			mixpanel.track(
-																				'Test outcome video play started'
-																			)
-																		}
-																		onEnded={() =>
-																			mixpanel.track(
-																				'Test outcome video play finished'
-																			)
-																		}
-																	/>
-																)}
+																<Flex justify="space-between">
+																	{outcome?.video && (
+																		<VideoPlayer
+																			src={outcome?.video.downloadUrl}
+																			onStart={() =>
+																				mixpanel.track(
+																					'Test outcome video play started'
+																				)
+																			}
+																			onEnded={() =>
+																				mixpanel.track(
+																					'Test outcome video play finished'
+																				)
+																			}
+																		/>
+																	)}
+																	<Link
+																		href={`/${slugifiedProjectName}/test-cases/${testCase.id}`}
+																		passHref
+																	>
+																		<Button
+																			as="a"
+																			size="sm"
+																			colorScheme="gray"
+																			rightIcon={<ExternalLinkIcon />}
+																		>
+																			Visit test case
+																		</Button>
+																	</Link>
+																</Flex>
+
 																<Flex mt={4}>
 																	<Flex
 																		justify="center"
