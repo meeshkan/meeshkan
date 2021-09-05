@@ -55,7 +55,7 @@ import { commandsToSteps } from '../../../utils/transform-steps';
 import { useAnalytics } from '@lightspeed/react-mixpanel-script';
 import { eightBaseClient } from '../../../utils/graphql';
 import useSWR from 'swr';
-import { TEST_RUN } from '../../../graphql/test-run';
+import { TEST_RUN_QUERY } from '../../../graphql/test-run';
 import DemoPlan from '../../../components/molecules/demo-plan';
 
 const TestRunPage = () => {
@@ -84,7 +84,7 @@ const TestRunPage = () => {
 	};
 
 	const { data, error, mutate, isValidating } = useSWR<TestRunResponse>(
-		TEST_RUN,
+		TEST_RUN_QUERY,
 		fetcher
 	);
 	if (
@@ -166,7 +166,7 @@ const TestRunPage = () => {
 									color={headingColor}
 									lineHeight="short"
 								>
-									{testCasesRan} test case{testCasesRan !== 1 && 's'} ran{' '}
+									{testCasesRan} test case{testCasesRan !== 1 && 's'} {testRun?.status === 'running' ? 'are running' : 'ran '}{testRun?.baseURL && `on ${new URL(testRun?.baseURL).hostname}`}.
 									<Tooltip
 										label="A test case represents each of your individual user stories that are marked as expected. Click into a failing test for more details."
 										placement="right-start"
@@ -235,7 +235,7 @@ const TestRunPage = () => {
 												: outcome?.errorStepIndex;
 										const errorInLogIn: boolean =
 											contextualErrorStepIndex > 0 &&
-											!isNaN(contextualErrorStepIndex)
+												!isNaN(contextualErrorStepIndex)
 												? false
 												: true;
 
@@ -386,7 +386,7 @@ const TestRunPage = () => {
 																</Tooltip>
 															) : null}
 															{isFailing &&
-															project?.configuration?.logInStory?.id ===
+																project?.configuration?.logInStory?.id ===
 																testCase?.id ? (
 																<Tooltip
 																	label="This is the path your users take to sign in."
@@ -440,31 +440,31 @@ const TestRunPage = () => {
 																	>
 																		{requiresAuthentication && hasLogInStory
 																			? outcome?.errorStepIndex +
-																			  1 -
-																			  stepsInLogInStory
+																			1 -
+																			stepsInLogInStory
 																			: outcome?.errorStepIndex + 1}
 																	</Flex>
 																	<Box w="full">
 																		<Text>{outcomeDetails?.text}</Text>
 																		{outcomeDetails?.command !==
 																			'execute javascript' && (
-																			<Alert
-																				status="error"
-																				p={3}
-																				mt={errorInLogIn ? 0 : 3}
-																				flex="1"
-																			>
-																				<AlertIcon />
-																				<AlertDescription>
-																					{outcomeError(
-																						errorInLogIn
-																							? 'auth'
-																							: outcomeDetails?.command,
-																						outcomeDetails?.tagName
-																					)}
-																				</AlertDescription>
-																			</Alert>
-																		)}
+																				<Alert
+																					status="error"
+																					p={3}
+																					mt={errorInLogIn ? 0 : 3}
+																					flex="1"
+																				>
+																					<AlertIcon />
+																					<AlertDescription>
+																						{outcomeError(
+																							errorInLogIn
+																								? 'auth'
+																								: outcomeDetails?.command,
+																							outcomeDetails?.tagName
+																						)}
+																					</AlertDescription>
+																				</Alert>
+																			)}
 																		{outcome?.errorMessage && (
 																			<Alert
 																				status="error"

@@ -1,11 +1,12 @@
 import { gql } from 'graphql-request';
 
-export const TEST_RUN = gql`
-	query TEST_RUN($testRunId: ID!) {
+export const TEST_RUN_QUERY = gql`
+	query TEST_RUN_QUERY($testRunId: ID!) {
 		testRun(id: $testRunId) {
 			id
 			status
 			runLink
+			baseURL
 			createdAt
 			testLength
 			testOutcome {
@@ -63,6 +64,7 @@ export const TEST_RUNS = gql`
 				id
 				status
 				runLink
+				baseURL
 				createdAt
 				testOutcome {
 					count
