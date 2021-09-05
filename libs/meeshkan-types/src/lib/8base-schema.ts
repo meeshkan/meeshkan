@@ -1212,7 +1212,8 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -1236,6 +1237,7 @@ export type AuthenticationTokens_ConfigurationCreateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationRelationInput>;
 };
 
 /** Configuration update input from authenticationTokens */
@@ -1270,7 +1272,8 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -1294,6 +1297,7 @@ export type AuthenticationTokens_ConfigurationUpdateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationUpdateRelationInput>;
 };
 
 export type AuthenticationTokenSort = {
@@ -1857,7 +1861,8 @@ export type Configuration = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -1881,6 +1886,7 @@ export type Configuration = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<SlackIntegrationListResponse>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -1895,6 +1901,19 @@ export type ConfigurationAuthenticationTokensArgs = {
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
 	groupBy?: Maybe<AuthenticationTokenGroupBy>;
+};
+
+/** Settings and configuration for an individual project. */
+export type ConfigurationSlackIntegrationArgs = {
+	filter?: Maybe<SlackIntegrationFilter>;
+	orderBy?: Maybe<Array<Maybe<SlackIntegrationOrderBy>>>;
+	sort?: Maybe<Array<SlackIntegrationSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<SlackIntegrationGroupBy>;
 };
 
 /** AuthenticationToken create input from configuration */
@@ -1939,6 +1958,7 @@ export type Configuration_PermissionFilter = {
 	project?: Maybe<Project_PermissionFilter>;
 	authenticationTokens?: Maybe<AuthenticationToken_PermissionRelationFilter>;
 	logInStory?: Maybe<UserStory_PermissionFilter>;
+	slackIntegration?: Maybe<SlackIntegration_PermissionRelationFilter>;
 	AND?: Maybe<Array<Configuration_PermissionFilter>>;
 	OR?: Maybe<Array<Configuration_PermissionFilter>>;
 };
@@ -2037,7 +2057,8 @@ export type ConfigurationCreateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -2061,6 +2082,7 @@ export type ConfigurationCreateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationRelationInput>;
 };
 
 /** Configuration create many input */
@@ -2094,7 +2116,8 @@ export type ConfigurationCreateManyInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -2118,6 +2141,7 @@ export type ConfigurationCreateManyInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationManyRelationInput>;
 };
 
 /** Configuration delete input */
@@ -2166,6 +2190,7 @@ export type ConfigurationFilter = {
 	project?: Maybe<ProjectFilter>;
 	authenticationTokens?: Maybe<AuthenticationTokenRelationFilter>;
 	logInStory?: Maybe<UserStoryFilter>;
+	slackIntegration?: Maybe<SlackIntegrationRelationFilter>;
 	AND?: Maybe<Array<ConfigurationFilter>>;
 	OR?: Maybe<Array<ConfigurationFilter>>;
 };
@@ -2199,6 +2224,7 @@ export type ConfigurationGroupByQuery = {
 	project?: Maybe<ProjectGroupByQuery>;
 	authenticationTokens?: Maybe<AuthenticationTokenGroupByQuery>;
 	logInStory?: Maybe<UserStoryGroupByQuery>;
+	slackIntegration?: Maybe<SlackIntegrationGroupByQuery>;
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
@@ -2303,6 +2329,32 @@ export type ConfigurationProjectUpdateRelationInput = {
 	update?: Maybe<Configuration_ProjectUpdateInput>;
 };
 
+/** Configuration relation input */
+export type ConfigurationSlackIntegrationManyRelationInput = {
+	connect?: Maybe<Array<SlackIntegrationKeyFilter>>;
+};
+
+/** Configuration relation input */
+export type ConfigurationSlackIntegrationRelationInput = {
+	connect?: Maybe<Array<SlackIntegrationKeyFilter>>;
+	create?: Maybe<
+		Array<Maybe<ProjectConfiguration_SlackIntegrationCreateInput>>
+	>;
+};
+
+/** Configuration relation input */
+export type ConfigurationSlackIntegrationUpdateRelationInput = {
+	connect?: Maybe<Array<SlackIntegrationKeyFilter>>;
+	disconnect?: Maybe<Array<SlackIntegrationKeyFilter>>;
+	reconnect?: Maybe<Array<SlackIntegrationKeyFilter>>;
+	create?: Maybe<
+		Array<Maybe<ProjectConfiguration_SlackIntegrationCreateInput>>
+	>;
+	update?: Maybe<
+		Array<Maybe<ProjectConfiguration_SlackIntegrationUpdateInput>>
+	>;
+};
+
 export type ConfigurationSort = {
 	id?: Maybe<SortOrder>;
 	createdAt?: Maybe<SortOrder>;
@@ -2381,7 +2433,8 @@ export type ConfigurationUpdateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -2405,6 +2458,7 @@ export type ConfigurationUpdateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationUpdateRelationInput>;
 };
 
 /** Custom Table Field Type */
@@ -4050,6 +4104,9 @@ export type GroupByResponse = {
 	AuthenticationTokenGroup: AuthenticationTokenListResponse;
 	MetricGroup: MetricListResponse;
 	ScriptCommandGroup: ScriptCommandListResponse;
+	SlackIntegrationGroup: SlackIntegrationListResponse;
+	UntitledTableGroup: UntitledTableListResponse;
+	MeeshkanAnalyticGroup: MeeshkanAnalyticListResponse;
 };
 
 export type GroupByResponseUserGroupArgs = {
@@ -4280,6 +4337,42 @@ export type GroupByResponseScriptCommandGroupArgs = {
 	groupBy?: Maybe<ScriptCommandGroupBy>;
 };
 
+export type GroupByResponseSlackIntegrationGroupArgs = {
+	filter?: Maybe<SlackIntegrationFilter>;
+	orderBy?: Maybe<Array<Maybe<SlackIntegrationOrderBy>>>;
+	sort?: Maybe<Array<SlackIntegrationSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<SlackIntegrationGroupBy>;
+};
+
+export type GroupByResponseUntitledTableGroupArgs = {
+	filter?: Maybe<UntitledTableFilter>;
+	orderBy?: Maybe<Array<Maybe<UntitledTableOrderBy>>>;
+	sort?: Maybe<Array<UntitledTableSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<UntitledTableGroupBy>;
+};
+
+export type GroupByResponseMeeshkanAnalyticGroupArgs = {
+	filter?: Maybe<MeeshkanAnalyticFilter>;
+	orderBy?: Maybe<Array<Maybe<MeeshkanAnalyticOrderBy>>>;
+	sort?: Maybe<Array<MeeshkanAnalyticSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<MeeshkanAnalyticGroupBy>;
+};
+
 export type GroupBySort = {
 	alias: Scalars['String'];
 	direction: SortOrder;
@@ -4350,6 +4443,11 @@ export type ImportedTable = {
 	name: Scalars['String'];
 };
 
+/** Inbox Events List Filter */
+export type InboxEventsListFilter = {
+	isCompleted?: Maybe<IntPredicate>;
+};
+
 /** Table Create Index Input */
 export type IndexCreateInput = {
 	tableId: Scalars['ID'];
@@ -4415,12 +4513,12 @@ export type InvitedByName = {
 	email?: Maybe<Scalars['String']>;
 };
 
-/** InviteMembersInput */
+/** Invite members input */
 export type InviteMembersInput = {
 	recipients: Array<InviteRecipientInput>;
 };
 
-/** InviteRecipientInput */
+/** Invite recipient input */
 export type InviteRecipientInput = {
 	email: Scalars['String'];
 	firstName?: Maybe<Scalars['String']>;
@@ -4485,7 +4583,8 @@ export type LogInStory_ConfigurationCreateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -4509,6 +4608,7 @@ export type LogInStory_ConfigurationCreateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationRelationInput>;
 };
 
 /** Configuration update input from logInStory */
@@ -4543,7 +4643,8 @@ export type LogInStory_ConfigurationUpdateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -4567,6 +4668,7 @@ export type LogInStory_ConfigurationUpdateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationUpdateRelationInput>;
 };
 
 /** UserStory create input from logInStoryConfig */
@@ -4663,6 +4765,169 @@ export type LogInStoryConfig_UserStoryUpdateInput = {
 	scriptVersion?: Maybe<Scalars['String']>;
 	flows?: Maybe<UserStoryFlowsUpdateRelationInput>;
 	author?: Maybe<UserStoryAuthorUpdateRelationInput>;
+};
+
+/** Storing information for Meeshkan internally. */
+export type MeeshkanAnalytic = {
+	__typename?: 'MeeshkanAnalytic';
+	id?: Maybe<Scalars['ID']>;
+	createdAt?: Maybe<Scalars['DateTime']>;
+	updatedAt?: Maybe<Scalars['DateTime']>;
+	deletedAt?: Maybe<Scalars['Int']>;
+	createdBy?: Maybe<User>;
+	activeCount?: Maybe<Scalars['Int']>;
+	date?: Maybe<Scalars['Date']>;
+	_description?: Maybe<Scalars['String']>;
+};
+
+export type MeeshkanAnalytic_PermissionFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	activeCount?: Maybe<IntPredicate>;
+	date?: Maybe<DatePredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<User_PermissionFilter>;
+	AND?: Maybe<Array<MeeshkanAnalytic_PermissionFilter>>;
+	OR?: Maybe<Array<MeeshkanAnalytic_PermissionFilter>>;
+};
+
+/** MeeshkanAnalytics create input */
+export type MeeshkanAnalyticCreateInput = {
+	activeCount?: Maybe<Scalars['Int']>;
+	date: Scalars['Date'];
+};
+
+/** MeeshkanAnalytics create many input */
+export type MeeshkanAnalyticCreateManyInput = {
+	activeCount?: Maybe<Scalars['Int']>;
+	date: Scalars['Date'];
+};
+
+/** MeeshkanAnalytics delete input */
+export type MeeshkanAnalyticDeleteInput = {
+	id?: Maybe<Scalars['ID']>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+/** MeeshkanAnalyticFieldsPermissions create input */
+export type MeeshkanAnalyticFieldsPermissions = {
+	createdAt?: Maybe<Scalars['Boolean']>;
+	updatedAt?: Maybe<Scalars['Boolean']>;
+	activeCount?: Maybe<Scalars['Boolean']>;
+	date?: Maybe<Scalars['Boolean']>;
+};
+
+export type MeeshkanAnalyticFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	activeCount?: Maybe<IntPredicate>;
+	date?: Maybe<DatePredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<UserFilter>;
+	AND?: Maybe<Array<MeeshkanAnalyticFilter>>;
+	OR?: Maybe<Array<MeeshkanAnalyticFilter>>;
+};
+
+export type MeeshkanAnalyticGroupBy = {
+	query: MeeshkanAnalyticGroupByQuery;
+	sort?: Maybe<Array<GroupBySort>>;
+	having?: Maybe<Having>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	skip?: Maybe<Scalars['Int']>;
+};
+
+export type MeeshkanAnalyticGroupByQuery = {
+	id?: Maybe<Array<GroupByField>>;
+	createdAt?: Maybe<Array<GroupByField>>;
+	updatedAt?: Maybe<Array<GroupByField>>;
+	activeCount?: Maybe<Array<GroupByField>>;
+	date?: Maybe<Array<GroupByField>>;
+	createdBy?: Maybe<UserGroupByQuery>;
+	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
+};
+
+export type MeeshkanAnalyticKeyFilter = {
+	id?: Maybe<Scalars['ID']>;
+};
+
+/** MeeshkanAnalyticListResponse output */
+export type MeeshkanAnalyticListResponse = {
+	__typename?: 'MeeshkanAnalyticListResponse';
+	/** List items */
+	items: Array<MeeshkanAnalytic>;
+	/** List items count */
+	count: Scalars['Int'];
+	/** Aggregated items */
+	groups: Array<GroupByResponse>;
+};
+
+/** MeeshkanAnalyticManyResponse output */
+export type MeeshkanAnalyticManyResponse = {
+	__typename?: 'MeeshkanAnalyticManyResponse';
+	/** List items */
+	items: Array<MeeshkanAnalytic>;
+	/** List items count */
+	count: Scalars['Int'];
+};
+
+/** No longer supported. Use `sort` instead. */
+export enum MeeshkanAnalyticOrderBy {
+	IdAsc = 'id_ASC',
+	IdDesc = 'id_DESC',
+	CreatedAtAsc = 'createdAt_ASC',
+	CreatedAtDesc = 'createdAt_DESC',
+	UpdatedAtAsc = 'updatedAt_ASC',
+	UpdatedAtDesc = 'updatedAt_DESC',
+	DeletedAtAsc = 'deletedAt_ASC',
+	DeletedAtDesc = 'deletedAt_DESC',
+	ActiveCountAsc = 'activeCount_ASC',
+	ActiveCountDesc = 'activeCount_DESC',
+	DateAsc = 'date_ASC',
+	DateDesc = 'date_DESC',
+}
+
+/** MeeshkanAnalytics subscription payload */
+export type MeeshkanAnalyticPayload = {
+	__typename?: 'MeeshkanAnalyticPayload';
+	mutation: MutationType;
+	node?: Maybe<MeeshkanAnalytic>;
+	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
+	previousValues?: Maybe<MeeshkanAnalytic>;
+};
+
+export type MeeshkanAnalyticSort = {
+	id?: Maybe<SortOrder>;
+	createdAt?: Maybe<SortOrder>;
+	updatedAt?: Maybe<SortOrder>;
+	deletedAt?: Maybe<SortOrder>;
+	activeCount?: Maybe<SortOrder>;
+	date?: Maybe<SortOrder>;
+	createdBy?: Maybe<UserSort>;
+};
+
+/** MeeshkanAnalytics subscription filter */
+export type MeeshkanAnalyticSubscriptionFilter = {
+	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
+	node?: Maybe<MeeshkanAnalyticFilter>;
+	updatedFields?: Maybe<UpdatedFieldsFilter>;
+};
+
+/** MeeshkanAnalytics update input */
+export type MeeshkanAnalyticUpdateByFilterInput = {
+	activeCount?: Maybe<Array<Maybe<UpdateByFilterIntInput>>>;
+	date?: Maybe<Array<Maybe<UpdateByFilterDateInput>>>;
+};
+
+/** MeeshkanAnalytics update input */
+export type MeeshkanAnalyticUpdateInput = {
+	id?: Maybe<Scalars['ID']>;
+	activeCount?: Maybe<Scalars['Int']>;
+	date?: Maybe<Scalars['Date']>;
 };
 
 /** Project create input from members */
@@ -5202,9 +5467,19 @@ export type Mutation = {
 	indexCreate: TableIndex;
 	indexDelete?: Maybe<SuccessResponse>;
 	indexUpdate: TableIndex;
-	inviteMembers: Array<Maybe<TeamInvitation>>;
+	/** @deprecated No longer supported. Use `system.inviteMembers` instead. */
+	inviteMembers: Array<Maybe<TeamInvitationDetails>>;
 	/** @deprecated No longer supported. Use `system.invoke` instead. */
 	invoke?: Maybe<InvokeFunctionResponse>;
+	meeshkanAnalyticCreate: MeeshkanAnalytic;
+	meeshkanAnalyticCreateMany: MeeshkanAnalyticManyResponse;
+	meeshkanAnalyticDelete?: Maybe<SuccessResponse>;
+	meeshkanAnalyticDeleteByFilter?: Maybe<SuccessResponse>;
+	meeshkanAnalyticDestroy?: Maybe<SuccessResponse>;
+	meeshkanAnalyticDestroyByFilter?: Maybe<SuccessResponse>;
+	meeshkanAnalyticRestore: MeeshkanAnalytic;
+	meeshkanAnalyticUpdate: MeeshkanAnalytic;
+	meeshkanAnalyticUpdateByFilter: MeeshkanAnalyticManyResponse;
 	metricCreate: Metric;
 	metricCreateMany: MetricManyResponse;
 	metricDelete?: Maybe<SuccessResponse>;
@@ -5254,6 +5529,15 @@ export type Mutation = {
 	scriptCommandUpdateByFilter: ScriptCommandManyResponse;
 	sendInvitationTo8base?: Maybe<SuccessResponse>;
 	settingsUpdate: Setting;
+	slackIntegrationCreate: SlackIntegration;
+	slackIntegrationCreateMany: SlackIntegrationManyResponse;
+	slackIntegrationDelete?: Maybe<SuccessResponse>;
+	slackIntegrationDeleteByFilter?: Maybe<SuccessResponse>;
+	slackIntegrationDestroy?: Maybe<SuccessResponse>;
+	slackIntegrationDestroyByFilter?: Maybe<SuccessResponse>;
+	slackIntegrationRestore: SlackIntegration;
+	slackIntegrationUpdate: SlackIntegration;
+	slackIntegrationUpdateByFilter: SlackIntegrationManyResponse;
 	system?: Maybe<SystemMutation>;
 	/** @deprecated No longer supported. Use `system.tableCreate` instead. */
 	tableCreate: Table;
@@ -5261,12 +5545,15 @@ export type Mutation = {
 	tableDelete: SuccessResponse;
 	/** @deprecated No longer supported. Use `system.tableUpdate` instead. */
 	tableUpdate: Table;
+	/** @deprecated No longer supported. Use `system.teamInvitationAccept` instead. */
 	teamInvitationAccept: TeamInvitationAcceptResponse;
+	/** @deprecated No longer supported. Use `system.teamInvitationCancel` instead. */
 	teamInvitationCancel?: Maybe<SuccessResponse>;
 	teamInvitationDelete?: Maybe<SuccessResponse>;
 	teamInvitationDeleteByFilter?: Maybe<SuccessResponse>;
 	teamInvitationDestroy?: Maybe<SuccessResponse>;
 	teamInvitationDestroyByFilter?: Maybe<SuccessResponse>;
+	/** @deprecated No longer supported. Use `system.teamInvitationResend` instead. */
 	teamInvitationResend?: Maybe<SuccessResponse>;
 	teamInvitationRestore: TeamInvitation;
 	teamMemberDelete?: Maybe<SuccessResponse>;
@@ -5292,6 +5579,13 @@ export type Mutation = {
 	testRunRestore: TestRun;
 	testRunUpdate: TestRun;
 	testRunUpdateByFilter: TestRunManyResponse;
+	untitledTableCreate: UntitledTable;
+	untitledTableCreateMany: UntitledTableManyResponse;
+	untitledTableDelete?: Maybe<SuccessResponse>;
+	untitledTableDeleteByFilter?: Maybe<SuccessResponse>;
+	untitledTableDestroy?: Maybe<SuccessResponse>;
+	untitledTableDestroyByFilter?: Maybe<SuccessResponse>;
+	untitledTableRestore: UntitledTable;
 	userChangePassword?: Maybe<SuccessResponse>;
 	userCreate: User;
 	userCreateMany: UserManyResponse;
@@ -5803,6 +6097,51 @@ export type MutationInvokeArgs = {
 	data?: Maybe<InvokeData>;
 };
 
+export type MutationMeeshkanAnalyticCreateArgs = {
+	data: MeeshkanAnalyticCreateInput;
+};
+
+export type MutationMeeshkanAnalyticCreateManyArgs = {
+	data: Array<Maybe<MeeshkanAnalyticCreateManyInput>>;
+};
+
+export type MutationMeeshkanAnalyticDeleteArgs = {
+	data?: Maybe<MeeshkanAnalyticDeleteInput>;
+	filter?: Maybe<MeeshkanAnalyticKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMeeshkanAnalyticDeleteByFilterArgs = {
+	filter: MeeshkanAnalyticFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMeeshkanAnalyticDestroyArgs = {
+	filter?: Maybe<MeeshkanAnalyticKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMeeshkanAnalyticDestroyByFilterArgs = {
+	filter: MeeshkanAnalyticFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMeeshkanAnalyticRestoreArgs = {
+	id: Scalars['String'];
+};
+
+export type MutationMeeshkanAnalyticUpdateArgs = {
+	data: MeeshkanAnalyticUpdateInput;
+	filter?: Maybe<MeeshkanAnalyticKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+	destroyDetached?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationMeeshkanAnalyticUpdateByFilterArgs = {
+	data: MeeshkanAnalyticUpdateByFilterInput;
+	filter?: Maybe<MeeshkanAnalyticFilter>;
+};
+
 export type MutationMetricCreateArgs = {
 	data: MetricCreateInput;
 };
@@ -6036,6 +6375,51 @@ export type MutationSettingsUpdateArgs = {
 	data: SettingUpdateInput;
 };
 
+export type MutationSlackIntegrationCreateArgs = {
+	data: SlackIntegrationCreateInput;
+};
+
+export type MutationSlackIntegrationCreateManyArgs = {
+	data: Array<Maybe<SlackIntegrationCreateManyInput>>;
+};
+
+export type MutationSlackIntegrationDeleteArgs = {
+	data?: Maybe<SlackIntegrationDeleteInput>;
+	filter?: Maybe<SlackIntegrationKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationSlackIntegrationDeleteByFilterArgs = {
+	filter: SlackIntegrationFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationSlackIntegrationDestroyArgs = {
+	filter?: Maybe<SlackIntegrationKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationSlackIntegrationDestroyByFilterArgs = {
+	filter: SlackIntegrationFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationSlackIntegrationRestoreArgs = {
+	id: Scalars['String'];
+};
+
+export type MutationSlackIntegrationUpdateArgs = {
+	data: SlackIntegrationUpdateInput;
+	filter?: Maybe<SlackIntegrationKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+	destroyDetached?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationSlackIntegrationUpdateByFilterArgs = {
+	data: SlackIntegrationUpdateByFilterInput;
+	filter?: Maybe<SlackIntegrationFilter>;
+};
+
 export type MutationTableCreateArgs = {
 	data: TableCreateInput;
 };
@@ -6200,6 +6584,31 @@ export type MutationTestRunUpdateArgs = {
 export type MutationTestRunUpdateByFilterArgs = {
 	data: TestRunUpdateByFilterInput;
 	filter?: Maybe<TestRunFilter>;
+};
+
+export type MutationUntitledTableDeleteArgs = {
+	data?: Maybe<UntitledTableDeleteInput>;
+	filter?: Maybe<UntitledTableKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationUntitledTableDeleteByFilterArgs = {
+	filter: UntitledTableFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationUntitledTableDestroyArgs = {
+	filter?: Maybe<UntitledTableKeyFilter>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationUntitledTableDestroyByFilterArgs = {
+	filter: UntitledTableFilter;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+export type MutationUntitledTableRestoreArgs = {
+	id: Scalars['String'];
 };
 
 export type MutationUserChangePasswordArgs = {
@@ -6580,6 +6989,7 @@ export type PermissionsData = {
 	Users?: Maybe<PermissionsDataUsers>;
 	Files?: Maybe<PermissionsDataFiles>;
 	Roles?: Maybe<PermissionsDataRoles>;
+	TeamInvitations?: Maybe<PermissionsDataTeamInvitations>;
 	CiCdMigrations?: Maybe<PermissionsDataCiCdMigrations>;
 	Project?: Maybe<PermissionsDataProject>;
 	Configuration?: Maybe<PermissionsDataConfiguration>;
@@ -6592,6 +7002,9 @@ export type PermissionsData = {
 	AuthenticationToken?: Maybe<PermissionsDataAuthenticationToken>;
 	Metrics?: Maybe<PermissionsDataMetrics>;
 	ScriptCommands?: Maybe<PermissionsDataScriptCommands>;
+	SlackIntegration?: Maybe<PermissionsDataSlackIntegration>;
+	UntitledTable?: Maybe<PermissionsDataUntitledTable>;
+	MeeshkanAnalytics?: Maybe<PermissionsDataMeeshkanAnalytics>;
 };
 
 export type PermissionsDataActivity = {
@@ -6798,6 +7211,40 @@ export type PermissionsDataFlowUpdate = {
 	fields?: Maybe<FlowFieldsPermissions>;
 };
 
+export type PermissionsDataMeeshkanAnalytics = {
+	create?: Maybe<PermissionsDataMeeshkanAnalyticsCreate>;
+	read?: Maybe<PermissionsDataMeeshkanAnalyticsRead>;
+	update?: Maybe<PermissionsDataMeeshkanAnalyticsUpdate>;
+	delete?: Maybe<PermissionsDataMeeshkanAnalyticsDelete>;
+	destroy?: Maybe<PermissionsDataMeeshkanAnalyticsDestroy>;
+};
+
+export type PermissionsDataMeeshkanAnalyticsCreate = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataMeeshkanAnalyticsDelete = {
+	allow: Scalars['Boolean'];
+	restore?: Maybe<Scalars['Boolean']>;
+	review?: Maybe<Scalars['Boolean']>;
+};
+
+export type PermissionsDataMeeshkanAnalyticsDestroy = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataMeeshkanAnalyticsRead = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<MeeshkanAnalytic_PermissionFilter>;
+	fields?: Maybe<MeeshkanAnalyticFieldsPermissions>;
+};
+
+export type PermissionsDataMeeshkanAnalyticsUpdate = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<MeeshkanAnalytic_PermissionFilter>;
+	fields?: Maybe<MeeshkanAnalyticFieldsPermissions>;
+};
+
 export type PermissionsDataMetrics = {
 	create?: Maybe<PermissionsDataMetricsCreate>;
 	read?: Maybe<PermissionsDataMetricsRead>;
@@ -6968,6 +7415,74 @@ export type PermissionsDataScriptCommandsUpdate = {
 	fields?: Maybe<ScriptCommandFieldsPermissions>;
 };
 
+export type PermissionsDataSlackIntegration = {
+	create?: Maybe<PermissionsDataSlackIntegrationCreate>;
+	read?: Maybe<PermissionsDataSlackIntegrationRead>;
+	update?: Maybe<PermissionsDataSlackIntegrationUpdate>;
+	delete?: Maybe<PermissionsDataSlackIntegrationDelete>;
+	destroy?: Maybe<PermissionsDataSlackIntegrationDestroy>;
+};
+
+export type PermissionsDataSlackIntegrationCreate = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataSlackIntegrationDelete = {
+	allow: Scalars['Boolean'];
+	restore?: Maybe<Scalars['Boolean']>;
+	review?: Maybe<Scalars['Boolean']>;
+};
+
+export type PermissionsDataSlackIntegrationDestroy = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataSlackIntegrationRead = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<SlackIntegration_PermissionFilter>;
+	fields?: Maybe<SlackIntegrationFieldsPermissions>;
+};
+
+export type PermissionsDataSlackIntegrationUpdate = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<SlackIntegration_PermissionFilter>;
+	fields?: Maybe<SlackIntegrationFieldsPermissions>;
+};
+
+export type PermissionsDataTeamInvitations = {
+	create?: Maybe<PermissionsDataTeamInvitationsCreate>;
+	read?: Maybe<PermissionsDataTeamInvitationsRead>;
+	update?: Maybe<PermissionsDataTeamInvitationsUpdate>;
+	delete?: Maybe<PermissionsDataTeamInvitationsDelete>;
+	destroy?: Maybe<PermissionsDataTeamInvitationsDestroy>;
+};
+
+export type PermissionsDataTeamInvitationsCreate = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataTeamInvitationsDelete = {
+	allow: Scalars['Boolean'];
+	restore?: Maybe<Scalars['Boolean']>;
+	review?: Maybe<Scalars['Boolean']>;
+};
+
+export type PermissionsDataTeamInvitationsDestroy = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataTeamInvitationsRead = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<TeamInvitation_PermissionFilter>;
+	fields?: Maybe<TeamInvitationFieldsPermissions>;
+};
+
+export type PermissionsDataTeamInvitationsUpdate = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<TeamInvitation_PermissionFilter>;
+	fields?: Maybe<TeamInvitationFieldsPermissions>;
+};
+
 export type PermissionsDataTestOutcome = {
 	create?: Maybe<PermissionsDataTestOutcomeCreate>;
 	read?: Maybe<PermissionsDataTestOutcomeRead>;
@@ -7034,6 +7549,40 @@ export type PermissionsDataTestRunUpdate = {
 	allow: Scalars['Boolean'];
 	filter?: Maybe<TestRun_PermissionFilter>;
 	fields?: Maybe<TestRunFieldsPermissions>;
+};
+
+export type PermissionsDataUntitledTable = {
+	create?: Maybe<PermissionsDataUntitledTableCreate>;
+	read?: Maybe<PermissionsDataUntitledTableRead>;
+	update?: Maybe<PermissionsDataUntitledTableUpdate>;
+	delete?: Maybe<PermissionsDataUntitledTableDelete>;
+	destroy?: Maybe<PermissionsDataUntitledTableDestroy>;
+};
+
+export type PermissionsDataUntitledTableCreate = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataUntitledTableDelete = {
+	allow: Scalars['Boolean'];
+	restore?: Maybe<Scalars['Boolean']>;
+	review?: Maybe<Scalars['Boolean']>;
+};
+
+export type PermissionsDataUntitledTableDestroy = {
+	allow: Scalars['Boolean'];
+};
+
+export type PermissionsDataUntitledTableRead = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<UntitledTable_PermissionFilter>;
+	fields?: Maybe<UntitledTableFieldsPermissions>;
+};
+
+export type PermissionsDataUntitledTableUpdate = {
+	allow: Scalars['Boolean'];
+	filter?: Maybe<UntitledTable_PermissionFilter>;
+	fields?: Maybe<UntitledTableFieldsPermissions>;
 };
 
 export type PermissionsDataUsers = {
@@ -7305,7 +7854,8 @@ export type Project_ConfigurationCreateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -7329,6 +7879,7 @@ export type Project_ConfigurationCreateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationRelationInput>;
 };
 
 /** Configuration update input from project */
@@ -7363,7 +7914,8 @@ export type Project_ConfigurationUpdateInput = {
 	/**
 	 * This represents the plan this project is on in Stripe. This is updated by the
 	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
-	 * `Feedback`, `Business`.
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
 	 */
 	plan?: Maybe<Scalars['String']>;
 	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
@@ -7387,6 +7939,7 @@ export type Project_ConfigurationUpdateInput = {
 	 * 2. `false` / sequential. Run one test after another.
 	 */
 	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationUpdateRelationInput>;
 };
 
 /** Metrics create input from project */
@@ -7562,6 +8115,27 @@ export type ProjectAvatarUpdateRelationInput = {
 	reconnect?: Maybe<FileKeyFilter>;
 	create?: Maybe<Project_Avatar_FileCreateInput>;
 	update?: Maybe<Project_Avatar_FileUpdateInput>;
+};
+
+/** SlackIntegration create input from projectConfiguration */
+export type ProjectConfiguration_SlackIntegrationCreateInput = {
+	/** The token to use on behalf of the slack workspace when using the Slack API. */
+	accessToken?: Maybe<Scalars['String']>;
+	/** Which channel does the slack integration point to? */
+	webhookChannel?: Maybe<Scalars['String']>;
+	/** The ID of the channel the slack integration is pointed to. */
+	webhookChannelID?: Maybe<Scalars['String']>;
+	/** The incoming webhook URL used to post messaged to the configured client slack channel */
+	webhookURL?: Maybe<Scalars['String']>;
+	/** The slack url where users can edit the configuration. */
+	webhookConfigurationURL?: Maybe<Scalars['String']>;
+	projectConfiguration?: Maybe<SlackIntegrationProjectConfigurationRelationInput>;
+};
+
+/** SlackIntegration update input from projectConfiguration */
+export type ProjectConfiguration_SlackIntegrationUpdateInput = {
+	filter?: Maybe<SlackIntegrationKeyFilter>;
+	data: SlackIntegrationUpdateInput;
 };
 
 /** Project relation input */
@@ -7925,6 +8499,8 @@ export type Query = {
 	getWorkspaceTransferInfo?: Maybe<WorkspaceTransferItem>;
 	/** @deprecated No longer supported. Use `system.logsList` instead. */
 	logs?: Maybe<Array<Maybe<Scalars['String']>>>;
+	meeshkanAnalytic?: Maybe<MeeshkanAnalytic>;
+	meeshkanAnalyticsList: MeeshkanAnalyticListResponse;
 	metric?: Maybe<Metric>;
 	metricsList: MetricListResponse;
 	project?: Maybe<Project>;
@@ -7936,6 +8512,8 @@ export type Query = {
 	scriptCommand?: Maybe<ScriptCommand>;
 	scriptCommandsList: ScriptCommandListResponse;
 	settings?: Maybe<Setting>;
+	slackIntegration?: Maybe<SlackIntegration>;
+	slackIntegrationsList: SlackIntegrationListResponse;
 	system?: Maybe<SystemQuery>;
 	/** @deprecated No longer supported. Use `system.table` instead. */
 	table?: Maybe<Table>;
@@ -7943,7 +8521,9 @@ export type Query = {
 	tableField?: Maybe<TableField>;
 	/** @deprecated No longer supported. Use `system.tablesList` instead. */
 	tablesList: TableListResponse;
+	/** @deprecated No longer supported. Use `system.teamInvitationDetails` instead. */
 	teamInvitationDetails?: Maybe<TeamInvitationDetails>;
+	/** @deprecated No longer supported. Use `system.teamInvitationsDetailsList` instead. */
 	teamInvitationsDetailsList?: Maybe<TeamInvitationsDetailsList>;
 	teamMember?: Maybe<TeamMember>;
 	teamMembersList: TeamMemberListResponse;
@@ -7951,8 +8531,11 @@ export type Query = {
 	testOutcomesList: TestOutcomeListResponse;
 	testRun?: Maybe<TestRun>;
 	testRunsList: TestRunListResponse;
+	untitledTable?: Maybe<UntitledTable>;
+	untitledTablesList: UntitledTableListResponse;
 	user?: Maybe<User>;
 	userBillingConfiguration: UserBillingConfigurationResponse;
+	/** @deprecated No longer supported. Use `system.userInvitationsList` instead. */
 	userInvitationsList?: Maybe<UserInvitationList>;
 	userStoriesList: UserStoryListResponse;
 	userStory?: Maybe<UserStory>;
@@ -8171,6 +8754,24 @@ export type QueryLogsArgs = {
 	endTime?: Maybe<Scalars['DateTime']>;
 };
 
+export type QueryMeeshkanAnalyticArgs = {
+	id?: Maybe<Scalars['ID']>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type QueryMeeshkanAnalyticsListArgs = {
+	filter?: Maybe<MeeshkanAnalyticFilter>;
+	orderBy?: Maybe<Array<Maybe<MeeshkanAnalyticOrderBy>>>;
+	sort?: Maybe<Array<MeeshkanAnalyticSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<MeeshkanAnalyticGroupBy>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
 export type QueryMetricArgs = {
 	id?: Maybe<Scalars['ID']>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
@@ -8262,6 +8863,24 @@ export type QueryScriptCommandsListArgs = {
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
+export type QuerySlackIntegrationArgs = {
+	id?: Maybe<Scalars['ID']>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type QuerySlackIntegrationsListArgs = {
+	filter?: Maybe<SlackIntegrationFilter>;
+	orderBy?: Maybe<Array<Maybe<SlackIntegrationOrderBy>>>;
+	sort?: Maybe<Array<SlackIntegrationSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<SlackIntegrationGroupBy>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
 export type QueryTableArgs = {
 	id?: Maybe<Scalars['ID']>;
 	name?: Maybe<Scalars['String']>;
@@ -8331,6 +8950,24 @@ export type QueryTestRunsListArgs = {
 	first?: Maybe<Scalars['Int']>;
 	last?: Maybe<Scalars['Int']>;
 	groupBy?: Maybe<TestRunGroupBy>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type QueryUntitledTableArgs = {
+	id?: Maybe<Scalars['ID']>;
+	withDeleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type QueryUntitledTablesListArgs = {
+	filter?: Maybe<UntitledTableFilter>;
+	orderBy?: Maybe<Array<Maybe<UntitledTableOrderBy>>>;
+	sort?: Maybe<Array<UntitledTableSort>>;
+	skip?: Maybe<Scalars['Int']>;
+	after?: Maybe<Scalars['String']>;
+	before?: Maybe<Scalars['String']>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	groupBy?: Maybe<UntitledTableGroupBy>;
 	withDeleted?: Maybe<Scalars['Boolean']>;
 };
 
@@ -8557,6 +9194,8 @@ export type Release_TestRunCreateInput = {
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** What base url was this test run performed against? */
+	baseURL?: Maybe<Scalars['String']>;
 };
 
 /** TestRun update input from release */
@@ -10300,6 +10939,384 @@ export type SignUpResendInput = {
 	email: Scalars['String'];
 };
 
+export type SlackIntegration = {
+	__typename?: 'SlackIntegration';
+	id?: Maybe<Scalars['ID']>;
+	createdAt?: Maybe<Scalars['DateTime']>;
+	updatedAt?: Maybe<Scalars['DateTime']>;
+	deletedAt?: Maybe<Scalars['Int']>;
+	createdBy?: Maybe<User>;
+	/** The token to use on behalf of the slack workspace when using the Slack API. */
+	accessToken?: Maybe<Scalars['String']>;
+	/** Which channel does the slack integration point to? */
+	webhookChannel?: Maybe<Scalars['String']>;
+	/** The ID of the channel the slack integration is pointed to. */
+	webhookChannelID?: Maybe<Scalars['String']>;
+	/** The incoming webhook URL used to post messaged to the configured client slack channel */
+	webhookURL?: Maybe<Scalars['String']>;
+	/** The slack url where users can edit the configuration. */
+	webhookConfigurationURL?: Maybe<Scalars['String']>;
+	projectConfiguration?: Maybe<Configuration>;
+	_description?: Maybe<Scalars['String']>;
+};
+
+/** Configuration create input from slackIntegration */
+export type SlackIntegration_ConfigurationCreateInput = {
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink: Scalars['String'];
+	project?: Maybe<ConfigurationProjectRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryRelationInput>;
+	/**
+	 * This defines whether the cron job that triggers test runs, should continue for
+	 * this project. It is represented as test runs 'on'/'off' in the webapp.
+	 */
+	activeTestRuns?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
+	 */
+	plan?: Maybe<Scalars['String']>;
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
+	subscriptionStartedDate?: Maybe<Scalars['Date']>;
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
+	 */
+	subscriptionStatus?: Maybe<Scalars['String']>;
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
+	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationRelationInput>;
+};
+
+/** Configuration update input from slackIntegration */
+export type SlackIntegration_ConfigurationUpdateInput = {
+	/**
+	 * This represents the URL that clients of the app being tested, use in
+	 * production. For Meeshkan as an example https://app.meeshkan.com. It is an
+	 * optional field.
+	 */
+	productionURL?: Maybe<Scalars['String']>;
+	/**
+	 * This represents the URL where a working version of an app is hosted. For
+	 * Meeshkan as an example https://webapp-git-staging-meeshkanml.vercel.app. This
+	 * is an optional field however test runs will not work with out it.
+	 */
+	stagingURL?: Maybe<Scalars['String']>;
+	/** This is an internal field storing the ID of a customer in Stripe's DB. */
+	stripeCustomerID?: Maybe<Scalars['String']>;
+	/**
+	 * The invitation link is dynamically generated by 8base custom functions. By
+	 * clicking this, other users and new users can join a project.
+	 */
+	inviteLink?: Maybe<Scalars['String']>;
+	project?: Maybe<ConfigurationProjectUpdateRelationInput>;
+	authenticationTokens?: Maybe<ConfigurationAuthenticationTokensUpdateRelationInput>;
+	logInStory?: Maybe<ConfigurationLogInStoryUpdateRelationInput>;
+	/**
+	 * This defines whether the cron job that triggers test runs, should continue for
+	 * this project. It is represented as test runs 'on'/'off' in the webapp.
+	 */
+	activeTestRuns?: Maybe<Scalars['Boolean']>;
+	/**
+	 * This represents the plan this project is on in Stripe. This is updated by the
+	 * logic webhook in `custom-graphql`. Current plans that exist are: `Free`,
+	 * `Feedback`, `Business`. Additionally `Demo` is to denominate a project for
+	 * display purposes with no limit usage.
+	 */
+	plan?: Maybe<Scalars['String']>;
+	/** This is the date that a subscription started for this project. The value for March 4th, 2021 would be "03/04/2021". */
+	subscriptionStartedDate?: Maybe<Scalars['Date']>;
+	/**
+	 * This represents a few of the important subscription statuses in 8base. Values that are acceptable include:
+	 * 1. `active`  fully started a subscription.
+	 * 2. `trialing` started a subscription but isn't paying
+	 * 3. `cancelled` project used to have a subscription but no longer does.
+	 */
+	subscriptionStatus?: Maybe<Scalars['String']>;
+	/** The cadence of billing, options are 'monthly' or 'yearly'. */
+	billingInterval?: Maybe<Scalars['String']>;
+	/** When a user chooses the feedback plan, they should schedule a call. This field keeps track of that. */
+	hasScheduledCall?: Maybe<Scalars['Boolean']>;
+	/** Used for integrations. */
+	clientSecret?: Maybe<Scalars['String']>;
+	/**
+	 * Do tests run concurrently for this project? Choices are:
+	 * 1. `true` / concurrent. Run all tests at the same time.
+	 * 2. `false` / sequential. Run one test after another.
+	 */
+	runTestsConcurrently?: Maybe<Scalars['Boolean']>;
+	slackIntegration?: Maybe<ConfigurationSlackIntegrationUpdateRelationInput>;
+};
+
+export type SlackIntegration_PermissionFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	accessToken?: Maybe<StringPredicate>;
+	webhookChannel?: Maybe<StringPredicate>;
+	webhookChannelID?: Maybe<StringPredicate>;
+	webhookURL?: Maybe<StringPredicate>;
+	webhookConfigurationURL?: Maybe<StringPredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<User_PermissionFilter>;
+	projectConfiguration?: Maybe<Configuration_PermissionFilter>;
+	AND?: Maybe<Array<SlackIntegration_PermissionFilter>>;
+	OR?: Maybe<Array<SlackIntegration_PermissionFilter>>;
+};
+
+export type SlackIntegration_PermissionRelationFilter = {
+	some?: Maybe<SlackIntegration_PermissionFilter>;
+	every?: Maybe<SlackIntegration_PermissionFilter>;
+	none?: Maybe<SlackIntegration_PermissionFilter>;
+};
+
+/** SlackIntegration create input */
+export type SlackIntegrationCreateInput = {
+	/** The token to use on behalf of the slack workspace when using the Slack API. */
+	accessToken?: Maybe<Scalars['String']>;
+	/** Which channel does the slack integration point to? */
+	webhookChannel?: Maybe<Scalars['String']>;
+	/** The ID of the channel the slack integration is pointed to. */
+	webhookChannelID?: Maybe<Scalars['String']>;
+	/** The incoming webhook URL used to post messaged to the configured client slack channel */
+	webhookURL?: Maybe<Scalars['String']>;
+	/** The slack url where users can edit the configuration. */
+	webhookConfigurationURL?: Maybe<Scalars['String']>;
+	projectConfiguration?: Maybe<SlackIntegrationProjectConfigurationRelationInput>;
+};
+
+/** SlackIntegration create many input */
+export type SlackIntegrationCreateManyInput = {
+	/** The token to use on behalf of the slack workspace when using the Slack API. */
+	accessToken?: Maybe<Scalars['String']>;
+	/** Which channel does the slack integration point to? */
+	webhookChannel?: Maybe<Scalars['String']>;
+	/** The ID of the channel the slack integration is pointed to. */
+	webhookChannelID?: Maybe<Scalars['String']>;
+	/** The incoming webhook URL used to post messaged to the configured client slack channel */
+	webhookURL?: Maybe<Scalars['String']>;
+	/** The slack url where users can edit the configuration. */
+	webhookConfigurationURL?: Maybe<Scalars['String']>;
+	projectConfiguration: SlackIntegrationProjectConfigurationManyRelationInput;
+};
+
+/** SlackIntegration delete input */
+export type SlackIntegrationDeleteInput = {
+	id?: Maybe<Scalars['ID']>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+/** SlackIntegrationFieldsPermissions create input */
+export type SlackIntegrationFieldsPermissions = {
+	createdAt?: Maybe<Scalars['Boolean']>;
+	updatedAt?: Maybe<Scalars['Boolean']>;
+	accessToken?: Maybe<Scalars['Boolean']>;
+	webhookChannel?: Maybe<Scalars['Boolean']>;
+	webhookChannelID?: Maybe<Scalars['Boolean']>;
+	webhookURL?: Maybe<Scalars['Boolean']>;
+	webhookConfigurationURL?: Maybe<Scalars['Boolean']>;
+};
+
+export type SlackIntegrationFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	accessToken?: Maybe<StringPredicate>;
+	webhookChannel?: Maybe<StringPredicate>;
+	webhookChannelID?: Maybe<StringPredicate>;
+	webhookURL?: Maybe<StringPredicate>;
+	webhookConfigurationURL?: Maybe<StringPredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<UserFilter>;
+	projectConfiguration?: Maybe<ConfigurationFilter>;
+	AND?: Maybe<Array<SlackIntegrationFilter>>;
+	OR?: Maybe<Array<SlackIntegrationFilter>>;
+};
+
+export type SlackIntegrationGroupBy = {
+	query: SlackIntegrationGroupByQuery;
+	sort?: Maybe<Array<GroupBySort>>;
+	having?: Maybe<Having>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	skip?: Maybe<Scalars['Int']>;
+};
+
+export type SlackIntegrationGroupByQuery = {
+	id?: Maybe<Array<GroupByField>>;
+	createdAt?: Maybe<Array<GroupByField>>;
+	updatedAt?: Maybe<Array<GroupByField>>;
+	accessToken?: Maybe<Array<GroupByField>>;
+	webhookChannel?: Maybe<Array<GroupByField>>;
+	webhookChannelID?: Maybe<Array<GroupByField>>;
+	webhookURL?: Maybe<Array<GroupByField>>;
+	webhookConfigurationURL?: Maybe<Array<GroupByField>>;
+	createdBy?: Maybe<UserGroupByQuery>;
+	projectConfiguration?: Maybe<ConfigurationGroupByQuery>;
+	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
+};
+
+export type SlackIntegrationKeyFilter = {
+	id?: Maybe<Scalars['ID']>;
+};
+
+/** SlackIntegrationListResponse output */
+export type SlackIntegrationListResponse = {
+	__typename?: 'SlackIntegrationListResponse';
+	/** List items */
+	items: Array<SlackIntegration>;
+	/** List items count */
+	count: Scalars['Int'];
+	/** Aggregated items */
+	groups: Array<GroupByResponse>;
+};
+
+/** SlackIntegrationManyResponse output */
+export type SlackIntegrationManyResponse = {
+	__typename?: 'SlackIntegrationManyResponse';
+	/** List items */
+	items: Array<SlackIntegration>;
+	/** List items count */
+	count: Scalars['Int'];
+};
+
+/** No longer supported. Use `sort` instead. */
+export enum SlackIntegrationOrderBy {
+	IdAsc = 'id_ASC',
+	IdDesc = 'id_DESC',
+	CreatedAtAsc = 'createdAt_ASC',
+	CreatedAtDesc = 'createdAt_DESC',
+	UpdatedAtAsc = 'updatedAt_ASC',
+	UpdatedAtDesc = 'updatedAt_DESC',
+	DeletedAtAsc = 'deletedAt_ASC',
+	DeletedAtDesc = 'deletedAt_DESC',
+	AccessTokenAsc = 'accessToken_ASC',
+	AccessTokenDesc = 'accessToken_DESC',
+	WebhookChannelAsc = 'webhookChannel_ASC',
+	WebhookChannelDesc = 'webhookChannel_DESC',
+	WebhookChannelIdAsc = 'webhookChannelID_ASC',
+	WebhookChannelIdDesc = 'webhookChannelID_DESC',
+	WebhookUrlAsc = 'webhookURL_ASC',
+	WebhookUrlDesc = 'webhookURL_DESC',
+	WebhookConfigurationUrlAsc = 'webhookConfigurationURL_ASC',
+	WebhookConfigurationUrlDesc = 'webhookConfigurationURL_DESC',
+}
+
+/** SlackIntegration subscription payload */
+export type SlackIntegrationPayload = {
+	__typename?: 'SlackIntegrationPayload';
+	mutation: MutationType;
+	node?: Maybe<SlackIntegration>;
+	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
+	previousValues?: Maybe<SlackIntegration>;
+};
+
+/** SlackIntegration relation input */
+export type SlackIntegrationProjectConfigurationManyRelationInput = {
+	connect?: Maybe<ConfigurationKeyFilter>;
+};
+
+/** SlackIntegration relation input */
+export type SlackIntegrationProjectConfigurationRelationInput = {
+	connect?: Maybe<ConfigurationKeyFilter>;
+	create?: Maybe<SlackIntegration_ConfigurationCreateInput>;
+};
+
+/** SlackIntegration relation input */
+export type SlackIntegrationProjectConfigurationUpdateRelationInput = {
+	connect?: Maybe<ConfigurationKeyFilter>;
+	disconnect?: Maybe<ConfigurationKeyFilter>;
+	reconnect?: Maybe<ConfigurationKeyFilter>;
+	create?: Maybe<SlackIntegration_ConfigurationCreateInput>;
+	update?: Maybe<SlackIntegration_ConfigurationUpdateInput>;
+};
+
+export type SlackIntegrationRelationFilter = {
+	some?: Maybe<SlackIntegrationFilter>;
+	every?: Maybe<SlackIntegrationFilter>;
+	none?: Maybe<SlackIntegrationFilter>;
+};
+
+export type SlackIntegrationSort = {
+	id?: Maybe<SortOrder>;
+	createdAt?: Maybe<SortOrder>;
+	updatedAt?: Maybe<SortOrder>;
+	deletedAt?: Maybe<SortOrder>;
+	accessToken?: Maybe<SortOrder>;
+	webhookChannel?: Maybe<SortOrder>;
+	webhookChannelID?: Maybe<SortOrder>;
+	webhookURL?: Maybe<SortOrder>;
+	webhookConfigurationURL?: Maybe<SortOrder>;
+	createdBy?: Maybe<UserSort>;
+	projectConfiguration?: Maybe<ConfigurationSort>;
+};
+
+/** SlackIntegration subscription filter */
+export type SlackIntegrationSubscriptionFilter = {
+	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
+	node?: Maybe<SlackIntegrationFilter>;
+	updatedFields?: Maybe<UpdatedFieldsFilter>;
+};
+
+/** SlackIntegration update input */
+export type SlackIntegrationUpdateByFilterInput = {
+	accessToken?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	webhookChannel?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	webhookChannelID?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	webhookURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	webhookConfigurationURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+};
+
+/** SlackIntegration update input */
+export type SlackIntegrationUpdateInput = {
+	id?: Maybe<Scalars['ID']>;
+	/** The token to use on behalf of the slack workspace when using the Slack API. */
+	accessToken?: Maybe<Scalars['String']>;
+	/** Which channel does the slack integration point to? */
+	webhookChannel?: Maybe<Scalars['String']>;
+	/** The ID of the channel the slack integration is pointed to. */
+	webhookChannelID?: Maybe<Scalars['String']>;
+	/** The incoming webhook URL used to post messaged to the configured client slack channel */
+	webhookURL?: Maybe<Scalars['String']>;
+	/** The slack url where users can edit the configuration. */
+	webhookConfigurationURL?: Maybe<Scalars['String']>;
+	projectConfiguration?: Maybe<SlackIntegrationProjectConfigurationUpdateRelationInput>;
+};
+
 /** Smart Field Attributes */
 export type SmartFieldTypeAttributes = {
 	__typename?: 'SmartFieldTypeAttributes';
@@ -10374,6 +11391,7 @@ export type Subscription = {
 	EnvironmentVariables?: Maybe<EnvironmentVariablePayload>;
 	Files?: Maybe<FilePayload>;
 	Flow?: Maybe<FlowPayload>;
+	MeeshkanAnalytics?: Maybe<MeeshkanAnalyticPayload>;
 	Metrics?: Maybe<MetricPayload>;
 	Permissions?: Maybe<PermissionPayload>;
 	Project?: Maybe<ProjectPayload>;
@@ -10381,10 +11399,12 @@ export type Subscription = {
 	Roles?: Maybe<RolePayload>;
 	ScriptCommands?: Maybe<ScriptCommandPayload>;
 	Settings?: Maybe<SettingPayload>;
+	SlackIntegration?: Maybe<SlackIntegrationPayload>;
 	TeamInvitations?: Maybe<TeamInvitationPayload>;
 	TeamMembers?: Maybe<TeamMemberPayload>;
 	TestOutcome?: Maybe<TestOutcomePayload>;
 	TestRun?: Maybe<TestRunPayload>;
+	UntitledTable?: Maybe<UntitledTablePayload>;
 	UserStory?: Maybe<UserStoryPayload>;
 	Users?: Maybe<UserPayload>;
 };
@@ -10429,6 +11449,10 @@ export type SubscriptionFlowArgs = {
 	filter?: Maybe<FlowSubscriptionFilter>;
 };
 
+export type SubscriptionMeeshkanAnalyticsArgs = {
+	filter?: Maybe<MeeshkanAnalyticSubscriptionFilter>;
+};
+
 export type SubscriptionMetricsArgs = {
 	filter?: Maybe<MetricSubscriptionFilter>;
 };
@@ -10457,6 +11481,10 @@ export type SubscriptionSettingsArgs = {
 	filter?: Maybe<SettingSubscriptionFilter>;
 };
 
+export type SubscriptionSlackIntegrationArgs = {
+	filter?: Maybe<SlackIntegrationSubscriptionFilter>;
+};
+
 export type SubscriptionTeamInvitationsArgs = {
 	filter?: Maybe<TeamInvitationSubscriptionFilter>;
 };
@@ -10471,6 +11499,10 @@ export type SubscriptionTestOutcomeArgs = {
 
 export type SubscriptionTestRunArgs = {
 	filter?: Maybe<TestRunSubscriptionFilter>;
+};
+
+export type SubscriptionUntitledTableArgs = {
+	filter?: Maybe<UntitledTableSubscriptionFilter>;
 };
 
 export type SubscriptionUserStoryArgs = {
@@ -11098,6 +12130,7 @@ export type SystemInboxEventWorkspace = {
 	id: Scalars['ID'];
 	name?: Maybe<Scalars['String']>;
 	avatar?: Maybe<GraphQlFileItemResponse>;
+	apiHost?: Maybe<Scalars['String']>;
 };
 
 /** Table Create Index Input */
@@ -11121,6 +12154,28 @@ export type SystemIndexUpdateInput = {
 	columns?: Maybe<Array<SystemTableIndexColumnInput>>;
 	force?: Maybe<Scalars['Boolean']>;
 	name?: Maybe<Scalars['String']>;
+};
+
+/** Invited By Name */
+export type SystemInvitedByName = {
+	__typename?: 'SystemInvitedByName';
+	firstName?: Maybe<Scalars['String']>;
+	lastName?: Maybe<Scalars['String']>;
+	workspaceName?: Maybe<Scalars['String']>;
+	email?: Maybe<Scalars['String']>;
+};
+
+/** Invite members input */
+export type SystemInviteMembersInput = {
+	recipients: Array<SystemInviteRecipientInput>;
+};
+
+/** Invite recipient input */
+export type SystemInviteRecipientInput = {
+	email: Scalars['String'];
+	firstName?: Maybe<Scalars['String']>;
+	lastName?: Maybe<Scalars['String']>;
+	roles?: Maybe<Array<Scalars['ID']>>;
 };
 
 /** InvokeData */
@@ -11164,6 +12219,7 @@ export type SystemMutation = {
 	indexCreate: SystemTableIndex;
 	indexDelete?: Maybe<SuccessResponse>;
 	indexUpdate: SystemTableIndex;
+	inviteMembers: Array<Maybe<SystemTeamInvitationDetails>>;
 	invoke?: Maybe<SystemInvokeFunctionResponse>;
 	organizationInviteUser?: Maybe<OrganizationUserInvitationResponse>;
 	organizationInviteUserAccept?: Maybe<SuccessResponse>;
@@ -11180,6 +12236,9 @@ export type SystemMutation = {
 	tableCreate: SystemTable;
 	tableDelete: SuccessResponse;
 	tableUpdate: SystemTable;
+	teamInvitationAccept: SystemTeamInvitationAcceptResponse;
+	teamInvitationCancel?: Maybe<SuccessResponse>;
+	teamInvitationResend?: Maybe<SuccessResponse>;
 	viewCreate: SystemTable;
 	viewUpdate: SystemTable;
 	workspaceCreate?: Maybe<SystemWorkspaceCreateResponse>;
@@ -11275,6 +12334,11 @@ export type SystemMutationIndexUpdateArgs = {
 	data: SystemIndexUpdateInput;
 };
 
+export type SystemMutationInviteMembersArgs = {
+	data: SystemInviteMembersInput;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
 export type SystemMutationInvokeArgs = {
 	data?: Maybe<SystemInvokeData>;
 };
@@ -11347,6 +12411,18 @@ export type SystemMutationTableDeleteArgs = {
 
 export type SystemMutationTableUpdateArgs = {
 	data: SystemTableUpdateInput;
+};
+
+export type SystemMutationTeamInvitationAcceptArgs = {
+	data: SystemTeamInvitationAcceptInput;
+};
+
+export type SystemMutationTeamInvitationCancelArgs = {
+	data: SystemTeamInvitationCancelInput;
+};
+
+export type SystemMutationTeamInvitationResendArgs = {
+	data: SystemTeamInvitationResendInput;
 };
 
 export type SystemMutationViewCreateArgs = {
@@ -11554,7 +12630,10 @@ export type SystemQuery = {
 	table?: Maybe<SystemTable>;
 	tableField?: Maybe<SystemTableField>;
 	tablesList: SystemTableListResponse;
+	teamInvitationDetails?: Maybe<SystemTeamInvitationDetails>;
+	teamInvitationsDetailsList?: Maybe<SystemTeamInvitationsDetailsList>;
 	userBillingConfiguration: SystemUserBillingConfigurationResponse;
+	userInvitationsList?: Maybe<SystemUserInvitationList>;
 	workspacesFrontendList?: Maybe<SystemWorkspaceListResponse>;
 	workspacesList?: Maybe<SystemWorkspaceListResponse>;
 };
@@ -11610,6 +12689,7 @@ export type SystemQueryGetWorkspaceTransferInfoArgs = {
 };
 
 export type SystemQueryInboxEventsListArgs = {
+	filter?: Maybe<InboxEventsListFilter>;
 	first?: Maybe<Scalars['Int']>;
 	skip?: Maybe<Scalars['Int']>;
 };
@@ -11653,6 +12733,10 @@ export type SystemQueryTableFieldArgs = {
 
 export type SystemQueryTablesListArgs = {
 	filter?: Maybe<SystemTableListFilter>;
+};
+
+export type SystemQueryTeamInvitationDetailsArgs = {
+	id: Scalars['String'];
 };
 
 /** Relation */
@@ -11929,6 +13013,50 @@ export type SystemTableUpdateInput = {
 	description?: Maybe<Scalars['String']>;
 };
 
+/** Team invitation accept input */
+export type SystemTeamInvitationAcceptInput = {
+	id: Scalars['String'];
+	accepted: Scalars['Boolean'];
+};
+
+/** Team Invitation Accept Response */
+export type SystemTeamInvitationAcceptResponse = {
+	__typename?: 'SystemTeamInvitationAcceptResponse';
+	success: Scalars['Boolean'];
+};
+
+/** Cancel team members invitations input */
+export type SystemTeamInvitationCancelInput = {
+	memberId: Scalars['ID'];
+};
+
+/** Team Invitation Details */
+export type SystemTeamInvitationDetails = {
+	__typename?: 'SystemTeamInvitationDetails';
+	id?: Maybe<Scalars['String']>;
+	firstName?: Maybe<Scalars['String']>;
+	lastName?: Maybe<Scalars['String']>;
+	email?: Maybe<Scalars['String']>;
+	isRegistered?: Maybe<Scalars['Boolean']>;
+	resentOn?: Maybe<Scalars['DateTime']>;
+	accepted?: Maybe<Scalars['Boolean']>;
+	acceptedOn?: Maybe<Scalars['DateTime']>;
+	apiHost?: Maybe<Scalars['String']>;
+	invitedBy?: Maybe<SystemInvitedByName>;
+};
+
+/** Resend team invitation input */
+export type SystemTeamInvitationResendInput = {
+	memberId: Scalars['ID'];
+};
+
+/** Team Invitations Details List */
+export type SystemTeamInvitationsDetailsList = {
+	__typename?: 'SystemTeamInvitationsDetailsList';
+	items?: Maybe<Array<Maybe<SystemTeamInvitationDetails>>>;
+	count?: Maybe<Scalars['Int']>;
+};
+
 /** Text Field Attributes */
 export type SystemTextFieldTypeAttributes = {
 	__typename?: 'SystemTextFieldTypeAttributes';
@@ -11979,6 +13107,28 @@ export type SystemUserBillingConfigurationResponse = {
 	isFreePlanAvailable: Scalars['Boolean'];
 	isCancelSubscriptionAvailable: Scalars['Boolean'];
 	availablePlans: Array<SystemBillingPlanBaseInfo>;
+};
+
+/** User Invitation Details */
+export type SystemUserInvitationDetails = {
+	__typename?: 'SystemUserInvitationDetails';
+	id?: Maybe<Scalars['String']>;
+	firstName?: Maybe<Scalars['String']>;
+	lastName?: Maybe<Scalars['String']>;
+	email?: Maybe<Scalars['String']>;
+	isRegistered?: Maybe<Scalars['Boolean']>;
+	resentOn?: Maybe<Scalars['DateTime']>;
+	accepted?: Maybe<Scalars['Boolean']>;
+	acceptedOn?: Maybe<Scalars['DateTime']>;
+	apiHost?: Maybe<Scalars['String']>;
+	invitedBy?: Maybe<SystemInvitedByName>;
+};
+
+/** User Invitation List */
+export type SystemUserInvitationList = {
+	__typename?: 'SystemUserInvitationList';
+	items?: Maybe<Array<Maybe<SystemUserInvitationDetails>>>;
+	count?: Maybe<Scalars['Int']>;
 };
 
 /** User Type */
@@ -12356,13 +13506,13 @@ export type TeamInvitation_PermissionRelationFilter = {
 	none?: Maybe<TeamInvitation_PermissionFilter>;
 };
 
-/** TeamInvitationAcceptInput */
+/** Team invitation accept input */
 export type TeamInvitationAcceptInput = {
 	uuid: Scalars['String'];
 	accepted: Scalars['Boolean'];
 };
 
-/** TeamInvitationAcceptResponse */
+/** Team Invitation Accept Response */
 export type TeamInvitationAcceptResponse = {
 	__typename?: 'TeamInvitationAcceptResponse';
 	success: Scalars['Boolean'];
@@ -12383,11 +13533,29 @@ export type TeamInvitationDeleteInput = {
 export type TeamInvitationDetails = {
 	__typename?: 'TeamInvitationDetails';
 	uuid?: Maybe<Scalars['String']>;
+	id?: Maybe<Scalars['String']>;
 	firstName?: Maybe<Scalars['String']>;
 	lastName?: Maybe<Scalars['String']>;
 	email?: Maybe<Scalars['String']>;
 	isRegistered?: Maybe<Scalars['Boolean']>;
+	resentOn?: Maybe<Scalars['DateTime']>;
+	accepted?: Maybe<Scalars['Boolean']>;
+	acceptedOn?: Maybe<Scalars['DateTime']>;
+	apiHost?: Maybe<Scalars['String']>;
 	invitedBy?: Maybe<InvitedByName>;
+};
+
+/** TeamInvitationFieldsPermissions create input */
+export type TeamInvitationFieldsPermissions = {
+	createdAt?: Maybe<Scalars['Boolean']>;
+	updatedAt?: Maybe<Scalars['Boolean']>;
+	uuid?: Maybe<Scalars['Boolean']>;
+	email?: Maybe<Scalars['Boolean']>;
+	firstName?: Maybe<Scalars['Boolean']>;
+	lastName?: Maybe<Scalars['Boolean']>;
+	resentOn?: Maybe<Scalars['Boolean']>;
+	accepted?: Maybe<Scalars['Boolean']>;
+	acceptedOn?: Maybe<Scalars['Boolean']>;
 };
 
 export type TeamInvitationFilter = {
@@ -12932,6 +14100,8 @@ export type TestOutcome_TestRunCreateInput = {
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** What base url was this test run performed against? */
+	baseURL?: Maybe<Scalars['String']>;
 };
 
 /** TestRun update input from testOutcome */
@@ -12953,6 +14123,8 @@ export type TestOutcome_TestRunUpdateInput = {
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** What base url was this test run performed against? */
+	baseURL?: Maybe<Scalars['String']>;
 };
 
 /** UserStory create input from testOutcome */
@@ -13403,6 +14575,8 @@ export type TestRun = {
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** What base url was this test run performed against? */
+	baseURL?: Maybe<Scalars['String']>;
 	_description?: Maybe<Scalars['String']>;
 };
 
@@ -13430,6 +14604,7 @@ export type TestRun_PermissionFilter = {
 	status?: Maybe<StringPredicate>;
 	runLink?: Maybe<StringPredicate>;
 	testLength?: Maybe<StringPredicate>;
+	baseURL?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<User_PermissionFilter>;
 	release?: Maybe<Release_PermissionFilter>;
@@ -13495,6 +14670,8 @@ export type TestRunCreateInput = {
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** What base url was this test run performed against? */
+	baseURL?: Maybe<Scalars['String']>;
 };
 
 /** TestRun create many input */
@@ -13516,6 +14693,8 @@ export type TestRunCreateManyInput = {
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** What base url was this test run performed against? */
+	baseURL?: Maybe<Scalars['String']>;
 };
 
 /** TestRun delete input */
@@ -13531,6 +14710,7 @@ export type TestRunFieldsPermissions = {
 	status?: Maybe<Scalars['Boolean']>;
 	runLink?: Maybe<Scalars['Boolean']>;
 	testLength?: Maybe<Scalars['Boolean']>;
+	baseURL?: Maybe<Scalars['Boolean']>;
 };
 
 export type TestRunFilter = {
@@ -13541,6 +14721,7 @@ export type TestRunFilter = {
 	status?: Maybe<StringPredicate>;
 	runLink?: Maybe<StringPredicate>;
 	testLength?: Maybe<StringPredicate>;
+	baseURL?: Maybe<StringPredicate>;
 	_fullText?: Maybe<Scalars['String']>;
 	createdBy?: Maybe<UserFilter>;
 	release?: Maybe<ReleaseFilter>;
@@ -13565,6 +14746,7 @@ export type TestRunGroupByQuery = {
 	status?: Maybe<Array<GroupByField>>;
 	runLink?: Maybe<Array<GroupByField>>;
 	testLength?: Maybe<Array<GroupByField>>;
+	baseURL?: Maybe<Array<GroupByField>>;
 	createdBy?: Maybe<UserGroupByQuery>;
 	release?: Maybe<ReleaseGroupByQuery>;
 	testOutcome?: Maybe<TestOutcomeGroupByQuery>;
@@ -13611,6 +14793,8 @@ export enum TestRunOrderBy {
 	RunLinkDesc = 'runLink_DESC',
 	TestLengthAsc = 'testLength_ASC',
 	TestLengthDesc = 'testLength_DESC',
+	BaseUrlAsc = 'baseURL_ASC',
+	BaseUrlDesc = 'baseURL_DESC',
 }
 
 /** TestRun subscription payload */
@@ -13686,6 +14870,7 @@ export type TestRunSort = {
 	status?: Maybe<SortOrder>;
 	runLink?: Maybe<SortOrder>;
 	testLength?: Maybe<SortOrder>;
+	baseURL?: Maybe<SortOrder>;
 	createdBy?: Maybe<UserSort>;
 	release?: Maybe<ReleaseSort>;
 };
@@ -13722,6 +14907,7 @@ export type TestRunUpdateByFilterInput = {
 	status?: Maybe<Array<Maybe<UpdateByFilterStringSwitchInput>>>;
 	runLink?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 	testLength?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
+	baseURL?: Maybe<Array<Maybe<UpdateByFilterStringInput>>>;
 };
 
 /** TestRun update input */
@@ -13744,6 +14930,8 @@ export type TestRunUpdateInput = {
 	 * before they finish when lapsed time is still unknown. Use a HH:MM:ss format. i.e. 14:50:19
 	 */
 	testLength?: Maybe<Scalars['String']>;
+	/** What base url was this test run performed against? */
+	baseURL?: Maybe<Scalars['String']>;
 };
 
 /** Text Field Attributes */
@@ -13766,6 +14954,127 @@ export enum TextTypeFormatEnum {
 export type TrimFunctionArguments = {
 	str: Scalars['String'];
 	mode?: Maybe<StringTrimMode>;
+};
+
+export type UntitledTable = {
+	__typename?: 'UntitledTable';
+	id?: Maybe<Scalars['ID']>;
+	createdAt?: Maybe<Scalars['DateTime']>;
+	updatedAt?: Maybe<Scalars['DateTime']>;
+	deletedAt?: Maybe<Scalars['Int']>;
+	createdBy?: Maybe<User>;
+	_description?: Maybe<Scalars['String']>;
+};
+
+export type UntitledTable_PermissionFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<User_PermissionFilter>;
+	AND?: Maybe<Array<UntitledTable_PermissionFilter>>;
+	OR?: Maybe<Array<UntitledTable_PermissionFilter>>;
+};
+
+/** UntitledTable delete input */
+export type UntitledTableDeleteInput = {
+	id?: Maybe<Scalars['ID']>;
+	force?: Maybe<Scalars['Boolean']>;
+};
+
+/** UntitledTableFieldsPermissions create input */
+export type UntitledTableFieldsPermissions = {
+	createdAt?: Maybe<Scalars['Boolean']>;
+	updatedAt?: Maybe<Scalars['Boolean']>;
+};
+
+export type UntitledTableFilter = {
+	id?: Maybe<IdPredicate>;
+	createdAt?: Maybe<DateTimePredicate>;
+	updatedAt?: Maybe<DateTimePredicate>;
+	deletedAt?: Maybe<IntPredicate>;
+	_fullText?: Maybe<Scalars['String']>;
+	createdBy?: Maybe<UserFilter>;
+	AND?: Maybe<Array<UntitledTableFilter>>;
+	OR?: Maybe<Array<UntitledTableFilter>>;
+};
+
+export type UntitledTableGroupBy = {
+	query: UntitledTableGroupByQuery;
+	sort?: Maybe<Array<GroupBySort>>;
+	having?: Maybe<Having>;
+	first?: Maybe<Scalars['Int']>;
+	last?: Maybe<Scalars['Int']>;
+	skip?: Maybe<Scalars['Int']>;
+};
+
+export type UntitledTableGroupByQuery = {
+	id?: Maybe<Array<GroupByField>>;
+	createdAt?: Maybe<Array<GroupByField>>;
+	updatedAt?: Maybe<Array<GroupByField>>;
+	createdBy?: Maybe<UserGroupByQuery>;
+	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
+};
+
+export type UntitledTableKeyFilter = {
+	id?: Maybe<Scalars['ID']>;
+};
+
+/** UntitledTableListResponse output */
+export type UntitledTableListResponse = {
+	__typename?: 'UntitledTableListResponse';
+	/** List items */
+	items: Array<UntitledTable>;
+	/** List items count */
+	count: Scalars['Int'];
+	/** Aggregated items */
+	groups: Array<GroupByResponse>;
+};
+
+/** UntitledTableManyResponse output */
+export type UntitledTableManyResponse = {
+	__typename?: 'UntitledTableManyResponse';
+	/** List items */
+	items: Array<UntitledTable>;
+	/** List items count */
+	count: Scalars['Int'];
+};
+
+/** No longer supported. Use `sort` instead. */
+export enum UntitledTableOrderBy {
+	IdAsc = 'id_ASC',
+	IdDesc = 'id_DESC',
+	CreatedAtAsc = 'createdAt_ASC',
+	CreatedAtDesc = 'createdAt_DESC',
+	UpdatedAtAsc = 'updatedAt_ASC',
+	UpdatedAtDesc = 'updatedAt_DESC',
+	DeletedAtAsc = 'deletedAt_ASC',
+	DeletedAtDesc = 'deletedAt_DESC',
+}
+
+/** UntitledTable subscription payload */
+export type UntitledTablePayload = {
+	__typename?: 'UntitledTablePayload';
+	mutation: MutationType;
+	node?: Maybe<UntitledTable>;
+	updatedFields?: Maybe<Array<Maybe<Scalars['String']>>>;
+	previousValues?: Maybe<UntitledTable>;
+};
+
+export type UntitledTableSort = {
+	id?: Maybe<SortOrder>;
+	createdAt?: Maybe<SortOrder>;
+	updatedAt?: Maybe<SortOrder>;
+	deletedAt?: Maybe<SortOrder>;
+	createdBy?: Maybe<UserSort>;
+};
+
+/** UntitledTable subscription filter */
+export type UntitledTableSubscriptionFilter = {
+	mutation_in?: Maybe<Array<Maybe<MutationType>>>;
+	node?: Maybe<UntitledTableFilter>;
+	updatedFields?: Maybe<UpdatedFieldsFilter>;
 };
 
 export type UpdateByFilterBooleanSwitchInput = {
@@ -14078,14 +15387,19 @@ export type UserGroupByQuery = {
 	_group?: Maybe<Array<GroupIdentifiersGroupByField>>;
 };
 
-/** Invitation Details */
+/** User Invitation Details */
 export type UserInvitationDetails = {
 	__typename?: 'UserInvitationDetails';
 	uuid?: Maybe<Scalars['String']>;
+	id?: Maybe<Scalars['String']>;
 	firstName?: Maybe<Scalars['String']>;
 	lastName?: Maybe<Scalars['String']>;
 	email?: Maybe<Scalars['String']>;
 	isRegistered?: Maybe<Scalars['Boolean']>;
+	resentOn?: Maybe<Scalars['DateTime']>;
+	accepted?: Maybe<Scalars['Boolean']>;
+	acceptedOn?: Maybe<Scalars['DateTime']>;
+	apiHost?: Maybe<Scalars['String']>;
 	invitedBy?: Maybe<InvitedByName>;
 };
 
