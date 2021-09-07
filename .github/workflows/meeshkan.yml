@@ -2,21 +2,21 @@ name: Run Meeshkan tests
 
 on: pull_request
 
-jobs:
-  run-tests:
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Wait for Vercel Preview deployment
-        id: wait-for-vercel
-        uses: patrickedqvist/wait-for-vercel-preview@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 200
-
-      - name: Run Meeshkan tests
-        uses: meeshkan/action@master
-        with:
-          client_id: ${{ secrets.MEESHKAN_CLIENT_ID }}
-          client_secret: ${{ secrets.MEESHKAN_CLIENT_SECRET }}
-          url: ${{ steps.wait-for-vercel.outputs.url }}
+#jobs:
+#  run-tests:
+#    runs-on: ubuntu-latest
+#    steps:
+#
+#      - name: Wait for Vercel Preview deployment
+#        id: wait-for-vercel
+#        uses: patrickedqvist/wait-for-vercel-preview@master
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          max_timeout: 200
+#
+#      - name: Run Meeshkan tests
+#        uses: meeshkan/action@master
+#        with:
+#          client_id: ${{ secrets.MEESHKAN_CLIENT_ID }}
+#          client_secret: ${{ secrets.MEESHKAN_CLIENT_SECRET }}
+#          url: ${{ steps.wait-for-vercel.outputs.url }}
