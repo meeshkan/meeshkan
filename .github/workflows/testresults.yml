@@ -1,0 +1,16 @@
+name: Update with test results
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'The name of the person'
+        required: true
+        default: 'Muse'
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        id: say-hello
+        run: echo "Hello, I am testing  ${{ github.event.inputs.name }}!!!"
